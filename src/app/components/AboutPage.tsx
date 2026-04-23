@@ -139,7 +139,7 @@ export function AboutPage({ onNavigate }: { onNavigate?: (page: string) => void 
                 <ImageWithFallback src={m.photo} alt={m.name} className="w-full h-full object-cover" loading="lazy" />
               </div>
               <h3 className="text-white mb-1" style={{ fontSize: "1.05rem", fontWeight: 600 }}>{m.name}</h3>
-              <p className="text-red-400 mb-3" style={{ fontSize: "0.8rem", fontWeight: 500 }}>{m.role}</p>
+              {/* <p className="text-red-400 mb-3" style={{ fontSize: "0.8rem", fontWeight: 500 }}>{m.role}</p> */}
               <p className="text-gray-500" style={{ fontSize: "0.8rem", lineHeight: 1.6 }}>{m.desc}</p>
             </motion.div>
           ))}

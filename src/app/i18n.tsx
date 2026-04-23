@@ -301,6 +301,8 @@ const enMessages = {
   footer: {
     titles: {
       contact: "Contact",
+      businessContact: "Business Contact",
+      customerService: "Customer Service",
       website: "Website",
       languages: "Languages",
     },
@@ -316,7 +318,7 @@ const enMessages = {
     title: "Preview Coming Soon",
     description: "Full episode available in the app",
   },
-} as const;
+};
 
 export type TranslationMessages = typeof enMessages;
 
@@ -612,6 +614,8 @@ const translations: Record<Locale, TranslationMessages> = {
     footer: {
       titles: {
         contact: "联系方式",
+        businessContact: "商务联系",
+        customerService: "联系客服",
         website: "网站",
         languages: "语言",
       },
@@ -918,6 +922,8 @@ const translations: Record<Locale, TranslationMessages> = {
     footer: {
       titles: {
         contact: "聯絡方式",
+        businessContact: "商務聯繫",
+        customerService: "聯絡客服",
         website: "網站",
         languages: "語言",
       },
@@ -1224,6 +1230,8 @@ const translations: Record<Locale, TranslationMessages> = {
     footer: {
       titles: {
         contact: "Contato",
+        businessContact: "Contato Comercial",
+        customerService: "Atendimento ao Cliente",
         website: "Site",
         languages: "Idiomas",
       },

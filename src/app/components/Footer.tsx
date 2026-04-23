@@ -29,13 +29,15 @@ export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) 
               {messages.footer.titles.contact}
             </h4>
             <div className="space-y-3.5">
-              <div className="flex items-center gap-3 text-gray-400" style={{ fontSize: "0.85rem" }}>
-                <Mail className="w-4 h-4 flex-shrink-0" />
-                <span>business@lollipop.im</span>
-              </div>
+              <p className="text-[#ffffff]" style={{ fontSize: "0.85rem", fontWeight: 700 }}>{messages.footer.titles.customerService}</p>
               <div className="flex items-center gap-3 text-gray-400" style={{ fontSize: "0.85rem" }}>
                 <Mail className="w-4 h-4 flex-shrink-0" />
                 <span>service@lollipop.im</span>
+              </div>
+              <p className="text-[#ffffff]" style={{ fontSize: "0.85rem", fontWeight: 700 }}>{messages.footer.titles.businessContact}</p>
+              <div className="flex items-center gap-3 text-gray-400" style={{ fontSize: "0.85rem" }}>
+                <Mail className="w-4 h-4 flex-shrink-0" />
+                <span>business@lollipop.im</span>
               </div>
               {/* <div className="flex items-center gap-3 text-gray-400" style={{ fontSize: "0.85rem" }}>
                 <Phone className="w-4 h-4 flex-shrink-0" />

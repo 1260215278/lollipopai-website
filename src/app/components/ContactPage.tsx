@@ -13,8 +13,8 @@ export function ContactPage({ onNavigate }: { onNavigate: (page: string) => void
           <Mail className="w-8 h-8 text-white" />
         </div>
       ),
-      title: messages.contact.cards[4].title,
-      detail: "business@lollipop.im",
+      title: messages.contact.cards[5].title,
+      detail: "service@lollipop.im",
       isLink: false,
     },
     {
@@ -23,10 +23,11 @@ export function ContactPage({ onNavigate }: { onNavigate: (page: string) => void
           <Mail className="w-8 h-8 text-white" />
         </div>
       ),
-      title: messages.contact.cards[5].title,
-      detail: "service@lollipop.im",
+      title: messages.contact.cards[4].title,
+      detail: "business@lollipop.im",
       isLink: false,
     },
+
   ];
 
   return (

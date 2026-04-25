@@ -8,6 +8,7 @@ export function Navbar({ currentPage, onNavigate }: { currentPage: string; onNav
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+  const [activeNavKey, setActiveNavKey] = useState("home");
   const langRef = useRef<HTMLDivElement>(null);
   const { messages, languages, currentLanguage, setLocale } = useI18n();
 
@@ -16,6 +17,32 @@ export function Navbar({ currentPage, onNavigate }: { currentPage: string; onNav
     window.addEventListener("scroll", handler);
     return () => window.removeEventListener("scroll", handler);
   }, []);
+
+  useEffect(() => {
+    if (currentPage !== "home") {
+      setActiveNavKey(currentPage === "about" ? "aboutUs" : "");
+      return;
+    }
+
+    const handler = () => {
+      const sectionIds = ["home", "trending", "genres", "creators"];
+      const current = sectionIds.reduce((active, id) => {
+        const section = document.getElementById(id);
+
+        if (!section) {
+          return active;
+        }
+
+        return section.getBoundingClientRect().top <= 120 ? id : active;
+      }, "home");
+
+      setActiveNavKey(current);
+    };
+
+    handler();
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
+  }, [currentPage]);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -36,8 +63,10 @@ export function Navbar({ currentPage, onNavigate }: { currentPage: string; onNav
 
   const handleNavClick = (href: string) => {
     if (href === "__about__") {
+      setActiveNavKey("aboutUs");
       onNavigate("about");
     } else {
+      setActiveNavKey(href.slice(1));
       if (currentPage !== "home") {
         onNavigate("home");
         setTimeout(() => {
@@ -52,11 +81,10 @@ export function Navbar({ currentPage, onNavigate }: { currentPage: string; onNav
       initial={{ y: -80 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? "bg-black/60 backdrop-blur-xl border-b border-white/5 shadow-2xl shadow-red-950/10"
-          : "bg-transparent"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/60 backdrop-blur-xl border-b border-white/5 shadow-2xl shadow-red-950/10 ${scrolled
+        ? ""
+        : ""
+        }`}
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
@@ -65,6 +93,7 @@ export function Navbar({ currentPage, onNavigate }: { currentPage: string; onNav
           className="flex items-center gap-2.5 group"
           onClick={(e) => {
             e.preventDefault();
+            setActiveNavKey("home");
             onNavigate("home");
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
@@ -81,28 +110,32 @@ export function Navbar({ currentPage, onNavigate }: { currentPage: string; onNav
             l.href === "__about__" ? (
               <button
                 key={l.key}
-                onClick={() => onNavigate("about")}
-                className={`transition-colors relative group cursor-pointer ${currentPage === "about" ? "text-white" : "text-gray-300 hover:text-white"}`}
+                onClick={() => {
+                  setActiveNavKey("aboutUs");
+                  onNavigate("about");
+                }}
+                className={`transition-colors relative group cursor-pointer ${activeNavKey === l.key ? "text-white" : "text-gray-300 hover:text-white"}`}
                 style={{ fontSize: "0.9rem", fontWeight: 500 }}
               >
                 {messages.navbar.links[l.key]}
-                <span className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-red-500 to-orange-500 transition-all duration-300 ${currentPage === "about" ? "w-full" : "w-0 group-hover:w-full"}`} />
+                <span className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-red-500 to-orange-500 transition-all duration-300 ${activeNavKey === l.key ? "w-full" : "w-0 group-hover:w-full"}`} />
               </button>
             ) : (
               <a
                 key={l.key}
                 href={l.href}
                 onClick={(e) => {
+                  setActiveNavKey(l.key);
                   if (currentPage !== "home") {
                     e.preventDefault();
                     handleNavClick(l.href);
                   }
                 }}
-                className="text-gray-300 hover:text-white transition-colors relative group"
+                className={`transition-colors relative group ${activeNavKey === l.key ? "text-white" : "text-gray-300 hover:text-white"}`}
                 style={{ fontSize: "0.9rem", fontWeight: 500 }}
               >
                 {messages.navbar.links[l.key]}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-red-500 to-orange-500 group-hover:w-full transition-all duration-300" />
+                <span className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-red-500 to-orange-500 transition-all duration-300 ${activeNavKey === l.key ? "w-full" : "w-0 group-hover:w-full"}`} />
               </a>
             )
           )}
@@ -143,11 +176,10 @@ export function Navbar({ currentPage, onNavigate }: { currentPage: string; onNav
                     <button
                       key={lang.code}
                       onClick={() => { setLocale(lang.code); setLangOpen(false); }}
-                      className={`w-full text-left px-4 py-2.5 transition-colors ${
-                        currentLanguage.code === lang.code
-                          ? "text-red-400 bg-red-500/10"
-                          : "text-gray-300 hover:text-white hover:bg-white/5"
-                      }`}
+                      className={`w-full text-left px-4 py-2.5 transition-colors ${currentLanguage.code === lang.code
+                        ? "text-red-400 bg-red-500/10"
+                        : "text-gray-300 hover:text-white hover:bg-white/5"
+                        }`}
                       style={{ fontSize: "0.85rem" }}
                     >
                       {lang.label}
@@ -209,11 +241,10 @@ export function Navbar({ currentPage, onNavigate }: { currentPage: string; onNav
                 <button
                   key={lang.code}
                   onClick={() => setLocale(lang.code)}
-                  className={`px-3 py-1.5 rounded-full transition-all ${
-                    currentLanguage.code === lang.code
-                      ? "bg-gradient-to-r from-red-500 to-orange-500 text-white"
-                      : "bg-white/5 text-gray-400 hover:text-white"
-                  }`}
+                  className={`px-3 py-1.5 rounded-full transition-all ${currentLanguage.code === lang.code
+                    ? "bg-gradient-to-r from-red-500 to-orange-500 text-white"
+                    : "bg-white/5 text-gray-400 hover:text-white"
+                    }`}
                   style={{ fontSize: "0.8rem" }}
                 >
                   {lang.label}

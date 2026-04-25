@@ -98,7 +98,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.6 }}
-          className="flex flex-col sm:flex-row items-center gap-4 z-10 relative px-[24px] py-[0px] mx-[0px] mt-[555px] mb-[0px]"
+          className="flex flex-col sm:flex-row items-center gap-4 z-10 relative px-[24px] py-[0px] mx-[0px] mt-[860px] mb-[0px]"
         >
           <a href="https://h5.lollipop.im/" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-400 hover:to-orange-400 text-white px-8 py-3.5 rounded-full transition-all shadow-lg shadow-red-900/40 hover:shadow-red-600/50 hover:scale-105 min-w-[210px] justify-center">
             <Apple className="w-5 h-5" />

@@ -76,7 +76,7 @@ const enMessages = {
     badge: "NEW",
     shows: [
       { title: "Crimson Dynasty", genre: "Historical · Power", meta: "45 EP" },
-      { title: "Neon Abyss", genre: "Sci-Fi · Thriller", meta: "36 EP" },
+      { title: "Neon Abyss", genre: "Ficção Científica · Thriller", meta: "36 EP" },
       { title: "Whispered Love", genre: "Romance · Drama", meta: "55 EP" },
       { title: "The Forgotten", genre: "Mystery · Suspense", meta: "40 EP" },
       { title: "Iron Will", genre: "Action · Martial Arts", meta: "48 EP" },
@@ -118,7 +118,7 @@ const enMessages = {
       { name: "Fantasy", count: "120+ Shows" },
       { name: "Action", count: "90+ Shows" },
       { name: "Horror", count: "85+ Shows" },
-      { name: "Sci-Fi", count: "75+ Shows" },
+      { name: "Ficção Científica", count: "75+ Shows" },
       { name: "Family", count: "110+ Shows" },
       { name: "Historical", count: "95+ Shows" },
     ],
@@ -361,7 +361,7 @@ const translations: Record<Locale, TranslationMessages> = {
     },
     hero: {
       bannerAlt: ["Lollipop 横幅 1", "Lollipop 横幅 2"],
-      taglineLine1: "全球首个 AI 创作者生态娱乐内容平台。",
+      taglineLine1: "全球首个 AI 创作者生态娱乐平台。",
       taglineLine2: "为数百万用户而生！",
       stats: [
         { label: "精品短剧" },
@@ -372,7 +372,7 @@ const translations: Record<Locale, TranslationMessages> = {
     trending: {
       eyebrow: "热门趋势",
       title: "全网爆款 · 实时更新",
-      description: "基于全球观看数据与评分精选，只把当下最火的短剧推荐给你。",
+      description: "基于全球热度与评分精选，带你直达最火短剧。",
       shows: [
         { title: "Temptation CEO", genre: "爱情 · 复仇", meta: "80 集 · 5200万观看" },
         { title: "The Bride Who Fell from the Sky", genre: "爱情 · 奇幻", meta: "60 集 · 3800万观看" },
@@ -987,7 +987,7 @@ const translations: Record<Locale, TranslationMessages> = {
     },
     trending: {
       eyebrow: "Em Alta Agora",
-      title: "Dramas Mais Quentes · Atualização em Tempo Real",
+      title: "Dramas em Alta · Atualizados em Tempo Real",
       description: "Selecionados com base em audiência e avaliações globais para você descobrir o que realmente está bombando.",
       shows: [
         { title: "Temptation CEO", genre: "Romance · Vingança", meta: "80 eps · 52 mi visualizações" },
@@ -1000,12 +1000,12 @@ const translations: Record<Locale, TranslationMessages> = {
     },
     newReleases: {
       eyebrow: "Novidades da Semana",
-      title: "Novos Lançamentos · Veja Primeiro",
+      title: "Novos Lançamentos · Assista Primeiro",
       description: "Toda semana chegam estreias exclusivas, então sempre há algo novo para maratonar.",
       badge: "NOVO",
       shows: [
-        { title: "Crimson Dynasty", genre: "Histórico · Poder", meta: "45 eps" },
-        { title: "Neon Abyss", genre: "Sci-Fi · Suspense", meta: "36 eps" },
+        { title: "Crimson Dynasty", genre: "Histórico · Intrigas de Poder", meta: "45 eps" },
+        { title: "Neon Abyss", genre: "Ficção Científica · Suspense", meta: "36 eps" },
         { title: "Whispered Love", genre: "Romance · Drama", meta: "55 eps" },
         { title: "The Forgotten", genre: "Mistério · Suspense", meta: "40 eps" },
         { title: "Iron Will", genre: "Ação · Artes Marciais", meta: "48 eps" },
@@ -1043,11 +1043,11 @@ const translations: Record<Locale, TranslationMessages> = {
         { name: "Romance", count: "320+ títulos" },
         { name: "Vingança", count: "180+ títulos" },
         { name: "Suspense", count: "150+ títulos" },
-        { name: "Drama CEO", count: "260+ títulos" },
+        { name: "Histórias de Bilionários", count: "260+ títulos" },
         { name: "Fantasia", count: "120+ títulos" },
         { name: "Ação", count: "90+ títulos" },
         { name: "Terror", count: "85+ títulos" },
-        { name: "Sci-Fi", count: "75+ títulos" },
+        { name: "Ficção Científica", count: "75+ títulos" },
         { name: "Família", count: "110+ títulos" },
         { name: "Histórico", count: "95+ títulos" },
       ],
@@ -1058,7 +1058,7 @@ const translations: Record<Locale, TranslationMessages> = {
       description: "Redefinimos a experiência de dramas curtos com algo mais imersivo, refinado e recompensador.",
       features: [
         {
-          title: "Episódios Curtos",
+          title: "Episódios Rápidos",
           desc: "Episódios de 1 a 3 minutos pensados para o celular, perfeitos para deslocamentos, pausas e maratonas rápidas.",
         },
         {
@@ -1079,7 +1079,7 @@ const translations: Record<Locale, TranslationMessages> = {
         },
         {
           title: "Experiência Sem Anúncios",
-          desc: "Sem interrupções, só drama do primeiro quadro até o último gancho.",
+          desc: "Sem interrupções, só drama do primeiro quadro até o último cliffhanger.",
         },
       ],
     },
@@ -1091,7 +1091,7 @@ const translations: Record<Locale, TranslationMessages> = {
       stats: [
         { label: "Detentores de Token" },
         { label: "NFTs Cunhados" },
-        { label: "Parceiros em Cadeia" },
+        { label: "Parceiros na Blockchain" },
       ],
       paragraphs: [
         'A Lollipop usa RWA para reconstruir o sistema de valor do audiovisual, criando um universo descentralizado que leva o entretenimento a uma era "quantificável, circulável e distribuível".',
@@ -1106,7 +1106,7 @@ const translations: Record<Locale, TranslationMessages> = {
         {
           name: "Sarah M.",
           role: "Premium · EUA",
-          text: "Estou completamente viciada. Os ganchos são brilhantes e terminei três séries em um fim de semana.",
+          text: "Estou completamente viciada. Os cliffhangers são brilhantes e terminei três séries em um fim de semana.",
         },
         {
           name: "James L.",
@@ -1136,7 +1136,7 @@ const translations: Record<Locale, TranslationMessages> = {
         {
           name: "Yuki T.",
           role: "Premium · Japão",
-          text: "Como criadora, a divisão de receita aqui é imbatível. Ganhei em meses mais do que em um ano em outras plataformas.",
+          text: "Como criadora, a participação na receita aqui é imbatível. Ganhei em meses mais do que em um ano em outras plataformas.",
         },
         {
           name: "Anna P.",
@@ -1148,16 +1148,16 @@ const translations: Record<Locale, TranslationMessages> = {
     creator: {
       eyebrow: "Programa de Criadores",
       title: "Torne-se o Próximo Criador de Milhões de Views",
-      description: "A Lollipop oferece divisão de receita de ponta e suporte criativo para que grandes criadores construam carreiras sustentáveis.",
+      description: "A Lollipop oferece participação na receita de ponta e suporte criativo para que grandes criadores construam carreiras sustentáveis.",
       benefits: [
-        "70% de divisão de receita, entre as maiores do mercado",
+        "70% de participação na receita, entre as maiores do mercado",
         "Acesso total ao kit de criação com IA",
         "Suporte dedicado para sucesso do criador",
         "Distribuição global em mais de 50 países",
         "Bônus mensais para os melhores desempenhos",
       ],
       stats: [
-        { label: "Divisão de Receita", desc: "Ganhos de criadores em nível líder de mercado" },
+        { label: "participação na receita", desc: "Ganhos de criadores em nível líder de mercado" },
         { label: "Criadores Ativos", desc: "Comunidade global em crescimento" },
         { label: "Ganho Médio Mensal", desc: "Para criadores de melhor desempenho" },
         { label: "Casos de Sucesso", desc: "Criadores que já chegaram a 1M+ reproduções" },
@@ -1165,7 +1165,7 @@ const translations: Record<Locale, TranslationMessages> = {
     },
     downloadCta: {
       eyebrow: "Disponível Agora",
-      title: "Sua Próxima Obsessão Está a Um Toque",
+      title: "Seu Próximo Vício Está a Um Toque",
       description: "Junte-se a milhões de espectadores. Baixe grátis e ganhe 7 dias de acesso Premium sem compromisso.",
       featuredTitle: "Baixe a Lollipop",
       featuredDescription: "Disponível em iOS e Android com streaming 4K, downloads offline e mais de 5.000 dramas premium.",
@@ -1296,7 +1296,7 @@ function getInitialLocale(): Locale {
     // Ignore storage failures and fall back to browser language.
   }
 
-  return normalizeLocale(window.navigator.languages?.[0] ?? window.navigator.language);
+  return "en";
 }
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {

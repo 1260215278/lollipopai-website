@@ -34,9 +34,9 @@ export default function App() {
           <NewReleasesSection />
           <AIFeaturesSection />
           <GenresSection />
-          <WhyChooseSection />
+          {/* <WhyChooseSection /> */}
           {/* <PricingSection /> */}
-          <Web2Web3Section />
+          {/* <Web2Web3Section /> */}
           <TestimonialsSection />
           <CreatorSection onNavigate={handleNavigate} />
           <DownloadCTA />

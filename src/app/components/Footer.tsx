@@ -8,7 +8,7 @@ export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) 
     { key: "home", page: "home" },
     { key: "aboutUs", page: "about" },
     { key: "download", page: "download" },
-    { key: "contactUs", page: "contact" },
+    // { key: "contactUs", page: "contact" },
   ] as const;
 
   return (

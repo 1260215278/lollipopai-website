@@ -144,14 +144,14 @@ export function Navbar({ currentPage, onNavigate }: { currentPage: string; onNav
 
         {/* CTA + Language */}
         <div className="hidden lg:flex items-center gap-3">
-          <button
+          {/* <button
             onClick={() => { onNavigate("contact"); window.scrollTo({ top: 0, behavior: "smooth" }); }}
             className="flex items-center gap-2 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-400 hover:to-orange-400 text-white px-6 py-2.5 rounded-full transition-all shadow-lg shadow-red-900/30 hover:shadow-red-600/40 cursor-pointer"
             style={{ fontSize: "0.85rem", fontWeight: 600 }}
           >
             <Phone className="w-4 h-4" />
             {messages.common.contactUs}
-          </button>
+          </button> */}
 
           {/* Language Globe */}
           <div ref={langRef} className="relative">
@@ -253,13 +253,13 @@ export function Navbar({ currentPage, onNavigate }: { currentPage: string; onNav
             </div>
           </div>
 
-          <button
+          {/* <button
             onClick={() => { setMobileOpen(false); onNavigate("contact"); window.scrollTo({ top: 0, behavior: "smooth" }); }}
             className="mt-4 w-full flex items-center justify-center gap-2 bg-gradient-to-r from-red-500 to-orange-500 text-white py-3 rounded-full"
             style={{ fontWeight: 600 }}
           >
             <Phone className="w-4 h-4" /> {messages.common.contactUs}
-          </button>
+          </button> */}
         </motion.div>
       )}
     </motion.nav>

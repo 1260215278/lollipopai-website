@@ -2,9 +2,12 @@ import { useState } from "react";
 import { motion } from "motion/react";
 import { Apple, Smartphone, Star, Mail, Check, Play, Download, ArrowRight } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { QRCodeSVG } from "qrcode.react";
 import bossPoster from "../../imports/Im-Obsessed-With-My-Boss-Part-II.png";
-import qrCodeImg from "../../imports/短剧H5.png";
 import { useI18n } from "../i18n";
+
+const APP_STORE_URL = "https://h5.lollipop.im/";
+const GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.StargetVenturesLLC.hks";
 
 export function DownloadCTA() {
   const [email, setEmail] = useState("");
@@ -153,15 +156,39 @@ export function DownloadCTA() {
             className="lg:col-span-2 flex flex-col gap-6"
           >
             {/* QR Code card */}
-            <div className="flex-1 rounded-3xl border border-white/5 bg-gradient-to-br from-white/[0.03] to-white/[0.01] p-8 flex flex-col items-center justify-center text-center hover:border-red-500/20 transition-all duration-500 group">
-              <div className="relative mb-5">
-                <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl blur-lg opacity-20 group-hover:opacity-40 transition-opacity" />
-                <div className="relative bg-white rounded-2xl p-4 shadow-xl">
-                  <ImageWithFallback src={qrCodeImg} alt="QR Code" className="w-28 h-28 object-contain" />
+            <div className="flex-1 rounded-3xl border border-white/5 bg-gradient-to-br from-white/[0.03] to-white/[0.01] p-6 flex flex-col items-center justify-center text-center hover:border-red-500/20 transition-all duration-500 group">
+              <p className="text-white mb-1" style={{ fontSize: "0.9rem", fontWeight: 600 }}>{messages.common.scanToDownload}</p>
+              <p className="text-gray-500 mb-5" style={{ fontSize: "0.75rem" }}>{messages.common.pointCameraAtQr}</p>
+
+              <div className="flex items-stretch justify-center gap-4 w-full">
+                {/* App Store QR */}
+                <div className="flex-1 flex flex-col items-center">
+                  <div className="relative mb-3">
+                    <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl blur-lg opacity-20 group-hover:opacity-40 transition-opacity" />
+                    <div className="relative bg-white rounded-2xl p-3 shadow-xl">
+                      <QRCodeSVG value={APP_STORE_URL} size={96} level="M" marginSize={0} className="w-24 h-24" />
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-white/90">
+                    <Apple className="w-3.5 h-3.5" />
+                    <span style={{ fontSize: "0.75rem", fontWeight: 600 }}>{messages.common.scanForAppStore}</span>
+                  </div>
+                </div>
+
+                {/* Google Play QR */}
+                <div className="flex-1 flex flex-col items-center">
+                  <div className="relative mb-3">
+                    <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl blur-lg opacity-20 group-hover:opacity-40 transition-opacity" />
+                    <div className="relative bg-white rounded-2xl p-3 shadow-xl">
+                      <QRCodeSVG value={GOOGLE_PLAY_URL} size={96} level="M" marginSize={0} className="w-24 h-24" />
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-white/90">
+                    <Smartphone className="w-3.5 h-3.5" />
+                    <span style={{ fontSize: "0.75rem", fontWeight: 600 }}>{messages.common.scanForGooglePlay}</span>
+                  </div>
                 </div>
               </div>
-              <p className="text-white mb-1" style={{ fontSize: "0.9rem", fontWeight: 600 }}>{messages.common.scanToDownload}</p>
-              <p className="text-gray-500" style={{ fontSize: "0.75rem" }}>{messages.common.pointCameraAtQr}</p>
             </div>
 
             {/* Email subscribe card */}

@@ -2,18 +2,18 @@ import type { Locale } from "../../i18n";
 
 /**
  * 发行者入驻文案。
- * zh-CN 为权威（取自 figma 设计稿 15237-33700 与接口文档）；
+ * zh-CN 为权威（取自 figma 15237-33700/34130/15098-24872/15123-25540/25742 与接口文档）；
  * en 同步；zh-TW / pt 机翻占位，结构一致。
+ * 含 {s}（倒计时秒）/ {company}（公司名）占位，由组件 replace。
  */
 export interface EnrollMessages {
-  // 头部
+  bannerTitle: string;
+  bannerSubtitle: string;
   welcomeTitle: string;
   welcomeSubtitle: string;
-  // 分区标题
   sectionAccount: string;
   sectionCompany: string;
   sectionAgreement: string;
-  // 关联账号
   phoneLabel: string;
   phonePlaceholder: string;
   phoneBoundHint: string;
@@ -21,8 +21,7 @@ export interface EnrollMessages {
   codeLabel: string;
   codePlaceholder: string;
   sendCode: string;
-  resendIn: string; // 含 {s} 占位
-  // 公司信息
+  resendIn: string;
   companyNameLabel: string;
   companyNamePlaceholder: string;
   businessLicenseLabel: string;
@@ -32,17 +31,13 @@ export interface EnrollMessages {
   legalPersonIdNoPlaceholder: string;
   idCardFrontLabel: string;
   idCardBackLabel: string;
-  // 上传区
-  uploadPrompt: string; // "点击或拖拽上传"
-  uploadFormat: string; // "支持 JPG、PNG 格式"
+  uploadPrompt: string;
+  uploadFormat: string;
   uploadReplace: string;
   uploadFailed: string;
-  // 协议
   agreement: string;
-  // 提交
   submit: string;
   resubmit: string;
-  // 前端校验
   vPhoneRequired: string;
   vCodeRequired: string;
   vCompanyRequired: string;
@@ -52,28 +47,33 @@ export interface EnrollMessages {
   vIdFrontRequired: string;
   vIdBackRequired: string;
   vAgreementRequired: string;
-  // toast
   sendCodeSuccess: string;
   submitSuccess: string;
-  // 审核中
   reviewingTitle: string;
   reviewingDesc: string;
-  reviewingNotice: string;
-  reviewingStepSubmitted: string;
-  reviewingStepReviewing: string;
-  reviewingStepDone: string;
-  // 已通过
+  reviewingInProgress: string;
+  step1Title: string;
+  step1Sub: string;
+  step2Title: string;
+  step2Sub: string;
+  step3Title: string;
+  step3Sub: string;
+  step4Title: string;
+  step4Sub: string;
   approvedTitle: string;
   approvedDesc: string;
   enterDashboard: string;
-  // 已驳回
   rejectedTitle: string;
+  rejectedDesc: string;
   rejectReasonLabel: string;
-  rejectedHint: string;
+  supportPrefix: string;
+  supportEmail: string;
 }
 
 export const enroll: Record<Locale, EnrollMessages> = {
   "zh-CN": {
+    bannerTitle: "欢迎入驻 Lollipop",
+    bannerSubtitle: "全球首家 AI 视频创作平台",
     welcomeTitle: "填写以下信息，即可在 Lollipop 发行剧集",
     welcomeSubtitle: "完成入驻后即可上架内容、接入分成，让优质剧集触达更多观众。",
     sectionAccount: "关联账号",
@@ -102,7 +102,7 @@ export const enroll: Record<Locale, EnrollMessages> = {
     uploadFailed: "上传失败，请重试",
     agreement: "我已阅读并同意《平台入驻合作协议》和《隐私政策》",
     submit: "提交入驻申请",
-    resubmit: "重新提交申请",
+    resubmit: "重新填写申请",
     vPhoneRequired: "请输入手机号",
     vCodeRequired: "请输入验证码",
     vCompanyRequired: "请输入公司名称",
@@ -114,20 +114,29 @@ export const enroll: Record<Locale, EnrollMessages> = {
     vAgreementRequired: "请先勾选同意合作协议与隐私政策",
     sendCodeSuccess: "验证码已发送",
     submitSuccess: "提交成功，正在进入审核",
-    reviewingTitle: "您的入驻申请正在审核中",
-    reviewingDesc: "预计 1-3 个工作日完成审核",
-    reviewingNotice: "审核结果将通过短信通知，请保持手机畅通",
-    reviewingStepSubmitted: "资料已提交",
-    reviewingStepReviewing: "平台审核中",
-    reviewingStepDone: "审核完成",
-    approvedTitle: "恭喜，您已成为 Lollipop 发行者",
-    approvedDesc: "现在可以进入发行中心上架剧集、查看收益与结算。",
+    reviewingTitle: "审核中",
+    reviewingDesc: "您的入驻申请已提交，我们将在 3-5 个工作日内完成审核，请留意短信通知。",
+    reviewingInProgress: "进行中",
+    step1Title: "提交申请",
+    step1Sub: "资料已成功提交",
+    step2Title: "资料审核",
+    step2Sub: "预计 3-5 个工作日",
+    step3Title: "结果通知",
+    step3Sub: "短信通知",
+    step4Title: "完成入驻",
+    step4Sub: "开通平台账号",
+    approvedTitle: "审核通过",
+    approvedDesc: "恭喜，{company} 的入驻申请已通过审核，欢迎加入 Lollipop 平台！",
     enterDashboard: "进入发行中心",
-    rejectedTitle: "您的入驻申请未通过",
+    rejectedTitle: "审核未通过",
+    rejectedDesc: "很遗憾，您提交的入驻资料未能通过审核，请检查并重新提交。",
     rejectReasonLabel: "驳回原因",
-    rejectedHint: "请根据驳回原因修改资料后重新提交。",
+    supportPrefix: "如有疑问请联系",
+    supportEmail: "support@lollipop.com",
   },
   "zh-TW": {
+    bannerTitle: "歡迎入駐 Lollipop",
+    bannerSubtitle: "全球首家 AI 影片創作平台",
     welcomeTitle: "填寫以下資訊，即可在 Lollipop 發行劇集",
     welcomeSubtitle: "完成入駐後即可上架內容、接入分成，讓優質劇集觸達更多觀眾。",
     sectionAccount: "關聯帳號",
@@ -156,7 +165,7 @@ export const enroll: Record<Locale, EnrollMessages> = {
     uploadFailed: "上傳失敗，請重試",
     agreement: "我已閱讀並同意《平台入駐合作協議》和《隱私政策》",
     submit: "提交入駐申請",
-    resubmit: "重新提交申請",
+    resubmit: "重新填寫申請",
     vPhoneRequired: "請輸入手機號",
     vCodeRequired: "請輸入驗證碼",
     vCompanyRequired: "請輸入公司名稱",
@@ -168,20 +177,29 @@ export const enroll: Record<Locale, EnrollMessages> = {
     vAgreementRequired: "請先勾選同意合作協議與隱私政策",
     sendCodeSuccess: "驗證碼已發送",
     submitSuccess: "提交成功，正在進入審核",
-    reviewingTitle: "您的入駐申請正在審核中",
-    reviewingDesc: "預計 1-3 個工作日完成審核",
-    reviewingNotice: "審核結果將透過簡訊通知，請保持手機暢通",
-    reviewingStepSubmitted: "資料已提交",
-    reviewingStepReviewing: "平台審核中",
-    reviewingStepDone: "審核完成",
-    approvedTitle: "恭喜，您已成為 Lollipop 發行者",
-    approvedDesc: "現在可以進入發行中心上架劇集、查看收益與結算。",
+    reviewingTitle: "審核中",
+    reviewingDesc: "您的入駐申請已提交，我們將在 3-5 個工作日內完成審核，請留意簡訊通知。",
+    reviewingInProgress: "進行中",
+    step1Title: "提交申請",
+    step1Sub: "資料已成功提交",
+    step2Title: "資料審核",
+    step2Sub: "預計 3-5 個工作日",
+    step3Title: "結果通知",
+    step3Sub: "簡訊通知",
+    step4Title: "完成入駐",
+    step4Sub: "開通平台帳號",
+    approvedTitle: "審核通過",
+    approvedDesc: "恭喜，{company} 的入駐申請已通過審核，歡迎加入 Lollipop 平台！",
     enterDashboard: "進入發行中心",
-    rejectedTitle: "您的入駐申請未通過",
+    rejectedTitle: "審核未通過",
+    rejectedDesc: "很遺憾，您提交的入駐資料未能通過審核，請檢查並重新提交。",
     rejectReasonLabel: "駁回原因",
-    rejectedHint: "請根據駁回原因修改資料後重新提交。",
+    supportPrefix: "如有疑問請聯絡",
+    supportEmail: "support@lollipop.com",
   },
   en: {
+    bannerTitle: "Welcome to Lollipop",
+    bannerSubtitle: "The world's first AI video creation platform",
     welcomeTitle: "Fill in the details below to distribute dramas on Lollipop",
     welcomeSubtitle: "Once onboarded, you can publish content, join revenue sharing, and reach more viewers.",
     sectionAccount: "Linked Account",
@@ -210,7 +228,7 @@ export const enroll: Record<Locale, EnrollMessages> = {
     uploadFailed: "Upload failed, please try again",
     agreement: "I have read and agree to the Platform Onboarding Agreement and Privacy Policy",
     submit: "Submit Application",
-    resubmit: "Resubmit Application",
+    resubmit: "Edit & Resubmit",
     vPhoneRequired: "Please enter your phone number",
     vCodeRequired: "Please enter the verification code",
     vCompanyRequired: "Please enter company name",
@@ -222,20 +240,29 @@ export const enroll: Record<Locale, EnrollMessages> = {
     vAgreementRequired: "Please agree to the cooperation agreement and privacy policy first",
     sendCodeSuccess: "Verification code sent",
     submitSuccess: "Submitted successfully, entering review",
-    reviewingTitle: "Your application is under review",
-    reviewingDesc: "Estimated 1-3 business days to complete",
-    reviewingNotice: "Results will be sent via SMS. Please keep your phone reachable.",
-    reviewingStepSubmitted: "Documents submitted",
-    reviewingStepReviewing: "Under review",
-    reviewingStepDone: "Completed",
-    approvedTitle: "Congratulations, you are now a Lollipop distributor",
-    approvedDesc: "You can now enter the Distribution Center to publish dramas and view earnings.",
+    reviewingTitle: "Under Review",
+    reviewingDesc: "Your application has been submitted. We will complete the review within 3-5 business days. Please watch for SMS notifications.",
+    reviewingInProgress: "In progress",
+    step1Title: "Application Submitted",
+    step1Sub: "Documents received",
+    step2Title: "Under Review",
+    step2Sub: "Est. 3-5 business days",
+    step3Title: "Result Notification",
+    step3Sub: "Notified via SMS",
+    step4Title: "Onboarding Complete",
+    step4Sub: "Platform account activated",
+    approvedTitle: "Approved",
+    approvedDesc: "Congratulations, the application for {company} has been approved. Welcome to Lollipop!",
     enterDashboard: "Enter Distribution Center",
-    rejectedTitle: "Your application was not approved",
+    rejectedTitle: "Not Approved",
+    rejectedDesc: "Unfortunately, your application was not approved. Please review and resubmit.",
     rejectReasonLabel: "Rejection Reason",
-    rejectedHint: "Please revise according to the reason and resubmit.",
+    supportPrefix: "Questions? Contact",
+    supportEmail: "support@lollipop.com",
   },
   pt: {
+    bannerTitle: "Bem-vindo à Lollipop",
+    bannerSubtitle: "A primeira plataforma de criação de vídeo com IA do mundo",
     welcomeTitle: "Preencha os dados abaixo para distribuir dramas na Lollipop",
     welcomeSubtitle: "Após a integração, você pode publicar conteúdo, participar da divisão de receita e alcançar mais espectadores.",
     sectionAccount: "Conta Vinculada",
@@ -264,7 +291,7 @@ export const enroll: Record<Locale, EnrollMessages> = {
     uploadFailed: "Falha no envio, tente novamente",
     agreement: "Li e concordo com o Acordo de Integração da Plataforma e a Política de Privacidade",
     submit: "Enviar Solicitação",
-    resubmit: "Reenviar Solicitação",
+    resubmit: "Editar e Reenviar",
     vPhoneRequired: "Digite seu número de telefone",
     vCodeRequired: "Digite o código de verificação",
     vCompanyRequired: "Digite o nome da empresa",
@@ -276,17 +303,24 @@ export const enroll: Record<Locale, EnrollMessages> = {
     vAgreementRequired: "Primeiro concorde com o acordo de cooperação e a política de privacidade",
     sendCodeSuccess: "Código de verificação enviado",
     submitSuccess: "Enviado com sucesso, entrando em análise",
-    reviewingTitle: "Sua solicitação está em análise",
-    reviewingDesc: "Estimativa de 1-3 dias úteis para concluir",
-    reviewingNotice: "Os resultados serão enviados por SMS. Mantenha seu telefone acessível.",
-    reviewingStepSubmitted: "Documentos enviados",
-    reviewingStepReviewing: "Em análise",
-    reviewingStepDone: "Concluído",
-    approvedTitle: "Parabéns, você agora é um distribuidor Lollipop",
-    approvedDesc: "Agora você pode entrar no Centro de Distribuição para publicar dramas e ver receitas.",
+    reviewingTitle: "Em Análise",
+    reviewingDesc: "Sua solicitação foi enviada. Concluiremos a análise em 3-5 dias úteis. Fique atento às notificações por SMS.",
+    reviewingInProgress: "Em andamento",
+    step1Title: "Solicitação Enviada",
+    step1Sub: "Documentos recebidos",
+    step2Title: "Em Análise",
+    step2Sub: "Est. 3-5 dias úteis",
+    step3Title: "Notificação de Resultado",
+    step3Sub: "Notificado por SMS",
+    step4Title: "Integração Concluída",
+    step4Sub: "Conta da plataforma ativada",
+    approvedTitle: "Aprovado",
+    approvedDesc: "Parabéns, a solicitação de {company} foi aprovada. Bem-vindo à Lollipop!",
     enterDashboard: "Entrar no Centro de Distribuição",
-    rejectedTitle: "Sua solicitação não foi aprovada",
+    rejectedTitle: "Não Aprovado",
+    rejectedDesc: "Infelizmente, sua solicitação não foi aprovada. Revise e reenvie.",
     rejectReasonLabel: "Motivo da Rejeição",
-    rejectedHint: "Revise de acordo com o motivo e reenvie.",
+    supportPrefix: "Dúvidas? Contate",
+    supportEmail: "support@lollipop.com",
   },
 };

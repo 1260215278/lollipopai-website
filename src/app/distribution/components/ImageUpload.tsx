@@ -7,6 +7,7 @@ import { cn } from "../../components/ui/utils";
  * 通用图片上传组件（证照/封面等）。
  * - 选择/拖拽文件后内部调用统一上传服务 uploadFile() → 拿到 URL → onChange(url)
  * - 纯展示 + 上传逻辑，所有文案由调用方通过 props 传入（各功能自有 i18n）
+ * - variant: 发行入驻页为 dark；后台仪表盘为 light
  */
 export interface ImageUploadProps {
   label: string;
@@ -14,19 +15,47 @@ export interface ImageUploadProps {
   value?: string | null;
   onChange: (url: string | null) => void;
   error?: string;
-  /** 区域内提示文案，如「点击或拖拽上传营业执照上传」 */
+  /** 区域内提示文案，如「点击或拖拽上传」 */
   promptText: string;
   /** 格式提示，如「支持 JPG、PNG 格式」 */
   formatText: string;
   /** 已上传后悬浮的「点击替换」文案 */
   replaceText: string;
-  /** 上传失败 toast 文案（由 service 层 toast，此处用于本地兜底显示） */
+  /** 上传失败兜底文案（service 层已 toast，本地用于无 toast 场景） */
   uploadFailedText: string;
   accept?: string;
+  variant?: "light" | "dark";
   className?: string;
   /** 上传区域高度类，默认 h-[132px] */
   zoneClassName?: string;
 }
+
+const TONES = {
+  light: {
+    label: "#374151",
+    idleBg: "#FAFAFA",
+    idleBorder: "#E5E7EB",
+    dragBorder: "#111111",
+    errorBorder: "#fca5a5",
+    errorBg: "#fef2f2",
+    iconBox: "bg-white border-gray-200",
+    icon: "#9CA3AF",
+    prompt: "#6B7280",
+    format: "#9CA3AF",
+  },
+  dark: {
+    label: "#ffffff",
+    idleBg: "rgba(51,51,51,0.3)",
+    idleBorder: "rgba(255,255,255,0.12)",
+    dragBorder: "rgba(255,255,255,0.45)",
+    errorBorder: "#fb2c36",
+    errorBg: "rgba(231,0,11,0.08)",
+    iconBox: "bg-[rgba(51,51,51,0.6)] border-white/10",
+    icon: "#99a1af",
+    prompt: "#d1d5dc",
+    format: "#717182",
+  },
+} as const;
 
 export const ImageUpload: React.FC<ImageUploadProps> = ({
   label,
@@ -39,12 +68,14 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   replaceText,
   uploadFailedText,
   accept = "image/png,image/jpeg",
+  variant = "light",
   className,
   zoneClassName,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [dragging, setDragging] = useState(false);
+  const tone = TONES[variant];
 
   const doUpload = async (file: File) => {
     setUploading(true);
@@ -52,7 +83,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
       const url = await uploadFile(file);
       onChange(url);
     } catch {
-      // uploadFile 已 toast，这里保持当前值不变
+      // uploadFile 已 toast；保持当前值不变
     } finally {
       setUploading(false);
     }
@@ -72,9 +103,9 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
 
   return (
     <div className={className}>
-      <label className="block text-sm mb-2 text-[#374151]" style={{ fontWeight: 500 }}>
+      <label className="block text-sm mb-2" style={{ fontWeight: 500, color: tone.label }}>
         {label}
-        {required && <span className="text-[#E8192C] ml-0.5">*</span>}
+        {required && <span className="text-[#fb2c36] ml-0.5">*</span>}
       </label>
 
       <div
@@ -84,22 +115,20 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         onDragOver={(e) => e.preventDefault()}
         onDrop={handleDrop}
         className={cn(
-          "relative cursor-pointer rounded-xl border-2 border-dashed flex items-center justify-center overflow-hidden transition-all",
+          "relative cursor-pointer rounded-[10px] border-2 border-dashed flex items-center justify-center overflow-hidden transition-all group",
           zoneClassName ?? "h-[132px]",
         )}
         style={{
-          borderColor: error ? "#fca5a5" : dragging ? "#111111" : "#E5E7EB",
-          background: error ? "#fef2f2" : dragging ? "#F9F9F9" : "#FAFAFA",
+          borderColor: error ? tone.errorBorder : dragging ? tone.dragBorder : tone.idleBorder,
+          background: error ? tone.errorBg : tone.idleBg,
         }}
       >
         {uploading ? (
-          <div className="flex flex-col items-center gap-2 text-gray-400">
-            <Loader2 className="w-6 h-6 animate-spin" />
-          </div>
+          <Loader2 className="w-6 h-6 animate-spin" style={{ color: tone.icon }} />
         ) : value ? (
           <>
             <img src={value} alt={label} className="w-full h-full object-contain" />
-            <div className="absolute inset-0 bg-black/0 hover:bg-black/45 transition-colors flex items-center justify-center opacity-0 hover:opacity-100">
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
               <span className="text-white text-sm" style={{ fontWeight: 500 }}>
                 {replaceText}
               </span>
@@ -119,25 +148,21 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
           </>
         ) : (
           <div className="flex flex-col items-center gap-2 px-4 text-center">
-            <div className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center">
-              <UploadCloud className="w-5 h-5 text-gray-400" />
+            <div className={cn("w-10 h-10 rounded-xl border flex items-center justify-center", tone.iconBox)}>
+              <UploadCloud className="w-5 h-5" style={{ color: tone.icon }} />
             </div>
-            <p className="text-sm text-gray-600" style={{ fontWeight: 500 }}>
+            <p className="text-sm" style={{ fontWeight: 500, color: tone.prompt }}>
               {promptText}
             </p>
-            <p className="text-xs text-gray-400">{formatText}</p>
+            <p className="text-xs" style={{ color: tone.format }}>
+              {formatText}
+            </p>
           </div>
         )}
       </div>
 
-      <input
-        ref={inputRef}
-        type="file"
-        accept={accept}
-        className="hidden"
-        onChange={(e) => onPick(e.target.files)}
-      />
-      {error && <p className="text-xs text-[#E8192C] mt-1.5">{error}</p>}
+      <input ref={inputRef} type="file" accept={accept} className="hidden" onChange={(e) => onPick(e.target.files)} />
+      {error && <p className="text-xs text-[#fb2c36] mt-1.5">{error}</p>}
     </div>
   );
 };

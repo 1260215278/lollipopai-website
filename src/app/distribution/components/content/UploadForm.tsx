@@ -505,7 +505,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmit })
               >
                 <div className="flex items-center justify-center min-w-0 px-2 h-8 rounded-lg bg-gray-100 flex-shrink-0">
                   <span className="text-xs text-gray-700 whitespace-nowrap" style={{ fontWeight: 700 }}>
-                    {`第${v.ep}集`}
+                    {fmt(t.epLabelN, { ep: v.ep })}
                   </span>
                 </div>
                 <input

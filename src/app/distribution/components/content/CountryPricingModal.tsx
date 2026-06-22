@@ -77,7 +77,7 @@ export const CountryPricingModal: React.FC<CountryPricingModalProps> = ({ open, 
                   <td className="py-3">
                     {c.pricing.ad ? (
                       <span className="text-amber-600" style={{ fontWeight: 600 }}>
-                        {c.pricing.ad.split(": ")[1]}
+                        {t.adHas}
                       </span>
                     ) : (
                       <span className="text-gray-300">{t.adNone}</span>

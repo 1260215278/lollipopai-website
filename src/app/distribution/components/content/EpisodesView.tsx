@@ -47,7 +47,7 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
       const found = episodes.find((e) => e.ep === i + 1);
       return {
         ep: i + 1,
-        title: found?.title || `第${i + 1}集`,
+        title: found?.title || t.epLabelN.replace("{ep}", String(i + 1)),
         duration: found?.duration || "—",
         size: found?.size || "—",
         uploadedAt: found?.uploadedAt || "—",
@@ -222,7 +222,7 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
               >
                 <div className="flex items-center justify-center h-8 rounded-lg bg-gray-100 flex-shrink-0">
                   <span className="text-xs text-gray-700" style={{ fontWeight: 700 }}>
-                    {`第${ep.ep}集`}
+                    {t.epLabelN.replace("{ep}", String(ep.ep))}
                   </span>
                 </div>
                 <span className="text-sm text-gray-800 truncate" style={{ fontWeight: 500 }}>

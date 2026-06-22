@@ -21,6 +21,8 @@ export interface EarningsMessages {
   bills: string;
   monthlyTrend: string;
   chartEarnings: string;
+  /** 月度趋势 X 轴标签，"{n}月" / "M{n}" */
+  monthLabel: string;
   /** 收益详情 */
   detailTitle: string;
   searchPlaceholder: string;
@@ -60,6 +62,7 @@ export const earnings: Record<Locale, EarningsMessages> = {
     bills: "结算账单",
     monthlyTrend: "月度收益趋势",
     chartEarnings: "收益",
+    monthLabel: "{n}月",
     detailTitle: "收益详情",
     searchPlaceholder: "搜索剧集名称",
     updatedDaily: "数据每日更新",
@@ -93,6 +96,7 @@ export const earnings: Record<Locale, EarningsMessages> = {
     bills: "結算帳單",
     monthlyTrend: "月度收益趨勢",
     chartEarnings: "收益",
+    monthLabel: "{n}月",
     detailTitle: "收益詳情",
     searchPlaceholder: "搜尋劇集名稱",
     updatedDaily: "資料每日更新",
@@ -126,6 +130,7 @@ export const earnings: Record<Locale, EarningsMessages> = {
     bills: "Bills",
     monthlyTrend: "Monthly Trend",
     chartEarnings: "Earnings",
+    monthLabel: "M{n}",
     detailTitle: "Earnings Detail",
     searchPlaceholder: "Search drama name",
     updatedDaily: "Updated daily",
@@ -159,6 +164,7 @@ export const earnings: Record<Locale, EarningsMessages> = {
     bills: "Faturas",
     monthlyTrend: "Tendência Mensal",
     chartEarnings: "Receita",
+    monthLabel: "M{n}",
     detailTitle: "Detalhe de Receitas",
     searchPlaceholder: "Buscar nome do drama",
     updatedDaily: "Atualizado diariamente",

@@ -154,6 +154,10 @@ export interface ContentMessages {
   pricingColAd: string;
   pricingReadonly: string;
   adNone: string;
+  /** 广告列「有」 */
+  adHas: string;
+  /** 剧集序号标签，"第{ep}集" / "Episode {ep}" */
+  epLabelN: string;
 
   // ── 详情页 ──
   detailEpisodeVideos: string;
@@ -340,6 +344,8 @@ export const content: Record<Locale, ContentMessages> = {
     pricingColAd: "15s广告",
     pricingReadonly: "平台定价，不可修改",
     adNone: "无",
+    adHas: "有",
+    epLabelN: "第{ep}集",
 
     detailEpisodeVideos: "剧集视频",
     detailBasicInfo: "基本信息",
@@ -532,6 +538,8 @@ export const content: Record<Locale, ContentMessages> = {
     pricingColAd: "15s廣告",
     pricingReadonly: "平台定價，不可修改",
     adNone: "無",
+    adHas: "有",
+    epLabelN: "第{ep}集",
 
     detailEpisodeVideos: "劇集影片",
     detailBasicInfo: "基本資訊",
@@ -725,6 +733,8 @@ export const content: Record<Locale, ContentMessages> = {
     pricingColAd: "15s Ad",
     pricingReadonly: "Platform pricing, read-only",
     adNone: "—",
+    adHas: "Yes",
+    epLabelN: "Episode {ep}",
 
     detailEpisodeVideos: "Episode Videos",
     detailBasicInfo: "Basic Info",
@@ -918,6 +928,8 @@ export const content: Record<Locale, ContentMessages> = {
     pricingColAd: "Anúncio 15s",
     pricingReadonly: "Preço da plataforma, somente leitura",
     adNone: "—",
+    adHas: "Sim",
+    epLabelN: "Episódio {ep}",
 
     detailEpisodeVideos: "Vídeos dos episódios",
     detailBasicInfo: "Informações básicas",

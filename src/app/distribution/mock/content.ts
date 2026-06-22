@@ -14,8 +14,8 @@ export interface CountryPricing {
   full: string;
   /** 单集价格，如 "$10" */
   single: string;
-  /** 15s 广告费描述，无广告则为 null（如 "15s广告费: $0.008/次"） */
-  ad: string | null;
+  /** 是否含 15s 广告（前端仅展示 有/无；具体单价见 接口契约草案.md） */
+  ad: boolean;
 }
 
 /** 上架国家定义（value 为业务码；label 走 i18n，flag 固定） */
@@ -30,9 +30,9 @@ export interface CountryDef {
  * 名称走 i18n（messages.distribution.content.countries[value]）。
  */
 export const COUNTRIES: CountryDef[] = [
-  { value: "us", flag: "🇺🇸", pricing: { full: "$80", single: "$10", ad: null } },
-  { value: "ph", flag: "🇵🇭", pricing: { full: "$12", single: "$1.5", ad: "15s广告费: $0.008/次" } },
-  { value: "in", flag: "🇮🇳", pricing: { full: "$8", single: "$0.8", ad: "15s广告费: $0.005/次" } },
+  { value: "us", flag: "🇺🇸", pricing: { full: "$80", single: "$10", ad: false } },
+  { value: "ph", flag: "🇵🇭", pricing: { full: "$12", single: "$1.5", ad: true } },
+  { value: "in", flag: "🇮🇳", pricing: { full: "$8", single: "$0.8", ad: true } },
 ];
 
 /** 可选标签（value 为业务码；label 走 i18n） */

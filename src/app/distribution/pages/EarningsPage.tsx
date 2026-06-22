@@ -85,7 +85,7 @@ export function EarningsPage() {
     s === "settled" ? t.statusSettled : s === "processing" ? t.statusProcessing : t.statusPending;
 
   const chartData = (summary?.monthlyTrend ?? []).map((m) => ({
-    label: `${m.month}月`,
+    label: t.monthLabel.replace("{n}", String(m.month)),
     total: hasAccount ? m.total : 0,
   }));
 

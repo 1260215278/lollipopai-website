@@ -2,16 +2,239 @@ import type { Locale } from "../../i18n";
 
 /**
  * 数据概览文案 —— 由 P2 功能 subagent 拥有并扩充。
- * 扩充时保持 4 语言（zh-CN/zh-TW/en/pt）结构完全一致；繁中/葡语机翻占位。
+ * zh-CN 为权威（取自 Figma 15077-19718 与原型 dashboard/HomePage.tsx）；
+ * en 同步；zh-TW / pt 机翻占位，4 语言（zh-CN/zh-TW/en/pt）结构完全一致。
+ *
+ * 占位符（由组件 replace）：
+ *  - {n}   本月新增部数
+ *  - {pct} 较上月环比百分比（已带正负号，如 "+23.4%"）
  */
 export interface OverviewMessages {
   title: string;
   subtitle: string;
+
+  // ── 顶部统计卡 ───────────────────────────────
+  /** 上剧总数 */
+  totalDramas: string;
+  /** 累计播放量 */
+  totalViews: string;
+  /** 累计点赞数 */
+  totalLikes: string;
+  /** 累计收藏数 */
+  totalFavorites: string;
+  /** 部数单位（上剧总数右侧小字） */
+  unitDrama: string;
+  /** 本月新增 {n} 部 */
+  monthlyAdded: string;
+  /** 较上月 {pct} */
+  momChange: string;
+
+  // ── 趋势图 ───────────────────────────────────
+  /** 数据趋势 */
+  trendTitle: string;
+  /** 近期剧集综合表现 */
+  trendSubtitle: string;
+  /** 指标：播放量 */
+  metricPlays: string;
+  /** 指标：点赞 */
+  metricLikes: string;
+  /** 指标：收藏 */
+  metricFavs: string;
+  /** 周期：近 7 天 */
+  period7: string;
+  /** 周期：近 30 天 */
+  period30: string;
+  /** 汇总：近 7 天播放 */
+  sum7Plays: string;
+  /** 汇总：近 7 天点赞 */
+  sum7Likes: string;
+  /** 汇总：近 7 天收藏 */
+  sum7Favs: string;
+  /** 汇总：近 30 天播放 */
+  sum30Plays: string;
+  /** 汇总：近 30 天点赞 */
+  sum30Likes: string;
+  /** 汇总：近 30 天收藏 */
+  sum30Favs: string;
+
+  // ── 剧集排行表 ───────────────────────────────
+  /** 剧集数据排行 */
+  rankTitle: string;
+  /** 按播放量排名 */
+  rankSubtitle: string;
+  colRank: string;
+  colDrama: string;
+  colEpisodes: string;
+  colTotalViews: string;
+  colLikes: string;
+  colFavorites: string;
+  colComments: string;
+  colShares: string;
+  /** 集数单位（如 24 集 / 24 ep） */
+  unitEpisode: string;
+
+  // ── 播放量对比柱状图 ─────────────────────────
+  /** 各剧集播放量对比 */
+  barTitle: string;
+  /** 柱状图播放量图例/tooltip 名 */
+  barViews: string;
+
+  // ── 状态 ─────────────────────────────────────
+  /** 加载失败提示 */
+  loadFailed: string;
 }
 
 export const overview: Record<Locale, OverviewMessages> = {
-  "zh-CN": { title: "数据概览", subtitle: "发行数据一览" },
-  "zh-TW": { title: "數據概覽", subtitle: "發行數據一覽" },
-  en: { title: "Overview", subtitle: "Your distribution at a glance" },
-  pt: { title: "Visão geral", subtitle: "Sua distribuição em resumo" },
+  "zh-CN": {
+    title: "数据概览",
+    subtitle: "发行数据一览",
+    totalDramas: "上剧总数",
+    totalViews: "累计播放量",
+    totalLikes: "累计点赞数",
+    totalFavorites: "累计收藏数",
+    unitDrama: "部",
+    monthlyAdded: "本月新增 {n} 部",
+    momChange: "较上月 {pct}",
+    trendTitle: "数据趋势",
+    trendSubtitle: "近期剧集综合表现",
+    metricPlays: "播放量",
+    metricLikes: "点赞",
+    metricFavs: "收藏",
+    period7: "近7天",
+    period30: "近30天",
+    sum7Plays: "近7天播放",
+    sum7Likes: "近7天点赞",
+    sum7Favs: "近7天收藏",
+    sum30Plays: "近30天播放",
+    sum30Likes: "近30天点赞",
+    sum30Favs: "近30天收藏",
+    rankTitle: "剧集数据排行",
+    rankSubtitle: "按播放量排名",
+    colRank: "排名",
+    colDrama: "剧集名称",
+    colEpisodes: "集数",
+    colTotalViews: "总播放量",
+    colLikes: "点赞数",
+    colFavorites: "收藏数",
+    colComments: "评论数",
+    colShares: "分享数",
+    unitEpisode: "集",
+    barTitle: "各剧集播放量对比",
+    barViews: "播放量",
+    loadFailed: "数据加载失败，请重试",
+  },
+  "zh-TW": {
+    title: "數據概覽",
+    subtitle: "發行數據一覽",
+    totalDramas: "上劇總數",
+    totalViews: "累計播放量",
+    totalLikes: "累計點讚數",
+    totalFavorites: "累計收藏數",
+    unitDrama: "部",
+    monthlyAdded: "本月新增 {n} 部",
+    momChange: "較上月 {pct}",
+    trendTitle: "數據趨勢",
+    trendSubtitle: "近期劇集綜合表現",
+    metricPlays: "播放量",
+    metricLikes: "點讚",
+    metricFavs: "收藏",
+    period7: "近7天",
+    period30: "近30天",
+    sum7Plays: "近7天播放",
+    sum7Likes: "近7天點讚",
+    sum7Favs: "近7天收藏",
+    sum30Plays: "近30天播放",
+    sum30Likes: "近30天點讚",
+    sum30Favs: "近30天收藏",
+    rankTitle: "劇集數據排行",
+    rankSubtitle: "按播放量排名",
+    colRank: "排名",
+    colDrama: "劇集名稱",
+    colEpisodes: "集數",
+    colTotalViews: "總播放量",
+    colLikes: "點讚數",
+    colFavorites: "收藏數",
+    colComments: "評論數",
+    colShares: "分享數",
+    unitEpisode: "集",
+    barTitle: "各劇集播放量對比",
+    barViews: "播放量",
+    loadFailed: "資料載入失敗，請重試",
+  },
+  en: {
+    title: "Overview",
+    subtitle: "Your distribution at a glance",
+    totalDramas: "Total Dramas",
+    totalViews: "Total Views",
+    totalLikes: "Total Likes",
+    totalFavorites: "Total Favorites",
+    unitDrama: "dramas",
+    monthlyAdded: "+{n} this month",
+    momChange: "{pct} vs last month",
+    trendTitle: "Data Trend",
+    trendSubtitle: "Recent drama performance",
+    metricPlays: "Views",
+    metricLikes: "Likes",
+    metricFavs: "Favs",
+    period7: "7d",
+    period30: "30d",
+    sum7Plays: "7d Views",
+    sum7Likes: "7d Likes",
+    sum7Favs: "7d Favs",
+    sum30Plays: "30d Views",
+    sum30Likes: "30d Likes",
+    sum30Favs: "30d Favs",
+    rankTitle: "Drama Rankings",
+    rankSubtitle: "Ranked by views",
+    colRank: "Rank",
+    colDrama: "Drama",
+    colEpisodes: "Episodes",
+    colTotalViews: "Total Views",
+    colLikes: "Likes",
+    colFavorites: "Favorites",
+    colComments: "Comments",
+    colShares: "Shares",
+    unitEpisode: "ep",
+    barTitle: "Drama Views Comparison",
+    barViews: "Views",
+    loadFailed: "Failed to load data, please try again",
+  },
+  pt: {
+    title: "Visão geral",
+    subtitle: "Sua distribuição em resumo",
+    totalDramas: "Total de Dramas",
+    totalViews: "Total de Visualizações",
+    totalLikes: "Total de Curtidas",
+    totalFavorites: "Total de Favoritos",
+    unitDrama: "dramas",
+    monthlyAdded: "+{n} este mês",
+    momChange: "{pct} vs mês anterior",
+    trendTitle: "Tendência de Dados",
+    trendSubtitle: "Desempenho recente dos dramas",
+    metricPlays: "Visualizações",
+    metricLikes: "Curtidas",
+    metricFavs: "Favoritos",
+    period7: "7d",
+    period30: "30d",
+    sum7Plays: "Views 7d",
+    sum7Likes: "Curtidas 7d",
+    sum7Favs: "Favoritos 7d",
+    sum30Plays: "Views 30d",
+    sum30Likes: "Curtidas 30d",
+    sum30Favs: "Favoritos 30d",
+    rankTitle: "Ranking de Dramas",
+    rankSubtitle: "Classificado por visualizações",
+    colRank: "Posição",
+    colDrama: "Drama",
+    colEpisodes: "Episódios",
+    colTotalViews: "Total de Visualizações",
+    colLikes: "Curtidas",
+    colFavorites: "Favoritos",
+    colComments: "Comentários",
+    colShares: "Compartilhamentos",
+    unitEpisode: "ep",
+    barTitle: "Comparação de Visualizações",
+    barViews: "Visualizações",
+    loadFailed: "Falha ao carregar os dados, tente novamente",
+  },
 };

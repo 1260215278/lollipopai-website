@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Menu, X, Phone, Globe } from "lucide-react";
+import { Link } from "react-router";
 import logoImg from "../../imports/Lollipop1.png";
 import { useI18n } from "../i18n";
 
@@ -144,6 +145,15 @@ export function Navbar({ currentPage, onNavigate }: { currentPage: string; onNav
 
         {/* CTA + Language */}
         <div className="hidden lg:flex items-center gap-3">
+          {/* 发行中心入口 */}
+          <Link
+            to="/distribution"
+            className="flex items-center gap-2 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-400 hover:to-orange-400 text-white px-5 py-2.5 rounded-full transition-all shadow-lg shadow-red-900/30 hover:shadow-red-600/40 cursor-pointer"
+            style={{ fontSize: "0.85rem", fontWeight: 600 }}
+          >
+            {messages.distribution.nav.entry}
+          </Link>
+
           {/* <button
             onClick={() => { onNavigate("contact"); window.scrollTo({ top: 0, behavior: "smooth" }); }}
             className="flex items-center gap-2 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-400 hover:to-orange-400 text-white px-6 py-2.5 rounded-full transition-all shadow-lg shadow-red-900/30 hover:shadow-red-600/40 cursor-pointer"
@@ -230,6 +240,16 @@ export function Navbar({ currentPage, onNavigate }: { currentPage: string; onNav
               </a>
             )
           )}
+
+          {/* 发行中心入口（移动端） */}
+          <Link
+            to="/distribution"
+            onClick={() => setMobileOpen(false)}
+            className="mt-3 mb-1 w-full flex items-center justify-center gap-2 bg-gradient-to-r from-red-500 to-orange-500 text-white py-3 rounded-full"
+            style={{ fontWeight: 600 }}
+          >
+            {messages.distribution.nav.entry}
+          </Link>
 
           {/* Mobile Language Selector */}
           <div className="py-3 border-b border-white/5">

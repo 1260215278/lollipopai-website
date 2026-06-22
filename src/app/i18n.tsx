@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { distributionMessages } from "./distribution/i18n.distribution";
 
 export type Locale = "zh-TW" | "zh-CN" | "en" | "pt";
 
@@ -320,6 +321,7 @@ const enMessages = {
     title: "Preview Coming Soon",
     description: "Full episode available in the app",
   },
+  distribution: distributionMessages.en,
 };
 
 export type TranslationMessages = typeof enMessages;
@@ -635,6 +637,7 @@ const translations: Record<Locale, TranslationMessages> = {
       title: "预告即将上线",
       description: "完整剧集请在 App 内观看",
     },
+    distribution: distributionMessages["zh-CN"],
   },
   "zh-TW": {
     common: {
@@ -945,6 +948,7 @@ const translations: Record<Locale, TranslationMessages> = {
       title: "預告即將上線",
       description: "完整劇集請在 App 內觀看",
     },
+    distribution: distributionMessages["zh-TW"],
   },
   pt: {
     common: {
@@ -1255,6 +1259,7 @@ const translations: Record<Locale, TranslationMessages> = {
       title: "Prévia em breve",
       description: "Episódio completo disponível no app",
     },
+    distribution: distributionMessages.pt,
   },
 };
 
@@ -1267,6 +1272,16 @@ type I18nContextValue = {
 };
 
 const I18nContext = createContext<I18nContextValue | null>(null);
+
+/**
+ * 非 React 模块的文案桥接：services 层（http.ts / upload.ts）等无法使用
+ * useI18n() hook，通过 getMessages() 读取当前语言文案（如网络错误兜底）。
+ * 由 I18nProvider 在每次渲染时与当前 locale 保持同步。
+ */
+let activeMessages: TranslationMessages = translations[getInitialLocale()];
+export function getMessages(): TranslationMessages {
+  return activeMessages;
+}
 
 function isLocale(value: string): value is Locale {
   return localeOptions.some((item) => item.code === value);
@@ -1309,6 +1324,9 @@ function getInitialLocale(): Locale {
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocale] = useState<Locale>(getInitialLocale);
+
+  // 同步非 hook 的文案桥接，供 services 层读取当前语言
+  activeMessages = translations[locale];
 
   useEffect(() => {
     try {

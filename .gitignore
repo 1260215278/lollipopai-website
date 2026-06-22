@@ -36,3 +36,6 @@ coverage/
 # 临时
 *.tmp
 *.bak
+
+# 测试工具产物
+.playwright-mcp/

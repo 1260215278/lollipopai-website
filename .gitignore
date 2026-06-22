@@ -39,3 +39,6 @@ coverage/
 
 # 测试工具产物
 .playwright-mcp/
+
+# Claude Code 会话/worktree 状态
+.claude/

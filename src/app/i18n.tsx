@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { distributionMessages } from "./distribution/i18n.distribution";
+import { loginMessages } from "./i18n.login";
 
 export type Locale = "zh-TW" | "zh-CN" | "en" | "pt";
 
@@ -43,11 +44,12 @@ const enMessages = {
   navbar: {
     links: {
       home: "Home",
-      trending: "Trending",
-      genres: "Genres",
-      creators: "Creators",
-      aboutUs: "About Us",
+      creating: "Creating",
+      download: "Download",
+      contact: "Contact",
     },
+    signUp: "Sign Up",
+    logIn: "Log In",
   },
   hero: {
     bannerAlt: ["Lollipop Banner 1", "Lollipop Banner 2"],
@@ -322,6 +324,7 @@ const enMessages = {
     description: "Full episode available in the app",
   },
   distribution: distributionMessages.en,
+  login: loginMessages.en,
 };
 
 export type TranslationMessages = typeof enMessages;
@@ -359,11 +362,12 @@ const translations: Record<Locale, TranslationMessages> = {
     navbar: {
       links: {
         home: "首页",
-        trending: "热门",
-        genres: "分类",
-        creators: "创作者",
-        aboutUs: "关于我们",
+        creating: "创作", // TODO(verify) Creating 中文用词
+        download: "下载",
+        contact: "联系我们",
       },
+      signUp: "注册",
+      logIn: "登录",
     },
     hero: {
       bannerAlt: ["Lollipop 横幅 1", "Lollipop 横幅 2"],
@@ -638,6 +642,7 @@ const translations: Record<Locale, TranslationMessages> = {
       description: "完整剧集请在 App 内观看",
     },
     distribution: distributionMessages["zh-CN"],
+    login: loginMessages["zh-CN"],
   },
   "zh-TW": {
     common: {
@@ -670,11 +675,12 @@ const translations: Record<Locale, TranslationMessages> = {
     navbar: {
       links: {
         home: "首頁",
-        trending: "熱門",
-        genres: "分類",
-        creators: "創作者",
-        aboutUs: "關於我們",
+        creating: "創作", // TODO(verify) Creating 中文用詞
+        download: "下載",
+        contact: "聯絡我們",
       },
+      signUp: "註冊",
+      logIn: "登入",
     },
     hero: {
       bannerAlt: ["Lollipop 橫幅 1", "Lollipop 橫幅 2"],
@@ -949,6 +955,7 @@ const translations: Record<Locale, TranslationMessages> = {
       description: "完整劇集請在 App 內觀看",
     },
     distribution: distributionMessages["zh-TW"],
+    login: loginMessages["zh-TW"],
   },
   pt: {
     common: {
@@ -981,11 +988,12 @@ const translations: Record<Locale, TranslationMessages> = {
     navbar: {
       links: {
         home: "Início",
-        trending: "Em Alta",
-        genres: "Gêneros",
-        creators: "Criadores",
-        aboutUs: "Sobre Nós",
+        creating: "Criação", // TODO(verify) Creating 葡译
+        download: "Baixar",
+        contact: "Contato",
       },
+      signUp: "Cadastrar",
+      logIn: "Entrar",
     },
     hero: {
       bannerAlt: ["Banner Lollipop 1", "Banner Lollipop 2"],
@@ -1260,6 +1268,7 @@ const translations: Record<Locale, TranslationMessages> = {
       description: "Episódio completo disponível no app",
     },
     distribution: distributionMessages.pt,
+    login: loginMessages.pt,
   },
 };
 

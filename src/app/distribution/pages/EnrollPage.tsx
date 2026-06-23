@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router";
-import { Globe, ChevronDown, Send, Loader2, Clock, CheckCircle2, XCircle, ArrowRight } from "lucide-react";
+import { Send, Loader2, Clock, CheckCircle2, XCircle, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { useI18n } from "../../i18n";
 import { Footer } from "../../components/Footer";
 import { ImageUpload } from "../components/ImageUpload";
-import logoImg from "../../../imports/Lollipop1.png";
+import { SiteHeader, type SiteNavItem } from "../../components/SiteHeader";
 import { ApiError } from "../../services/http";
 import {
   getPublisherStatus,
@@ -218,60 +218,19 @@ export function EnrollPage() {
   );
 }
 
-/* ── 顶部头部（深色，logo + 语言切换） ───────────────────────── */
+/* ── 顶部头部：复用全站统一顶栏（figma），导航跳回营销站对应锚点 ── */
 function EnrollHeader() {
-  const { messages, languages, currentLanguage, setLocale } = useI18n();
+  const { messages } = useI18n();
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const h = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-    };
-    document.addEventListener("mousedown", h);
-    return () => document.removeEventListener("mousedown", h);
-  }, []);
-
-  return (
-    <header className="sticky top-0 z-50 bg-black/60 backdrop-blur-xl border-b border-white/5">
-      <div className="max-w-7xl mx-auto px-6 h-[64px] flex items-center justify-between">
-        <button onClick={() => navigate("/")} className="flex items-center gap-2.5 cursor-pointer">
-          <img src={logoImg} alt="Lollipop" className="h-9 w-auto rounded-[8px]" />
-          <span className="text-white tracking-wide" style={{ fontSize: "1.3rem", fontWeight: 700 }}>
-            {messages.common.brand}
-          </span>
-        </button>
-
-        <div ref={ref} className="relative">
-          <button
-            onClick={() => setOpen((v) => !v)}
-            aria-label={messages.common.language}
-            className="flex items-center gap-1.5 px-3 h-10 rounded-full border border-white/10 text-gray-300 hover:text-white hover:border-white/25 transition-all"
-          >
-            <Globe className="w-[18px] h-[18px]" />
-            <span className="text-sm">{currentLanguage.label}</span>
-            <ChevronDown className="w-3.5 h-3.5" />
-          </button>
-          {open && (
-            <div className="absolute top-full right-0 mt-2 w-40 bg-black/90 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden shadow-2xl py-1">
-              {languages.map((lang) => (
-                <button
-                  key={lang.code}
-                  onClick={() => { setLocale(lang.code); setOpen(false); }}
-                  className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
-                    currentLanguage.code === lang.code ? "text-red-400 bg-red-500/10" : "text-gray-300 hover:text-white hover:bg-white/5"
-                  }`}
-                >
-                  {lang.label}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    </header>
-  );
+  const links = messages.navbar.links;
+  const navItems: SiteNavItem[] = [
+    { key: "home", label: links.home, onClick: () => navigate("/") },
+    { key: "creating", label: links.creating, onClick: () => navigate({ pathname: "/", hash: "#creators" }) },
+    { key: "distribution", label: messages.distribution.nav.entry, active: true, onClick: () => navigate("/distribution") },
+    { key: "download", label: links.download, onClick: () => navigate({ pathname: "/", hash: "#download" }) },
+    { key: "contact", label: links.contact, onClick: () => navigate({ pathname: "/", hash: "#contact" }) },
+  ];
+  return <SiteHeader navItems={navItems} onLogoClick={() => navigate("/")} sticky />;
 }
 
 /* ── 深色表单控件 ─────────────────────────────────────────── */

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navbar } from "./components/Navbar";
 import { HeroSection, StatsSection } from "./components/HeroSection";
 import { TrendingSection } from "./components/TrendingSection";
@@ -22,6 +22,23 @@ export default function App() {
     setCurrentPage(page);
     if (page !== "home") window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  // 跨路由跳回营销站（如发行/入驻页顶栏点击 Home/Creating/Download/Contact）时，
+  // 按 URL hash 定位：#contact/#about → 切页；区块 id → 平滑滚动。
+  useEffect(() => {
+    const hash = window.location.hash.replace("#", "");
+    if (!hash) return;
+    if (hash === "contact" || hash === "about") {
+      setCurrentPage(hash);
+      window.scrollTo({ top: 0 });
+      return;
+    }
+    const timer = window.setTimeout(
+      () => document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" }),
+      200,
+    );
+    return () => window.clearTimeout(timer);
+  }, []);
 
   return (
     <div className="relative bg-[#0a0000] min-h-screen" style={{ fontFamily: "Inter, sans-serif" }}>

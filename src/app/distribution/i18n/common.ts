@@ -22,6 +22,8 @@ export interface CommonMessages {
   logout: string;
   language: string;
   publisher: string;
+  menu: string;
+  close: string;
 }
 
 export const common: Record<Locale, CommonMessages> = {
@@ -46,6 +48,8 @@ export const common: Record<Locale, CommonMessages> = {
     logout: "退出登录",
     language: "语言",
     publisher: "发行者",
+    menu: "菜单",
+    close: "关闭",
   },
   "zh-TW": {
     networkError: "網路異常，請稍後重試",
@@ -68,6 +72,8 @@ export const common: Record<Locale, CommonMessages> = {
     logout: "登出",
     language: "語言",
     publisher: "發行者",
+    menu: "選單",
+    close: "關閉",
   },
   en: {
     networkError: "Network error, please try again later",
@@ -90,6 +96,8 @@ export const common: Record<Locale, CommonMessages> = {
     logout: "Log Out",
     language: "Language",
     publisher: "Publisher",
+    menu: "Menu",
+    close: "Close",
   },
   pt: {
     networkError: "Erro de rede, tente novamente mais tarde",
@@ -112,5 +120,7 @@ export const common: Record<Locale, CommonMessages> = {
     logout: "Sair",
     language: "Idioma",
     publisher: "Distribuidor",
+    menu: "Menu",
+    close: "Fechar",
   },
 };

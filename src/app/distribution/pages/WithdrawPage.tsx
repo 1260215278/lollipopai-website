@@ -176,7 +176,8 @@ export function WithdrawPage() {
         </div>
 
         {/* 表格：结算日期 / 周期 / 比例 / 类型 / 账户类型 / 账户号码 / 金额 / 状态 / 操作 */}
-        <table className="w-full">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[880px]">
           <thead>
             <tr className="border-b border-[#f3f4f6] bg-gray-50/50">
               <Th>{t.colDate}</Th>
@@ -240,6 +241,7 @@ export function WithdrawPage() {
             </tbody>
           )}
         </table>
+        </div>
 
         {filtered.length === 0 && (
           <EmptyState

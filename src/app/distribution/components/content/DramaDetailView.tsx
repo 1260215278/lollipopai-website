@@ -94,7 +94,7 @@ export const DramaDetailView: React.FC<DramaDetailViewProps> = ({
         </button>
       </div>
 
-      <div className="grid grid-cols-[1fr_320px] gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_320px] gap-6">
         {/* Left */}
         <div className="space-y-5">
           {/* Basic Info */}

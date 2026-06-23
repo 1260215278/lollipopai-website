@@ -490,6 +490,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmit })
       {/* ── Step 2 上传剧集 ── */}
       {step === 2 && (
         <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden max-w-4xl">
+          <div className="overflow-x-auto">
+          <div className="min-w-[680px]">
           <div className="grid grid-cols-[72px_1fr_1fr_100px_90px_90px] gap-3 px-5 py-3 border-b border-gray-100 bg-gray-50/60">
             {[t.colEp, t.colEpTitle, t.colVideoFile, t.colSize, t.colDuration, t.colStatus].map((col, i) => (
               <span key={i} className="text-xs text-gray-500" style={{ fontWeight: 500 }}>
@@ -575,6 +577,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmit })
                 </span>
               </div>
             ))}
+          </div>
+          </div>
           </div>
           <div className="flex items-center justify-between px-5 py-3.5 border-t border-gray-100 bg-gray-50/40">
             <span className="text-xs text-gray-500">

@@ -92,7 +92,8 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
       </div>
 
       <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-        <table className="w-full">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[880px]">
           <thead>
             <tr className="border-b border-gray-100 bg-gray-50/50">
               {columns.map((col, i) => (
@@ -324,6 +325,7 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );

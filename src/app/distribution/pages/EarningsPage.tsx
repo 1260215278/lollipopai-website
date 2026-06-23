@@ -234,6 +234,8 @@ export function EarningsPage() {
             </div>
 
             {/* 表头 */}
+            <div className="overflow-x-auto">
+            <div className="min-w-[720px]">
             <div className="grid grid-cols-[1fr_160px_80px_100px_120px_100px] px-5 py-2.5 bg-gray-50/60 border-b border-[#f3f4f6]">
               {[t.colDrama, t.colType, t.colShare, t.colViews, t.colAmount, t.colStatus].map((col, i) => (
                 <span key={i} className="text-xs text-[#6a7282]" style={{ fontWeight: 500 }}>
@@ -275,6 +277,8 @@ export function EarningsPage() {
                   <p className="text-sm text-gray-400">{t.emptyMonth}</p>
                 </div>
               )}
+            </div>
+            </div>
             </div>
           </>
         ) : (

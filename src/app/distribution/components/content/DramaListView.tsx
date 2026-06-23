@@ -115,13 +115,15 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
                 </td>
               </tr>
             ) : dramas.length > 0 ? (
-              dramas.map((drama) => {
+              dramas.map((drama, idx) => {
                 const stStyle = dramaStatusStyle[drama.status];
                 const distLabel = drama.distribution === "full" ? t.distFull : t.distAccount;
                 const revenueLabel =
                   drama.revenueType === "full" ? t.revenueFullShort : t.revenueAccountShort;
                 const epDone = uploadedCounts[drama.id] ?? drama.uploadedEpisodes;
                 const isOpen = actionMenuId === drama.id;
+                // 末 2 行的操作菜单向上展开，避免被表格横向滚动容器/卡片 overflow 裁切
+                const openUp = dramas.length > 2 && idx >= dramas.length - 2;
                 return (
                   <tr key={drama.id} className="border-t border-gray-50 hover:bg-gray-50/50 transition-colors">
                     <td className="px-4 py-4">
@@ -236,7 +238,11 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
                           <MoreHorizontal className="w-4 h-4" />
                         </button>
                         {isOpen && (
-                          <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-xl z-20 overflow-hidden">
+                          <div
+                            className={`absolute right-0 w-48 bg-white border border-gray-200 rounded-xl shadow-xl z-20 overflow-hidden ${
+                              openUp ? "bottom-full mb-1" : "top-full mt-1"
+                            }`}
+                          >
                             {drama.status === "reviewing" && (
                               <div className="flex items-center gap-2 px-3 py-2 bg-amber-50 border-b border-amber-100">
                                 <AlertCircle className="w-3 h-3 text-amber-500 flex-shrink-0" />

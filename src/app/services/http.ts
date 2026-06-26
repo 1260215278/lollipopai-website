@@ -13,7 +13,9 @@ import { toast } from "sonner";
 import { getAppToken, getPublisherToken } from "./auth";
 import { getMessages } from "../i18n";
 
-const API_BASE: string = import.meta.env.VITE_API_BASE || "";
+// TODO(verify): 临时写死测试环境基址，便于部署后直连测试后端（跨域，需后端开 CORS）。
+// 后续应改回由 VITE_API_BASE 配置（留空走相对 /sqx_fast + 同域/代理）。
+const API_BASE: string = import.meta.env.VITE_API_BASE || "https://www.testshort.top";
 /** 后端统一 context-path */
 export const CONTEXT_PATH = "/sqx_fast";
 /** 请求基础地址：${VITE_API_BASE}/sqx_fast */

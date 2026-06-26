@@ -223,9 +223,10 @@ export function WithdrawPage() {
                       disabled={row.status === "paid" || applyingId === row.id}
                       className="inline-flex items-center gap-1.5 h-8 px-3 rounded-[14px] text-white text-xs transition-opacity disabled:cursor-not-allowed"
                       style={{
-                        background: "#111111",
+                        // 已打款禁用态：实心中灰填充（对齐 figma 15188-33359），而非半透明黑
+                        background: row.status === "paid" ? "#9CA3AF" : "#111111",
                         fontWeight: 600,
-                        opacity: row.status === "paid" ? 0.4 : applyingId === row.id ? 0.7 : 1,
+                        opacity: applyingId === row.id ? 0.7 : 1,
                       }}
                     >
                       {applyingId === row.id ? (

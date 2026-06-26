@@ -50,6 +50,8 @@ const enMessages = {
     },
     signUp: "Sign Up",
     logIn: "Log In",
+    account: "Account",
+    logOut: "Log Out",
   },
   hero: {
     bannerAlt: ["Lollipop Banner 1", "Lollipop Banner 2"],
@@ -368,6 +370,8 @@ const translations: Record<Locale, TranslationMessages> = {
       },
       signUp: "注册",
       logIn: "登录",
+      account: "账户",
+      logOut: "退出登录",
     },
     hero: {
       bannerAlt: ["Lollipop 横幅 1", "Lollipop 横幅 2"],
@@ -681,6 +685,8 @@ const translations: Record<Locale, TranslationMessages> = {
       },
       signUp: "註冊",
       logIn: "登入",
+      account: "帳號",
+      logOut: "退出登入",
     },
     hero: {
       bannerAlt: ["Lollipop 橫幅 1", "Lollipop 橫幅 2"],
@@ -994,6 +1000,8 @@ const translations: Record<Locale, TranslationMessages> = {
       },
       signUp: "Cadastrar",
       logIn: "Entrar",
+      account: "Conta",
+      logOut: "Sair",
     },
     hero: {
       bannerAlt: ["Banner Lollipop 1", "Banner Lollipop 2"],

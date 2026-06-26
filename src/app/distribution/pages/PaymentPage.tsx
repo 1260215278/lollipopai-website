@@ -129,12 +129,14 @@ export function PaymentPage() {
     );
   }
 
-  // ── 查看：空态 vs 已绑定 ──
+  // ── 查看：空态（满宽卡，figma 15150-30625） vs 已绑定（窄卡，figma 15150-30884） ──
   return (
-    <div className="p-8 max-w-2xl">
+    <div className="p-8">
       <PageHeader title={t.title} subtitle={t.subtitle} />
       {account ? (
-        <BoundView t={t} account={account} saveSuccess={saveSuccess} onEdit={handleEdit} />
+        <div className="max-w-2xl">
+          <BoundView t={t} account={account} saveSuccess={saveSuccess} onEdit={handleEdit} />
+        </div>
       ) : (
         <EmptyView t={t} onAdd={handleAdd} />
       )}

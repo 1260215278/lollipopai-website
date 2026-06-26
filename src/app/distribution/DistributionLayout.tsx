@@ -10,10 +10,21 @@ import {
   User,
   Menu,
   X,
+  Loader2,
+  Bell,
+  AlertTriangle,
 } from "lucide-react";
+import { toast } from "sonner";
 import { useI18n } from "../i18n";
 import type { DistributionMessages } from "./i18n.distribution";
-import { setToken } from "../services/auth";
+import { clearTokens, isAppAuthed, isPublisherAuthed } from "../services/auth";
+import { ensurePublisherToken } from "../services/session";
+import {
+  getPublisherStatus,
+  getPublisherTenantStatus,
+  retryPublisherTenantSync,
+  type PublisherTenantStatus,
+} from "../services/publisher";
 import lollipopLogo from "../../imports/Lollipop1.png";
 
 /** 发行中心后台外壳：左侧边栏 + 顶部头部 + 内容区 <Outlet />
@@ -37,9 +48,94 @@ export function DistributionLayout() {
   const langRef = useRef<HTMLDivElement>(null);
   const userRef = useRef<HTMLDivElement>(null);
 
+  // publisher token 是否就绪：已持有则直接 true；否则等 byAppToken 换取完成再放行子页面，
+  // 避免子页面（overview 等）在 token 换到前就发 /publisher/** 请求导致首次 401「token 失效」。
+  const [tokenReady, setTokenReady] = useState(() => isPublisherAuthed());
+  // 顶栏展示的公司名（取自 /app/publisher/status 的 apply.companyName）
+  const [companyName, setCompanyName] = useState("");
+  // swift 租户开通状态：失败（tenantSyncStatus=2）时顶栏展示通知铃铛 + 失败弹窗 + 重试
+  const [tenant, setTenant] = useState<PublisherTenantStatus | null>(null);
+  const [tenantModalOpen, setTenantModalOpen] = useState(false);
+  const [retrying, setRetrying] = useState(false);
+  const tenantFailed = tenant?.tenantSyncStatus === 2;
+
   useEffect(() => {
     if (inSettlement) setSettlementOpen(true);
   }, [inSettlement]);
+
+  // 进入后台页：无登录态直接去登录；有 appToken 但无 publisher token，则用 byAppToken 换取。
+  // 换取失败说明还不是发行者或登录态失效，回入驻页，不放行子页面请求 /publisher/**。
+  useEffect(() => {
+    let alive = true;
+    if (isPublisherAuthed()) {
+      setTokenReady(true);
+      return () => {
+        alive = false;
+      };
+    }
+    if (!isAppAuthed()) {
+      navigate("/login", { replace: true });
+      return () => {
+        alive = false;
+      };
+    }
+    setTokenReady(false);
+    ensurePublisherToken()
+      .then(() => {
+        if (alive) setTokenReady(true);
+      })
+      .catch(() => {
+        if (alive) navigate("/distribution/enroll", { replace: true });
+      });
+    return () => {
+      alive = false;
+    };
+  }, [navigate]);
+
+  // 拉取入驻状态，用 apply.companyName 作为顶栏展示名（status 用 appToken，登录后即可用）
+  useEffect(() => {
+    if (!isAppAuthed()) return;
+    let alive = true;
+    getPublisherStatus()
+      .then((s) => {
+        if (alive && s.apply?.companyName) setCompanyName(s.apply.companyName);
+      })
+      .catch(() => undefined);
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  // 拉取 swift 租户开通状态：失败时顶栏出现通知铃铛（开通在审核通过后异步进行，此处只读一次即可）
+  useEffect(() => {
+    if (!isAppAuthed()) return;
+    let alive = true;
+    getPublisherTenantStatus()
+      .then((s) => {
+        if (alive) setTenant(s);
+      })
+      .catch(() => undefined);
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  // 手动重试 swift 开通（开通失败时），成功后刷新状态；状态恢复非失败则关闭弹窗
+  const handleRetryTenant = async () => {
+    if (retrying) return;
+    setRetrying(true);
+    try {
+      await retryPublisherTenantSync();
+      toast.success(t.tenant.retrySuccess);
+      const s = await getPublisherTenantStatus();
+      setTenant(s);
+      if (s.tenantSyncStatus !== 2) setTenantModalOpen(false);
+    } catch {
+      // http 已 toast 后端文案
+    } finally {
+      setRetrying(false);
+    }
+  };
 
   // 路由切换时收起移动端抽屉
   useEffect(() => {
@@ -57,8 +153,8 @@ export function DistributionLayout() {
 
   const handleLogout = () => {
     setUserMenuOpen(false);
-    setToken(null);
-    navigate("/");
+    clearTokens();
+    navigate("/login");
   };
 
   return (
@@ -121,6 +217,19 @@ export function DistributionLayout() {
           </div>
 
           <div className="flex items-center gap-2 flex-shrink-0">
+            {/* swift 开通失败通知铃铛（仅失败时出现，点击打开说明弹窗可重试） */}
+            {tenantFailed && (
+              <button
+                onClick={() => setTenantModalOpen(true)}
+                className="relative flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
+                title={t.tenant.notifyTitle}
+                aria-label={t.tenant.notifyTitle}
+              >
+                <Bell className="w-4 h-4" />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#E8192C] border border-white" />
+              </button>
+            )}
+
             {/* 语言切换（4 语言） */}
             <div ref={langRef} className="relative">
               <button
@@ -166,8 +275,11 @@ export function DistributionLayout() {
                 <div className="w-8 h-8 rounded-full bg-[#111111] flex items-center justify-center flex-shrink-0">
                   <User className="w-4 h-4 text-white" />
                 </div>
-                <div className="hidden sm:block text-left">
-                  <p className="text-xs text-gray-400 leading-tight">{t.common.publisher}</p>
+                <div className="hidden sm:block text-left leading-tight">
+                  <p className="text-xs" style={{ fontWeight: 600, color: "#111111" }}>
+                    {companyName || t.common.publisher}
+                  </p>
+                  {companyName && <p className="text-[11px] text-gray-400 mt-0.5">{t.common.publisher}</p>}
                 </div>
                 <ChevronDown className="w-3.5 h-3.5 text-gray-400 ml-0.5" />
               </div>
@@ -188,9 +300,61 @@ export function DistributionLayout() {
         </header>
 
         <main className="flex-1 overflow-y-auto">
-          <Outlet />
+          {tokenReady ? (
+            <Outlet />
+          ) : (
+            <div className="h-full flex items-center justify-center">
+              <Loader2 className="w-7 h-7 animate-spin text-gray-400" />
+            </div>
+          )}
         </main>
       </div>
+
+      {/* swift 开通失败说明弹窗（点击通知铃铛打开，可手动重试） */}
+      {tenantModalOpen && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setTenantModalOpen(false)} />
+          <div className="relative w-full max-w-[420px] bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div className="px-6 pt-6 pb-5">
+              <div className="flex items-start gap-3">
+                <span className="flex items-center justify-center w-10 h-10 rounded-full bg-red-50 flex-shrink-0">
+                  <AlertTriangle className="w-5 h-5 text-[#E8192C]" />
+                </span>
+                <div className="min-w-0">
+                  <h3 className="text-[#111111]" style={{ fontWeight: 700, fontSize: "1rem" }}>
+                    {t.tenant.failedTitle}
+                  </h3>
+                  <p className="text-sm text-gray-500 mt-1.5 leading-relaxed">{t.tenant.failedDesc}</p>
+                </div>
+              </div>
+              {tenant?.tenantSyncMsg && (
+                <div className="mt-4 rounded-lg bg-gray-50 border border-gray-100 px-3.5 py-2.5">
+                  <p className="text-xs text-gray-400" style={{ fontWeight: 600 }}>{t.tenant.reasonLabel}</p>
+                  <p className="text-sm text-gray-600 mt-1 break-words">{tenant.tenantSyncMsg}</p>
+                </div>
+              )}
+            </div>
+            <div className="flex gap-3 px-6 pb-6">
+              <button
+                onClick={() => setTenantModalOpen(false)}
+                className="flex-1 h-10 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+                style={{ fontWeight: 500 }}
+              >
+                {t.common.close}
+              </button>
+              <button
+                onClick={handleRetryTenant}
+                disabled={retrying}
+                className="flex-1 h-10 rounded-lg bg-[#111111] text-white text-sm flex items-center justify-center gap-2 transition-all hover:opacity-90 disabled:opacity-60"
+                style={{ fontWeight: 600 }}
+              >
+                {retrying && <Loader2 className="w-4 h-4 animate-spin" />}
+                {t.common.retry}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

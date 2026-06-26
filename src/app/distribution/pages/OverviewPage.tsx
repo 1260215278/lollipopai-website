@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import {
   Info,
   TrendingUp,
@@ -26,32 +26,31 @@ import {
 } from "recharts";
 import { useI18n, type Locale } from "../../i18n";
 import {
-  getDashboardOverview,
-  type DashboardData,
+  getOverview,
+  getTrend,
+  getRanking,
+  getPlayCompare,
+  type DashboardOverview,
+  type DashboardTrend,
+  type RankingItem,
+  type PlayCompareItem,
   type TrendMetric,
-  type TrendPeriod,
+  type TrendRange,
 } from "../../services/dashboard";
 
 /**
- * 数据概览 —— 严格对齐 Figma 15077-19718（视觉权威），数据来自 dashboard service
- * （mock + VITE_USE_MOCK 开关，真接口就绪可切换）。文案全部走 useI18n()。
- * 模块：4 张统计卡 + 数据趋势折线图(7/30 日 × 播放/点赞/收藏切换) + 剧集数据排行表
- *       + 各剧集播放量对比柱状图；含 加载 / 错误 / 空 态。
+ * 数据概览 —— 对接 4 个端点（/publisher/dashboard/overview|trend|ranking|playCompare）。
+ * 模块：4 张统计卡 + 数据趋势折线(7/30 日 × 播放/点赞/收藏切换，单指标按需拉取) +
+ *       剧集数据排行表 + 各剧集播放量对比柱状图；含 加载 / 错误 态。
  */
 
-/** 指标主题色（与 Figma：播放=黑 / 点赞=品牌红 / 收藏=靛蓝 一致） */
+/** 指标主题色（播放=黑 / 点赞=品牌红 / 收藏=靛蓝） */
 const METRIC_COLOR: Record<TrendMetric, string> = {
-  plays: "#111111",
-  likes: "#E8192C",
-  favs: "#6366F1",
+  play: "#111111",
+  like: "#E8192C",
+  collect: "#6366F1",
 };
 
-/**
- * 紧凑数字格式化（按语言）：
- *  - zh-CN / zh-TW：万 / 亿（如 3,802,000 → "380.2万"）
- *  - en / pt：K / M（如 3,802,000 → "3.8M"）
- * 仅用于「大数值」展示；精确计数（评论/分享/趋势汇总）用千分位。
- */
 function formatCompact(n: number, locale: Locale): string {
   const cn = locale === "zh-CN" || locale === "zh-TW";
   if (cn) {
@@ -64,22 +63,18 @@ function formatCompact(n: number, locale: Locale): string {
   return n.toLocaleString();
 }
 
-/** 保留 1 位小数并去掉多余的 .0 */
 function trimZero(v: number): string {
   return v.toFixed(1).replace(/\.0$/, "");
 }
 
-/** 千分位精确计数 */
 function formatCount(n: number, locale: Locale): string {
   return n.toLocaleString(locale === "en" ? "en-US" : locale);
 }
 
-/** 把模板里的占位符替换为实际值 */
 function tpl(s: string, vars: Record<string, string | number>): string {
   return s.replace(/\{(\w+)\}/g, (_, k) => String(vars[k] ?? ""));
 }
 
-/** 带符号的百分比文案（+23.4% / -5.0%） */
 function signedPct(pct: number): string {
   const sign = pct >= 0 ? "+" : "";
   return `${sign}${trimZero(pct)}%`;
@@ -89,47 +84,52 @@ export function OverviewPage() {
   const { messages, locale } = useI18n();
   const t = messages.distribution.overview;
 
-  const [data, setData] = useState<DashboardData | null>(null);
+  const [overview, setOverview] = useState<DashboardOverview | null>(null);
+  const [ranking, setRanking] = useState<RankingItem[]>([]);
+  const [playCompare, setPlayCompare] = useState<PlayCompareItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const [period, setPeriod] = useState<TrendPeriod>("7");
-  const [metric, setMetric] = useState<TrendMetric>("plays");
+  const [period, setPeriod] = useState<TrendRange>(7);
+  const [metric, setMetric] = useState<TrendMetric>("play");
+  const [trend, setTrend] = useState<DashboardTrend | null>(null);
+  const [trendLoading, setTrendLoading] = useState(false);
 
-  const load = () => {
+  const loadCore = useCallback(() => {
     setLoading(true);
     setError(false);
-    getDashboardOverview()
-      .then((d) => setData(d))
+    Promise.all([getOverview(), getRanking(), getPlayCompare()])
+      .then(([ov, rk, pc]) => {
+        setOverview(ov);
+        setRanking(rk);
+        setPlayCompare(pc);
+      })
       .catch(() => setError(true))
       .finally(() => setLoading(false));
-  };
-
-  useEffect(() => {
-    load();
-    // 只在挂载时拉取
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // 趋势汇总（按当前周期对三项指标求和）
-  const summary = useMemo(() => {
-    const points = data ? data.trend[period] : [];
-    return {
-      plays: points.reduce((s, d) => s + d.plays, 0),
-      likes: points.reduce((s, d) => s + d.likes, 0),
-      favs: points.reduce((s, d) => s + d.favs, 0),
-    };
-  }, [data, period]);
+  useEffect(() => {
+    loadCore();
+  }, [loadCore]);
+
+  // 趋势按 metric+period 单独拉取
+  useEffect(() => {
+    setTrendLoading(true);
+    getTrend(metric, period)
+      .then((d) => setTrend(d))
+      .catch(() => setTrend(null))
+      .finally(() => setTrendLoading(false));
+  }, [metric, period]);
 
   if (loading) return <OverviewSkeleton />;
 
-  if (error || !data) {
+  if (error || !overview) {
     return (
       <div className="p-8">
         <div className="rounded-2xl border border-gray-100 bg-white h-64 flex flex-col items-center justify-center gap-3">
           <p className="text-sm text-gray-500">{t.loadFailed}</p>
           <button
-            onClick={load}
+            onClick={loadCore}
             className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#111111] text-white text-sm hover:opacity-90 transition-opacity"
             style={{ fontWeight: 500 }}
           >
@@ -141,79 +141,69 @@ export function OverviewPage() {
     );
   }
 
-  const { stats, ranking } = data;
-  const trendData = data.trend[period];
-
-  const summaryLabels =
-    period === "7"
-      ? { plays: t.sum7Plays, likes: t.sum7Likes, favs: t.sum7Favs }
-      : { plays: t.sum30Plays, likes: t.sum30Likes, favs: t.sum30Favs };
-
   const statCards: StatCard[] = [
     {
       icon: <Play className="w-4 h-4" />,
       iconBg: "#F3F4F6",
       iconColor: "#111111",
       label: t.totalDramas,
-      value: formatCount(stats.totalDramas.value, locale),
+      value: formatCount(overview.dramaTotal, locale),
       unit: t.unitDrama,
-      sub: tpl(t.monthlyAdded, { n: stats.totalDramas.monthlyAdded }),
-      subUp: stats.totalDramas.monthlyAdded >= 0,
+      sub: tpl(t.monthlyAdded, { n: overview.dramaMonthAdd }),
+      subUp: overview.dramaMonthAdd >= 0,
     },
     {
       icon: <Eye className="w-4 h-4" />,
       iconBg: "#EFF6FF",
       iconColor: "#3B82F6",
       label: t.totalViews,
-      value: formatCompact(stats.totalViews.value, locale),
+      value: formatCompact(overview.playTotal, locale),
       unit: "",
-      sub: tpl(t.momChange, { pct: signedPct(stats.totalViews.momPercent) }),
-      subUp: stats.totalViews.momPercent >= 0,
+      sub: tpl(t.momChange, { pct: signedPct(overview.playMomRate) }),
+      subUp: overview.playMomRate >= 0,
     },
     {
       icon: <ThumbsUp className="w-4 h-4" />,
       iconBg: "#FFF1F2",
       iconColor: "#E8192C",
       label: t.totalLikes,
-      value: formatCompact(stats.totalLikes.value, locale),
+      value: formatCompact(overview.likeTotal, locale),
       unit: "",
-      sub: tpl(t.momChange, { pct: signedPct(stats.totalLikes.momPercent) }),
-      subUp: stats.totalLikes.momPercent >= 0,
+      sub: tpl(t.momChange, { pct: signedPct(overview.likeMomRate) }),
+      subUp: overview.likeMomRate >= 0,
     },
     {
       icon: <BookmarkCheck className="w-4 h-4" />,
       iconBg: "#F5F3FF",
       iconColor: "#6366F1",
       label: t.totalFavorites,
-      value: formatCompact(stats.totalFavorites.value, locale),
+      value: formatCompact(overview.collectTotal, locale),
       unit: "",
-      sub: tpl(t.momChange, { pct: signedPct(stats.totalFavorites.momPercent) }),
-      subUp: stats.totalFavorites.momPercent >= 0,
+      sub: tpl(t.momChange, { pct: signedPct(overview.collectMomRate) }),
+      subUp: overview.collectMomRate >= 0,
     },
   ];
 
   const metricTabs: { key: TrendMetric; label: string }[] = [
-    { key: "plays", label: t.metricPlays },
-    { key: "likes", label: t.metricLikes },
-    { key: "favs", label: t.metricFavs },
+    { key: "play", label: t.metricPlays },
+    { key: "like", label: t.metricLikes },
+    { key: "collect", label: t.metricFavs },
   ];
 
-  const periodTabs: { key: TrendPeriod; label: string }[] = [
-    { key: "7", label: t.period7 },
-    { key: "30", label: t.period30 },
+  const periodTabs: { key: TrendRange; label: string }[] = [
+    { key: 7, label: t.period7 },
+    { key: 30, label: t.period30 },
   ];
 
-  const summaryRow = [
-    { label: summaryLabels.plays, val: formatCount(summary.plays, locale), color: METRIC_COLOR.plays },
-    { label: summaryLabels.likes, val: formatCount(summary.likes, locale), color: METRIC_COLOR.likes },
-    { label: summaryLabels.favs, val: formatCount(summary.favs, locale), color: METRIC_COLOR.favs },
-  ];
+  const sumLabel =
+    period === 7
+      ? { play: t.sum7Plays, like: t.sum7Likes, collect: t.sum7Favs }[metric]
+      : { play: t.sum30Plays, like: t.sum30Likes, collect: t.sum30Favs }[metric];
 
-  // 柱状图数据：剧名取前 4 字 + 播放量原始数值
-  const barData = ranking.map((d, idx) => ({
+  const barData = playCompare.map((d, idx) => ({
     id: `drama-${idx}`,
     name: d.title.slice(0, 4),
-    plays: d.plays,
+    plays: d.playCount,
   }));
 
   return (
@@ -265,7 +255,6 @@ export function OverviewPage() {
             <p className="text-xs text-gray-400 mt-0.5">{t.trendSubtitle}</p>
           </div>
           <div className="flex items-center gap-3">
-            {/* 指标切换 */}
             <div className="flex gap-1">
               {metricTabs.map((m) => (
                 <button
@@ -282,7 +271,6 @@ export function OverviewPage() {
                 </button>
               ))}
             </div>
-            {/* 周期切换 */}
             <div className="flex gap-1 border border-gray-200 rounded-lg p-0.5">
               {periodTabs.map((p) => (
                 <button
@@ -302,9 +290,14 @@ export function OverviewPage() {
           </div>
         </div>
 
-        <div className="h-52">
+        <div className="h-52 relative">
+          {trendLoading && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/60">
+              <Loader2 className="w-5 h-5 text-gray-300 animate-spin" />
+            </div>
+          )}
           <ResponsiveContainer key={`${period}-${metric}`} width="100%" height="100%">
-            <LineChart data={trendData} margin={{ top: 4, right: 12, left: -20, bottom: 0 }}>
+            <LineChart data={trend?.points ?? []} margin={{ top: 4, right: 12, left: -20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} />
               <XAxis dataKey="date" tick={{ fontSize: 11, fill: "#9CA3AF" }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 11, fill: "#9CA3AF" }} axisLine={false} tickLine={false} />
@@ -316,7 +309,7 @@ export function OverviewPage() {
               />
               <Line
                 type="monotone"
-                dataKey={metric}
+                dataKey="value"
                 name={metric}
                 stroke={METRIC_COLOR[metric]}
                 strokeWidth={2}
@@ -327,17 +320,15 @@ export function OverviewPage() {
           </ResponsiveContainer>
         </div>
 
-        {/* 汇总行 */}
+        {/* 汇总行（单指标区间累计） */}
         <div className="flex flex-wrap gap-x-6 gap-y-2 mt-4 pt-4 border-t border-gray-100">
-          {summaryRow.map((s, i) => (
-            <div key={i} className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: s.color }} />
-              <span className="text-xs text-gray-500">{s.label}</span>
-              <span className="text-xs text-gray-900" style={{ fontWeight: 600 }}>
-                {s.val}
-              </span>
-            </div>
-          ))}
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: METRIC_COLOR[metric] }} />
+            <span className="text-xs text-gray-500">{sumLabel}</span>
+            <span className="text-xs text-gray-900" style={{ fontWeight: 600 }}>
+              {formatCount(trend?.total ?? 0, locale)}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -374,25 +365,18 @@ export function OverviewPage() {
             </thead>
             <tbody>
               {ranking.map((row) => (
-                <tr key={row.rank} className="border-t border-gray-50 hover:bg-gray-50/50 transition-colors">
+                <tr key={row.courseId} className="border-t border-gray-50 hover:bg-gray-50/50 transition-colors">
                   <td className="px-5 py-3.5">
-                    <div className="flex items-center gap-1.5">
-                      <span
-                        className="w-6 h-6 rounded-md flex items-center justify-center text-xs flex-shrink-0"
-                        style={{
-                          background: row.rank <= 3 ? "#111111" : "#F3F4F6",
-                          color: row.rank <= 3 ? "white" : "#6B7280",
-                          fontWeight: 700,
-                        }}
-                      >
-                        {row.rank}
-                      </span>
-                      {row.trend === "up" ? (
-                        <TrendingUp className="w-3 h-3 text-green-500" />
-                      ) : (
-                        <TrendingDown className="w-3 h-3 text-red-400" />
-                      )}
-                    </div>
+                    <span
+                      className="w-6 h-6 rounded-md flex items-center justify-center text-xs"
+                      style={{
+                        background: row.rank <= 3 ? "#111111" : "#F3F4F6",
+                        color: row.rank <= 3 ? "white" : "#6B7280",
+                        fontWeight: 700,
+                      }}
+                    >
+                      {row.rank}
+                    </span>
                   </td>
                   <td className="px-5 py-3.5">
                     <p className="text-sm text-gray-900" style={{ fontWeight: 600 }}>
@@ -401,34 +385,34 @@ export function OverviewPage() {
                   </td>
                   <td className="px-5 py-3.5">
                     <span className="text-xs text-gray-600">
-                      {row.episodes}
+                      {row.episodeCount}
                       {t.unitEpisode}
                     </span>
                   </td>
                   <td className="px-5 py-3.5">
                     <span className="text-sm text-gray-900" style={{ fontWeight: 600 }}>
-                      {formatCompact(row.plays, locale)}
+                      {formatCompact(row.playCount, locale)}
                     </span>
                   </td>
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-1 text-xs text-gray-600">
                       <Heart className="w-3 h-3 text-red-400" />
-                      {formatCompact(row.likes, locale)}
+                      {formatCompact(row.likeCount, locale)}
                     </div>
                   </td>
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-1 text-xs text-gray-600">
                       <Star className="w-3 h-3 text-indigo-400" />
-                      {formatCompact(row.favs, locale)}
+                      {formatCompact(row.collectCount, locale)}
                     </div>
                   </td>
                   <td className="px-5 py-3.5">
-                    <span className="text-xs text-gray-600">{formatCount(row.comments, locale)}</span>
+                    <span className="text-xs text-gray-600">{formatCount(row.commentCount, locale)}</span>
                   </td>
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-1 text-xs text-gray-600">
                       <Share2 className="w-3 h-3 text-gray-400" />
-                      {formatCount(row.shares, locale)}
+                      {formatCount(row.shareCount, locale)}
                     </div>
                   </td>
                 </tr>
@@ -481,7 +465,7 @@ interface StatCard {
   subUp: boolean;
 }
 
-/** 加载骨架屏：与真实布局结构一致，避免跳动 */
+/** 加载骨架屏 */
 function OverviewSkeleton() {
   return (
     <div className="p-8 space-y-6">

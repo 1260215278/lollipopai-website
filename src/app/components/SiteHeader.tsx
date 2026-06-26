@@ -1,9 +1,20 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Menu, X, Globe } from "lucide-react";
-import { Link } from "react-router";
+import { Menu, X, Globe, User, LogOut, ChevronDown } from "lucide-react";
+import { Link, useNavigate } from "react-router";
 import logoImg from "../../imports/Lollipop1.png";
 import { useI18n } from "../i18n";
+import { isAppAuthed, getLoginName, clearTokens, subscribeAuthChange } from "../services/auth";
+
+/** 顶栏登录态（已登录 + 展示名），登录/退出后即时刷新。 */
+function useAuthSession() {
+  const [session, setSession] = useState(() => ({ authed: isAppAuthed(), name: getLoginName() }));
+  useEffect(
+    () => subscribeAuthChange(() => setSession({ authed: isAppAuthed(), name: getLoginName() })),
+    [],
+  );
+  return session;
+}
 
 /** 顶栏导航项。to → react-router 跳转；onClick → 自定义行为（站内滚动/状态切换）。 */
 export interface SiteNavItem {
@@ -18,7 +29,8 @@ export interface SiteNavItem {
  * 全站统一顶栏（figma 15237-33700 顶部）：
  * Logo + 导航(Home/Creating/Distribution/Download/Contact) + Sign Up + Log In + 语言球。
  * 营销站(Navbar) 与发行者入驻页(EnrollHeader) 共用，导航行为由各自传入。
- * Sign Up → /distribution/enroll，Log In → /login（两处一致）。
+ * 未登录：Sign Up / Log In 均跳 /login（创作者账号由平台创建，仅支持登录）。
+ * 已登录：右侧改为「用户信息 + 下拉退出菜单」，登录态由 services/auth 跨页同步。
  */
 export function SiteHeader({
   navItems,
@@ -32,17 +44,31 @@ export function SiteHeader({
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+  const [userOpen, setUserOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
+  const userRef = useRef<HTMLDivElement>(null);
   const { messages, languages, currentLanguage, setLocale } = useI18n();
+  const navigate = useNavigate();
   const nav = messages.navbar;
+  const { authed, name } = useAuthSession();
+  const displayName = name || nav.account;
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (langRef.current && !langRef.current.contains(e.target as Node)) setLangOpen(false);
+      if (userRef.current && !userRef.current.contains(e.target as Node)) setUserOpen(false);
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
+
+  // 退出登录：清除 token 与展示名，关闭菜单并回到首页。
+  const onLogout = () => {
+    clearTokens();
+    setUserOpen(false);
+    setMobileOpen(false);
+    navigate("/");
+  };
 
   const renderNavItem = (item: SiteNavItem, mobile = false) => {
     const color = item.active ? "text-white" : "text-gray-300 hover:text-white";
@@ -99,22 +125,62 @@ export function SiteHeader({
         {/* Desktop Nav */}
         <div className="hidden lg:flex items-center gap-8">{navItems.map((i) => renderNavItem(i))}</div>
 
-        {/* Right: Sign Up / Log In / 语言 */}
+        {/* Right: 已登录(用户菜单) / 未登录(Sign Up + Log In，均跳 /login) / 语言 */}
         <div className="hidden lg:flex items-center gap-3">
-          <Link
-            to="/distribution/enroll"
-            className="px-5 py-2.5 rounded-full border border-white/15 text-gray-200 hover:text-white hover:border-white/30 transition-all"
-            style={{ fontSize: "0.85rem", fontWeight: 600 }}
-          >
-            {nav.signUp}
-          </Link>
-          <Link
-            to="/login"
-            className="bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-400 hover:to-orange-400 text-white px-5 py-2.5 rounded-full transition-all shadow-lg shadow-red-900/30 hover:shadow-red-600/40"
-            style={{ fontSize: "0.85rem", fontWeight: 600 }}
-          >
-            {nav.logIn}
-          </Link>
+          {authed ? (
+            /* 已登录：用户信息 + 下拉退出菜单 */
+            <div ref={userRef} className="relative">
+              <button
+                onClick={() => setUserOpen((v) => !v)}
+                className="flex items-center gap-2 pl-1.5 pr-3 py-1.5 rounded-full border border-white/15 text-gray-200 hover:text-white hover:border-white/30 transition-all"
+              >
+                <span className="flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white">
+                  <User className="w-4 h-4" />
+                </span>
+                <span className="max-w-[140px] truncate" style={{ fontSize: "0.85rem", fontWeight: 600 }}>
+                  {displayName}
+                </span>
+                <ChevronDown className={`w-3.5 h-3.5 text-white/50 transition-transform ${userOpen ? "rotate-180" : ""}`} />
+              </button>
+              <AnimatePresence>
+                {userOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 8, scale: 0.95 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute top-full right-0 mt-2 w-44 bg-black/90 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden shadow-2xl shadow-black/60 py-1"
+                  >
+                    <button
+                      onClick={onLogout}
+                      className="w-full flex items-center gap-2 text-left px-4 py-2.5 text-gray-300 hover:text-white hover:bg-white/5 transition-colors"
+                      style={{ fontSize: "0.85rem" }}
+                    >
+                      <LogOut className="w-4 h-4" />
+                      {nav.logOut}
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="px-5 py-2.5 rounded-full border border-white/15 text-gray-200 hover:text-white hover:border-white/30 transition-all"
+                style={{ fontSize: "0.85rem", fontWeight: 600 }}
+              >
+                {nav.signUp}
+              </Link>
+              <Link
+                to="/login"
+                className="bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-400 hover:to-orange-400 text-white px-5 py-2.5 rounded-full transition-all shadow-lg shadow-red-900/30 hover:shadow-red-600/40"
+                style={{ fontSize: "0.85rem", fontWeight: 600 }}
+              >
+                {nav.logIn}
+              </Link>
+            </>
+          )}
 
           {/* 语言球 */}
           <div ref={langRef} className="relative">
@@ -172,24 +238,46 @@ export function SiteHeader({
           >
             {navItems.map((i) => renderNavItem(i, true))}
 
-            <div className="flex items-center gap-3 mt-4">
-              <Link
-                to="/distribution/enroll"
-                onClick={() => setMobileOpen(false)}
-                className="flex-1 text-center py-3 rounded-full border border-white/15 text-gray-200"
-                style={{ fontWeight: 600 }}
-              >
-                {nav.signUp}
-              </Link>
-              <Link
-                to="/login"
-                onClick={() => setMobileOpen(false)}
-                className="flex-1 text-center py-3 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white"
-                style={{ fontWeight: 600 }}
-              >
-                {nav.logIn}
-              </Link>
-            </div>
+            {authed ? (
+              /* 已登录：展示用户信息 + 退出登录 */
+              <div className="mt-4 space-y-3">
+                <div className="flex items-center gap-2.5 px-1">
+                  <span className="flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white">
+                    <User className="w-4 h-4" />
+                  </span>
+                  <span className="text-white truncate" style={{ fontWeight: 600 }}>
+                    {displayName}
+                  </span>
+                </div>
+                <button
+                  onClick={onLogout}
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-full border border-white/15 text-gray-200"
+                  style={{ fontWeight: 600 }}
+                >
+                  <LogOut className="w-4 h-4" />
+                  {nav.logOut}
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-3 mt-4">
+                <Link
+                  to="/login"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex-1 text-center py-3 rounded-full border border-white/15 text-gray-200"
+                  style={{ fontWeight: 600 }}
+                >
+                  {nav.signUp}
+                </Link>
+                <Link
+                  to="/login"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex-1 text-center py-3 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white"
+                  style={{ fontWeight: 600 }}
+                >
+                  {nav.logIn}
+                </Link>
+              </div>
+            )}
 
             {/* 移动端语言 */}
             <div className="py-3 mt-2 border-t border-white/5">

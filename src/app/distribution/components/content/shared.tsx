@@ -1,7 +1,8 @@
 import React from "react";
 import { CheckCircle2, Clock, AlertCircle } from "lucide-react";
 import type { ContentMessages } from "../../i18n/content";
-import type { DramaStatus, EpisodeStatus, DistributionType, Highlight } from "./types";
+import { genderToChannel, type ChannelValue } from "../../mock/content";
+import type { Highlight } from "./PhoneMockup";
 
 /** 读取视频时长（m:ss），失败返回 "—" */
 export const readVideoDuration = (file: File): Promise<string> =>
@@ -17,51 +18,118 @@ export const readVideoDuration = (file: File): Promise<string> =>
     video.src = URL.createObjectURL(file);
   });
 
-/** 上架状态视觉样式（颜色固定，文案由调用方按 i18n 决定） */
-export const dramaStatusStyle: Record<DramaStatus, { bg: string; color: string }> = {
-  online: { bg: "#F0FDF4", color: "#16A34A" },
-  offline: { bg: "#F9FAFB", color: "#6B7280" },
-  reviewing: { bg: "#FFF7ED", color: "#EA580C" },
-  not_published: { bg: "#F3F4F6", color: "#9CA3AF" },
+/* ─── 审核状态（auditStatus 0草稿/1审核中/2通过/3驳回） ─────────── */
+
+export const auditStatusStyle: Record<number, { bg: string; color: string }> = {
+  0: { bg: "#F3F4F6", color: "#6B7280" },
+  1: { bg: "#FFF7ED", color: "#EA580C" },
+  2: { bg: "#F0FDF4", color: "#16A34A" },
+  3: { bg: "#FEF2F2", color: "#EF4444" },
 };
 
-/** 上架状态 → i18n 文案 */
-export function dramaStatusLabel(status: DramaStatus, t: ContentMessages): string {
-  switch (status) {
-    case "online":
-      return t.statusOnline;
-    case "offline":
-      return t.statusOffline;
-    case "reviewing":
-      return t.statusReviewing;
-    case "not_published":
+export function auditStatusLabel(s: number, t: ContentMessages): string {
+  switch (s) {
+    case 0:
+      return t.auditDraft;
+    case 1:
+      return t.reviewReviewing;
+    case 2:
+      return t.reviewApproved;
+    case 3:
+      return t.auditRejected;
+    default:
+      return "—";
+  }
+}
+
+/* ─── 上架状态（shelfStatus 0未上架/1已上架/2已下架，仅 auditStatus=2 有意义） ── */
+
+export const shelfStatusStyle: Record<number, { bg: string; color: string }> = {
+  0: { bg: "#F3F4F6", color: "#9CA3AF" },
+  1: { bg: "#F0FDF4", color: "#16A34A" },
+  2: { bg: "#F9FAFB", color: "#6B7280" },
+};
+
+export function shelfStatusLabel(s: number, t: ContentMessages): string {
+  switch (s) {
+    case 0:
       return t.statusNotPublished;
+    case 1:
+      return t.statusOnline;
+    case 2:
+      return t.statusOffline;
+    default:
+      return "—";
   }
 }
 
-/** 单集状态视觉样式 + 图标 */
-export const epStatusStyle: Record<EpisodeStatus, { icon: React.ReactNode; color: string }> = {
-  uploaded: { icon: <CheckCircle2 className="w-3.5 h-3.5" />, color: "#16A34A" },
-  processing: { icon: <Clock className="w-3.5 h-3.5" />, color: "#EA580C" },
-  failed: { icon: <AlertCircle className="w-3.5 h-3.5" />, color: "#EF4444" },
+/* ─── 剧集上传态（1已上传/2上传失败/0待提交虚拟态） ───────────── */
+
+export const uploadStatusStyle: Record<number, { icon: React.ReactNode; color: string }> = {
+  0: { icon: <Clock className="w-3.5 h-3.5" />, color: "#6366F1" },
+  1: { icon: <CheckCircle2 className="w-3.5 h-3.5" />, color: "#16A34A" },
+  2: { icon: <AlertCircle className="w-3.5 h-3.5" />, color: "#EF4444" },
 };
 
-/** 单集状态 → i18n 文案 */
-export function epStatusLabel(status: EpisodeStatus, t: ContentMessages): string {
-  switch (status) {
-    case "uploaded":
+export function uploadStatusLabel(s: number, t: ContentMessages): string {
+  switch (s) {
+    case 1:
       return t.epStatusUploaded;
-    case "processing":
-      return t.epStatusProcessing;
-    case "failed":
+    case 2:
       return t.epStatusFailed;
+    default:
+      return t.statPendingSubmit;
   }
 }
 
-/** 发布范围 → 手机预览高亮位置 */
-export function highlightsOf(distribution: DistributionType): Highlight[] {
-  return distribution === "full" ? ["account", "homepage", "foryou"] : ["account"];
+/* ─── 发布范围 → 手机预览高亮位置 ─────────────────────────────── */
+
+/** publishScope: 1 账号主页 / 2 全量推荐（账号主页 + 首页推荐 + For You） */
+export function highlightsOf(publishScope: number): Highlight[] {
+  return publishScope === 2 ? ["account", "homepage", "foryou"] : ["account"];
 }
+
+/** genderType(1/2/3) → 频道 i18n key */
+export function genderChannelKey(genderType: number): ChannelValue {
+  return genderToChannel(genderType);
+}
+
+/* ─── 格式化 ──────────────────────────────────────────────────── */
+
+/** 字节 → "15.0 MB"（无效返回 "—"） */
+export function formatBytes(bytes: number | undefined | null): string {
+  if (!bytes || bytes <= 0) return "—";
+  const mb = bytes / 1024 / 1024;
+  if (mb >= 1024) return `${(mb / 1024).toFixed(1)} GB`;
+  return `${mb.toFixed(1)} MB`;
+}
+
+/** 秒 → "m:ss"（无效返回 "—"） */
+export function formatDuration(sec: number | undefined | null): string {
+  if (!sec || sec <= 0) return "—";
+  const m = Math.floor(sec / 60);
+  const s = Math.round(sec % 60);
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+/** USD 金额 → "$0.59"；null/undefined → "—"（该国不卖单集） */
+export function formatUsd(v: number | null | undefined): string {
+  return v == null ? "—" : `$${v}`;
+}
+
+/** 从 OSS URL 取文件名（去掉 query/hash）；空值返回 "" */
+export function fileNameFromUrl(url: string | undefined | null): string {
+  if (!url) return "";
+  const path = url.split(/[?#]/)[0];
+  const name = path.substring(path.lastIndexOf("/") + 1);
+  try {
+    return decodeURIComponent(name);
+  } catch {
+    return name;
+  }
+}
+
+/* ─── 占位替换 / 布局小组件 ──────────────────────────────────── */
 
 /** 简单占位替换：把 "{key}" 换成 vars[key] */
 export function fmt(template: string, vars: Record<string, string | number>): string {

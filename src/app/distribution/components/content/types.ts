@@ -1,16 +1,32 @@
 /**
- * content 组件共享类型：从 mock 数据模型与 PhoneMockup 复出，避免重复定义。
+ * content 组件共享类型：统一从 services（真实接口契约）与本地展示组件复出，
+ * 不再依赖 mock 数据模型。
  */
 export type {
-  DramaRow,
-  EpisodeRecord,
-  DramaStatus,
-  EpisodeStatus,
-  DistributionType,
-  RevenueType,
+  PublisherCourseRow,
+  CourseDetail,
+  CourseDetailBasic,
+  EpisodeItem,
+  EpisodesResponse,
+  PriceRuleCountry,
+  DraftResponse,
+  DraftCourse,
+  SaveBasicBody,
+  SaveEpisodeBody,
+  SaveEpisodeResult,
+  PublishBody,
+  PageResult,
+  CourseListQuery,
+} from "../../../services/content";
+export {
+  AuditStatus,
+  ShelfStatus,
+  PublishScope,
   CopyrightType,
-  ChannelValue,
-  CreateDramaInput,
-} from "../../mock/content";
+  GenderType,
+  UploadStatus,
+} from "../../../services/content";
 
+export type { LanguageOption } from "../../../services/language";
 export type { Highlight } from "./PhoneMockup";
+export type { ChannelValue } from "../../mock/content";

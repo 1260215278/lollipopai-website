@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   ArrowLeft,
   ChevronRight,
@@ -7,110 +7,148 @@ import {
   Film,
   X,
   CheckCircle2,
-  Clock,
   AlertCircle,
+  Clock,
   Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
 import type { ContentMessages } from "../../i18n/content";
-import { uploadFile } from "../../../services/upload";
-import { submitEpisodeUploads, type EpisodeUploadMeta } from "../../../services/content";
-import type { DramaRow, EpisodeRecord } from "./types";
-import { epStatusStyle, epStatusLabel, readVideoDuration, fmt } from "./shared";
+import { uploadFile, PUBLISHER_UPLOAD_PATH } from "../../../services/upload";
+import { fetchEpisodes, saveEpisode, type EpisodesResponse } from "../../../services/content";
+import {
+  uploadStatusStyle,
+  uploadStatusLabel,
+  readVideoDuration,
+  formatBytes,
+  formatDuration,
+  fmt,
+} from "./shared";
 
 interface EpisodesViewProps {
   t: ContentMessages;
-  drama: DramaRow;
-  episodes: EpisodeRecord[];
+  courseId: number;
+  title: string;
+  plannedEpisodes: number;
   onBack: () => void;
-  /** 提交成功后回传最新剧集列表，供上层刷新计数 */
-  onUpdated: (eps: EpisodeRecord[]) => void;
+  /** 保存成功后通知上层刷新列表计数 */
+  onChanged?: () => void;
 }
 
-/** 本地行：在已有记录上叠加「待提交」的新文件 */
-interface Row extends EpisodeRecord {
+/** 行：服务端集 + 本地待提交文件 */
+interface Row {
+  episodeNo: number;
+  title: string;
+  /** 0 待提交（无行）/ 1 已上传 / 2 上传失败 */
+  uploadStatus: number;
+  videoDuration: number;
+  videoSize: number;
+  uploadDate?: string;
   newFile: File | null;
   newDuration: string;
   fileRef: React.RefObject<HTMLInputElement | null>;
 }
 
-/** 剧集视频管理（figma 15081-23236）。视频经 uploadFile 上传，提交转为转码中。 */
+/**
+ * 剧集视频管理（img_10）。
+ * 列表来自 GET /publisher/course/episodes（仅已建行的集）；未建行的集号按 plannedEpisodes
+ * 补「待提交」虚拟行。上传走 /file/upload → saveEpisode（同 episodeNo 覆盖）；不含转码态。
+ */
 export const EpisodesView: React.FC<EpisodesViewProps> = ({
   t,
-  drama,
-  episodes,
+  courseId,
+  title,
+  plannedEpisodes,
   onBack,
-  onUpdated,
+  onChanged,
 }) => {
-  const [rows, setRows] = useState<Row[]>(() =>
-    Array.from({ length: drama.episodes }, (_, i) => {
-      const found = episodes.find((e) => e.ep === i + 1);
-      return {
-        ep: i + 1,
-        title: found?.title || t.epLabelN.replace("{ep}", String(i + 1)),
-        duration: found?.duration || "—",
-        size: found?.size || "—",
-        uploadedAt: found?.uploadedAt || "—",
-        status: found?.status || "failed",
-        newFile: null,
-        newDuration: "",
-        fileRef: React.createRef<HTMLInputElement>(),
-      };
-    }),
-  );
+  const [data, setData] = useState<EpisodesResponse | null>(null);
+  const [rows, setRows] = useState<Row[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchEp, setSearchEp] = useState("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  const filtered = rows.filter((e) => String(e.ep).includes(searchEp) || e.title.includes(searchEp));
-  const uploadedCount = rows.filter((e) => e.status === "uploaded").length;
-  const processingCount = rows.filter((e) => e.status === "processing").length;
-  const failedCount = rows.filter((e) => e.status === "failed").length;
-  const pendingCount = rows.filter((e) => e.newFile).length;
+  const buildRows = useCallback(
+    (resp: EpisodesResponse): Row[] => {
+      const planned = resp.plannedEpisodes || plannedEpisodes;
+      return Array.from({ length: planned }, (_, i) => {
+        const no = i + 1;
+        const found = resp.episodes.find((e) => e.episodeNo === no);
+        return {
+          episodeNo: no,
+          title: found?.title || fmt(t.epLabelN, { ep: no }),
+          uploadStatus: found?.uploadStatus ?? 0,
+          videoDuration: found?.videoDuration ?? 0,
+          videoSize: found?.videoSize ?? 0,
+          uploadDate: found?.uploadDate,
+          newFile: null,
+          newDuration: "",
+          fileRef: React.createRef<HTMLInputElement>(),
+        };
+      });
+    },
+    [plannedEpisodes, t],
+  );
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const resp = await fetchEpisodes(courseId);
+      setData(resp);
+      setRows(buildRows(resp));
+    } catch {
+      /* http 已 toast */
+    } finally {
+      setLoading(false);
+    }
+  }, [courseId, buildRows]);
+
+  useEffect(() => {
+    void load();
+  }, [load]);
+
+  const filtered = rows.filter(
+    (e) => String(e.episodeNo).includes(searchEp) || e.title.includes(searchEp),
+  );
+  const stat = data?.stat ?? { uploaded: 0, failed: 0, pending: plannedEpisodes };
+  const pendingLocal = rows.filter((e) => e.newFile).length;
 
   const handleFileSelect = (ep: number, file: File) => {
-    setRows((prev) => prev.map((e) => (e.ep === ep ? { ...e, newFile: file, newDuration: "" } : e)));
+    setRows((prev) => prev.map((e) => (e.episodeNo === ep ? { ...e, newFile: file, newDuration: "" } : e)));
     void readVideoDuration(file).then((dur) =>
-      setRows((prev) => prev.map((e) => (e.ep === ep ? { ...e, newDuration: dur } : e))),
+      setRows((prev) => prev.map((e) => (e.episodeNo === ep ? { ...e, newDuration: dur } : e))),
     );
   };
 
   const clearFile = (ep: number) =>
-    setRows((prev) => prev.map((e) => (e.ep === ep ? { ...e, newFile: null, newDuration: "" } : e)));
+    setRows((prev) => prev.map((e) => (e.episodeNo === ep ? { ...e, newFile: null, newDuration: "" } : e)));
+
+  const updateTitle = (ep: number, title: string) =>
+    setRows((prev) => prev.map((e) => (e.episodeNo === ep ? { ...e, title } : e)));
 
   const handleSave = async () => {
     const pending = rows.filter((e) => e.newFile);
-    if (pending.length === 0) return;
+    if (pending.length === 0 || saving) return;
     setSaving(true);
-    try {
-      // 逐个上传视频文件拿到 URL（统一走 uploadFile）
-      const metas: EpisodeUploadMeta[] = [];
-      for (const r of pending) {
-        const url = await uploadFile(r.newFile as File);
-        metas.push({
-          ep: r.ep,
-          videoUrl: url,
-          size: `${((r.newFile as File).size / 1024 / 1024).toFixed(1)} MB`,
-          duration: r.newDuration || "—",
-        });
+    let anyFail = false;
+    // 逐个：直传 OSS → saveEpisode（一个文件一次，互不影响）
+    for (const r of pending) {
+      try {
+        const url = await uploadFile(r.newFile as File, PUBLISHER_UPLOAD_PATH);
+        await saveEpisode({ courseId, episodeNo: r.episodeNo, title: r.title, videoUrl: url });
+      } catch {
+        anyFail = true; // uploadFile / http 已 toast
       }
-      const updated = await submitEpisodeUploads(drama.id, metas);
-      // 用服务端返回的最新列表重建行状态
-      setRows((prev) =>
-        prev.map((e) => {
-          const fresh = updated.find((u) => u.ep === e.ep);
-          return fresh ? { ...e, ...fresh, newFile: null, newDuration: "" } : e;
-        }),
-      );
-      onUpdated(updated);
+    }
+    await load();
+    setSaving(false);
+    if (anyFail) {
+      toast.error(t.videoUploadFailed);
+    } else {
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
-    } catch {
-      // uploadFile / http 已 toast；保留待提交状态以便重试
-      toast.error(t.videoUploadFailed);
-    } finally {
-      setSaving(false);
     }
+    onChanged?.();
   };
 
   const cols = [t.colEp, t.colEpTitle, t.colDuration, t.colSize, t.epColUploadDate, t.colStatus, t.colActions];
@@ -128,10 +166,10 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
               {t.episodesTitle}
             </h2>
             <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
-            <span className="text-sm text-gray-500">{drama.name}</span>
+            <span className="text-sm text-gray-500">{title}</span>
           </div>
           <p className="text-xs text-gray-400 mt-0.5">
-            {fmt(t.episodesBreadcrumbCount, { total: drama.episodes, done: uploadedCount })}
+            {fmt(t.episodesBreadcrumbCount, { total: plannedEpisodes, done: stat.uploaded })}
           </p>
         </div>
         <div className="ml-auto flex items-center gap-3">
@@ -141,7 +179,7 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
               {t.epSaved}
             </div>
           )}
-          {pendingCount > 0 && (
+          {pendingLocal > 0 && (
             <button
               onClick={handleSave}
               disabled={saving}
@@ -156,7 +194,7 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
               ) : (
                 <>
                   <Upload className="w-3.5 h-3.5" />
-                  {fmt(t.epSubmitN, { n: pendingCount })}
+                  {fmt(t.epSubmitN, { n: pendingLocal })}
                 </>
               )}
             </button>
@@ -164,13 +202,12 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="flex gap-3 mb-5">
+      {/* Stats（已上传 / 上传失败 / 待提交） */}
+      <div className="flex gap-3 mb-5 flex-wrap">
         {[
-          { icon: <CheckCircle2 className="w-3.5 h-3.5" />, count: uploadedCount, label: t.epStatusUploaded, color: "#16A34A", bg: "#F0FDF4" },
-          { icon: <Clock className="w-3.5 h-3.5" />, count: processingCount, label: t.statProcessing, color: "#EA580C", bg: "#FFF7ED" },
-          { icon: <AlertCircle className="w-3.5 h-3.5" />, count: failedCount, label: t.epStatusFailed, color: "#EF4444", bg: "#FEF2F2" },
-          { icon: <Upload className="w-3.5 h-3.5" />, count: pendingCount, label: t.statPendingSubmit, color: "#6366F1", bg: "#EEF2FF" },
+          { icon: <CheckCircle2 className="w-3.5 h-3.5" />, count: stat.uploaded, label: t.epStatusUploaded, color: "#16A34A", bg: "#F0FDF4" },
+          { icon: <AlertCircle className="w-3.5 h-3.5" />, count: stat.failed, label: t.epStatusFailed, color: "#EF4444", bg: "#FEF2F2" },
+          { icon: <Clock className="w-3.5 h-3.5" />, count: stat.pending, label: t.statPendingSubmit, color: "#6366F1", bg: "#EEF2FF" },
         ].map((item, i) => (
           <div key={i} className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl" style={{ background: item.bg }}>
             <span style={{ color: item.color }}>{item.icon}</span>
@@ -203,105 +240,117 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
         </div>
 
         <div className="overflow-x-auto">
-        <div className="min-w-[960px]">
-        <div className="grid grid-cols-[64px_1fr_120px_120px_130px_120px_200px] gap-3 px-5 py-2.5 bg-gray-50/60 border-b border-gray-100">
-          {cols.map((col, i) => (
-            <span key={i} className="text-xs text-gray-500" style={{ fontWeight: 500 }}>
-              {col}
-            </span>
-          ))}
-        </div>
+          <div className="min-w-[960px]">
+            <div className="grid grid-cols-[64px_1fr_120px_120px_130px_120px_200px] gap-3 px-5 py-2.5 bg-gray-50/60 border-b border-gray-100">
+              {cols.map((col, i) => (
+                <span key={i} className="text-xs text-gray-500" style={{ fontWeight: 500 }}>
+                  {col}
+                </span>
+              ))}
+            </div>
 
-        <div className="divide-y divide-gray-50 max-h-[520px] overflow-y-auto">
-          {filtered.map((ep) => {
-            const st = epStatusStyle[ep.status];
-            return (
-              <div
-                key={ep.ep}
-                className={`grid grid-cols-[64px_1fr_120px_120px_130px_120px_200px] gap-3 items-center px-5 py-3 transition-colors ${
-                  ep.newFile ? "bg-indigo-50/40" : "hover:bg-gray-50/50"
-                }`}
-              >
-                <div className="flex items-center justify-center h-8 rounded-lg bg-gray-100 flex-shrink-0">
-                  <span className="text-xs text-gray-700" style={{ fontWeight: 700 }}>
-                    {t.epLabelN.replace("{ep}", String(ep.ep))}
-                  </span>
-                </div>
-                <span className="text-sm text-gray-800 truncate" style={{ fontWeight: 500 }}>
-                  {ep.title}
-                </span>
-                <span className="text-xs text-gray-500">{ep.newFile ? ep.newDuration || t.readingDuration : ep.duration}</span>
-                <span className="text-xs text-gray-500">
-                  {ep.newFile ? `${(ep.newFile.size / 1024 / 1024).toFixed(1)} MB` : ep.size}
-                </span>
-                <span className="text-xs text-gray-500">{ep.uploadedAt}</span>
-                <div className="flex items-center gap-1.5" style={{ color: st.color }}>
-                  {st.icon}
-                  <span className="text-xs" style={{ fontWeight: 500 }}>
-                    {epStatusLabel(ep.status, t)}
-                  </span>
-                  {ep.newFile && (
-                    <span
-                      className="ml-1 px-1.5 py-0.5 rounded text-[10px] bg-indigo-100 text-indigo-600"
-                      style={{ fontWeight: 600 }}
-                    >
-                      {t.epStatusNew}
-                    </span>
-                  )}
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    ref={ep.fileRef}
-                    type="file"
-                    accept="video/*"
-                    onChange={(e) => {
-                      if (e.target.files?.[0]) handleFileSelect(ep.ep, e.target.files[0]);
-                      e.target.value = "";
-                    }}
-                    className="hidden"
-                  />
-                  {ep.newFile ? (
-                    <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <Film className="w-3.5 h-3.5 text-indigo-400 flex-shrink-0" />
-                      <span className="text-xs text-indigo-700 truncate flex-1" style={{ fontWeight: 500 }}>
-                        {ep.newFile.name}
-                      </span>
-                      <button
-                        onClick={() => clearFile(ep.ep)}
-                        className="text-gray-400 hover:text-red-500 flex-shrink-0 transition-colors"
-                      >
-                        <X className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  ) : (
-                    <button
-                      onClick={() => ep.fileRef.current?.click()}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-dashed text-xs transition-all"
-                      style={{
-                        borderColor: ep.status === "failed" ? "#EF4444" : "#D1D5DB",
-                        color: ep.status === "failed" ? "#EF4444" : "#6B7280",
-                        fontWeight: 500,
-                      }}
-                    >
-                      <Upload className="w-3 h-3" />
-                      {ep.status === "uploaded"
-                        ? t.epActionReplace
-                        : ep.status === "failed"
-                          ? t.epActionRetry
-                          : t.epActionUpload}
-                    </button>
-                  )}
-                </div>
+            {loading ? (
+              <div className="flex items-center justify-center py-16 text-gray-400">
+                <Loader2 className="w-5 h-5 animate-spin" />
               </div>
-            );
-          })}
-        </div>
-        </div>
+            ) : (
+              <div className="divide-y divide-gray-50 max-h-[520px] overflow-y-auto">
+                {filtered.map((ep) => {
+                  const st = uploadStatusStyle[ep.uploadStatus] ?? uploadStatusStyle[0];
+                  return (
+                    <div
+                      key={ep.episodeNo}
+                      className={`grid grid-cols-[64px_1fr_120px_120px_130px_120px_200px] gap-3 items-center px-5 py-3 transition-colors ${
+                        ep.newFile ? "bg-indigo-50/40" : "hover:bg-gray-50/50"
+                      }`}
+                    >
+                      <div className="flex items-center justify-center h-8 rounded-lg bg-gray-100 flex-shrink-0">
+                        <span className="text-xs text-gray-700" style={{ fontWeight: 700 }}>
+                          {fmt(t.epLabelN, { ep: ep.episodeNo })}
+                        </span>
+                      </div>
+                      <input
+                        type="text"
+                        value={ep.title}
+                        onChange={(e) => updateTitle(ep.episodeNo, e.target.value)}
+                        placeholder={fmt(t.epTitlePlaceholder, { ep: ep.episodeNo })}
+                        className="px-3 py-2 rounded-lg border border-gray-200 text-sm outline-none hover:border-gray-400 focus:border-black transition-all min-w-0"
+                      />
+                      <span className="text-xs text-gray-500">
+                        {ep.newFile ? ep.newDuration || t.readingDuration : formatDuration(ep.videoDuration)}
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        {ep.newFile ? `${((ep.newFile.size) / 1024 / 1024).toFixed(1)} MB` : formatBytes(ep.videoSize)}
+                      </span>
+                      <span className="text-xs text-gray-500">{ep.uploadDate || "—"}</span>
+                      <div className="flex items-center gap-1.5" style={{ color: st.color }}>
+                        {st.icon}
+                        <span className="text-xs" style={{ fontWeight: 500 }}>
+                          {uploadStatusLabel(ep.uploadStatus, t)}
+                        </span>
+                        {ep.newFile && (
+                          <span
+                            className="ml-1 px-1.5 py-0.5 rounded text-[10px] bg-indigo-100 text-indigo-600"
+                            style={{ fontWeight: 600 }}
+                          >
+                            {t.epStatusNew}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <input
+                          ref={ep.fileRef}
+                          type="file"
+                          accept="video/*"
+                          onChange={(e) => {
+                            if (e.target.files?.[0]) handleFileSelect(ep.episodeNo, e.target.files[0]);
+                            e.target.value = "";
+                          }}
+                          className="hidden"
+                        />
+                        {ep.newFile ? (
+                          <div className="flex items-center gap-2 flex-1 min-w-0">
+                            <Film className="w-3.5 h-3.5 text-indigo-400 flex-shrink-0" />
+                            <span className="text-xs text-indigo-700 truncate flex-1" style={{ fontWeight: 500 }}>
+                              {ep.newFile.name}
+                            </span>
+                            <button
+                              onClick={() => clearFile(ep.episodeNo)}
+                              className="text-gray-400 hover:text-red-500 flex-shrink-0 transition-colors"
+                            >
+                              <X className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => ep.fileRef.current?.click()}
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-dashed text-xs transition-all"
+                            style={{
+                              borderColor: ep.uploadStatus === 2 ? "#EF4444" : "#D1D5DB",
+                              color: ep.uploadStatus === 2 ? "#EF4444" : "#6B7280",
+                              fontWeight: 500,
+                            }}
+                          >
+                            <Upload className="w-3 h-3" />
+                            {ep.uploadStatus === 1
+                              ? t.epActionReplace
+                              : ep.uploadStatus === 2
+                                ? t.epActionRetry
+                                : t.epActionUpload}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="px-5 py-3 border-t border-gray-100 flex items-center justify-between bg-gray-50/30">
-          <span className="text-xs text-gray-500">{fmt(t.epTotalCount, { total: drama.episodes })}</span>
-          {pendingCount > 0 && (
+          <span className="text-xs text-gray-500">{fmt(t.epTotalCount, { total: plannedEpisodes })}</span>
+          {pendingLocal > 0 && (
             <button
               onClick={handleSave}
               disabled={saving}
@@ -314,7 +363,7 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
                   {t.epUploading}
                 </>
               ) : (
-                fmt(t.epSubmitNVideos, { n: pendingCount })
+                fmt(t.epSubmitNVideos, { n: pendingLocal })
               )}
             </button>
           )}

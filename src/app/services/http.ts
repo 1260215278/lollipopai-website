@@ -3,13 +3,14 @@
  * ------------------------------------------------------------------
  * 统一 fetch 封装：
  *  - baseURL = VITE_API_BASE + /sqx_fast（context-path）
- *  - 请求头注入 token（取自 auth.getToken()）
+ *  - 双 token 自动选择：`/publisher/**` 注入 publisherToken，其余（`/app/**`、
+ *    `/file/**`、`/alioss/**`）注入 appToken。可用 options.tokenType 覆盖，auth:false 不注入。
  *  - 解包统一响应 { code, msg, data }：code===0 返回 data；否则抛 ApiError
  *  - 业务失败的 msg 已是后端翻译好的文案，可直接 toast 展示
  *  - 传输/网络异常用 i18n 文案兜底（getMessages，非 hook，供 service 层使用）
  */
 import { toast } from "sonner";
-import { getToken } from "./auth";
+import { getAppToken, getPublisherToken } from "./auth";
 import { getMessages } from "../i18n";
 
 const API_BASE: string = import.meta.env.VITE_API_BASE || "";
@@ -18,11 +19,13 @@ export const CONTEXT_PATH = "/sqx_fast";
 /** 请求基础地址：${VITE_API_BASE}/sqx_fast */
 export const BASE_URL = `${API_BASE}${CONTEXT_PATH}`;
 
-/** 统一响应结构 */
+/** 统一响应结构。分页接口数据放在顶层 `page`（renren-fast 约定，见接口文档 §0）。 */
 export interface ApiResponse<T> {
   code: number;
   msg: string;
   data: T;
+  /** 分页接口的列表载荷（`{ totalCount, pageSize, totalPage, currPage, list }`） */
+  page?: T;
 }
 
 /** 业务/传输错误。code 为后端业务码（如 401923）或 -1（传输层失败） */
@@ -35,6 +38,9 @@ export class ApiError extends Error {
   }
 }
 
+/** 注入哪种 token。默认按路径自动判定（/publisher/** → publisher，其余 → app） */
+export type TokenType = "app" | "publisher";
+
 export interface RequestOptions extends Omit<RequestInit, "body"> {
   /** 查询参数 */
   params?: Record<string, string | number | boolean | undefined | null>;
@@ -42,6 +48,10 @@ export interface RequestOptions extends Omit<RequestInit, "body"> {
   body?: unknown;
   /** 是否注入 token，默认 true */
   auth?: boolean;
+  /** 强制使用的 token 类型；不传则按路径自动判定 */
+  tokenType?: TokenType;
+  /** 从响应里取哪个字段：默认 "data"；分页接口传 "page"；"raw"=返回完整 {code,msg,data,...} 信封（用于 token 等顶层字段） */
+  pick?: "data" | "page" | "raw";
   /** 出错时是否自动 toast，默认 true */
   toastOnError?: boolean;
 }
@@ -57,12 +67,18 @@ function buildUrl(path: string, params?: RequestOptions["params"]): string {
   return qs ? `${url}?${qs}` : url;
 }
 
+/** 按路径或显式类型解析应注入的 token 字符串 */
+function resolveToken(path: string, tokenType?: TokenType): string {
+  const type: TokenType = tokenType ?? (path.startsWith("/publisher/") ? "publisher" : "app");
+  return type === "publisher" ? getPublisherToken() : getAppToken();
+}
+
 export async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
-  const { params, body, auth = true, toastOnError = true, headers, method, ...rest } = options;
+  const { params, body, auth = true, tokenType, pick = "data", toastOnError = true, headers, method, ...rest } = options;
 
   const finalHeaders: Record<string, string> = { ...(headers as Record<string, string>) };
   if (auth) {
-    const token = getToken();
+    const token = resolveToken(path, tokenType);
     if (token) finalHeaders["token"] = token;
   }
 
@@ -96,7 +112,8 @@ export async function request<T>(path: string, options: RequestOptions = {}): Pr
   }
 
   if (json.code === 0) {
-    return json.data;
+    if (pick === "raw") return json as unknown as T;
+    return (pick === "page" ? (json.page as T) : json.data);
   }
 
   // 业务失败：msg 已由后端按当前语言翻译，可直接展示

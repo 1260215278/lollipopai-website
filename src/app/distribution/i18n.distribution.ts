@@ -14,6 +14,7 @@ import { content, type ContentMessages } from "./i18n/content";
 import { payment, type PaymentMessages } from "./i18n/payment";
 import { earnings, type EarningsMessages } from "./i18n/earnings";
 import { withdraw, type WithdrawMessages } from "./i18n/withdraw";
+import { tenant, type TenantMessages } from "./i18n/tenant";
 
 export interface DistributionMessages {
   common: CommonMessages;
@@ -24,6 +25,7 @@ export interface DistributionMessages {
   payment: PaymentMessages;
   earnings: EarningsMessages;
   withdraw: WithdrawMessages;
+  tenant: TenantMessages;
 }
 
 function compose(locale: Locale): DistributionMessages {
@@ -36,6 +38,7 @@ function compose(locale: Locale): DistributionMessages {
     payment: payment[locale],
     earnings: earnings[locale],
     withdraw: withdraw[locale],
+    tenant: tenant[locale],
   };
 }
 

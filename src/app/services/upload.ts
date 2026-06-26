@@ -1,33 +1,46 @@
 /**
- * 通用上传服务
+ * 通用上传服务（multipart，字段名 file，成功时 data 为完整 URL 字符串）
  * ------------------------------------------------------------------
- * 证照 / 封面 / 视频统一走 POST /alioss/upload（multipart，字段名 file）。
- * 该接口在后端为 anon（可不带 token），但已登录场景下正常携带。
- * 成功时 data 为图片/文件的完整 URL 字符串。
+ * 端点按业务链路区分（见《20260625-后端答复与变更》一·1）：
+ *  - 上剧封面 / 剧集视频：`POST /publisher/course/upload`（@PublisherLogin，走 publisher
+ *    token）。后端按扩展名区分大小：封面图 ≤10MB、剧集视频 ≤500MB，成功返回 OSS URL。
+ *  - 入驻证照：`POST /alioss/upload`（anon，走 app token / 无鉴权），与发行方上传隔离。
+ *  - 旧 `/file/upload` 属另一套鉴权域（sys/后管登录），不认发行方 token，已弃用。
+ * token 与 http.ts 一致按路径自动注入：`/publisher/**` → publisherToken，其余 → appToken。
+ * 由调用方按场景显式指定 path（默认发行方上传端点）。
  */
 import { toast } from "sonner";
-import { getToken } from "./auth";
+import { getAppToken, getPublisherToken } from "./auth";
 import { BASE_URL, ApiError, type ApiResponse } from "./http";
 import { getMessages } from "../i18n";
 
-const UPLOAD_PATH = "/alioss/upload";
+/** 上剧封面 / 剧集视频上传端点（发行方专用，publisher token） */
+export const PUBLISHER_UPLOAD_PATH = "/publisher/course/upload";
+/** 入驻证照上传端点（anon） */
+export const ALIOSS_UPLOAD_PATH = "/alioss/upload";
+
+/** 按路径解析应注入的 token（与 http.ts resolveToken 对齐） */
+function resolveUploadToken(path: string): string {
+  return path.startsWith("/publisher/") ? getPublisherToken() : getAppToken();
+}
 
 /**
  * 上传单个文件，返回其完整 URL。
  * @param file 待上传文件
+ * @param path 上传端点（默认发行方专用 /publisher/course/upload；入驻证照传 /alioss/upload）
  * @returns 文件 URL 字符串
  */
-export async function uploadFile(file: File): Promise<string> {
+export async function uploadFile(file: File, path: string = PUBLISHER_UPLOAD_PATH): Promise<string> {
   const form = new FormData();
   form.append("file", file);
 
   const headers: Record<string, string> = {};
-  const token = getToken();
+  const token = resolveUploadToken(path);
   if (token) headers["token"] = token;
 
   let res: Response;
   try {
-    res = await fetch(`${BASE_URL}${UPLOAD_PATH}`, {
+    res = await fetch(`${BASE_URL}${path}`, {
       method: "POST",
       headers, // 不手动设置 Content-Type，交给浏览器带 boundary
       body: form,

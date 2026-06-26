@@ -87,6 +87,8 @@ export interface ContentMessages {
   coverRatio: string;
   coverReplace: string;
   coverUploadFailed: string;
+  /** 封面超过 10MB 限制 */
+  coverTooLarge: string;
   nameLabel: string;
   namePlaceholder: string;
   descLabel: string;
@@ -171,6 +173,8 @@ export interface ContentMessages {
   detailCopyright: string;
   detailUploadDate: string;
   detailPricingTitle: string;
+  /** 收费规则为空时的占位（后端 priceRule 字段未对齐时） */
+  pricingEmpty: string;
   detailFullSeries: string;
   detailPerEpisode: string;
   detailAd15s: string;
@@ -208,9 +212,34 @@ export interface ContentMessages {
   epSaved: string;
   epTotalCount: string;
   videoUploadFailed: string;
+  /** 提交时存在未上传视频的剧集（区别于上传过程失败） */
+  videoIncomplete: string;
 
   // ── 加载 / 错误 ──
   loadFailed: string;
+
+  // ── 发行中心对接新增 ──
+  /** 列表「上架语言」列（原型曾用国家，现按文档为语言维度） */
+  colLanguage: string;
+  /** 审核态：草稿 */
+  auditDraft: string;
+  /** 审核态：已驳回 */
+  auditRejected: string;
+  /** 详情：剧集语言 */
+  detailLanguage: string;
+  /** step1：剧集语言字段 */
+  langLabel: string;
+  langPlaceholder: string;
+  /** 标签需先选语言 */
+  tagsSelectLangFirst: string;
+  /** 驳回原因标题 */
+  rejectReasonTitle: string;
+  /** 收费规则：整剧（≤50集） */
+  pricingColWholeLe50: string;
+  /** 收费规则：整剧（>50集） */
+  pricingColWholeGt50: string;
+  /** 草稿已清空 */
+  draftCleared: string;
 
   // ── 维度映射 ──
   countries: CountryLabels;
@@ -282,6 +311,7 @@ export const content: Record<Locale, ContentMessages> = {
     coverRatio: "9:16",
     coverReplace: "点击替换",
     coverUploadFailed: "封面上传失败，请重试",
+    coverTooLarge: "封面超过 10MB 限制",
     nameLabel: "短剧名称",
     namePlaceholder: "请输入短剧名称",
     descLabel: "剧情简介",
@@ -358,6 +388,7 @@ export const content: Record<Locale, ContentMessages> = {
     detailCopyright: "版权类型",
     detailUploadDate: "上传日期",
     detailPricingTitle: "收费规则",
+    pricingEmpty: "暂无收费规则",
     detailFullSeries: "整部剧",
     detailPerEpisode: "单集",
     detailAd15s: "15s广告费",
@@ -392,8 +423,21 @@ export const content: Record<Locale, ContentMessages> = {
     epSaved: "已保存",
     epTotalCount: "共 {total} 集",
     videoUploadFailed: "视频上传失败，请重试",
+    videoIncomplete: "请上传完整剧集视频",
 
     loadFailed: "加载失败，请重试",
+
+    colLanguage: "上架语言",
+    auditDraft: "草稿",
+    auditRejected: "已驳回",
+    detailLanguage: "剧集语言",
+    langLabel: "剧集语言",
+    langPlaceholder: "请选择语言",
+    tagsSelectLangFirst: "请先选择语言",
+    rejectReasonTitle: "驳回原因",
+    pricingColWholeLe50: "整剧（≤50集）",
+    pricingColWholeGt50: "整剧（>50集）",
+    draftCleared: "已清空草稿",
 
     countries: { us: "美国", ph: "菲律宾", in: "印度" },
     tags: {
@@ -476,6 +520,7 @@ export const content: Record<Locale, ContentMessages> = {
     coverRatio: "9:16",
     coverReplace: "點擊替換",
     coverUploadFailed: "封面上傳失敗，請重試",
+    coverTooLarge: "封面超過 10MB 限制",
     nameLabel: "短劇名稱",
     namePlaceholder: "請輸入短劇名稱",
     descLabel: "劇情簡介",
@@ -552,6 +597,7 @@ export const content: Record<Locale, ContentMessages> = {
     detailCopyright: "版權類型",
     detailUploadDate: "上傳日期",
     detailPricingTitle: "收費規則",
+    pricingEmpty: "暫無收費規則",
     detailFullSeries: "整部劇",
     detailPerEpisode: "單集",
     detailAd15s: "15s廣告費",
@@ -586,8 +632,21 @@ export const content: Record<Locale, ContentMessages> = {
     epSaved: "已儲存",
     epTotalCount: "共 {total} 集",
     videoUploadFailed: "影片上傳失敗，請重試",
+    videoIncomplete: "請上傳完整劇集影片",
 
     loadFailed: "載入失敗，請重試",
+
+    colLanguage: "上架語言",
+    auditDraft: "草稿",
+    auditRejected: "已駁回",
+    detailLanguage: "劇集語言",
+    langLabel: "劇集語言",
+    langPlaceholder: "請選擇語言",
+    tagsSelectLangFirst: "請先選擇語言",
+    rejectReasonTitle: "駁回原因",
+    pricingColWholeLe50: "整劇（≤50集）",
+    pricingColWholeGt50: "整劇（>50集）",
+    draftCleared: "已清空草稿",
 
     countries: { us: "美國", ph: "菲律賓", in: "印度" },
     tags: {
@@ -671,6 +730,7 @@ export const content: Record<Locale, ContentMessages> = {
     coverRatio: "9:16",
     coverReplace: "Replace",
     coverUploadFailed: "Cover upload failed, please retry",
+    coverTooLarge: "Cover exceeds the 10MB limit",
     nameLabel: "Drama Name",
     namePlaceholder: "Enter drama name",
     descLabel: "Description",
@@ -747,6 +807,7 @@ export const content: Record<Locale, ContentMessages> = {
     detailCopyright: "Copyright",
     detailUploadDate: "Upload Date",
     detailPricingTitle: "Pricing Rules",
+    pricingEmpty: "No pricing rules yet",
     detailFullSeries: "Full Series",
     detailPerEpisode: "Per Episode",
     detailAd15s: "15s Ad",
@@ -781,8 +842,21 @@ export const content: Record<Locale, ContentMessages> = {
     epSaved: "Saved",
     epTotalCount: "Total {total} episodes",
     videoUploadFailed: "Video upload failed, please retry",
+    videoIncomplete: "Please upload videos for all episodes",
 
     loadFailed: "Failed to load, please retry",
+
+    colLanguage: "Language",
+    auditDraft: "Draft",
+    auditRejected: "Rejected",
+    detailLanguage: "Language",
+    langLabel: "Language",
+    langPlaceholder: "Select language",
+    tagsSelectLangFirst: "Select a language first",
+    rejectReasonTitle: "Rejection Reason",
+    pricingColWholeLe50: "Full (≤50 eps)",
+    pricingColWholeGt50: "Full (>50 eps)",
+    draftCleared: "Draft cleared",
 
     countries: { us: "United States", ph: "Philippines", in: "India" },
     tags: {
@@ -866,6 +940,7 @@ export const content: Record<Locale, ContentMessages> = {
     coverRatio: "9:16",
     coverReplace: "Substituir",
     coverUploadFailed: "Falha no envio da capa, tente novamente",
+    coverTooLarge: "A capa excede o limite de 10MB",
     nameLabel: "Nome do drama",
     namePlaceholder: "Digite o nome do drama",
     descLabel: "Descrição",
@@ -942,6 +1017,7 @@ export const content: Record<Locale, ContentMessages> = {
     detailCopyright: "Direitos autorais",
     detailUploadDate: "Data de envio",
     detailPricingTitle: "Regras de preço",
+    pricingEmpty: "Sem regras de preço",
     detailFullSeries: "Série completa",
     detailPerEpisode: "Por episódio",
     detailAd15s: "Anúncio 15s",
@@ -976,8 +1052,21 @@ export const content: Record<Locale, ContentMessages> = {
     epSaved: "Salvo",
     epTotalCount: "Total de {total} episódios",
     videoUploadFailed: "Falha no envio do vídeo, tente novamente",
+    videoIncomplete: "Envie os vídeos de todos os episódios",
 
     loadFailed: "Falha ao carregar, tente novamente",
+
+    colLanguage: "Idioma",
+    auditDraft: "Rascunho",
+    auditRejected: "Rejeitado",
+    detailLanguage: "Idioma",
+    langLabel: "Idioma",
+    langPlaceholder: "Selecione o idioma",
+    tagsSelectLangFirst: "Selecione um idioma primeiro",
+    rejectReasonTitle: "Motivo da rejeição",
+    pricingColWholeLe50: "Série (≤50 eps)",
+    pricingColWholeGt50: "Série (>50 eps)",
+    draftCleared: "Rascunho limpo",
 
     countries: { us: "Estados Unidos", ph: "Filipinas", in: "Índia" },
     tags: {

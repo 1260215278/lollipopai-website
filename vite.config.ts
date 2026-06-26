@@ -16,6 +16,10 @@ function figmaAssetResolver() {
   }
 }
 
+// 真实后端地址（联调）。dev 时把 /sqx_fast/** 反向代理到此，避免浏览器跨域(CORS)。
+// 可用环境变量 VITE_DEV_PROXY_TARGET 覆盖；生产构建走相对 /sqx_fast（同域）或由 VITE_API_BASE 指定。
+const DEV_API_TARGET = process.env.VITE_DEV_PROXY_TARGET || 'https://www.testshort.top'
+
 export default defineConfig({
   plugins: [
     figmaAssetResolver(),
@@ -28,6 +32,17 @@ export default defineConfig({
     alias: {
       // Alias @ to the src directory
       '@': path.resolve(__dirname, './src'),
+    },
+  },
+
+  // dev 反向代理：前端请求相对 /sqx_fast/** → 真实后端，规避跨域；联调即开即用。
+  server: {
+    proxy: {
+      '/sqx_fast': {
+        target: DEV_API_TARGET,
+        changeOrigin: true,
+        secure: true,
+      },
     },
   },
 

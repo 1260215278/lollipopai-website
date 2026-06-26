@@ -1,20 +1,31 @@
 import React from "react";
-import { X } from "lucide-react";
-import { COUNTRIES } from "../../mock/content";
+import { X, Loader2 } from "lucide-react";
 import type { ContentMessages } from "../../i18n/content";
+import type { PriceRuleCountry } from "./types";
+import { formatUsd } from "./shared";
 
 interface CountryPricingModalProps {
   open: boolean;
   onClose: () => void;
   t: ContentMessages;
+  /** 各国家收费规则（GET /publisher/course/priceRule） */
+  rows: PriceRuleCountry[];
+  loading?: boolean;
 }
 
 /**
- * 国家收费规则弹窗（figma 15081-22048）。
- * 数据来自前端写死的 COUNTRIES 常量（US/PH/IN，平台统一定价，只读）。
- * 名称走 i18n（t.countries[value]），数值原样取常量、不可修改。
+ * 各国家收费规则弹窗（img_17，只读）。
+ * 数据来自 `/publisher/course/priceRule`：平台按国家统一定价（USD），
+ * 列为 单集 / 整剧(≤50集) / 整剧(>50集)；单集价为 NULL 时显示 "—"（该国不卖单集）。
+ * 已去除 15s 广告列（本期不做）。
  */
-export const CountryPricingModal: React.FC<CountryPricingModalProps> = ({ open, onClose, t }) => {
+export const CountryPricingModal: React.FC<CountryPricingModalProps> = ({
+  open,
+  onClose,
+  t,
+  rows,
+  loading,
+}) => {
   if (!open) return null;
   return (
     <div
@@ -40,53 +51,52 @@ export const CountryPricingModal: React.FC<CountryPricingModalProps> = ({ open, 
         </div>
         <div className="p-6">
           <p className="text-xs text-gray-400 mb-4">{t.pricingDesc}</p>
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-100">
-                <th className="text-left pb-2 text-xs text-gray-500" style={{ fontWeight: 500 }}>
-                  {t.pricingColCountry}
-                </th>
-                <th className="text-left pb-2 text-xs text-gray-500" style={{ fontWeight: 500 }}>
-                  {t.pricingColFull}
-                </th>
-                <th className="text-left pb-2 text-xs text-gray-500" style={{ fontWeight: 500 }}>
-                  {t.pricingColSingle}
-                </th>
-                <th className="text-left pb-2 text-xs text-gray-500" style={{ fontWeight: 500 }}>
-                  {t.pricingColAd}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {COUNTRIES.map((c) => (
-                <tr key={c.value} className="border-b border-gray-50 last:border-0">
-                  <td className="py-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-base">{c.flag}</span>
-                      <span className="text-gray-800" style={{ fontWeight: 600 }}>
-                        {t.countries[c.value as keyof typeof t.countries]}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="py-3 text-gray-900" style={{ fontWeight: 700 }}>
-                    {c.pricing.full}
-                  </td>
-                  <td className="py-3 text-gray-900" style={{ fontWeight: 700 }}>
-                    {c.pricing.single}
-                  </td>
-                  <td className="py-3">
-                    {c.pricing.ad ? (
-                      <span className="text-amber-600" style={{ fontWeight: 600 }}>
-                        {t.adHas}
-                      </span>
-                    ) : (
-                      <span className="text-gray-300">{t.adNone}</span>
-                    )}
-                  </td>
+          {loading ? (
+            <div className="flex items-center justify-center py-12 text-gray-400">
+              <Loader2 className="w-5 h-5 animate-spin" />
+            </div>
+          ) : rows.length === 0 ? (
+            <div className="py-12 text-center text-sm text-gray-400">{t.emptyTitle}</div>
+          ) : (
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-100">
+                  <th className="text-left pb-2 text-xs text-gray-500" style={{ fontWeight: 500 }}>
+                    {t.pricingColCountry}
+                  </th>
+                  <th className="text-left pb-2 text-xs text-gray-500" style={{ fontWeight: 500 }}>
+                    {t.pricingColSingle}
+                  </th>
+                  <th className="text-left pb-2 text-xs text-gray-500" style={{ fontWeight: 500 }}>
+                    {t.pricingColWholeLe50}
+                  </th>
+                  <th className="text-left pb-2 text-xs text-gray-500" style={{ fontWeight: 500 }}>
+                    {t.pricingColWholeGt50}
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {rows.map((c) => (
+                  <tr key={c.country} className="border-b border-gray-50 last:border-0">
+                    <td className="py-3">
+                      <span className="text-gray-800" style={{ fontWeight: 600 }}>
+                        {c.countryName || c.country}
+                      </span>
+                    </td>
+                    <td className="py-3 text-gray-900" style={{ fontWeight: 700 }}>
+                      {formatUsd(c.episodePriceUsd)}
+                    </td>
+                    <td className="py-3 text-gray-900" style={{ fontWeight: 700 }}>
+                      {formatUsd(c.wholePriceLe50Usd)}
+                    </td>
+                    <td className="py-3 text-gray-900" style={{ fontWeight: 700 }}>
+                      {formatUsd(c.wholePriceGt50Usd)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </div>

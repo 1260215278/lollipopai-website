@@ -1,12 +1,15 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router";
-import { Send, Loader2, Clock, CheckCircle2, XCircle, ArrowRight } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { Send, Loader2, CheckCircle2, ArrowRight, X, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { useI18n } from "../../i18n";
 import { Footer } from "../../components/Footer";
 import { ImageUpload } from "../components/ImageUpload";
+import welcomeBanner from "../../../imports/发行入驻-欢迎横幅.png";
 import { SiteHeader, type SiteNavItem } from "../../components/SiteHeader";
 import { ApiError } from "../../services/http";
+import { getLoginName, isAppAuthed, setAppToken, setLoginName } from "../../services/auth";
 import {
   getPublisherStatus,
   sendPublisherCode,
@@ -16,11 +19,37 @@ import {
 } from "../../services/publisher";
 
 /**
+ * 已点击「进入发行中心」的标记（按账号手机号区分）。审核通过页只在首次进入时展示，
+ * 用户点过一次后，再访问 /distribution/enroll 直接跳转发行中心。
+ */
+const ENTERED_KEY_PREFIX = "lp_enroll_entered_";
+
+function enteredKey(phone: string): string {
+  return ENTERED_KEY_PREFIX + (phone || "anon");
+}
+
+function hasEnteredDashboard(phone: string): boolean {
+  try {
+    return localStorage.getItem(enteredKey(phone)) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function markEnteredDashboard(phone: string): void {
+  try {
+    localStorage.setItem(enteredKey(phone), "1");
+  } catch {
+    /* localStorage 不可用时忽略，本次会话仍正常进入 */
+  }
+}
+
+/**
  * 发行者入驻 —— 四态状态机（严格按《发行者入驻-前端接口.md》+ figma）：
  *   auditStatus null  → 可编辑表单（空）
  *   auditStatus 2     → 审核未通过页 →「重新填写申请」→ 回填表单（含驳回原因）
  *   auditStatus 0     → 审核中
- *   auditStatus 1 / isPublisher=1 → 已通过
+ *   auditStatus 1 / isPublisher=1 → 已通过（首次展示通过页，点过「进入发行中心」后再访问直接跳转）
  */
 export function EnrollPage() {
   const { messages } = useI18n();
@@ -30,6 +59,8 @@ export function EnrollPage() {
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState<PublisherStatus | null>(null);
   const [editing, setEditing] = useState(false);
+  // 合作协议 / 隐私政策 弹窗（null=关闭）
+  const [docOpen, setDocOpen] = useState<"terms" | "privacy" | null>(null);
 
   // 表单字段（对应接口 8 字段；图片为上传后 URL）
   const [phone, setPhone] = useState("");
@@ -47,8 +78,10 @@ export function EnrollPage() {
   const [countdown, setCountdown] = useState(0);
   const [submitting, setSubmitting] = useState(false);
 
-  // 账号已绑定手机号 → 只读锁定（依据接口文档；以 apply.phone 作为已绑定信号）
-  const boundPhone = (status?.apply?.phone ?? "").trim();
+  // 账号已绑定手机号 → 只读锁定，发码/提交均不传 phone（后端强制用账号手机号，见入驻文档 §2.2/§2.5）。
+  // 本站登录即手机号 OTP，登录手机号 = 账号已绑定号，故以登录手机号为准；
+  // 无登录手机号（如联调回退 token）时退回历史申请号，仍无则可编辑填写（账号未绑定分支）。
+  const boundPhone = getLoginName().trim() || (status?.apply?.phone ?? "").trim();
 
   const prefill = (apply: PublisherApply) => {
     setPhone(apply.phone ?? "");
@@ -61,13 +94,22 @@ export function EnrollPage() {
   };
 
   const loadStatus = useCallback(async () => {
+    // 仅在已登录（持有 appToken）时才查询入驻状态；未登录直接展示空表单，不打无效请求
+    if (!isAppAuthed()) {
+      setStatus(null);
+      setLoading(false);
+      return;
+    }
+    // 已登录默认回填登录手机号（仅作初始值，仍可编辑）；若存在历史申请则由下方 prefill 覆盖
+    const loginPhone = getLoginName();
+    if (loginPhone) setPhone(loginPhone);
     setLoading(true);
     try {
       const s = await getPublisherStatus();
       setStatus(s);
       if (s.apply) prefill(s.apply);
     } catch {
-      // http 已 toast；无登录态/无后端时回退到空表单，便于继续填写
+      // http 已 toast；登录态失效/无后端时回退到空表单，便于继续填写
       setStatus(null);
     } finally {
       setLoading(false);
@@ -95,13 +137,14 @@ export function EnrollPage() {
 
   const onSendCode = async () => {
     if (sending || countdown > 0) return;
-    if (!boundPhone && !phone.trim()) {
+    // 2026-06-26 起发码免登录、phone 必传（即输入框值）
+    if (!phone.trim()) {
       setErrors((e) => ({ ...e, phone: t.vPhoneRequired }));
       return;
     }
     setSending(true);
     try {
-      await sendPublisherCode(boundPhone ? undefined : phone.trim());
+      await sendPublisherCode(phone.trim());
       toast.success(t.sendCodeSuccess);
       setCountdown(60);
     } catch {
@@ -113,7 +156,7 @@ export function EnrollPage() {
 
   const validate = (): Record<string, string> => {
     const e: Record<string, string> = {};
-    if (!boundPhone && !phone.trim()) e.phone = t.vPhoneRequired;
+    if (!phone.trim()) e.phone = t.vPhoneRequired;
     if (!code.trim()) e.code = t.vCodeRequired;
     if (!companyName.trim()) e.companyName = t.vCompanyRequired;
     if (!businessLicense) e.businessLicense = t.vLicenseRequired;
@@ -133,8 +176,8 @@ export function EnrollPage() {
     }
     setSubmitting(true);
     try {
-      await submitPublisher({
-        phone: boundPhone ? undefined : phone.trim(),
+      const res = await submitPublisher({
+        phone: phone.trim(),
         code: code.trim(),
         companyName: companyName.trim(),
         businessLicense: businessLicense!,
@@ -147,7 +190,13 @@ export function EnrollPage() {
       toast.success(t.submitSuccess);
       setEditing(false);
       setCode("");
-      await loadStatus(); // 回到服务端权威状态（→ 审核中）
+      // 提交即登录：后端在响应顶层返回登录 token（匿名/登录态均返回），写入并替换本地登录态，
+      // 无需用户再走一次验证码登录。展示名优先用后端权威手机号（账号已绑号时后端以账号号为准）。
+      if (res.token) {
+        setAppToken(res.token);
+        setLoginName(res.user?.phone ?? phone.trim());
+      }
+      await loadStatus(); // 回到服务端权威状态（登录态 → 审核中）
     } catch (err) {
       // http 已 toast 后端文案。若已是发行者(401925)/已有审核中申请(401924)，
       // 刷新到对应状态而非停留表单。
@@ -161,9 +210,23 @@ export function EnrollPage() {
 
   const auditStatus = status?.auditStatus ?? null;
   const isPublisher = status?.isPublisher === 1;
+  const approved = auditStatus === 1 || isPublisher;
+  // 已通过且此前点过「进入发行中心」→ 直接跳转，不再展示通过页
+  const redirectDashboard = approved && hasEnteredDashboard(boundPhone);
+
+  useEffect(() => {
+    if (!loading && redirectDashboard) {
+      navigate("/distribution/overview", { replace: true });
+    }
+  }, [loading, redirectDashboard, navigate]);
+
+  const enterDashboard = () => {
+    markEnteredDashboard(boundPhone);
+    navigate("/distribution/overview");
+  };
 
   let view: React.ReactNode;
-  if (loading) {
+  if (loading || redirectDashboard) {
     view = (
       <div className="flex items-center justify-center py-40">
         <Loader2 className="w-7 h-7 animate-spin text-white/60" />
@@ -171,15 +234,14 @@ export function EnrollPage() {
     );
   } else if (auditStatus === 0) {
     view = <ReviewingView t={t} />;
-  } else if (auditStatus === 1 || isPublisher) {
-    view = <ApprovedView t={t} company={status?.apply?.companyName ?? ""} onEnter={() => navigate("/distribution/overview")} />;
+  } else if (approved) {
+    view = <ApprovedView t={t} company={status?.apply?.companyName ?? ""} onEnter={enterDashboard} />;
   } else if (auditStatus === 2 && !editing) {
     view = <RejectedView t={t} reason={status?.rejectReason ?? ""} onResubmit={() => setEditing(true)} />;
   } else {
     view = (
       <FormView
         t={t}
-        rejectReason={auditStatus === 2 ? status?.rejectReason ?? "" : ""}
         phone={phone}
         setPhone={(v) => { setPhone(v); clearError("phone"); }}
         boundPhone={boundPhone}
@@ -202,6 +264,7 @@ export function EnrollPage() {
         setIdCardBack={(v) => { setIdCardBack(v); clearError("idCardBack"); }}
         agree={agree}
         setAgree={(v) => { setAgree(v); clearError("agree"); }}
+        onOpenDoc={setDocOpen}
         errors={errors}
         submitting={submitting}
         onSubmit={onSubmit}
@@ -214,6 +277,15 @@ export function EnrollPage() {
       <EnrollHeader />
       <main className="flex-1">{view}</main>
       <Footer onNavigate={() => navigate("/")} />
+
+      {/* 合作协议 / 隐私政策 弹窗 */}
+      <AgreementModal
+        open={docOpen !== null}
+        title={docOpen === "privacy" ? t.privacyTitle : t.termsTitle}
+        body={docOpen === "privacy" ? t.privacyBody : t.termsBody}
+        closeLabel={t.docClose}
+        onClose={() => setDocOpen(null)}
+      />
     </div>
   );
 }
@@ -267,7 +339,6 @@ const inputCls =
 
 function FormView(props: {
   t: EM;
-  rejectReason: string;
   phone: string;
   setPhone: (v: string) => void;
   boundPhone: string;
@@ -290,11 +361,38 @@ function FormView(props: {
   setIdCardBack: (v: string | null) => void;
   agree: boolean;
   setAgree: (v: boolean) => void;
+  onOpenDoc: (doc: "terms" | "privacy") => void;
   errors: Record<string, string>;
   submitting: boolean;
   onSubmit: () => void;
 }) {
   const { t, errors } = props;
+
+  // 勾选文案：将 {terms}/{privacy} 占位渲染为可点击链接（点击打开弹窗，不触发勾选切换）；
+  // 其余纯文本点击仍可切换勾选框。
+  const agreementNodes = t.agreement.split(/(\{terms\}|\{privacy\})/).map((part, i) => {
+    if (part === "{terms}" || part === "{privacy}") {
+      const doc = part === "{terms}" ? "terms" : "privacy";
+      const label = part === "{terms}" ? t.agreementTerms : t.agreementPrivacy;
+      return (
+        <button
+          key={i}
+          type="button"
+          onClick={() => props.onOpenDoc(doc)}
+          className="text-white hover:underline"
+          style={{ fontWeight: 500 }}
+        >
+          {label}
+        </button>
+      );
+    }
+    if (!part) return null;
+    return (
+      <span key={i} onClick={() => props.setAgree(!props.agree)} className="cursor-pointer select-none">
+        {part}
+      </span>
+    );
+  });
   // 上传区只显示通用提示（具体上传项已由上方 label 标明），多语言下更自然
   const uploadProps = () => ({
     promptText: t.uploadPrompt,
@@ -306,29 +404,22 @@ function FormView(props: {
   });
 
   return (
-    <div className="max-w-[720px] mx-auto px-6 py-10">
-      {/* 欢迎横幅（渐变 + 本地化标题，保证多语言可切换） */}
-      <div className="rounded-2xl overflow-hidden mb-8 relative" style={{ background: "linear-gradient(110deg, #1a0a06 0%, #7a2d12 45%, #e8631c 100%)" }}>
-        <div className="px-8 py-10 relative z-10">
-          <p className="text-white" style={{ fontWeight: 800, fontSize: "1.6rem", letterSpacing: "-0.02em" }}>
-            {t.bannerTitle}
-          </p>
-          <p className="text-white/80 mt-2 text-sm">{t.bannerSubtitle}</p>
+    <div className="max-w-[672px] mx-auto px-6 py-10">
+      {/* 申请表单卡片（figma 15237-33706：#090101 + 24px 内边距 + 16px 圆角） */}
+      <div className="bg-[#090101] rounded-[16px] p-6">
+        {/* 欢迎横幅：figma 15237-33708 导出的图片资源，整图出血至卡片边缘并保留顶部圆角 */}
+        <div className="-mx-6 -mt-6 mb-6">
+          <img
+            src={welcomeBanner}
+            alt={t.bannerTitle}
+            className="block w-full rounded-t-[16px] select-none pointer-events-none"
+          />
         </div>
-        <div className="absolute -right-6 -top-8 text-[120px] opacity-20 select-none">🎬</div>
-      </div>
 
-      <h1 className="text-white" style={{ fontWeight: 700, fontSize: "1.5rem", letterSpacing: "0.07px" }}>
-        {t.welcomeTitle}
-      </h1>
-      <p className="text-[#717182] text-sm mt-2">{t.welcomeSubtitle}</p>
-
-      {props.rejectReason && (
-        <div className="mt-6 rounded-[10px] border border-[#fb2c36]/40 bg-[rgba(231,0,11,0.08)] px-4 py-3">
-          <p className="text-[#fb2c36] text-sm" style={{ fontWeight: 600 }}>{t.rejectReasonLabel}</p>
-          <p className="text-[#d1d5dc] text-sm mt-1">{props.rejectReason}</p>
-        </div>
-      )}
+        <h1 className="text-white" style={{ fontWeight: 500, fontSize: "1.5rem", letterSpacing: "0.07px" }}>
+          {t.welcomeTitle}
+        </h1>
+        <p className="text-[#717182] text-sm mt-2">{t.welcomeSubtitle}</p>
 
       {/* 关联账号 */}
       <section className="mt-8">
@@ -343,7 +434,6 @@ function FormView(props: {
             <input
               className={inputCls}
               value={props.phone}
-              readOnly={!!props.boundPhone}
               placeholder={t.phonePlaceholder}
               onChange={(e) => props.setPhone(e.target.value)}
               inputMode="numeric"
@@ -351,7 +441,7 @@ function FormView(props: {
           </DarkField>
 
           <DarkField label={t.codeLabel} required error={errors.code}>
-            <div className="flex gap-3">
+            <div className="flex gap-2">
               <input
                 className={inputCls + " flex-1"}
                 value={props.code}
@@ -363,7 +453,7 @@ function FormView(props: {
                 type="button"
                 onClick={props.onSendCode}
                 disabled={props.sending || props.countdown > 0}
-                className="h-[45px] px-5 rounded-[10px] bg-[rgba(51,51,51,0.5)] border border-white/10 text-white text-sm whitespace-nowrap flex items-center gap-2 transition-all hover:bg-[rgba(51,51,51,0.7)] disabled:opacity-60"
+                className="h-[45px] px-6 rounded-[10px] bg-white text-[#111] text-sm whitespace-nowrap flex items-center gap-2 transition-all hover:opacity-90 disabled:opacity-60"
                 style={{ fontWeight: 500 }}
               >
                 {props.sending ? (
@@ -440,12 +530,13 @@ function FormView(props: {
       {/* 合作协议 */}
       <section className="mt-8">
         <h2 className="text-white mb-4" style={{ fontWeight: 500, fontSize: "1.25rem" }}>{t.sectionAgreement}</h2>
-        <button
-          type="button"
-          onClick={() => props.setAgree(!props.agree)}
-          className="flex items-start gap-3 text-left"
-        >
-          <span
+        {/* figma 15237-33811：勾选区整体置于 rgba(51,51,51,0.5) 浅色框内 */}
+        <div className="flex items-start gap-3 bg-[rgba(51,51,51,0.5)] rounded-[10px] p-4">
+          <button
+            type="button"
+            role="checkbox"
+            aria-checked={props.agree}
+            onClick={() => props.setAgree(!props.agree)}
             className="mt-0.5 w-[18px] h-[18px] rounded-[4px] flex-shrink-0 flex items-center justify-center border transition-all"
             style={{
               background: props.agree ? "#fb2c36" : "transparent",
@@ -457,23 +548,63 @@ function FormView(props: {
                 <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             )}
-          </span>
-          <span className="text-sm text-[#d1d5dc] leading-relaxed select-none">{t.agreement}</span>
-        </button>
+          </button>
+          <p className="text-sm text-white/55 leading-relaxed">{agreementNodes}</p>
+        </div>
         {errors.agree && <p className="text-xs text-[#fb2c36] mt-2 ml-7">{errors.agree}</p>}
       </section>
 
-      {/* 提交 */}
-      <button
-        onClick={props.onSubmit}
-        disabled={props.submitting}
-        className="mt-8 w-full h-[48px] rounded-[10px] bg-white text-[#111] text-sm flex items-center justify-center gap-2 transition-all hover:opacity-90 active:scale-[0.99] disabled:opacity-70"
-        style={{ fontWeight: 700 }}
-      >
-        {props.submitting && <Loader2 className="w-4 h-4 animate-spin" />}
-        {t.submit}
-      </button>
+        {/* 提交 */}
+        <button
+          onClick={props.onSubmit}
+          disabled={props.submitting}
+          className="mt-8 w-full h-[48px] rounded-[10px] bg-white text-[#111] text-sm flex items-center justify-center gap-2 transition-all hover:opacity-90 active:scale-[0.99] disabled:opacity-70"
+          style={{ fontWeight: 500 }}
+        >
+          {props.submitting && <Loader2 className="w-4 h-4 animate-spin" />}
+          {t.submit}
+        </button>
+      </div>
     </div>
+  );
+}
+
+/* ── 入驻状态图标：直接内联 figma 导出的 SVG 路径（viewBox 27.995 / stroke 2.333 / currentColor 取色），
+ *    与设计稿像素级一致。审核通过=CircleCheckBig（缺口圆+大对勾）、审核失败=CircleX、审核中=Clock。 ── */
+function ApprovedCheckIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 27.995 27.995" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M25.43 11.6646C25.9627 14.279 25.583 16.997 24.3543 19.3653C23.1256 21.7336 21.1221 23.6092 18.6779 24.6791C16.2338 25.7491 13.4967 25.9488 10.9231 25.2449C8.34948 24.5411 6.09497 22.9762 4.53551 20.8113C2.97606 18.6464 2.20592 16.0123 2.35352 13.3482C2.50113 10.6842 3.55756 8.15132 5.34664 6.17193C7.13572 4.19254 9.54931 2.88632 12.1849 2.47109C14.8205 2.05585 17.5188 2.55671 19.8298 3.89014"
+        stroke="currentColor" strokeWidth="2.33292" strokeLinecap="round" strokeLinejoin="round"
+      />
+      <path d="M10.4981 12.831L13.9975 16.3304L25.6621 4.66583" stroke="currentColor" strokeWidth="2.33292" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function RejectedXIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 27.995 27.995" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M13.9975 25.6621C20.4397 25.6621 25.6621 20.4397 25.6621 13.9975C25.6621 7.55533 20.4397 2.33292 13.9975 2.33292C7.55533 2.33292 2.33292 7.55533 2.33292 13.9975C2.33292 20.4397 7.55533 25.6621 13.9975 25.6621Z"
+        stroke="currentColor" strokeWidth="2.33292" strokeLinecap="round" strokeLinejoin="round"
+      />
+      <path d="M17.4969 10.4981L10.4981 17.4969" stroke="currentColor" strokeWidth="2.33292" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M10.4981 10.4981L17.4969 17.4969" stroke="currentColor" strokeWidth="2.33292" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function ReviewingClockIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 27.995 27.995" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M13.9975 25.6621C20.4397 25.6621 25.6621 20.4397 25.6621 13.9975C25.6621 7.55533 20.4397 2.33292 13.9975 2.33292C7.55533 2.33292 2.33292 7.55533 2.33292 13.9975C2.33292 20.4397 7.55533 25.6621 13.9975 25.6621Z"
+        stroke="currentColor" strokeWidth="2.33292" strokeLinecap="round" strokeLinejoin="round"
+      />
+      <path d="M13.9975 6.99875V13.9975L18.6633 16.3304" stroke="currentColor" strokeWidth="2.33292" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
 }
 
@@ -488,8 +619,9 @@ function ReviewingView({ t }: { t: EM }) {
   return (
     <StatusBand>
       <div className="flex flex-col items-center text-center">
-        <div className="w-16 h-16 rounded-full border-2 border-gray-200 flex items-center justify-center mb-6">
-          <Clock className="w-7 h-7 text-gray-400" />
+        {/* 审核中图标：figma 15098 外圈 #d1d5dc + 28px 时钟图标（描边 #6a7282），SVG 取自设计稿 */}
+        <div className="w-16 h-16 rounded-full border-2 border-[#d1d5dc] flex items-center justify-center mb-6">
+          <ReviewingClockIcon className="w-7 h-7 text-[#6a7282]" />
         </div>
         <h2 className="text-[#111111]" style={{ fontWeight: 800, fontSize: "1.5rem" }}>{t.reviewingTitle}</h2>
         <p className="text-gray-500 text-sm mt-3 leading-relaxed max-w-md">{t.reviewingDesc}</p>
@@ -512,15 +644,22 @@ function ReviewingView({ t }: { t: EM }) {
               >
                 {s.state === "done" ? <CheckCircle2 className="w-4 h-4" /> : i + 1}
               </div>
-              {i < steps.length - 1 && <div className="w-px flex-1 my-1 min-h-[26px]" style={{ background: "#E5E7EB" }} />}
+              {/* 已完成步骤向下的连线为深色，其余为灰色（对齐设计稿） */}
+              {i < steps.length - 1 && (
+                <div className="w-px flex-1 my-1 min-h-[26px]" style={{ background: s.state === "done" ? "#111111" : "#E5E7EB" }} />
+              )}
             </div>
             <div className="pb-6">
               <div className="flex items-center gap-2">
-                <p className="text-sm" style={{ fontWeight: s.state === "pending" ? 400 : 600, color: s.state === "pending" ? "#6B7280" : "#111111" }}>
+                {/* 仅进行中(active)步骤标题为深色加粗，已完成/待处理均为灰色（对齐设计稿） */}
+                <p className="text-sm" style={{ fontWeight: s.state === "active" ? 600 : s.state === "done" ? 500 : 400, color: s.state === "active" ? "#111111" : "#6B7280" }}>
                   {s.title}
                 </p>
                 {s.state === "active" && (
-                  <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "rgba(232,25,44,0.1)", color: "#E8192C", fontWeight: 600 }}>
+                  <span
+                    className="text-xs px-1.5 py-0.5 rounded-[4px]"
+                    style={{ border: "1px solid #99a1af", color: "#6a7282", fontWeight: 400 }}
+                  >
                     {t.reviewingInProgress}
                   </span>
                 )}
@@ -542,15 +681,21 @@ function ApprovedView({ t, company, onEnter }: { t: EM; company: string; onEnter
   return (
     <StatusBand>
       <div className="flex flex-col items-center text-center">
-        <div className="w-16 h-16 rounded-full border-2 border-gray-200 flex items-center justify-center mb-6">
-          <CheckCircle2 className="w-7 h-7 text-[#111111]" />
+        {/* 审核通过图标：figma 15123:25722 外圈 #1e2939 + 28px CircleCheckBig（描边 #1e2939），SVG 取自设计稿 */}
+        <div className="w-16 h-16 rounded-full border-2 border-[#1e2939] flex items-center justify-center mb-6">
+          <ApprovedCheckIcon className="w-7 h-7 text-[#1e2939]" />
         </div>
         <h2 className="text-[#111111]" style={{ fontWeight: 800, fontSize: "1.5rem" }}>{t.approvedTitle}</h2>
         <p className="text-gray-500 text-sm mt-3 leading-relaxed max-w-md">{t.approvedDesc.replace("{company}", company)}</p>
+      </div>
 
+      {/* 描述与按钮之间的分隔线（对齐 figma 15123-25540） */}
+      <div className="w-full h-px bg-gray-100 my-8" />
+
+      <div className="flex flex-col items-center">
         <button
           onClick={onEnter}
-          className="mt-8 flex items-center justify-center gap-2 px-8 h-[46px] rounded-[10px] bg-[#111111] text-white text-sm transition-all hover:opacity-90 active:scale-[0.99]"
+          className="flex items-center justify-center gap-2 px-8 h-[46px] rounded-[10px] bg-[#111111] text-white text-sm transition-all hover:opacity-90 active:scale-[0.99]"
           style={{ fontWeight: 600 }}
         >
           {t.enterDashboard}
@@ -568,30 +713,116 @@ function RejectedView({ t, reason, onResubmit }: { t: EM; reason: string; onResu
   return (
     <StatusBand>
       <div className="flex flex-col items-center text-center">
-        <div className="w-16 h-16 rounded-full border-2 border-gray-200 flex items-center justify-center mb-6">
-          <XCircle className="w-7 h-7 text-gray-500" />
+        {/* 审核未通过图标：figma 15123:25872 外圈 #d1d5dc + 28px CircleX（描边 #6a7282），SVG 取自设计稿 */}
+        <div className="w-16 h-16 rounded-full border-2 border-[#d1d5dc] flex items-center justify-center mb-6">
+          <RejectedXIcon className="w-7 h-7 text-[#6a7282]" />
         </div>
         <h2 className="text-[#111111]" style={{ fontWeight: 800, fontSize: "1.5rem" }}>{t.rejectedTitle}</h2>
         <p className="text-gray-500 text-sm mt-3 leading-relaxed max-w-md">{t.rejectedDesc}</p>
       </div>
 
-      {reason && (
-        <div className="mt-8 max-w-md mx-auto w-full rounded-xl border border-red-100 bg-red-50 px-5 py-4">
-          <p className="text-sm text-[#E8192C]" style={{ fontWeight: 600 }}>{t.rejectReasonLabel}</p>
-          <p className="text-sm text-gray-700 mt-1.5 leading-relaxed">{reason}</p>
-        </div>
-      )}
+      {/* 分隔线 + 原因区 + 分隔线 + 全宽按钮：对齐 figma 15123-25742 的节奏 */}
+      <div className="w-full h-px bg-gray-100 my-8" />
 
+      {/* 原因区（figma 15123-25884）：后端有具体驳回原因则展示真实原因，否则回退展示常见原因列表 */}
+      <div className="w-full text-left">
+        {reason ? (
+          <>
+            <p className="text-xs uppercase tracking-[0.3px] text-[#99a1af]">{t.rejectReasonLabel}</p>
+            <p className="text-sm text-[#4a5565] mt-3 leading-relaxed">{reason}</p>
+          </>
+        ) : (
+          <>
+            <p className="text-xs uppercase tracking-[0.3px] text-[#99a1af]">{t.commonReasonsLabel}</p>
+            <ul className="mt-3 space-y-3">
+              {t.commonReasons.map((item, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-[#99a1af] flex-shrink-0" />
+                  <span className="text-sm text-[#4a5565] leading-relaxed">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
+
+      <div className="w-full h-px bg-gray-100 my-8" />
+
+      {/* figma 15123-25913：深色按钮 #101828 + 刷新图标 */}
       <button
         onClick={onResubmit}
-        className="mt-8 w-full max-w-md mx-auto flex items-center justify-center h-[48px] rounded-[10px] bg-[#111111] text-white text-sm transition-all hover:opacity-90 active:scale-[0.99]"
+        className="w-full flex items-center justify-center gap-2 h-[48px] rounded-[10px] bg-[#101828] text-white text-sm transition-all hover:opacity-90 active:scale-[0.99]"
         style={{ fontWeight: 600 }}
       >
+        <RefreshCw className="w-4 h-4" />
         {t.resubmit}
       </button>
 
       <div className="mt-8"><SupportLine t={t} /></div>
     </StatusBand>
+  );
+}
+
+/* ── 合作协议 / 隐私政策 弹窗 ─────────────────────────────── */
+function AgreementModal({
+  open,
+  title,
+  body,
+  closeLabel,
+  onClose,
+}: {
+  open: boolean;
+  title: string;
+  body: string;
+  closeLabel: string;
+  onClose: () => void;
+}) {
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.18 }}
+        >
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
+          <motion.div
+            className="relative w-full max-w-[640px] max-h-[80vh] bg-[#1c1c1c] border border-white/10 rounded-2xl flex flex-col overflow-hidden shadow-2xl shadow-black/60"
+            initial={{ y: 16, scale: 0.98, opacity: 0 }}
+            animate={{ y: 0, scale: 1, opacity: 1 }}
+            exit={{ y: 16, scale: 0.98, opacity: 0 }}
+            transition={{ duration: 0.18 }}
+          >
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
+              <h3 className="text-white" style={{ fontWeight: 700, fontSize: "1.1rem" }}>{title}</h3>
+              <button
+                type="button"
+                onClick={onClose}
+                aria-label={closeLabel}
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="px-6 py-5 overflow-y-auto text-sm text-[#d1d5dc] leading-relaxed whitespace-pre-wrap">
+              {body}
+            </div>
+            <div className="px-6 py-4 border-t border-white/10 flex justify-end">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-6 h-10 rounded-[10px] bg-white text-[#111] text-sm transition-opacity hover:opacity-90"
+                style={{ fontWeight: 600 }}
+              >
+                {closeLabel}
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -608,7 +839,7 @@ function SupportLine({ t }: { t: EM }) {
   return (
     <p className="text-center text-xs text-gray-400">
       {t.supportPrefix}{" "}
-      <a href={`mailto:${t.supportEmail}`} className="text-[#E8192C] hover:underline">
+      <a href={`mailto:${t.supportEmail}`} className="text-[#4a5565] hover:underline">
         {t.supportEmail}
       </a>
     </p>

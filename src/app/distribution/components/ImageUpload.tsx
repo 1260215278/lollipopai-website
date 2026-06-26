@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
-import { UploadCloud, Loader2, X, CheckCircle2 } from "lucide-react";
-import { uploadFile } from "../../services/upload";
+import { UploadCloud, Loader2, X } from "lucide-react";
+import { uploadFile, ALIOSS_UPLOAD_PATH } from "../../services/upload";
 import { cn } from "../../components/ui/utils";
 
 /**
@@ -80,7 +80,8 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   const doUpload = async (file: File) => {
     setUploading(true);
     try {
-      const url = await uploadFile(file);
+      // 入驻证照走 /alioss/upload（入驻文档 §2.3）；上剧封面/视频走默认 /file/upload
+      const url = await uploadFile(file, ALIOSS_UPLOAD_PATH);
       onChange(url);
     } catch {
       // uploadFile 已 toast；保持当前值不变
@@ -133,7 +134,6 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
                 {replaceText}
               </span>
             </div>
-            <CheckCircle2 className="absolute top-2 right-2 w-5 h-5 text-emerald-500 bg-white rounded-full" />
             <button
               type="button"
               onClick={(e) => {
@@ -141,9 +141,9 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
                 onChange(null);
                 if (inputRef.current) inputRef.current.value = "";
               }}
-              className="absolute top-2 left-2 p-1 rounded-lg bg-white/90 hover:bg-white shadow-sm"
+              className="absolute top-2 right-2 p-1 rounded-full bg-black/60 hover:bg-black/80 transition-colors"
             >
-              <X className="w-3.5 h-3.5 text-gray-600" />
+              <X className="w-4 h-4 text-white" />
             </button>
           </>
         ) : (

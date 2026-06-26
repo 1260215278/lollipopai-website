@@ -35,7 +35,22 @@ export interface EnrollMessages {
   uploadFormat: string;
   uploadReplace: string;
   uploadFailed: string;
+  /** 勾选文案模板，含 {terms} / {privacy} 两个可点击占位，由组件替换为链接 */
   agreement: string;
+  /** 合作协议链接文案（含书名号） */
+  agreementTerms: string;
+  /** 隐私政策链接文案（含书名号） */
+  agreementPrivacy: string;
+  /** 合作协议弹窗标题 */
+  termsTitle: string;
+  /** 隐私政策弹窗标题 */
+  privacyTitle: string;
+  /** 合作协议正文（占位，TODO(verify) 待补真实条款） */
+  termsBody: string;
+  /** 隐私政策正文（占位，TODO(verify) 待补真实条款） */
+  privacyBody: string;
+  /** 弹窗关闭按钮 */
+  docClose: string;
   submit: string;
   resubmit: string;
   vPhoneRequired: string;
@@ -66,6 +81,10 @@ export interface EnrollMessages {
   rejectedTitle: string;
   rejectedDesc: string;
   rejectReasonLabel: string;
+  /** 常见原因区标题（figma 15123-25886；无具体驳回原因时展示） */
+  commonReasonsLabel: string;
+  /** 常见原因列表（figma 15123-25742 的 4 条静态文案；后端无 rejectReason 时回退展示） */
+  commonReasons: string[];
   supportPrefix: string;
   supportEmail: string;
 }
@@ -100,7 +119,16 @@ export const enroll: Record<Locale, EnrollMessages> = {
     uploadFormat: "支持 JPG、PNG 格式",
     uploadReplace: "点击替换",
     uploadFailed: "上传失败，请重试",
-    agreement: "我已阅读并同意《平台入驻合作协议》和《隐私政策》",
+    agreement: "我已阅读并同意{terms}和{privacy}",
+    agreementTerms: "《平台入驻合作协议》",
+    agreementPrivacy: "《隐私政策》",
+    termsTitle: "平台入驻合作协议",
+    privacyTitle: "隐私政策",
+    // TODO(verify): 占位正文，待法务/产品提供《平台入驻合作协议》正式条款后替换
+    termsBody: "【协议正文待补充】请在此填入《平台入驻合作协议》正式条款。",
+    // TODO(verify): 占位正文，待法务/产品提供《隐私政策》正式条款后替换
+    privacyBody: "【隐私政策正文待补充】请在此填入《隐私政策》正式内容。",
+    docClose: "关闭",
     submit: "提交入驻申请",
     resubmit: "重新填写申请",
     vPhoneRequired: "请输入手机号",
@@ -131,6 +159,13 @@ export const enroll: Record<Locale, EnrollMessages> = {
     rejectedTitle: "审核未通过",
     rejectedDesc: "很遗憾，您提交的入驻资料未能通过审核，请检查并重新提交。",
     rejectReasonLabel: "驳回原因",
+    commonReasonsLabel: "常见原因",
+    commonReasons: [
+      "营业执照图片模糊或信息不完整",
+      "身份证正反面上传有误或不清晰",
+      "统一社会信用代码与营业执照不符",
+      "企业信息与工商登记不一致",
+    ],
     supportPrefix: "如有疑问请联系",
     supportEmail: "support@lollipop.com",
   },
@@ -163,7 +198,16 @@ export const enroll: Record<Locale, EnrollMessages> = {
     uploadFormat: "支援 JPG、PNG 格式",
     uploadReplace: "點擊替換",
     uploadFailed: "上傳失敗，請重試",
-    agreement: "我已閱讀並同意《平台入駐合作協議》和《隱私政策》",
+    agreement: "我已閱讀並同意{terms}和{privacy}",
+    agreementTerms: "《平台入駐合作協議》",
+    agreementPrivacy: "《隱私政策》",
+    termsTitle: "平台入駐合作協議",
+    privacyTitle: "隱私政策",
+    // TODO(verify): 占位正文，待法務/產品提供《平台入駐合作協議》正式條款後替換
+    termsBody: "【協議正文待補充】請在此填入《平台入駐合作協議》正式條款。",
+    // TODO(verify): 占位正文，待法務/產品提供《隱私政策》正式條款後替換
+    privacyBody: "【隱私政策正文待補充】請在此填入《隱私政策》正式內容。",
+    docClose: "關閉",
     submit: "提交入駐申請",
     resubmit: "重新填寫申請",
     vPhoneRequired: "請輸入手機號",
@@ -194,6 +238,13 @@ export const enroll: Record<Locale, EnrollMessages> = {
     rejectedTitle: "審核未通過",
     rejectedDesc: "很遺憾，您提交的入駐資料未能通過審核，請檢查並重新提交。",
     rejectReasonLabel: "駁回原因",
+    commonReasonsLabel: "常見原因",
+    commonReasons: [
+      "營業執照圖片模糊或資訊不完整",
+      "身分證正反面上傳有誤或不清晰",
+      "統一社會信用代碼與營業執照不符",
+      "企業資訊與工商登記不一致",
+    ],
     supportPrefix: "如有疑問請聯絡",
     supportEmail: "support@lollipop.com",
   },
@@ -226,7 +277,16 @@ export const enroll: Record<Locale, EnrollMessages> = {
     uploadFormat: "Supports JPG, PNG",
     uploadReplace: "Click to replace",
     uploadFailed: "Upload failed, please try again",
-    agreement: "I have read and agree to the Platform Onboarding Agreement and Privacy Policy",
+    agreement: "I have read and agree to the {terms} and {privacy}",
+    agreementTerms: "Platform Onboarding Agreement",
+    agreementPrivacy: "Privacy Policy",
+    termsTitle: "Platform Onboarding Agreement",
+    privacyTitle: "Privacy Policy",
+    // TODO(verify): placeholder body, replace with the official Platform Onboarding Agreement text
+    termsBody: "[Agreement text pending] Please insert the official Platform Onboarding Agreement here.",
+    // TODO(verify): placeholder body, replace with the official Privacy Policy text
+    privacyBody: "[Privacy Policy text pending] Please insert the official Privacy Policy here.",
+    docClose: "Close",
     submit: "Submit Application",
     resubmit: "Edit & Resubmit",
     vPhoneRequired: "Please enter your phone number",
@@ -257,6 +317,13 @@ export const enroll: Record<Locale, EnrollMessages> = {
     rejectedTitle: "Not Approved",
     rejectedDesc: "Unfortunately, your application was not approved. Please review and resubmit.",
     rejectReasonLabel: "Rejection Reason",
+    commonReasonsLabel: "Common Reasons",
+    commonReasons: [
+      "Business license image is blurry or incomplete",
+      "ID card front/back uploaded incorrectly or unclear",
+      "Unified social credit code does not match the business license",
+      "Company information does not match commercial registration",
+    ],
     supportPrefix: "Questions? Contact",
     supportEmail: "support@lollipop.com",
   },
@@ -289,7 +356,16 @@ export const enroll: Record<Locale, EnrollMessages> = {
     uploadFormat: "Suporta JPG, PNG",
     uploadReplace: "Clique para substituir",
     uploadFailed: "Falha no envio, tente novamente",
-    agreement: "Li e concordo com o Acordo de Integração da Plataforma e a Política de Privacidade",
+    agreement: "Li e concordo com o {terms} e a {privacy}",
+    agreementTerms: "Acordo de Integração da Plataforma",
+    agreementPrivacy: "Política de Privacidade",
+    termsTitle: "Acordo de Integração da Plataforma",
+    privacyTitle: "Política de Privacidade",
+    // TODO(verify): texto provisório, substituir pelo Acordo de Integração da Plataforma oficial
+    termsBody: "[Texto do acordo pendente] Insira aqui o Acordo de Integração da Plataforma oficial.",
+    // TODO(verify): texto provisório, substituir pela Política de Privacidade oficial
+    privacyBody: "[Texto da política pendente] Insira aqui a Política de Privacidade oficial.",
+    docClose: "Fechar",
     submit: "Enviar Solicitação",
     resubmit: "Editar e Reenviar",
     vPhoneRequired: "Digite seu número de telefone",
@@ -320,6 +396,13 @@ export const enroll: Record<Locale, EnrollMessages> = {
     rejectedTitle: "Não Aprovado",
     rejectedDesc: "Infelizmente, sua solicitação não foi aprovada. Revise e reenvie.",
     rejectReasonLabel: "Motivo da Rejeição",
+    commonReasonsLabel: "Motivos Comuns",
+    commonReasons: [
+      "Imagem da licença comercial está borrada ou incompleta",
+      "Frente/verso da identidade enviados incorretamente ou pouco nítidos",
+      "Código de crédito social unificado não corresponde à licença comercial",
+      "Informações da empresa não correspondem ao registro comercial",
+    ],
     supportPrefix: "Dúvidas? Contate",
     supportEmail: "support@lollipop.com",
   },

@@ -3,44 +3,96 @@ import { Search, Wallet, Clock, CheckCircle2, TrendingUp, Info, Film } from "luc
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { useI18n } from "../../i18n";
 import { PageLoading } from "../components/settlement/PageHeader";
-import { TypeBadge, EarningsStatusBadge } from "../components/settlement/Badge";
+import { TypeBadge } from "../components/settlement/Badge";
 import { EmptyState } from "../components/settlement/EmptyState";
 import {
   getPayoutAccount,
   getEarningsSummary,
   getEarningsDetail,
+  getEarningsCoursesDropdown,
   type EarningsSummary,
   type EarningsDetailRow,
+  type EarningsCourseOption,
 } from "../../services/settlement";
 
-const yuan = (n: number) =>
-  `¥ ${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+const DETAIL_PAGE_SIZE = 100;
+
+const usd = (n: number) =>
+  `$ ${(n ?? 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+const monthOf = (earnDate: string) => earnDate.slice(0, 7);
+
+function monthToIndex(month: string): number {
+  const [year, m] = month.split("-").map(Number);
+  return year * 12 + m - 1;
+}
+
+function indexToMonth(index: number): string {
+  const year = Math.floor(index / 12);
+  const month = (index % 12) + 1;
+  return `${year}-${String(month).padStart(2, "0")}`;
+}
+
+function currentMonth(): string {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+}
+
+function normalizeTrend(trend: EarningsSummary["monthlyTrend"]) {
+  const amountByMonth = new Map(trend.map((item) => [item.month, item.amountUsd]));
+  const sortedMonths = trend.map((item) => item.month).sort();
+  const endMonth = sortedMonths[sortedMonths.length - 1] ?? currentMonth();
+  const endIndex = monthToIndex(endMonth);
+  return Array.from({ length: 6 }, (_, i) => {
+    const month = indexToMonth(endIndex - 5 + i);
+    return { month, amountUsd: amountByMonth.get(month) ?? 0 };
+  });
+}
+
+async function loadAllEarningsRows(): Promise<EarningsDetailRow[]> {
+  const first = await getEarningsDetail({ page: 1, limit: DETAIL_PAGE_SIZE });
+  if (first.totalCount <= first.list.length) return first.list;
+
+  const totalPages = Math.ceil(first.totalCount / DETAIL_PAGE_SIZE);
+  const rest = await Promise.all(
+    Array.from({ length: totalPages - 1 }, (_, i) =>
+      getEarningsDetail({ page: i + 2, limit: DETAIL_PAGE_SIZE }),
+    ),
+  );
+  return first.list.concat(rest.flatMap((page) => page.list));
+}
 
 /**
- * 收益明细 —— figma 15151-31377(暂无) / 15135-27153(列表)。
- * 数据走 services/settlement.ts 的 mock + VITE_USE_MOCK 开关。
+ * 收益明细 —— 对接 /publisher/settlement/overview、/earnings、/courses。
  * 是否有收款账户决定展示数据态还是暂无态（同原型 hasPaymentAccount）。
  */
 export function EarningsPage() {
   const { messages } = useI18n();
   const t = messages.distribution.earnings;
+  const allLabel = messages.distribution.withdraw.statusAll;
 
   const [loading, setLoading] = useState(true);
   const [hasAccount, setHasAccount] = useState(false);
   const [summary, setSummary] = useState<EarningsSummary | null>(null);
   const [detail, setDetail] = useState<EarningsDetailRow[]>([]);
+  const [courses, setCourses] = useState<EarningsCourseOption[]>([]);
+  const [activeMonth, setActiveMonth] = useState<string>("");
+  const [courseFilter, setCourseFilter] = useState<number | "all">("all");
+  const [search, setSearch] = useState("");
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [acc, sum, rows] = await Promise.all([
+      const [acc, sum, rows, courseOptions] = await Promise.all([
         getPayoutAccount(),
         getEarningsSummary(),
-        getEarningsDetail(),
+        loadAllEarningsRows(),
+        getEarningsCoursesDropdown(),
       ]);
       setHasAccount(!!acc);
       setSummary(sum);
       setDetail(rows);
+      setCourses(courseOptions);
     } catch {
       // http 已 toast
     } finally {
@@ -52,24 +104,27 @@ export function EarningsPage() {
     void load();
   }, [load]);
 
-  // 月份 Tab：由全部明细派生，降序
+  // 月份 Tab：由全部明细派生，降序。
   const months = useMemo(
-    () => [...new Set(detail.map((d) => d.month))].sort().reverse(),
+    () => [...new Set(detail.map((d) => monthOf(d.earnDate)))].sort().reverse(),
     [detail],
   );
-  const [activeMonth, setActiveMonth] = useState<string>("");
-  const [search, setSearch] = useState("");
 
   useEffect(() => {
-    if (months.length && !months.includes(activeMonth)) setActiveMonth(months[0]);
+    if (months.length && !months.includes(activeMonth)) {
+      setActiveMonth(months[0]);
+    } else if (!months.length && activeMonth) {
+      setActiveMonth("");
+    }
   }, [months, activeMonth]);
 
   const monthRows = useMemo(
     () =>
       detail
-        .filter((r) => r.month === activeMonth)
-        .filter((r) => !search || r.drama.includes(search)),
-    [detail, activeMonth, search],
+        .filter((r) => !activeMonth || monthOf(r.earnDate) === activeMonth)
+        .filter((r) => courseFilter === "all" || r.courseId === courseFilter)
+        .filter((r) => !search || r.courseTitle.includes(search)),
+    [detail, activeMonth, courseFilter, search],
   );
 
   if (loading) {
@@ -80,13 +135,13 @@ export function EarningsPage() {
     );
   }
 
-  const typeLabel = (type: "full" | "account") => (type === "full" ? t.typeFull : t.typeAccount);
-  const statusLabel = (s: EarningsDetailRow["status"]) =>
-    s === "settled" ? t.statusSettled : s === "processing" ? t.statusProcessing : t.statusPending;
+  const typeLabel = (scope: EarningsDetailRow["publishScope"]) => (scope === 2 ? t.typeFull : t.typeAccount);
+  const typeValue = (scope: EarningsDetailRow["publishScope"]) => (scope === 2 ? "full" : "account");
+  const growthText = summary?.growthRate === null ? "--" : t.growthVsLastMonth.replace("{rate}", String(summary?.growthRate ?? 0));
 
-  const chartData = (summary?.monthlyTrend ?? []).map((m) => ({
-    label: t.monthLabel.replace("{n}", String(m.month)),
-    total: hasAccount ? m.total : 0,
+  const chartData = normalizeTrend(summary?.monthlyTrend ?? []).map((m) => ({
+    label: t.monthLabel.replace("{n}", String(Number(m.month.slice(5, 7)))),
+    total: hasAccount ? m.amountUsd : 0,
   }));
 
   return (
@@ -111,12 +166,12 @@ export function EarningsPage() {
                 color: hasAccount ? "#101828" : "#D1D5DB",
               }}
             >
-              {yuan(hasAccount ? summary?.totalCumulative ?? 0 : 0)}
+              {usd(hasAccount ? summary?.totalCumulativeUsd ?? 0 : 0)}
             </p>
             {hasAccount && summary && (
               <div className="flex items-center gap-1 mt-1 text-xs text-green-600">
                 <TrendingUp className="w-3 h-3" />
-                {t.growthVsLastMonth.replace("{rate}", String(summary.growthRate))}
+                {growthText}
               </div>
             )}
           </div>
@@ -125,9 +180,10 @@ export function EarningsPage() {
 
           <div className="flex flex-wrap gap-8">
             {[
-              { icon: <Wallet className="w-4 h-4" />, label: t.withdrawable, val: summary?.withdrawable ?? 0 },
-              { icon: <Clock className="w-4 h-4" />, label: t.processing, val: summary?.processing ?? 0 },
-              { icon: <CheckCircle2 className="w-4 h-4" />, label: t.withdrawn, val: summary?.withdrawn ?? 0 },
+              { icon: <Wallet className="w-4 h-4" />, label: t.withdrawable, val: summary?.withdrawableUsd ?? 0 },
+              { icon: <Clock className="w-4 h-4" />, label: t.processing, val: summary?.processingUsd ?? 0 },
+              { icon: <CheckCircle2 className="w-4 h-4" />, label: t.withdrawn, val: summary?.withdrawnUsd ?? 0 },
+              { icon: <Info className="w-4 h-4" />, label: t.pending, val: summary?.pendingUsd ?? 0 },
             ].map((item, i) => (
               <div key={i} className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 flex-shrink-0">
@@ -136,7 +192,7 @@ export function EarningsPage() {
                 <div>
                   <p className="text-xs text-gray-500">{item.label}</p>
                   <p className="text-sm mt-0.5" style={{ fontWeight: 700, color: hasAccount ? "#101828" : "#D1D5DB" }}>
-                    {yuan(hasAccount ? item.val : 0)}
+                    {usd(hasAccount ? item.val : 0)}
                   </p>
                 </div>
               </div>
@@ -146,8 +202,8 @@ export function EarningsPage() {
           <div className="ml-auto flex flex-wrap items-center gap-4">
             {[
               { label: t.relatedDramas, val: hasAccount ? String(summary?.relatedDramas ?? 0) : "0", accent: false },
-              { label: t.estThisMonth, val: yuan(hasAccount ? summary?.estThisMonth ?? 0 : 0), accent: false },
-              { label: t.bills, val: hasAccount ? String(summary?.bills ?? 0) : "0", accent: true },
+              { label: t.yesterday, val: usd(hasAccount ? summary?.yesterdayUsd ?? 0 : 0), accent: false },
+              { label: t.estThisMonth, val: usd(hasAccount ? summary?.estThisMonthUsd ?? 0 : 0), accent: true },
             ].map((item, i) => (
               <div key={i} className="text-center px-4 py-2 rounded-xl bg-gray-50">
                 <p className="text-xs text-gray-400 mb-0.5">{item.label}</p>
@@ -178,7 +234,7 @@ export function EarningsPage() {
                 <YAxis tick={{ fontSize: 11, fill: "#9CA3AF" }} axisLine={false} tickLine={false} />
                 <Tooltip
                   contentStyle={{ borderRadius: "8px", border: "1px solid #E5E7EB", fontSize: "12px" }}
-                  formatter={(v: number) => [yuan(v), t.chartEarnings]}
+                  formatter={(v: number) => [usd(v), t.chartEarnings]}
                 />
                 <Bar dataKey="total" name={t.chartEarnings} fill="#111111" radius={[4, 4, 0, 0]} />
               </BarChart>
@@ -217,6 +273,19 @@ export function EarningsPage() {
         {hasAccount ? (
           <>
             <div className="flex items-center gap-3 px-5 py-3 border-b border-[#f3f4f6] bg-gray-50/30">
+              <select
+                value={courseFilter}
+                onChange={(e) => setCourseFilter(e.target.value === "all" ? "all" : Number(e.target.value))}
+                className="h-9 px-3 text-xs border border-[#e5e7eb] rounded-lg bg-white outline-none focus:border-gray-400 transition-colors"
+                aria-label={t.colDrama}
+              >
+                <option value="all">{allLabel}</option>
+                {courses.map((course) => (
+                  <option key={course.courseId} value={course.courseId}>
+                    {course.courseTitle}
+                  </option>
+                ))}
+              </select>
               <div className="relative max-w-xs flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
                 <input
@@ -235,50 +304,54 @@ export function EarningsPage() {
 
             {/* 表头 */}
             <div className="overflow-x-auto">
-            <div className="min-w-[720px]">
-            <div className="grid grid-cols-[1fr_160px_80px_100px_120px_100px] px-5 py-2.5 bg-gray-50/60 border-b border-[#f3f4f6]">
-              {[t.colDrama, t.colType, t.colShare, t.colViews, t.colAmount, t.colStatus].map((col, i) => (
-                <span key={i} className="text-xs text-[#6a7282]" style={{ fontWeight: 500 }}>
-                  {col}
-                </span>
-              ))}
-            </div>
-
-            <div className="divide-y divide-gray-50">
-              {monthRows.map((row, i) => (
-                <div
-                  key={i}
-                  className="grid grid-cols-[1fr_160px_80px_100px_120px_100px] px-5 py-3.5 items-center hover:bg-gray-50/50 transition-colors"
-                >
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="w-7 h-9 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-                      <Film className="w-3.5 h-3.5 text-gray-300" />
-                    </div>
-                    <span className="text-sm text-[#101828] truncate" style={{ fontWeight: 600 }}>
-                      {row.drama}
+              <div className="min-w-[840px]">
+                <div className="grid grid-cols-[110px_1fr_150px_90px_90px_130px] px-5 py-2.5 bg-gray-50/60 border-b border-[#f3f4f6]">
+                  {[t.colDate, t.colDrama, t.colType, t.colShare, t.colOrders, t.colAmount].map((col, i) => (
+                    <span key={i} className="text-xs text-[#6a7282]" style={{ fontWeight: 500 }}>
+                      {col}
                     </span>
-                  </div>
-                  <div>
-                    <TypeBadge type={row.type} label={typeLabel(row.type)} />
-                  </div>
-                  <span className="text-sm text-gray-700" style={{ fontWeight: 600 }}>
-                    {row.ratio}
-                  </span>
-                  <span className="text-xs text-gray-600">{row.views}</span>
-                  <span className="text-sm text-[#101828]" style={{ fontWeight: 700 }}>
-                    {yuan(row.amount)}
-                  </span>
-                  <EarningsStatusBadge status={row.status} label={statusLabel(row.status)} />
+                  ))}
                 </div>
-              ))}
-              {monthRows.length === 0 && (
-                <div className="flex flex-col items-center justify-center py-12 gap-2">
-                  <Wallet className="w-7 h-7 text-gray-200" />
-                  <p className="text-sm text-gray-400">{t.emptyMonth}</p>
+
+                <div className="divide-y divide-gray-50">
+                  {monthRows.map((row) => (
+                    <div
+                      key={`${row.courseId}-${row.earnDate}`}
+                      className="grid grid-cols-[110px_1fr_150px_90px_90px_130px] px-5 py-3.5 items-center hover:bg-gray-50/50 transition-colors"
+                    >
+                      <span className="text-xs text-gray-500">{row.earnDate}</span>
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-7 h-9 rounded-lg bg-gray-100 overflow-hidden flex items-center justify-center flex-shrink-0">
+                          {row.courseImg ? (
+                            <img src={row.courseImg} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            <Film className="w-3.5 h-3.5 text-gray-300" />
+                          )}
+                        </div>
+                        <span className="text-sm text-[#101828] truncate" style={{ fontWeight: 600 }}>
+                          {row.courseTitle}
+                        </span>
+                      </div>
+                      <div>
+                        <TypeBadge type={typeValue(row.publishScope)} label={typeLabel(row.publishScope)} />
+                      </div>
+                      <span className="text-sm text-gray-700" style={{ fontWeight: 600 }}>
+                        {row.ratioLabel ?? "--"}
+                      </span>
+                      <span className="text-xs text-gray-600">{row.orderCount}</span>
+                      <span className="text-sm text-[#101828]" style={{ fontWeight: 700 }}>
+                        {usd(row.creatorUsd)}
+                      </span>
+                    </div>
+                  ))}
+                  {monthRows.length === 0 && (
+                    <div className="flex flex-col items-center justify-center py-12 gap-2">
+                      <Wallet className="w-7 h-7 text-gray-200" />
+                      <p className="text-sm text-gray-400">{t.emptyMonth}</p>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-            </div>
+              </div>
             </div>
           </>
         ) : (

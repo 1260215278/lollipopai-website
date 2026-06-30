@@ -1,219 +1,269 @@
 /**
  * 结算中心服务（收款管理 / 收益明细 / 结算记录）
  * ------------------------------------------------------------------
- * 结算相关接口后端尚未定义（见《开发计划-短剧发行中心.md》§6.2），故本服务
- * 采用「mock + VITE_USE_MOCK 开关」：默认 mock，接口就绪后逐个把 http 真实分支
- * 的路径/字段对齐《contract-draft-settlement.md》并切真，调用方（页面）无需改动。
+ * 路径前缀全部走发行中心 publisher token 域 `/publisher/**`（见《前端反馈-20260630-后端契约》§6.1，
+ * 此前误写成 `/app/publisher/**` 已纠正）。统一响应 {code,msg,data}，分页接口取 `page`。
  *
- * 约定（同 http.ts）：context-path=/sqx_fast（http 注入），鉴权 header: token，
- * 统一响应 {code,msg,data}，code=0 取 data，非 0 由 http.ts toast 后端 msg。
- *
- * 字段一律来自原型三页 + figma，未编造、无撒网式 fallback；接口未定的部分以
- * 精确 interface 收敛后再写逻辑。
+ * - 收款账号（bug21）/ 结算记录（bug22）：后端已提供完整字段契约 → 走真实接口（不再 mock）。
+ * - 收益总览 / 收益明细 / 收益日志 / 剧目筛选：按《结算中心字段补充 - 后端契约（20260630）》切真。
  */
 import { http } from "./http";
-import {
-  MOCK_COMPANY_NAME,
-  getMockPayoutAccount,
-  setMockPayoutAccount,
-  mockEarningsSummary,
-  mockEarningsDetail,
-  mockSettlementRecords,
-} from "../distribution/mock/settlement";
-
-/** 默认走 mock；显式设置 VITE_USE_MOCK="false" 时走真实接口。 */
-const USE_MOCK = import.meta.env.VITE_USE_MOCK !== "false";
-
-/** 模拟网络延迟，便于演示 loading 态。 */
-function delay<T>(data: T, ms = 320): Promise<T> {
-  return new Promise((resolve) => setTimeout(() => resolve(data), ms));
-}
+import type { PageResult } from "./content";
 
 // ────────────────────────────────────────────────────────────────
-// 收款管理（收款账户增删改查）
+// 收款管理（收款账户 CRUD，bug21）—— 真实接口
 // ────────────────────────────────────────────────────────────────
 
-/** 对公收款账户（figma 15150-30744/30884）。 */
+/** 对公收款账户实体（后端 /publisher/payout/account 返回）。 */
 export interface PayoutAccount {
-  /** 公司名称（自动带入，只读） */
-  companyName: string;
+  id: number;
+  publisherUserId: number;
   /** 银行账号 */
   accountNo: string;
   /** 开户银行 */
   bank: string;
-  /** 支行名称（选填） */
+  /** 支行名称 */
   branch?: string;
-}
-
-/** 新增 / 修改收款账户的请求体（公司名称后端按账号带入，不随表单提交银行账号以外的可改字段以外内容）。 */
-export interface PayoutAccountBody {
-  accountNo: string;
-  bank: string;
-  branch?: string;
-}
-
-/** 进入收款管理时获取已绑定账户（无则 null）。 */
-export function getPayoutAccount(): Promise<PayoutAccount | null> {
-  if (USE_MOCK) {
-    return delay(getMockPayoutAccount());
-  }
-  return http.get<PayoutAccount | null>("/app/publisher/payout/account");
-}
-
-/** 新增收款账户（mock 写入内存存储并回显，公司名称用账号带入的固定值）。 */
-export function addPayoutAccount(body: PayoutAccountBody): Promise<PayoutAccount> {
-  if (USE_MOCK) {
-    const account: PayoutAccount = { companyName: MOCK_COMPANY_NAME, ...body };
-    setMockPayoutAccount(account);
-    return delay(account);
-  }
-  return http.post<PayoutAccount>("/app/publisher/payout/account", body);
-}
-
-/** 修改收款账户。 */
-export function updatePayoutAccount(body: PayoutAccountBody): Promise<PayoutAccount> {
-  if (USE_MOCK) {
-    const account: PayoutAccount = { companyName: MOCK_COMPANY_NAME, ...body };
-    setMockPayoutAccount(account);
-    return delay(account);
-  }
-  return http.post<PayoutAccount>("/app/publisher/payout/account/update", body);
-}
-
-/** 获取自动带入的公司名称（收款账户表单只读字段）。 */
-export function getPayoutCompanyName(): Promise<string> {
-  if (USE_MOCK) {
-    return delay(MOCK_COMPANY_NAME);
-  }
-  return http.get<string>("/app/publisher/payout/company");
-}
-
-// ────────────────────────────────────────────────────────────────
-// 收益明细（收益总览 + 按月查询）
-// ────────────────────────────────────────────────────────────────
-
-/** 月度收益趋势项（1-12 月）。 */
-export interface MonthlyTrendItem {
-  /** 月份 1-12 */
-  month: number;
-  /** 当月收益（元） */
-  total: number;
-}
-
-/** 收益总览（figma 15135-27153 顶部统计卡）。 */
-export interface EarningsSummary {
-  /** 累计总收益 */
-  totalCumulative: number;
-  /** 可提现 */
-  withdrawable: number;
-  /** 结算中 */
-  processing: number;
-  /** 已提现 */
-  withdrawn: number;
-  /** 关联剧集数 */
-  relatedDramas: number;
-  /** 本月预估收益 */
-  estThisMonth: number;
-  /** 结算账单数 */
-  bills: number;
-  /** 本月较上月增长百分比 */
-  growthRate: number;
-  /** 月度收益趋势 */
-  monthlyTrend: MonthlyTrendItem[];
-}
-
-/** 收益类型：全量推荐订阅 / 账户主页订阅。 */
-export type EarningsType = "full" | "account";
-/** 收益明细行状态：已结算 / 结算中 / 待结算。 */
-export type EarningsRowStatus = "settled" | "processing" | "pending";
-
-/** 收益明细行（figma 15135-27153 明细表）。 */
-export interface EarningsDetailRow {
-  /** 归集月份 yyyy-MM */
-  month: string;
-  /** 剧集名称 */
-  drama: string;
-  /** 收益类型 */
-  type: EarningsType;
-  /** 分成比例（出品方占比，如 "60%"） */
-  ratio: string;
-  /** 播放量（原始展示串，如 "112.3万"） */
-  views: string;
-  /** 结算金额（元） */
-  amount: number;
+  /** 户名 */
+  accountHolder?: string;
+  /** 公司名称 */
+  companyName?: string;
+  /** 币种，缺省 USD */
+  currency: string;
   /** 状态 */
-  status: EarningsRowStatus;
+  status: number;
+  createTime: string;
+  updateTime: string;
+}
+
+/** 新增 / 修改收款账户请求体（create/update 共用）。 */
+export interface PayoutAccountBody {
+  /** 银行账号，必填 ≤64 */
+  accountNo: string;
+  /** 开户银行，必填 ≤128 */
+  bank: string;
+  /** 支行名称 ≤255，可选 */
+  branch?: string;
+  /** 户名 ≤128，可选 */
+  accountHolder?: string;
+  /** 公司名称 ≤255，可选 */
+  companyName?: string;
+  /** 币种 ≤8，缺省 USD */
+  currency?: string;
+}
+
+/** 查询当前收款账户（无则 null）。 */
+export function getPayoutAccount(): Promise<PayoutAccount | null> {
+  return http.get<PayoutAccount | null>("/publisher/payout/account");
+}
+
+/** 新建收款账户（已存在报 403315）。 */
+export function addPayoutAccount(body: PayoutAccountBody): Promise<PayoutAccount> {
+  return http.post<PayoutAccount>("/publisher/payout/account", body);
+}
+
+/** 更新收款账户（不存在报 403316）。 */
+export function updatePayoutAccount(body: PayoutAccountBody): Promise<PayoutAccount> {
+  return http.post<PayoutAccount>("/publisher/payout/account/update", body);
+}
+
+// ────────────────────────────────────────────────────────────────
+// 收益明细（收益总览 + 明细）—— 真实接口
+// ────────────────────────────────────────────────────────────────
+
+/** 月度收益趋势项（yyyy-MM）。 */
+export interface MonthlyTrendItem {
+  /** 月份 yyyy-MM */
+  month: string;
+  /** 当月出品方实得，USD */
+  amountUsd: number;
+}
+
+/** 收益总览（/publisher/settlement/overview）。金额单位 USD。 */
+export interface EarningsSummary {
+  /** 累计实得（已扣分润） */
+  totalCumulativeUsd: number;
+  /** 当前可提现 */
+  withdrawableUsd: number;
+  /** 结算中（已申请待打款） */
+  processingUsd: number;
+  /** 已提现（已打款） */
+  withdrawnUsd: number;
+  /** 待入账（cron 跑前暂挂） */
+  pendingUsd: number;
+  /** 昨日实得 */
+  yesterdayUsd: number;
+  /** 本月至今实得 */
+  estThisMonthUsd: number;
+  /** 本月 vs 上月环比百分比；上月为 0 时返回 null */
+  growthRate: number | null;
+  /** 产生过收益的不同剧目数 */
+  relatedDramas: number;
+  /** 近 6 个月每月实得，后端不补空月份 */
+  monthlyTrend: MonthlyTrendItem[];
+  currency: "USD";
+}
+
+/** 发布范围：1 账号主页 / 2 全量推荐。 */
+export type EarningsPublishScope = 1 | 2;
+
+/** 收益明细行（/publisher/settlement/earnings）。金额单位 USD。 */
+export interface EarningsDetailRow {
+  /** 归集日期 yyyy-MM-dd */
+  earnDate: string;
+  courseId: number;
+  courseTitle: string;
+  courseImg: string;
+  publishScope: EarningsPublishScope;
+  /** creator:platform，如 "6:4"；publishScope 缺失时为 null */
+  ratioLabel: string | null;
+  /** 当日订单数 */
+  orderCount: number;
+  /** 当日总流水 */
+  grossUsd: number;
+  /** 当日出品方实得 */
+  creatorUsd: number;
+  /** 创作者分成百分比，80 或 60 */
+  ratio: number;
+}
+
+/** 收益明细分页数据（分页对象在 data 内）。 */
+export interface EarningsDetailPage {
+  totalCount: number;
+  list: EarningsDetailRow[];
+}
+
+/** 收益明细查询。 */
+export interface EarningsDetailQuery {
+  page?: number;
+  limit?: number;
+  /** yyyy-MM-dd */
+  startDate?: string;
+  /** yyyy-MM-dd */
+  endDate?: string;
+  courseId?: number;
+}
+
+/** 收益日志行（/publisher/settlement/earnings/log）。金额单位 USD。 */
+export interface EarningsLogRow {
+  payTime: string;
+  country: string;
+  courseDetailsId: number | null;
+  grossUsd: number;
+  creatorUsd: number;
+  ratio: number;
+}
+
+/** 收益日志分页数据。 */
+export interface EarningsLogPage {
+  totalCount: number;
+  list: EarningsLogRow[];
+}
+
+/** 收益日志查询。 */
+export interface EarningsLogQuery {
+  courseId: number;
+  /** yyyy-MM-dd */
+  earnDate: string;
+  page?: number;
+  limit?: number;
+}
+
+/** 收益剧目筛选项。 */
+export interface EarningsCourseOption {
+  courseId: number;
+  courseTitle: string;
 }
 
 /** 获取收益总览。 */
 export function getEarningsSummary(): Promise<EarningsSummary> {
-  if (USE_MOCK) {
-    return delay(mockEarningsSummary);
-  }
-  return http.get<EarningsSummary>("/app/publisher/earnings/summary");
+  return http.get<EarningsSummary>("/publisher/settlement/overview");
 }
 
-/**
- * 按月查询收益明细。
- * @param month yyyy-MM；不传则返回全部（页面用全部数据派生可选月份 Tab）。
- */
-export function getEarningsDetail(month?: string): Promise<EarningsDetailRow[]> {
-  if (USE_MOCK) {
-    const rows = month ? mockEarningsDetail.filter((r) => r.month === month) : mockEarningsDetail;
-    return delay(rows);
-  }
-  return http.get<EarningsDetailRow[]>("/app/publisher/earnings/detail", {
-    params: month ? { month } : undefined,
+/** 查询收益明细。 */
+export function getEarningsDetail(query: EarningsDetailQuery = {}): Promise<EarningsDetailPage> {
+  return http.get<EarningsDetailPage>("/publisher/settlement/earnings", {
+    params: {
+      page: query.page ?? 1,
+      limit: query.limit ?? 10,
+      startDate: query.startDate,
+      endDate: query.endDate,
+      courseId: query.courseId,
+    },
   });
 }
 
-// ────────────────────────────────────────────────────────────────
-// 结算记录（列表 + 提交结算申请）
-// ────────────────────────────────────────────────────────────────
-
-/** 账户类型：中国公户 / 海外公户。 */
-export type SettlementAccountType = "cn" | "overseas";
-/** 结算记录状态：未打款 / 已打款。 */
-export type SettlementStatus = "unpaid" | "paid";
-
-/** 结算记录行（figma 15188-33359）。 */
-export interface SettlementRecord {
-  /** 记录 id */
-  id: string;
-  /** 结算日期 yyyy-MM-dd */
-  date: string;
-  /** 结算周期 yyyy-MM */
-  period: string;
-  /** 结算比例「平台：出品方」原始串（如 "4：6"） */
-  ratio: string;
-  /** 结算类型 */
-  type: EarningsType;
-  /** 账户类型 */
-  accountType: SettlementAccountType;
-  /** 账户号码（脱敏尾号，如 "****4567"） */
-  accountNo: string;
-  /** 结算金额（元） */
-  amount: number;
-  /** 结算状态 */
-  status: SettlementStatus;
+/** 查询某剧某日收益日志。 */
+export function getEarningsLog(query: EarningsLogQuery): Promise<EarningsLogPage> {
+  return http.get<EarningsLogPage>("/publisher/settlement/earnings/log", {
+    params: {
+      courseId: query.courseId,
+      earnDate: query.earnDate,
+      page: query.page ?? 1,
+      limit: query.limit ?? 10,
+    },
+  });
 }
 
-/** 获取结算记录列表。 */
-export function getSettlementRecords(): Promise<SettlementRecord[]> {
-  if (USE_MOCK) {
-    return delay(mockSettlementRecords);
-  }
-  return http.get<SettlementRecord[]>("/app/publisher/settlement/records");
+/** 查询收益明细筛选剧目。 */
+export function getEarningsCoursesDropdown(): Promise<EarningsCourseOption[]> {
+  return http.get<EarningsCourseOption[]>("/publisher/settlement/courses");
+}
+
+// ────────────────────────────────────────────────────────────────
+// 结算记录（列表 + 申请结算，bug22）—— 真实接口
+// ────────────────────────────────────────────────────────────────
+
+/** 结算单状态：0草稿 / 1已申请 / 2审核通过 / 3已打款 / 4驳回。 */
+export type SettlementStatus = 0 | 1 | 2 | 3 | 4;
+
+/** 结算单（后端 /publisher/settlement/records 行）。金额单位 USD。 */
+export interface SettlementRecord {
+  id: number;
+  /** 结算周期起 yyyy-MM-dd */
+  periodStart: string;
+  /** 结算周期止 yyyy-MM-dd */
+  periodEnd: string;
+  /** 总额 */
+  grossUsd: number;
+  /** 出品方实得（已扣分润，发行方到手） */
+  creatorUsd: number;
+  /** 平台分成 */
+  platformUsd: number;
+  /** 分成比例文案，如 "8:2" */
+  ratioLabel: string;
+  /** 状态 0-4 */
+  status: number;
+  /** 驳回备注 */
+  auditRemark: string | null;
+  applyTime: string | null;
+  payTime: string | null;
+  /** 打款凭证 URL */
+  payVoucherUrl: string | null;
+  /** 申请时的收款账号快照 */
+  accountSnapshot: string | null;
+  createTime: string;
+  updateTime: string;
+}
+
+/** 结算记录查询。status 不传=全部。 */
+export interface SettlementRecordQuery {
+  status?: number;
+  page?: number;
+  limit?: number;
+}
+
+/** 结算记录列表（分页）。注意：分页对象 {totalCount,list,...} 在 `data` 里（非顶层 page），用默认 pick:"data"。 */
+export function getSettlementRecords(query: SettlementRecordQuery = {}): Promise<PageResult<SettlementRecord>> {
+  return http.get<PageResult<SettlementRecord>>("/publisher/settlement/records", {
+    params: { status: query.status, page: query.page ?? 1, limit: query.limit ?? 10 },
+  });
 }
 
 /**
- * 提交结算申请（figma 15188-33359 行内「申请结算」）。
- * @param recordId 目标结算记录 id。
- * mock 分支不修改后端状态，仅回执成功；页面据此乐观更新行状态/提示。
+ * 申请结算（仅 status=0 草稿可申请）。
+ * 成功返回新状态（status=1）的 record；异常 403317/403318/403319 由 http.ts toast 后端文案。
  */
-export function applySettlement(recordId: string): Promise<void> {
-  if (USE_MOCK) {
-    return delay(undefined);
-  }
-  return http.post<void>("/app/publisher/settlement/apply", { recordId });
+export function applySettlement(recordId: number): Promise<SettlementRecord> {
+  return http.post<SettlementRecord>("/publisher/settlement/apply", { recordId });
 }

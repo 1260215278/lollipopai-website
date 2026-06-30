@@ -16,9 +16,10 @@ export interface EarningsMessages {
   withdrawable: string;
   processing: string;
   withdrawn: string;
+  pending: string;
   relatedDramas: string;
+  yesterday: string;
   estThisMonth: string;
-  bills: string;
   monthlyTrend: string;
   chartEarnings: string;
   /** 月度趋势 X 轴标签，"{n}月" / "M{n}" */
@@ -27,10 +28,11 @@ export interface EarningsMessages {
   detailTitle: string;
   searchPlaceholder: string;
   updatedDaily: string;
+  colDate: string;
   colDrama: string;
   colType: string;
   colShare: string;
-  colViews: string;
+  colOrders: string;
   colAmount: string;
   colStatus: string;
   /** 收益类型 */
@@ -57,23 +59,25 @@ export const earnings: Record<Locale, EarningsMessages> = {
     withdrawable: "可提现",
     processing: "结算中",
     withdrawn: "已提现",
+    pending: "待入账",
     relatedDramas: "关联剧集",
+    yesterday: "昨日实得",
     estThisMonth: "本月预估",
-    bills: "结算账单",
     monthlyTrend: "月度收益趋势",
     chartEarnings: "收益",
     monthLabel: "{n}月",
     detailTitle: "收益详情",
     searchPlaceholder: "搜索剧集名称",
     updatedDaily: "数据每日更新",
+    colDate: "归集日期",
     colDrama: "剧集名称",
     colType: "收益类型",
     colShare: "分成",
-    colViews: "播放量",
-    colAmount: "结算金额",
+    colOrders: "订单数",
+    colAmount: "出品方实得",
     colStatus: "状态",
-    typeFull: "全量推荐订阅",
-    typeAccount: "账户主页订阅",
+    typeFull: "全量推荐",
+    typeAccount: "账号主页",
     statusSettled: "已结算",
     statusProcessing: "结算中",
     statusPending: "待结算",
@@ -91,23 +95,25 @@ export const earnings: Record<Locale, EarningsMessages> = {
     withdrawable: "可提現",
     processing: "結算中",
     withdrawn: "已提現",
+    pending: "待入帳",
     relatedDramas: "關聯劇集",
+    yesterday: "昨日實得",
     estThisMonth: "本月預估",
-    bills: "結算帳單",
     monthlyTrend: "月度收益趨勢",
     chartEarnings: "收益",
     monthLabel: "{n}月",
     detailTitle: "收益詳情",
     searchPlaceholder: "搜尋劇集名稱",
     updatedDaily: "資料每日更新",
+    colDate: "歸集日期",
     colDrama: "劇集名稱",
     colType: "收益類型",
     colShare: "分成",
-    colViews: "播放量",
-    colAmount: "結算金額",
+    colOrders: "訂單數",
+    colAmount: "出品方實得",
     colStatus: "狀態",
-    typeFull: "全量推薦訂閱",
-    typeAccount: "帳戶主頁訂閱",
+    typeFull: "全量推薦",
+    typeAccount: "帳號主頁",
     statusSettled: "已結算",
     statusProcessing: "結算中",
     statusPending: "待結算",
@@ -125,23 +131,25 @@ export const earnings: Record<Locale, EarningsMessages> = {
     withdrawable: "Withdrawable",
     processing: "Processing",
     withdrawn: "Withdrawn",
+    pending: "Pending Posting",
     relatedDramas: "Dramas",
+    yesterday: "Yesterday",
     estThisMonth: "Est. This Month",
-    bills: "Bills",
     monthlyTrend: "Monthly Trend",
     chartEarnings: "Earnings",
     monthLabel: "M{n}",
     detailTitle: "Earnings Detail",
     searchPlaceholder: "Search drama name",
     updatedDaily: "Updated daily",
+    colDate: "Date",
     colDrama: "Drama",
     colType: "Type",
     colShare: "Share",
-    colViews: "Views",
-    colAmount: "Amount",
+    colOrders: "Orders",
+    colAmount: "Creator Earned",
     colStatus: "Status",
-    typeFull: "Full Boost Sub.",
-    typeAccount: "Account Sub.",
+    typeFull: "Full Distribution",
+    typeAccount: "Account Homepage",
     statusSettled: "Settled",
     statusProcessing: "Processing",
     statusPending: "Pending",
@@ -159,23 +167,25 @@ export const earnings: Record<Locale, EarningsMessages> = {
     withdrawable: "Disponível",
     processing: "Em processamento",
     withdrawn: "Sacado",
+    pending: "Pendente de crédito",
     relatedDramas: "Dramas",
+    yesterday: "Ontem",
     estThisMonth: "Estim. deste mês",
-    bills: "Faturas",
     monthlyTrend: "Tendência Mensal",
     chartEarnings: "Receita",
     monthLabel: "M{n}",
     detailTitle: "Detalhe de Receitas",
     searchPlaceholder: "Buscar nome do drama",
     updatedDaily: "Atualizado diariamente",
+    colDate: "Data",
     colDrama: "Drama",
     colType: "Tipo",
     colShare: "Divisão",
-    colViews: "Visualizações",
-    colAmount: "Valor",
+    colOrders: "Pedidos",
+    colAmount: "Receita do criador",
     colStatus: "Status",
-    typeFull: "Assin. Impulso Total",
-    typeAccount: "Assin. de Conta",
+    typeFull: "Distribuição total",
+    typeAccount: "Página da conta",
     statusSettled: "Liquidado",
     statusProcessing: "Em processamento",
     statusPending: "Pendente",

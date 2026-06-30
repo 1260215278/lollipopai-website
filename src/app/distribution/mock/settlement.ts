@@ -2,8 +2,8 @@
  * 结算中心 mock 数据
  * ------------------------------------------------------------------
  * 字段语义来自原型三页（PaymentPage / EarningsPage / WithdrawPage）与 figma
- * 15150-* / 15151-* / 15135-27153 / 15188-33359。结算接口尚未定义，全部走 mock；
- * 接口就绪后由 services/settlement.ts 的 http 真实分支替换，本文件仅供 mock 分支使用。
+ * 15150-* / 15151-* / 15135-27153 / 15188-33359。本文件仅供本地演示或回退调试使用；
+ * 真实业务已由 services/settlement.ts 对接 `/publisher/**`。
  *
  * 注意：可见的中文标签（收益类型 / 状态 / 账户类型等）不在此处写死，
  * 由各页面经 i18n（messages.distribution.*）渲染；这里只存「枚举值 + 数值/原始串」。
@@ -38,45 +38,40 @@ export function setMockPayoutAccount(account: PayoutAccount): void {
 
 /** 收益总览统计（figma 15135-27153 顶部卡片）。 */
 export const mockEarningsSummary: EarningsSummary = {
-  totalCumulative: 7501.5,
-  withdrawable: 3444.0,
-  processing: 257.0,
-  withdrawn: 3800.5,
-  relatedDramas: 3,
-  estThisMonth: 1684.5,
-  bills: 7,
+  totalCumulativeUsd: 7501.5,
+  withdrawableUsd: 3444.0,
+  processingUsd: 257.0,
+  withdrawnUsd: 3800.5,
+  pendingUsd: 98.4,
+  yesterdayUsd: 42.6,
+  estThisMonthUsd: 1684.5,
   // 本月较上月增长百分比（正数为增长）
   growthRate: 41.4,
-  // 月度收益趋势：1-12 月，单位元（figma 柱状图 1月~12月）
+  relatedDramas: 3,
+  // 月度收益趋势：yyyy-MM，单位 USD
   monthlyTrend: [
-    { month: 1, total: 0 },
-    { month: 2, total: 320 },
-    { month: 3, total: 680 },
-    { month: 4, total: 1240 },
-    { month: 5, total: 3680 },
-    { month: 6, total: 2150 },
-    { month: 7, total: 0 },
-    { month: 8, total: 0 },
-    { month: 9, total: 0 },
-    { month: 10, total: 0 },
-    { month: 11, total: 0 },
-    { month: 12, total: 0 },
+    { month: "2026-01", amountUsd: 0 },
+    { month: "2026-02", amountUsd: 320 },
+    { month: "2026-03", amountUsd: 680 },
+    { month: "2026-04", amountUsd: 1240 },
+    { month: "2026-05", amountUsd: 3680 },
+    { month: "2026-06", amountUsd: 2150 },
   ],
+  currency: "USD",
 };
 
 /**
- * 收益明细：按 yyyy-MM 归集（figma 15135-27153 月份 Tab + 明细表）。
- * type：'full'=全量推荐订阅(4:6) / 'account'=账户主页订阅(2:8)。
- * status：'settled'=已结算 / 'processing'=结算中 / 'pending'=待结算。
+ * 收益明细：按日归集（figma 15135-27153 月份 Tab + 明细表）。
+ * publishScope：1=账号主页(8:2) / 2=全量推荐(6:4)。
  */
 export const mockEarningsDetail: EarningsDetailRow[] = [
-  { month: "2026-06", drama: "星河恋人", type: "full", ratio: "60%", views: "112.3万", amount: 1684.5, status: "processing" },
-  { month: "2026-05", drama: "星河恋人", type: "full", ratio: "60%", views: "148.2万", amount: 2160.0, status: "settled" },
-  { month: "2026-05", drama: "穿越千年寻你", type: "account", ratio: "80%", views: "92.6万", amount: 1200.0, status: "settled" },
-  { month: "2026-05", drama: "总裁的秘密", type: "full", ratio: "60%", views: "67.4万", amount: 257.0, status: "processing" },
-  { month: "2026-04", drama: "星河恋人", type: "full", ratio: "60%", views: "108.1万", amount: 1621.5, status: "settled" },
-  { month: "2026-04", drama: "穿越千年寻你", type: "account", ratio: "80%", views: "71.2万", amount: 1200.0, status: "settled" },
-  { month: "2026-03", drama: "星河恋人", type: "full", ratio: "60%", views: "89.6万", amount: 1344.0, status: "settled" },
+  { earnDate: "2026-06-29", courseId: 101, courseTitle: "星河恋人", courseImg: "", publishScope: 2, ratioLabel: "6:4", orderCount: 12, grossUsd: 2807.5, creatorUsd: 1684.5, ratio: 60 },
+  { earnDate: "2026-05-28", courseId: 101, courseTitle: "星河恋人", courseImg: "", publishScope: 2, ratioLabel: "6:4", orderCount: 18, grossUsd: 3600.0, creatorUsd: 2160.0, ratio: 60 },
+  { earnDate: "2026-05-26", courseId: 102, courseTitle: "穿越千年寻你", courseImg: "", publishScope: 1, ratioLabel: "8:2", orderCount: 10, grossUsd: 1500.0, creatorUsd: 1200.0, ratio: 80 },
+  { earnDate: "2026-05-21", courseId: 103, courseTitle: "总裁的秘密", courseImg: "", publishScope: 2, ratioLabel: "6:4", orderCount: 5, grossUsd: 428.33, creatorUsd: 257.0, ratio: 60 },
+  { earnDate: "2026-04-18", courseId: 101, courseTitle: "星河恋人", courseImg: "", publishScope: 2, ratioLabel: "6:4", orderCount: 14, grossUsd: 2702.5, creatorUsd: 1621.5, ratio: 60 },
+  { earnDate: "2026-04-11", courseId: 102, courseTitle: "穿越千年寻你", courseImg: "", publishScope: 1, ratioLabel: "8:2", orderCount: 8, grossUsd: 1500.0, creatorUsd: 1200.0, ratio: 80 },
+  { earnDate: "2026-03-09", courseId: 101, courseTitle: "星河恋人", courseImg: "", publishScope: 2, ratioLabel: "6:4", orderCount: 11, grossUsd: 2240.0, creatorUsd: 1344.0, ratio: 60 },
 ];
 
 /**
@@ -88,9 +83,9 @@ export const mockEarningsDetail: EarningsDetailRow[] = [
  * status：'unpaid'=未打款 / 'paid'=已打款。
  */
 export const mockSettlementRecords: SettlementRecord[] = [
-  { id: "ST20260610001", date: "2026-06-10", period: "2026-05", ratio: "4：6", type: "full", accountType: "cn", accountNo: "****4567", amount: 2160.0, status: "unpaid" },
-  { id: "ST20260610002", date: "2026-06-10", period: "2026-05", ratio: "2：8", type: "account", accountType: "cn", accountNo: "****4567", amount: 1200.0, status: "unpaid" },
-  { id: "ST20260515001", date: "2026-05-15", period: "2026-04", ratio: "4：6", type: "full", accountType: "overseas", accountNo: "****4567", amount: 1621.5, status: "paid" },
-  { id: "ST20260515002", date: "2026-05-15", period: "2026-04", ratio: "2：8", type: "account", accountType: "overseas", accountNo: "****4567", amount: 1200.0, status: "paid" },
-  { id: "ST20260415001", date: "2026-04-15", period: "2026-03", ratio: "4：6", type: "full", accountType: "cn", accountNo: "****4567", amount: 1344.0, status: "paid" },
+  { id: 1001, periodStart: "2026-05-01", periodEnd: "2026-05-31", grossUsd: 3600.0, creatorUsd: 2160.0, platformUsd: 1440.0, ratioLabel: "6:4", status: 1, auditRemark: null, applyTime: "2026-06-10 09:30:00", payTime: null, payVoucherUrl: null, accountSnapshot: null, createTime: "2026-06-10 09:00:00", updateTime: "2026-06-10 09:30:00" },
+  { id: 1002, periodStart: "2026-05-01", periodEnd: "2026-05-31", grossUsd: 1500.0, creatorUsd: 1200.0, platformUsd: 300.0, ratioLabel: "8:2", status: 1, auditRemark: null, applyTime: "2026-06-10 09:30:00", payTime: null, payVoucherUrl: null, accountSnapshot: null, createTime: "2026-06-10 09:00:00", updateTime: "2026-06-10 09:30:00" },
+  { id: 1003, periodStart: "2026-04-01", periodEnd: "2026-04-30", grossUsd: 2702.5, creatorUsd: 1621.5, platformUsd: 1081.0, ratioLabel: "6:4", status: 3, auditRemark: null, applyTime: "2026-05-15 09:30:00", payTime: "2026-05-18 15:00:00", payVoucherUrl: null, accountSnapshot: null, createTime: "2026-05-15 09:00:00", updateTime: "2026-05-18 15:00:00" },
+  { id: 1004, periodStart: "2026-04-01", periodEnd: "2026-04-30", grossUsd: 1500.0, creatorUsd: 1200.0, platformUsd: 300.0, ratioLabel: "8:2", status: 3, auditRemark: null, applyTime: "2026-05-15 09:30:00", payTime: "2026-05-18 15:00:00", payVoucherUrl: null, accountSnapshot: null, createTime: "2026-05-15 09:00:00", updateTime: "2026-05-18 15:00:00" },
+  { id: 1005, periodStart: "2026-03-01", periodEnd: "2026-03-31", grossUsd: 2240.0, creatorUsd: 1344.0, platformUsd: 896.0, ratioLabel: "6:4", status: 3, auditRemark: null, applyTime: "2026-04-15 09:30:00", payTime: "2026-04-18 15:00:00", payVoucherUrl: null, accountSnapshot: null, createTime: "2026-04-15 09:00:00", updateTime: "2026-04-18 15:00:00" },
 ];

@@ -14,8 +14,10 @@ import {
   getPublisherStatus,
   sendPublisherCode,
   submitPublisher,
+  getPublisherAgreement,
   type PublisherApply,
   type PublisherStatus,
+  type PublisherAgreement,
 } from "../../services/publisher";
 
 /**
@@ -52,7 +54,7 @@ function markEnteredDashboard(phone: string): void {
  *   auditStatus 1 / isPublisher=1 → 已通过（首次展示通过页，点过「进入发行中心」后再访问直接跳转）
  */
 export function EnrollPage() {
-  const { messages } = useI18n();
+  const { messages, locale } = useI18n();
   const t = messages.distribution.enroll;
   const navigate = useNavigate();
 
@@ -61,6 +63,11 @@ export function EnrollPage() {
   const [editing, setEditing] = useState(false);
   // 合作协议 / 隐私政策 弹窗（null=关闭）
   const [docOpen, setDocOpen] = useState<"terms" | "privacy" | null>(null);
+  // 协议正文/版本（bug12：随当前语言从后端拉；失败回退静态文案）
+  const [agreements, setAgreements] = useState<{ cooperation: PublisherAgreement | null; privacy: PublisherAgreement | null }>({
+    cooperation: null,
+    privacy: null,
+  });
 
   // 表单字段（对应接口 8 字段；图片为上传后 URL）
   const [phone, setPhone] = useState("");
@@ -115,6 +122,27 @@ export function EnrollPage() {
       setLoading(false);
     }
   }, []);
+
+  // bug11：未登录不允许进入发行中心（含入驻页），直接跳登录
+  useEffect(() => {
+    if (!isAppAuthed()) {
+      navigate("/login", { replace: true });
+    }
+  }, [navigate]);
+
+  // bug12：按当前语言拉协议正文/版本（失败回退静态文案）
+  useEffect(() => {
+    let alive = true;
+    void Promise.all([
+      getPublisherAgreement("cooperation").catch(() => null),
+      getPublisherAgreement("privacy").catch(() => null),
+    ]).then(([cooperation, privacy]) => {
+      if (alive) setAgreements({ cooperation, privacy });
+    });
+    return () => {
+      alive = false;
+    };
+  }, [locale]);
 
   useEffect(() => {
     void loadStatus();
@@ -186,6 +214,8 @@ export function EnrollPage() {
         idCardFront: idCardFront!,
         idCardBack: idCardBack!,
         agreementAgreed: 1,
+        // bug12：回写用户实际看到的合作协议版本（拉取失败则不传，由后端回填）
+        ...(agreements.cooperation?.version ? { agreementVersion: agreements.cooperation.version } : {}),
       });
       toast.success(t.submitSuccess);
       setEditing(false);
@@ -282,7 +312,11 @@ export function EnrollPage() {
       <AgreementModal
         open={docOpen !== null}
         title={docOpen === "privacy" ? t.privacyTitle : t.termsTitle}
-        body={docOpen === "privacy" ? t.privacyBody : t.termsBody}
+        body={
+          docOpen === "privacy"
+            ? agreements.privacy?.content ?? t.privacyBody
+            : agreements.cooperation?.content ?? t.termsBody
+        }
         closeLabel={t.docClose}
         onClose={() => setDocOpen(null)}
       />
@@ -432,11 +466,15 @@ function FormView(props: {
             hint={props.boundPhone ? t.phoneBoundHint : t.phoneRegisterHint}
           >
             <input
-              className={inputCls}
+              className={inputCls + (props.boundPhone ? " opacity-60 cursor-not-allowed" : "")}
               value={props.phone}
               placeholder={t.phonePlaceholder}
-              onChange={(e) => props.setPhone(e.target.value)}
+              // bug7：账号已绑定手机号时自动获取且只读，不可编辑；
+              // bug6：未绑定可编辑分支也仅允许数字、≤20 位
+              readOnly={!!props.boundPhone}
+              onChange={(e) => props.setPhone(e.target.value.replace(/\D/g, "").slice(0, 20))}
               inputMode="numeric"
+              maxLength={20}
             />
           </DarkField>
 
@@ -478,6 +516,7 @@ function FormView(props: {
               value={props.companyName}
               placeholder={t.companyNamePlaceholder}
               onChange={(e) => props.setCompanyName(e.target.value)}
+              maxLength={50}
             />
           </DarkField>
 
@@ -496,6 +535,7 @@ function FormView(props: {
                 value={props.legalPersonName}
                 placeholder={t.legalPersonNamePlaceholder}
                 onChange={(e) => props.setLegalPersonName(e.target.value)}
+                maxLength={50}
               />
             </DarkField>
             <DarkField label={t.legalPersonIdNoLabel} required error={errors.legalPersonIdNo}>
@@ -504,6 +544,7 @@ function FormView(props: {
                 value={props.legalPersonIdNo}
                 placeholder={t.legalPersonIdNoPlaceholder}
                 onChange={(e) => props.setLegalPersonIdNo(e.target.value)}
+                maxLength={50}
               />
             </DarkField>
           </div>

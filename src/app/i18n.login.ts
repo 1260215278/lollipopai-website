@@ -23,6 +23,27 @@ export interface LoginMessages {
   vCodeRequired: string;
   codeSent: string;
   loginSuccess: string;
+  /** 密码登录 / 邮箱登录 / 忘记密码（照搬 H5 逻辑新增） */
+  accountPlaceholder: string;
+  passwordPlaceholder: string;
+  forgotPassword: string;
+  vAccountRequired: string;
+  vPasswordRequired: string;
+  resetTitle: string;
+  newPasswordPlaceholder: string;
+  confirmPasswordPlaceholder: string;
+  resetButton: string;
+  backToLogin: string;
+  vPasswordMismatch: string;
+  vPasswordTooShort: string;
+  resetSuccess: string;
+  /** 注册态（注册/登录双态切换） */
+  registerTitle: string;
+  registerSubtitle: string;
+  registerSubmit: string;
+  toLogin: string;
+  toRegister: string;
+  registerSuccess: string;
 }
 
 export const loginMessages: Record<Locale, LoginMessages> = {
@@ -30,7 +51,7 @@ export const loginMessages: Record<Locale, LoginMessages> = {
     sloganLine1: "让好创作",
     sloganLine2: "收获好回报",
     welcomeTitle: "欢迎使用 Lollipop",
-    subtitle: "请使用手机号登录您的账号",
+    subtitle: "请使用手机号或邮箱登录您的账号",
     phoneLabel: "手机号",
     phonePlaceholder: "请输入手机号",
     codeLabel: "请输入验证码",
@@ -43,12 +64,31 @@ export const loginMessages: Record<Locale, LoginMessages> = {
     vCodeRequired: "请输入验证码",
     codeSent: "验证码已发送",
     loginSuccess: "登录成功",
+    accountPlaceholder: "请输入手机号或邮箱",
+    passwordPlaceholder: "请输入密码",
+    forgotPassword: "忘记密码？",
+    vAccountRequired: "请输入手机号或邮箱",
+    vPasswordRequired: "请输入密码",
+    resetTitle: "重置密码",
+    newPasswordPlaceholder: "请输入新密码",
+    confirmPasswordPlaceholder: "请再次输入新密码",
+    resetButton: "重置密码",
+    backToLogin: "返回登录",
+    vPasswordMismatch: "两次输入的密码不一致",
+    vPasswordTooShort: "密码至少 6 位",
+    resetSuccess: "密码重置成功，请登录",
+    registerTitle: "注册账号",
+    registerSubtitle: "请使用手机号或邮箱注册账号",
+    registerSubmit: "注册",
+    toLogin: "已有账号？去登录",
+    toRegister: "没有账号？去注册",
+    registerSuccess: "注册成功",
   },
   "zh-TW": {
     sloganLine1: "讓好創作",
     sloganLine2: "收穫好回報",
     welcomeTitle: "歡迎使用 Lollipop",
-    subtitle: "請使用手機號登入您的帳號",
+    subtitle: "請使用手機號或郵箱登入您的帳號",
     phoneLabel: "手機號",
     phonePlaceholder: "請輸入手機號",
     codeLabel: "請輸入驗證碼",
@@ -61,12 +101,31 @@ export const loginMessages: Record<Locale, LoginMessages> = {
     vCodeRequired: "請輸入驗證碼",
     codeSent: "驗證碼已發送",
     loginSuccess: "登入成功",
+    accountPlaceholder: "請輸入手機號或郵箱",
+    passwordPlaceholder: "請輸入密碼",
+    forgotPassword: "忘記密碼？",
+    vAccountRequired: "請輸入手機號或郵箱",
+    vPasswordRequired: "請輸入密碼",
+    resetTitle: "重設密碼",
+    newPasswordPlaceholder: "請輸入新密碼",
+    confirmPasswordPlaceholder: "請再次輸入新密碼",
+    resetButton: "重設密碼",
+    backToLogin: "返回登入",
+    vPasswordMismatch: "兩次輸入的密碼不一致",
+    vPasswordTooShort: "密碼至少 6 位",
+    resetSuccess: "密碼重設成功，請登入",
+    registerTitle: "註冊帳號",
+    registerSubtitle: "請使用手機號或郵箱註冊帳號",
+    registerSubmit: "註冊",
+    toLogin: "已有帳號？去登入",
+    toRegister: "沒有帳號？去註冊",
+    registerSuccess: "註冊成功",
   },
   en: {
     sloganLine1: "Great creation,", // TODO(verify) 标语英译
     sloganLine2: "rewarded well.", // TODO(verify)
     welcomeTitle: "Welcome to Lollipop",
-    subtitle: "Sign in with your phone number",
+    subtitle: "Sign in with your phone number or email",
     phoneLabel: "Phone number",
     phonePlaceholder: "Enter phone number",
     codeLabel: "Verification code",
@@ -79,12 +138,31 @@ export const loginMessages: Record<Locale, LoginMessages> = {
     vCodeRequired: "Please enter the verification code",
     codeSent: "Verification code sent",
     loginSuccess: "Signed in",
+    accountPlaceholder: "Phone number or email",
+    passwordPlaceholder: "Enter password",
+    forgotPassword: "Forgot password?",
+    vAccountRequired: "Please enter your phone number or email",
+    vPasswordRequired: "Please enter your password",
+    resetTitle: "Reset password",
+    newPasswordPlaceholder: "Enter new password",
+    confirmPasswordPlaceholder: "Re-enter new password",
+    resetButton: "Reset password",
+    backToLogin: "Back to login",
+    vPasswordMismatch: "Passwords do not match",
+    vPasswordTooShort: "Password must be at least 6 characters",
+    resetSuccess: "Password reset successful, please log in",
+    registerTitle: "Create account",
+    registerSubtitle: "Sign up with your phone number or email",
+    registerSubmit: "Sign Up",
+    toLogin: "Already have an account? Log in",
+    toRegister: "No account? Sign up",
+    registerSuccess: "Registration successful",
   },
   pt: {
     sloganLine1: "Boa criação,", // TODO(verify) 标语葡译
     sloganLine2: "boas recompensas.", // TODO(verify)
     welcomeTitle: "Bem-vindo ao Lollipop",
-    subtitle: "Entre com seu número de telefone",
+    subtitle: "Entre com seu telefone ou e-mail",
     phoneLabel: "Número de telefone",
     phonePlaceholder: "Digite o número de telefone",
     codeLabel: "Código de verificação",
@@ -97,5 +175,24 @@ export const loginMessages: Record<Locale, LoginMessages> = {
     vCodeRequired: "Digite o código de verificação",
     codeSent: "Código de verificação enviado",
     loginSuccess: "Conectado",
+    accountPlaceholder: "Telefone ou e-mail",
+    passwordPlaceholder: "Digite a senha",
+    forgotPassword: "Esqueceu a senha?",
+    vAccountRequired: "Digite seu telefone ou e-mail",
+    vPasswordRequired: "Digite sua senha",
+    resetTitle: "Redefinir senha",
+    newPasswordPlaceholder: "Digite a nova senha",
+    confirmPasswordPlaceholder: "Digite novamente a nova senha",
+    resetButton: "Redefinir senha",
+    backToLogin: "Voltar ao login",
+    vPasswordMismatch: "As senhas não coincidem",
+    vPasswordTooShort: "A senha deve ter pelo menos 6 caracteres",
+    resetSuccess: "Senha redefinida com sucesso, faça login",
+    registerTitle: "Criar conta",
+    registerSubtitle: "Cadastre-se com seu telefone ou e-mail",
+    registerSubmit: "Cadastrar",
+    toLogin: "Já tem conta? Entrar",
+    toRegister: "Não tem conta? Cadastre-se",
+    registerSuccess: "Cadastro concluído",
   },
 };

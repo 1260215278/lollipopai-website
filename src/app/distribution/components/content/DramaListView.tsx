@@ -11,6 +11,8 @@ import {
   AlertCircle,
   Loader2,
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import type { ContentMessages } from "../../i18n/content";
 import type { PublisherCourseRow } from "./types";
@@ -34,6 +36,10 @@ interface DramaListViewProps {
   onManageEpisodes: (d: PublisherCourseRow) => void;
   /** 上架/下架（仅 auditStatus=2 可点）；下架的确认弹窗由上层处理 */
   onToggleShelf: (d: PublisherCourseRow) => void;
+  /** 分页（bug20）：当前页 / 总页数 / 翻页回调 */
+  page: number;
+  totalPage: number;
+  onPageChange: (page: number) => void;
 }
 
 /** 短剧列表（img_1 / img_9）。表格 + 行内操作菜单。 */
@@ -47,6 +53,9 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
   onViewDetail,
   onManageEpisodes,
   onToggleShelf,
+  page,
+  totalPage,
+  onPageChange,
 }) => {
   // 操作菜单：用 fixed 定位 + portal 渲染到 body，避免被表格的 overflow-x-auto / 卡片 overflow-hidden 裁切
   const [menu, setMenu] = useState<{ id: number; rect: DOMRect } | null>(null);
@@ -158,7 +167,8 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
                           <div className="min-w-0">
                             <button
                               onClick={() => onViewDetail(drama)}
-                              className="text-sm text-gray-900 truncate hover:underline text-left"
+                              title={drama.title}
+                              className="block max-w-full text-sm text-gray-900 truncate hover:underline text-left"
                               style={{ fontWeight: 600 }}
                             >
                               {drama.title}
@@ -364,6 +374,33 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
             </tbody>
           </table>
         </div>
+
+        {/* 分页（bug20：>1 页时显示，避免早期数据无法翻看） */}
+        {!loading && totalPage > 1 && (
+          <div className="flex items-center justify-end gap-3 px-4 py-3 border-t border-gray-100">
+            <button
+              type="button"
+              onClick={() => onPageChange(page - 1)}
+              disabled={page <= 1}
+              className="w-8 h-8 rounded-lg border border-gray-200 text-gray-600 flex items-center justify-center hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+              aria-label="Previous page"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <span className="text-sm text-gray-600 tabular-nums">
+              {page} / {totalPage}
+            </span>
+            <button
+              type="button"
+              onClick={() => onPageChange(page + 1)}
+              disabled={page >= totalPage}
+              className="w-8 h-8 rounded-lg border border-gray-200 text-gray-600 flex items-center justify-center hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+              aria-label="Next page"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

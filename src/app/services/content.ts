@@ -139,6 +139,11 @@ export interface SaveBasicBody {
   courseLabel: string;
   /** 版权类型 1自制/2授权 */
   copyrightType: number;
+  /**
+   * 版权证明文件 URL（仅 copyrightType=2 授权时必填）。
+   * TODO(verify): 字段名 / 是否必填 / 支持的文件格式以后端为准，详见《后端反馈-版权证明》。
+   */
+  copyrightProof?: string;
 }
 
 /** 暂存基本信息，返回 courseId（新建/更新草稿） */
@@ -234,6 +239,8 @@ export interface DraftCourse {
   /** 逗号分隔的标签名 */
   courseLabel: string;
   copyrightType: number;
+  /** 版权证明 URL（授权时回显，TODO(verify) 字段名以后端为准） */
+  copyrightProof?: string;
   createTime?: string;
 }
 
@@ -269,6 +276,8 @@ export interface CourseDetailBasic {
   courseLabel: string[];
   genderType: number;
   copyrightType: number;
+  /** 版权证明 URL（授权时，TODO(verify) 字段名以后端为准） */
+  copyrightProof?: string;
   createTime: string;
 }
 

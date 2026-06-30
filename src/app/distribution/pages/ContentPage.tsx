@@ -15,6 +15,9 @@ import { UploadForm } from "../components/content/UploadForm";
 
 type View = "list" | "form" | "detail" | "episodes";
 
+/** 上剧列表每页条数（bug20） */
+const PAGE_SIZE = 12;
+
 interface EpisodesCtx {
   courseId: number;
   title: string;
@@ -34,17 +37,21 @@ export function ContentPage() {
   const [dramas, setDramas] = useState<PublisherCourseRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  // 分页（bug20）：每页 12 条，与产品「上传 12 个后需翻页」一致
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
 
   const [detail, setDetail] = useState<CourseDetail | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
   const [episodesCtx, setEpisodesCtx] = useState<EpisodesCtx | null>(null);
   const [confirmOffline, setConfirmOffline] = useState<PublisherCourseRow | null>(null);
 
-  const loadList = useCallback(async (keyword: string) => {
+  const loadList = useCallback(async (keyword: string, pageNum: number) => {
     setLoading(true);
     try {
-      const page = await fetchCourseList({ keyword });
-      setDramas(page.list);
+      const res = await fetchCourseList({ keyword, page: pageNum, limit: PAGE_SIZE });
+      setDramas(res.list);
+      setTotalPage(res.totalPage > 0 ? res.totalPage : 1);
     } catch {
       // service 已 toast
     } finally {
@@ -52,18 +59,18 @@ export function ContentPage() {
     }
   }, []);
 
+  // 搜索词变化回到第 1 页
   useEffect(() => {
-    void loadList("");
-  }, [loadList]);
+    setPage(1);
+  }, [searchQuery]);
 
-  // 搜索防抖
+  // 按当前页 + 搜索词加载（搜索防抖 300ms）
   useEffect(() => {
     const id = setTimeout(() => {
-      void loadList(searchQuery);
+      void loadList(searchQuery, page);
     }, 300);
     return () => clearTimeout(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery]);
+  }, [searchQuery, page, loadList]);
 
   const openDetail = async (d: PublisherCourseRow) => {
     setView("detail");
@@ -103,7 +110,7 @@ export function ContentPage() {
     if (d.shelfStatus === 1) {
       setConfirmOffline(d);
     } else {
-      void setShelf(d.courseId, true).then(() => loadList(searchQuery));
+      void setShelf(d.courseId, true).then(() => loadList(searchQuery, page));
     }
   };
 
@@ -111,7 +118,7 @@ export function ContentPage() {
     if (!confirmOffline) return;
     await setShelf(confirmOffline.courseId, false).catch(() => undefined);
     setConfirmOffline(null);
-    void loadList(searchQuery);
+    void loadList(searchQuery, page);
   };
 
   /* ── 视图分发 ── */
@@ -122,7 +129,7 @@ export function ContentPage() {
         onCancel={() => setView("list")}
         onSubmitted={() => {
           setView("list");
-          void loadList(searchQuery);
+          void loadList(searchQuery, page);
         }}
       />
     );
@@ -154,7 +161,7 @@ export function ContentPage() {
         title={episodesCtx.title}
         plannedEpisodes={episodesCtx.plannedEpisodes}
         onBack={() => setView(episodesCtx.backTo)}
-        onChanged={() => void loadList(searchQuery)}
+        onChanged={() => void loadList(searchQuery, page)}
       />
     );
   }
@@ -171,6 +178,9 @@ export function ContentPage() {
         onViewDetail={(d) => void openDetail(d)}
         onManageEpisodes={(d) => openEpisodes(d)}
         onToggleShelf={handleToggleShelf}
+        page={page}
+        totalPage={totalPage}
+        onPageChange={setPage}
       />
 
       {/* 下架确认弹窗（img_16） */}

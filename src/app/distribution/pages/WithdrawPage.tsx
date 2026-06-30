@@ -3,7 +3,6 @@ import { ChevronDown, Search, Building2, CalendarClock, Send, Loader2 } from "lu
 import { toast } from "sonner";
 import { useI18n } from "../../i18n";
 import { PageLoading } from "../components/settlement/PageHeader";
-import { AccountTypeBadge, SettlementStatusBadge } from "../components/settlement/Badge";
 import { EmptyState } from "../components/settlement/EmptyState";
 import {
   getPayoutAccount,
@@ -14,15 +13,15 @@ import {
 
 type WithdrawMsg = ReturnType<typeof useI18n>["messages"]["distribution"]["withdraw"];
 
-const yuan = (n: number) =>
-  `¥ ${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+const usd = (n: number) =>
+  `$ ${(n ?? 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
-type StatusFilter = "all" | "paid" | "unpaid";
+/** 状态筛选：'all' 或具体状态 0-4 */
+type StatusFilter = "all" | 0 | 1 | 2 | 3 | 4;
 
 /**
- * 结算记录 —— figma 15151-31580(暂无) / 15188-33359(列表) / 15152-31918(点击结算)。
- * 采用最完整的 15188-33359 版式：结算说明卡 + 明细表（含行内「申请结算」）。
- * 数据走 services/settlement.ts 的 mock + VITE_USE_MOCK 开关。
+ * 结算记录 —— 对接 /publisher/settlement/records（bug22）。
+ * 结算说明卡 + 结算单表（草稿可「申请结算」）。金额单位 USD。
  */
 export function WithdrawPage() {
   const { messages } = useI18n();
@@ -31,19 +30,33 @@ export function WithdrawPage() {
   const [loading, setLoading] = useState(true);
   const [hasAccount, setHasAccount] = useState(false);
   const [records, setRecords] = useState<SettlementRecord[]>([]);
-  const [applyingId, setApplyingId] = useState<string | null>(null);
+  const [applyingId, setApplyingId] = useState<number | null>(null);
 
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [statusOpen, setStatusOpen] = useState(false);
   const [search, setSearch] = useState("");
   const statusRef = useRef<HTMLDivElement>(null);
 
+  const statusText = useCallback(
+    (s: number) =>
+      s === 0
+        ? t.statusDraft
+        : s === 1
+          ? t.statusApplied
+          : s === 2
+            ? t.statusApproved
+            : s === 3
+              ? t.statusPaid
+              : t.statusRejected,
+    [t],
+  );
+
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [acc, rows] = await Promise.all([getPayoutAccount(), getSettlementRecords()]);
+      const [acc, page] = await Promise.all([getPayoutAccount(), getSettlementRecords({ page: 1, limit: 50 })]);
       setHasAccount(!!acc);
-      setRecords(rows);
+      setRecords(page.list);
     } catch {
       // http 已 toast
     } finally {
@@ -65,29 +78,33 @@ export function WithdrawPage() {
 
   const statusOptions: { key: StatusFilter; label: string }[] = [
     { key: "all", label: t.statusAll },
-    { key: "paid", label: t.statusPaid },
-    { key: "unpaid", label: t.statusUnpaid },
+    { key: 0, label: t.statusDraft },
+    { key: 1, label: t.statusApplied },
+    { key: 2, label: t.statusApproved },
+    { key: 3, label: t.statusPaid },
+    { key: 4, label: t.statusRejected },
   ];
-  const statusLabelMap: Record<StatusFilter, string> = {
-    all: t.statusAll,
-    paid: t.statusPaid,
-    unpaid: t.statusUnpaid,
-  };
+  const statusFilterLabel = statusFilter === "all" ? t.statusAll : statusText(statusFilter);
 
   const filtered = useMemo(() => {
-    if (!hasAccount) return [];
     return records
       .filter((r) => statusFilter === "all" || r.status === statusFilter)
-      .filter((r) => !search || r.period.includes(search) || typeLabel(r.type, t).includes(search));
-  }, [records, hasAccount, statusFilter, search, t]);
+      .filter(
+        (r) =>
+          !search ||
+          r.periodStart?.includes(search) ||
+          r.periodEnd?.includes(search) ||
+          r.ratioLabel?.includes(search),
+      );
+  }, [records, statusFilter, search]);
 
   const handleApply = async (rec: SettlementRecord) => {
     if (applyingId) return;
     setApplyingId(rec.id);
     try {
-      await applySettlement(rec.id);
-      // 乐观更新：申请后视为进入打款流程，标记为已打款（mock 演示）
-      setRecords((prev) => prev.map((r) => (r.id === rec.id ? { ...r, status: "paid" } : r)));
+      const updated = await applySettlement(rec.id);
+      // 用后端返回的新状态更新该行
+      setRecords((prev) => prev.map((r) => (r.id === rec.id ? { ...r, ...updated } : r)));
       toast.success(t.applySuccess);
     } catch {
       // http 已 toast
@@ -140,14 +157,14 @@ export function WithdrawPage() {
                 style={{ fontWeight: 500 }}
               >
                 <span className="text-[#99a1af]">{t.statusFilter}</span>
-                <span className="ml-1">{statusLabelMap[statusFilter]}</span>
+                <span className="ml-1">{statusFilterLabel}</span>
                 <ChevronDown className="w-3 h-3 text-gray-400" />
               </button>
               {statusOpen && (
                 <div className="absolute top-full right-0 mt-1 w-32 bg-white border border-[#e5e7eb] rounded-xl shadow-xl z-10 overflow-hidden">
                   {statusOptions.map((s) => (
                     <button
-                      key={s.key}
+                      key={String(s.key)}
                       onClick={() => {
                         setStatusFilter(s.key);
                         setStatusOpen(false);
@@ -175,73 +192,65 @@ export function WithdrawPage() {
           </div>
         </div>
 
-        {/* 表格：结算日期 / 周期 / 比例 / 类型 / 账户类型 / 账户号码 / 金额 / 状态 / 操作 */}
+        {/* 表格：周期 / 比例 / 总额 / 出品方实得 / 平台分成 / 状态 / 操作 */}
         <div className="overflow-x-auto">
-        <table className="w-full min-w-[880px]">
-          <thead>
-            <tr className="border-b border-[#f3f4f6] bg-gray-50/50">
-              <Th>{t.colDate}</Th>
-              <Th>{t.colPeriod}</Th>
-              <Th>
-                <span className="block leading-4">{t.colRatio}</span>
-                <span className="block leading-4 text-[#bababa]">{t.colRatioSub}</span>
-              </Th>
-              <Th>{t.colType}</Th>
-              <Th>{t.colAccountType}</Th>
-              <Th>{t.colAccountNo}</Th>
-              <Th>{t.colAmount}</Th>
-              <Th>{t.colStatus}</Th>
-              <Th>{t.colAction}</Th>
-            </tr>
-          </thead>
-          {filtered.length > 0 && (
-            <tbody>
-              {filtered.map((row) => (
-                <tr key={row.id} className="border-t border-gray-50 hover:bg-gray-50/50 transition-colors">
-                  <td className="px-5 py-3.5 text-xs text-[#4a5565]">{row.date}</td>
-                  <td className="px-5 py-3.5 text-xs text-[#4a5565]">{row.period}</td>
-                  <td className="px-5 py-3.5 text-xs text-[#4a5565]">{row.ratio}</td>
-                  <td className="px-5 py-3.5 text-xs text-[#4a5565]">{typeLabel(row.type, t)}</td>
-                  <td className="px-5 py-3.5">
-                    <AccountTypeBadge label={row.accountType === "cn" ? t.accountCn : t.accountOverseas} />
-                  </td>
-                  <td className="px-5 py-3.5 text-xs text-[#4a5565] font-mono">{row.accountNo}</td>
-                  <td className="px-5 py-3.5">
-                    <span className="text-sm text-[#101828]" style={{ fontWeight: 700 }}>
-                      {yuan(row.amount)}
-                    </span>
-                  </td>
-                  <td className="px-5 py-3.5">
-                    <SettlementStatusBadge
-                      status={row.status}
-                      label={row.status === "paid" ? t.statusPaid : t.statusUnpaid}
-                    />
-                  </td>
-                  <td className="px-5 py-3.5">
-                    <button
-                      onClick={() => handleApply(row)}
-                      disabled={row.status === "paid" || applyingId === row.id}
-                      className="inline-flex items-center gap-1.5 h-8 px-3 rounded-[14px] text-white text-xs transition-opacity disabled:cursor-not-allowed"
-                      style={{
-                        // 已打款禁用态：实心中灰填充（对齐 figma 15188-33359），而非半透明黑
-                        background: row.status === "paid" ? "#9CA3AF" : "#111111",
-                        fontWeight: 600,
-                        opacity: applyingId === row.id ? 0.7 : 1,
-                      }}
-                    >
-                      {applyingId === row.id ? (
-                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+          <table className="w-full min-w-[880px]">
+            <thead>
+              <tr className="border-b border-[#f3f4f6] bg-gray-50/50">
+                <Th>{t.colPeriod}</Th>
+                <Th>
+                  <span className="block leading-4">{t.colRatio}</span>
+                  <span className="block leading-4 text-[#bababa]">{t.colRatioSub}</span>
+                </Th>
+                <Th>{t.colGross}</Th>
+                <Th>{t.colCreator}</Th>
+                <Th>{t.colPlatform}</Th>
+                <Th>{t.colStatus}</Th>
+                <Th>{t.colAction}</Th>
+              </tr>
+            </thead>
+            {filtered.length > 0 && (
+              <tbody>
+                {filtered.map((row) => (
+                  <tr key={row.id} className="border-t border-gray-50 hover:bg-gray-50/50 transition-colors">
+                    <td className="px-5 py-3.5 text-xs text-[#4a5565]">
+                      {row.periodStart} ~ {row.periodEnd}
+                    </td>
+                    <td className="px-5 py-3.5 text-xs text-[#4a5565]">{row.ratioLabel}</td>
+                    <td className="px-5 py-3.5 text-xs text-[#4a5565]">{usd(row.grossUsd)}</td>
+                    <td className="px-5 py-3.5">
+                      <span className="text-sm text-[#101828]" style={{ fontWeight: 700 }}>
+                        {usd(row.creatorUsd)}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3.5 text-xs text-[#4a5565]">{usd(row.platformUsd)}</td>
+                    <td className="px-5 py-3.5">
+                      <StatusBadge status={row.status} label={statusText(row.status)} />
+                    </td>
+                    <td className="px-5 py-3.5">
+                      {row.status === 0 ? (
+                        <button
+                          onClick={() => handleApply(row)}
+                          disabled={applyingId === row.id}
+                          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-[14px] text-white text-xs transition-opacity disabled:cursor-not-allowed"
+                          style={{ background: "#111111", fontWeight: 600, opacity: applyingId === row.id ? 0.7 : 1 }}
+                        >
+                          {applyingId === row.id ? (
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          ) : (
+                            <Send className="w-3.5 h-3.5" />
+                          )}
+                          {t.applySettlement}
+                        </button>
                       ) : (
-                        <Send className="w-3.5 h-3.5" />
+                        <span className="text-xs text-[#9ca3af]">—</span>
                       )}
-                      {t.applySettlement}
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          )}
-        </table>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            )}
+          </table>
         </div>
 
         {filtered.length === 0 && (
@@ -257,8 +266,24 @@ export function WithdrawPage() {
   );
 }
 
-function typeLabel(type: "full" | "account", t: WithdrawMsg) {
-  return type === "full" ? t.typeFull : t.typeAccount;
+/** 结算单状态徽章（0草稿 灰 / 1已申请 橙 / 2审核通过 蓝 / 3已打款 绿 / 4驳回 红）。 */
+function StatusBadge({ status, label }: { status: number; label: string }) {
+  const map: Record<number, { background: string; color: string }> = {
+    0: { background: "#F9FAFB", color: "#6B7280" },
+    1: { background: "#FFF7ED", color: "#ea580c" },
+    2: { background: "#EFF6FF", color: "#3b82f6" },
+    3: { background: "#F0FDF4", color: "#16a34a" },
+    4: { background: "#FEF2F2", color: "#dc2626" },
+  };
+  const style = map[status] ?? map[0];
+  return (
+    <span
+      className="inline-flex items-center px-2.5 py-1 rounded-full text-xs w-fit whitespace-nowrap"
+      style={{ ...style, fontWeight: 500 }}
+    >
+      {label}
+    </span>
+  );
 }
 
 function Th({ children }: { children: React.ReactNode }) {

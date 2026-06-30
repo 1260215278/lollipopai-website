@@ -12,7 +12,7 @@
  */
 import { BASE_URL, ApiError, http, type ApiResponse } from "./http";
 import { setAppToken, setPublisherToken, getAppToken, getPublisherToken } from "./auth";
-import { getMessages } from "../i18n";
+import { getMessages, getAcceptLanguage } from "../i18n";
 
 /** emailAuth 响应（token 在顶层；其余字段未在文档列全，TODO(verify)） */
 interface EmailAuthResponse {
@@ -40,7 +40,7 @@ export async function loginByEmail(input: EmailLoginInput): Promise<string> {
   try {
     res = await fetch(`${BASE_URL}/app/Login/emailAuth`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "Accept-Language": getAcceptLanguage() },
       body: JSON.stringify({
         emailName: input.emailName,
         code: input.code,
@@ -108,7 +108,7 @@ export async function loginByPhone(input: PhoneLoginInput): Promise<string> {
   try {
     res = await fetch(`${BASE_URL}/app/Login/registerCode`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "Accept-Language": getAcceptLanguage() },
       body: JSON.stringify({
         phone: fullPhone,
         msg: input.code,
@@ -125,6 +125,176 @@ export async function loginByPhone(input: PhoneLoginInput): Promise<string> {
   }
   setAppToken(token);
   return token;
+}
+
+/* ── 密码登录 / 邮箱登录 / 忘记密码（照搬短剧 H5 loginPhone.vue / forgetPwd.vue 逻辑） ──
+ *   接口与字段以 H5 为准：
+ *   - 手机密码登录：POST /app/Login/registerCode { phone:区号+号, password, platform }（不传 msg 即密码登录）
+ *   - 邮箱密码登录：POST(form) /app/Login/emailLogin { emailName, password, isFirebaseEmail:"1" }
+ *   - 手机找回：发码 GET /app/Login/sendMsg/{区号+号}/forget；重置 POST /app/Login/forgetPwd { phone, pwd, msg }
+ *   - 邮箱找回：发码 POST /app/Login/sendEmailMsg?emailName=&type=2&language=；重置 POST(form) /app/Login/forgetPassWord { emailName, password, code }
+ *   登录类响应 token 均在顶层（同 registerCode），故用裸 fetch 解析。*/
+
+/** 通用顶层登录响应解析：成功写 appToken 返回，失败抛后端文案 */
+async function parseLoginResponse(res: Response): Promise<string> {
+  const json = (await res.json()) as PhoneAuthResponse;
+  const token = json?.token;
+  if (!token) {
+    throw new ApiError(json?.code ?? -1, json?.msg ?? getMessages().distribution.common.serverError);
+  }
+  setAppToken(token);
+  return token;
+}
+
+/** 手机号 + 密码登录（H5：registerCode 带 password、不传 msg）。 */
+export async function loginByPhonePassword(input: {
+  phone: string;
+  password: string;
+  areaCode?: string;
+}): Promise<string> {
+  const areaCode = input.areaCode ?? DEFAULT_AREA_CODE;
+  let res: Response;
+  try {
+    res = await fetch(`${BASE_URL}/app/Login/registerCode`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept-Language": getAcceptLanguage() },
+      body: JSON.stringify({
+        phone: `${areaCode}${input.phone}`,
+        password: input.password,
+        platform: "h5",
+      }),
+    });
+  } catch {
+    throw new ApiError(-1, getMessages().distribution.common.networkError);
+  }
+  return parseLoginResponse(res);
+}
+
+/** 邮箱 + 密码登录（H5：POST form /app/Login/emailLogin）。 */
+export async function loginByEmailPassword(input: { email: string; password: string }): Promise<string> {
+  let res: Response;
+  try {
+    res = await fetch(`${BASE_URL}/app/Login/emailLogin`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept-Language": getAcceptLanguage() },
+      body: new URLSearchParams({
+        emailName: input.email,
+        password: input.password,
+        isFirebaseEmail: "1",
+      }).toString(),
+    });
+  } catch {
+    throw new ApiError(-1, getMessages().distribution.common.networkError);
+  }
+  return parseLoginResponse(res);
+}
+
+/** 手机号注册（H5：registerCode 带 msg(验证码)+password；发码复用 sendPhoneLoginCode）。 */
+export async function registerByPhone(input: {
+  phone: string;
+  code: string;
+  password: string;
+  areaCode?: string;
+}): Promise<string> {
+  const areaCode = input.areaCode ?? DEFAULT_AREA_CODE;
+  let res: Response;
+  try {
+    res = await fetch(`${BASE_URL}/app/Login/registerCode`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept-Language": getAcceptLanguage() },
+      body: JSON.stringify({
+        phone: `${areaCode}${input.phone}`,
+        msg: input.code,
+        password: input.password,
+        platform: "h5",
+      }),
+    });
+  } catch {
+    throw new ApiError(-1, getMessages().distribution.common.networkError);
+  }
+  return parseLoginResponse(res);
+}
+
+/** 邮箱注册（H5：POST form /app/Login/emailRegister；web 不传设备 sysPhone）。 */
+export async function registerByEmail(input: { email: string; password: string; code: string }): Promise<string> {
+  let res: Response;
+  try {
+    res = await fetch(`${BASE_URL}/app/Login/emailRegister`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept-Language": getAcceptLanguage() },
+      body: new URLSearchParams({
+        emailName: input.email,
+        password: input.password,
+        code: input.code,
+        platform: "h5",
+      }).toString(),
+    });
+  } catch {
+    throw new ApiError(-1, getMessages().distribution.common.networkError);
+  }
+  return parseLoginResponse(res);
+}
+
+/** 发送注册-邮箱验证码（H5：POST sendEmailMsg?emailName=&type=1&language=）。 */
+export function sendRegisterEmailCode(email: string): Promise<unknown> {
+  return http.post<unknown>("/app/Login/sendEmailMsg", undefined, {
+    params: { emailName: email, type: 1, language: getAcceptLanguage() },
+    auth: false,
+  });
+}
+
+/** 发送找回密码-手机验证码（H5：GET sendMsg/{区号+号}/forget）。 */
+export function sendForgetPhoneCode(phone: string, areaCode: string = DEFAULT_AREA_CODE): Promise<unknown> {
+  return http.get<unknown>(`/app/Login/sendMsg/${areaCode}${phone}/forget`, { auth: false });
+}
+
+/** 发送找回密码-邮箱验证码（H5：POST sendEmailMsg?emailName=&type=2&language=）。 */
+export function sendForgetEmailCode(email: string): Promise<unknown> {
+  return http.post<unknown>("/app/Login/sendEmailMsg", undefined, {
+    params: { emailName: email, type: 2, language: getAcceptLanguage() },
+    auth: false,
+  });
+}
+
+/** 重置密码-手机（H5：POST /app/Login/forgetPwd { phone, pwd, msg }）。 */
+export function resetPhonePassword(input: {
+  phone: string;
+  pwd: string;
+  msg: string;
+  areaCode?: string;
+}): Promise<unknown> {
+  const areaCode = input.areaCode ?? DEFAULT_AREA_CODE;
+  return http.post<unknown>(
+    "/app/Login/forgetPwd",
+    { phone: `${areaCode}${input.phone}`, pwd: input.pwd, msg: input.msg },
+    { auth: false },
+  );
+}
+
+/** 重置密码-邮箱（H5：POST form /app/Login/forgetPassWord { emailName, password, code }）。 */
+export async function resetEmailPassword(input: {
+  email: string;
+  password: string;
+  code: string;
+}): Promise<void> {
+  let res: Response;
+  try {
+    res = await fetch(`${BASE_URL}/app/Login/forgetPassWord`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept-Language": getAcceptLanguage() },
+      body: new URLSearchParams({
+        emailName: input.email,
+        password: input.password,
+        code: input.code,
+      }).toString(),
+    });
+  } catch {
+    throw new ApiError(-1, getMessages().distribution.common.networkError);
+  }
+  const json = (await res.json()) as PhoneAuthResponse;
+  if (json?.code !== 0) {
+    throw new ApiError(json?.code ?? -1, json?.msg ?? getMessages().distribution.common.serverError);
+  }
 }
 
 /**

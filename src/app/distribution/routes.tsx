@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from "react-router";
 import { Toaster } from "../components/ui/sonner";
+import { ErrorBoundary } from "../components/ErrorBoundary";
 import { DistributionLayout } from "./DistributionLayout";
 import { EnrollPage } from "./pages/EnrollPage";
 import { OverviewPage } from "./pages/OverviewPage";
@@ -18,7 +19,7 @@ import { WithdrawPage } from "./pages/WithdrawPage";
  */
 export function DistributionRoutes() {
   return (
-    <>
+    <ErrorBoundary>
       <Toaster position="top-center" richColors />
       <Routes>
         <Route index element={<Navigate to="enroll" replace />} />
@@ -32,6 +33,6 @@ export function DistributionRoutes() {
         </Route>
         <Route path="*" element={<Navigate to="enroll" replace />} />
       </Routes>
-    </>
+    </ErrorBoundary>
   );
 }

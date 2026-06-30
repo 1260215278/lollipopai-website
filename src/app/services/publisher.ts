@@ -8,6 +8,7 @@
  *   40023 验证码错误 / 401179 验证码过期 / 40021 手机号占用 / 40034 发码频繁
  */
 import { http } from "./http";
+import type { PageResult } from "./content";
 
 /** 申请详情对象（status.apply / 列表 records[]） */
 export interface PublisherApply {
@@ -66,6 +67,28 @@ export interface PublisherSubmitBody {
   idCardBack: string;
   /** 是否同意合作协议，必须为 1 */
   agreementAgreed: number;
+  /** 用户实际看到/同意的合作协议版本号（取自 getPublisherAgreement 返回的 version；bug12） */
+  agreementVersion?: string;
+}
+
+/** 入驻协议类型：合作协议 / 隐私政策 */
+export type AgreementType = "cooperation" | "privacy";
+
+/** GET /app/publisher/agreements 响应（按当前 Accept-Language 返回对应语种正文） */
+export interface PublisherAgreement {
+  type: AgreementType;
+  /** 版本号（提交时回写到 submit 的 agreementVersion） */
+  version: string;
+  /** 协议正文 */
+  content: string;
+}
+
+/**
+ * 查询入驻协议正文（bug12）：type=cooperation 合作协议 / privacy 隐私政策。
+ * 正文语种随当前 Accept-Language；type 非法后端返回 403313。
+ */
+export function getPublisherAgreement(type: AgreementType): Promise<PublisherAgreement> {
+  return http.get<PublisherAgreement>("/app/publisher/agreements", { params: { type }, auth: false });
 }
 
 /** 入驻状态机审核态枚举 */
@@ -139,4 +162,53 @@ export function submitPublisher(body: PublisherSubmitBody): Promise<PublisherSub
  */
 export function retryPublisherTenantSync(): Promise<unknown> {
   return http.post<unknown>("/app/publisher/retrySyncTenant");
+}
+
+/* ── 出品方公开主页（bug18，免登录；上架闸口 audit_status=2 & publish_scope=2 & shelf_status=1）── */
+
+/** GET /app/publisher/profile/{userId} 响应 */
+export interface PublisherProfile {
+  userId: number;
+  userName: string;
+  avatar: string;
+  /** 0=否 1=是 */
+  isPublisher: number;
+  /** 已上架剧目数 */
+  totalDramas: number;
+  /** 累计播放量 */
+  totalPlays: number;
+}
+
+/** 出品方主页已上架剧目行（GET /app/publisher/profile/{userId}/courses 的 list 项） */
+export interface PublisherProfileCourse {
+  courseId: number;
+  title: string;
+  titleImg: string;
+  img: string;
+  classifyId: number;
+  courseType: number;
+  languageType: string;
+  viewCounts: number;
+  collectNum: number;
+  priceUsd: number;
+  /** 是否完结 0/1 */
+  over: number;
+  updateTime: string;
+}
+
+/** 出品方公开主页基础信息（非发行方返回 403312）。 */
+export function getPublisherProfile(userId: number | string): Promise<PublisherProfile> {
+  return http.get<PublisherProfile>(`/app/publisher/profile/${userId}`, { auth: false });
+}
+
+/** 出品方已上架剧列表（非发行方/不存在返回空分页，不报错）。 */
+export function getPublisherProfileCourses(
+  userId: number | string,
+  query: { page?: number; limit?: number } = {},
+): Promise<PageResult<PublisherProfileCourse>> {
+  // 该接口分页对象在 data 内（非顶层 page），故用默认 pick:"data"
+  return http.get<PageResult<PublisherProfileCourse>>(`/app/publisher/profile/${userId}/courses`, {
+    params: { page: query.page ?? 1, limit: query.limit ?? 20 },
+    auth: false,
+  });
 }

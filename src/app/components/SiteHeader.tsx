@@ -166,7 +166,7 @@ export function SiteHeader({
           ) : (
             <>
               <Link
-                to="/login"
+                to="/login?mode=register"
                 className="px-5 py-2.5 rounded-full border border-white/15 text-gray-200 hover:text-white hover:border-white/30 transition-all"
                 style={{ fontSize: "0.85rem", fontWeight: 600 }}
               >
@@ -261,7 +261,7 @@ export function SiteHeader({
             ) : (
               <div className="flex items-center gap-3 mt-4">
                 <Link
-                  to="/login"
+                  to="/login?mode=register"
                   onClick={() => setMobileOpen(false)}
                   className="flex-1 text-center py-3 rounded-full border border-white/15 text-gray-200"
                   style={{ fontWeight: 600 }}

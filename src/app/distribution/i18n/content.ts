@@ -55,6 +55,10 @@ export interface ContentMessages {
   revenueFullShort: string;
   copyrightSelf: string;
   copyrightLicensed: string;
+  /** 版权证明上传（仅授权时显示） */
+  copyrightProofLabel: string;
+  copyrightProofPrompt: string;
+  copyrightProofFormat: string;
 
   // ── 行内操作菜单 ──
   actionViewDetail: string;
@@ -283,6 +287,9 @@ export const content: Record<Locale, ContentMessages> = {
     revenueFullShort: "全量推荐订阅 4:6",
     copyrightSelf: "自制",
     copyrightLicensed: "授权",
+    copyrightProofLabel: "版权证明",
+    copyrightProofPrompt: "点击或拖拽上传版权证明",
+    copyrightProofFormat: "支持 JPG、PNG、HEIC、PDF 格式（≤20MB）",
 
     actionViewDetail: "查看详情",
     actionEpisodes: "剧集视频",
@@ -307,7 +314,7 @@ export const content: Record<Locale, ContentMessages> = {
 
     coverLabel: "封面",
     coverPrompt: "点击上传封面",
-    coverHint: "9:16 · JPG / PNG · 300 ~ 500 KB",
+    coverHint: "9:16 · JPG / PNG / HEIC · 300 ~ 500 KB",
     coverRatio: "9:16",
     coverReplace: "点击替换",
     coverUploadFailed: "封面上传失败，请重试",
@@ -492,6 +499,9 @@ export const content: Record<Locale, ContentMessages> = {
     revenueFullShort: "全量推薦訂閱 4:6",
     copyrightSelf: "自製",
     copyrightLicensed: "授權",
+    copyrightProofLabel: "版權證明",
+    copyrightProofPrompt: "點擊或拖曳上傳版權證明",
+    copyrightProofFormat: "支援 JPG、PNG、HEIC、PDF 格式（≤20MB）",
 
     actionViewDetail: "查看詳情",
     actionEpisodes: "劇集影片",
@@ -516,7 +526,7 @@ export const content: Record<Locale, ContentMessages> = {
 
     coverLabel: "封面",
     coverPrompt: "點擊上傳封面",
-    coverHint: "9:16 · JPG / PNG · 300 ~ 500 KB",
+    coverHint: "9:16 · JPG / PNG / HEIC · 300 ~ 500 KB",
     coverRatio: "9:16",
     coverReplace: "點擊替換",
     coverUploadFailed: "封面上傳失敗，請重試",
@@ -701,6 +711,9 @@ export const content: Record<Locale, ContentMessages> = {
     revenueFullShort: "Full Boost 4:6",
     copyrightSelf: "Original",
     copyrightLicensed: "Licensed",
+    copyrightProofLabel: "Copyright proof",
+    copyrightProofPrompt: "Click or drag to upload copyright proof",
+    copyrightProofFormat: "Supports JPG, PNG, HEIC, PDF (≤20MB)",
 
     actionViewDetail: "View Details",
     actionEpisodes: "Episode Videos",
@@ -726,7 +739,7 @@ export const content: Record<Locale, ContentMessages> = {
 
     coverLabel: "Cover",
     coverPrompt: "Click to upload",
-    coverHint: "9:16 · JPG / PNG · 300 ~ 500 KB",
+    coverHint: "9:16 · JPG / PNG / HEIC · 300 ~ 500 KB",
     coverRatio: "9:16",
     coverReplace: "Replace",
     coverUploadFailed: "Cover upload failed, please retry",
@@ -911,6 +924,9 @@ export const content: Record<Locale, ContentMessages> = {
     revenueFullShort: "Impulso total 4:6",
     copyrightSelf: "Original",
     copyrightLicensed: "Licenciado",
+    copyrightProofLabel: "Comprovante de direitos autorais",
+    copyrightProofPrompt: "Clique ou arraste para enviar o comprovante",
+    copyrightProofFormat: "Suporta JPG, PNG, HEIC, PDF (≤20MB)",
 
     actionViewDetail: "Ver detalhes",
     actionEpisodes: "Vídeos dos episódios",
@@ -936,7 +952,7 @@ export const content: Record<Locale, ContentMessages> = {
 
     coverLabel: "Capa",
     coverPrompt: "Clique para enviar",
-    coverHint: "9:16 · JPG / PNG · 300 ~ 500 KB",
+    coverHint: "9:16 · JPG / PNG / HEIC · 300 ~ 500 KB",
     coverRatio: "9:16",
     coverReplace: "Substituir",
     coverUploadFailed: "Falha no envio da capa, tente novamente",

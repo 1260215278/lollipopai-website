@@ -5,7 +5,6 @@ import { useI18n } from "../../i18n";
 import { PageHeader, PageLoading } from "../components/settlement/PageHeader";
 import {
   getPayoutAccount,
-  getPayoutCompanyName,
   addPayoutAccount,
   updatePayoutAccount,
   type PayoutAccount,
@@ -17,13 +16,15 @@ interface DraftState {
   accountNo: string;
   bank: string;
   branch: string;
+  accountHolder: string;
+  companyName: string;
 }
 
-const emptyDraft: DraftState = { accountNo: "", bank: "", branch: "" };
+const emptyDraft: DraftState = { accountNo: "", bank: "", branch: "", accountHolder: "", companyName: "" };
 
 /**
  * 收款管理 —— figma 15150-30625(空) / 30744(添加) / 30884(完成) / 31032(编辑)。
- * 收款账户接口未定，走 services/settlement.ts 的 mock + VITE_USE_MOCK 开关。
+ * 收款账户走真实接口 /publisher/payout/account（bug21，不再 mock）。
  */
 export function PaymentPage() {
   const { messages } = useI18n();
@@ -32,7 +33,6 @@ export function PaymentPage() {
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState<"view" | "add" | "edit">("view");
   const [account, setAccount] = useState<PayoutAccount | null>(null);
-  const [companyName, setCompanyName] = useState("");
   const [draft, setDraft] = useState<DraftState>(emptyDraft);
   const [errors, setErrors] = useState<Partial<DraftState>>({});
   const [saving, setSaving] = useState(false);
@@ -41,9 +41,8 @@ export function PaymentPage() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [acc, company] = await Promise.all([getPayoutAccount(), getPayoutCompanyName()]);
+      const acc = await getPayoutAccount();
       setAccount(acc);
-      setCompanyName(company);
     } catch {
       // http 已 toast；保持空态
       setAccount(null);
@@ -73,6 +72,9 @@ export function PaymentPage() {
         accountNo: draft.accountNo.trim(),
         bank: draft.bank.trim(),
         branch: draft.branch.trim() || undefined,
+        accountHolder: draft.accountHolder.trim() || undefined,
+        companyName: draft.companyName.trim() || undefined,
+        currency: "USD",
       };
       const saved = isEdit ? await updatePayoutAccount(body) : await addPayoutAccount(body);
       setAccount(saved);
@@ -88,7 +90,14 @@ export function PaymentPage() {
   };
 
   const handleEdit = () => {
-    if (account) setDraft({ accountNo: account.accountNo, bank: account.bank, branch: account.branch ?? "" });
+    if (account)
+      setDraft({
+        accountNo: account.accountNo,
+        bank: account.bank,
+        branch: account.branch ?? "",
+        accountHolder: account.accountHolder ?? "",
+        companyName: account.companyName ?? "",
+      });
     setErrors({});
     setMode("edit");
   };
@@ -117,7 +126,6 @@ export function PaymentPage() {
       <PaymentForm
         t={t}
         mode={mode}
-        companyName={companyName}
         draft={draft}
         setDraft={setDraft}
         errors={errors}
@@ -202,7 +210,8 @@ function BoundView({
   onEdit: () => void;
 }) {
   const rows = [
-    { label: t.rowCompany, val: account.companyName },
+    { label: t.rowCompany, val: account.companyName || "—" },
+    ...(account.accountHolder ? [{ label: t.accountHolderLabel, val: account.accountHolder }] : []),
     { label: t.rowAccountNo, val: maskAccount(account.accountNo), mono: true },
     { label: t.rowBank, val: account.bank },
     { label: t.rowBranch, val: account.branch || "—" },
@@ -273,7 +282,6 @@ function BoundView({
 function PaymentForm({
   t,
   mode,
-  companyName,
   draft,
   setDraft,
   errors,
@@ -284,7 +292,6 @@ function PaymentForm({
 }: {
   t: PaymentMsg;
   mode: "add" | "edit";
-  companyName: string;
   draft: DraftState;
   setDraft: React.Dispatch<React.SetStateAction<DraftState>>;
   errors: Partial<DraftState>;
@@ -329,19 +336,21 @@ function PaymentForm({
           </div>
 
           <div className="space-y-5">
-            {/* 公司名称（自动带入，只读） */}
+            {/* 公司名称（选填） */}
             <div>
               <label className="block text-sm text-[#364153] mb-2" style={{ fontWeight: 600 }}>
                 {t.companyNameLabel}
+                <span className="text-xs text-[#99a1af] ml-1.5" style={{ fontWeight: 400 }}>
+                  {t.branchOptional}
+                </span>
               </label>
-              <div className="w-full px-4 py-2.5 rounded-[10px] border border-[#f3f4f6] bg-[#f9fafb] text-sm flex items-center justify-between">
-                <span className="text-[#364153]" style={{ fontWeight: 500 }}>
-                  {companyName}
-                </span>
-                <span className="text-xs text-[#99a1af] bg-white px-2 py-0.5 rounded border border-[#e5e7eb] flex-shrink-0">
-                  {t.autoFilled}
-                </span>
-              </div>
+              <input
+                type="text"
+                value={draft.companyName}
+                onChange={(e) => setDraft((p) => ({ ...p, companyName: e.target.value }))}
+                placeholder={t.companyNamePlaceholder}
+                className={inputCls()}
+              />
             </div>
 
             {/* 银行账号 */}
@@ -393,6 +402,23 @@ function PaymentForm({
                 value={draft.branch}
                 onChange={(e) => setDraft((p) => ({ ...p, branch: e.target.value }))}
                 placeholder={t.branchPlaceholder}
+                className={inputCls()}
+              />
+            </div>
+
+            {/* 户名（选填） */}
+            <div>
+              <label className="block text-sm text-[#364153] mb-2" style={{ fontWeight: 600 }}>
+                {t.accountHolderLabel}
+                <span className="text-xs text-[#99a1af] ml-1.5" style={{ fontWeight: 400 }}>
+                  {t.branchOptional}
+                </span>
+              </label>
+              <input
+                type="text"
+                value={draft.accountHolder}
+                onChange={(e) => setDraft((p) => ({ ...p, accountHolder: e.target.value }))}
+                placeholder={t.accountHolderPlaceholder}
                 className={inputCls()}
               />
             </div>

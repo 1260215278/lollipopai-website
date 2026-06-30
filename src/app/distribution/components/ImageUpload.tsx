@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { UploadCloud, Loader2, X } from "lucide-react";
 import { uploadFile, ALIOSS_UPLOAD_PATH } from "../../services/upload";
+import { normalizeImageFile } from "../../services/heic";
 import { cn } from "../../components/ui/utils";
 
 /**
@@ -67,7 +68,8 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   formatText,
   replaceText,
   uploadFailedText,
-  accept = "image/png,image/jpeg",
+  // bug9：放开苹果 HEIC/HEIF 拍照格式（需后端/OSS 同步支持，见后端反馈文档）
+  accept = "image/png,image/jpeg,image/heic,image/heif,.heic,.heif",
   variant = "light",
   className,
   zoneClassName,
@@ -80,8 +82,9 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   const doUpload = async (file: File) => {
     setUploading(true);
     try {
-      // 入驻证照走 /alioss/upload（入驻文档 §2.3）；上剧封面/视频走默认 /file/upload
-      const url = await uploadFile(file, ALIOSS_UPLOAD_PATH);
+      // bug9：HEIC 先转 JPEG（浏览器不渲染 HEIC）；入驻证照走 /alioss/upload（入驻文档 §2.3）
+      const norm = await normalizeImageFile(file);
+      const url = await uploadFile(norm, ALIOSS_UPLOAD_PATH);
       onChange(url);
     } catch {
       // uploadFile 已 toast；保持当前值不变

@@ -20,7 +20,10 @@ export interface PaymentMessages {
   formCardTitle: string;
   formCardDesc: string;
   companyNameLabel: string;
+  companyNamePlaceholder: string;
   autoFilled: string;
+  accountHolderLabel: string;
+  accountHolderPlaceholder: string;
   accountNoLabel: string;
   accountNoPlaceholder: string;
   bankLabel: string;
@@ -62,7 +65,10 @@ export const payment: Record<Locale, PaymentMessages> = {
     formCardTitle: "对公收款账户",
     formCardDesc: "请填写对公收款信息，用于平台结算打款",
     companyNameLabel: "公司名称",
+    companyNamePlaceholder: "请输入公司名称",
     autoFilled: "自动带入",
+    accountHolderLabel: "户名",
+    accountHolderPlaceholder: "请输入收款户名",
     accountNoLabel: "银行账号",
     accountNoPlaceholder: "请输入银行账号",
     bankLabel: "开户银行",
@@ -100,7 +106,10 @@ export const payment: Record<Locale, PaymentMessages> = {
     formCardTitle: "對公收款帳戶",
     formCardDesc: "請填寫對公收款資訊，用於平台結算打款",
     companyNameLabel: "公司名稱",
+    companyNamePlaceholder: "請輸入公司名稱",
     autoFilled: "自動帶入",
+    accountHolderLabel: "戶名",
+    accountHolderPlaceholder: "請輸入收款戶名",
     accountNoLabel: "銀行帳號",
     accountNoPlaceholder: "請輸入銀行帳號",
     bankLabel: "開戶銀行",
@@ -138,7 +147,10 @@ export const payment: Record<Locale, PaymentMessages> = {
     formCardTitle: "Corporate Bank Account",
     formCardDesc: "Fill in the corporate account info used for platform settlements",
     companyNameLabel: "Company Name",
+    companyNamePlaceholder: "Enter company name",
     autoFilled: "Auto-filled",
+    accountHolderLabel: "Account Holder",
+    accountHolderPlaceholder: "Enter account holder name",
     accountNoLabel: "Account Number",
     accountNoPlaceholder: "Enter bank account number",
     bankLabel: "Bank Name",
@@ -176,7 +188,10 @@ export const payment: Record<Locale, PaymentMessages> = {
     formCardTitle: "Conta Bancária Corporativa",
     formCardDesc: "Preencha os dados da conta corporativa usados nas liquidações da plataforma",
     companyNameLabel: "Nome da Empresa",
+    companyNamePlaceholder: "Digite o nome da empresa",
     autoFilled: "Preenchido automaticamente",
+    accountHolderLabel: "Titular da Conta",
+    accountHolderPlaceholder: "Digite o nome do titular",
     accountNoLabel: "Número da Conta",
     accountNoPlaceholder: "Digite o número da conta bancária",
     bankLabel: "Banco",

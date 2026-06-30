@@ -1300,6 +1300,30 @@ export function getMessages(): TranslationMessages {
   return activeMessages;
 }
 
+/** 当前 locale 的非 hook 桥接，供 services 层（http.ts/session.ts）拼 Accept-Language 用 */
+let activeLocale: Locale = getInitialLocale();
+export function getLocale(): Locale {
+  return activeLocale;
+}
+
+/**
+ * locale → Accept-Language 头取值。取值与短剧 H5 后端约定一致：en/zh/cht/pt
+ * （见 short-play common/http.interceptor.js、bind.vue zoneLanguageMap）。后端据此返回
+ * 对应语言的短信/邮件/错误文案。
+ */
+export function getAcceptLanguage(): string {
+  switch (activeLocale) {
+    case "zh-CN":
+      return "zh";
+    case "zh-TW":
+      return "cht";
+    case "pt":
+      return "pt";
+    default:
+      return "en";
+  }
+}
+
 function isLocale(value: string): value is Locale {
   return localeOptions.some((item) => item.code === value);
 }
@@ -1344,6 +1368,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
 
   // 同步非 hook 的文案桥接，供 services 层读取当前语言
   activeMessages = translations[locale];
+  activeLocale = locale;
 
   useEffect(() => {
     try {

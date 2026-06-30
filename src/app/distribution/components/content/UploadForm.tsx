@@ -15,6 +15,7 @@ import {
 import { toast } from "sonner";
 import type { ContentMessages } from "../../i18n/content";
 import { uploadFile, PUBLISHER_UPLOAD_PATH } from "../../../services/upload";
+import { normalizeImageFile } from "../../../services/heic";
 import {
   saveBasic,
   saveEpisode,
@@ -34,6 +35,8 @@ import { CountryPricingModal } from "./CountryPricingModal";
 import { Field, inputClass, fmt, formatBytes, formatDuration, fileNameFromUrl, readVideoDuration } from "./shared";
 
 const DESC_LIMIT = 200;
+/** 短剧名称上限 100 字符（bug16：避免超长提交后端异常） */
+const NAME_LIMIT = 100;
 /** 封面上限 10MB（与后端 /publisher/course/upload 图片校验对齐） */
 const COVER_MAX = 10 * 1024 * 1024;
 /** 剧集视频上限 500MB（与后端 /publisher/course/upload 视频校验对齐） */
@@ -49,6 +52,8 @@ interface BasicInfo {
   tags: string[];
   /** 版权类型 1自制/2授权 */
   copyrightType: number;
+  /** 版权证明文件 URL（仅授权 copyrightType=2 时使用） */
+  copyrightProof: string;
 }
 
 interface VideoRow {
@@ -84,7 +89,94 @@ const emptyBasic: BasicInfo = {
   languageType: "",
   tags: [],
   copyrightType: 1,
+  copyrightProof: "",
 };
+
+/**
+ * 版权证明上传（授权版权必填）。支持图片 + PDF，走 /publisher/course/upload（文档 ≤20MB）。
+ * PDF 无法 <img> 预览，故已上传时展示文件名链接（点开新标签查看）。
+ */
+function CopyrightProofUpload({
+  t,
+  value,
+  onChange,
+}: {
+  t: ContentMessages;
+  value: string;
+  onChange: (url: string) => void;
+}) {
+  const ref = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+
+  const pick = async (file: File | undefined) => {
+    if (!file) return;
+    setUploading(true);
+    try {
+      // bug9：HEIC 图片证明先转 JPEG；PDF 等原样上传
+      const norm = await normalizeImageFile(file);
+      const url = await uploadFile(norm, PUBLISHER_UPLOAD_PATH);
+      onChange(url);
+    } catch {
+      // uploadFile 已 toast
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div>
+      <input
+        ref={ref}
+        type="file"
+        accept="image/*,.pdf"
+        className="hidden"
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          e.target.value = "";
+          void pick(f);
+        }}
+      />
+      {value ? (
+        <div className="flex items-center gap-3 px-4 h-[45px] rounded-lg border border-gray-200 bg-gray-50">
+          <a
+            href={value}
+            target="_blank"
+            rel="noreferrer"
+            className="flex-1 truncate text-sm text-gray-700 hover:underline"
+            title={fileNameFromUrl(value)}
+          >
+            {fileNameFromUrl(value)}
+          </a>
+          <button
+            type="button"
+            onClick={() => ref.current?.click()}
+            disabled={uploading}
+            className="text-xs text-gray-500 hover:text-gray-900 disabled:opacity-50 flex items-center"
+          >
+            {uploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : t.coverReplace}
+          </button>
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={() => ref.current?.click()}
+          disabled={uploading}
+          className="w-full h-[88px] rounded-lg border border-dashed border-gray-300 flex flex-col items-center justify-center gap-1.5 text-gray-400 hover:border-gray-400 transition-colors disabled:opacity-60"
+        >
+          {uploading ? (
+            <Loader2 className="w-5 h-5 animate-spin" />
+          ) : (
+            <>
+              <Upload className="w-5 h-5" />
+              <span className="text-sm">{t.copyrightProofPrompt}</span>
+              <span className="text-xs text-gray-300">{t.copyrightProofFormat}</span>
+            </>
+          )}
+        </button>
+      )}
+    </div>
+  );
+}
 
 /**
  * 上剧流程（三步，分步草稿暂存）：
@@ -147,6 +239,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
           languageType: c.languageType || "",
           tags: c.courseLabel ? c.courseLabel.split(",").filter(Boolean) : [],
           copyrightType: c.copyrightType || 1,
+          copyrightProof: c.copyrightProof || "",
         });
         // 已上传集回显
         const planned = c.plannedEpisodes || 0;
@@ -208,8 +301,9 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
     setCoverError("");
     setCoverUploading(true);
     try {
-      // 封面走发行方专用 /publisher/course/upload（@PublisherLogin，publisher token）。
-      const url = await uploadFile(file, PUBLISHER_UPLOAD_PATH);
+      // bug9：HEIC 先转 JPEG；封面走发行方专用 /publisher/course/upload（@PublisherLogin）。
+      const norm = await normalizeImageFile(file);
+      const url = await uploadFile(norm, PUBLISHER_UPLOAD_PATH);
       bi({ cover: url });
     } catch {
       setCoverError(t.coverUploadFailed);
@@ -225,7 +319,9 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
     parseInt(basicInfo.totalEpisodes) >= 1 &&
     !!basicInfo.channel &&
     !!basicInfo.languageType &&
-    basicInfo.tags.length > 0;
+    basicInfo.tags.length > 0 &&
+    // 授权版权需上传版权证明
+    (basicInfo.copyrightType !== 2 || !!basicInfo.copyrightProof);
 
   /** Step1 → saveBasic → Step2 */
   const goStep2 = async () => {
@@ -243,6 +339,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
         languageType: basicInfo.languageType,
         courseLabel: basicInfo.tags.join(","),
         copyrightType: basicInfo.copyrightType,
+        // 仅授权时提交版权证明（字段名 TODO(verify) 待后端确认）
+        copyrightProof: basicInfo.copyrightType === 2 ? basicInfo.copyrightProof : "",
       });
       setCourseId(res.courseId);
       // 构建/保留剧集行
@@ -463,7 +561,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
               <input
                 ref={coverRef}
                 type="file"
-                accept="image/png,image/jpeg"
+                accept="image/png,image/jpeg,image/heic,image/heif,.heic,.heif"
                 onChange={(e) => {
                   const f = e.target.files?.[0];
                   e.target.value = "";
@@ -487,6 +585,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                   onChange={(e) => bi({ name: e.target.value })}
                   placeholder={t.namePlaceholder}
                   className={inputClass(false)}
+                  maxLength={NAME_LIMIT}
                 />
               </Field>
 
@@ -623,6 +722,17 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                   ))}
                 </div>
               </Field>
+
+              {/* 授权版权 → 需上传版权证明（copyrightType=2 必填；支持图片/PDF，走 /publisher/course/upload） */}
+              {basicInfo.copyrightType === 2 && (
+                <Field label={t.copyrightProofLabel} required>
+                  <CopyrightProofUpload
+                    t={t}
+                    value={basicInfo.copyrightProof}
+                    onChange={(url) => bi({ copyrightProof: url })}
+                  />
+                </Field>
+              )}
             </div>
           </div>
 

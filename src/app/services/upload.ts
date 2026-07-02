@@ -10,7 +10,7 @@
  * 由调用方按场景显式指定 path（默认发行方上传端点）。
  */
 import { toast } from "sonner";
-import { getAppToken, getPublisherToken } from "./auth";
+import { getAppToken, getPublisherToken, handleUnauthorized } from "./auth";
 import { BASE_URL, ApiError, type ApiResponse } from "./http";
 import { getMessages } from "../i18n";
 
@@ -57,7 +57,14 @@ export async function uploadFile(file: File, path: string = PUBLISHER_UPLOAD_PAT
   } catch {
     const msg = getMessages().distribution.common.serverError;
     toast.error(msg);
+    if (res.status === 401) handleUnauthorized();
     throw new ApiError(res.status, msg);
+  }
+
+  if (json.code === 401 || res.status === 401) {
+    toast.error(json.msg);
+    handleUnauthorized();
+    throw new ApiError(json.code, json.msg);
   }
 
   if (json.code === 0) {

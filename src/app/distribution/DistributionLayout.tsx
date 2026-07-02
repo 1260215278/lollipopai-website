@@ -13,11 +13,13 @@ import {
   Loader2,
   Bell,
   AlertTriangle,
+  Users,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useI18n } from "../i18n";
 import type { DistributionMessages } from "./i18n.distribution";
 import { clearTokens, isAppAuthed, isPublisherAuthed } from "../services/auth";
+import { ApiError } from "../services/http";
 import { ensurePublisherToken } from "../services/session";
 import {
   getPublisherStatus,
@@ -26,6 +28,14 @@ import {
   type PublisherTenantStatus,
 } from "../services/publisher";
 import lollipopLogo from "../../imports/Lollipop1.png";
+
+const NAME_PREVIEW_LIMIT = 10;
+
+function previewName(name: string) {
+  const chars = Array.from(name);
+  if (chars.length <= NAME_PREVIEW_LIMIT) return name;
+  return `${chars.slice(0, NAME_PREVIEW_LIMIT).join("")}...`;
+}
 
 /** 发行中心后台外壳：左侧边栏 + 顶部头部 + 内容区 <Outlet />
  *  响应式：≥lg 侧边栏常驻；<lg 侧边栏折叠为抽屉，由 header 汉堡按钮唤起。
@@ -58,6 +68,9 @@ export function DistributionLayout() {
   const [tenantModalOpen, setTenantModalOpen] = useState(false);
   const [retrying, setRetrying] = useState(false);
   const tenantFailed = tenant?.tenantSyncStatus === 2;
+  const publisherName = companyName.trim();
+  const hasPublisherName = publisherName.length > 0;
+  const headerName = hasPublisherName ? previewName(publisherName) : t.common.publisher;
 
   useEffect(() => {
     if (inSettlement) setSettlementOpen(true);
@@ -84,8 +97,11 @@ export function DistributionLayout() {
       .then(() => {
         if (alive) setTokenReady(true);
       })
-      .catch(() => {
-        if (alive) navigate("/distribution/enroll", { replace: true });
+      .catch((err) => {
+        if (!alive) return;
+        // 401 已由 http 层清 token 并跳登录，勿再误导向入驻页
+        if (err instanceof ApiError && err.code === 401) return;
+        navigate("/distribution/enroll", { replace: true });
       });
     return () => {
       alive = false;
@@ -209,8 +225,8 @@ export function DistributionLayout() {
               <Menu className="w-5 h-5" />
             </button>
             <span
-              className="hidden sm:inline-block px-3.5 py-1.5 text-sm rounded-lg whitespace-nowrap"
-              style={{ fontWeight: 600, color: "#111111", background: "#F3F4F6" }}
+              className="hidden sm:inline-block text-sm whitespace-nowrap"
+              style={{ fontWeight: 600, color: "#111111" }}
             >
               {t.common.workspace}
             </span>
@@ -275,16 +291,24 @@ export function DistributionLayout() {
                 <div className="w-8 h-8 rounded-full bg-[#111111] flex items-center justify-center flex-shrink-0">
                   <User className="w-4 h-4 text-white" />
                 </div>
-                <div className="hidden sm:block text-left leading-tight">
-                  <p className="text-xs" style={{ fontWeight: 600, color: "#111111" }}>
-                    {companyName || t.common.publisher}
+                <div className="hidden sm:block text-left leading-tight min-w-0 max-w-[120px]">
+                  <p className="text-xs whitespace-nowrap" style={{ fontWeight: 600, color: "#111111" }}>
+                    {headerName}
                   </p>
-                  {companyName && <p className="text-[11px] text-gray-400 mt-0.5">{t.common.publisher}</p>}
+                  {hasPublisherName && <p className="text-[11px] text-gray-400 mt-0.5">{t.common.publisher}</p>}
                 </div>
                 <ChevronDown className="w-3.5 h-3.5 text-gray-400 ml-0.5" />
               </div>
               {userMenuOpen && (
-                <div className="absolute top-full right-0 mt-1 w-44 bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden">
+                <div className="absolute top-full right-0 mt-1 w-[240px] bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden">
+                  {hasPublisherName && (
+                    <div className="px-4 py-3 border-b border-gray-100">
+                      <p className="text-[11px] text-gray-400" style={{ fontWeight: 500 }}>{t.common.publisher}</p>
+                      <p className="mt-1 text-sm text-gray-800 break-words" style={{ fontWeight: 600 }}>
+                        {publisherName}
+                      </p>
+                    </div>
+                  )}
                   <button
                     onClick={handleLogout}
                     className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-left text-gray-700 hover:bg-gray-50 transition-colors"
@@ -421,6 +445,12 @@ function SidebarNav({
             </div>
           )}
         </div>
+
+        <SideRow
+          to="/distribution/members"
+          icon={<Users className="w-[15px] h-[15px]" />}
+          label={t.nav.members}
+        />
       </nav>
     </>
   );

@@ -4,8 +4,9 @@
  * 全局 context-path=/sqx_fast（由 http.ts 注入），鉴权 header: token。
  * 统一响应 {code,msg,data}：code=0 成功；非 0 时 http.ts 已 toast 后端翻译好的 msg。
  * 错误码（后端返回 msg 可直接展示）：
- *   401923 未勾选协议 / 401924 重复提交 / 401925 已是发行者 / 401926 手机号空 /
- *   40023 验证码错误 / 401179 验证码过期 / 40021 手机号占用 / 40034 发码频繁
+ *   401923 未勾选协议 / 401924 重复提交 / 401925 已是发行者 / 403360 手机号邮箱均未填 /
+ *   403361 邮箱已被占用 / 403362 邮箱格式不正确 / 40023 验证码错误 / 401179 验证码过期 /
+ *   40021 手机号占用 / 40034 发码频繁 / 40038 邮件发送失败
  */
 import { http } from "./http";
 import type { PageResult } from "./content";
@@ -15,6 +16,8 @@ export interface PublisherApply {
   id?: number;
   userId?: number;
   phone?: string;
+  /** 申请邮箱（手机号入驻时为 null；2026-07-02 新增） */
+  email?: string;
   companyName?: string;
   businessLicense?: string;
   legalPersonName?: string;
@@ -50,11 +53,13 @@ export interface PublisherStatus {
   apply: PublisherApply | null;
 }
 
-/** POST /app/publisher/submit 请求体（8 字段，严格按接口文档，不增不改） */
+/** POST /app/publisher/submit 请求体（严格按接口文档；phone/email 二选一） */
 export interface PublisherSubmitBody {
-  /** 条件必填：账号已绑定手机号可空；未绑定必填 */
+  /** 二选一：申请手机号（与 email 都传时后端手机号优先） */
   phone?: string;
-  /** 手机验证码 */
+  /** 二选一：申请邮箱（2026-07-02 新增） */
+  email?: string;
+  /** 验证码（发到哪个通道就校验哪个） */
   code: string;
   companyName: string;
   /** 营业执照图片 URL */
@@ -123,12 +128,20 @@ export function getPublisherTenantStatus(): Promise<PublisherTenantStatus> {
   return http.get<PublisherTenantStatus>("/app/publisher/tenantStatus");
 }
 
+/** sendCode 请求参数：phone/email 二选一（都传时后端手机号优先） */
+export interface PublisherSendCodeParams {
+  phone?: string;
+  email?: string;
+  /** 邮件验证码语言（zh/en/pt，仅邮箱通道；默认 zh） */
+  language?: string;
+}
+
 /**
- * 发送手机验证码（2026-06-26 起免登录；phone 必传，即输入框值）。
+ * 发送验证码（2026-06-26 起免登录；2026-07-02 起支持手机号或邮箱二选一）。
  * 免登录 endpoint（Shiro anon），带 token 无害；http.ts 未登录时不会注入 token。
  */
-export function sendPublisherCode(phone: string): Promise<unknown> {
-  return http.get<unknown>("/app/publisher/sendCode", { params: { phone } });
+export function sendPublisherCode(params: PublisherSendCodeParams): Promise<unknown> {
+  return http.get<unknown>("/app/publisher/sendCode", { params, auth: false });
 }
 
 /**
@@ -144,7 +157,7 @@ export interface PublisherSubmitResult {
   /** 动作标识（如 "login"） */
   action?: string;
   /** 登录用户信息 */
-  user?: { userId?: number; phone?: string };
+  user?: { userId?: number; phone?: string; email?: string };
 }
 
 /**

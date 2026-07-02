@@ -16,24 +16,26 @@ import type { PageResult } from "./content";
 
 /** 对公收款账户实体（后端 /publisher/payout/account 返回）。 */
 export interface PayoutAccount {
-  id: number;
-  publisherUserId: number;
-  /** 银行账号 */
-  accountNo: string;
-  /** 开户银行 */
-  bank: string;
-  /** 支行名称 */
-  branch?: string;
-  /** 户名 */
-  accountHolder?: string;
-  /** 公司名称 */
-  companyName?: string;
-  /** 币种，缺省 USD */
-  currency: string;
-  /** 状态 */
-  status: number;
-  createTime: string;
-  updateTime: string;
+  /** false=未添加(空态); true=已绑定 */
+  bound: boolean;
+  id?: number;
+  publisherUserId?: number;
+  /** 服务端按入驻资料回填，前端只读 */
+  companyName: string;
+  /** 银行账号；未绑定时 null */
+  accountNo: string | null;
+  /** 开户银行；未绑定时 null */
+  bank: string | null;
+  /** 支行名称；未绑定时 null */
+  branch: string | null;
+  /** 户名（本表单不采集） */
+  accountHolder?: string | null;
+  /** 币种，缺省 USD；未绑定时 null */
+  currency: string | null;
+  /** 0禁用 1启用；未绑定时 null */
+  status: number | null;
+  createTime?: string;
+  updateTime?: string;
 }
 
 /** 新增 / 修改收款账户请求体（create/update 共用）。 */
@@ -46,15 +48,13 @@ export interface PayoutAccountBody {
   branch?: string;
   /** 户名 ≤128，可选 */
   accountHolder?: string;
-  /** 公司名称 ≤255，可选 */
-  companyName?: string;
   /** 币种 ≤8，缺省 USD */
   currency?: string;
 }
 
-/** 查询当前收款账户（无则 null）。 */
-export function getPayoutAccount(): Promise<PayoutAccount | null> {
-  return http.get<PayoutAccount | null>("/publisher/payout/account");
+/** 查询当前收款账户（未绑定也返回对象，bound=false）。 */
+export function getPayoutAccount(): Promise<PayoutAccount> {
+  return http.get<PayoutAccount>("/publisher/payout/account");
 }
 
 /** 新建收款账户（已存在报 403315）。 */
@@ -99,7 +99,9 @@ export interface EarningsSummary {
   growthRate: number | null;
   /** 产生过收益的不同剧目数 */
   relatedDramas: number;
-  /** 近 6 个月每月实得，后端不补空月份 */
+  /** 结算账单数（publisher_settlement_record 全状态未删条数） */
+  settlementBillCount: number;
+  /** 本年 1—12 月每月实得，固定 12 项、空月补 0、month 升序 */
   monthlyTrend: MonthlyTrendItem[];
   currency: "USD";
 }
@@ -125,6 +127,10 @@ export interface EarningsDetailRow {
   creatorUsd: number;
   /** 创作者分成百分比，80 或 60 */
   ratio: number;
+  /** 该剧累计播放量（course.view_counts） */
+  viewCount: number;
+  /** 结算状态：0待结算 / 1结算中 / 2已结算 */
+  settleStatus: 0 | 1 | 2;
 }
 
 /** 收益明细分页数据（分页对象在 data 内）。 */
@@ -142,6 +148,8 @@ export interface EarningsDetailQuery {
   /** yyyy-MM-dd */
   endDate?: string;
   courseId?: number;
+  /** 剧名模糊搜索 */
+  keyword?: string;
 }
 
 /** 收益日志行（/publisher/settlement/earnings/log）。金额单位 USD。 */
@@ -189,6 +197,7 @@ export function getEarningsDetail(query: EarningsDetailQuery = {}): Promise<Earn
       startDate: query.startDate,
       endDate: query.endDate,
       courseId: query.courseId,
+      keyword: query.keyword,
     },
   });
 }

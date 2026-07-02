@@ -16,11 +16,9 @@ interface DraftState {
   accountNo: string;
   bank: string;
   branch: string;
-  accountHolder: string;
-  companyName: string;
 }
 
-const emptyDraft: DraftState = { accountNo: "", bank: "", branch: "", accountHolder: "", companyName: "" };
+const emptyDraft: DraftState = { accountNo: "", bank: "", branch: "" };
 
 /**
  * 收款管理 —— figma 15150-30625(空) / 30744(添加) / 30884(完成) / 31032(编辑)。
@@ -72,8 +70,6 @@ export function PaymentPage() {
         accountNo: draft.accountNo.trim(),
         bank: draft.bank.trim(),
         branch: draft.branch.trim() || undefined,
-        accountHolder: draft.accountHolder.trim() || undefined,
-        companyName: draft.companyName.trim() || undefined,
         currency: "USD",
       };
       const saved = isEdit ? await updatePayoutAccount(body) : await addPayoutAccount(body);
@@ -90,13 +86,11 @@ export function PaymentPage() {
   };
 
   const handleEdit = () => {
-    if (account)
+    if (account?.bound)
       setDraft({
-        accountNo: account.accountNo,
-        bank: account.bank,
+        accountNo: account.accountNo ?? "",
+        bank: account.bank ?? "",
         branch: account.branch ?? "",
-        accountHolder: account.accountHolder ?? "",
-        companyName: account.companyName ?? "",
       });
     setErrors({});
     setMode("edit");
@@ -126,6 +120,7 @@ export function PaymentPage() {
       <PaymentForm
         t={t}
         mode={mode}
+        companyName={account?.companyName ?? ""}
         draft={draft}
         setDraft={setDraft}
         errors={errors}
@@ -141,7 +136,7 @@ export function PaymentPage() {
   return (
     <div className="p-8">
       <PageHeader title={t.title} subtitle={t.subtitle} />
-      {account ? (
+      {account?.bound ? (
         <div className="max-w-2xl">
           <BoundView t={t} account={account} saveSuccess={saveSuccess} onEdit={handleEdit} />
         </div>
@@ -161,27 +156,31 @@ function EmptyView({ t, onAdd }: { t: PaymentMsg; onAdd: () => void }) {
           <CreditCard className="w-7 h-7 text-gray-300" />
         </div>
         <div className="text-center">
-          <p className="text-sm text-gray-700 mb-1" style={{ fontWeight: 600 }}>
+          <p className="text-sm text-[#364153] mb-1" style={{ fontWeight: 600 }}>
             {t.emptyTitle}
           </p>
-          <p className="text-xs text-gray-400 max-w-xs leading-relaxed">{t.emptyDesc}</p>
+          <p className="text-xs text-[#99a1af] max-w-xs" style={{ lineHeight: "19.5px" }}>
+            {t.emptyDesc}
+          </p>
         </div>
 
         <div className="mt-2 bg-white rounded-2xl border border-[#f3f4f6] p-5 w-full max-w-sm">
           <div className="flex items-start gap-3">
-            <div className="w-9 h-9 rounded-xl bg-[#111111] flex items-center justify-center flex-shrink-0 mt-0.5">
+            <div className="w-9 h-9 rounded-[14px] bg-[#101828] flex items-center justify-center flex-shrink-0 mt-0.5">
               <CreditCard className="w-4 h-4 text-white" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm text-[#101828]" style={{ fontWeight: 700 }}>
                 {t.addCardTitle}
               </p>
-              <p className="text-xs text-gray-500 mt-1 leading-relaxed">{t.addCardDesc}</p>
+              <p className="text-xs text-[#6a7282] mt-1" style={{ lineHeight: "19.5px" }}>
+                {t.addCardDesc}
+              </p>
             </div>
           </div>
           <button
             onClick={onAdd}
-            className="mt-4 w-full py-2.5 rounded-xl text-white text-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+            className="mt-4 w-full h-10 rounded-[14px] text-white text-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
             style={{ background: "#111111", fontWeight: 600 }}
           >
             <ArrowRight className="w-4 h-4" />
@@ -211,9 +210,8 @@ function BoundView({
 }) {
   const rows = [
     { label: t.rowCompany, val: account.companyName || "—" },
-    ...(account.accountHolder ? [{ label: t.accountHolderLabel, val: account.accountHolder }] : []),
-    { label: t.rowAccountNo, val: maskAccount(account.accountNo), mono: true },
-    { label: t.rowBank, val: account.bank },
+    { label: t.rowAccountNo, val: maskAccount(account.accountNo ?? ""), mono: true },
+    { label: t.rowBank, val: account.bank ?? "—" },
     { label: t.rowBranch, val: account.branch || "—" },
   ];
   return (
@@ -282,6 +280,7 @@ function BoundView({
 function PaymentForm({
   t,
   mode,
+  companyName,
   draft,
   setDraft,
   errors,
@@ -292,6 +291,7 @@ function PaymentForm({
 }: {
   t: PaymentMsg;
   mode: "add" | "edit";
+  companyName: string;
   draft: DraftState;
   setDraft: React.Dispatch<React.SetStateAction<DraftState>>;
   errors: Partial<DraftState>;
@@ -336,20 +336,19 @@ function PaymentForm({
           </div>
 
           <div className="space-y-5">
-            {/* 公司名称（选填） */}
+            {/* 公司名称（服务端自动带入，只读） */}
             <div>
               <label className="block text-sm text-[#364153] mb-2" style={{ fontWeight: 600 }}>
                 {t.companyNameLabel}
                 <span className="text-xs text-[#99a1af] ml-1.5" style={{ fontWeight: 400 }}>
-                  {t.branchOptional}
+                  {t.autoFilled}
                 </span>
               </label>
               <input
                 type="text"
-                value={draft.companyName}
-                onChange={(e) => setDraft((p) => ({ ...p, companyName: e.target.value }))}
-                placeholder={t.companyNamePlaceholder}
-                className={inputCls()}
+                value={companyName}
+                disabled
+                className="w-full px-4 py-2.5 rounded-[10px] border border-[#e5e7eb] text-sm bg-[#f9fafb] text-[#6a7282] cursor-not-allowed"
               />
             </div>
 
@@ -402,23 +401,6 @@ function PaymentForm({
                 value={draft.branch}
                 onChange={(e) => setDraft((p) => ({ ...p, branch: e.target.value }))}
                 placeholder={t.branchPlaceholder}
-                className={inputCls()}
-              />
-            </div>
-
-            {/* 户名（选填） */}
-            <div>
-              <label className="block text-sm text-[#364153] mb-2" style={{ fontWeight: 600 }}>
-                {t.accountHolderLabel}
-                <span className="text-xs text-[#99a1af] ml-1.5" style={{ fontWeight: 400 }}>
-                  {t.branchOptional}
-                </span>
-              </label>
-              <input
-                type="text"
-                value={draft.accountHolder}
-                onChange={(e) => setDraft((p) => ({ ...p, accountHolder: e.target.value }))}
-                placeholder={t.accountHolderPlaceholder}
                 className={inputCls()}
               />
             </div>

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
 import { Send, Loader2, CheckCircle2, ArrowRight, X, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
-import { useI18n } from "../../i18n";
+import { useI18n, type Locale } from "../../i18n";
 import { Footer } from "../../components/Footer";
 import { ImageUpload } from "../components/ImageUpload";
 import welcomeBanner from "../../../imports/发行入驻-欢迎横幅.png";
@@ -26,21 +26,40 @@ import {
  */
 const ENTERED_KEY_PREFIX = "lp_enroll_entered_";
 
-function enteredKey(phone: string): string {
-  return ENTERED_KEY_PREFIX + (phone || "anon");
+type ContactMode = "phone" | "email";
+
+function isEmailAccount(v: string): boolean {
+  return v.includes("@");
 }
 
-function hasEnteredDashboard(phone: string): boolean {
+/** 邮件验证码 language 参数（接口文档 §2.2：zh/en/pt） */
+function publisherEmailLanguage(locale: Locale): string {
+  switch (locale) {
+    case "zh-CN":
+    case "zh-TW":
+      return "zh";
+    case "pt":
+      return "pt";
+    default:
+      return "en";
+  }
+}
+
+function enteredKey(account: string): string {
+  return ENTERED_KEY_PREFIX + (account || "anon");
+}
+
+function hasEnteredDashboard(account: string): boolean {
   try {
-    return localStorage.getItem(enteredKey(phone)) === "1";
+    return localStorage.getItem(enteredKey(account)) === "1";
   } catch {
     return false;
   }
 }
 
-function markEnteredDashboard(phone: string): void {
+function markEnteredDashboard(account: string): void {
   try {
-    localStorage.setItem(enteredKey(phone), "1");
+    localStorage.setItem(enteredKey(account), "1");
   } catch {
     /* localStorage 不可用时忽略，本次会话仍正常进入 */
   }
@@ -69,8 +88,10 @@ export function EnrollPage() {
     privacy: null,
   });
 
-  // 表单字段（对应接口 8 字段；图片为上传后 URL）
+  // 表单字段（对应接口字段；图片为上传后 URL）
+  const [contactMode, setContactMode] = useState<ContactMode>("phone");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [businessLicense, setBusinessLicense] = useState<string | null>(null);
@@ -85,13 +106,24 @@ export function EnrollPage() {
   const [countdown, setCountdown] = useState(0);
   const [submitting, setSubmitting] = useState(false);
 
-  // 账号已绑定手机号 → 只读锁定，发码/提交均不传 phone（后端强制用账号手机号，见入驻文档 §2.2/§2.5）。
-  // 本站登录即手机号 OTP，登录手机号 = 账号已绑定号，故以登录手机号为准；
-  // 无登录手机号（如联调回退 token）时退回历史申请号，仍无则可编辑填写（账号未绑定分支）。
-  const boundPhone = getLoginName().trim() || (status?.apply?.phone ?? "").trim();
+  // 账号已绑定手机/邮箱 → 只读锁定对应输入框；发码/提交按当前通道传参（见入驻文档 §2.2/§2.5）。
+  const loginAccount = getLoginName().trim();
+  const applyPhone = (status?.apply?.phone ?? "").trim();
+  const applyEmail = (status?.apply?.email ?? "").trim();
+  const boundPhone = isEmailAccount(loginAccount) ? applyPhone : (loginAccount || applyPhone);
+  const boundEmail = isEmailAccount(loginAccount) ? (loginAccount || applyEmail) : applyEmail;
+  const boundAccount = boundPhone || boundEmail;
+  const canSwitchContactMode = !boundPhone && !boundEmail;
 
   const prefill = (apply: PublisherApply) => {
-    setPhone(apply.phone ?? "");
+    if (apply.phone?.trim()) {
+      setPhone(apply.phone);
+      setContactMode("phone");
+    }
+    if (apply.email?.trim()) {
+      setEmail(apply.email);
+      if (!apply.phone?.trim()) setContactMode("email");
+    }
     setCompanyName(apply.companyName ?? "");
     setBusinessLicense(apply.businessLicense ?? null);
     setLegalPersonName(apply.legalPersonName ?? "");
@@ -107,9 +139,17 @@ export function EnrollPage() {
       setLoading(false);
       return;
     }
-    // 已登录默认回填登录手机号（仅作初始值，仍可编辑）；若存在历史申请则由下方 prefill 覆盖
-    const loginPhone = getLoginName();
-    if (loginPhone) setPhone(loginPhone);
+    // 已登录默认回填登录账号（手机或邮箱）；若存在历史申请则由下方 prefill 覆盖
+    const login = getLoginName().trim();
+    if (login) {
+      if (isEmailAccount(login)) {
+        setEmail(login);
+        setContactMode("email");
+      } else {
+        setPhone(login);
+        setContactMode("phone");
+      }
+    }
     setLoading(true);
     try {
       const s = await getPublisherStatus();
@@ -165,18 +205,27 @@ export function EnrollPage() {
 
   const onSendCode = async () => {
     if (sending || countdown > 0) return;
-    // 2026-06-26 起发码免登录、phone 必传（即输入框值）
-    if (!phone.trim()) {
-      setErrors((e) => ({ ...e, phone: t.vPhoneRequired }));
+    const mode = boundPhone ? "phone" : boundEmail ? "email" : contactMode;
+    if (mode === "phone") {
+      if (!phone.trim()) {
+        setErrors((e) => ({ ...e, phone: t.vPhoneRequired }));
+        return;
+      }
+    } else if (!email.trim()) {
+      setErrors((e) => ({ ...e, email: t.vEmailRequired }));
       return;
     }
     setSending(true);
     try {
-      await sendPublisherCode(phone.trim());
+      if (mode === "phone") {
+        await sendPublisherCode({ phone: phone.trim() });
+      } else {
+        await sendPublisherCode({ email: email.trim(), language: publisherEmailLanguage(locale) });
+      }
       toast.success(t.sendCodeSuccess);
       setCountdown(60);
     } catch {
-      // http 已 toast（含 401926 / 40034 等）
+      // http 已 toast（含 403360 / 403362 / 40034 / 40038 等）
     } finally {
       setSending(false);
     }
@@ -184,7 +233,9 @@ export function EnrollPage() {
 
   const validate = (): Record<string, string> => {
     const e: Record<string, string> = {};
-    if (!phone.trim()) e.phone = t.vPhoneRequired;
+    const mode = boundPhone ? "phone" : boundEmail ? "email" : contactMode;
+    if (mode === "phone" && !phone.trim()) e.phone = t.vPhoneRequired;
+    if (mode === "email" && !email.trim()) e.email = t.vEmailRequired;
     if (!code.trim()) e.code = t.vCodeRequired;
     if (!companyName.trim()) e.companyName = t.vCompanyRequired;
     if (!businessLicense) e.businessLicense = t.vLicenseRequired;
@@ -204,8 +255,9 @@ export function EnrollPage() {
     }
     setSubmitting(true);
     try {
+      const mode = boundPhone ? "phone" : boundEmail ? "email" : contactMode;
       const res = await submitPublisher({
-        phone: phone.trim(),
+        ...(mode === "phone" ? { phone: phone.trim() } : { email: email.trim() }),
         code: code.trim(),
         companyName: companyName.trim(),
         businessLicense: businessLicense!,
@@ -220,11 +272,13 @@ export function EnrollPage() {
       toast.success(t.submitSuccess);
       setEditing(false);
       setCode("");
-      // 提交即登录：后端在响应顶层返回登录 token（匿名/登录态均返回），写入并替换本地登录态，
-      // 无需用户再走一次验证码登录。展示名优先用后端权威手机号（账号已绑号时后端以账号号为准）。
+      // 提交即登录：后端在响应顶层返回登录 token（匿名/登录态均返回），写入并替换本地登录态。
+      // 展示名优先用后端权威标识（账号已绑定时后端以账号为准）。
       if (res.token) {
         setAppToken(res.token);
-        setLoginName(res.user?.phone ?? phone.trim());
+        const displayName =
+          res.user?.phone ?? res.user?.email ?? (mode === "phone" ? phone.trim() : email.trim());
+        setLoginName(displayName);
       }
       await loadStatus(); // 回到服务端权威状态（登录态 → 审核中）
     } catch (err) {
@@ -242,7 +296,7 @@ export function EnrollPage() {
   const isPublisher = status?.isPublisher === 1;
   const approved = auditStatus === 1 || isPublisher;
   // 已通过且此前点过「进入发行中心」→ 直接跳转，不再展示通过页
-  const redirectDashboard = approved && hasEnteredDashboard(boundPhone);
+  const redirectDashboard = approved && hasEnteredDashboard(boundAccount);
 
   useEffect(() => {
     if (!loading && redirectDashboard) {
@@ -251,7 +305,7 @@ export function EnrollPage() {
   }, [loading, redirectDashboard, navigate]);
 
   const enterDashboard = () => {
-    markEnteredDashboard(boundPhone);
+    markEnteredDashboard(boundAccount);
     navigate("/distribution/overview");
   };
 
@@ -272,9 +326,19 @@ export function EnrollPage() {
     view = (
       <FormView
         t={t}
+        contactMode={boundPhone ? "phone" : boundEmail ? "email" : contactMode}
+        setContactMode={(mode) => {
+          setContactMode(mode);
+          clearError("phone");
+          clearError("email");
+        }}
+        canSwitchContactMode={canSwitchContactMode}
         phone={phone}
         setPhone={(v) => { setPhone(v); clearError("phone"); }}
         boundPhone={boundPhone}
+        email={email}
+        setEmail={(v) => { setEmail(v); clearError("email"); }}
+        boundEmail={boundEmail}
         code={code}
         setCode={(v) => { setCode(v); clearError("code"); }}
         onSendCode={onSendCode}
@@ -373,9 +437,15 @@ const inputCls =
 
 function FormView(props: {
   t: EM;
+  contactMode: ContactMode;
+  setContactMode: (mode: ContactMode) => void;
+  canSwitchContactMode: boolean;
   phone: string;
   setPhone: (v: string) => void;
   boundPhone: string;
+  email: string;
+  setEmail: (v: string) => void;
+  boundEmail: string;
   code: string;
   setCode: (v: string) => void;
   onSendCode: () => void;
@@ -400,7 +470,8 @@ function FormView(props: {
   submitting: boolean;
   onSubmit: () => void;
 }) {
-  const { t, errors } = props;
+  const { t, errors, contactMode } = props;
+  const isPhoneMode = contactMode === "phone";
 
   // 勾选文案：将 {terms}/{privacy} 占位渲染为可点击链接（点击打开弹窗，不触发勾选切换）；
   // 其余纯文本点击仍可切换勾选框。
@@ -459,24 +530,61 @@ function FormView(props: {
       <section className="mt-8">
         <h2 className="text-white mb-5" style={{ fontWeight: 500, fontSize: "1.25rem" }}>{t.sectionAccount}</h2>
         <div className="space-y-5">
-          <DarkField
-            label={t.phoneLabel}
-            required
-            error={errors.phone}
-            hint={props.boundPhone ? t.phoneBoundHint : t.phoneRegisterHint}
-          >
-            <input
-              className={inputCls + (props.boundPhone ? " opacity-60 cursor-not-allowed" : "")}
-              value={props.phone}
-              placeholder={t.phonePlaceholder}
-              // bug7：账号已绑定手机号时自动获取且只读，不可编辑；
-              // bug6：未绑定可编辑分支也仅允许数字、≤20 位
-              readOnly={!!props.boundPhone}
-              onChange={(e) => props.setPhone(e.target.value.replace(/\D/g, "").slice(0, 20))}
-              inputMode="numeric"
-              maxLength={20}
-            />
-          </DarkField>
+          {props.canSwitchContactMode && (
+            <div className="inline-flex p-1 rounded-[10px] bg-[rgba(51,51,51,0.5)] border border-white/10">
+              {(["phone", "email"] as const).map((mode) => (
+                <button
+                  key={mode}
+                  type="button"
+                  onClick={() => props.setContactMode(mode)}
+                  className="px-4 h-9 rounded-[8px] text-sm transition-all"
+                  style={{
+                    fontWeight: contactMode === mode ? 600 : 400,
+                    background: contactMode === mode ? "white" : "transparent",
+                    color: contactMode === mode ? "#111" : "rgba(255,255,255,0.65)",
+                  }}
+                >
+                  {mode === "phone" ? t.accountModePhone : t.accountModeEmail}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {isPhoneMode ? (
+            <DarkField
+              label={t.phoneLabel}
+              required
+              error={errors.phone}
+              hint={props.boundPhone ? t.phoneBoundHint : t.phoneRegisterHint}
+            >
+              <input
+                className={inputCls + (props.boundPhone ? " opacity-60 cursor-not-allowed" : "")}
+                value={props.phone}
+                placeholder={t.phonePlaceholder}
+                readOnly={!!props.boundPhone}
+                onChange={(e) => props.setPhone(e.target.value.replace(/\D/g, "").slice(0, 20))}
+                inputMode="numeric"
+                maxLength={20}
+              />
+            </DarkField>
+          ) : (
+            <DarkField
+              label={t.emailLabel}
+              required
+              error={errors.email}
+              hint={props.boundEmail ? t.emailBoundHint : t.emailRegisterHint}
+            >
+              <input
+                className={inputCls + (props.boundEmail ? " opacity-60 cursor-not-allowed" : "")}
+                value={props.email}
+                placeholder={t.emailPlaceholder}
+                readOnly={!!props.boundEmail}
+                onChange={(e) => props.setEmail(e.target.value.trimStart())}
+                type="email"
+                autoComplete="email"
+              />
+            </DarkField>
+          )}
 
           <DarkField label={t.codeLabel} required error={errors.code}>
             <div className="flex gap-2">

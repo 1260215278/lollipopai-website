@@ -7,10 +7,11 @@
  *    `/file/**`、`/alioss/**`）注入 appToken。可用 options.tokenType 覆盖，auth:false 不注入。
  *  - 解包统一响应 { code, msg, data }：code===0 返回 data；否则抛 ApiError
  *  - 业务失败的 msg 已是后端翻译好的文案，可直接 toast 展示
+ *  - 业务 code=401（如 msg=403343 会话失效）→ 清 token 并跳转 /login
  *  - 传输/网络异常用 i18n 文案兜底（getMessages，非 hook，供 service 层使用）
  */
 import { toast } from "sonner";
-import { getAppToken, getPublisherToken } from "./auth";
+import { getAppToken, getPublisherToken, handleUnauthorized } from "./auth";
 import { getMessages, getAcceptLanguage } from "../i18n";
 
 // TODO(verify): 临时写死测试环境基址，便于部署后直连测试后端（跨域，需后端开 CORS）。
@@ -113,7 +114,14 @@ export async function request<T>(path: string, options: RequestOptions = {}): Pr
   } catch {
     const msg = getMessages().distribution.common.serverError;
     if (toastOnError) toast.error(msg);
+    if (res.status === 401) handleUnauthorized();
     throw new ApiError(res.status, msg);
+  }
+
+  if (json.code === 401 || res.status === 401) {
+    if (toastOnError) toast.error(json.msg);
+    handleUnauthorized();
+    throw new ApiError(json.code, json.msg);
   }
 
   if (json.code === 0) {

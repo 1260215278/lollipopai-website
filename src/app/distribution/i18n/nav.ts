@@ -10,6 +10,7 @@ export interface NavMessages {
   payment: string;
   earnings: string;
   withdraw: string;
+  members: string;
 }
 
 export const nav: Record<Locale, NavMessages> = {
@@ -21,6 +22,7 @@ export const nav: Record<Locale, NavMessages> = {
     payment: "收款管理",
     earnings: "收益明细",
     withdraw: "结算记录",
+    members: "成员管理",
   },
   "zh-TW": {
     entry: "發行中心",
@@ -30,6 +32,7 @@ export const nav: Record<Locale, NavMessages> = {
     payment: "收款管理",
     earnings: "收益明細",
     withdraw: "結算記錄",
+    members: "成員管理",
   },
   en: {
     entry: "Distribution",
@@ -39,6 +42,7 @@ export const nav: Record<Locale, NavMessages> = {
     payment: "Payment Accounts",
     earnings: "Earnings",
     withdraw: "Settlement Records",
+    members: "Members",
   },
   pt: {
     entry: "Distribuição",
@@ -48,5 +52,6 @@ export const nav: Record<Locale, NavMessages> = {
     payment: "Contas de recebimento",
     earnings: "Receitas",
     withdraw: "Registros de liquidação",
+    members: "Membros",
   },
 };

@@ -18,6 +18,7 @@ export interface EarningsMessages {
   withdrawn: string;
   pending: string;
   relatedDramas: string;
+  settlementBills: string;
   yesterday: string;
   estThisMonth: string;
   monthlyTrend: string;
@@ -33,8 +34,9 @@ export interface EarningsMessages {
   colType: string;
   colShare: string;
   colOrders: string;
+  colViewCount: string;
   colAmount: string;
-  colStatus: string;
+  colSettleStatus: string;
   /** 收益类型 */
   typeFull: string;
   typeAccount: string;
@@ -61,6 +63,7 @@ export const earnings: Record<Locale, EarningsMessages> = {
     withdrawn: "已提现",
     pending: "待入账",
     relatedDramas: "关联剧集",
+    settlementBills: "结算账单",
     yesterday: "昨日实得",
     estThisMonth: "本月预估",
     monthlyTrend: "月度收益趋势",
@@ -74,8 +77,9 @@ export const earnings: Record<Locale, EarningsMessages> = {
     colType: "收益类型",
     colShare: "分成",
     colOrders: "订单数",
+    colViewCount: "播放量",
     colAmount: "出品方实得",
-    colStatus: "状态",
+    colSettleStatus: "结算状态",
     typeFull: "全量推荐",
     typeAccount: "账号主页",
     statusSettled: "已结算",
@@ -97,6 +101,7 @@ export const earnings: Record<Locale, EarningsMessages> = {
     withdrawn: "已提現",
     pending: "待入帳",
     relatedDramas: "關聯劇集",
+    settlementBills: "結算帳單",
     yesterday: "昨日實得",
     estThisMonth: "本月預估",
     monthlyTrend: "月度收益趨勢",
@@ -110,8 +115,9 @@ export const earnings: Record<Locale, EarningsMessages> = {
     colType: "收益類型",
     colShare: "分成",
     colOrders: "訂單數",
+    colViewCount: "播放量",
     colAmount: "出品方實得",
-    colStatus: "狀態",
+    colSettleStatus: "結算狀態",
     typeFull: "全量推薦",
     typeAccount: "帳號主頁",
     statusSettled: "已結算",
@@ -133,6 +139,7 @@ export const earnings: Record<Locale, EarningsMessages> = {
     withdrawn: "Withdrawn",
     pending: "Pending Posting",
     relatedDramas: "Dramas",
+    settlementBills: "Settlement Bills",
     yesterday: "Yesterday",
     estThisMonth: "Est. This Month",
     monthlyTrend: "Monthly Trend",
@@ -146,8 +153,9 @@ export const earnings: Record<Locale, EarningsMessages> = {
     colType: "Type",
     colShare: "Share",
     colOrders: "Orders",
+    colViewCount: "Views",
     colAmount: "Creator Earned",
-    colStatus: "Status",
+    colSettleStatus: "Settlement Status",
     typeFull: "Full Distribution",
     typeAccount: "Account Homepage",
     statusSettled: "Settled",
@@ -169,6 +177,7 @@ export const earnings: Record<Locale, EarningsMessages> = {
     withdrawn: "Sacado",
     pending: "Pendente de crédito",
     relatedDramas: "Dramas",
+    settlementBills: "Faturas de Liquidação",
     yesterday: "Ontem",
     estThisMonth: "Estim. deste mês",
     monthlyTrend: "Tendência Mensal",
@@ -182,8 +191,9 @@ export const earnings: Record<Locale, EarningsMessages> = {
     colType: "Tipo",
     colShare: "Divisão",
     colOrders: "Pedidos",
+    colViewCount: "Visualizações",
     colAmount: "Receita do criador",
-    colStatus: "Status",
+    colSettleStatus: "Status de Liquidação",
     typeFull: "Distribuição total",
     typeAccount: "Página da conta",
     statusSettled: "Liquidado",

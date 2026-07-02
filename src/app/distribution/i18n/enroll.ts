@@ -14,10 +14,18 @@ export interface EnrollMessages {
   sectionAccount: string;
   sectionCompany: string;
   sectionAgreement: string;
+  /** 关联账号 Tab：手机号 */
+  accountModePhone: string;
+  /** 关联账号 Tab：邮箱 */
+  accountModeEmail: string;
   phoneLabel: string;
   phonePlaceholder: string;
   phoneBoundHint: string;
   phoneRegisterHint: string;
+  emailLabel: string;
+  emailPlaceholder: string;
+  emailBoundHint: string;
+  emailRegisterHint: string;
   codeLabel: string;
   codePlaceholder: string;
   sendCode: string;
@@ -54,6 +62,7 @@ export interface EnrollMessages {
   submit: string;
   resubmit: string;
   vPhoneRequired: string;
+  vEmailRequired: string;
   vCodeRequired: string;
   vCompanyRequired: string;
   vLicenseRequired: string;
@@ -98,10 +107,16 @@ export const enroll: Record<Locale, EnrollMessages> = {
     sectionAccount: "关联账号",
     sectionCompany: "公司信息",
     sectionAgreement: "合作协议",
+    accountModePhone: "手机号",
+    accountModeEmail: "邮箱",
     phoneLabel: "手机号",
     phonePlaceholder: "请输入手机号",
     phoneBoundHint: "已绑定账号手机号，无需修改",
     phoneRegisterHint: "该手机号将自动注册为您的 Lollipop 平台账号，亦可用于登录 AI 视频创作工具 Swift",
+    emailLabel: "邮箱",
+    emailPlaceholder: "请输入邮箱地址",
+    emailBoundHint: "已绑定账号邮箱，无需修改",
+    emailRegisterHint: "该邮箱将自动注册为您的 Lollipop 平台账号；邮箱入驻暂不支持自动开通 Swift 租户，待 Swift 支持邮箱后可重试开通",
     codeLabel: "验证码",
     codePlaceholder: "请输入验证码",
     sendCode: "发送验证码",
@@ -132,6 +147,7 @@ export const enroll: Record<Locale, EnrollMessages> = {
     submit: "提交入驻申请",
     resubmit: "重新填写申请",
     vPhoneRequired: "请输入手机号",
+    vEmailRequired: "请输入邮箱",
     vCodeRequired: "请输入验证码",
     vCompanyRequired: "请输入公司名称",
     vLicenseRequired: "请上传营业执照",
@@ -150,7 +166,7 @@ export const enroll: Record<Locale, EnrollMessages> = {
     step2Title: "资料审核",
     step2Sub: "预计 3-5 个工作日",
     step3Title: "结果通知",
-    step3Sub: "短信通知",
+    step3Sub: "短信/邮件通知",
     step4Title: "完成入驻",
     step4Sub: "开通平台账号",
     approvedTitle: "审核通过",
@@ -177,10 +193,16 @@ export const enroll: Record<Locale, EnrollMessages> = {
     sectionAccount: "關聯帳號",
     sectionCompany: "公司資訊",
     sectionAgreement: "合作協議",
+    accountModePhone: "手機號",
+    accountModeEmail: "郵箱",
     phoneLabel: "手機號",
     phonePlaceholder: "請輸入手機號",
     phoneBoundHint: "已綁定帳號手機號，無需修改",
     phoneRegisterHint: "該手機號將自動註冊為您的 Lollipop 平台帳號，亦可用於登入 AI 影片創作工具 Swift",
+    emailLabel: "郵箱",
+    emailPlaceholder: "請輸入郵箱地址",
+    emailBoundHint: "已綁定帳號郵箱，無需修改",
+    emailRegisterHint: "該郵箱將自動註冊為您的 Lollipop 平台帳號；郵箱入駐暫不支援自動開通 Swift 租戶，待 Swift 支援郵箱後可重試開通",
     codeLabel: "驗證碼",
     codePlaceholder: "請輸入驗證碼",
     sendCode: "發送驗證碼",
@@ -211,6 +233,7 @@ export const enroll: Record<Locale, EnrollMessages> = {
     submit: "提交入駐申請",
     resubmit: "重新填寫申請",
     vPhoneRequired: "請輸入手機號",
+    vEmailRequired: "請輸入郵箱",
     vCodeRequired: "請輸入驗證碼",
     vCompanyRequired: "請輸入公司名稱",
     vLicenseRequired: "請上傳營業執照",
@@ -229,7 +252,7 @@ export const enroll: Record<Locale, EnrollMessages> = {
     step2Title: "資料審核",
     step2Sub: "預計 3-5 個工作日",
     step3Title: "結果通知",
-    step3Sub: "簡訊通知",
+    step3Sub: "簡訊/郵件通知",
     step4Title: "完成入駐",
     step4Sub: "開通平台帳號",
     approvedTitle: "審核通過",
@@ -256,10 +279,16 @@ export const enroll: Record<Locale, EnrollMessages> = {
     sectionAccount: "Linked Account",
     sectionCompany: "Company Information",
     sectionAgreement: "Cooperation Agreement",
+    accountModePhone: "Phone",
+    accountModeEmail: "Email",
     phoneLabel: "Phone Number",
     phonePlaceholder: "Enter your phone number",
     phoneBoundHint: "Bound to your account phone number; no change needed",
     phoneRegisterHint: "This number will be registered as your Lollipop account and can also log in to the AI video tool Swift",
+    emailLabel: "Email",
+    emailPlaceholder: "Enter your email address",
+    emailBoundHint: "Bound to your account email; no change needed",
+    emailRegisterHint: "This email will be registered as your Lollipop account. Email enrollment cannot auto-provision a Swift tenant yet; retry after Swift supports email login.",
     codeLabel: "Verification Code",
     codePlaceholder: "Enter verification code",
     sendCode: "Send Code",
@@ -290,6 +319,7 @@ export const enroll: Record<Locale, EnrollMessages> = {
     submit: "Submit Application",
     resubmit: "Edit & Resubmit",
     vPhoneRequired: "Please enter your phone number",
+    vEmailRequired: "Please enter your email",
     vCodeRequired: "Please enter the verification code",
     vCompanyRequired: "Please enter company name",
     vLicenseRequired: "Please upload the business license",
@@ -308,7 +338,7 @@ export const enroll: Record<Locale, EnrollMessages> = {
     step2Title: "Under Review",
     step2Sub: "Est. 3-5 business days",
     step3Title: "Result Notification",
-    step3Sub: "Notified via SMS",
+    step3Sub: "Notified via SMS/email",
     step4Title: "Onboarding Complete",
     step4Sub: "Platform account activated",
     approvedTitle: "Approved",
@@ -335,10 +365,16 @@ export const enroll: Record<Locale, EnrollMessages> = {
     sectionAccount: "Conta Vinculada",
     sectionCompany: "Informações da Empresa",
     sectionAgreement: "Acordo de Cooperação",
+    accountModePhone: "Telefone",
+    accountModeEmail: "E-mail",
     phoneLabel: "Número de Telefone",
     phonePlaceholder: "Digite seu número de telefone",
     phoneBoundHint: "Vinculado ao telefone da conta; não é necessário alterar",
     phoneRegisterHint: "Este número será registrado como sua conta Lollipop e também pode acessar a ferramenta de vídeo IA Swift",
+    emailLabel: "E-mail",
+    emailPlaceholder: "Digite seu endereço de e-mail",
+    emailBoundHint: "Vinculado ao e-mail da conta; não é necessário alterar",
+    emailRegisterHint: "Este e-mail será registrado como sua conta Lollipop. Integração por e-mail ainda não provisiona automaticamente o tenant Swift; tente novamente quando o Swift suportar e-mail.",
     codeLabel: "Código de Verificação",
     codePlaceholder: "Digite o código de verificação",
     sendCode: "Enviar Código",
@@ -369,6 +405,7 @@ export const enroll: Record<Locale, EnrollMessages> = {
     submit: "Enviar Solicitação",
     resubmit: "Editar e Reenviar",
     vPhoneRequired: "Digite seu número de telefone",
+    vEmailRequired: "Digite seu e-mail",
     vCodeRequired: "Digite o código de verificação",
     vCompanyRequired: "Digite o nome da empresa",
     vLicenseRequired: "Envie a licença comercial",
@@ -387,7 +424,7 @@ export const enroll: Record<Locale, EnrollMessages> = {
     step2Title: "Em Análise",
     step2Sub: "Est. 3-5 dias úteis",
     step3Title: "Notificação de Resultado",
-    step3Sub: "Notificado por SMS",
+    step3Sub: "Notificado por SMS/e-mail",
     step4Title: "Integração Concluída",
     step4Sub: "Conta da plataforma ativada",
     approvedTitle: "Aprovado",

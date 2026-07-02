@@ -8,6 +8,7 @@ import { ContentPage } from "./pages/ContentPage";
 import { PaymentPage } from "./pages/PaymentPage";
 import { EarningsPage } from "./pages/EarningsPage";
 import { WithdrawPage } from "./pages/WithdrawPage";
+import { MembersPage } from "./pages/MembersPage";
 
 /**
  * 发行中心子路由（挂载于 /distribution/*）。
@@ -30,6 +31,7 @@ export function DistributionRoutes() {
           <Route path="payment" element={<PaymentPage />} />
           <Route path="earnings" element={<EarningsPage />} />
           <Route path="withdraw" element={<WithdrawPage />} />
+          <Route path="members" element={<MembersPage />} />
         </Route>
         <Route path="*" element={<Navigate to="enroll" replace />} />
       </Routes>

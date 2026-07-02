@@ -148,13 +148,13 @@ export function LoginPage() {
         <main className="flex-1 flex">
           {/* 左侧宣传（lg+ 显示） */}
           <div className="hidden lg:block lg:w-[46%] relative overflow-hidden">
-            <img src={promoImg} alt="" className="absolute inset-0 w-full h-full object-cover" />
+            <img src={promoImg} alt="" className="absolute inset-0 w-full h-full object-cover object-[center_42%]" />
             <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/45" />
-            <div className="relative z-10 pt-[68px] px-12 text-center">
-              <p className="text-white leading-[65px]" style={{ fontWeight: 900, fontSize: "54px", letterSpacing: "5px" }}>
+            <div className="relative z-10 pt-[50px] px-12 text-left max-w-[560px]">
+              <p className="text-white leading-[58px]" style={{ fontWeight: 900, fontSize: "50px", letterSpacing: "5px" }}>
                 {t.sloganLine1}
               </p>
-              <p className="text-white leading-[65px]" style={{ fontWeight: 900, fontSize: "54px", letterSpacing: "5px" }}>
+              <p className="text-white leading-[58px]" style={{ fontWeight: 900, fontSize: "50px", letterSpacing: "5px" }}>
                 {t.sloganLine2}
               </p>
             </div>
@@ -166,8 +166,7 @@ export function LoginPage() {
               <img
                 src={appIcon}
                 alt="Lollipop"
-                className="absolute left-1/2 -translate-x-1/2 -top-[45px] w-[134px] h-[134px] rounded-[20px] border border-[#f8fed0] object-cover"
-                style={{ boxShadow: "0px 4px 12.4px 0px rgba(255,220,224,0.35)" }}
+                className="absolute left-1/2 -translate-x-1/2 -top-[45px] w-[134px] h-[134px] rounded-[20px] object-cover"
               />
               <div className="bg-[#1c1c1c] border border-[#666] rounded-[31px] pt-[104px] pb-10 px-8 sm:px-12">
                 <h2 className="text-center text-white" style={{ fontWeight: 700, fontSize: "26px", letterSpacing: "-0.78px" }}>

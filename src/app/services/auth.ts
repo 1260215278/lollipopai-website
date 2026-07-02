@@ -20,6 +20,9 @@ const LOGIN_NAME_KEY = "lp_login_name";
 /** 登录态变更事件（顶栏据此在登录/退出后即时切换展示） */
 const AUTH_CHANGE_EVENT = "lp-auth-change";
 
+/** 防止并发 401 重复跳转登录页 */
+let sessionExpiredHandled = false;
+
 function emitAuthChange(): void {
   try {
     window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
@@ -80,6 +83,7 @@ export function getPublisherToken(): string {
 export function setAppToken(token: string | null): void {
   appToken = token ?? "";
   writeStorage(APP_TOKEN_KEY, appToken);
+  if (token) sessionExpiredHandled = false;
   emitAuthChange();
 }
 
@@ -99,6 +103,19 @@ export function setLoginName(name: string | null): void {
 export function setPublisherToken(token: string | null): void {
   publisherToken = token ?? "";
   writeStorage(PUB_TOKEN_KEY, publisherToken);
+}
+
+/**
+ * 会话失效（业务 code=401，如 msg=403343）：清除 token 并跳转登录。
+ * 见《发行中心-成员与账号-前端对接》§0。
+ */
+export function handleUnauthorized(): void {
+  clearTokens();
+  if (sessionExpiredHandled) return;
+  const path = window.location.pathname;
+  if (path === "/login" || path.startsWith("/login/")) return;
+  sessionExpiredHandled = true;
+  window.location.replace("/login");
 }
 
 /** 退出登录：清除两类 token 与登录展示名。 */

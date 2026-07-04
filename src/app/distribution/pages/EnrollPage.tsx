@@ -15,9 +15,12 @@ import {
   sendPublisherCode,
   submitPublisher,
   getPublisherAgreement,
+  getPublisherTenantStatus,
+  retryPublisherTenantSync,
   type PublisherApply,
   type PublisherStatus,
   type PublisherAgreement,
+  type PublisherTenantStatus,
 } from "../../services/publisher";
 
 /**
@@ -87,6 +90,9 @@ export function EnrollPage() {
     cooperation: null,
     privacy: null,
   });
+  const [tenantStatus, setTenantStatus] = useState<PublisherTenantStatus | null>(null);
+  const [tenantLoading, setTenantLoading] = useState(false);
+  const [tenantRetrying, setTenantRetrying] = useState(false);
 
   // 表单字段（对应接口字段；图片为上传后 URL）
   const [contactMode, setContactMode] = useState<ContactMode>("phone");
@@ -162,13 +168,6 @@ export function EnrollPage() {
       setLoading(false);
     }
   }, []);
-
-  // bug11：未登录不允许进入发行中心（含入驻页），直接跳登录
-  useEffect(() => {
-    if (!isAppAuthed()) {
-      navigate("/login", { replace: true });
-    }
-  }, [navigate]);
 
   // bug12：按当前语言拉协议正文/版本（失败回退静态文案）
   useEffect(() => {
@@ -298,6 +297,30 @@ export function EnrollPage() {
   // 已通过且此前点过「进入发行中心」→ 直接跳转，不再展示通过页
   const redirectDashboard = approved && hasEnteredDashboard(boundAccount);
 
+  const loadTenantStatus = useCallback(async () => {
+    if (!isAppAuthed()) {
+      setTenantStatus(null);
+      return;
+    }
+    setTenantLoading(true);
+    try {
+      const s = await getPublisherTenantStatus();
+      setTenantStatus(s);
+    } catch {
+      setTenantStatus(null);
+    } finally {
+      setTenantLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!loading && approved && !redirectDashboard) {
+      void loadTenantStatus();
+      return;
+    }
+    setTenantStatus(null);
+  }, [loading, approved, redirectDashboard, loadTenantStatus]);
+
   useEffect(() => {
     if (!loading && redirectDashboard) {
       navigate("/distribution/overview", { replace: true });
@@ -307,6 +330,20 @@ export function EnrollPage() {
   const enterDashboard = () => {
     markEnteredDashboard(boundAccount);
     navigate("/distribution/overview");
+  };
+
+  const onRetryTenantSync = async () => {
+    if (tenantRetrying) return;
+    setTenantRetrying(true);
+    try {
+      await retryPublisherTenantSync();
+      toast.success(t.swiftRetrySuccess);
+      await loadTenantStatus();
+    } catch {
+      // http 已 toast 后端文案（含 401933 等）
+    } finally {
+      setTenantRetrying(false);
+    }
   };
 
   let view: React.ReactNode;
@@ -319,7 +356,18 @@ export function EnrollPage() {
   } else if (auditStatus === 0) {
     view = <ReviewingView t={t} />;
   } else if (approved) {
-    view = <ApprovedView t={t} company={status?.apply?.companyName ?? ""} onEnter={enterDashboard} />;
+    view = (
+      <ApprovedView
+        t={t}
+        company={status?.apply?.companyName ?? ""}
+        tenantStatus={tenantStatus}
+        tenantLoading={tenantLoading}
+        tenantRetrying={tenantRetrying}
+        tenantUsername={status?.apply?.tenantUsername ?? boundPhone}
+        onRetryTenantSync={onRetryTenantSync}
+        onEnter={enterDashboard}
+      />
+    );
   } else if (auditStatus === 2 && !editing) {
     view = <RejectedView t={t} reason={status?.rejectReason ?? ""} onResubmit={() => setEditing(true)} />;
   } else {
@@ -826,7 +874,28 @@ function ReviewingView({ t }: { t: EM }) {
 }
 
 /* ── 已通过 ─────────────────────────────────────────────── */
-function ApprovedView({ t, company, onEnter }: { t: EM; company: string; onEnter: () => void }) {
+function ApprovedView({
+  t,
+  company,
+  tenantStatus,
+  tenantLoading,
+  tenantRetrying,
+  tenantUsername,
+  onRetryTenantSync,
+  onEnter,
+}: {
+  t: EM;
+  company: string;
+  tenantStatus: PublisherTenantStatus | null;
+  tenantLoading: boolean;
+  tenantRetrying: boolean;
+  tenantUsername: string;
+  onRetryTenantSync: () => void;
+  onEnter: () => void;
+}) {
+  const syncStatus = tenantStatus?.tenantSyncStatus ?? null;
+  const showTenantPanel = tenantLoading || syncStatus !== null;
+
   return (
     <StatusBand>
       <div className="flex flex-col items-center text-center">
@@ -842,6 +911,46 @@ function ApprovedView({ t, company, onEnter }: { t: EM; company: string; onEnter
       <div className="w-full h-px bg-gray-100 my-8" />
 
       <div className="flex flex-col items-center">
+        {showTenantPanel && (
+          <div className="w-full mb-6 rounded-[12px] bg-[#f9fafb] border border-[#e5e7eb] p-4 text-left">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-sm text-[#111111]" style={{ fontWeight: 600 }}>{t.swiftAccountStatus}</p>
+                {tenantLoading ? (
+                  <p className="text-sm text-[#6b7280] mt-2">{t.swiftOpening}</p>
+                ) : syncStatus === 1 ? (
+                  <div className="mt-2 space-y-1.5 text-sm text-[#4a5565]">
+                    <p>{t.swiftReady}</p>
+                    {tenantUsername && <p>{t.swiftAccount}: {tenantUsername}</p>}
+                    {tenantUsername && <p>{t.swiftInitialPassword}: {tenantUsername}</p>}
+                    {tenantStatus?.tenantId && <p>{t.swiftTenantId}: {tenantStatus.tenantId}</p>}
+                    {tenantStatus?.tenantSyncTime && <p>{t.swiftLastSync}: {tenantStatus.tenantSyncTime}</p>}
+                  </div>
+                ) : syncStatus === 2 ? (
+                  <div className="mt-2 space-y-1.5 text-sm text-[#4a5565]">
+                    <p>{tenantStatus?.tenantSyncMsg || t.swiftFailed}</p>
+                    {tenantStatus?.tenantSyncTime && <p>{t.swiftLastSync}: {tenantStatus.tenantSyncTime}</p>}
+                  </div>
+                ) : (
+                  <p className="text-sm text-[#6b7280] mt-2">{t.swiftOpening}</p>
+                )}
+              </div>
+              {syncStatus === 2 && (
+                <button
+                  type="button"
+                  onClick={onRetryTenantSync}
+                  disabled={tenantRetrying}
+                  className="h-9 px-3 rounded-[8px] bg-[#111111] text-white text-xs flex items-center gap-2 transition-all hover:opacity-90 disabled:opacity-60"
+                  style={{ fontWeight: 600 }}
+                >
+                  {tenantRetrying ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
+                  {t.swiftRetry}
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
         <button
           onClick={onEnter}
           className="flex items-center justify-center gap-2 px-8 h-[46px] rounded-[10px] bg-[#111111] text-white text-sm transition-all hover:opacity-90 active:scale-[0.99]"

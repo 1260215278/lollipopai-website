@@ -169,7 +169,7 @@ export function LoginPage() {
                 className="absolute left-1/2 -translate-x-1/2 -top-[45px] w-[134px] h-[134px] rounded-[20px] object-cover"
               />
               <div className="bg-[#1c1c1c] border border-[#666] rounded-[31px] pt-[104px] pb-10 px-8 sm:px-12">
-                <h2 className="text-center text-white" style={{ fontWeight: 700, fontSize: "26px", letterSpacing: "-0.78px" }}>
+                <h2 className="text-center text-white" style={{ fontWeight: 700, fontSize: "26px", letterSpacing: 0 }}>
                   {isRegister ? t.registerTitle : t.welcomeTitle}
                 </h2>
                 <p className="text-center text-[#99a1af] text-sm mt-2">

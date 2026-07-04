@@ -9,7 +9,9 @@
  * 上传走「前端直传 OSS（services/upload.ts）→ 拿 URL → saveEpisode」，后端 ffprobe
  * 回写大小/时长，不在前端伪造。
  */
-import { http } from "./http";
+import { getPublisherToken } from "./auth";
+import { BASE_URL, ApiError, http, type ApiResponse } from "./http";
+import { getAcceptLanguage } from "../i18n";
 
 /* ─── 枚举（与接口文档 §0.1 对应） ─────────────────────────────── */
 
@@ -54,21 +56,26 @@ export interface PublisherCourseRow {
   genderType: number;
   /** 内容语言 code（如 en） */
   languageType: string;
-  /** 内容语言展示名（如 English） */
-  languageName: string;
   /** 发布范围 1账号主页/2全量推荐 */
   publishScope: number;
   /** 审核状态 0草稿/1审核中/2通过/3驳回 */
   auditStatus: number;
   /** 审核驳回原因：仅 auditStatus=3 有值，其余为 null */
   auditRemark: string | null;
-  /** 上架状态 0未上架/1已上架/2已下架（仅 auditStatus=2 有效） */
-  shelfStatus: number;
+  /** 上架状态 0未上架/1已上架/2已下架；未过审为 null */
+  shelfStatus: number | null;
   /** 版权类型 1自制/2授权 */
   copyrightType: number;
-  /** 收益方式文案（由后端按 publishScope 拼） */
-  revenueText: string;
+  /** 收益方式（20260703 汇总版改为嵌套对象） */
+  revenue: CourseRevenue;
   createTime: string;
+}
+
+export interface CourseRevenue {
+  publishScope: number;
+  platformRatio: number;
+  creatorRatio: number;
+  revenueText: string;
 }
 
 /** 列表查询参数 */
@@ -77,6 +84,8 @@ export interface CourseListQuery {
   keyword?: string;
   /** 审核状态过滤；不传=全部 */
   auditStatus?: number;
+  /** 上架状态过滤；勿与 auditStatus 同传 */
+  shelfStatus?: number;
   page?: number;
   limit?: number;
 }
@@ -87,11 +96,24 @@ export function fetchCourseList(query: CourseListQuery = {}): Promise<PageResult
     params: {
       keyword: query.keyword || undefined,
       auditStatus: query.auditStatus,
+      shelfStatus: query.shelfStatus,
       page: query.page ?? 1,
       limit: query.limit ?? 10,
     },
     pick: "page",
   });
+}
+
+export interface CourseStats {
+  total: number;
+  onShelf: number;
+  auditing: number;
+  offShelf: number;
+}
+
+/** 发行新剧列表页顶部统计卡。 */
+export function fetchCourseStats(): Promise<CourseStats> {
+  return http.get<CourseStats>("/publisher/course/stats");
 }
 
 /* ─── 上架 / 下架（§2.1） ──────────────────────────────────────── */
@@ -110,9 +132,11 @@ export interface EpisodeItem {
   title: string;
   videoUrl: string;
   /** 视频时长（秒，后端 ffprobe 回写） */
-  videoDuration: number;
+  videoDuration: number | null;
   /** 视频大小（字节，后端回写） */
-  videoSize: number;
+  videoSize: number | null;
+  /** 原始文件名（20260703 新增；老数据可为空） */
+  fileName?: string | null;
   /** 上传日期（部分接口返回） */
   uploadDate?: string;
   /** 上传态 1已上传/2上传失败 */
@@ -124,7 +148,7 @@ export interface EpisodeItem {
 export interface SaveBasicBody {
   /** 空=新建草稿；非空=更新草稿 */
   courseId: number | null;
-  /** 封面 URL（先 /file/upload 得 URL，9:16） */
+  /** 封面 URL（先 /publisher/course/upload 得 URL，9:16） */
   titleImg: string;
   title: string;
   /** 剧情简介 ≤200 */
@@ -137,12 +161,11 @@ export interface SaveBasicBody {
   languageType: string;
   /** 标签（逗号分隔的标签名，取自 §3.1.1 labels） */
   courseLabel: string;
+  /** 类别 ID（候选来自 /publisher/course/classifications，送审必填） */
+  classificationId: number;
   /** 版权类型 1自制/2授权 */
   copyrightType: number;
-  /**
-   * 版权证明文件 URL（仅 copyrightType=2 授权时必填）。
-   * TODO(verify): 字段名 / 是否必填 / 支持的文件格式以后端为准，详见《后端反馈-版权证明》。
-   */
+  /** 版权证明文件 URL（仅 copyrightType=2 授权时必填；支持 PDF/图片/Word）。 */
   copyrightProof?: string;
 }
 
@@ -156,6 +179,16 @@ export function fetchLabels(languageType: string): Promise<string[]> {
   return http.get<string[]>("/publisher/course/labels", { params: { languageType } });
 }
 
+export interface CourseClassification {
+  classificationId: number;
+  classificationName: string;
+}
+
+/** 类别候选（按剧集语言维护，前端不得写死）。 */
+export function fetchClassifications(languageType: string): Promise<CourseClassification[]> {
+  return http.get<CourseClassification[]>("/publisher/course/classifications", { params: { languageType } });
+}
+
 /* ─── Step2 暂存单集 / 上传视频（§3.2） ───────────────────────── */
 
 export interface SaveEpisodeBody {
@@ -164,22 +197,33 @@ export interface SaveEpisodeBody {
   episodeNo: number;
   /** 剧集标题（选填） */
   title?: string;
-  /** 视频 URL（≤500MB，先 /file/upload 直传 OSS 得到） */
+  /** 视频 URL（≤500MB，先 /publisher/course/upload 直传 OSS 得到） */
   videoUrl: string;
+  /** 原始文件名，用于行内回显 */
+  fileName?: string;
 }
 
 /** saveEpisode 返回（后端回写大小/时长/上传态） */
 export interface SaveEpisodeResult {
   courseDetailsId: number;
   episodeNo: number;
-  videoSize: number;
-  videoDuration: number;
+  /** 字节，后端可能尚未探测成功 */
+  videoSize: number | null;
+  /** 秒，后端可能尚未探测成功 */
+  videoDuration: number | null;
   uploadStatus: number;
 }
 
 /** 暂存单集（同 episodeNo 再调=覆盖该集）。批量=前端循环调用本接口。 */
 export function saveEpisode(body: SaveEpisodeBody): Promise<SaveEpisodeResult> {
   return http.post<SaveEpisodeResult>("/publisher/course/saveEpisode", body);
+}
+
+/** 移除单集（物理删除，幂等；仅草稿/驳回态可写）。 */
+export function deleteEpisode(courseId: number, episodeNo: number): Promise<void> {
+  return http.post<void>("/publisher/course/deleteEpisode", undefined, {
+    params: { courseId, episodeNo },
+  });
 }
 
 /* ─── Step3 发布配置并送审（§3.3） ────────────────────────────── */
@@ -197,6 +241,18 @@ export function publishCourse(body: PublishBody): Promise<{ courseId: number; au
   return http.post<{ courseId: number; auditStatus: number }>("/publisher/course/publish", body);
 }
 
+export interface RevenueOption {
+  publishScope: number;
+  platformRatio: number;
+  creatorRatio: number;
+  revenueText: string;
+}
+
+/** 发布范围分成比例（后管可调，前端不得写死）。 */
+export function fetchRevenueOptions(): Promise<RevenueOption[]> {
+  return http.get<RevenueOption[]>("/publisher/course/revenueOptions");
+}
+
 /* ─── 各国家收费规则（§3.4，只读） ───────────────────────────── */
 
 export interface PriceRuleCountry {
@@ -212,17 +268,11 @@ export interface PriceRuleCountry {
   wholePriceUsd?: number;
 }
 
-/**
- * 各国家收费规则（传 episodes 则附按档整剧价）。
- * 文档约定取 `data.list[]`；后端响应壳不统一（byAppToken 直返裸值、language 取 data.records），
- * 故同时兼容裸数组形态，任一情况都收敛为数组，避免 `data.list` 缺失时返回 undefined 导致弹窗崩溃。
- */
+/** 各国家收费规则（传 episodes 则附按档整剧价）。 */
 export function fetchPriceRule(episodes?: number): Promise<PriceRuleCountry[]> {
-  return http
-    .get<{ list: PriceRuleCountry[] } | PriceRuleCountry[]>("/publisher/course/priceRule", {
-      params: { episodes },
-    })
-    .then((d) => (Array.isArray(d) ? d : d?.list ?? []));
+  return http.get<PriceRuleCountry[]>("/publisher/course/priceRule", {
+    params: { episodes },
+  });
 }
 
 /* ─── 草稿恢复 / 清空（§4） ───────────────────────────────────── */
@@ -238,9 +288,17 @@ export interface DraftCourse {
   languageType: string;
   /** 逗号分隔的标签名 */
   courseLabel: string;
+  /** 类别 ID / 名称（20260704 新增） */
+  classificationId?: number | null;
+  classificationName?: string | null;
   copyrightType: number;
-  /** 版权证明 URL（授权时回显，TODO(verify) 字段名以后端为准） */
+  /** 版权证明 URL（授权时回显） */
   copyrightProof?: string;
+  /** 本剧高光时刻宣传视频 URL（20260703 起送审必填） */
+  highlightVideoUrl?: string | null;
+  highlightFileName?: string | null;
+  highlightFileSize?: number | null;
+  highlightUploadTime?: string | null;
   createTime?: string;
 }
 
@@ -270,20 +328,28 @@ export interface CourseDetailBasic {
   details: string;
   /** 剧集语言 code */
   languageType: string;
-  /** 剧集语言展示名 */
-  languageName: string;
   /** 标签名数组 */
   courseLabel: string[];
   genderType: number;
+  /** 类别 ID / 名称（20260704 新增） */
+  classificationId?: number | null;
+  classificationName?: string | null;
   copyrightType: number;
-  /** 版权证明 URL（授权时，TODO(verify) 字段名以后端为准） */
+  /** 版权证明 URL（授权时） */
   copyrightProof?: string;
+  /** 本剧高光时刻宣传视频 URL（20260703 起送审必填） */
+  highlightVideoUrl?: string | null;
+  highlightFileName?: string | null;
+  highlightFileSize?: number | null;
+  highlightUploadTime?: string | null;
   createTime: string;
 }
 
 export interface CourseDetailProgress {
   plannedEpisodes: number;
   uploadedEpisodes: number;
+  failedEpisodes?: number;
+  pendingEpisodes?: number;
   percent: number;
 }
 
@@ -293,17 +359,7 @@ export interface CourseDetailPublish {
   shelfStatus: number;
 }
 
-export interface CourseDetailPriceRule {
-  episodes: number;
-  countries: PriceRuleCountry[];
-}
-
-export interface CourseDetailRevenue {
-  publishScope: number;
-  platformRatio: number;
-  creatorRatio: number;
-  revenueText: string;
-}
+export type CourseDetailRevenue = CourseRevenue;
 
 export interface CourseDetail {
   courseId: number;
@@ -315,7 +371,8 @@ export interface CourseDetail {
   basic: CourseDetailBasic;
   progress: CourseDetailProgress;
   publish: CourseDetailPublish;
-  priceRule: CourseDetailPriceRule;
+  /** 启用计价国家列表；20260703 汇总版明确无独立上架国家字段。 */
+  priceRule: PriceRuleCountry[];
   revenue: CourseDetailRevenue;
 }
 
@@ -330,30 +387,39 @@ function toLabelArray(raw: unknown): string[] {
   return [];
 }
 
-/**
- * detail.priceRule 字段集两接口未对齐（B8）：发行端文档 §5 约定 `{ episodes, countries[] }`，
- * 但后端实测可能直接回传国家裸数组（后管形态），或缺省 priceRule / countries。
- * 统一在边界收敛为声明的 `CourseDetailPriceRule`，使 `countries` 恒为数组，避免详情页 `.map` 崩溃。
- */
-function toPriceRule(raw: unknown): CourseDetailPriceRule {
-  if (Array.isArray(raw)) return { episodes: 0, countries: raw as PriceRuleCountry[] };
-  if (raw && typeof raw === "object") {
-    const obj = raw as Partial<CourseDetailPriceRule>;
-    return {
-      episodes: obj.episodes ?? 0,
-      countries: Array.isArray(obj.countries) ? obj.countries : [],
-    };
-  }
-  return { episodes: 0, countries: [] };
-}
-
 /** 短剧详情 */
 export function fetchCourseDetail(courseId: number): Promise<CourseDetail> {
   return http.get<CourseDetail>("/publisher/course/detail", { params: { courseId } }).then((d) => ({
     ...d,
     basic: { ...d.basic, courseLabel: toLabelArray(d.basic?.courseLabel) },
-    priceRule: toPriceRule(d.priceRule),
   }));
+}
+
+/** 下载批量录入模版（Excel 文件流，后端返回 .xlsx）。 */
+export async function downloadUploadTemplate(courseId: number): Promise<Blob> {
+  const headers: Record<string, string> = { "Accept-Language": getAcceptLanguage() };
+  const token = getPublisherToken();
+  if (token) headers["token"] = token;
+  const res = await fetch(`${BASE_URL}/publisher/course/uploadTemplate?courseId=${courseId}`, { headers });
+  if (!res.ok) throw new Error(`uploadTemplate failed: ${res.status}`);
+  if (res.headers.get("Content-Type")?.includes("application/json")) {
+    const json = (await res.json()) as ApiResponse<unknown>;
+    throw new ApiError(json.code, json.msg);
+  }
+  return res.blob();
+}
+
+export interface SaveHighlightResult {
+  courseId: number;
+  highlightVideoUrl: string;
+  highlightFileName: string | null;
+  highlightFileSize: number | null;
+  highlightUploadTime: string | null;
+}
+
+/** 保存本剧高光时刻宣传视频 URL（20260703 起送审必填；传空 videoUrl 可移除）。 */
+export function saveHighlight(courseId: number, videoUrl: string, fileName?: string): Promise<SaveHighlightResult> {
+  return http.post<SaveHighlightResult>("/publisher/course/saveHighlight", { courseId, videoUrl, fileName });
 }
 
 /* ─── 剧集视频管理（§6.1） ────────────────────────────────────── */

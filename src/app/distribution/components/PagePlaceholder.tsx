@@ -5,7 +5,7 @@ export function PagePlaceholder({ title, subtitle }: { title: string; subtitle: 
   const { messages } = useI18n();
   return (
     <div className="p-8">
-      <h1 className="text-[#111111]" style={{ fontWeight: 800, fontSize: "1.5rem", letterSpacing: "-0.02em" }}>
+      <h1 className="text-[#111111]" style={{ fontWeight: 800, fontSize: "1.5rem", letterSpacing: 0 }}>
         {title}
       </h1>
       <p className="text-gray-500 text-sm mt-1">{subtitle}</p>

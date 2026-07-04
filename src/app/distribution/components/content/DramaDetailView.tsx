@@ -16,7 +16,9 @@ import {
   AlertCircle,
 } from "lucide-react";
 import type { ContentMessages } from "../../i18n/content";
+import type { LanguageOption } from "../../../services/language";
 import type { CourseDetail } from "./types";
+import { AuditStatus } from "../../../services/content";
 import {
   auditStatusStyle,
   auditStatusLabel,
@@ -24,7 +26,10 @@ import {
   shelfStatusLabel,
   highlightsOf,
   genderChannelKey,
+  languageLabel,
   formatUsd,
+  formatBytes,
+  fileNameFromUrl,
   fmt,
   InfoRow,
 } from "./shared";
@@ -33,6 +38,8 @@ import { PhoneMockup } from "./PhoneMockup";
 interface DramaDetailViewProps {
   t: ContentMessages;
   detail: CourseDetail;
+  languages: LanguageOption[];
+  canManageCourse: boolean;
   onBack: () => void;
   onManageEpisodes: () => void;
 }
@@ -41,6 +48,8 @@ interface DramaDetailViewProps {
 export const DramaDetailView: React.FC<DramaDetailViewProps> = ({
   t,
   detail,
+  languages,
+  canManageCourse,
   onBack,
   onManageEpisodes,
 }) => {
@@ -58,6 +67,7 @@ export const DramaDetailView: React.FC<DramaDetailViewProps> = ({
   const distLabelBg = publish.publishScope === 2 ? "#FFF1F2" : "#F3F4F6";
 
   const phoneLabels = { home: t.phoneHome, forYou: t.phoneForYou, me: t.phoneMe };
+  const canContinueUpload = canManageCourse && (detail.auditStatus === AuditStatus.DRAFT || detail.auditStatus === AuditStatus.REJECTED);
 
   return (
     <div className="p-8">
@@ -132,7 +142,7 @@ export const DramaDetailView: React.FC<DramaDetailViewProps> = ({
             </div>
 
             <InfoRow icon={<Globe className="w-3.5 h-3.5" />} label={t.detailLanguage}>
-              <span className="text-sm text-gray-700">{basic.languageName || basic.languageType}</span>
+              <span className="text-sm text-gray-700">{languageLabel(basic.languageType, languages)}</span>
             </InfoRow>
 
             <InfoRow icon={<Tag className="w-3.5 h-3.5" />} label={t.detailTags}>
@@ -153,6 +163,10 @@ export const DramaDetailView: React.FC<DramaDetailViewProps> = ({
               <span className="text-sm text-gray-700">{t.channels[genderChannelKey(basic.genderType)]}</span>
             </InfoRow>
 
+            <InfoRow icon={<Tag className="w-3.5 h-3.5" />} label={t.classificationLabel}>
+              <span className="text-sm text-gray-700">{basic.classificationName || "--"}</span>
+            </InfoRow>
+
             <InfoRow icon={<FileText className="w-3.5 h-3.5" />} label={t.detailCopyright}>
               <span className="text-sm text-gray-700">
                 {basic.copyrightType === 1 ? t.copyrightSelf : t.copyrightLicensed}
@@ -170,10 +184,10 @@ export const DramaDetailView: React.FC<DramaDetailViewProps> = ({
               {t.detailPricingTitle}
             </h3>
             <div className="space-y-3">
-              {priceRule.countries.length === 0 && (
+              {priceRule.length === 0 && (
                 <p className="text-sm text-gray-400">{t.pricingEmpty}</p>
               )}
-              {priceRule.countries.map((c) => (
+              {priceRule.map((c) => (
                 <div key={c.country} className="rounded-xl border border-gray-200 bg-gray-50/60 p-4">
                   <div className="flex items-center gap-2 mb-3">
                     <span className="text-sm text-gray-800" style={{ fontWeight: 600 }}>
@@ -236,14 +250,57 @@ export const DramaDetailView: React.FC<DramaDetailViewProps> = ({
               </div>
             </div>
 
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="px-2 py-1 rounded-lg text-xs bg-green-50 text-green-600" style={{ fontWeight: 600 }}>
+                {t.statUploaded} {progress.uploadedEpisodes}
+              </span>
+              <span className="px-2 py-1 rounded-lg text-xs bg-red-50 text-red-500" style={{ fontWeight: 600 }}>
+                {fmt(t.detailFailedEpisodes, { n: progress.failedEpisodes ?? 0 })}
+              </span>
+              <span className="px-2 py-1 rounded-lg text-xs bg-indigo-50 text-indigo-600" style={{ fontWeight: 600 }}>
+                {fmt(t.detailPendingEpisodes, { n: progress.pendingEpisodes ?? 0 })}
+              </span>
+            </div>
+
             <button
               onClick={onManageEpisodes}
-              className="mt-4 w-full py-2 rounded-xl border border-gray-200 text-xs text-gray-600 hover:bg-gray-50 flex items-center justify-center gap-1.5 transition-colors"
+              disabled={!canContinueUpload}
+              className="mt-4 w-full py-2 rounded-xl border border-gray-200 text-xs text-gray-600 hover:bg-gray-50 disabled:bg-gray-50 disabled:text-gray-300 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 transition-colors"
               style={{ fontWeight: 500 }}
             >
               <PlusCircle className="w-3.5 h-3.5" />
               {t.detailContinueUpload}
             </button>
+          </div>
+
+          {/* Highlight Video */}
+          <div className="bg-white rounded-2xl border border-gray-100 p-5">
+            <h3 className="text-sm text-gray-900 mb-3" style={{ fontWeight: 700 }}>
+              {t.detailHighlightVideo}
+            </h3>
+            {basic.highlightVideoUrl ? (
+              <a
+                href={basic.highlightVideoUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-3 rounded-xl border border-gray-100 bg-gray-50/70 px-3 py-3 hover:bg-gray-50 transition-colors"
+              >
+                <div className="w-9 h-9 rounded-lg bg-white border border-gray-100 flex items-center justify-center flex-shrink-0">
+                  <Film className="w-4 h-4 text-gray-500" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs text-gray-700 truncate" style={{ fontWeight: 600 }}>
+                    {basic.highlightFileName || fileNameFromUrl(basic.highlightVideoUrl)}
+                  </p>
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    {basic.highlightFileSize ? formatBytes(basic.highlightFileSize) : "—"}
+                    {basic.highlightUploadTime ? ` · ${fmt(t.detailHighlightUploadedAt, { time: basic.highlightUploadTime })}` : ""}
+                  </p>
+                </div>
+              </a>
+            ) : (
+              <p className="text-xs text-gray-400">{t.detailHighlightMissing}</p>
+            )}
           </div>
 
           {/* Distribution */}

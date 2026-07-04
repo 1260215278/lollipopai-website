@@ -24,10 +24,7 @@ const ROLE_THEME: Record<number, { bg: string; text: string; dot: string }> = {
   3: { bg: "#f9fafb", text: "#6b7280", dot: "#6b7280" },
 };
 
-/**
- * 手机号仅校验非空（后端按 tb_user.phone 精确字符串匹配，库内长度 6—15 位、
- * 含 +852/+55/+86 等带区号形式，见后端回复 C-1）。输入限制为数字与 +。
- */
+/** 20260704 后端回执：成员手机号支持海外区号格式，前端只做非空校验。 */
 function isValidPhone(v: string) {
   return v.trim().length > 0;
 }
@@ -382,7 +379,7 @@ function AddMemberModal({
     }
     setSubmitting(true);
     try {
-      await addMember({ phone, role });
+      await addMember({ phone: phone.trim(), role });
       onSuccess();
     } catch {
       // http 已 toast
@@ -460,16 +457,16 @@ function AddMemberModal({
           </label>
           <input
             type="text"
-            inputMode="numeric"
+            inputMode="tel"
             value={phone}
             onChange={(e) => {
-              setPhone(e.target.value.replace(/[^\d+]/g, "").slice(0, 20));
+              setPhone(e.target.value.slice(0, 32));
               if (phoneError) setPhoneError("");
             }}
             placeholder={t.phonePlaceholder}
             className={`mt-1.5 w-full h-[45px] px-4 rounded-[14px] border text-sm outline-none transition-all placeholder:text-[rgba(10,10,10,0.5)] ${
               phoneError
-                ? "border-[#ffa2a2] focus:border-[#fb2c36]"
+                ? "border-[#fb2c36] focus:border-[#fb2c36]"
                 : "border-[#e5e7eb] hover:border-gray-400 focus:border-[#111]"
             }`}
           />

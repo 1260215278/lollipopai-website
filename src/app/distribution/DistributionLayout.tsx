@@ -14,12 +14,14 @@ import {
   Bell,
   AlertTriangle,
   Users,
+  UserRound,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useI18n } from "../i18n";
 import type { DistributionMessages } from "./i18n.distribution";
 import { clearTokens, isAppAuthed, isPublisherAuthed } from "../services/auth";
 import { ApiError } from "../services/http";
+import { logoutAccount } from "../services/account";
 import { ensurePublisherToken } from "../services/session";
 import {
   getPublisherStatus,
@@ -27,9 +29,14 @@ import {
   retryPublisherTenantSync,
   type PublisherTenantStatus,
 } from "../services/publisher";
+import { getCurrentMember, type CurrentPublisherMember } from "../services/member";
 import lollipopLogo from "../../imports/Lollipop1.png";
 
 const NAME_PREVIEW_LIMIT = 10;
+
+export interface DistributionOutletContext {
+  currentMember: CurrentPublisherMember | null;
+}
 
 function previewName(name: string) {
   const chars = Array.from(name);
@@ -51,7 +58,7 @@ export function DistributionLayout() {
     location.pathname.includes("/earnings") ||
     location.pathname.includes("/withdraw");
 
-  const [settlementOpen, setSettlementOpen] = useState(inSettlement);
+  const [settlementOpen, setSettlementOpen] = useState(true);
   const [langOpen, setLangOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -61,16 +68,18 @@ export function DistributionLayout() {
   // publisher token 是否就绪：已持有则直接 true；否则等 byAppToken 换取完成再放行子页面，
   // 避免子页面（overview 等）在 token 换到前就发 /publisher/** 请求导致首次 401「token 失效」。
   const [tokenReady, setTokenReady] = useState(() => isPublisherAuthed());
-  // 顶栏展示的公司名（取自 /app/publisher/status 的 apply.companyName）
+  // 顶栏展示的公司名（优先取 member/me.publisherName，兜底 /app/publisher/status 的 apply.companyName）
   const [companyName, setCompanyName] = useState("");
   // swift 租户开通状态：失败（tenantSyncStatus=2）时顶栏展示通知铃铛 + 失败弹窗 + 重试
   const [tenant, setTenant] = useState<PublisherTenantStatus | null>(null);
+  const [currentMember, setCurrentMember] = useState<CurrentPublisherMember | null>(null);
   const [tenantModalOpen, setTenantModalOpen] = useState(false);
   const [retrying, setRetrying] = useState(false);
   const tenantFailed = tenant?.tenantSyncStatus === 2;
-  const publisherName = companyName.trim();
+  const publisherName = (currentMember?.publisherName || companyName).trim();
+  const memberDisplayName = (currentMember?.phoneMask || currentMember?.nickname || "").trim();
   const hasPublisherName = publisherName.length > 0;
-  const headerName = hasPublisherName ? previewName(publisherName) : t.common.publisher;
+  const headerName = memberDisplayName || (hasPublisherName ? previewName(publisherName) : t.common.publisher);
 
   useEffect(() => {
     if (inSettlement) setSettlementOpen(true);
@@ -122,6 +131,38 @@ export function DistributionLayout() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!tokenReady) return;
+    let alive = true;
+    getCurrentMember()
+      .then((member) => {
+        if (alive) setCurrentMember(member);
+      })
+      .catch(() => {
+        if (alive) setCurrentMember(null);
+      });
+    return () => {
+      alive = false;
+    };
+  }, [tokenReady]);
+
+  useEffect(() => {
+    if (!currentMember) return;
+    const role = currentMember.role;
+    const path = location.pathname;
+    const blocked =
+      (role === 3 && (
+        path.includes("/payment") ||
+        path.includes("/earnings") ||
+        path.includes("/withdraw") ||
+        path.includes("/account") ||
+        path.includes("/members")
+      )) ||
+      (role === 2 && (path.includes("/withdraw") || path.includes("/account") || path.includes("/members")));
+
+    if (blocked) navigate("/distribution/overview", { replace: true });
+  }, [currentMember, location.pathname, navigate]);
+
   // 拉取 swift 租户开通状态：失败时顶栏出现通知铃铛（开通在审核通过后异步进行，此处只读一次即可）
   useEffect(() => {
     if (!isAppAuthed()) return;
@@ -167,8 +208,15 @@ export function DistributionLayout() {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setUserMenuOpen(false);
+    if (isPublisherAuthed()) {
+      try {
+        await logoutAccount();
+      } catch {
+        // 本地退出不能被服务端会话清理失败阻塞。
+      }
+    }
     clearTokens();
     navigate("/login");
   };
@@ -185,6 +233,7 @@ export function DistributionLayout() {
           inSettlement={inSettlement}
           settlementOpen={settlementOpen}
           onToggleSettlement={() => setSettlementOpen((v) => !v)}
+          currentMember={currentMember}
         />
       </aside>
 
@@ -208,6 +257,7 @@ export function DistributionLayout() {
               inSettlement={inSettlement}
               settlementOpen={settlementOpen}
               onToggleSettlement={() => setSettlementOpen((v) => !v)}
+              currentMember={currentMember}
             />
           </aside>
         </div>
@@ -310,7 +360,7 @@ export function DistributionLayout() {
                     </div>
                   )}
                   <button
-                    onClick={handleLogout}
+                    onClick={() => void handleLogout()}
                     className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-left text-gray-700 hover:bg-gray-50 transition-colors"
                     style={{ fontWeight: 500 }}
                   >
@@ -325,7 +375,7 @@ export function DistributionLayout() {
 
         <main className="flex-1 overflow-y-auto">
           {tokenReady ? (
-            <Outlet />
+            <Outlet context={{ currentMember } satisfies DistributionOutletContext} />
           ) : (
             <div className="h-full flex items-center justify-center">
               <Loader2 className="w-7 h-7 animate-spin text-gray-400" />
@@ -389,12 +439,20 @@ function SidebarNav({
   inSettlement,
   settlementOpen,
   onToggleSettlement,
+  currentMember,
 }: {
   t: DistributionMessages;
   inSettlement: boolean;
   settlementOpen: boolean;
   onToggleSettlement: () => void;
+  currentMember: CurrentPublisherMember | null;
 }) {
+  const role = currentMember?.role;
+  const canViewSettlement = role === undefined || role !== 3;
+  const canViewWithdraw = role === undefined || role === 1;
+  const canViewAccount = role === undefined || role === 1;
+  const canViewMembers = role === undefined || role === 1;
+
   return (
     <>
       <div className="px-4 h-[60px] flex items-center gap-2 border-b border-gray-100 flex-shrink-0">
@@ -405,7 +463,7 @@ function SidebarNav({
         />
         <span
           className="text-[#111111] text-xs leading-tight"
-          style={{ fontWeight: 700, letterSpacing: "-0.02em" }}
+          style={{ fontWeight: 700, letterSpacing: 0 }}
         >
           {t.common.brand}
         </span>
@@ -415,42 +473,52 @@ function SidebarNav({
         <SideRow to="/distribution/overview" icon={<BarChart2 className="w-[15px] h-[15px]" />} label={t.nav.overview} />
         <SideRow to="/distribution/content" icon={<Video className="w-[15px] h-[15px]" />} label={t.nav.content} />
 
-        {/* 结算中心（可折叠分组） */}
-        <div>
-          <button
-            onClick={onToggleSettlement}
-            className="w-full flex items-center gap-2.5 px-3 py-[9px] rounded-lg text-left transition-colors hover:bg-gray-50"
-          >
-            <Wallet
-              className="w-[15px] h-[15px] flex-shrink-0 transition-colors"
-              style={{ color: inSettlement ? "#111111" : "#9CA3AF" }}
-            />
-            <span
-              className="flex-1 text-sm transition-colors"
-              style={{ fontWeight: 500, color: inSettlement ? "#111111" : "#374151" }}
+        {canViewSettlement && (
+          <div>
+            <button
+              onClick={onToggleSettlement}
+              className="w-full flex items-center gap-2.5 px-3 py-[9px] rounded-lg text-left transition-colors hover:bg-gray-50"
             >
-              {t.nav.settlement}
-            </span>
-            <ChevronDown
-              className="w-3.5 h-3.5 text-gray-400 transition-transform flex-shrink-0"
-              style={{ transform: settlementOpen ? "rotate(0deg)" : "rotate(-90deg)" }}
-            />
-          </button>
+              <Wallet
+                className="w-[15px] h-[15px] flex-shrink-0 transition-colors"
+                style={{ color: inSettlement ? "#111111" : "#9CA3AF" }}
+              />
+              <span
+                className="flex-1 text-sm transition-colors"
+                style={{ fontWeight: 500, color: inSettlement ? "#111111" : "#374151" }}
+              >
+                {t.nav.settlement}
+              </span>
+              <ChevronDown
+                className="w-3.5 h-3.5 text-gray-400 transition-transform flex-shrink-0"
+                style={{ transform: settlementOpen ? "rotate(0deg)" : "rotate(-90deg)" }}
+              />
+            </button>
 
-          {settlementOpen && (
-            <div className="ml-[34px] mt-0.5 space-y-0.5">
-              <SubRow to="/distribution/payment" label={t.nav.payment} />
-              <SubRow to="/distribution/earnings" label={t.nav.earnings} />
-              <SubRow to="/distribution/withdraw" label={t.nav.withdraw} />
-            </div>
-          )}
-        </div>
+            {settlementOpen && (
+              <div className="ml-[34px] mt-0.5 space-y-0.5">
+                <SubRow to="/distribution/payment" label={t.nav.payment} />
+                <SubRow to="/distribution/earnings" label={t.nav.earnings} />
+                {canViewWithdraw && <SubRow to="/distribution/withdraw" label={t.nav.withdraw} />}
+              </div>
+            )}
+          </div>
+        )}
 
-        <SideRow
-          to="/distribution/members"
-          icon={<Users className="w-[15px] h-[15px]" />}
-          label={t.nav.members}
-        />
+        {canViewAccount && (
+          <SideRow
+            to="/distribution/account"
+            icon={<UserRound className="w-[15px] h-[15px]" />}
+            label={t.nav.account}
+          />
+        )}
+        {canViewMembers && (
+          <SideRow
+            to="/distribution/members"
+            icon={<Users className="w-[15px] h-[15px]" />}
+            label={t.nav.members}
+          />
+        )}
       </nav>
     </>
   );

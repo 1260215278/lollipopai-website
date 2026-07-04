@@ -14,9 +14,7 @@ import { toast } from "sonner";
 import { getAppToken, getPublisherToken, handleUnauthorized } from "./auth";
 import { getMessages, getAcceptLanguage } from "../i18n";
 
-// TODO(verify): 临时写死测试环境基址，便于部署后直连测试后端（跨域，需后端开 CORS）。
-// 后续应改回由 VITE_API_BASE 配置（留空走相对 /sqx_fast + 同域/代理）。
-const API_BASE: string = import.meta.env.VITE_API_BASE || "https://www.testshort.top";
+const API_BASE: string = import.meta.env.VITE_API_BASE || "";
 /** 后端统一 context-path */
 export const CONTEXT_PATH = "/sqx_fast";
 /** 请求基础地址：${VITE_API_BASE}/sqx_fast */
@@ -80,8 +78,7 @@ export async function request<T>(path: string, options: RequestOptions = {}): Pr
   const { params, body, auth = true, tokenType, pick = "data", toastOnError = true, headers, method, ...rest } = options;
 
   const finalHeaders: Record<string, string> = { ...(headers as Record<string, string>) };
-  // 携带当前语言：后端据此返回对应语言的短信/错误文案（bug5）。
-  // TODO(verify): 后端实际读取的语言头键名与取值映射需联调确认（标准 Accept-Language / BCP-47）。
+  // 携带当前语言：后端读取 Accept-Language，并按 zh/en/cht/pt 返回短信、邮件和错误文案。
   if (!finalHeaders["Accept-Language"]) finalHeaders["Accept-Language"] = getAcceptLanguage();
   if (auth) {
     const token = resolveToken(path, tokenType);

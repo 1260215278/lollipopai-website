@@ -17,6 +17,9 @@ export type {
   PublishBody,
   PageResult,
   CourseListQuery,
+  CourseStats,
+  RevenueOption,
+  CourseClassification,
 } from "../../../services/content";
 export {
   AuditStatus,

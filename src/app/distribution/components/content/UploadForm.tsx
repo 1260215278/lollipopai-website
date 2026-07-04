@@ -16,15 +16,23 @@ import { toast } from "sonner";
 import type { ContentMessages } from "../../i18n/content";
 import { uploadFile, PUBLISHER_UPLOAD_PATH } from "../../../services/upload";
 import { normalizeImageFile } from "../../../services/heic";
+import { ApiError } from "../../../services/http";
 import {
   saveBasic,
   saveEpisode,
   publishCourse,
   fetchDraft,
   fetchLabels,
+  fetchClassifications,
   fetchPriceRule,
   clearDraft,
+  downloadUploadTemplate,
+  saveHighlight,
+  deleteEpisode,
+  fetchRevenueOptions,
+  type RevenueOption,
   type PriceRuleCountry,
+  type CourseClassification,
 } from "../../../services/content";
 import { getLanguageTypeList, type LanguageOption } from "../../../services/language";
 import { CHANNEL_VALUES, channelToGender, genderToChannel, type ChannelValue } from "../../mock/content";
@@ -32,7 +40,20 @@ import type { Highlight } from "./types";
 import { StepIndicator } from "../StepIndicator";
 import { PhoneMockup } from "./PhoneMockup";
 import { CountryPricingModal } from "./CountryPricingModal";
-import { Field, inputClass, fmt, formatBytes, formatDuration, fileNameFromUrl, readVideoDuration } from "./shared";
+import {
+  COPYRIGHT_PROOF_ACCEPT,
+  Field,
+  HIGHLIGHT_ACCEPT,
+  IMAGE_ACCEPT,
+  VIDEO_ACCEPT,
+  inputClass,
+  fmt,
+  formatBytes,
+  formatDuration,
+  fileNameFromUrl,
+  readVideoDuration,
+} from "./shared";
+import { parseEpisodeTemplate } from "./episodeTemplate";
 
 const DESC_LIMIT = 200;
 /** 短剧名称上限 100 字符（bug16：避免超长提交后端异常） */
@@ -41,6 +62,8 @@ const NAME_LIMIT = 100;
 const COVER_MAX = 10 * 1024 * 1024;
 /** 剧集视频上限 500MB（与后端 /publisher/course/upload 视频校验对齐） */
 const VIDEO_MAX = 500 * 1024 * 1024;
+/** 发布配置不进后端草稿，按 courseId 在前端缓存。 */
+const PUB_CONFIG_CACHE_PREFIX = "distribution.upload.publishConfig.";
 
 interface BasicInfo {
   cover: string;
@@ -49,6 +72,7 @@ interface BasicInfo {
   totalEpisodes: string;
   channel: ChannelValue | "";
   languageType: string;
+  classificationId: number | null;
   tags: string[];
   /** 版权类型 1自制/2授权 */
   copyrightType: number;
@@ -70,7 +94,24 @@ interface VideoRow {
   videoDuration: number;
   /** 已上传集回显：视频 URL（用于推导文件名） */
   videoUrl: string;
+  /** 原始文件名（后端 20260703 新增；老数据为空时从 URL 退化显示） */
+  fileName: string;
   fileRef: React.RefObject<HTMLInputElement | null>;
+}
+
+interface HighlightState {
+  videoUrl: string;
+  fileName: string;
+  fileSize: number | null;
+  uploadTime: string;
+  file: File | null;
+  uploading: boolean;
+  error: string;
+}
+
+interface PublishConfigState {
+  publishScope: number;
+  onShelfNow: boolean;
 }
 
 interface UploadFormProps {
@@ -87,14 +128,52 @@ const emptyBasic: BasicInfo = {
   totalEpisodes: "",
   channel: "",
   languageType: "",
+  classificationId: null,
   tags: [],
   copyrightType: 1,
   copyrightProof: "",
 };
 
+const pubConfigCacheKey = (id: number) => `${PUB_CONFIG_CACHE_PREFIX}${id}`;
+
+function getCachedPubConfig(id: number): PublishConfigState | null {
+  try {
+    return parseCachedPubConfig(localStorage.getItem(pubConfigCacheKey(id)));
+  } catch {
+    return null;
+  }
+}
+
+function setCachedPubConfig(id: number, config: PublishConfigState) {
+  try {
+    localStorage.setItem(pubConfigCacheKey(id), JSON.stringify(config));
+  } catch {
+    // localStorage 不可用时忽略；本次会话内 React 状态仍可继续发布。
+  }
+}
+
+function removeCachedPubConfig(id: number) {
+  try {
+    localStorage.removeItem(pubConfigCacheKey(id));
+  } catch {
+    // ignore
+  }
+}
+
+function parseCachedPubConfig(raw: string | null): PublishConfigState | null {
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw) as Partial<PublishConfigState>;
+    if (typeof parsed.publishScope !== "number" || typeof parsed.onShelfNow !== "boolean") return null;
+    return { publishScope: parsed.publishScope, onShelfNow: parsed.onShelfNow };
+  } catch {
+    return null;
+  }
+}
+
 /**
- * 版权证明上传（授权版权必填）。支持图片 + PDF，走 /publisher/course/upload（文档 ≤20MB）。
- * PDF 无法 <img> 预览，故已上传时展示文件名链接（点开新标签查看）。
+ * 版权证明上传（授权版权必填）。支持图片 + PDF + Word，走 /publisher/course/upload（文档 ≤20MB）。
+ * 文档无法 <img> 预览，故已上传时展示文件名链接（点开新标签查看）。
  */
 function CopyrightProofUpload({
   t,
@@ -128,7 +207,7 @@ function CopyrightProofUpload({
       <input
         ref={ref}
         type="file"
-        accept="image/*,.pdf"
+        accept={COPYRIGHT_PROOF_ACCEPT}
         className="hidden"
         onChange={(e) => {
           const f = e.target.files?.[0];
@@ -190,14 +269,25 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
   const [courseId, setCourseId] = useState<number | null>(null);
   const [basicInfo, setBasicInfo] = useState<BasicInfo>(emptyBasic);
   const [videos, setVideos] = useState<VideoRow[]>([]);
-  const [pubConfig, setPubConfig] = useState<{ publishScope: number; onShelfNow: boolean }>({
+  const [pubConfig, setPubConfig] = useState<PublishConfigState>({
     publishScope: 1,
     onShelfNow: true,
+  });
+  const [highlight, setHighlight] = useState<HighlightState>({
+    videoUrl: "",
+    fileName: "",
+    fileSize: null,
+    uploadTime: "",
+    file: null,
+    uploading: false,
+    error: "",
   });
 
   const [languages, setLanguages] = useState<LanguageOption[]>([]);
   const [labelOptions, setLabelOptions] = useState<string[]>([]);
+  const [classificationOptions, setClassificationOptions] = useState<CourseClassification[]>([]);
   const [labelsLoading, setLabelsLoading] = useState(false);
+  const [classificationsLoading, setClassificationsLoading] = useState(false);
 
   const [coverError, setCoverError] = useState("");
   const [coverUploading, setCoverUploading] = useState(false);
@@ -205,11 +295,17 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
   const [showPricing, setShowPricing] = useState(false);
   const [priceRows, setPriceRows] = useState<PriceRuleCountry[]>([]);
   const [priceLoading, setPriceLoading] = useState(false);
+  const [revenueOptions, setRevenueOptions] = useState<RevenueOption[]>([]);
   const [savingBasic, setSavingBasic] = useState(false);
   const [uploadingEps, setUploadingEps] = useState(false);
+  const [templateDownloading, setTemplateDownloading] = useState(false);
+  const [templateImporting, setTemplateImporting] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const coverRef = useRef<HTMLInputElement>(null);
+  const templateInputRef = useRef<HTMLInputElement>(null);
+  const highlightRef = useRef<HTMLInputElement>(null);
+  const restoredPubConfigCourse = useRef<number | null>(null);
 
   const bi = (field: Partial<BasicInfo>) => setBasicInfo((p) => ({ ...p, ...field }));
 
@@ -221,7 +317,37 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
     void getLanguageTypeList()
       .then(setLanguages)
       .catch(() => undefined);
+    void fetchRevenueOptions()
+      .then((rows) => {
+        setRevenueOptions(rows);
+        if (rows.length > 0) {
+          setPubConfig((prev) =>
+            rows.some((item) => item.publishScope === prev.publishScope)
+              ? prev
+              : { ...prev, publishScope: rows[0].publishScope },
+          );
+        }
+      })
+      .catch(() => undefined);
   }, []);
+
+  useEffect(() => {
+    if (courseId === null || restoredPubConfigCourse.current === courseId) return;
+    restoredPubConfigCourse.current = courseId;
+    const cached = getCachedPubConfig(courseId);
+    if (!cached) return;
+    setPubConfig(() => {
+      if (revenueOptions.length > 0 && !revenueOptions.some((item) => item.publishScope === cached.publishScope)) {
+        return { ...cached, publishScope: revenueOptions[0].publishScope };
+      }
+      return cached;
+    });
+  }, [courseId, revenueOptions]);
+
+  useEffect(() => {
+    if (courseId === null) return;
+    setCachedPubConfig(courseId, pubConfig);
+  }, [courseId, pubConfig]);
 
   // 恢复服务端草稿
   useEffect(() => {
@@ -237,10 +363,18 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
           totalEpisodes: c.plannedEpisodes ? String(c.plannedEpisodes) : "",
           channel: genderToChannel(c.genderType),
           languageType: c.languageType || "",
+          classificationId: c.classificationId ?? null,
           tags: c.courseLabel ? c.courseLabel.split(",").filter(Boolean) : [],
           copyrightType: c.copyrightType || 1,
           copyrightProof: c.copyrightProof || "",
         });
+        setHighlight((p) => ({
+          ...p,
+          videoUrl: c.highlightVideoUrl || "",
+          fileName: c.highlightFileName || "",
+          fileSize: c.highlightFileSize ?? null,
+          uploadTime: c.highlightUploadTime || "",
+        }));
         // 已上传集回显
         const planned = c.plannedEpisodes || 0;
         setVideos(
@@ -257,6 +391,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
               videoSize: ep?.videoSize ?? 0,
               videoDuration: ep?.videoDuration ?? 0,
               videoUrl: ep?.videoUrl || "",
+              fileName: ep?.fileName || "",
               fileRef: React.createRef<HTMLInputElement>(),
             };
           }),
@@ -266,10 +401,11 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
       .catch(() => undefined);
   }, []);
 
-  // 语言变化时加载标签集
+  // 语言变化时加载标签集和类别集
   useEffect(() => {
     if (!basicInfo.languageType) {
       setLabelOptions([]);
+      setClassificationOptions([]);
       return;
     }
     setLabelsLoading(true);
@@ -277,11 +413,17 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
       .then((opts) => setLabelOptions(opts))
       .catch(() => setLabelOptions([]))
       .finally(() => setLabelsLoading(false));
+    setClassificationsLoading(true);
+    fetchClassifications(basicInfo.languageType)
+      .then((opts) => setClassificationOptions(opts))
+      .catch(() => setClassificationOptions([]))
+      .finally(() => setClassificationsLoading(false));
   }, [basicInfo.languageType]);
 
   const discardDraft = async () => {
     if (courseId !== null) {
       await clearDraft(courseId).catch(() => undefined);
+      removeCachedPubConfig(courseId);
       toast.success(t.draftCleared);
     }
     setCourseId(null);
@@ -289,6 +431,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
     setVideos([]);
     setStep(1);
     setPubConfig({ publishScope: 1, onShelfNow: true });
+    setHighlight({ videoUrl: "", fileName: "", fileSize: null, uploadTime: "", file: null, uploading: false, error: "" });
     setDraftRestored(false);
   };
 
@@ -319,6 +462,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
     parseInt(basicInfo.totalEpisodes) >= 1 &&
     !!basicInfo.channel &&
     !!basicInfo.languageType &&
+    basicInfo.classificationId !== null &&
     basicInfo.tags.length > 0 &&
     // 授权版权需上传版权证明
     (basicInfo.copyrightType !== 2 || !!basicInfo.copyrightProof);
@@ -338,8 +482,9 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
         genderType: channelToGender(basicInfo.channel as ChannelValue),
         languageType: basicInfo.languageType,
         courseLabel: basicInfo.tags.join(","),
+        classificationId: basicInfo.classificationId as number,
         copyrightType: basicInfo.copyrightType,
-        // 仅授权时提交版权证明（字段名 TODO(verify) 待后端确认）
+        // 仅授权时提交版权证明；自制版权由后端强制清空。
         copyrightProof: basicInfo.copyrightType === 2 ? basicInfo.copyrightProof : "",
       });
       setCourseId(res.courseId);
@@ -359,6 +504,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
               videoSize: 0,
               videoDuration: 0,
               videoUrl: "",
+              fileName: "",
               fileRef: React.createRef<HTMLInputElement>(),
             }
           );
@@ -410,6 +556,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
           episodeNo: r.episodeNo,
           title: r.title || undefined,
           videoUrl: url,
+          fileName: r.file?.name,
         });
         updateVideo(r.episodeNo, {
           uploadStatus: res.uploadStatus,
@@ -418,6 +565,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
           videoSize: res.videoSize,
           videoDuration: res.videoDuration,
           videoUrl: url,
+          fileName: r.file?.name || "",
         });
         if (res.uploadStatus === 1) {
           uploaded.add(r.episodeNo);
@@ -437,6 +585,120 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
     setStep(3);
   };
 
+  const onPickHighlight = async (file: File | undefined) => {
+    if (!file || courseId === null) return;
+    if (file.size > VIDEO_MAX) {
+      setHighlight((p) => ({ ...p, error: t.fileTooLarge }));
+      return;
+    }
+    setHighlight((p) => ({ ...p, file, uploading: true, error: "" }));
+    try {
+      const url = await uploadFile(file, PUBLISHER_UPLOAD_PATH);
+      const saved = await saveHighlight(courseId, url, file.name);
+      setHighlight({
+        videoUrl: saved.highlightVideoUrl,
+        fileName: saved.highlightFileName || file.name,
+        fileSize: saved.highlightFileSize,
+        uploadTime: saved.highlightUploadTime || "",
+        file: null,
+        uploading: false,
+        error: "",
+      });
+      toast.success(t.highlightSaved);
+    } catch {
+      setHighlight((p) => ({ ...p, uploading: false, error: t.highlightUploadFailed }));
+    }
+  };
+
+  const removeHighlight = async () => {
+    if (courseId === null) return;
+    setHighlight((p) => ({ ...p, uploading: true, error: "" }));
+    try {
+      await saveHighlight(courseId, "");
+      setHighlight({ videoUrl: "", fileName: "", fileSize: null, uploadTime: "", file: null, uploading: false, error: "" });
+    } catch {
+      setHighlight((p) => ({ ...p, uploading: false }));
+    }
+  };
+
+  const removeUploadedVideo = async (episodeNo: number) => {
+    if (courseId === null) return;
+    try {
+      await deleteEpisode(courseId, episodeNo);
+      updateVideo(episodeNo, {
+        file: null,
+        duration: "",
+        fileError: "",
+        uploadStatus: 0,
+        videoSize: 0,
+        videoDuration: 0,
+        videoUrl: "",
+        fileName: "",
+      });
+    } catch {
+      // http 已 toast
+    }
+  };
+
+  const downloadTemplate = async () => {
+    if (courseId === null) return;
+    setTemplateDownloading(true);
+    try {
+      const blob = await downloadUploadTemplate(courseId);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `批量录入模版_D${courseId}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      toast.error(err instanceof ApiError ? err.message : t.templateDownloadFailed);
+    } finally {
+      setTemplateDownloading(false);
+    }
+  };
+
+  const importTemplate = async (file: File | undefined) => {
+    if (!file || courseId === null) return;
+    setTemplateImporting(true);
+    try {
+      const entries = await parseEpisodeTemplate(file, videos.length);
+      if (entries.length === 0) {
+        toast.error(t.templateImportEmpty);
+        return;
+      }
+      for (const entry of entries) {
+        const res = await saveEpisode({
+          courseId,
+          episodeNo: entry.episodeNo,
+          title: entry.title,
+          videoUrl: entry.videoUrl,
+          fileName: entry.fileName,
+        });
+        const patch: Partial<VideoRow> = {
+          file: null,
+          duration: "",
+          fileError: "",
+          uploadStatus: res.uploadStatus,
+          videoSize: res.videoSize,
+          videoDuration: res.videoDuration,
+          videoUrl: entry.videoUrl,
+          fileName: entry.fileName,
+        };
+        if (entry.title) patch.title = entry.title;
+        updateVideo(entry.episodeNo, patch);
+      }
+      toast.success(fmt(t.templateImportSuccess, { n: entries.length }));
+    } catch {
+      toast.error(t.templateImportFailed);
+    } finally {
+      setTemplateImporting(false);
+      if (templateInputRef.current) templateInputRef.current.value = "";
+    }
+  };
+
   const openPricing = () => {
     setShowPricing(true);
     setPriceLoading(true);
@@ -449,6 +711,11 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
   /** Step3 → publish 送审 */
   const handleSubmit = async () => {
     if (courseId === null || submitting) return;
+    if (!highlight.videoUrl) {
+      setHighlight((p) => ({ ...p, error: t.highlightRequired }));
+      toast.error(t.highlightRequired);
+      return;
+    }
     setSubmitting(true);
     try {
       await publishCourse({
@@ -456,10 +723,19 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
         publishScope: pubConfig.publishScope,
         onShelfNow: pubConfig.onShelfNow,
       });
+      removeCachedPubConfig(courseId);
       toast.success(t.submitSuccess);
       onSubmitted();
-    } catch {
-      /* http 已 toast（如「请先上传全部剧集」） */
+    } catch (err) {
+      if (isPublishError(err, "publisher_course_basic_incomplete")) {
+        setStep(1);
+      } else if (isPublishError(err, "publisher_course_upload_all_first")) {
+        setStep(2);
+      } else if (isPublishError(err, "publisher_course_highlight_required")) {
+        setHighlight((p) => ({ ...p, error: t.highlightRequired }));
+      } else if (isPublishError(err, "publisher_course_not_submittable")) {
+        onSubmitted();
+      }
     } finally {
       setSubmitting(false);
     }
@@ -561,7 +837,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
               <input
                 ref={coverRef}
                 type="file"
-                accept="image/png,image/jpeg,image/heic,image/heif,.heic,.heif"
+                accept={IMAGE_ACCEPT}
                 onChange={(e) => {
                   const f = e.target.files?.[0];
                   e.target.value = "";
@@ -647,7 +923,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
               <Field label={t.langLabel} required>
                 <select
                   value={basicInfo.languageType}
-                  onChange={(e) => bi({ languageType: e.target.value, tags: [] })}
+                  onChange={(e) => bi({ languageType: e.target.value, classificationId: null, tags: [] })}
                   className={inputClass(false)}
                 >
                   <option value="">{t.langPlaceholder}</option>
@@ -657,6 +933,43 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                     </option>
                   ))}
                 </select>
+              </Field>
+
+              {/* 类别（按语言取 classifications 接口） */}
+              <Field label={t.classificationLabel} required>
+                {!basicInfo.languageType ? (
+                  <p className="text-xs text-gray-400">{t.classificationSelectLangFirst}</p>
+                ) : classificationsLoading ? (
+                  <div className="flex items-center gap-2 text-xs text-gray-400">
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    {t.readingDuration}
+                  </div>
+                ) : (
+                  <div className="flex flex-wrap gap-1.5">
+                    {classificationOptions.map((item) => {
+                      const selected = basicInfo.classificationId === item.classificationId;
+                      return (
+                        <button
+                          key={item.classificationId}
+                          type="button"
+                          onClick={() => bi({ classificationId: item.classificationId })}
+                          className="px-2.5 py-1 rounded-lg text-xs border transition-all"
+                          style={{
+                            background: selected ? "#111111" : "#FAFAFA",
+                            color: selected ? "white" : "#6B7280",
+                            borderColor: selected ? "#111111" : "#E5E7EB",
+                            fontWeight: selected ? 600 : 400,
+                          }}
+                        >
+                          {item.classificationName}
+                        </button>
+                      );
+                    })}
+                    {classificationOptions.length === 0 && (
+                      <p className="text-xs text-gray-400">{t.classificationEmpty}</p>
+                    )}
+                  </div>
+                )}
               </Field>
 
               {/* 标签（按语言取 labels 接口） */}
@@ -723,7 +1036,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                 </div>
               </Field>
 
-              {/* 授权版权 → 需上传版权证明（copyrightType=2 必填；支持图片/PDF，走 /publisher/course/upload） */}
+              {/* 授权版权 → 需上传版权证明（copyrightType=2 必填；支持图片/PDF/Word，走 /publisher/course/upload） */}
               {basicInfo.copyrightType === 2 && (
                 <Field label={t.copyrightProofLabel} required>
                   <CopyrightProofUpload
@@ -796,7 +1109,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                         <input
                           ref={v.fileRef}
                           type="file"
-                          accept="video/*"
+                          accept={VIDEO_ACCEPT}
                           onChange={(e) => {
                             const f = e.target.files?.[0];
                             e.target.value = "";
@@ -830,7 +1143,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                           <div className="flex items-center gap-2">
                             <Film className="w-4 h-4 text-gray-400 flex-shrink-0" />
                             <span className="text-xs text-gray-700 truncate flex-1 max-w-[120px]">
-                              {fileNameFromUrl(v.videoUrl) || fmt(t.epLabelN, { ep: v.episodeNo })}
+                              {v.fileName || fileNameFromUrl(v.videoUrl) || fmt(t.epLabelN, { ep: v.episodeNo })}
                             </span>
                             <button
                               onClick={() => v.fileRef.current?.click()}
@@ -839,6 +1152,12 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                             >
                               <Upload className="w-3 h-3" />
                               {t.epActionReplace}
+                            </button>
+                            <button
+                              onClick={() => void removeUploadedVideo(v.episodeNo)}
+                              className="text-gray-400 hover:text-red-500 flex-shrink-0"
+                            >
+                              <X className="w-3.5 h-3.5" />
                             </button>
                           </div>
                         ) : (
@@ -886,10 +1205,39 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
             </div>
           </div>
           <div className="flex items-center justify-between px-5 py-3.5 border-t border-gray-100 bg-gray-50/40">
-            <span className="text-xs text-gray-500">
-              {fmt(t.episodesBreadcrumbCount, { total: videos.length, done: uploadedCount })}
-              {selectedVideoCount > 0 && ` · ${fmt(t.uploadSummary, { total: videos.length, selected: selectedVideoCount })}`}
-            </span>
+            <div className="flex items-center gap-3 min-w-0">
+              <input
+                ref={templateInputRef}
+                type="file"
+                accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                className="hidden"
+                onChange={(e) => void importTemplate(e.target.files?.[0])}
+              />
+              <span className="text-xs text-gray-500">
+                {fmt(t.episodesBreadcrumbCount, { total: videos.length, done: uploadedCount })}
+                {selectedVideoCount > 0 && ` · ${fmt(t.uploadSummary, { total: videos.length, selected: selectedVideoCount })}`}
+              </span>
+              <button
+                type="button"
+                onClick={() => void downloadTemplate()}
+                disabled={templateDownloading}
+                className="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-600 hover:bg-gray-50 disabled:opacity-60 inline-flex items-center gap-1.5"
+                style={{ fontWeight: 600 }}
+              >
+                {templateDownloading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                {t.downloadTemplate}
+              </button>
+              <button
+                type="button"
+                onClick={() => templateInputRef.current?.click()}
+                disabled={templateImporting}
+                className="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-600 hover:bg-gray-50 disabled:opacity-60 inline-flex items-center gap-1.5"
+                style={{ fontWeight: 600 }}
+              >
+                {templateImporting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                {templateImporting ? t.templateImporting : t.importTemplate}
+              </button>
+            </div>
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setStep(1)}
@@ -931,10 +1279,6 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                   badgeBg: "#F3F4F6",
                   badgeColor: "#374151",
                   revenueTitle: t.revenueAccountTitle,
-                  rows: [
-                    { label: t.platform, val: "20%" },
-                    { label: t.producer, val: "80%", highlight: true },
-                  ],
                 },
                 {
                   scope: 2,
@@ -945,13 +1289,29 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                   badgeBg: "#FFF1F2",
                   badgeColor: "#E8192C",
                   revenueTitle: t.revenueFullTitle,
-                  rows: [
-                    { label: t.platform, val: "40%" },
-                    { label: t.producer, val: "60%", highlight: true },
-                  ],
                 },
-              ].map((opt) => {
+              ]
+                .map((meta) => {
+                  const revenue = revenueOptions.find((item) => item.publishScope === meta.scope);
+                  return revenue ? { ...meta, revenue } : null;
+                })
+                .filter((opt): opt is {
+                  scope: number;
+                  title: string;
+                  desc: string;
+                  highlights: Highlight[];
+                  badge: string;
+                  badgeBg: string;
+                  badgeColor: string;
+                  revenueTitle: string;
+                  revenue: RevenueOption;
+                } => opt !== null)
+                .map((opt) => {
                 const active = pubConfig.publishScope === opt.scope;
+                const rows = [
+                  { label: t.platform, val: `${opt.revenue.platformRatio}%` },
+                  { label: t.producer, val: `${opt.revenue.creatorRatio}%`, highlight: true },
+                ];
                 return (
                   <div
                     key={opt.scope}
@@ -1013,7 +1373,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                         {opt.revenueTitle}
                       </p>
                       <div className="flex gap-3">
-                        {opt.rows.map((r, ri) => (
+                        {rows.map((r, ri) => (
                           <div
                             key={ri}
                             className="flex-1 rounded-lg px-3 py-2"
@@ -1042,6 +1402,64 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
           </div>
 
           <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+            <div className="p-6 border-b border-gray-100">
+              <h3 className="text-sm text-gray-900 mb-4" style={{ fontWeight: 700 }}>
+                {t.uploadHighlight} <span className="text-red-500">*</span>
+              </h3>
+              <input
+                ref={highlightRef}
+                type="file"
+                accept={HIGHLIGHT_ACCEPT}
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  e.target.value = "";
+                  void onPickHighlight(f);
+                }}
+              />
+              {highlight.videoUrl ? (
+                <div className="flex items-center gap-3 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3">
+                  <Film className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm text-gray-800" style={{ fontWeight: 600 }}>
+                      {highlight.fileName || fileNameFromUrl(highlight.videoUrl)}
+                    </p>
+                    <p className="mt-0.5 text-xs text-gray-400">
+                      {highlight.fileSize !== null ? formatBytes(highlight.fileSize) : "—"} {highlight.uploadTime ? `· ${highlight.uploadTime}` : ""}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => highlightRef.current?.click()}
+                    disabled={highlight.uploading}
+                    className="text-xs text-gray-500 hover:text-gray-900 disabled:opacity-50"
+                    style={{ fontWeight: 500 }}
+                  >
+                    {highlight.uploading ? t.highlightUploading : t.epActionReplace}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => void removeHighlight()}
+                    disabled={highlight.uploading}
+                    className="text-gray-400 hover:text-red-500 disabled:opacity-50"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => highlightRef.current?.click()}
+                  disabled={highlight.uploading}
+                  className="w-full h-[88px] rounded-xl border border-dashed border-gray-300 flex flex-col items-center justify-center gap-1.5 text-gray-400 hover:border-gray-400 transition-colors disabled:opacity-60"
+                >
+                  {highlight.uploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-5 h-5" />}
+                  <span className="text-sm">{highlight.uploading ? t.highlightUploading : t.uploadHighlight}</span>
+                </button>
+              )}
+              {highlight.error && <p className="mt-2 text-xs text-red-500">{highlight.error}</p>}
+            </div>
+
             {/* 各国家收费规则（只读入口） */}
             <div className="p-6 border-b border-gray-100">
               <button
@@ -1103,7 +1521,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                 </button>
                 <button
                   onClick={() => void handleSubmit()}
-                  disabled={submitting}
+                  disabled={submitting || revenueOptions.length === 0}
                   className="px-5 py-2 rounded-xl text-white text-sm hover:opacity-90 disabled:opacity-60 flex items-center gap-2"
                   style={{ background: "#111111", fontWeight: 600 }}
                 >
@@ -1120,3 +1538,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
     </div>
   );
 };
+
+function isPublishError(err: unknown, key: string): boolean {
+  return err instanceof ApiError && err.message.includes(key);
+}

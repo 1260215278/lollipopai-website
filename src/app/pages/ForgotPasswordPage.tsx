@@ -143,7 +143,7 @@ export function ForgotPasswordPage() {
                 style={{ boxShadow: "0px 4px 12.4px 0px rgba(255,220,224,0.35)" }}
               />
               <div className="bg-[#1c1c1c] border border-[#666] rounded-[31px] pt-[104px] pb-10 px-8 sm:px-12">
-                <h2 className="text-center text-white" style={{ fontWeight: 700, fontSize: "26px", letterSpacing: "-0.78px" }}>
+                <h2 className="text-center text-white" style={{ fontWeight: 700, fontSize: "26px", letterSpacing: 0 }}>
                   {t.resetTitle}
                 </h2>
 

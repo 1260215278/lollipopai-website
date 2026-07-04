@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Search, Wallet, Clock, CheckCircle2, TrendingUp, Info, Film, ChevronLeft, ChevronRight } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { useI18n } from "../../i18n";
@@ -8,6 +8,7 @@ import { EmptyState } from "../components/settlement/EmptyState";
 import {
   getPayoutAccount,
   getEarningsSummary,
+  getEarningsMonths,
   getEarningsDetail,
   getEarningsCoursesDropdown,
   type EarningsSummary,
@@ -20,21 +21,14 @@ const DETAIL_PAGE_SIZE = 10;
 const usd = (n: number) =>
   `$ ${(n ?? 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
-const formatViews = (n: number) => (n ?? 0).toLocaleString("en-US");
+const formatViews = (n: number | null, locale: string) =>
+  n === null ? "--" : new Intl.NumberFormat(locale, { notation: "compact", maximumFractionDigits: 1 }).format(n);
 
-function currentMonth(): string {
+function getDefaultMonth(months: string[]): string {
   const now = new Date();
-  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
-}
+  const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
 
-/** 月份 Tab：本年 monthlyTrend 中 amountUsd>0 的月份 + 当前月，降序。 */
-function deriveMonthTabs(trend: EarningsSummary["monthlyTrend"]): string[] {
-  const months = new Set<string>();
-  for (const item of trend) {
-    if (item.amountUsd > 0) months.add(item.month);
-  }
-  months.add(currentMonth());
-  return [...months].sort().reverse();
+  return months.includes(currentMonth) ? currentMonth : months[0] ?? "";
 }
 
 function monthDateRange(month: string): { startDate: string; endDate: string } {
@@ -44,6 +38,10 @@ function monthDateRange(month: string): { startDate: string; endDate: string } {
     startDate: `${month}-01`,
     endDate: `${month}-${String(lastDay).padStart(2, "0")}`,
   };
+}
+
+function monthTabLabel(month: string, template: string): string {
+  return template.replace("{n}", String(Number(month.slice(5, 7))));
 }
 
 /** 结算状态徽标：0待结算灰 / 1结算中蓝 / 2已结算绿。 */
@@ -69,7 +67,7 @@ function SettleStatusBadge({ status, label }: { status: 0 | 1 | 2; label: string
  * 是否有收款账户决定展示数据态还是暂无态（同原型 hasPaymentAccount）。
  */
 export function EarningsPage() {
-  const { messages } = useI18n();
+  const { messages, locale } = useI18n();
   const t = messages.distribution.earnings;
   const allLabel = messages.distribution.withdraw.statusAll;
 
@@ -80,6 +78,7 @@ export function EarningsPage() {
   const [detail, setDetail] = useState<EarningsDetailRow[]>([]);
   const [detailTotal, setDetailTotal] = useState(0);
   const [courses, setCourses] = useState<EarningsCourseOption[]>([]);
+  const [months, setMonths] = useState<string[]>([]);
   const [activeMonth, setActiveMonth] = useState<string>("");
   const [courseFilter, setCourseFilter] = useState<number | "all">("all");
   const [search, setSearch] = useState("");
@@ -89,16 +88,17 @@ export function EarningsPage() {
   const loadOverview = useCallback(async () => {
     setLoading(true);
     try {
-      const [acc, sum, courseOptions] = await Promise.all([
+      const [acc, sum, courseOptions, availableMonths] = await Promise.all([
         getPayoutAccount(),
         getEarningsSummary(),
         getEarningsCoursesDropdown(),
+        getEarningsMonths(),
       ]);
       setHasAccount(acc.bound);
       setSummary(sum);
       setCourses(courseOptions);
-      const tabs = deriveMonthTabs(sum.monthlyTrend);
-      setActiveMonth((prev) => (tabs.includes(prev) ? prev : tabs[0] ?? ""));
+      setMonths(availableMonths);
+      setActiveMonth((prev) => (availableMonths.includes(prev) ? prev : getDefaultMonth(availableMonths)));
     } catch {
       // http 已 toast
     } finally {
@@ -120,11 +120,6 @@ export function EarningsPage() {
   useEffect(() => {
     setPage(1);
   }, [debouncedSearch]);
-
-  const months = useMemo(
-    () => (summary ? deriveMonthTabs(summary.monthlyTrend) : []),
-    [summary],
-  );
 
   const loadDetail = useCallback(async () => {
     if (!hasAccount || !activeMonth) return;
@@ -206,7 +201,7 @@ export function EarningsPage() {
               style={{
                 fontWeight: 800,
                 fontSize: "2.25rem",
-                letterSpacing: "-0.04em",
+                letterSpacing: 0,
                 color: hasAccount ? "#101828" : "#D1D5DB",
               }}
             >
@@ -311,7 +306,7 @@ export function EarningsPage() {
                     boxShadow: activeMonth === m ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
                   }}
                 >
-                  {m}
+                  {monthTabLabel(m, t.monthLabel)}
                 </button>
               ))}
             </div>
@@ -397,7 +392,7 @@ export function EarningsPage() {
                           </span>
                           <span className="text-xs text-gray-600 whitespace-nowrap">{row.orderCount}</span>
                           <span className="text-xs text-gray-600 whitespace-nowrap tabular-nums">
-                            {formatViews(row.viewCount)}
+                            {formatViews(row.dailyViewCount, locale)}
                           </span>
                           <div>
                             <SettleStatusBadge

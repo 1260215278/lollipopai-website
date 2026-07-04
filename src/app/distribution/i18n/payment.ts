@@ -20,10 +20,7 @@ export interface PaymentMessages {
   formCardTitle: string;
   formCardDesc: string;
   companyNameLabel: string;
-  companyNamePlaceholder: string;
   autoFilled: string;
-  accountHolderLabel: string;
-  accountHolderPlaceholder: string;
   accountNoLabel: string;
   accountNoPlaceholder: string;
   bankLabel: string;
@@ -32,12 +29,17 @@ export interface PaymentMessages {
   branchOptional: string;
   branchPlaceholder: string;
   confirm: string;
+  confirmAdd: string;
+  confirmEdit: string;
   cancel: string;
   back: string;
   /** 已绑定查看 */
   accountCardTitle: string;
   bound: string;
+  defaultBadge: string;
+  setDefault: string;
   edit: string;
+  delete: string;
   rowCompany: string;
   rowAccountNo: string;
   rowBank: string;
@@ -49,6 +51,8 @@ export interface PaymentMessages {
   vBankRequired: string;
   addSuccess: string;
   updateSuccess: string;
+  deleteSuccess: string;
+  setDefaultSuccess: string;
 }
 
 export const payment: Record<Locale, PaymentMessages> = {
@@ -60,15 +64,12 @@ export const payment: Record<Locale, PaymentMessages> = {
     addCardTitle: "添加收款账户",
     addCardDesc: "绑定对公银行账户，平台结算后直接打款到账。",
     addNow: "立即添加",
-    addTitle: "添加收款账户",
+    addTitle: "新增收款账户",
     editTitle: "修改收款账户",
     formCardTitle: "对公收款账户",
     formCardDesc: "请填写对公收款信息，用于平台结算打款",
     companyNameLabel: "公司名称",
-    companyNamePlaceholder: "请输入公司名称",
     autoFilled: "自动带入",
-    accountHolderLabel: "户名",
-    accountHolderPlaceholder: "请输入收款户名",
     accountNoLabel: "银行账号",
     accountNoPlaceholder: "请输入银行账号",
     bankLabel: "开户银行",
@@ -77,21 +78,28 @@ export const payment: Record<Locale, PaymentMessages> = {
     branchOptional: "（选填）",
     branchPlaceholder: "如：北京朝阳支行",
     confirm: "确认提交",
+    confirmAdd: "确认添加",
+    confirmEdit: "确认修改",
     cancel: "取消",
     back: "返回",
     accountCardTitle: "对公收款账户",
     bound: "已绑定",
+    defaultBadge: "默认",
+    setDefault: "设为默认",
     edit: "修改",
+    delete: "删除",
     rowCompany: "公司名称",
     rowAccountNo: "银行账号",
     rowBank: "开户银行",
     rowBranch: "支行名称",
     savedTip: "收款账户信息已保存",
-    notice: "收款账户仅支持对公银行账户，结算款项将直接打款至该账户。如需修改，请联系平台客服。",
+    notice: "收款账户仅支持对公银行账户，结算款项将直接打款至该账户。如需变更，可点击修改更新。",
     vAccountNoRequired: "请填写银行账号",
     vBankRequired: "请填写开户银行",
     addSuccess: "收款账户添加成功",
     updateSuccess: "收款账户信息已更新",
+    deleteSuccess: "收款账户已删除",
+    setDefaultSuccess: "默认收款账户已更新",
   },
   "zh-TW": {
     title: "收款管理",
@@ -106,10 +114,7 @@ export const payment: Record<Locale, PaymentMessages> = {
     formCardTitle: "對公收款帳戶",
     formCardDesc: "請填寫對公收款資訊，用於平台結算打款",
     companyNameLabel: "公司名稱",
-    companyNamePlaceholder: "請輸入公司名稱",
     autoFilled: "自動帶入",
-    accountHolderLabel: "戶名",
-    accountHolderPlaceholder: "請輸入收款戶名",
     accountNoLabel: "銀行帳號",
     accountNoPlaceholder: "請輸入銀行帳號",
     bankLabel: "開戶銀行",
@@ -118,21 +123,28 @@ export const payment: Record<Locale, PaymentMessages> = {
     branchOptional: "（選填）",
     branchPlaceholder: "如：北京朝陽支行",
     confirm: "確認提交",
+    confirmAdd: "確認新增",
+    confirmEdit: "確認修改",
     cancel: "取消",
     back: "返回",
     accountCardTitle: "對公收款帳戶",
     bound: "已綁定",
+    defaultBadge: "預設",
+    setDefault: "設為預設",
     edit: "修改",
+    delete: "刪除",
     rowCompany: "公司名稱",
     rowAccountNo: "銀行帳號",
     rowBank: "開戶銀行",
     rowBranch: "支行名稱",
     savedTip: "收款帳戶資訊已儲存",
-    notice: "收款帳戶僅支援對公銀行帳戶，結算款項將直接打款至該帳戶。如需修改，請聯絡平台客服。",
+    notice: "收款帳戶僅支援對公銀行帳戶，結算款項將直接打款至該帳戶。如需變更，可點擊修改更新。",
     vAccountNoRequired: "請填寫銀行帳號",
     vBankRequired: "請填寫開戶銀行",
     addSuccess: "收款帳戶新增成功",
     updateSuccess: "收款帳戶資訊已更新",
+    deleteSuccess: "收款帳戶已刪除",
+    setDefaultSuccess: "預設收款帳戶已更新",
   },
   en: {
     title: "Payment Management",
@@ -147,10 +159,7 @@ export const payment: Record<Locale, PaymentMessages> = {
     formCardTitle: "Corporate Bank Account",
     formCardDesc: "Fill in the corporate account info used for platform settlements",
     companyNameLabel: "Company Name",
-    companyNamePlaceholder: "Enter company name",
     autoFilled: "Auto-filled",
-    accountHolderLabel: "Account Holder",
-    accountHolderPlaceholder: "Enter account holder name",
     accountNoLabel: "Account Number",
     accountNoPlaceholder: "Enter bank account number",
     bankLabel: "Bank Name",
@@ -159,21 +168,28 @@ export const payment: Record<Locale, PaymentMessages> = {
     branchOptional: "(optional)",
     branchPlaceholder: "e.g. Beijing Chaoyang Branch",
     confirm: "Submit",
+    confirmAdd: "Add",
+    confirmEdit: "Save",
     cancel: "Cancel",
     back: "Back",
     accountCardTitle: "Corporate Bank Account",
     bound: "Bound",
+    defaultBadge: "Default",
+    setDefault: "Set default",
     edit: "Edit",
+    delete: "Delete",
     rowCompany: "Company",
     rowAccountNo: "Account No.",
     rowBank: "Bank",
     rowBranch: "Branch",
     savedTip: "Payment account saved",
-    notice: "Only corporate bank accounts are supported. Settlements are paid directly to this account. Contact support to update.",
+    notice: "Only corporate bank accounts are supported. Settlements are paid directly to this account. Use Edit to update details.",
     vAccountNoRequired: "Please enter the bank account number",
     vBankRequired: "Please enter the bank name",
     addSuccess: "Payment account added",
     updateSuccess: "Payment account updated",
+    deleteSuccess: "Payment account deleted",
+    setDefaultSuccess: "Default payment account updated",
   },
   pt: {
     title: "Gestão de Recebimento",
@@ -188,10 +204,7 @@ export const payment: Record<Locale, PaymentMessages> = {
     formCardTitle: "Conta Bancária Corporativa",
     formCardDesc: "Preencha os dados da conta corporativa usados nas liquidações da plataforma",
     companyNameLabel: "Nome da Empresa",
-    companyNamePlaceholder: "Digite o nome da empresa",
     autoFilled: "Preenchido automaticamente",
-    accountHolderLabel: "Titular da Conta",
-    accountHolderPlaceholder: "Digite o nome do titular",
     accountNoLabel: "Número da Conta",
     accountNoPlaceholder: "Digite o número da conta bancária",
     bankLabel: "Banco",
@@ -200,20 +213,27 @@ export const payment: Record<Locale, PaymentMessages> = {
     branchOptional: "(opcional)",
     branchPlaceholder: "ex.: Agência Centro",
     confirm: "Enviar",
+    confirmAdd: "Adicionar",
+    confirmEdit: "Salvar",
     cancel: "Cancelar",
     back: "Voltar",
     accountCardTitle: "Conta Bancária Corporativa",
     bound: "Vinculada",
+    defaultBadge: "Padrão",
+    setDefault: "Definir padrão",
     edit: "Editar",
+    delete: "Excluir",
     rowCompany: "Empresa",
     rowAccountNo: "Nº da Conta",
     rowBank: "Banco",
     rowBranch: "Agência",
     savedTip: "Conta de recebimento salva",
-    notice: "Apenas contas bancárias corporativas são aceitas. As liquidações são pagas diretamente nesta conta. Contate o suporte para alterar.",
+    notice: "Apenas contas bancárias corporativas são aceitas. As liquidações são pagas diretamente nesta conta. Use Editar para atualizar os dados.",
     vAccountNoRequired: "Digite o número da conta bancária",
     vBankRequired: "Digite o nome do banco",
     addSuccess: "Conta de recebimento adicionada",
     updateSuccess: "Conta de recebimento atualizada",
+    deleteSuccess: "Conta de recebimento excluída",
+    setDefaultSuccess: "Conta padrão atualizada",
   },
 };

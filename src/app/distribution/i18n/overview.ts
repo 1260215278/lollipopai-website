@@ -28,6 +28,12 @@ export interface OverviewMessages {
   monthlyAdded: string;
   /** 较上月 {pct} */
   momChange: string;
+  /** 当前余额 */
+  balanceUsd: string;
+  /** 昨日实得 */
+  yesterdayUsd: string;
+  /** 本月至今实得 */
+  monthToDateUsd: string;
 
   // ── 趋势图 ───────────────────────────────────
   /** 数据趋势 */
@@ -70,6 +76,13 @@ export interface OverviewMessages {
   colFavorites: string;
   colComments: string;
   colShares: string;
+  /** 展开更多排行 */
+  expandRanking: string;
+  /** 排名上升 / 下降 */
+  rankUp: string;
+  rankDown: string;
+  /** 上期排名 tooltip */
+  lastRank: string;
   /** 集数单位（如 24 集 / 24 ep） */
   unitEpisode: string;
 
@@ -95,6 +108,9 @@ export const overview: Record<Locale, OverviewMessages> = {
     unitDrama: "部",
     monthlyAdded: "本月新增 {n} 部",
     momChange: "较上月 {pct}",
+    balanceUsd: "当前余额",
+    yesterdayUsd: "昨日实得",
+    monthToDateUsd: "本月至今实得",
     trendTitle: "数据趋势",
     trendSubtitle: "近期剧集综合表现",
     metricPlays: "播放量",
@@ -118,6 +134,10 @@ export const overview: Record<Locale, OverviewMessages> = {
     colFavorites: "收藏数",
     colComments: "评论数",
     colShares: "分享数",
+    expandRanking: "展开更多（{n} 部）",
+    rankUp: "升",
+    rankDown: "降",
+    lastRank: "上期排名：第 {rank} 名",
     unitEpisode: "集",
     barTitle: "各剧集播放量对比",
     barViews: "播放量",
@@ -133,6 +153,9 @@ export const overview: Record<Locale, OverviewMessages> = {
     unitDrama: "部",
     monthlyAdded: "本月新增 {n} 部",
     momChange: "較上月 {pct}",
+    balanceUsd: "目前餘額",
+    yesterdayUsd: "昨日實得",
+    monthToDateUsd: "本月至今實得",
     trendTitle: "數據趨勢",
     trendSubtitle: "近期劇集綜合表現",
     metricPlays: "播放量",
@@ -156,6 +179,10 @@ export const overview: Record<Locale, OverviewMessages> = {
     colFavorites: "收藏數",
     colComments: "評論數",
     colShares: "分享數",
+    expandRanking: "展開更多（{n} 部）",
+    rankUp: "升",
+    rankDown: "降",
+    lastRank: "上期排名：第 {rank} 名",
     unitEpisode: "集",
     barTitle: "各劇集播放量對比",
     barViews: "播放量",
@@ -171,6 +198,9 @@ export const overview: Record<Locale, OverviewMessages> = {
     unitDrama: "dramas",
     monthlyAdded: "+{n} this month",
     momChange: "{pct} vs last month",
+    balanceUsd: "Balance",
+    yesterdayUsd: "Yesterday",
+    monthToDateUsd: "Month to Date",
     trendTitle: "Data Trend",
     trendSubtitle: "Recent drama performance",
     metricPlays: "Views",
@@ -194,6 +224,10 @@ export const overview: Record<Locale, OverviewMessages> = {
     colFavorites: "Favorites",
     colComments: "Comments",
     colShares: "Shares",
+    expandRanking: "Show more ({n})",
+    rankUp: "Up",
+    rankDown: "Down",
+    lastRank: "Last rank: #{rank}",
     unitEpisode: "ep",
     barTitle: "Drama Views Comparison",
     barViews: "Views",
@@ -209,6 +243,9 @@ export const overview: Record<Locale, OverviewMessages> = {
     unitDrama: "dramas",
     monthlyAdded: "+{n} este mês",
     momChange: "{pct} vs mês anterior",
+    balanceUsd: "Saldo",
+    yesterdayUsd: "Ontem",
+    monthToDateUsd: "Mês até hoje",
     trendTitle: "Tendência de Dados",
     trendSubtitle: "Desempenho recente dos dramas",
     metricPlays: "Visualizações",
@@ -232,6 +269,10 @@ export const overview: Record<Locale, OverviewMessages> = {
     colFavorites: "Favoritos",
     colComments: "Comentários",
     colShares: "Compartilhamentos",
+    expandRanking: "Mostrar mais ({n})",
+    rankUp: "Subiu",
+    rankDown: "Caiu",
+    lastRank: "Classificação anterior: #{rank}",
     unitEpisode: "ep",
     barTitle: "Comparação de Visualizações",
     barViews: "Visualizações",

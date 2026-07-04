@@ -1,12 +1,13 @@
 /**
  * 数据概览服务（发行方端，真实接口）
  * ------------------------------------------------------------------
- * 严格对接《20260622-发行中心-上剧-接口文档》§1：拆为 4 个端点（前缀 /publisher/**，
- * 走 publisher token）。统计一律限定当前用户（token 内 userId）的剧。
+ * 对接 20260703《发行中心-播放数据-前端对接》：核心接口前缀 /publisher/**，
+ * 走 publisher token。统计一律限定当前发行账号可见剧；员工只统计其被分配的剧。
  *  - GET /publisher/dashboard/overview     顶部概览卡片
  *  - GET /publisher/dashboard/trend        数据趋势（折线，按 metric+range）
- *  - GET /publisher/dashboard/ranking      剧集数据排行（data.list[]）
- *  - GET /publisher/dashboard/playCompare  各剧播放量对比（data.list[]）
+ *  - GET /publisher/dashboard/ranking      剧集数据排行（data.totalCount + data.list[]）
+ *
+ * `/publisher/dashboard/playCompare` 不在 20260703 播放数据契约中，仅作为旧柱状图的非阻塞兼容数据源。
  *
  * 字段一律来自接口文档，不臆造。分享数（shareCount）后端在埋点上线前返回 0。
  */
@@ -29,6 +30,12 @@ export interface DashboardOverview {
   /** 累计收藏 */
   collectTotal: number;
   collectMomRate: number;
+  /** 当前余额，员工账号不返回。 */
+  balanceUsd?: number;
+  /** 昨日实得，员工账号不返回。 */
+  yesterdayUsd?: number;
+  /** 本月至今实得，员工账号不返回。 */
+  monthToDateUsd?: number;
 }
 
 export function getOverview(): Promise<DashboardOverview> {
@@ -66,6 +73,10 @@ export function getTrend(metric: TrendMetric, range: TrendRange): Promise<Dashbo
 
 export interface RankingItem {
   rank: number;
+  /** 名次趋势：1上升 / -1下降 / 0持平或新剧 */
+  rankTrend: 1 | -1 | 0;
+  /** 上期名次；新剧无历史快照时为 null */
+  lastRank: number | null;
   courseId: number;
   title: string;
   /** 集数 */
@@ -79,13 +90,17 @@ export interface RankingItem {
   shareCount: number;
 }
 
-/** 剧集数据排行（默认按播放量降序）。data.list[] */
-export function getRanking(limit = 10, sort: "play" = "play"): Promise<RankingItem[]> {
-  return http
-    .get<{ list: RankingItem[] }>("/publisher/dashboard/ranking", {
-      params: { sort, limit },
-    })
-    .then((d) => d.list);
+export interface RankingResult {
+  /** 该账户可见剧总数 */
+  totalCount: number;
+  list: RankingItem[];
+}
+
+/** 剧集数据排行（默认按播放量降序）。 */
+export function getRanking(limit = 10, sort: "play" = "play"): Promise<RankingResult> {
+  return http.get<RankingResult>("/publisher/dashboard/ranking", {
+    params: { sort, limit },
+  });
 }
 
 /* ─── 各剧集播放量对比（§1.4） ───────────────────────────────── */

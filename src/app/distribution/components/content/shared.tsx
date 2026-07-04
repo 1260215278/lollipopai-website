@@ -2,7 +2,14 @@ import React from "react";
 import { CheckCircle2, Clock, AlertCircle } from "lucide-react";
 import type { ContentMessages } from "../../i18n/content";
 import { genderToChannel, type ChannelValue } from "../../mock/content";
+import type { LanguageOption } from "../../../services/language";
 import type { Highlight } from "./PhoneMockup";
+
+/** /publisher/course/upload 白名单（20260703 上剧全流程文档）。 */
+export const IMAGE_ACCEPT = "image/jpeg,image/png,image/gif,image/bmp,image/webp,image/heic,image/heif,.jpg,.jpeg,.png,.gif,.bmp,.webp,.heic,.heif";
+export const VIDEO_ACCEPT = "video/mp4,video/x-msvideo,video/quicktime,video/x-ms-wmv,video/x-flv,video/x-matroska,video/webm,.mp4,.avi,.mov,.wmv,.flv,.mkv,.webm,.m4v";
+export const HIGHLIGHT_ACCEPT = "video/mp4,video/quicktime,.mp4,.mov";
+export const COPYRIGHT_PROOF_ACCEPT = `${IMAGE_ACCEPT},application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.pdf,.doc,.docx`;
 
 /** 读取视频时长（m:ss），失败返回 "—" */
 export const readVideoDuration = (file: File): Promise<string> =>
@@ -92,6 +99,11 @@ export function highlightsOf(publishScope: number): Highlight[] {
 /** genderType(1/2/3) → 频道 i18n key */
 export function genderChannelKey(genderType: number): ChannelValue {
   return genderToChannel(genderType);
+}
+
+export function languageLabel(languageType: string | undefined | null, languages: LanguageOption[]): string {
+  if (!languageType) return "—";
+  return languages.find((item) => item.language === languageType)?.languageName || languageType;
 }
 
 /* ─── 格式化 ──────────────────────────────────────────────────── */

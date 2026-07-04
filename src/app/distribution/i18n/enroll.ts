@@ -86,6 +86,16 @@ export interface EnrollMessages {
   step4Sub: string;
   approvedTitle: string;
   approvedDesc: string;
+  swiftAccountStatus: string;
+  swiftOpening: string;
+  swiftReady: string;
+  swiftFailed: string;
+  swiftAccount: string;
+  swiftInitialPassword: string;
+  swiftTenantId: string;
+  swiftLastSync: string;
+  swiftRetry: string;
+  swiftRetrySuccess: string;
   enterDashboard: string;
   rejectedTitle: string;
   rejectedDesc: string;
@@ -171,6 +181,16 @@ export const enroll: Record<Locale, EnrollMessages> = {
     step4Sub: "开通平台账号",
     approvedTitle: "审核通过",
     approvedDesc: "恭喜，{company} 的入驻申请已通过审核，欢迎加入 Lollipop 平台！",
+    swiftAccountStatus: "Swift 账号状态",
+    swiftOpening: "Swift 账号开通中，请稍后。",
+    swiftReady: "Swift 账号已开通。",
+    swiftFailed: "开通中，请稍后。",
+    swiftAccount: "登录账号",
+    swiftInitialPassword: "初始密码",
+    swiftTenantId: "Swift 租户编号",
+    swiftLastSync: "最近同步时间",
+    swiftRetry: "重试开通",
+    swiftRetrySuccess: "已触发重试，请稍后刷新查看结果",
     enterDashboard: "进入发行中心",
     rejectedTitle: "审核未通过",
     rejectedDesc: "很遗憾，您提交的入驻资料未能通过审核，请检查并重新提交。",
@@ -257,6 +277,16 @@ export const enroll: Record<Locale, EnrollMessages> = {
     step4Sub: "開通平台帳號",
     approvedTitle: "審核通過",
     approvedDesc: "恭喜，{company} 的入駐申請已通過審核，歡迎加入 Lollipop 平台！",
+    swiftAccountStatus: "Swift 帳號狀態",
+    swiftOpening: "Swift 帳號開通中，請稍後。",
+    swiftReady: "Swift 帳號已開通。",
+    swiftFailed: "開通中，請稍後。",
+    swiftAccount: "登入帳號",
+    swiftInitialPassword: "初始密碼",
+    swiftTenantId: "Swift 租戶編號",
+    swiftLastSync: "最近同步時間",
+    swiftRetry: "重試開通",
+    swiftRetrySuccess: "已觸發重試，請稍後重新整理查看結果",
     enterDashboard: "進入發行中心",
     rejectedTitle: "審核未通過",
     rejectedDesc: "很遺憾，您提交的入駐資料未能通過審核，請檢查並重新提交。",
@@ -343,6 +373,16 @@ export const enroll: Record<Locale, EnrollMessages> = {
     step4Sub: "Platform account activated",
     approvedTitle: "Approved",
     approvedDesc: "Congratulations, the application for {company} has been approved. Welcome to Lollipop!",
+    swiftAccountStatus: "Swift Account Status",
+    swiftOpening: "Swift account provisioning is in progress. Please check again later.",
+    swiftReady: "Swift account is ready.",
+    swiftFailed: "Provisioning is in progress. Please check again later.",
+    swiftAccount: "Login account",
+    swiftInitialPassword: "Initial password",
+    swiftTenantId: "Swift tenant ID",
+    swiftLastSync: "Last sync time",
+    swiftRetry: "Retry",
+    swiftRetrySuccess: "Retry triggered. Please check again later.",
     enterDashboard: "Enter Distribution Center",
     rejectedTitle: "Not Approved",
     rejectedDesc: "Unfortunately, your application was not approved. Please review and resubmit.",
@@ -429,6 +469,16 @@ export const enroll: Record<Locale, EnrollMessages> = {
     step4Sub: "Conta da plataforma ativada",
     approvedTitle: "Aprovado",
     approvedDesc: "Parabéns, a solicitação de {company} foi aprovada. Bem-vindo à Lollipop!",
+    swiftAccountStatus: "Status da Conta Swift",
+    swiftOpening: "A conta Swift está sendo provisionada. Verifique novamente mais tarde.",
+    swiftReady: "A conta Swift está pronta.",
+    swiftFailed: "O provisionamento está em andamento. Verifique novamente mais tarde.",
+    swiftAccount: "Conta de login",
+    swiftInitialPassword: "Senha inicial",
+    swiftTenantId: "ID do tenant Swift",
+    swiftLastSync: "Última sincronização",
+    swiftRetry: "Tentar novamente",
+    swiftRetrySuccess: "Nova tentativa acionada. Verifique novamente mais tarde.",
     enterDashboard: "Entrar no Centro de Distribuição",
     rejectedTitle: "Não Aprovado",
     rejectedDesc: "Infelizmente, sua solicitação não foi aprovada. Revise e reenvie.",

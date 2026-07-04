@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ArrowLeft,
   ChevronRight,
@@ -14,21 +14,27 @@ import {
 import { toast } from "sonner";
 import type { ContentMessages } from "../../i18n/content";
 import { uploadFile, PUBLISHER_UPLOAD_PATH } from "../../../services/upload";
-import { fetchEpisodes, saveEpisode, type EpisodesResponse } from "../../../services/content";
+import { AuditStatus, deleteEpisode, downloadUploadTemplate, fetchEpisodes, saveEpisode, type EpisodesResponse } from "../../../services/content";
+import { ApiError } from "../../../services/http";
 import {
   uploadStatusStyle,
   uploadStatusLabel,
   readVideoDuration,
   formatBytes,
   formatDuration,
+  fileNameFromUrl,
   fmt,
+  VIDEO_ACCEPT,
 } from "./shared";
+import { parseEpisodeTemplate } from "./episodeTemplate";
 
 interface EpisodesViewProps {
   t: ContentMessages;
   courseId: number;
   title: string;
   plannedEpisodes: number;
+  auditStatus: number;
+  canManageCourse?: boolean;
   onBack: () => void;
   /** 保存成功后通知上层刷新列表计数 */
   onChanged?: () => void;
@@ -42,6 +48,8 @@ interface Row {
   uploadStatus: number;
   videoDuration: number;
   videoSize: number;
+  videoUrl: string;
+  fileName: string;
   uploadDate?: string;
   newFile: File | null;
   newDuration: string;
@@ -51,13 +59,15 @@ interface Row {
 /**
  * 剧集视频管理（img_10）。
  * 列表来自 GET /publisher/course/episodes（仅已建行的集）；未建行的集号按 plannedEpisodes
- * 补「待提交」虚拟行。上传走 /file/upload → saveEpisode（同 episodeNo 覆盖）；不含转码态。
+ * 补「待提交」虚拟行。上传走 /publisher/course/upload → saveEpisode（同 episodeNo 覆盖）；不含转码态。
  */
 export const EpisodesView: React.FC<EpisodesViewProps> = ({
   t,
   courseId,
   title,
   plannedEpisodes,
+  auditStatus,
+  canManageCourse = true,
   onBack,
   onChanged,
 }) => {
@@ -65,35 +75,62 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchEp, setSearchEp] = useState("");
+  const [debouncedSearchEp, setDebouncedSearchEp] = useState("");
   const [saving, setSaving] = useState(false);
+  const [templateDownloading, setTemplateDownloading] = useState(false);
+  const [templateImporting, setTemplateImporting] = useState(false);
   const [saved, setSaved] = useState(false);
+  const templateInputRef = useRef<HTMLInputElement>(null);
 
   const buildRows = useCallback(
     (resp: EpisodesResponse): Row[] => {
       const planned = resp.plannedEpisodes || plannedEpisodes;
-      return Array.from({ length: planned }, (_, i) => {
-        const no = i + 1;
-        const found = resp.episodes.find((e) => e.episodeNo === no);
+      const keyword = debouncedSearchEp.trim();
+      const toRow = (no: number, found?: EpisodesResponse["episodes"][number]): Row => {
         return {
           episodeNo: no,
           title: found?.title || fmt(t.epLabelN, { ep: no }),
           uploadStatus: found?.uploadStatus ?? 0,
           videoDuration: found?.videoDuration ?? 0,
           videoSize: found?.videoSize ?? 0,
+          videoUrl: found?.videoUrl ?? "",
+          fileName: found?.fileName ?? "",
           uploadDate: found?.uploadDate,
           newFile: null,
           newDuration: "",
           fileRef: React.createRef<HTMLInputElement>(),
         };
-      });
+      };
+
+      if (!keyword) {
+        return Array.from({ length: planned }, (_, i) => {
+          const no = i + 1;
+          const found = resp.episodes.find((e) => e.episodeNo === no);
+          return toRow(no, found);
+        });
+      }
+
+      const matched = new Map<number, Row>();
+      for (const episode of resp.episodes) {
+        matched.set(episode.episodeNo, toRow(episode.episodeNo, episode));
+      }
+      for (let no = 1; no <= planned; no += 1) {
+        if (String(no).includes(keyword) && !matched.has(no)) {
+          matched.set(no, toRow(no));
+        }
+      }
+      return [...matched.values()].sort((a, b) => a.episodeNo - b.episodeNo);
     },
-    [plannedEpisodes, t],
+    [debouncedSearchEp, plannedEpisodes, t],
   );
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const resp = await fetchEpisodes(courseId);
+      const resp = await fetchEpisodes(courseId, {
+        keyword: debouncedSearchEp.trim() || undefined,
+        limit: Math.max(plannedEpisodes, 10),
+      });
       setData(resp);
       setRows(buildRows(resp));
     } catch {
@@ -101,19 +138,23 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
     } finally {
       setLoading(false);
     }
-  }, [courseId, buildRows]);
+  }, [courseId, debouncedSearchEp, plannedEpisodes, buildRows]);
 
   useEffect(() => {
     void load();
   }, [load]);
 
-  const filtered = rows.filter(
-    (e) => String(e.episodeNo).includes(searchEp) || e.title.includes(searchEp),
-  );
+  useEffect(() => {
+    const id = window.setTimeout(() => setDebouncedSearchEp(searchEp), 300);
+    return () => window.clearTimeout(id);
+  }, [searchEp]);
+
   const stat = data?.stat ?? { uploaded: 0, failed: 0, pending: plannedEpisodes };
   const pendingLocal = rows.filter((e) => e.newFile).length;
+  const canEditEpisodes = canManageCourse && (auditStatus === AuditStatus.DRAFT || auditStatus === AuditStatus.REJECTED);
 
   const handleFileSelect = (ep: number, file: File) => {
+    if (!canEditEpisodes) return;
     setRows((prev) => prev.map((e) => (e.episodeNo === ep ? { ...e, newFile: file, newDuration: "" } : e)));
     void readVideoDuration(file).then((dur) =>
       setRows((prev) => prev.map((e) => (e.episodeNo === ep ? { ...e, newDuration: dur } : e))),
@@ -123,10 +164,70 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
   const clearFile = (ep: number) =>
     setRows((prev) => prev.map((e) => (e.episodeNo === ep ? { ...e, newFile: null, newDuration: "" } : e)));
 
+  const removeEpisode = async (ep: number) => {
+    if (!canEditEpisodes) return;
+    try {
+      await deleteEpisode(courseId, ep);
+      await load();
+      onChanged?.();
+    } catch {
+      // http 已 toast
+    }
+  };
+
+  const downloadTemplate = async () => {
+    setTemplateDownloading(true);
+    try {
+      const blob = await downloadUploadTemplate(courseId);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `批量录入模版_D${courseId}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      toast.error(err instanceof ApiError ? err.message : t.templateDownloadFailed);
+    } finally {
+      setTemplateDownloading(false);
+    }
+  };
+
+  const importTemplate = async (file: File | undefined) => {
+    if (!file || !canEditEpisodes) return;
+    setTemplateImporting(true);
+    try {
+      const entries = await parseEpisodeTemplate(file, plannedEpisodes);
+      if (entries.length === 0) {
+        toast.error(t.templateImportEmpty);
+        return;
+      }
+      for (const entry of entries) {
+        await saveEpisode({
+          courseId,
+          episodeNo: entry.episodeNo,
+          title: entry.title,
+          videoUrl: entry.videoUrl,
+          fileName: entry.fileName,
+        });
+      }
+      await load();
+      onChanged?.();
+      toast.success(fmt(t.templateImportSuccess, { n: entries.length }));
+    } catch {
+      toast.error(t.templateImportFailed);
+    } finally {
+      setTemplateImporting(false);
+      if (templateInputRef.current) templateInputRef.current.value = "";
+    }
+  };
+
   const updateTitle = (ep: number, title: string) =>
     setRows((prev) => prev.map((e) => (e.episodeNo === ep ? { ...e, title } : e)));
 
   const handleSave = async () => {
+    if (!canEditEpisodes) return;
     const pending = rows.filter((e) => e.newFile);
     if (pending.length === 0 || saving) return;
     setSaving(true);
@@ -135,7 +236,7 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
     for (const r of pending) {
       try {
         const url = await uploadFile(r.newFile as File, PUBLISHER_UPLOAD_PATH);
-        await saveEpisode({ courseId, episodeNo: r.episodeNo, title: r.title, videoUrl: url });
+        await saveEpisode({ courseId, episodeNo: r.episodeNo, title: r.title, videoUrl: url, fileName: r.newFile?.name });
       } catch {
         anyFail = true; // uploadFile / http 已 toast
       }
@@ -173,6 +274,33 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
           </p>
         </div>
         <div className="ml-auto flex items-center gap-3">
+          <input
+            ref={templateInputRef}
+            type="file"
+            accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            className="hidden"
+            onChange={(e) => void importTemplate(e.target.files?.[0])}
+          />
+          <button
+            onClick={() => void downloadTemplate()}
+            disabled={templateDownloading}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 text-xs text-gray-600 hover:bg-gray-50 disabled:opacity-60"
+            style={{ fontWeight: 600 }}
+          >
+            {templateDownloading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
+            {t.downloadTemplate}
+          </button>
+          {canEditEpisodes && (
+            <button
+              onClick={() => templateInputRef.current?.click()}
+              disabled={templateImporting}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 text-xs text-gray-600 hover:bg-gray-50 disabled:opacity-60"
+              style={{ fontWeight: 600 }}
+            >
+              {templateImporting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
+              {templateImporting ? t.templateImporting : t.importTemplate}
+            </button>
+          )}
           {saved && (
             <div className="flex items-center gap-1.5 text-xs text-green-600" style={{ fontWeight: 500 }}>
               <CheckCircle2 className="w-3.5 h-3.5" />
@@ -182,7 +310,7 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
           {pendingLocal > 0 && (
             <button
               onClick={handleSave}
-              disabled={saving}
+              disabled={saving || !canEditEpisodes}
               className="flex items-center gap-2 px-4 py-2 rounded-xl text-white text-xs hover:opacity-90 disabled:opacity-60"
               style={{ background: "#111111", fontWeight: 600 }}
             >
@@ -236,7 +364,7 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
               className="w-full pl-9 pr-3 py-2 text-xs border border-gray-200 rounded-lg bg-white outline-none focus:border-gray-400 transition-colors"
             />
           </div>
-          <span className="text-xs text-gray-400 ml-auto">{fmt(t.episodesResultCount, { n: filtered.length })}</span>
+          <span className="text-xs text-gray-400 ml-auto">{fmt(t.episodesResultCount, { n: rows.length })}</span>
         </div>
 
         <div className="overflow-x-auto">
@@ -255,7 +383,7 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
               </div>
             ) : (
               <div className="divide-y divide-gray-50 max-h-[520px] overflow-y-auto">
-                {filtered.map((ep) => {
+                {rows.map((ep) => {
                   const st = uploadStatusStyle[ep.uploadStatus] ?? uploadStatusStyle[0];
                   return (
                     <div
@@ -273,8 +401,9 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
                         type="text"
                         value={ep.title}
                         onChange={(e) => updateTitle(ep.episodeNo, e.target.value)}
+                        disabled={!canEditEpisodes}
                         placeholder={fmt(t.epTitlePlaceholder, { ep: ep.episodeNo })}
-                        className="px-3 py-2 rounded-lg border border-gray-200 text-sm outline-none hover:border-gray-400 focus:border-black transition-all min-w-0"
+                        className="px-3 py-2 rounded-lg border border-gray-200 text-sm outline-none hover:border-gray-400 focus:border-black transition-all min-w-0 disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed"
                       />
                       <span className="text-xs text-gray-500">
                         {ep.newFile ? ep.newDuration || t.readingDuration : formatDuration(ep.videoDuration)}
@@ -301,11 +430,12 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
                         <input
                           ref={ep.fileRef}
                           type="file"
-                          accept="video/*"
+                          accept={VIDEO_ACCEPT}
                           onChange={(e) => {
                             if (e.target.files?.[0]) handleFileSelect(ep.episodeNo, e.target.files[0]);
                             e.target.value = "";
                           }}
+                          disabled={!canEditEpisodes}
                           className="hidden"
                         />
                         {ep.newFile ? (
@@ -316,27 +446,48 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
                             </span>
                             <button
                               onClick={() => clearFile(ep.episodeNo)}
-                              className="text-gray-400 hover:text-red-500 flex-shrink-0 transition-colors"
+                              disabled={!canEditEpisodes}
+                              className="text-gray-400 hover:text-red-500 flex-shrink-0 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                             >
                               <X className="w-3.5 h-3.5" />
                             </button>
                           </div>
                         ) : (
+                          <div className="flex items-center gap-2 min-w-0">
+                            {ep.uploadStatus === 1 && (
+                              <span
+                                className="text-xs text-gray-500 truncate max-w-[92px]"
+                                title={ep.fileName || fileNameFromUrl(ep.videoUrl)}
+                              >
+                                {ep.fileName || fileNameFromUrl(ep.videoUrl)}
+                              </span>
+                            )}
+                            <button
+                              onClick={() => ep.fileRef.current?.click()}
+                              disabled={!canEditEpisodes}
+                              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-dashed text-xs transition-all flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
+                              style={{
+                                borderColor: ep.uploadStatus === 2 ? "#EF4444" : "#D1D5DB",
+                                color: ep.uploadStatus === 2 ? "#EF4444" : "#6B7280",
+                                fontWeight: 500,
+                              }}
+                            >
+                              <Upload className="w-3 h-3" />
+                              {ep.uploadStatus === 1
+                                ? t.epActionReplace
+                                : ep.uploadStatus === 2
+                                  ? t.epActionRetry
+                                  : t.epActionUpload}
+                            </button>
+                          </div>
+                        )}
+                        {ep.uploadStatus !== 0 && !ep.newFile && (
                           <button
-                            onClick={() => ep.fileRef.current?.click()}
-                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-dashed text-xs transition-all"
-                            style={{
-                              borderColor: ep.uploadStatus === 2 ? "#EF4444" : "#D1D5DB",
-                              color: ep.uploadStatus === 2 ? "#EF4444" : "#6B7280",
-                              fontWeight: 500,
-                            }}
+                            onClick={() => void removeEpisode(ep.episodeNo)}
+                            disabled={!canEditEpisodes}
+                            className="text-gray-400 hover:text-red-500 flex-shrink-0 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                           >
-                            <Upload className="w-3 h-3" />
-                            {ep.uploadStatus === 1
-                              ? t.epActionReplace
-                              : ep.uploadStatus === 2
-                                ? t.epActionRetry
-                                : t.epActionUpload}
+                            <X className="w-3.5 h-3.5" />
                           </button>
                         )}
                       </div>
@@ -353,7 +504,7 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
           {pendingLocal > 0 && (
             <button
               onClick={handleSave}
-              disabled={saving}
+              disabled={saving || !canEditEpisodes}
               className="flex items-center gap-2 px-5 py-2 rounded-xl text-white text-xs hover:opacity-90 disabled:opacity-60"
               style={{ background: "#111111", fontWeight: 600 }}
             >

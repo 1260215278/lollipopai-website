@@ -1,156 +1,360 @@
 import type { Locale } from "../../i18n";
 
-/**
- * 结算记录文案 —— P3 结算中心（对接后端 /publisher/settlement/records，金额单位 USD）。
- * zh-CN / en 权威；zh-TW / pt 翻译，4 语言结构一致。
- */
 export interface WithdrawMessages {
   title: string;
   subtitle: string;
-  /** 结算说明卡 */
   policyTitle: string;
   policyDesc: string;
   payoutDate: string;
-  /** 列表卡 */
+  totalSettled: string;
+  settledCount: string;
+  pendingTotal: string;
+  applySettlement: string;
+  resubmitSettlement: string;
+  alreadyApplied: string;
+  blockNoAccount: string;
+  blockAlreadyApplied: string;
+  blockNoEarnings: string;
+  chartTitle: string;
+  chartByTime: string;
+  chartByDrama: string;
+  chartAmount: string;
+  chartCumulative: string;
+  topCourses: string;
+  emptyChart: string;
   recordsTitle: string;
   statusFilter: string;
   statusAll: string;
+  scopeAll: string;
   searchPlaceholder: string;
-  /** 表头 */
+  colOrderNo: string;
   colPeriod: string;
+  colType: string;
   colRatio: string;
-  colRatioSub: string;
-  colGross: string;
   colCreator: string;
-  colPlatform: string;
+  colDate: string;
   colStatus: string;
   colAction: string;
-  /** 结算单状态 0-4 */
-  statusDraft: string;
+  colOrders: string;
+  typeFull: string;
+  typeAccount: string;
   statusApplied: string;
   statusApproved: string;
   statusPaid: string;
   statusRejected: string;
-  /** 操作 */
-  applySettlement: string;
-  /** 空态 */
+  groupApplied: string;
+  groupSettled: string;
+  groupFailed: string;
+  detail: string;
+  detailTitle: string;
+  detailOrderNo: string;
+  detailApplyTime: string;
+  detailPeriod: string;
+  detailAccount: string;
+  detailAmount: string;
+  detailStatus: string;
+  detailGross: string;
+  detailPlatform: string;
+  itemCourse: string;
+  itemGross: string;
+  itemCreator: string;
+  applyConfirmTitle: string;
+  applyConfirmDesc: string;
+  applyConfirmPeriod: string;
+  applyConfirmAmount: string;
+  applyConfirmAccount: string;
+  applyConfirmTip: string;
+  cancel: string;
+  confirmApply: string;
+  rejectedReason: string;
   emptyTitle: string;
   emptyDesc: string;
-  /** 反馈 */
   applySuccess: string;
 }
 
 export const withdraw: Record<Locale, WithdrawMessages> = {
   "zh-CN": {
-    title: "结算记录",
-    subtitle: "查看结算与提现记录",
+    title: "结算管理",
+    subtitle: "提交结算申请并查看结算记录",
     policyTitle: "结算说明",
-    policyDesc: "平台按结算周期生成结算单，款项将打入您绑定的收款账户。请对草稿状态的结算单手动提交申请，平台审核后打款。",
-    payoutDate: "结算款项打入已绑定收款账户",
+    policyDesc: "每月 15 日出款，提交申请后平台将在 1-3 个工作日内审核，审核通过后按默认收款账户打款。",
+    payoutDate: "结算款项打入默认收款账户",
+    totalSettled: "累计结算",
+    settledCount: "已结算笔数",
+    pendingTotal: "可结算金额",
+    applySettlement: "提交结算申请",
+    resubmitSettlement: "重新提交结算申请",
+    alreadyApplied: "✓ 本月已提交申请",
+    blockNoAccount: "请先添加收款账户",
+    blockAlreadyApplied: "本月已提交申请",
+    blockNoEarnings: "暂无可结算收益",
+    chartTitle: "结算概况",
+    chartByTime: "按时间",
+    chartByDrama: "按剧集",
+    chartAmount: "结算金额",
+    chartCumulative: "累计结算总额",
+    topCourses: "累计 Top3 剧集",
+    emptyChart: "暂无结算图表数据",
     recordsTitle: "结算记录",
     statusFilter: "结算状态",
     statusAll: "全部",
-    searchPlaceholder: "搜索结算周期 / 比例",
+    scopeAll: "全部类型",
+    searchPlaceholder: "搜索订单编号 / 结算周期",
+    colOrderNo: "订单编号",
     colPeriod: "结算周期",
+    colType: "结算类型",
     colRatio: "结算比例",
-    colRatioSub: "(平台：出品方)",
-    colGross: "总额 (USD)",
-    colCreator: "出品方实得 (USD)",
-    colPlatform: "平台分成 (USD)",
+    colCreator: "申请金额 (CNY)",
+    colDate: "结算日期",
     colStatus: "结算状态",
     colAction: "操作",
-    statusDraft: "待申请",
-    statusApplied: "已申请",
-    statusApproved: "审核通过",
+    colOrders: "订单数",
+    typeFull: "全量推荐",
+    typeAccount: "账号主页",
+    statusApplied: "待审核",
+    statusApproved: "待打款",
     statusPaid: "已打款",
-    statusRejected: "已驳回",
-    applySettlement: "申请结算",
+    statusRejected: "驳回/打款失败",
+    groupApplied: "已申请",
+    groupSettled: "已结算",
+    groupFailed: "结算失败",
+    detail: "详情",
+    detailTitle: "结算单详情",
+    detailOrderNo: "申请编号",
+    detailApplyTime: "申请时间",
+    detailPeriod: "结算周期",
+    detailAccount: "收款账户",
+    detailAmount: "申请金额",
+    detailStatus: "申请状态",
+    detailGross: "总流水",
+    detailPlatform: "平台分成",
+    itemCourse: "剧集 ID",
+    itemGross: "总流水",
+    itemCreator: "出品方实得",
+    applyConfirmTitle: "确认提交结算申请？",
+    applyConfirmDesc: "提交后将把截至上月末所有未结算的完整自然月生成结算单。",
+    applyConfirmPeriod: "结算周期",
+    applyConfirmAmount: "可结算金额",
+    applyConfirmAccount: "收款账户",
+    applyConfirmTip: "平台审核 1-3 个工作日，15 日前完成打款。",
+    cancel: "取消",
+    confirmApply: "确认提交",
+    rejectedReason: "失败原因",
     emptyTitle: "暂无结算记录",
-    emptyDesc: "请先在「收款管理」中添加收款账户，才能发起结算。",
+    emptyDesc: "暂无可展示的结算申请记录。",
     applySuccess: "结算申请已提交",
   },
   "zh-TW": {
-    title: "結算記錄",
-    subtitle: "查看結算與提現記錄",
+    title: "結算管理",
+    subtitle: "提交結算申請並查看結算記錄",
     policyTitle: "結算說明",
-    policyDesc: "平台按結算週期生成結算單，款項將打入您綁定的收款帳戶。請對草稿狀態的結算單手動提交申請，平台審核後打款。",
-    payoutDate: "結算款項打入已綁定收款帳戶",
+    policyDesc: "每月 15 日出款，提交申請後平台將在 1-3 個工作日內審核，通過後按預設收款帳戶打款。",
+    payoutDate: "結算款項打入預設收款帳戶",
+    totalSettled: "累計結算",
+    settledCount: "已結算筆數",
+    pendingTotal: "可結算金額",
+    applySettlement: "提交結算申請",
+    resubmitSettlement: "重新提交結算申請",
+    alreadyApplied: "✓ 本月已提交申請",
+    blockNoAccount: "請先新增收款帳戶",
+    blockAlreadyApplied: "本月已提交申請",
+    blockNoEarnings: "暫無可結算收益",
+    chartTitle: "結算概況",
+    chartByTime: "按時間",
+    chartByDrama: "按劇集",
+    chartAmount: "結算金額",
+    chartCumulative: "累計結算總額",
+    topCourses: "累計 Top3 劇集",
+    emptyChart: "暫無結算圖表資料",
     recordsTitle: "結算記錄",
     statusFilter: "結算狀態",
     statusAll: "全部",
-    searchPlaceholder: "搜尋結算週期 / 比例",
+    scopeAll: "全部類型",
+    searchPlaceholder: "搜尋訂單編號 / 結算週期",
+    colOrderNo: "訂單編號",
     colPeriod: "結算週期",
+    colType: "結算類型",
     colRatio: "結算比例",
-    colRatioSub: "(平台：出品方)",
-    colGross: "總額 (USD)",
-    colCreator: "出品方實得 (USD)",
-    colPlatform: "平台分成 (USD)",
+    colCreator: "申請金額 (CNY)",
+    colDate: "結算日期",
     colStatus: "結算狀態",
     colAction: "操作",
-    statusDraft: "待申請",
-    statusApplied: "已申請",
-    statusApproved: "審核通過",
+    colOrders: "訂單數",
+    typeFull: "全量推薦",
+    typeAccount: "帳號主頁",
+    statusApplied: "待審核",
+    statusApproved: "待打款",
     statusPaid: "已打款",
-    statusRejected: "已駁回",
-    applySettlement: "申請結算",
+    statusRejected: "駁回/打款失敗",
+    groupApplied: "已申請",
+    groupSettled: "已結算",
+    groupFailed: "結算失敗",
+    detail: "詳情",
+    detailTitle: "結算單詳情",
+    detailOrderNo: "申請編號",
+    detailApplyTime: "申請時間",
+    detailPeriod: "結算週期",
+    detailAccount: "收款帳戶",
+    detailAmount: "申請金額",
+    detailStatus: "申請狀態",
+    detailGross: "總流水",
+    detailPlatform: "平台分成",
+    itemCourse: "劇集 ID",
+    itemGross: "總流水",
+    itemCreator: "出品方實得",
+    applyConfirmTitle: "確認提交結算申請？",
+    applyConfirmDesc: "提交後將把截至上月末所有未結算的完整自然月生成結算單。",
+    applyConfirmPeriod: "結算週期",
+    applyConfirmAmount: "可結算金額",
+    applyConfirmAccount: "收款帳戶",
+    applyConfirmTip: "平台審核 1-3 個工作日，15 日前完成打款。",
+    cancel: "取消",
+    confirmApply: "確認提交",
+    rejectedReason: "失敗原因",
     emptyTitle: "暫無結算記錄",
-    emptyDesc: "請先在「收款管理」中新增收款帳戶，才能發起結算。",
+    emptyDesc: "暫無可展示的結算申請記錄。",
     applySuccess: "結算申請已提交",
   },
   en: {
-    title: "Settlement Records",
-    subtitle: "View settlement and payout records",
+    title: "Settlement Management",
+    subtitle: "Submit settlement requests and view records",
     policyTitle: "Settlement Policy",
-    policyDesc: "The platform generates settlement statements per period and pays out to your bound account. Submit draft statements manually; the platform pays after review.",
-    payoutDate: "Payouts go to your bound payment account",
+    policyDesc: "Payouts are issued on the 15th each month. Requests are reviewed in 1-3 business days and paid to the default payment account after approval.",
+    payoutDate: "Settlements are paid to the default payment account",
+    totalSettled: "Total Settled",
+    settledCount: "Settled Orders",
+    pendingTotal: "Settleable Amount",
+    applySettlement: "Submit Request",
+    resubmitSettlement: "Resubmit Request",
+    alreadyApplied: "✓ Submitted This Month",
+    blockNoAccount: "Add a payment account first",
+    blockAlreadyApplied: "Already submitted this month",
+    blockNoEarnings: "No settleable earnings",
+    chartTitle: "Settlement Overview",
+    chartByTime: "By Time",
+    chartByDrama: "By Drama",
+    chartAmount: "Settlement Amount",
+    chartCumulative: "Cumulative Settled",
+    topCourses: "Top 3 Dramas",
+    emptyChart: "No chart data",
     recordsTitle: "Settlement Records",
     statusFilter: "Status",
     statusAll: "All",
-    searchPlaceholder: "Search period / ratio",
+    scopeAll: "All Types",
+    searchPlaceholder: "Search order no. / period",
+    colOrderNo: "Order No.",
     colPeriod: "Period",
-    colRatio: "Split Ratio",
-    colRatioSub: "(Platform : Publisher)",
-    colGross: "Gross (USD)",
-    colCreator: "Publisher Net (USD)",
-    colPlatform: "Platform (USD)",
+    colType: "Type",
+    colRatio: "Ratio",
+    colCreator: "Amount (CNY)",
+    colDate: "Settlement Date",
     colStatus: "Status",
     colAction: "Action",
-    statusDraft: "Pending Apply",
-    statusApplied: "Applied",
-    statusApproved: "Approved",
+    colOrders: "Orders",
+    typeFull: "Full Distribution",
+    typeAccount: "Account Homepage",
+    statusApplied: "Pending Review",
+    statusApproved: "Pending Payout",
     statusPaid: "Paid",
-    statusRejected: "Rejected",
-    applySettlement: "Apply",
+    statusRejected: "Rejected/Failed",
+    groupApplied: "Applied",
+    groupSettled: "Settled",
+    groupFailed: "Failed",
+    detail: "Detail",
+    detailTitle: "Settlement Detail",
+    detailOrderNo: "Request No.",
+    detailApplyTime: "Applied At",
+    detailPeriod: "Period",
+    detailAccount: "Payment Account",
+    detailAmount: "Request Amount",
+    detailStatus: "Request Status",
+    detailGross: "Gross",
+    detailPlatform: "Platform Share",
+    itemCourse: "Course ID",
+    itemGross: "Gross",
+    itemCreator: "Publisher Net",
+    applyConfirmTitle: "Submit settlement request?",
+    applyConfirmDesc: "This will generate settlement orders for all complete unsettled natural months up to the end of last month.",
+    applyConfirmPeriod: "Period",
+    applyConfirmAmount: "Settleable Amount",
+    applyConfirmAccount: "Payment Account",
+    applyConfirmTip: "Review takes 1-3 business days, with payout before the 15th.",
+    cancel: "Cancel",
+    confirmApply: "Submit",
+    rejectedReason: "Failure Reason",
     emptyTitle: "No settlement records",
-    emptyDesc: "Add a payment account in Payment Management to begin settlements.",
+    emptyDesc: "No settlement requests to show yet.",
     applySuccess: "Settlement request submitted",
   },
   pt: {
-    title: "Registros de Liquidação",
-    subtitle: "Veja registros de liquidação e saque",
+    title: "Gestão de Liquidação",
+    subtitle: "Envie solicitações e veja registros de liquidação",
     policyTitle: "Política de Liquidação",
-    policyDesc: "A plataforma gera extratos de liquidação por período e paga na sua conta vinculada. Envie os extratos em rascunho manualmente; a plataforma paga após a revisão.",
-    payoutDate: "Os pagamentos vão para sua conta vinculada",
+    policyDesc: "Os pagamentos são emitidos no dia 15 de cada mês. As solicitações são revisadas em 1-3 dias úteis e pagas na conta padrão.",
+    payoutDate: "As liquidações são pagas na conta padrão",
+    totalSettled: "Total Liquidado",
+    settledCount: "Ordens Liquidadas",
+    pendingTotal: "Valor Disponível",
+    applySettlement: "Enviar Solicitação",
+    resubmitSettlement: "Reenviar Solicitação",
+    alreadyApplied: "✓ Enviado este mês",
+    blockNoAccount: "Adicione uma conta de recebimento primeiro",
+    blockAlreadyApplied: "Já enviado este mês",
+    blockNoEarnings: "Sem receitas liquidáveis",
+    chartTitle: "Visão de Liquidação",
+    chartByTime: "Por Tempo",
+    chartByDrama: "Por Drama",
+    chartAmount: "Valor de Liquidação",
+    chartCumulative: "Total Acumulado",
+    topCourses: "Top 3 Dramas",
+    emptyChart: "Sem dados de gráfico",
     recordsTitle: "Registros de Liquidação",
     statusFilter: "Status",
     statusAll: "Todos",
-    searchPlaceholder: "Buscar período / proporção",
+    scopeAll: "Todos os tipos",
+    searchPlaceholder: "Buscar nº do pedido / período",
+    colOrderNo: "Nº do Pedido",
     colPeriod: "Período",
+    colType: "Tipo",
     colRatio: "Proporção",
-    colRatioSub: "(Plataforma : Produtor)",
-    colGross: "Bruto (USD)",
-    colCreator: "Líquido do Produtor (USD)",
-    colPlatform: "Plataforma (USD)",
+    colCreator: "Valor (CNY)",
+    colDate: "Data de Liquidação",
     colStatus: "Status",
     colAction: "Ação",
-    statusDraft: "Aguardando",
-    statusApplied: "Solicitado",
-    statusApproved: "Aprovado",
+    colOrders: "Pedidos",
+    typeFull: "Distribuição total",
+    typeAccount: "Página da conta",
+    statusApplied: "Em revisão",
+    statusApproved: "Aguardando pagamento",
     statusPaid: "Pago",
-    statusRejected: "Rejeitado",
-    applySettlement: "Solicitar",
+    statusRejected: "Rejeitado/Falhou",
+    groupApplied: "Solicitado",
+    groupSettled: "Liquidado",
+    groupFailed: "Falhou",
+    detail: "Detalhe",
+    detailTitle: "Detalhe da Liquidação",
+    detailOrderNo: "Nº da Solicitação",
+    detailApplyTime: "Solicitado em",
+    detailPeriod: "Período",
+    detailAccount: "Conta de recebimento",
+    detailAmount: "Valor solicitado",
+    detailStatus: "Status",
+    detailGross: "Bruto",
+    detailPlatform: "Parcela da plataforma",
+    itemCourse: "ID do Curso",
+    itemGross: "Bruto",
+    itemCreator: "Líquido do produtor",
+    applyConfirmTitle: "Enviar solicitação de liquidação?",
+    applyConfirmDesc: "Isto criará ordens para todos os meses naturais completos e não liquidados até o fim do mês passado.",
+    applyConfirmPeriod: "Período",
+    applyConfirmAmount: "Valor disponível",
+    applyConfirmAccount: "Conta de recebimento",
+    applyConfirmTip: "A revisão leva 1-3 dias úteis, com pagamento antes do dia 15.",
+    cancel: "Cancelar",
+    confirmApply: "Enviar",
+    rejectedReason: "Motivo da falha",
     emptyTitle: "Sem registros de liquidação",
-    emptyDesc: "Adicione uma conta de recebimento em Gestão de Recebimento para iniciar liquidações.",
+    emptyDesc: "Ainda não há solicitações de liquidação.",
     applySuccess: "Solicitação de liquidação enviada",
   },
 };

@@ -1,12 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
-import { Building2, Check, CreditCard, Edit2, ArrowRight, Loader2 } from "lucide-react";
+import { Building2, Check, CreditCard, Edit2, Loader2, Plus, Star, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { useI18n } from "../../i18n";
 import { PageHeader, PageLoading } from "../components/settlement/PageHeader";
 import {
-  getPayoutAccount,
+  getPayoutAccounts,
   addPayoutAccount,
   updatePayoutAccount,
+  deletePayoutAccount,
+  setDefaultPayoutAccount,
   type PayoutAccount,
 } from "../../services/settlement";
 
@@ -16,34 +18,35 @@ interface DraftState {
   accountNo: string;
   bank: string;
   branch: string;
+  isDefault: boolean;
 }
 
-const emptyDraft: DraftState = { accountNo: "", bank: "", branch: "" };
+const emptyDraft: DraftState = { accountNo: "", bank: "", branch: "", isDefault: false };
 
-/**
- * 收款管理 —— figma 15150-30625(空) / 30744(添加) / 30884(完成) / 31032(编辑)。
- * 收款账户走真实接口 /publisher/payout/account（bug21，不再 mock）。
- */
 export function PaymentPage() {
   const { messages } = useI18n();
   const t = messages.distribution.payment;
 
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState<"view" | "add" | "edit">("view");
-  const [account, setAccount] = useState<PayoutAccount | null>(null);
+  const [companyName, setCompanyName] = useState("");
+  const [accounts, setAccounts] = useState<PayoutAccount[]>([]);
+  const [editingAccount, setEditingAccount] = useState<PayoutAccount | null>(null);
   const [draft, setDraft] = useState<DraftState>(emptyDraft);
   const [errors, setErrors] = useState<Partial<DraftState>>({});
   const [saving, setSaving] = useState(false);
+  const [actingId, setActingId] = useState<number | null>(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const acc = await getPayoutAccount();
-      setAccount(acc);
+      const res = await getPayoutAccounts();
+      setCompanyName(res.companyName);
+      setAccounts(res.list);
     } catch {
-      // http 已 toast；保持空态
-      setAccount(null);
+      setCompanyName("");
+      setAccounts([]);
     } finally {
       setLoading(false);
     }
@@ -64,20 +67,22 @@ export function PaymentPage() {
   const handleSave = async () => {
     if (!validate()) return;
     setSaving(true);
-    const isEdit = mode === "edit";
     try {
       const body = {
+        id: editingAccount?.id,
         accountNo: draft.accountNo.trim(),
         bank: draft.bank.trim(),
         branch: draft.branch.trim() || undefined,
-        currency: "USD",
+        isDefault: draft.isDefault,
       };
-      const saved = isEdit ? await updatePayoutAccount(body) : await addPayoutAccount(body);
-      setAccount(saved);
+      if (mode === "edit") await updatePayoutAccount(body);
+      else await addPayoutAccount(body);
       setMode("view");
+      setEditingAccount(null);
       setSaveSuccess(true);
       window.setTimeout(() => setSaveSuccess(false), 3000);
-      toast.success(isEdit ? t.updateSuccess : t.addSuccess);
+      toast.success(mode === "edit" ? t.updateSuccess : t.addSuccess);
+      await load();
     } catch {
       // http 已 toast
     } finally {
@@ -85,25 +90,54 @@ export function PaymentPage() {
     }
   };
 
-  const handleEdit = () => {
-    if (account?.bound)
-      setDraft({
-        accountNo: account.accountNo ?? "",
-        bank: account.bank ?? "",
-        branch: account.branch ?? "",
-      });
+  const handleEdit = (account: PayoutAccount) => {
+    setEditingAccount(account);
+    setDraft({
+      accountNo: account.accountNo,
+      bank: account.bank,
+      branch: account.branch ?? "",
+      isDefault: account.isDefault === 1,
+    });
     setErrors({});
     setMode("edit");
   };
 
   const handleAdd = () => {
-    setDraft(emptyDraft);
+    setEditingAccount(null);
+    setDraft({ ...emptyDraft, isDefault: accounts.length === 0 });
     setErrors({});
     setMode("add");
   };
 
+  const handleDelete = async (id: number) => {
+    setActingId(id);
+    try {
+      await deletePayoutAccount(id);
+      toast.success(t.deleteSuccess);
+      await load();
+    } catch {
+      // http 已 toast
+    } finally {
+      setActingId(null);
+    }
+  };
+
+  const handleSetDefault = async (id: number) => {
+    setActingId(id);
+    try {
+      await setDefaultPayoutAccount(id);
+      toast.success(t.setDefaultSuccess);
+      await load();
+    } catch {
+      // http 已 toast
+    } finally {
+      setActingId(null);
+    }
+  };
+
   const handleCancel = () => {
     setErrors({});
+    setEditingAccount(null);
     setMode("view");
   };
 
@@ -120,7 +154,7 @@ export function PaymentPage() {
       <PaymentForm
         t={t}
         mode={mode}
-        companyName={account?.companyName ?? ""}
+        companyName={companyName || editingAccount?.companyName || ""}
         draft={draft}
         setDraft={setDraft}
         errors={errors}
@@ -132,14 +166,32 @@ export function PaymentPage() {
     );
   }
 
-  // ── 查看：空态（满宽卡，figma 15150-30625） vs 已绑定（窄卡，figma 15150-30884） ──
   return (
     <div className="p-8">
-      <PageHeader title={t.title} subtitle={t.subtitle} />
-      {account?.bound ? (
-        <div className="max-w-2xl">
-          <BoundView t={t} account={account} saveSuccess={saveSuccess} onEdit={handleEdit} />
-        </div>
+      <div className="flex items-start justify-between gap-4">
+        <PageHeader title={t.title} subtitle={t.subtitle} />
+        {accounts.length > 0 && (
+          <button
+            onClick={handleAdd}
+            className="h-10 px-4 rounded-[12px] text-white text-sm hover:opacity-90 transition-opacity inline-flex items-center justify-center gap-2"
+            style={{ background: "#111111", fontWeight: 600 }}
+          >
+            <Plus className="w-4 h-4" />
+            {t.addNow}
+          </button>
+        )}
+      </div>
+
+      {accounts.length > 0 ? (
+        <BoundView
+          t={t}
+          accounts={accounts}
+          saveSuccess={saveSuccess}
+          actingId={actingId}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          onSetDefault={handleSetDefault}
+        />
       ) : (
         <EmptyView t={t} onAdd={handleAdd} />
       )}
@@ -147,136 +199,164 @@ export function PaymentPage() {
   );
 }
 
-/* ── 空态（尚未添加） figma 15150-30625 ─────────────────────── */
 function EmptyView({ t, onAdd }: { t: PaymentMsg; onAdd: () => void }) {
   return (
-    <div className="bg-white rounded-2xl border border-[#f3f4f6] overflow-hidden">
-      <div className="flex flex-col items-center justify-center gap-4 py-16">
-        <div className="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center">
-          <CreditCard className="w-7 h-7 text-gray-300" />
+    <div className="bg-white rounded-2xl border border-[#f3f4f6] overflow-hidden min-h-[336px]">
+      <div className="min-h-[336px] flex flex-col items-center justify-center py-16">
+        <div className="w-16 h-16 rounded-[16px] bg-[#f3f4f6] flex items-center justify-center">
+          <CreditCard className="w-7 h-7 text-[#d1d5dc]" />
         </div>
-        <div className="text-center">
+        <div className="text-center mt-5">
           <p className="text-sm text-[#364153] mb-1" style={{ fontWeight: 600 }}>
             {t.emptyTitle}
           </p>
-          <p className="text-xs text-[#99a1af] max-w-xs" style={{ lineHeight: "19.5px" }}>
+          <p className="text-xs text-[#99a1af] max-w-[420px]" style={{ lineHeight: "19.5px" }}>
             {t.emptyDesc}
           </p>
         </div>
 
-        <div className="mt-2 bg-white rounded-2xl border border-[#f3f4f6] p-5 w-full max-w-sm">
-          <div className="flex items-start gap-3">
-            <div className="w-9 h-9 rounded-[14px] bg-[#101828] flex items-center justify-center flex-shrink-0 mt-0.5">
-              <CreditCard className="w-4 h-4 text-white" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm text-[#101828]" style={{ fontWeight: 700 }}>
-                {t.addCardTitle}
-              </p>
-              <p className="text-xs text-[#6a7282] mt-1" style={{ lineHeight: "19.5px" }}>
-                {t.addCardDesc}
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={onAdd}
-            className="mt-4 w-full h-10 rounded-[14px] text-white text-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
-            style={{ background: "#111111", fontWeight: 600 }}
-          >
-            <ArrowRight className="w-4 h-4" />
-            {t.addNow}
-          </button>
-        </div>
+        <button
+          onClick={onAdd}
+          className="mt-7 h-10 px-6 rounded-[12px] text-white text-sm hover:opacity-90 transition-opacity inline-flex items-center justify-center gap-2"
+          style={{ background: "#111111", fontWeight: 600 }}
+        >
+          <Plus className="w-4 h-4" />
+          {t.addNow}
+        </button>
       </div>
     </div>
   );
 }
 
-/* ── 已绑定查看 figma 15150-30884 ───────────────────────────── */
 function maskAccount(no: string) {
-  return no.length > 8 ? `${no.slice(0, 4)} **** **** ${no.slice(-4)}` : no;
+  const clean = no.replace(/\s+/g, "");
+  return clean.length > 8 ? `${clean.slice(0, 4)} **** **** ${clean.slice(-4)}` : clean;
 }
 
 function BoundView({
   t,
-  account,
+  accounts,
   saveSuccess,
+  actingId,
   onEdit,
+  onDelete,
+  onSetDefault,
 }: {
   t: PaymentMsg;
-  account: PayoutAccount;
+  accounts: PayoutAccount[];
   saveSuccess: boolean;
-  onEdit: () => void;
+  actingId: number | null;
+  onEdit: (account: PayoutAccount) => void;
+  onDelete: (id: number) => Promise<void>;
+  onSetDefault: (id: number) => Promise<void>;
 }) {
-  const rows = [
-    { label: t.rowCompany, val: account.companyName || "—" },
-    { label: t.rowAccountNo, val: maskAccount(account.accountNo ?? ""), mono: true },
-    { label: t.rowBank, val: account.bank ?? "—" },
-    { label: t.rowBranch, val: account.branch || "—" },
-  ];
   return (
     <>
-      <div className="bg-white rounded-2xl border border-[#f3f4f6] overflow-hidden">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#f3f4f6]">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center">
-              <CreditCard className="w-4 h-4 text-gray-500" />
-            </div>
-            <div>
-              <p className="text-sm text-[#101828]" style={{ fontWeight: 600 }}>
-                {t.accountCardTitle}
-              </p>
-              <div className="flex items-center gap-1 mt-0.5">
-                <Check className="w-3 h-3 text-green-500" />
-                <span className="text-xs text-green-600" style={{ fontWeight: 500 }}>
-                  {t.bound}
-                </span>
+      <div className="grid gap-4 xl:grid-cols-2">
+        {accounts.map((account) => {
+          const isDefault = account.isDefault === 1;
+          const busy = actingId === account.id;
+          const rows = [
+            { label: t.rowBank, val: account.bank || "—" },
+            { label: t.rowBranch, val: account.branch || "—" },
+          ];
+          return (
+            <div key={account.id} className="bg-white rounded-2xl border border-[#f3f4f6] overflow-hidden">
+              <div className="flex items-center justify-between px-6 py-5 border-b border-[#f3f4f6]">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-10 h-10 rounded-[14px] bg-[#f3f4f6] flex items-center justify-center flex-shrink-0">
+                    <CreditCard className="w-4 h-4 text-[#6a7282]" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <p className="truncate text-sm text-[#101828]" style={{ fontWeight: 700 }}>
+                        {account.companyName || "—"}
+                      </p>
+                      {isDefault && (
+                        <span className="px-1.5 py-0.5 rounded-md border border-[#fcd34d] bg-[#fffbeb] text-[10px] text-[#d97706]" style={{ fontWeight: 600 }}>
+                          {t.defaultBadge}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-[#99a1af] mt-0.5 font-mono">{maskAccount(account.accountNo)}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  {!isDefault && (
+                    <IconButton
+                      label={t.setDefault}
+                      icon={busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Star className="w-3.5 h-3.5" />}
+                      disabled={busy}
+                      onClick={() => void onSetDefault(account.id)}
+                    />
+                  )}
+                  <IconButton label={t.edit} icon={<Edit2 className="w-3.5 h-3.5" />} onClick={() => onEdit(account)} />
+                  <IconButton
+                    label={t.delete}
+                    icon={busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
+                    disabled={busy}
+                    onClick={() => void onDelete(account.id)}
+                  />
+                </div>
+              </div>
+
+              <div className="px-6 py-2">
+                {rows.map((item, i) => (
+                  <div key={i} className="flex items-center justify-between py-3 border-b border-gray-50 last:border-0">
+                    <span className="text-xs text-[#99a1af] w-24 flex-shrink-0">{item.label}</span>
+                    <span className="text-sm text-[#1e2939] flex-1 text-right" style={{ fontWeight: 700 }}>
+                      {item.val}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
-          <button
-            onClick={onEdit}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-[#e5e7eb] text-xs text-gray-600 hover:bg-gray-50 transition-colors"
-            style={{ fontWeight: 500 }}
-          >
-            <Edit2 className="w-3.5 h-3.5" />
-            {t.edit}
-          </button>
-        </div>
-
-        <div className="px-6 py-2">
-          {rows.map((item, i) => (
-            <div key={i} className="flex items-center justify-between py-3 border-b border-gray-50 last:border-0">
-              <span className="text-xs text-gray-500 w-24 flex-shrink-0">{item.label}</span>
-              <span
-                className={`text-sm text-gray-800 flex-1 text-right ${item.mono ? "font-mono" : ""}`}
-                style={{ fontWeight: 500 }}
-              >
-                {item.val}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {saveSuccess && (
-          <div className="mx-6 mb-4 flex items-center gap-2 px-4 py-3 rounded-xl bg-green-50 border border-green-100">
-            <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
-            <span className="text-xs text-green-700" style={{ fontWeight: 500 }}>
-              {t.savedTip}
-            </span>
-          </div>
-        )}
+          );
+        })}
       </div>
 
-      <div className="mt-4 px-4 py-3 rounded-xl bg-amber-50 border border-amber-100 flex items-start gap-2.5">
-        <Building2 className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
+      {saveSuccess && (
+        <div className="mt-4 flex items-center gap-2 px-4 py-3 rounded-xl bg-green-50 border border-green-100">
+          <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
+          <span className="text-xs text-green-700" style={{ fontWeight: 500 }}>
+            {t.savedTip}
+          </span>
+        </div>
+      )}
+
+      <div className="mt-4 px-4 py-3 rounded-xl bg-[#fffbeb] border border-[#fde68a] flex items-start gap-2.5">
+        <Building2 className="w-4 h-4 text-[#f59e0b] flex-shrink-0 mt-0.5" />
         <p className="text-xs text-amber-700 leading-relaxed">{t.notice}</p>
       </div>
     </>
   );
 }
 
-/* ── 添加 / 编辑表单 figma 15150-30744 / 31032 ──────────────── */
+function IconButton({
+  label,
+  icon,
+  disabled,
+  onClick,
+}: {
+  label: string;
+  icon: React.ReactNode;
+  disabled?: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      title={label}
+      aria-label={label}
+      disabled={disabled}
+      onClick={onClick}
+      className="w-8 h-8 rounded-lg border border-[#e5e7eb] text-[#364153] hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center"
+    >
+      {icon}
+    </button>
+  );
+}
+
 function PaymentForm({
   t,
   mode,
@@ -309,34 +389,32 @@ function PaymentForm({
 
   return (
     <div className="p-8">
-      <button
-        onClick={onCancel}
-        className="text-xs text-[#6a7282] hover:text-gray-700 flex items-center gap-1 mb-4"
-        style={{ fontWeight: 500 }}
-      >
-        ← {t.back}
-      </button>
-      <h2 className="text-[#101828] mb-5" style={{ fontWeight: 700, fontSize: "0.9375rem" }}>
-        {mode === "add" ? t.addTitle : t.editTitle}
-      </h2>
+      <PageHeader title={t.title} subtitle={t.subtitle} />
 
-      <div className="bg-white rounded-2xl border border-[#f3f4f6] p-8 flex flex-col items-center justify-center min-h-[480px]">
-        <div className="w-full max-w-md">
-          {/* 卡片标题 */}
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-9 h-9 rounded-[14px] bg-[#f3f4f6] flex items-center justify-center">
-              <Building2 className="w-4 h-4 text-gray-500" />
+      <div className="bg-white rounded-2xl border border-[#f3f4f6] overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-[#f3f4f6]">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-[14px] bg-[#f3f4f6] flex items-center justify-center">
+              <Building2 className="w-4 h-4 text-[#6a7282]" />
             </div>
             <div>
               <p className="text-sm text-[#101828]" style={{ fontWeight: 600 }}>
-                {t.formCardTitle}
+                {mode === "add" ? t.addTitle : t.editTitle}
               </p>
-              <p className="text-xs text-[#99a1af] mt-0.5">{t.formCardDesc}</p>
             </div>
           </div>
+          <button
+            type="button"
+            onClick={onCancel}
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-[#99a1af] hover:bg-gray-50"
+            aria-label={t.cancel}
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
 
+        <div className="p-6">
           <div className="space-y-5">
-            {/* 公司名称（服务端自动带入，只读） */}
             <div>
               <label className="block text-sm text-[#364153] mb-2" style={{ fontWeight: 600 }}>
                 {t.companyNameLabel}
@@ -348,11 +426,10 @@ function PaymentForm({
                 type="text"
                 value={companyName}
                 disabled
-                className="w-full px-4 py-2.5 rounded-[10px] border border-[#e5e7eb] text-sm bg-[#f9fafb] text-[#6a7282] cursor-not-allowed"
+                className="w-full px-4 py-2.5 rounded-[10px] border border-[#f3f4f6] text-sm bg-[#f9fafb] text-[#364153] cursor-not-allowed"
               />
             </div>
 
-            {/* 银行账号 */}
             <div>
               <label className="block text-sm text-[#364153] mb-2" style={{ fontWeight: 600 }}>
                 {t.accountNoLabel} <span className="text-[#fb2c36]">*</span>
@@ -361,7 +438,7 @@ function PaymentForm({
                 type="text"
                 value={draft.accountNo}
                 onChange={(e) => {
-                  setDraft((p) => ({ ...p, accountNo: e.target.value }));
+                  setDraft((p) => ({ ...p, accountNo: e.target.value.replace(/\D/g, "") }));
                   clearError("accountNo");
                 }}
                 placeholder={t.accountNoPlaceholder}
@@ -370,7 +447,6 @@ function PaymentForm({
               {errors.accountNo && <p className="text-xs text-red-500 mt-1">{errors.accountNo}</p>}
             </div>
 
-            {/* 开户银行 */}
             <div>
               <label className="block text-sm text-[#364153] mb-2" style={{ fontWeight: 600 }}>
                 {t.bankLabel} <span className="text-[#fb2c36]">*</span>
@@ -388,7 +464,6 @@ function PaymentForm({
               {errors.bank && <p className="text-xs text-red-500 mt-1">{errors.bank}</p>}
             </div>
 
-            {/* 支行名称（选填） */}
             <div>
               <label className="block text-sm text-[#364153] mb-2" style={{ fontWeight: 600 }}>
                 {t.branchLabel}
@@ -404,17 +479,27 @@ function PaymentForm({
                 className={inputCls()}
               />
             </div>
+
+            <label className="inline-flex items-center gap-2 text-sm text-[#364153]">
+              <input
+                type="checkbox"
+                checked={draft.isDefault}
+                onChange={(e) => setDraft((p) => ({ ...p, isDefault: e.target.checked }))}
+                className="h-4 w-4 rounded border-gray-300"
+              />
+              {t.setDefault}
+            </label>
           </div>
 
           <div className="flex items-center gap-3 mt-8">
             <button
               onClick={onSave}
               disabled={saving}
-              className="px-8 py-2.5 rounded-[14px] text-white text-sm hover:opacity-90 disabled:opacity-60 flex items-center gap-2"
+              className="px-6 py-2.5 rounded-[14px] text-white text-sm hover:opacity-90 disabled:opacity-60 flex items-center gap-2"
               style={{ background: "#111111", fontWeight: 600 }}
             >
               {saving && <Loader2 className="w-4 h-4 animate-spin" />}
-              {t.confirm}
+              {mode === "add" ? t.confirmAdd : t.confirmEdit}
             </button>
             <button
               onClick={onCancel}
@@ -425,6 +510,11 @@ function PaymentForm({
             </button>
           </div>
         </div>
+      </div>
+
+      <div className="mt-4 px-4 py-3 rounded-xl bg-[#fffbeb] border border-[#fde68a] flex items-start gap-2.5">
+        <Building2 className="w-4 h-4 text-[#f59e0b] flex-shrink-0 mt-0.5" />
+        <p className="text-xs text-amber-700 leading-relaxed">{t.notice}</p>
       </div>
     </div>
   );

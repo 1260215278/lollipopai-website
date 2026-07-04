@@ -43,7 +43,7 @@ export const common: Record<Locale, CommonMessages> = {
     retry: "重试",
     empty: "暂无数据",
     optional: "选填",
-    brand: "Lollipop 发行中心",
+    brand: "Lollipop发行中心",
     workspace: "工作台",
     logout: "退出登录",
     language: "语言",

@@ -4,7 +4,7 @@
  * 路径前缀全部走发行中心 publisher token 域 `/publisher/**`（见《前端反馈-20260630-后端契约》§6.1，
  * 此前误写成 `/app/publisher/**` 已纠正）。统一响应 {code,msg,data}，分页接口取 `page`。
  *
- * - 收款账号（bug21）/ 结算记录（bug22）：后端已提供完整字段契约 → 走真实接口（不再 mock）。
+ * - 收款账号 / 结算管理：按《发行中心_结算管理与收款信息_前端对接_20260704》切真实多卡 + CNY 结算单接口。
  * - 收益总览 / 收益明细 / 收益日志 / 剧目筛选：按《结算中心字段补充 - 后端契约（20260630）》切真。
  */
 import { http } from "./http";
@@ -14,57 +14,75 @@ import type { PageResult } from "./content";
 // 收款管理（收款账户 CRUD，bug21）—— 真实接口
 // ────────────────────────────────────────────────────────────────
 
-/** 对公收款账户实体（后端 /publisher/payout/account 返回）。 */
+/** 对公收款账户实体（后端 /publisher/payout/account/list 返回）。 */
 export interface PayoutAccount {
-  /** false=未添加(空态); true=已绑定 */
+  id: number;
+  companyName: string;
+  accountNo: string;
+  bank: string;
+  branch?: string | null;
+  isDefault: 0 | 1;
+  status: number;
+  createTime: string;
+  updateTime: string;
+}
+
+export interface PayoutAccountList {
+  companyName: string;
+  list: PayoutAccount[];
+}
+
+/** 默认卡兼容接口（/publisher/payout/account）。 */
+export interface DefaultPayoutAccount {
   bound: boolean;
   id?: number;
-  publisherUserId?: number;
-  /** 服务端按入驻资料回填，前端只读 */
-  companyName: string;
-  /** 银行账号；未绑定时 null */
-  accountNo: string | null;
-  /** 开户银行；未绑定时 null */
-  bank: string | null;
-  /** 支行名称；未绑定时 null */
-  branch: string | null;
-  /** 户名（本表单不采集） */
-  accountHolder?: string | null;
-  /** 币种，缺省 USD；未绑定时 null */
-  currency: string | null;
-  /** 0禁用 1启用；未绑定时 null */
-  status: number | null;
-  createTime?: string;
-  updateTime?: string;
+  companyName?: string;
+  accountNo?: string | null;
+  bank?: string | null;
+  branch?: string | null;
+  isDefault?: 0 | 1;
+  status?: number | null;
 }
 
 /** 新增 / 修改收款账户请求体（create/update 共用）。 */
 export interface PayoutAccountBody {
+  id?: number;
   /** 银行账号，必填 ≤64 */
   accountNo: string;
   /** 开户银行，必填 ≤128 */
   bank: string;
   /** 支行名称 ≤255，可选 */
   branch?: string;
-  /** 户名 ≤128，可选 */
-  accountHolder?: string;
-  /** 币种 ≤8，缺省 USD */
-  currency?: string;
+  /** 直接设为默认卡。 */
+  isDefault?: boolean;
 }
 
-/** 查询当前收款账户（未绑定也返回对象，bound=false）。 */
-export function getPayoutAccount(): Promise<PayoutAccount> {
-  return http.get<PayoutAccount>("/publisher/payout/account");
+/** 查询收款账户列表（默认卡在前）。 */
+export function getPayoutAccounts(): Promise<PayoutAccountList> {
+  return http.get<PayoutAccountList>("/publisher/payout/account/list");
 }
 
-/** 新建收款账户（已存在报 403315）。 */
+/** 查询默认收款账户（兼容/表单带入用）。 */
+export function getPayoutAccount(): Promise<DefaultPayoutAccount> {
+  return http.get<DefaultPayoutAccount>("/publisher/payout/account");
+}
+
+/** 新建收款账户（重复卡号报 403373）。 */
 export function addPayoutAccount(body: PayoutAccountBody): Promise<PayoutAccount> {
   return http.post<PayoutAccount>("/publisher/payout/account", body);
 }
 
-/** 更新收款账户（不存在报 403316）。 */
+/** 更新收款账户（不存在/不属于本账户报 403316）。 */
 export function updatePayoutAccount(body: PayoutAccountBody): Promise<PayoutAccount> {
   return http.post<PayoutAccount>("/publisher/payout/account/update", body);
+}
+
+export function deletePayoutAccount(id: number): Promise<void> {
+  return http.post<void>("/publisher/payout/account/delete", { id });
+}
+
+export function setDefaultPayoutAccount(id: number): Promise<void> {
+  return http.post<void>("/publisher/payout/account/setDefault", { id });
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -129,6 +147,8 @@ export interface EarningsDetailRow {
   ratio: number;
   /** 该剧累计播放量（course.view_counts） */
   viewCount: number;
+  /** 该剧当日播放量；当日无快照时为 null */
+  dailyViewCount: number | null;
   /** 结算状态：0待结算 / 1结算中 / 2已结算 */
   settleStatus: 0 | 1 | 2;
 }
@@ -188,6 +208,11 @@ export function getEarningsSummary(): Promise<EarningsSummary> {
   return http.get<EarningsSummary>("/publisher/settlement/overview");
 }
 
+/** 查询有收益数据的月份（倒序、跨年）。 */
+export function getEarningsMonths(): Promise<string[]> {
+  return http.get<string[]>("/publisher/settlement/earnings/months");
+}
+
 /** 查询收益明细。 */
 export function getEarningsDetail(query: EarningsDetailQuery = {}): Promise<EarningsDetailPage> {
   return http.get<EarningsDetailPage>("/publisher/settlement/earnings", {
@@ -223,41 +248,93 @@ export function getEarningsCoursesDropdown(): Promise<EarningsCourseOption[]> {
 // 结算记录（列表 + 申请结算，bug22）—— 真实接口
 // ────────────────────────────────────────────────────────────────
 
-/** 结算单状态：0草稿 / 1已申请 / 2审核通过 / 3已打款 / 4驳回。 */
-export type SettlementStatus = 0 | 1 | 2 | 3 | 4;
+/** 结算单状态：1已申请 / 2审核通过待打款 / 3已打款 / 4驳回或打款失败。 */
+export type SettlementStatus = 1 | 2 | 3 | 4;
+export type SettlementStatusGroup = "applied" | "settled" | "failed";
+export type SettlementBlockReason = "NO_PAYOUT_ACCOUNT" | "ALREADY_APPLIED_THIS_MONTH" | "NO_SETTLEABLE_EARNINGS";
 
-/** 结算单（后端 /publisher/settlement/records 行）。金额单位 USD。 */
+export interface SettlementSummary {
+  hasPayoutAccount: boolean;
+  canApply: boolean;
+  resubmit: boolean;
+  blockReason: SettlementBlockReason | null;
+  totalSettledCny: number;
+  settledCount: number;
+  pendingMonths: string[];
+  pendingTotalCny: number;
+  payoutAccount: {
+    bank: string;
+    accountNoMasked: string;
+  } | null;
+  currency: "CNY";
+}
+
+export interface SettlementApplyResult {
+  orderNo: string;
+  periodMonth: string;
+  publishScope: EarningsPublishScope;
+  ratioLabel: string;
+  creatorCny: number;
+}
+
+/** 结算单（后端 /publisher/settlement/records 行）。金额单位 CNY。 */
 export interface SettlementRecord {
   id: number;
-  /** 结算周期起 yyyy-MM-dd */
-  periodStart: string;
-  /** 结算周期止 yyyy-MM-dd */
-  periodEnd: string;
-  /** 总额 */
-  grossUsd: number;
-  /** 出品方实得（已扣分润，发行方到手） */
-  creatorUsd: number;
-  /** 平台分成 */
-  platformUsd: number;
-  /** 分成比例文案，如 "8:2" */
+  orderNo: string;
+  periodMonth: string;
+  publishScope: EarningsPublishScope;
   ratioLabel: string;
-  /** 状态 0-4 */
-  status: number;
+  creatorCny: number;
+  status: SettlementStatus;
+  statusGroup: SettlementStatusGroup;
   /** 驳回备注 */
   auditRemark: string | null;
   applyTime: string | null;
   payTime: string | null;
+  accountNoMasked: string | null;
+}
+
+export interface SettlementRecordDetail extends SettlementRecord {
+  grossCny: number;
+  platformCny: number;
+  creatorUsd: number;
+  rateSnapshot: number;
+  accountSnapshot: string | null;
+  auditTime: string | null;
   /** 打款凭证 URL */
   payVoucherUrl: string | null;
-  /** 申请时的收款账号快照 */
-  accountSnapshot: string | null;
-  createTime: string;
-  updateTime: string;
+  items: SettlementRecordItem[];
+}
+
+export interface SettlementRecordItem {
+  courseId: number;
+  periodMonth: string;
+  publishScope: EarningsPublishScope;
+  orderCount: number;
+  grossUsd: number;
+  creatorUsd: number;
+  grossCny: number;
+  creatorCny: number;
+}
+
+export interface SettlementChartSeries {
+  courseId: number;
+  courseName: string;
+  points: number[];
+  totalCny: number;
+  cumulativeCny: number;
+}
+
+export interface SettlementChart {
+  months: string[];
+  series: SettlementChartSeries[];
 }
 
 /** 结算记录查询。status 不传=全部。 */
 export interface SettlementRecordQuery {
-  status?: number;
+  status?: SettlementStatus;
+  keyword?: string;
+  scope?: EarningsPublishScope;
   page?: number;
   limit?: number;
 }
@@ -265,14 +342,40 @@ export interface SettlementRecordQuery {
 /** 结算记录列表（分页）。注意：分页对象 {totalCount,list,...} 在 `data` 里（非顶层 page），用默认 pick:"data"。 */
 export function getSettlementRecords(query: SettlementRecordQuery = {}): Promise<PageResult<SettlementRecord>> {
   return http.get<PageResult<SettlementRecord>>("/publisher/settlement/records", {
-    params: { status: query.status, page: query.page ?? 1, limit: query.limit ?? 10 },
+    params: {
+      status: query.status,
+      keyword: query.keyword,
+      scope: query.scope,
+      page: query.page ?? 1,
+      limit: query.limit ?? 10,
+    },
   });
 }
 
-/**
- * 申请结算（仅 status=0 草稿可申请）。
- * 成功返回新状态（status=1）的 record；异常 403317/403318/403319 由 http.ts toast 后端文案。
- */
-export function applySettlement(recordId: number): Promise<SettlementRecord> {
-  return http.post<SettlementRecord>("/publisher/settlement/apply", { recordId });
+export function getSettlementSummary(): Promise<SettlementSummary> {
+  return http.get<SettlementSummary>("/publisher/settlement/summary");
+}
+
+export function applySettlement(): Promise<SettlementApplyResult[]> {
+  return http.post<SettlementApplyResult[]>("/publisher/settlement/apply");
+}
+
+export function getSettlementRecordDetail(id: number): Promise<SettlementRecordDetail> {
+  return http.get<SettlementRecordDetail>(`/publisher/settlement/records/${id}`);
+}
+
+export interface SettlementChartQuery {
+  startMonth?: string;
+  endMonth?: string;
+  courseIds?: number[];
+}
+
+export function getSettlementChart(query: SettlementChartQuery = {}): Promise<SettlementChart> {
+  return http.get<SettlementChart>("/publisher/settlement/chart", {
+    params: {
+      startMonth: query.startMonth,
+      endMonth: query.endMonth,
+      courseIds: query.courseIds?.join(","),
+    },
+  });
 }

@@ -15,22 +15,29 @@ import {
   ChevronRight,
 } from "lucide-react";
 import type { ContentMessages } from "../../i18n/content";
-import type { PublisherCourseRow } from "./types";
+import type { LanguageOption } from "../../../services/language";
+import type { CourseStats, PublisherCourseRow } from "./types";
 import {
   auditStatusStyle,
   auditStatusLabel,
   shelfStatusStyle,
   shelfStatusLabel,
   genderChannelKey,
+  languageLabel,
   fmt,
 } from "./shared";
 
 interface DramaListViewProps {
   t: ContentMessages;
   dramas: PublisherCourseRow[];
+  stats: CourseStats | null;
+  languages: LanguageOption[];
+  filter: "all" | "onShelf" | "auditing" | "offShelf";
+  onFilterChange: (filter: "all" | "onShelf" | "auditing" | "offShelf") => void;
   loading: boolean;
   searchQuery: string;
   onSearch: (v: string) => void;
+  canManageCourse: boolean;
   onUpload: () => void;
   onViewDetail: (d: PublisherCourseRow) => void;
   onManageEpisodes: (d: PublisherCourseRow) => void;
@@ -46,9 +53,14 @@ interface DramaListViewProps {
 export const DramaListView: React.FC<DramaListViewProps> = ({
   t,
   dramas,
+  stats,
+  languages,
+  filter,
+  onFilterChange,
   loading,
   searchQuery,
   onSearch,
+  canManageCourse,
   onUpload,
   onViewDetail,
   onManageEpisodes,
@@ -95,6 +107,33 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
 
   return (
     <div className="p-8">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-5">
+        {[
+          { key: "all" as const, label: t.statTotalDramas, value: stats?.total ?? 0 },
+          { key: "onShelf" as const, label: t.statOnShelfDramas, value: stats?.onShelf ?? 0 },
+          { key: "auditing" as const, label: t.statAuditingDramas, value: stats?.auditing ?? 0 },
+          { key: "offShelf" as const, label: t.statOffShelfDramas, value: stats?.offShelf ?? 0 },
+        ].map((item) => {
+          const active = filter === item.key;
+          return (
+            <button
+              key={item.key}
+              type="button"
+              onClick={() => onFilterChange(item.key)}
+              className="text-left rounded-2xl border bg-white px-5 py-4 transition-all"
+              style={{ borderColor: active ? "#111111" : "#f3f4f6" }}
+            >
+              <p className="text-xs text-gray-400" style={{ fontWeight: 500 }}>
+                {item.label}
+              </p>
+              <p className="mt-2 text-2xl text-[#101828]" style={{ fontWeight: 800 }}>
+                {item.value}
+              </p>
+            </button>
+          );
+        })}
+      </div>
+
       <div className="flex items-center gap-3 mb-6">
         <div className="flex-1 relative max-w-xs">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
@@ -106,7 +145,7 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
             className="w-full pl-9 pr-4 py-2 text-xs border border-gray-200 rounded-lg bg-white outline-none focus:border-gray-400"
           />
         </div>
-        <div className="ml-auto flex items-center gap-2">
+        {canManageCourse && <div className="ml-auto flex items-center gap-2">
           <button
             onClick={onUpload}
             className="px-4 py-2 rounded-lg text-white text-xs flex items-center gap-1.5 hover:opacity-90"
@@ -115,7 +154,7 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
             <Film className="w-3.5 h-3.5" />
             {t.uploadDrama}
           </button>
-        </div>
+        </div>}
       </div>
 
       <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
@@ -146,9 +185,10 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
                   const isApproved = drama.auditStatus === 2;
                   const isReviewing = drama.auditStatus === 1;
                   const onShelf = drama.shelfStatus === 1;
+                  const hasShelfStatus = typeof drama.shelfStatus === "number";
                   const distLabel = drama.publishScope === 2 ? t.distFull : t.distAccount;
                   const auStyle = auditStatusStyle[drama.auditStatus] ?? { bg: "#F3F4F6", color: "#6B7280" };
-                  const shStyle = shelfStatusStyle[drama.shelfStatus] ?? { bg: "#F3F4F6", color: "#9CA3AF" };
+                  const shStyle = hasShelfStatus ? shelfStatusStyle[drama.shelfStatus] : undefined;
                   const isOpen = menu?.id === drama.courseId;
                   return (
                     <tr
@@ -185,7 +225,7 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
                         </div>
                       </td>
                       <td className="px-4 py-4">
-                        <span className="text-xs text-gray-600">{drama.languageName || drama.languageType}</span>
+                        <span className="text-xs text-gray-600">{languageLabel(drama.languageType, languages)}</span>
                       </td>
                       <td className="px-4 py-4">
                         <span
@@ -223,7 +263,7 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
                       </td>
                       {/* 上架状态（仅审核通过显示） */}
                       <td className="px-4 py-4">
-                        {isApproved ? (
+                        {isApproved && hasShelfStatus && shStyle ? (
                           <span
                             className="px-2.5 py-1 rounded-full text-xs"
                             style={{ background: shStyle.bg, color: shStyle.color, fontWeight: 500 }}
@@ -243,12 +283,12 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
                         <span
                           className="px-2 py-0.5 rounded text-xs"
                           style={{
-                            background: drama.publishScope === 2 ? "#FFF1F2" : "#EFF6FF",
-                            color: drama.publishScope === 2 ? "#E8192C" : "#3B82F6",
+                            background: drama.revenue.publishScope === 2 ? "#FFF1F2" : "#EFF6FF",
+                            color: drama.revenue.publishScope === 2 ? "#E8192C" : "#3B82F6",
                             fontWeight: 500,
                           }}
                         >
-                          {drama.publishScope === 2 ? t.revenueFullShort : t.revenueAccountShort}
+                          {drama.revenue.revenueText}
                         </span>
                       </td>
                       <td className="px-4 py-4">
@@ -317,7 +357,7 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
                                 <Video className="w-3.5 h-3.5" />
                                 {t.actionEpisodes}
                               </button>
-                              {isApproved && (
+                              {isApproved && canManageCourse && (
                                 <>
                                   <div className="h-px bg-gray-100 mx-3" />
                                   <button
@@ -360,13 +400,15 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
                         <Film className="w-7 h-7 text-gray-300" />
                       </div>
                       <p className="text-sm text-gray-400">{t.emptyTitle}</p>
-                      <button
-                        onClick={onUpload}
-                        className="mt-1 px-5 py-2 rounded-lg text-white text-xs hover:opacity-90"
-                        style={{ background: "#111111", fontWeight: 600 }}
-                      >
-                        {t.uploadNow}
-                      </button>
+                      {canManageCourse && (
+                        <button
+                          onClick={onUpload}
+                          className="mt-1 px-5 py-2 rounded-lg text-white text-xs hover:opacity-90"
+                          style={{ background: "#111111", fontWeight: 600 }}
+                        >
+                          {t.uploadNow}
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>

@@ -29,6 +29,10 @@ export interface ContentMessages {
   // ── 列表页 ──
   searchPlaceholder: string;
   uploadDrama: string;
+  statTotalDramas: string;
+  statOnShelfDramas: string;
+  statAuditingDramas: string;
+  statOffShelfDramas: string;
   emptyTitle: string;
   uploadNow: string;
   colDramaInfo: string;
@@ -177,17 +181,22 @@ export interface ContentMessages {
   detailCopyright: string;
   detailUploadDate: string;
   detailPricingTitle: string;
-  /** 收费规则为空时的占位（后端 priceRule 字段未对齐时） */
+  /** 收费规则为空时的占位。 */
   pricingEmpty: string;
   detailFullSeries: string;
   detailPerEpisode: string;
   detailAd15s: string;
   detailEpisodeProgress: string;
+  detailFailedEpisodes: string;
+  detailPendingEpisodes: string;
   detailManageEpisodes: string;
   detailUploadedOf: string;
   detailContinueUpload: string;
   detailDistribution: string;
   detailRevenue: string;
+  detailHighlightVideo: string;
+  detailHighlightMissing: string;
+  detailHighlightUploadedAt: string;
   revenueAccountFull: string;
   revenueFullFull: string;
   statUploaded: string;
@@ -216,6 +225,18 @@ export interface ContentMessages {
   epSaved: string;
   epTotalCount: string;
   videoUploadFailed: string;
+  downloadTemplate: string;
+  templateDownloadFailed: string;
+  importTemplate: string;
+  templateImporting: string;
+  templateImportSuccess: string;
+  templateImportEmpty: string;
+  templateImportFailed: string;
+  uploadHighlight: string;
+  highlightUploading: string;
+  highlightSaved: string;
+  highlightUploadFailed: string;
+  highlightRequired: string;
   /** 提交时存在未上传视频的剧集（区别于上传过程失败） */
   videoIncomplete: string;
 
@@ -234,6 +255,10 @@ export interface ContentMessages {
   /** step1：剧集语言字段 */
   langLabel: string;
   langPlaceholder: string;
+  /** step1：类别字段 */
+  classificationLabel: string;
+  classificationSelectLangFirst: string;
+  classificationEmpty: string;
   /** 标签需先选语言 */
   tagsSelectLangFirst: string;
   /** 驳回原因标题 */
@@ -263,6 +288,10 @@ export const content: Record<Locale, ContentMessages> = {
 
     searchPlaceholder: "搜索短剧名称 / ID",
     uploadDrama: "上传短剧",
+    statTotalDramas: "总发行剧集",
+    statOnShelfDramas: "已上架",
+    statAuditingDramas: "审核中",
+    statOffShelfDramas: "已下架",
     emptyTitle: "暂无短剧，点击上传",
     uploadNow: "立即上传短剧",
     colDramaInfo: "剧集信息",
@@ -289,7 +318,7 @@ export const content: Record<Locale, ContentMessages> = {
     copyrightLicensed: "授权",
     copyrightProofLabel: "版权证明",
     copyrightProofPrompt: "点击或拖拽上传版权证明",
-    copyrightProofFormat: "支持 JPG、PNG、HEIC、PDF 格式（≤20MB）",
+    copyrightProofFormat: "支持 JPG、PNG、HEIC、PDF、DOC、DOCX 格式（≤20MB）",
 
     actionViewDetail: "查看详情",
     actionEpisodes: "剧集视频",
@@ -400,11 +429,16 @@ export const content: Record<Locale, ContentMessages> = {
     detailPerEpisode: "单集",
     detailAd15s: "15s广告费",
     detailEpisodeProgress: "剧集进度",
+    detailFailedEpisodes: "失败 {n} 集",
+    detailPendingEpisodes: "待提交 {n} 集",
     detailManageEpisodes: "管理剧集",
     detailUploadedOf: "已上传 {done} / {total} 集",
     detailContinueUpload: "继续上传剧集",
     detailDistribution: "发布配置",
     detailRevenue: "收益方式",
+    detailHighlightVideo: "高光视频",
+    detailHighlightMissing: "未上传高光视频",
+    detailHighlightUploadedAt: "上传于 {time}",
     revenueAccountFull: "账户主页订阅（平台2 : 出品方8）",
     revenueFullFull: "全量推荐订阅（平台4 : 出品方6）",
     statUploaded: "已上传",
@@ -430,6 +464,18 @@ export const content: Record<Locale, ContentMessages> = {
     epSaved: "已保存",
     epTotalCount: "共 {total} 集",
     videoUploadFailed: "视频上传失败，请重试",
+    downloadTemplate: "下载批量录入模版",
+    templateDownloadFailed: "模版下载失败，请重试",
+    importTemplate: "导入批量模版",
+    templateImporting: "导入中",
+    templateImportSuccess: "已导入 {n} 集",
+    templateImportEmpty: "模版中没有可导入的视频链接",
+    templateImportFailed: "模版导入失败，请检查文件内容",
+    uploadHighlight: "上传高光视频",
+    highlightUploading: "上传中",
+    highlightSaved: "高光视频已保存",
+    highlightUploadFailed: "高光视频上传失败，请重试",
+    highlightRequired: "请先上传高光视频",
     videoIncomplete: "请上传完整剧集视频",
 
     loadFailed: "加载失败，请重试",
@@ -440,6 +486,9 @@ export const content: Record<Locale, ContentMessages> = {
     detailLanguage: "剧集语言",
     langLabel: "剧集语言",
     langPlaceholder: "请选择语言",
+    classificationLabel: "类别",
+    classificationSelectLangFirst: "请先选择语言",
+    classificationEmpty: "暂无可选类别",
     tagsSelectLangFirst: "请先选择语言",
     rejectReasonTitle: "驳回原因",
     pricingColWholeLe50: "整剧（≤50集）",
@@ -475,6 +524,10 @@ export const content: Record<Locale, ContentMessages> = {
 
     searchPlaceholder: "搜尋短劇名稱 / ID",
     uploadDrama: "上傳短劇",
+    statTotalDramas: "總發行劇集",
+    statOnShelfDramas: "已上架",
+    statAuditingDramas: "審核中",
+    statOffShelfDramas: "已下架",
     emptyTitle: "暫無短劇，點擊上傳",
     uploadNow: "立即上傳短劇",
     colDramaInfo: "劇集資訊",
@@ -501,7 +554,7 @@ export const content: Record<Locale, ContentMessages> = {
     copyrightLicensed: "授權",
     copyrightProofLabel: "版權證明",
     copyrightProofPrompt: "點擊或拖曳上傳版權證明",
-    copyrightProofFormat: "支援 JPG、PNG、HEIC、PDF 格式（≤20MB）",
+    copyrightProofFormat: "支援 JPG、PNG、HEIC、PDF、DOC、DOCX 格式（≤20MB）",
 
     actionViewDetail: "查看詳情",
     actionEpisodes: "劇集影片",
@@ -612,11 +665,16 @@ export const content: Record<Locale, ContentMessages> = {
     detailPerEpisode: "單集",
     detailAd15s: "15s廣告費",
     detailEpisodeProgress: "劇集進度",
+    detailFailedEpisodes: "失敗 {n} 集",
+    detailPendingEpisodes: "待提交 {n} 集",
     detailManageEpisodes: "管理劇集",
     detailUploadedOf: "已上傳 {done} / {total} 集",
     detailContinueUpload: "繼續上傳劇集",
     detailDistribution: "發佈設定",
     detailRevenue: "收益方式",
+    detailHighlightVideo: "高光影片",
+    detailHighlightMissing: "未上傳高光影片",
+    detailHighlightUploadedAt: "上傳於 {time}",
     revenueAccountFull: "帳戶主頁訂閱（平台2 : 出品方8）",
     revenueFullFull: "全量推薦訂閱（平台4 : 出品方6）",
     statUploaded: "已上傳",
@@ -642,6 +700,18 @@ export const content: Record<Locale, ContentMessages> = {
     epSaved: "已儲存",
     epTotalCount: "共 {total} 集",
     videoUploadFailed: "影片上傳失敗，請重試",
+    downloadTemplate: "下載批量錄入模版",
+    templateDownloadFailed: "模版下載失敗，請重試",
+    importTemplate: "導入批量模版",
+    templateImporting: "導入中",
+    templateImportSuccess: "已導入 {n} 集",
+    templateImportEmpty: "模版中沒有可導入的影片連結",
+    templateImportFailed: "模版導入失敗，請檢查檔案內容",
+    uploadHighlight: "上傳高光影片",
+    highlightUploading: "上傳中",
+    highlightSaved: "高光影片已儲存",
+    highlightUploadFailed: "高光影片上傳失敗，請重試",
+    highlightRequired: "請先上傳高光影片",
     videoIncomplete: "請上傳完整劇集影片",
 
     loadFailed: "載入失敗，請重試",
@@ -652,6 +722,9 @@ export const content: Record<Locale, ContentMessages> = {
     detailLanguage: "劇集語言",
     langLabel: "劇集語言",
     langPlaceholder: "請選擇語言",
+    classificationLabel: "類別",
+    classificationSelectLangFirst: "請先選擇語言",
+    classificationEmpty: "暫無可選類別",
     tagsSelectLangFirst: "請先選擇語言",
     rejectReasonTitle: "駁回原因",
     pricingColWholeLe50: "整劇（≤50集）",
@@ -687,6 +760,10 @@ export const content: Record<Locale, ContentMessages> = {
 
     searchPlaceholder: "Search drama name / ID",
     uploadDrama: "Upload Drama",
+    statTotalDramas: "Total Dramas",
+    statOnShelfDramas: "On Shelf",
+    statAuditingDramas: "Auditing",
+    statOffShelfDramas: "Off Shelf",
     emptyTitle: "No dramas yet",
     uploadNow: "Upload Now",
     colDramaInfo: "Drama Info",
@@ -713,7 +790,7 @@ export const content: Record<Locale, ContentMessages> = {
     copyrightLicensed: "Licensed",
     copyrightProofLabel: "Copyright proof",
     copyrightProofPrompt: "Click or drag to upload copyright proof",
-    copyrightProofFormat: "Supports JPG, PNG, HEIC, PDF (≤20MB)",
+    copyrightProofFormat: "Supports JPG, PNG, HEIC, PDF, DOC, DOCX (≤20MB)",
 
     actionViewDetail: "View Details",
     actionEpisodes: "Episode Videos",
@@ -787,7 +864,7 @@ export const content: Record<Locale, ContentMessages> = {
     viewPricingRules: "View pricing rules by country",
     publishSettingsTitle: "Publishing Settings",
     publishNowOption: "Publish Now",
-    publishLaterOption: "Save Draft",
+    publishLaterOption: "Do Not Publish Now",
     submitPublish: "Submit & Publish",
     submitSuccess: "Submitted. Your drama is now under review.",
 
@@ -825,11 +902,16 @@ export const content: Record<Locale, ContentMessages> = {
     detailPerEpisode: "Per Episode",
     detailAd15s: "15s Ad",
     detailEpisodeProgress: "Episode Progress",
+    detailFailedEpisodes: "{n} failed",
+    detailPendingEpisodes: "{n} pending",
     detailManageEpisodes: "Manage",
     detailUploadedOf: "{done} / {total} uploaded",
     detailContinueUpload: "Continue Uploading",
     detailDistribution: "Distribution",
     detailRevenue: "Revenue",
+    detailHighlightVideo: "Highlight Video",
+    detailHighlightMissing: "No highlight video uploaded",
+    detailHighlightUploadedAt: "Uploaded at {time}",
     revenueAccountFull: "Account Subscription (Platform 2 : Producer 8)",
     revenueFullFull: "Full Boost Subscription (Platform 4 : Producer 6)",
     statUploaded: "Uploaded",
@@ -855,6 +937,18 @@ export const content: Record<Locale, ContentMessages> = {
     epSaved: "Saved",
     epTotalCount: "Total {total} episodes",
     videoUploadFailed: "Video upload failed, please retry",
+    downloadTemplate: "Download Batch Template",
+    templateDownloadFailed: "Template download failed, please retry",
+    importTemplate: "Import Batch Template",
+    templateImporting: "Importing",
+    templateImportSuccess: "Imported {n} episodes",
+    templateImportEmpty: "No importable video links in the template",
+    templateImportFailed: "Template import failed. Check the file content",
+    uploadHighlight: "Upload Highlight Video",
+    highlightUploading: "Uploading",
+    highlightSaved: "Highlight video saved",
+    highlightUploadFailed: "Highlight upload failed, please retry",
+    highlightRequired: "Please upload a highlight video first",
     videoIncomplete: "Please upload videos for all episodes",
 
     loadFailed: "Failed to load, please retry",
@@ -865,6 +959,9 @@ export const content: Record<Locale, ContentMessages> = {
     detailLanguage: "Language",
     langLabel: "Language",
     langPlaceholder: "Select language",
+    classificationLabel: "Category",
+    classificationSelectLangFirst: "Select a language first",
+    classificationEmpty: "No categories available",
     tagsSelectLangFirst: "Select a language first",
     rejectReasonTitle: "Rejection Reason",
     pricingColWholeLe50: "Full (≤50 eps)",
@@ -900,6 +997,10 @@ export const content: Record<Locale, ContentMessages> = {
 
     searchPlaceholder: "Buscar nome do drama / ID",
     uploadDrama: "Enviar drama",
+    statTotalDramas: "Total de dramas",
+    statOnShelfDramas: "Publicados",
+    statAuditingDramas: "Em revisão",
+    statOffShelfDramas: "Retirados",
     emptyTitle: "Nenhum drama ainda",
     uploadNow: "Enviar agora",
     colDramaInfo: "Informações do drama",
@@ -926,7 +1027,7 @@ export const content: Record<Locale, ContentMessages> = {
     copyrightLicensed: "Licenciado",
     copyrightProofLabel: "Comprovante de direitos autorais",
     copyrightProofPrompt: "Clique ou arraste para enviar o comprovante",
-    copyrightProofFormat: "Suporta JPG, PNG, HEIC, PDF (≤20MB)",
+    copyrightProofFormat: "Suporta JPG, PNG, HEIC, PDF, DOC, DOCX (≤20MB)",
 
     actionViewDetail: "Ver detalhes",
     actionEpisodes: "Vídeos dos episódios",
@@ -1000,7 +1101,7 @@ export const content: Record<Locale, ContentMessages> = {
     viewPricingRules: "Ver regras de preço por país",
     publishSettingsTitle: "Configurações de publicação",
     publishNowOption: "Publicar agora",
-    publishLaterOption: "Salvar rascunho",
+    publishLaterOption: "Não publicar agora",
     submitPublish: "Enviar e publicar",
     submitSuccess: "Enviado. Seu drama está em análise.",
 
@@ -1038,11 +1139,16 @@ export const content: Record<Locale, ContentMessages> = {
     detailPerEpisode: "Por episódio",
     detailAd15s: "Anúncio 15s",
     detailEpisodeProgress: "Progresso dos episódios",
+    detailFailedEpisodes: "{n} com falha",
+    detailPendingEpisodes: "{n} pendentes",
     detailManageEpisodes: "Gerenciar",
     detailUploadedOf: "{done} / {total} enviados",
     detailContinueUpload: "Continuar enviando",
     detailDistribution: "Distribuição",
     detailRevenue: "Receita",
+    detailHighlightVideo: "Vídeo destaque",
+    detailHighlightMissing: "Nenhum vídeo destaque enviado",
+    detailHighlightUploadedAt: "Enviado em {time}",
     revenueAccountFull: "Assinatura do perfil (Plataforma 2 : Produtor 8)",
     revenueFullFull: "Assinatura de impulso total (Plataforma 4 : Produtor 6)",
     statUploaded: "Enviado",
@@ -1068,6 +1174,18 @@ export const content: Record<Locale, ContentMessages> = {
     epSaved: "Salvo",
     epTotalCount: "Total de {total} episódios",
     videoUploadFailed: "Falha no envio do vídeo, tente novamente",
+    downloadTemplate: "Baixar Modelo em Lote",
+    templateDownloadFailed: "Falha ao baixar modelo, tente novamente",
+    importTemplate: "Importar Modelo em Lote",
+    templateImporting: "Importando",
+    templateImportSuccess: "{n} episódios importados",
+    templateImportEmpty: "Nenhum link de vídeo importável no modelo",
+    templateImportFailed: "Falha ao importar modelo. Verifique o conteúdo do arquivo",
+    uploadHighlight: "Enviar Vídeo Destaque",
+    highlightUploading: "Enviando",
+    highlightSaved: "Vídeo destaque salvo",
+    highlightUploadFailed: "Falha no envio do destaque, tente novamente",
+    highlightRequired: "Envie um vídeo destaque primeiro",
     videoIncomplete: "Envie os vídeos de todos os episódios",
 
     loadFailed: "Falha ao carregar, tente novamente",
@@ -1078,6 +1196,9 @@ export const content: Record<Locale, ContentMessages> = {
     detailLanguage: "Idioma",
     langLabel: "Idioma",
     langPlaceholder: "Selecione o idioma",
+    classificationLabel: "Categoria",
+    classificationSelectLangFirst: "Selecione um idioma primeiro",
+    classificationEmpty: "Nenhuma categoria disponível",
     tagsSelectLangFirst: "Selecione um idioma primeiro",
     rejectReasonTitle: "Motivo da rejeição",
     pricingColWholeLe50: "Série (≤50 eps)",

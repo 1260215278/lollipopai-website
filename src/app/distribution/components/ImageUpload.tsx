@@ -69,7 +69,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   replaceText,
   uploadFailedText,
   // bug9：放开苹果 HEIC/HEIF 拍照格式（需后端/OSS 同步支持，见后端反馈文档）
-  accept = "image/png,image/jpeg,image/heic,image/heif,.heic,.heif",
+  accept = "image/jpeg,image/png,image/heic,image/heif,.jpg,.jpeg,.png,.heic,.heif",
   variant = "light",
   className,
   zoneClassName,

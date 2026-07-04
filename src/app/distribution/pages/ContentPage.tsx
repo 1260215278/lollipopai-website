@@ -1,19 +1,25 @@
 import { useCallback, useEffect, useState } from "react";
 import { AlertCircle, Loader2 } from "lucide-react";
+import { useOutletContext } from "react-router";
 import { useI18n } from "../../i18n";
+import type { DistributionOutletContext } from "../DistributionLayout";
 import {
   fetchCourseList,
+  fetchCourseStats,
   fetchCourseDetail,
   setShelf,
   type PublisherCourseRow,
   type CourseDetail,
+  type CourseStats,
 } from "../../services/content";
+import { getLanguageTypeList, type LanguageOption } from "../../services/language";
 import { DramaListView } from "../components/content/DramaListView";
 import { DramaDetailView } from "../components/content/DramaDetailView";
 import { EpisodesView } from "../components/content/EpisodesView";
 import { UploadForm } from "../components/content/UploadForm";
 
 type View = "list" | "form" | "detail" | "episodes";
+type ListFilter = "all" | "onShelf" | "auditing" | "offShelf";
 
 /** 上剧列表每页条数（bug20） */
 const PAGE_SIZE = 12;
@@ -22,6 +28,7 @@ interface EpisodesCtx {
   courseId: number;
   title: string;
   plannedEpisodes: number;
+  auditStatus: number;
   backTo: "list" | "detail";
 }
 
@@ -31,12 +38,17 @@ interface EpisodesCtx {
  */
 export function ContentPage() {
   const { messages } = useI18n();
+  const { currentMember } = useOutletContext<DistributionOutletContext>();
   const t = messages.distribution.content;
+  const canManageCourse = currentMember?.role !== 3;
 
   const [view, setView] = useState<View>("list");
   const [dramas, setDramas] = useState<PublisherCourseRow[]>([]);
+  const [stats, setStats] = useState<CourseStats | null>(null);
+  const [languages, setLanguages] = useState<LanguageOption[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [filter, setFilter] = useState<ListFilter>("all");
   // 分页（bug20）：每页 12 条，与产品「上传 12 个后需翻页」一致
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
@@ -46,10 +58,24 @@ export function ContentPage() {
   const [episodesCtx, setEpisodesCtx] = useState<EpisodesCtx | null>(null);
   const [confirmOffline, setConfirmOffline] = useState<PublisherCourseRow | null>(null);
 
-  const loadList = useCallback(async (keyword: string, pageNum: number) => {
+  const loadStats = useCallback(async () => {
+    try {
+      setStats(await fetchCourseStats());
+    } catch {
+      setStats(null);
+    }
+  }, []);
+
+  const loadList = useCallback(async (keyword: string, pageNum: number, currentFilter: ListFilter) => {
     setLoading(true);
     try {
-      const res = await fetchCourseList({ keyword, page: pageNum, limit: PAGE_SIZE });
+      const res = await fetchCourseList({
+        keyword,
+        page: pageNum,
+        limit: PAGE_SIZE,
+        auditStatus: currentFilter === "auditing" ? 1 : undefined,
+        shelfStatus: currentFilter === "onShelf" ? 1 : currentFilter === "offShelf" ? 2 : undefined,
+      });
       setDramas(res.list);
       setTotalPage(res.totalPage > 0 ? res.totalPage : 1);
     } catch {
@@ -62,15 +88,29 @@ export function ContentPage() {
   // 搜索词变化回到第 1 页
   useEffect(() => {
     setPage(1);
-  }, [searchQuery]);
+  }, [searchQuery, filter]);
+
+  useEffect(() => {
+    void loadStats();
+  }, [loadStats]);
+
+  useEffect(() => {
+    void getLanguageTypeList()
+      .then(setLanguages)
+      .catch(() => setLanguages([]));
+  }, []);
+
+  useEffect(() => {
+    if (!canManageCourse && view === "form") setView("list");
+  }, [canManageCourse, view]);
 
   // 按当前页 + 搜索词加载（搜索防抖 300ms）
   useEffect(() => {
     const id = setTimeout(() => {
-      void loadList(searchQuery, page);
+      void loadList(searchQuery, page, filter);
     }, 300);
     return () => clearTimeout(id);
-  }, [searchQuery, page, loadList]);
+  }, [searchQuery, page, filter, loadList]);
 
   const openDetail = async (d: PublisherCourseRow) => {
     setView("detail");
@@ -91,6 +131,7 @@ export function ContentPage() {
       courseId: d.courseId,
       title: d.title,
       plannedEpisodes: d.plannedEpisodes,
+      auditStatus: d.auditStatus,
       backTo: "list",
     });
     setView("episodes");
@@ -101,35 +142,42 @@ export function ContentPage() {
       courseId: cd.courseId,
       title: cd.title,
       plannedEpisodes: cd.progress.plannedEpisodes,
+      auditStatus: cd.auditStatus,
       backTo: "detail",
     });
     setView("episodes");
   };
 
   const handleToggleShelf = (d: PublisherCourseRow) => {
+    if (!canManageCourse) return;
     if (d.shelfStatus === 1) {
       setConfirmOffline(d);
     } else {
-      void setShelf(d.courseId, true).then(() => loadList(searchQuery, page));
+      void setShelf(d.courseId, true).then(() => {
+        void loadStats();
+        void loadList(searchQuery, page, filter);
+      });
     }
   };
 
   const doConfirmOffline = async () => {
-    if (!confirmOffline) return;
+    if (!confirmOffline || !canManageCourse) return;
     await setShelf(confirmOffline.courseId, false).catch(() => undefined);
     setConfirmOffline(null);
-    void loadList(searchQuery, page);
+    void loadStats();
+    void loadList(searchQuery, page, filter);
   };
 
   /* ── 视图分发 ── */
-  if (view === "form") {
+  if (view === "form" && canManageCourse) {
     return (
       <UploadForm
         t={t}
         onCancel={() => setView("list")}
         onSubmitted={() => {
           setView("list");
-          void loadList(searchQuery, page);
+          void loadStats();
+          void loadList(searchQuery, page, filter);
         }}
       />
     );
@@ -147,6 +195,8 @@ export function ContentPage() {
       <DramaDetailView
         t={t}
         detail={detail}
+        languages={languages}
+        canManageCourse={canManageCourse}
         onBack={() => setView("list")}
         onManageEpisodes={() => openEpisodesFromDetail(detail)}
       />
@@ -160,8 +210,13 @@ export function ContentPage() {
         courseId={episodesCtx.courseId}
         title={episodesCtx.title}
         plannedEpisodes={episodesCtx.plannedEpisodes}
+        auditStatus={episodesCtx.auditStatus}
+        canManageCourse={canManageCourse}
         onBack={() => setView(episodesCtx.backTo)}
-        onChanged={() => void loadList(searchQuery, page)}
+        onChanged={() => {
+          void loadStats();
+          void loadList(searchQuery, page, filter);
+        }}
       />
     );
   }
@@ -171,9 +226,14 @@ export function ContentPage() {
       <DramaListView
         t={t}
         dramas={dramas}
+        stats={stats}
+        languages={languages}
+        filter={filter}
+        onFilterChange={setFilter}
         loading={loading}
         searchQuery={searchQuery}
         onSearch={setSearchQuery}
+        canManageCourse={canManageCourse}
         onUpload={() => setView("form")}
         onViewDetail={(d) => void openDetail(d)}
         onManageEpisodes={(d) => openEpisodes(d)}

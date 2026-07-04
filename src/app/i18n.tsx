@@ -1360,7 +1360,7 @@ function getInitialLocale(): Locale {
     // Ignore storage failures and fall back to browser language.
   }
 
-  return "en";
+  return normalizeLocale(window.navigator.languages?.[0] ?? window.navigator.language);
 }
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {

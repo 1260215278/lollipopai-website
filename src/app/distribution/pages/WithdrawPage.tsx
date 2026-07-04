@@ -1,72 +1,205 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import { ChevronDown, Search, Building2, CalendarClock, Send, Loader2 } from "lucide-react";
+import {
+  AlertCircle,
+  BarChart3,
+  CalendarClock,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Eye,
+  Loader2,
+  Search,
+  Send,
+  Wallet,
+  X,
+} from "lucide-react";
+import { Bar, BarChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { toast } from "sonner";
 import { useI18n } from "../../i18n";
 import { PageLoading } from "../components/settlement/PageHeader";
 import { EmptyState } from "../components/settlement/EmptyState";
+import { TypeBadge } from "../components/settlement/Badge";
 import {
-  getPayoutAccount,
+  getSettlementSummary,
   getSettlementRecords,
+  getSettlementRecordDetail,
+  getSettlementChart,
+  getEarningsCoursesDropdown,
   applySettlement,
+  type EarningsCourseOption,
+  type EarningsPublishScope,
+  type SettlementChart,
   type SettlementRecord,
+  type SettlementRecordDetail,
+  type SettlementStatus,
+  type SettlementStatusGroup,
+  type SettlementSummary,
 } from "../../services/settlement";
 
 type WithdrawMsg = ReturnType<typeof useI18n>["messages"]["distribution"]["withdraw"];
 
-const usd = (n: number) =>
-  `$ ${(n ?? 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+const RECORD_PAGE_SIZE = 10;
+const chartColors = ["#111111", "#e8192c", "#3b82f6", "#16a34a", "#f59e0b"];
 
-/** 状态筛选：'all' 或具体状态 0-4 */
-type StatusFilter = "all" | 0 | 1 | 2 | 3 | 4;
+const cny = (n: number) =>
+  `¥ ${(n ?? 0).toLocaleString("zh-CN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
-/**
- * 结算记录 —— 对接 /publisher/settlement/records（bug22）。
- * 结算说明卡 + 结算单表（草稿可「申请结算」）。金额单位 USD。
- */
+type StatusFilter = "all" | SettlementStatus;
+type ScopeFilter = "all" | EarningsPublishScope;
+type ChartMode = "time" | "drama";
+
+interface SettlementAccountSnapshot {
+  companyName?: string;
+  accountNo?: string;
+  bank?: string;
+  branch?: string;
+  accountHolder?: string;
+  currency?: string;
+}
+
+function parseAccountSnapshot(raw: string | null): SettlementAccountSnapshot | null {
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as SettlementAccountSnapshot;
+  } catch {
+    return null;
+  }
+}
+
+function accountText(bank?: string | null, accountNo?: string | null): string {
+  return [bank, accountNo].filter(Boolean).join(" ");
+}
+
+function periodText(months: string[]): string {
+  if (months.length <= 1) return months[0] ?? "—";
+  return `${months[0]} ~ ${months[months.length - 1]}`;
+}
+
+function addMonth(month: string, offset: number): string {
+  const [year, m] = month.split("-").map(Number);
+  const d = new Date(year, m - 1 + offset, 1);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+}
+
+function recentMonthRange(): { startMonth: string; endMonth: string } {
+  const now = new Date();
+  const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+  const endMonth = addMonth(currentMonth, -1);
+  return { startMonth: addMonth(endMonth, -5), endMonth };
+}
+
+function makeLineData(chart: SettlementChart) {
+  return chart.months.map((month, index) => {
+    const row: Record<string, string | number> = { month };
+    chart.series.forEach((series) => {
+      row[String(series.courseId)] = series.points[index] ?? 0;
+    });
+    return row;
+  });
+}
+
 export function WithdrawPage() {
   const { messages } = useI18n();
   const t = messages.distribution.withdraw;
+  const allLabel = t.statusAll;
+  const initialRange = useMemo(() => recentMonthRange(), []);
 
   const [loading, setLoading] = useState(true);
-  const [hasAccount, setHasAccount] = useState(false);
+  const [recordsLoading, setRecordsLoading] = useState(false);
+  const [chartLoading, setChartLoading] = useState(false);
+  const [summary, setSummary] = useState<SettlementSummary | null>(null);
   const [records, setRecords] = useState<SettlementRecord[]>([]);
-  const [applyingId, setApplyingId] = useState<number | null>(null);
+  const [courses, setCourses] = useState<EarningsCourseOption[]>([]);
+  const [chart, setChart] = useState<SettlementChart>({ months: [], series: [] });
+  const [applying, setApplying] = useState(false);
+  const [confirmApply, setConfirmApply] = useState(false);
+  const [detailLoading, setDetailLoading] = useState(false);
+  const [detail, setDetail] = useState<SettlementRecordDetail | null>(null);
 
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [scopeFilter, setScopeFilter] = useState<ScopeFilter>("all");
   const [statusOpen, setStatusOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
+  const [chartMode, setChartMode] = useState<ChartMode>("time");
+  const [selectedCourseId, setSelectedCourseId] = useState<number | "all">("all");
+  const [startMonth, setStartMonth] = useState(initialRange.startMonth);
+  const [endMonth, setEndMonth] = useState(initialRange.endMonth);
   const statusRef = useRef<HTMLDivElement>(null);
+  const didInitialLoad = useRef(false);
 
   const statusText = useCallback(
-    (s: number) =>
-      s === 0
-        ? t.statusDraft
-        : s === 1
-          ? t.statusApplied
-          : s === 2
-            ? t.statusApproved
-            : s === 3
-              ? t.statusPaid
-              : t.statusRejected,
+    (s: SettlementStatus) => (s === 1 ? t.statusApplied : s === 2 ? t.statusApproved : s === 3 ? t.statusPaid : t.statusRejected),
+    [t],
+  );
+  const groupText = useCallback(
+    (group: SettlementStatusGroup) => (group === "settled" ? t.groupSettled : group === "failed" ? t.groupFailed : t.groupApplied),
     [t],
   );
 
-  const load = useCallback(async () => {
-    setLoading(true);
+  const loadSummary = useCallback(async () => {
+    const [nextSummary, courseOptions] = await Promise.all([getSettlementSummary(), getEarningsCoursesDropdown()]);
+    setSummary(nextSummary);
+    setCourses(courseOptions);
+  }, []);
+
+  const loadRecords = useCallback(async () => {
+    setRecordsLoading(true);
     try {
-      const [acc, page] = await Promise.all([getPayoutAccount(), getSettlementRecords({ page: 1, limit: 50 })]);
-      setHasAccount(!!acc);
-      setRecords(page.list);
+      const pageData = await getSettlementRecords({
+        page,
+        limit: RECORD_PAGE_SIZE,
+        status: statusFilter === "all" ? undefined : statusFilter,
+        scope: scopeFilter === "all" ? undefined : scopeFilter,
+        keyword: search.trim() || undefined,
+      });
+      setRecords(pageData.list);
+      setTotalPage(pageData.totalPage > 0 ? pageData.totalPage : 1);
     } catch {
       // http 已 toast
     } finally {
-      setLoading(false);
+      setRecordsLoading(false);
     }
+  }, [page, statusFilter, scopeFilter, search]);
+
+  const loadChart = useCallback(async () => {
+    setChartLoading(true);
+    try {
+      setChart(
+        await getSettlementChart({
+          startMonth: startMonth || undefined,
+          endMonth: endMonth || undefined,
+          courseIds: selectedCourseId === "all" ? undefined : [selectedCourseId],
+        }),
+      );
+    } catch {
+      // http 已 toast
+    } finally {
+      setChartLoading(false);
+    }
+  }, [startMonth, endMonth, selectedCourseId]);
+
+  useEffect(() => {
+    const run = async () => {
+      setLoading(true);
+      try {
+        await Promise.all([loadSummary(), loadRecords(), loadChart()]);
+      } finally {
+        didInitialLoad.current = true;
+        setLoading(false);
+      }
+    };
+    void run();
   }, []);
 
   useEffect(() => {
-    void load();
-  }, [load]);
+    if (didInitialLoad.current) void loadRecords();
+  }, [loadRecords]);
+
+  useEffect(() => {
+    if (didInitialLoad.current) void loadChart();
+  }, [loadChart]);
 
   useEffect(() => {
     const h = (e: MouseEvent) => {
@@ -77,41 +210,60 @@ export function WithdrawPage() {
   }, []);
 
   const statusOptions: { key: StatusFilter; label: string }[] = [
-    { key: "all", label: t.statusAll },
-    { key: 0, label: t.statusDraft },
+    { key: "all", label: allLabel },
     { key: 1, label: t.statusApplied },
     { key: 2, label: t.statusApproved },
     { key: 3, label: t.statusPaid },
     { key: 4, label: t.statusRejected },
   ];
-  const statusFilterLabel = statusFilter === "all" ? t.statusAll : statusText(statusFilter);
 
-  const filtered = useMemo(() => {
-    return records
-      .filter((r) => statusFilter === "all" || r.status === statusFilter)
-      .filter(
-        (r) =>
-          !search ||
-          r.periodStart?.includes(search) ||
-          r.periodEnd?.includes(search) ||
-          r.ratioLabel?.includes(search),
-      );
-  }, [records, statusFilter, search]);
+  const statusFilterLabel = statusFilter === "all" ? allLabel : statusText(statusFilter);
+  const canApply = Boolean(summary?.canApply);
+  const applyButtonText = summary?.blockReason === "ALREADY_APPLIED_THIS_MONTH"
+    ? t.alreadyApplied
+    : summary?.resubmit
+      ? t.resubmitSettlement
+      : t.applySettlement;
+  const blockReasonText =
+    summary?.blockReason === "NO_PAYOUT_ACCOUNT"
+      ? t.blockNoAccount
+      : summary?.blockReason === "ALREADY_APPLIED_THIS_MONTH"
+        ? t.blockAlreadyApplied
+        : summary?.blockReason === "NO_SETTLEABLE_EARNINGS"
+          ? t.blockNoEarnings
+          : "";
 
-  const handleApply = async (rec: SettlementRecord) => {
-    if (applyingId) return;
-    setApplyingId(rec.id);
+  const openDetail = async (id: number) => {
+    setDetailLoading(true);
     try {
-      const updated = await applySettlement(rec.id);
-      // 用后端返回的新状态更新该行
-      setRecords((prev) => prev.map((r) => (r.id === rec.id ? { ...r, ...updated } : r)));
-      toast.success(t.applySuccess);
+      setDetail(await getSettlementRecordDetail(id));
     } catch {
       // http 已 toast
     } finally {
-      setApplyingId(null);
+      setDetailLoading(false);
     }
   };
+
+  const handleApply = async () => {
+    if (applying) return;
+    setApplying(true);
+    try {
+      await applySettlement();
+      toast.success(t.applySuccess);
+      setConfirmApply(false);
+      await Promise.all([loadSummary(), loadRecords()]);
+    } catch {
+      // http 已 toast
+    } finally {
+      setApplying(false);
+    }
+  };
+
+  const lineData = useMemo(() => makeLineData(chart), [chart]);
+  const barData = useMemo(
+    () => chart.series.map((series) => ({ name: series.courseName, total: series.cumulativeCny })),
+    [chart],
+  );
 
   if (loading) {
     return (
@@ -123,8 +275,99 @@ export function WithdrawPage() {
 
   return (
     <div className="p-8 space-y-5">
-      {/* ── 结算说明 ── */}
-      <div className="bg-white rounded-2xl border border-[#f3f4f6] p-5">
+      <SummaryCard
+        t={t}
+        summary={summary}
+        canApply={canApply}
+        applyButtonText={applyButtonText}
+        blockReasonText={blockReasonText}
+        applying={applying}
+        onApply={() => setConfirmApply(true)}
+      />
+
+      <ChartCard
+        t={t}
+        mode={chartMode}
+        setMode={setChartMode}
+        courses={courses}
+        selectedCourseId={selectedCourseId}
+        setSelectedCourseId={setSelectedCourseId}
+        startMonth={startMonth}
+        setStartMonth={setStartMonth}
+        endMonth={endMonth}
+        setEndMonth={setEndMonth}
+        chart={chart}
+        lineData={lineData}
+        barData={barData}
+        loading={chartLoading}
+      />
+
+      <RecordsCard
+        t={t}
+        records={records}
+        loading={recordsLoading}
+        statusFilterLabel={statusFilterLabel}
+        statusOpen={statusOpen}
+        statusRef={statusRef}
+        statusOptions={statusOptions}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+        setStatusOpen={setStatusOpen}
+        scopeFilter={scopeFilter}
+        setScopeFilter={setScopeFilter}
+        search={search}
+        setSearch={setSearch}
+        setPage={setPage}
+        totalPage={totalPage}
+        page={page}
+        statusText={statusText}
+        groupText={groupText}
+        onDetail={(id) => void openDetail(id)}
+      />
+
+      {confirmApply && summary && (
+        <ApplyModal
+          t={t}
+          summary={summary}
+          applying={applying}
+          onClose={() => setConfirmApply(false)}
+          onApply={() => void handleApply()}
+        />
+      )}
+
+      {(detail || detailLoading) && (
+        <DetailModal
+          t={t}
+          detail={detail}
+          loading={detailLoading}
+          groupText={groupText}
+          onClose={() => setDetail(null)}
+        />
+      )}
+    </div>
+  );
+}
+
+function SummaryCard({
+  t,
+  summary,
+  canApply,
+  applyButtonText,
+  blockReasonText,
+  applying,
+  onApply,
+}: {
+  t: WithdrawMsg;
+  summary: SettlementSummary | null;
+  canApply: boolean;
+  applyButtonText: string;
+  blockReasonText: string;
+  applying: boolean;
+  onApply: () => void;
+}) {
+  return (
+    <div className="bg-white rounded-2xl border border-[#f3f4f6] p-5">
+      <div className="flex flex-wrap items-start justify-between gap-5">
         <div className="flex items-start gap-3">
           <div className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center flex-shrink-0 mt-0.5">
             <CalendarClock className="w-[18px] h-[18px] text-gray-500" />
@@ -140,147 +383,502 @@ export function WithdrawPage() {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* ── 结算记录 ── */}
-      <div className="bg-white rounded-2xl border border-[#f3f4f6] overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-[#f3f4f6]">
-          <h3 className="text-sm text-[#101828]" style={{ fontWeight: 700 }}>
-            {t.recordsTitle}
-          </h3>
-          <div className="flex items-center gap-2">
-            {/* 结算状态筛选 */}
-            <div className="relative" ref={statusRef}>
-              <button
-                onClick={() => setStatusOpen((v) => !v)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#e5e7eb] text-xs text-[#364153] hover:bg-gray-50 transition-all"
-                style={{ fontWeight: 500 }}
-              >
-                <span className="text-[#99a1af]">{t.statusFilter}</span>
-                <span className="ml-1">{statusFilterLabel}</span>
-                <ChevronDown className="w-3 h-3 text-gray-400" />
-              </button>
-              {statusOpen && (
-                <div className="absolute top-full right-0 mt-1 w-32 bg-white border border-[#e5e7eb] rounded-xl shadow-xl z-10 overflow-hidden">
-                  {statusOptions.map((s) => (
-                    <button
-                      key={String(s.key)}
-                      onClick={() => {
-                        setStatusFilter(s.key);
-                        setStatusOpen(false);
-                      }}
-                      className="w-full px-3 py-2.5 text-xs text-left text-[#364153] hover:bg-gray-50"
-                      style={{ fontWeight: statusFilter === s.key ? 600 : 400 }}
-                    >
-                      {s.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-            {/* 搜索 */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder={t.searchPlaceholder}
-                className="w-48 pl-9 pr-3 py-1.5 text-xs border border-[#e5e7eb] rounded-lg bg-white outline-none focus:border-gray-400 transition-colors"
-              />
-            </div>
+        <div className="flex flex-wrap items-center gap-4">
+          <Metric label={t.totalSettled} value={cny(summary?.totalSettledCny ?? 0)} />
+          <Metric label={t.settledCount} value={String(summary?.settledCount ?? 0)} />
+          <Metric label={t.pendingTotal} value={cny(summary?.pendingTotalCny ?? 0)} accent />
+          <div>
+            <button
+              type="button"
+              disabled={!canApply || applying}
+              onClick={onApply}
+              className="h-10 px-5 rounded-[14px] text-sm text-white disabled:text-[#6a7282] disabled:bg-gray-100 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2"
+              style={{ background: canApply ? "#111111" : undefined, fontWeight: 600 }}
+            >
+              {applying ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+              {applyButtonText}
+            </button>
+            {blockReasonText && <p className="text-[11px] text-[#99a1af] mt-1 text-right">{blockReasonText}</p>}
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
 
-        {/* 表格：周期 / 比例 / 总额 / 出品方实得 / 平台分成 / 状态 / 操作 */}
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[880px]">
-            <thead>
-              <tr className="border-b border-[#f3f4f6] bg-gray-50/50">
-                <Th>{t.colPeriod}</Th>
-                <Th>
-                  <span className="block leading-4">{t.colRatio}</span>
-                  <span className="block leading-4 text-[#bababa]">{t.colRatioSub}</span>
-                </Th>
-                <Th>{t.colGross}</Th>
-                <Th>{t.colCreator}</Th>
-                <Th>{t.colPlatform}</Th>
-                <Th>{t.colStatus}</Th>
-                <Th>{t.colAction}</Th>
-              </tr>
-            </thead>
-            {filtered.length > 0 && (
-              <tbody>
-                {filtered.map((row) => (
-                  <tr key={row.id} className="border-t border-gray-50 hover:bg-gray-50/50 transition-colors">
-                    <td className="px-5 py-3.5 text-xs text-[#4a5565]">
-                      {row.periodStart} ~ {row.periodEnd}
-                    </td>
-                    <td className="px-5 py-3.5 text-xs text-[#4a5565]">{row.ratioLabel}</td>
-                    <td className="px-5 py-3.5 text-xs text-[#4a5565]">{usd(row.grossUsd)}</td>
-                    <td className="px-5 py-3.5">
-                      <span className="text-sm text-[#101828]" style={{ fontWeight: 700 }}>
-                        {usd(row.creatorUsd)}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3.5 text-xs text-[#4a5565]">{usd(row.platformUsd)}</td>
-                    <td className="px-5 py-3.5">
-                      <StatusBadge status={row.status} label={statusText(row.status)} />
-                    </td>
-                    <td className="px-5 py-3.5">
-                      {row.status === 0 ? (
-                        <button
-                          onClick={() => handleApply(row)}
-                          disabled={applyingId === row.id}
-                          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-[14px] text-white text-xs transition-opacity disabled:cursor-not-allowed"
-                          style={{ background: "#111111", fontWeight: 600, opacity: applyingId === row.id ? 0.7 : 1 }}
-                        >
-                          {applyingId === row.id ? (
-                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                          ) : (
-                            <Send className="w-3.5 h-3.5" />
-                          )}
-                          {t.applySettlement}
-                        </button>
-                      ) : (
-                        <span className="text-xs text-[#9ca3af]">—</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            )}
-          </table>
+function Metric({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
+  return (
+    <div className="text-right">
+      <p className="text-xs text-[#99a1af]">{label}</p>
+      <p className="text-lg tabular-nums" style={{ fontWeight: 800, color: accent ? "#e8192c" : "#101828" }}>
+        {value}
+      </p>
+    </div>
+  );
+}
+
+function ChartCard({
+  t,
+  mode,
+  setMode,
+  courses,
+  selectedCourseId,
+  setSelectedCourseId,
+  startMonth,
+  setStartMonth,
+  endMonth,
+  setEndMonth,
+  chart,
+  lineData,
+  barData,
+  loading,
+}: {
+  t: WithdrawMsg;
+  mode: ChartMode;
+  setMode: (mode: ChartMode) => void;
+  courses: EarningsCourseOption[];
+  selectedCourseId: number | "all";
+  setSelectedCourseId: (id: number | "all") => void;
+  startMonth: string;
+  setStartMonth: (month: string) => void;
+  endMonth: string;
+  setEndMonth: (month: string) => void;
+  chart: SettlementChart;
+  lineData: Record<string, string | number>[];
+  barData: { name: string; total: number }[];
+  loading: boolean;
+}) {
+  return (
+    <div className="bg-white rounded-2xl border border-[#f3f4f6] overflow-hidden">
+      <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-4 border-b border-[#f3f4f6]">
+        <h3 className="text-sm text-[#101828]" style={{ fontWeight: 700 }}>
+          {t.chartTitle}
+        </h3>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setMode("time")}
+            className="h-8 px-3 rounded-lg text-xs"
+            style={{ background: mode === "time" ? "#111111" : "#f3f4f6", color: mode === "time" ? "#fff" : "#364153", fontWeight: 600 }}
+          >
+            {t.chartByTime}
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode("drama")}
+            className="h-8 px-3 rounded-lg text-xs"
+            style={{ background: mode === "drama" ? "#111111" : "#f3f4f6", color: mode === "drama" ? "#fff" : "#364153", fontWeight: 600 }}
+          >
+            {t.chartByDrama}
+          </button>
+          <input type="month" value={startMonth} onChange={(e) => setStartMonth(e.target.value)} className="h-8 px-2 rounded-lg border border-[#e5e7eb] text-xs" />
+          <input type="month" value={endMonth} onChange={(e) => setEndMonth(e.target.value)} className="h-8 px-2 rounded-lg border border-[#e5e7eb] text-xs" />
+          <select
+            value={selectedCourseId}
+            onChange={(e) => setSelectedCourseId(e.target.value === "all" ? "all" : Number(e.target.value))}
+            className="h-8 px-2 rounded-lg border border-[#e5e7eb] text-xs bg-white"
+          >
+            <option value="all">{t.topCourses}</option>
+            {courses.map((course) => (
+              <option key={course.courseId} value={course.courseId}>
+                {course.courseTitle}
+              </option>
+            ))}
+          </select>
         </div>
-
-        {filtered.length === 0 && (
-          <EmptyState
-            className="py-16"
-            icon={<Building2 className="w-6 h-6" />}
-            title={t.emptyTitle}
-            desc={!hasAccount ? t.emptyDesc : undefined}
-          />
+      </div>
+      <div className="h-72 p-4">
+        {loading ? (
+          <PageLoading />
+        ) : chart.series.length === 0 ? (
+          <EmptyState className="py-12" icon={<BarChart3 className="w-6 h-6" />} title={t.emptyChart} />
+        ) : mode === "time" ? (
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={lineData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} />
+              <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#9CA3AF" }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 11, fill: "#9CA3AF" }} axisLine={false} tickLine={false} />
+              <Tooltip formatter={(v: number) => [cny(v), t.chartAmount]} />
+              <Legend wrapperStyle={{ fontSize: 12 }} />
+              {chart.series.map((series, index) => (
+                <Line key={series.courseId} type="monotone" dataKey={String(series.courseId)} name={series.courseName} stroke={chartColors[index % chartColors.length]} strokeWidth={2} dot={false} />
+              ))}
+            </LineChart>
+          </ResponsiveContainer>
+        ) : (
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={barData} layout="vertical" margin={{ top: 10, right: 20, left: 20, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" horizontal={false} />
+              <XAxis type="number" tick={{ fontSize: 11, fill: "#9CA3AF" }} axisLine={false} tickLine={false} />
+              <YAxis dataKey="name" type="category" width={110} tick={{ fontSize: 11, fill: "#6B7280" }} axisLine={false} tickLine={false} />
+              <Tooltip formatter={(v: number) => [cny(v), t.chartCumulative]} />
+              <Bar dataKey="total" name={t.chartCumulative} fill="#111111" radius={[0, 4, 4, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         )}
       </div>
     </div>
   );
 }
 
-/** 结算单状态徽章（0草稿 灰 / 1已申请 橙 / 2审核通过 蓝 / 3已打款 绿 / 4驳回 红）。 */
-function StatusBadge({ status, label }: { status: number; label: string }) {
-  const map: Record<number, { background: string; color: string }> = {
-    0: { background: "#F9FAFB", color: "#6B7280" },
-    1: { background: "#FFF7ED", color: "#ea580c" },
-    2: { background: "#EFF6FF", color: "#3b82f6" },
-    3: { background: "#F0FDF4", color: "#16a34a" },
-    4: { background: "#FEF2F2", color: "#dc2626" },
-  };
-  const style = map[status] ?? map[0];
+function RecordsCard({
+  t,
+  records,
+  loading,
+  statusFilterLabel,
+  statusOpen,
+  statusRef,
+  statusOptions,
+  statusFilter,
+  setStatusFilter,
+  setStatusOpen,
+  scopeFilter,
+  setScopeFilter,
+  search,
+  setSearch,
+  setPage,
+  totalPage,
+  page,
+  statusText,
+  groupText,
+  onDetail,
+}: {
+  t: WithdrawMsg;
+  records: SettlementRecord[];
+  loading: boolean;
+  statusFilterLabel: string;
+  statusOpen: boolean;
+  statusRef: React.RefObject<HTMLDivElement>;
+  statusOptions: { key: StatusFilter; label: string }[];
+  statusFilter: StatusFilter;
+  setStatusFilter: (status: StatusFilter) => void;
+  setStatusOpen: (open: boolean | ((value: boolean) => boolean)) => void;
+  scopeFilter: ScopeFilter;
+  setScopeFilter: (scope: ScopeFilter) => void;
+  search: string;
+  setSearch: (search: string) => void;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+  totalPage: number;
+  page: number;
+  statusText: (status: SettlementStatus) => string;
+  groupText: (group: SettlementStatusGroup) => string;
+  onDetail: (id: number) => void;
+}) {
   return (
-    <span
-      className="inline-flex items-center px-2.5 py-1 rounded-full text-xs w-fit whitespace-nowrap"
-      style={{ ...style, fontWeight: 500 }}
-    >
+    <div className="bg-white rounded-2xl border border-[#f3f4f6] overflow-hidden">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-[#f3f4f6]">
+        <h3 className="text-sm text-[#101828]" style={{ fontWeight: 700 }}>
+          {t.recordsTitle}
+        </h3>
+        <div className="flex items-center gap-2">
+          <div className="relative" ref={statusRef}>
+            <button
+              onClick={() => setStatusOpen((v) => !v)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#e5e7eb] text-xs text-[#364153] hover:bg-gray-50 transition-all"
+              style={{ fontWeight: 500 }}
+            >
+              <span className="text-[#99a1af]">{t.statusFilter}</span>
+              <span className="ml-1">{statusFilterLabel}</span>
+              <ChevronDown className="w-3 h-3 text-gray-400" />
+            </button>
+            {statusOpen && (
+              <div className="absolute top-full right-0 mt-1 w-32 bg-white border border-[#e5e7eb] rounded-xl shadow-xl z-10 overflow-hidden">
+                {statusOptions.map((s) => (
+                  <button
+                    key={String(s.key)}
+                    onClick={() => {
+                      setStatusFilter(s.key);
+                      setPage(1);
+                      setStatusOpen(false);
+                    }}
+                    className="w-full px-3 py-2.5 text-xs text-left text-[#364153] hover:bg-gray-50"
+                    style={{ fontWeight: statusFilter === s.key ? 600 : 400 }}
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          <select
+            value={scopeFilter}
+            onChange={(e) => {
+              setScopeFilter(e.target.value === "all" ? "all" : Number(e.target.value) as EarningsPublishScope);
+              setPage(1);
+            }}
+            className="h-8 px-2 rounded-lg border border-[#e5e7eb] text-xs bg-white"
+          >
+            <option value="all">{t.scopeAll}</option>
+            <option value={1}>{t.typeAccount}</option>
+            <option value={2}>{t.typeFull}</option>
+          </select>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(1);
+              }}
+              placeholder={t.searchPlaceholder}
+              className="w-52 pl-9 pr-3 py-1.5 text-xs border border-[#e5e7eb] rounded-lg bg-white outline-none focus:border-gray-400 transition-colors"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[1060px]">
+          <thead>
+            <tr className="border-b border-[#f3f4f6] bg-gray-50/50">
+              <Th>{t.colOrderNo}</Th>
+              <Th>{t.colPeriod}</Th>
+              <Th>{t.colType}</Th>
+              <Th>{t.colRatio}</Th>
+              <Th>{t.colCreator}</Th>
+              <Th>{t.colDate}</Th>
+              <Th>{t.colStatus}</Th>
+              <Th>{t.colAction}</Th>
+            </tr>
+          </thead>
+          {!loading && records.length > 0 && (
+            <tbody>
+              {records.map((row) => (
+                <tr key={row.id} className="border-t border-gray-50 hover:bg-gray-50/50 transition-colors">
+                  <td className="px-5 py-3.5 text-xs text-[#4a5565] tabular-nums">{row.orderNo}</td>
+                  <td className="px-5 py-3.5 text-xs text-[#4a5565]">{row.periodMonth}</td>
+                  <td className="px-5 py-3.5">
+                    <TypeBadge type={row.publishScope === 2 ? "full" : "account"} label={row.publishScope === 2 ? t.typeFull : t.typeAccount} />
+                  </td>
+                  <td className="px-5 py-3.5 text-xs text-[#4a5565]">{row.ratioLabel}</td>
+                  <td className="px-5 py-3.5">
+                    <span className="text-sm text-[#101828]" style={{ fontWeight: 700 }}>
+                      {cny(row.creatorCny)}
+                    </span>
+                  </td>
+                  <td className="px-5 py-3.5 text-xs text-[#4a5565] whitespace-nowrap">
+                    {row.statusGroup === "settled" ? row.payTime ?? "—" : row.applyTime ?? "—"}
+                  </td>
+                  <td className="px-5 py-3.5">
+                    <StatusBadge group={row.statusGroup} label={groupText(row.statusGroup)} />
+                    <p className="text-[11px] text-[#99a1af] mt-1">{statusText(row.status)}</p>
+                  </td>
+                  <td className="px-5 py-3.5">
+                    <button
+                      type="button"
+                      onClick={() => onDetail(row.id)}
+                      className="inline-flex items-center gap-1.5 h-8 px-3 rounded-[14px] border border-[#e5e7eb] text-xs text-[#364153] hover:bg-gray-50"
+                      style={{ fontWeight: 600 }}
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      {t.detail}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          )}
+        </table>
+      </div>
+
+      {loading && (
+        <div className="flex items-center justify-center py-12">
+          <PageLoading />
+        </div>
+      )}
+
+      {!loading && records.length === 0 && <EmptyState className="py-16" icon={<Wallet className="w-6 h-6" />} title={t.emptyTitle} />}
+
+      {!loading && totalPage > 1 && (
+        <div className="flex items-center justify-end gap-3 px-4 py-3 border-t border-gray-100">
+          <button
+            type="button"
+            onClick={() => setPage((p) => p - 1)}
+            disabled={page <= 1}
+            className="w-8 h-8 rounded-lg border border-gray-200 text-gray-600 flex items-center justify-center hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+            aria-label="Previous page"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+          <span className="text-sm text-gray-600 tabular-nums">
+            {page} / {totalPage}
+          </span>
+          <button
+            type="button"
+            onClick={() => setPage((p) => p + 1)}
+            disabled={page >= totalPage}
+            className="w-8 h-8 rounded-lg border border-gray-200 text-gray-600 flex items-center justify-center hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+            aria-label="Next page"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ApplyModal({
+  t,
+  summary,
+  applying,
+  onClose,
+  onApply,
+}: {
+  t: WithdrawMsg;
+  summary: SettlementSummary;
+  applying: boolean;
+  onClose: () => void;
+  onApply: () => void;
+}) {
+  return (
+    <ModalShell onClose={onClose}>
+      <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center">
+            <AlertCircle className="w-5 h-5 text-amber-500" />
+          </div>
+          <h3 className="text-[#101828]" style={{ fontWeight: 700, fontSize: "1rem" }}>
+            {t.applyConfirmTitle}
+          </h3>
+        </div>
+        <CloseButton onClose={onClose} />
+      </div>
+      <div className="p-6">
+        <p className="text-sm text-[#6a7282] leading-relaxed mb-4">{t.applyConfirmDesc}</p>
+        <div className="rounded-2xl bg-gray-50 border border-gray-100 p-4 space-y-3">
+          <InfoLine label={t.applyConfirmPeriod} value={periodText(summary.pendingMonths)} />
+          <InfoLine label={t.applyConfirmAmount} value={cny(summary.pendingTotalCny)} strong />
+          <InfoLine label={t.applyConfirmAccount} value={summary.payoutAccount ? accountText(summary.payoutAccount.bank, summary.payoutAccount.accountNoMasked) : "—"} />
+        </div>
+        <p className="text-xs text-[#99a1af] mt-3">{t.applyConfirmTip}</p>
+        <div className="flex gap-3 mt-6">
+          <button type="button" onClick={onClose} className="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-700 hover:bg-gray-50 transition-colors" style={{ fontWeight: 500 }}>
+            {t.cancel}
+          </button>
+          <button type="button" onClick={onApply} disabled={applying} className="flex-1 py-2.5 rounded-xl text-sm text-white transition-opacity disabled:cursor-not-allowed inline-flex items-center justify-center gap-2" style={{ background: "#111111", fontWeight: 600, opacity: applying ? 0.7 : 1 }}>
+            {applying && <Loader2 className="w-4 h-4 animate-spin" />}
+            {t.confirmApply}
+          </button>
+        </div>
+      </div>
+    </ModalShell>
+  );
+}
+
+function DetailModal({
+  t,
+  detail,
+  loading,
+  groupText,
+  onClose,
+}: {
+  t: WithdrawMsg;
+  detail: SettlementRecordDetail | null;
+  loading: boolean;
+  groupText: (group: SettlementStatusGroup) => string;
+  onClose: () => void;
+}) {
+  const snapshot = parseAccountSnapshot(detail?.accountSnapshot ?? null);
+  return (
+    <ModalShell onClose={onClose}>
+      <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+        <h3 className="text-[#101828]" style={{ fontWeight: 700, fontSize: "1rem" }}>
+          {t.detailTitle}
+        </h3>
+        <CloseButton onClose={onClose} />
+      </div>
+      <div className="p-6">
+        {loading || !detail ? (
+          <PageLoading />
+        ) : (
+          <>
+            <div className="grid grid-cols-2 gap-3">
+              <InfoLine label={t.detailOrderNo} value={detail.orderNo} />
+              <InfoLine label={t.detailApplyTime} value={detail.applyTime ?? "—"} />
+              <InfoLine label={t.detailPeriod} value={detail.periodMonth} />
+              <InfoLine label={t.detailAccount} value={accountText(snapshot?.bank, detail.accountNoMasked)} />
+              <InfoLine label={t.detailAmount} value={cny(detail.creatorCny)} strong />
+              <InfoLine label={t.detailStatus} value={groupText(detail.statusGroup)} />
+              <InfoLine label={t.detailGross} value={cny(detail.grossCny)} />
+              <InfoLine label={t.detailPlatform} value={cny(detail.platformCny)} />
+            </div>
+            {detail.statusGroup === "failed" && detail.auditRemark && (
+              <div className="mt-4 rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-600">
+                {t.rejectedReason}: {detail.auditRemark}
+              </div>
+            )}
+            <div className="mt-5 overflow-x-auto">
+              <table className="w-full min-w-[640px]">
+                <thead>
+                  <tr className="border-b border-[#f3f4f6] bg-gray-50/50">
+                    <Th>{t.itemCourse}</Th>
+                    <Th>{t.colType}</Th>
+                    <Th>{t.colOrders}</Th>
+                    <Th>{t.itemGross}</Th>
+                    <Th>{t.itemCreator}</Th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {detail.items.map((item) => (
+                    <tr key={`${item.courseId}-${item.periodMonth}-${item.publishScope}`} className="border-t border-gray-50">
+                      <td className="px-5 py-3 text-xs text-[#4a5565]">{item.courseId}</td>
+                      <td className="px-5 py-3 text-xs text-[#4a5565]">{item.publishScope === 2 ? t.typeFull : t.typeAccount}</td>
+                      <td className="px-5 py-3 text-xs text-[#4a5565]">{item.orderCount}</td>
+                      <td className="px-5 py-3 text-xs text-[#4a5565]">{cny(item.grossCny)}</td>
+                      <td className="px-5 py-3 text-xs text-[#101828]" style={{ fontWeight: 700 }}>{cny(item.creatorCny)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+      </div>
+    </ModalShell>
+  );
+}
+
+function ModalShell({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: "rgba(0,0,0,0.4)" }} onClick={onClose}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl mx-4 max-h-[86vh] overflow-auto" onClick={(e) => e.stopPropagation()}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function CloseButton({ onClose }: { onClose: () => void }) {
+  return (
+    <button type="button" onClick={onClose} className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-gray-50 hover:text-gray-600" aria-label="Close">
+      <X className="w-4 h-4" />
+    </button>
+  );
+}
+
+function InfoLine({ label, value, strong }: { label: string; value: string; strong?: boolean }) {
+  return (
+    <div className="flex items-center justify-between gap-4 rounded-xl bg-gray-50 px-4 py-3">
+      <span className="text-xs text-[#99a1af]">{label}</span>
+      <span className="text-sm text-[#101828] tabular-nums text-right" style={{ fontWeight: strong ? 800 : 600 }}>
+        {value || "—"}
+      </span>
+    </div>
+  );
+}
+
+function StatusBadge({ group, label }: { group: SettlementStatusGroup; label: string }) {
+  const map = {
+    applied: { background: "#FFF7ED", color: "#ea580c" },
+    settled: { background: "#F0FDF4", color: "#16a34a" },
+    failed: { background: "#FEF2F2", color: "#dc2626" },
+  } as const;
+  const style = map[group];
+  return (
+    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs w-fit whitespace-nowrap" style={{ ...style, fontWeight: 500 }}>
       {label}
     </span>
   );

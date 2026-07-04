@@ -19,7 +19,6 @@ import { EpisodesView } from "../components/content/EpisodesView";
 import { UploadForm } from "../components/content/UploadForm";
 
 type View = "list" | "form" | "detail" | "episodes";
-type ListFilter = "all" | "onShelf" | "auditing" | "offShelf";
 
 /** 上剧列表每页条数（bug20） */
 const PAGE_SIZE = 12;
@@ -40,6 +39,7 @@ export function ContentPage() {
   const { messages } = useI18n();
   const { currentMember } = useOutletContext<DistributionOutletContext>();
   const t = messages.distribution.content;
+  const dramaUnit = messages.distribution.overview.unitDrama;
   const canManageCourse = currentMember?.role !== 3;
 
   const [view, setView] = useState<View>("list");
@@ -48,7 +48,6 @@ export function ContentPage() {
   const [languages, setLanguages] = useState<LanguageOption[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filter, setFilter] = useState<ListFilter>("all");
   // 分页（bug20）：每页 12 条，与产品「上传 12 个后需翻页」一致
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
@@ -66,15 +65,13 @@ export function ContentPage() {
     }
   }, []);
 
-  const loadList = useCallback(async (keyword: string, pageNum: number, currentFilter: ListFilter) => {
+  const loadList = useCallback(async (keyword: string, pageNum: number) => {
     setLoading(true);
     try {
       const res = await fetchCourseList({
         keyword,
         page: pageNum,
         limit: PAGE_SIZE,
-        auditStatus: currentFilter === "auditing" ? 1 : undefined,
-        shelfStatus: currentFilter === "onShelf" ? 1 : currentFilter === "offShelf" ? 2 : undefined,
       });
       setDramas(res.list);
       setTotalPage(res.totalPage > 0 ? res.totalPage : 1);
@@ -88,7 +85,7 @@ export function ContentPage() {
   // 搜索词变化回到第 1 页
   useEffect(() => {
     setPage(1);
-  }, [searchQuery, filter]);
+  }, [searchQuery]);
 
   useEffect(() => {
     void loadStats();
@@ -107,10 +104,10 @@ export function ContentPage() {
   // 按当前页 + 搜索词加载（搜索防抖 300ms）
   useEffect(() => {
     const id = setTimeout(() => {
-      void loadList(searchQuery, page, filter);
+      void loadList(searchQuery, page);
     }, 300);
     return () => clearTimeout(id);
-  }, [searchQuery, page, filter, loadList]);
+  }, [searchQuery, page, loadList]);
 
   const openDetail = async (d: PublisherCourseRow) => {
     setView("detail");
@@ -155,7 +152,7 @@ export function ContentPage() {
     } else {
       void setShelf(d.courseId, true).then(() => {
         void loadStats();
-        void loadList(searchQuery, page, filter);
+        void loadList(searchQuery, page);
       });
     }
   };
@@ -165,7 +162,7 @@ export function ContentPage() {
     await setShelf(confirmOffline.courseId, false).catch(() => undefined);
     setConfirmOffline(null);
     void loadStats();
-    void loadList(searchQuery, page, filter);
+    void loadList(searchQuery, page);
   };
 
   /* ── 视图分发 ── */
@@ -177,7 +174,7 @@ export function ContentPage() {
         onSubmitted={() => {
           setView("list");
           void loadStats();
-          void loadList(searchQuery, page, filter);
+          void loadList(searchQuery, page);
         }}
       />
     );
@@ -215,7 +212,7 @@ export function ContentPage() {
         onBack={() => setView(episodesCtx.backTo)}
         onChanged={() => {
           void loadStats();
-          void loadList(searchQuery, page, filter);
+          void loadList(searchQuery, page);
         }}
       />
     );
@@ -227,9 +224,8 @@ export function ContentPage() {
         t={t}
         dramas={dramas}
         stats={stats}
+        dramaUnit={dramaUnit}
         languages={languages}
-        filter={filter}
-        onFilterChange={setFilter}
         loading={loading}
         searchQuery={searchQuery}
         onSearch={setSearchQuery}

@@ -54,21 +54,21 @@ export function MembersPage() {
   const [addOpen, setAddOpen] = useState(false);
   const [removeTarget, setRemoveTarget] = useState<PublisherMember | null>(null);
 
-  const load = useCallback(async () => {
-    setLoading(true);
+  const load = useCallback(async (showLoading = true) => {
+    if (showLoading) setLoading(true);
     try {
       try {
         setMembers(await getMemberList());
       } catch {
-        setMembers([]);
+        if (showLoading) setMembers([]);
       }
       try {
         setRoles(await getMemberRoles());
       } catch {
-        setRoles([]);
+        if (showLoading) setRoles([]);
       }
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   }, []);
 
@@ -170,7 +170,7 @@ export function MembersPage() {
           onSuccess={() => {
             setAddOpen(false);
             toast.success(t.addSuccess);
-            void load();
+            void load(false);
           }}
         />
       )}
@@ -182,9 +182,10 @@ export function MembersPage() {
           member={removeTarget}
           onClose={() => setRemoveTarget(null)}
           onSuccess={() => {
+            setMembers((prev) => prev.filter((m) => m.memberUserId !== removeTarget.memberUserId));
             setRemoveTarget(null);
             toast.success(t.removeSuccess);
-            void load();
+            void load(false);
           }}
         />
       )}

@@ -45,6 +45,7 @@ import { normalizeImageFile } from "../../services/heic";
 
 type AccountMsg = ReturnType<typeof useI18n>["messages"]["distribution"]["account"];
 type TabKey = "info" | "security" | "devices";
+type AccountProfilePatch = Partial<Pick<AccountInfo["profile"], "nickname" | "avatar">>;
 
 const emptyCompany: AccountCompany = {
   companyName: "",
@@ -72,6 +73,26 @@ export function AccountPage() {
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  const refreshInfo = useCallback(async () => {
+    try {
+      setInfo(await getAccountInfo());
+    } catch {
+      // 保存后的静默刷新失败时保留当前页面状态，避免回到整页空态。
+    }
+  }, []);
+
+  const patchProfile = useCallback((profile: AccountProfilePatch) => {
+    setInfo((prev) => prev ? { ...prev, profile: { ...prev.profile, ...profile } } : prev);
+  }, []);
+
+  const patchCompany = useCallback((company: AccountCompany) => {
+    setInfo((prev) => prev ? { ...prev, company } : prev);
+  }, []);
+
+  const patchNotify = useCallback((notify: AccountNotify) => {
+    setInfo((prev) => prev ? { ...prev, notify } : prev);
   }, []);
 
   const loadDevices = useCallback(async () => {
@@ -112,8 +133,8 @@ export function AccountPage() {
     <div className="p-8">
       <Tabs t={t} active={active} onChange={setActive} />
       <div className="mt-7">
-        {active === "info" && <AccountInfoTab t={t} info={info} onReload={loadInfo} />}
-        {active === "security" && <SecurityTab t={t} info={info} onReload={loadInfo} />}
+        {active === "info" && <AccountInfoTab t={t} info={info} onReload={refreshInfo} onProfileChange={patchProfile} onCompanyChange={patchCompany} onNotifyChange={patchNotify} />}
+        {active === "security" && <SecurityTab t={t} info={info} onReload={refreshInfo} />}
         {active === "devices" && (
           <DevicesTab
             t={t}
@@ -157,20 +178,34 @@ function Tabs({ t, active, onChange }: { t: AccountMsg; active: TabKey; onChange
   );
 }
 
-function AccountInfoTab({ t, info, onReload }: { t: AccountMsg; info: AccountInfo; onReload: () => Promise<void> }) {
+function AccountInfoTab({
+  t,
+  info,
+  onReload,
+  onProfileChange,
+  onCompanyChange,
+  onNotifyChange,
+}: {
+  t: AccountMsg;
+  info: AccountInfo;
+  onReload: () => Promise<void>;
+  onProfileChange: (profile: AccountProfilePatch) => void;
+  onCompanyChange: (company: AccountCompany) => void;
+  onNotifyChange: (notify: AccountNotify) => void;
+}) {
   return (
     <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,752px)_366px]">
       <div className="space-y-5">
-        <ProfileCard t={t} info={info} onReload={onReload} />
+        <ProfileCard t={t} info={info} onProfileChange={onProfileChange} />
         <DataCard t={t} info={info} onReload={onReload} />
-        <CompanyCard t={t} company={info.company ?? emptyCompany} onReload={onReload} />
+        <CompanyCard t={t} company={info.company ?? emptyCompany} onCompanyChange={onCompanyChange} />
       </div>
-      <NotificationCard t={t} notify={info.notify} onReload={onReload} />
+      <NotificationCard t={t} notify={info.notify} onNotifyChange={onNotifyChange} />
     </div>
   );
 }
 
-function ProfileCard({ t, info, onReload }: { t: AccountMsg; info: AccountInfo; onReload: () => Promise<void> }) {
+function ProfileCard({ t, info, onProfileChange }: { t: AccountMsg; info: AccountInfo; onProfileChange: (profile: AccountProfilePatch) => void }) {
   const avatarText = (info.profile.nickname || "创").trim().slice(0, 1).toUpperCase();
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
@@ -183,8 +218,8 @@ function ProfileCard({ t, info, onReload }: { t: AccountMsg; info: AccountInfo; 
       const normalized = await normalizeImageFile(file);
       const url = await uploadFile(normalized, ALIOSS_UPLOAD_PATH);
       await updateAvatar(url);
+      onProfileChange({ avatar: url });
       toast.success(t.saveSuccess);
-      await onReload();
     } catch {
       // uploadFile / http 已 toast
     } finally {
@@ -249,9 +284,9 @@ function ProfileCard({ t, info, onReload }: { t: AccountMsg; info: AccountInfo; 
           t={t}
           initialNickname={info.profile.nickname || ""}
           onClose={() => setNicknameOpen(false)}
-          onSaved={async () => {
+          onSaved={async (nickname) => {
             setNicknameOpen(false);
-            await onReload();
+            onProfileChange({ nickname });
           }}
         />
       )}
@@ -288,7 +323,7 @@ function DataCard({ t, info, onReload }: { t: AccountMsg; info: AccountInfo; onR
   );
 }
 
-function CompanyCard({ t, company, onReload }: { t: AccountMsg; company: AccountCompany; onReload: () => Promise<void> }) {
+function CompanyCard({ t, company, onCompanyChange }: { t: AccountMsg; company: AccountCompany; onCompanyChange: (company: AccountCompany) => void }) {
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [draft, setDraft] = useState(() => normalizeCompany(company));
@@ -305,15 +340,16 @@ function CompanyCard({ t, company, onReload }: { t: AccountMsg; company: Account
     }
     setSaving(true);
     try {
-      await updateCompany({
+      const nextCompany: AccountCompany = {
         companyName: draft.companyName.trim(),
         creditCode: draft.creditCode.trim(),
         companyAddress: draft.companyAddress.trim(),
         companyPhone: draft.companyPhone.trim(),
-      });
+      };
+      await updateCompany(nextCompany);
       toast.success(t.saveSuccess);
       setEditing(false);
-      await onReload();
+      onCompanyChange(nextCompany);
     } catch {
       // http 已 toast
     } finally {
@@ -359,13 +395,15 @@ function CompanyCard({ t, company, onReload }: { t: AccountMsg; company: Account
   );
 }
 
-function NotificationCard({ t, notify, onReload }: { t: AccountMsg; notify: AccountNotify; onReload: () => Promise<void> }) {
+function NotificationCard({ t, notify, onNotifyChange }: { t: AccountMsg; notify: AccountNotify; onNotifyChange: (notify: AccountNotify) => void }) {
   const [saving, setSaving] = useState<keyof AccountNotify | null>(null);
   const toggle = async (key: keyof AccountNotify) => {
     setSaving(key);
     try {
-      await updateNotify({ ...notify, [key]: notify[key] ? 0 : 1 });
-      await onReload();
+      const nextValue: 0 | 1 = notify[key] === 1 ? 0 : 1;
+      const nextNotify: AccountNotify = { ...notify, [key]: nextValue };
+      await updateNotify(nextNotify);
+      onNotifyChange(nextNotify);
     } catch {
       // http 已 toast
     } finally {
@@ -609,7 +647,7 @@ function LoginRecordRow({ t, locale, record, last }: { t: AccountMsg; locale: Lo
   );
 }
 
-function NicknameModal({ t, initialNickname, onClose, onSaved }: { t: AccountMsg; initialNickname: string; onClose: () => void; onSaved: () => Promise<void> }) {
+function NicknameModal({ t, initialNickname, onClose, onSaved }: { t: AccountMsg; initialNickname: string; onClose: () => void; onSaved: (nickname: string) => Promise<void> }) {
   const [nickname, setNickname] = useState(initialNickname);
   const [saving, setSaving] = useState(false);
   const save = async () => {
@@ -619,7 +657,7 @@ function NicknameModal({ t, initialNickname, onClose, onSaved }: { t: AccountMsg
     try {
       await updateNickname(next);
       toast.success(t.saveSuccess);
-      await onSaved();
+      await onSaved(next);
     } catch {
       // http 已 toast
     } finally {

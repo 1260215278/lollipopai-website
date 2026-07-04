@@ -31,9 +31,8 @@ interface DramaListViewProps {
   t: ContentMessages;
   dramas: PublisherCourseRow[];
   stats: CourseStats | null;
+  dramaUnit: string;
   languages: LanguageOption[];
-  filter: "all" | "onShelf" | "auditing" | "offShelf";
-  onFilterChange: (filter: "all" | "onShelf" | "auditing" | "offShelf") => void;
   loading: boolean;
   searchQuery: string;
   onSearch: (v: string) => void;
@@ -54,9 +53,8 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
   t,
   dramas,
   stats,
+  dramaUnit,
   languages,
-  filter,
-  onFilterChange,
   loading,
   searchQuery,
   onSearch,
@@ -107,29 +105,35 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
 
   return (
     <div className="p-8">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-5">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
         {[
-          { key: "all" as const, label: t.statTotalDramas, value: stats?.total ?? 0 },
-          { key: "onShelf" as const, label: t.statOnShelfDramas, value: stats?.onShelf ?? 0 },
-          { key: "auditing" as const, label: t.statAuditingDramas, value: stats?.auditing ?? 0 },
-          { key: "offShelf" as const, label: t.statOffShelfDramas, value: stats?.offShelf ?? 0 },
+          { key: "all", label: t.statTotalDramas, value: stats?.total ?? 0, bg: "#ffffff", color: "#111111" },
+          { key: "onShelf", label: t.statOnShelfDramas, value: stats?.onShelf ?? 0, bg: "#f0fdf4", color: "#16a34a" },
+          { key: "auditing", label: t.statAuditingDramas, value: stats?.auditing ?? 0, bg: "#fff7ed", color: "#ea580c" },
+          { key: "offShelf", label: t.statOffShelfDramas, value: stats?.offShelf ?? 0, bg: "#ffffff", color: "#9ca3af" },
         ].map((item) => {
-          const active = filter === item.key;
           return (
-            <button
+            <div
               key={item.key}
-              type="button"
-              onClick={() => onFilterChange(item.key)}
-              className="text-left rounded-2xl border bg-white px-5 py-4 transition-all"
-              style={{ borderColor: active ? "#111111" : "#f3f4f6" }}
+              className="min-h-[79px] rounded-2xl border border-[#f3f4f6] px-5 py-4"
+              style={{ background: item.bg }}
             >
-              <p className="text-xs text-gray-400" style={{ fontWeight: 500 }}>
+              <p className="text-xs text-[#99a1af]" style={{ fontWeight: 400, lineHeight: "16px" }}>
                 {item.label}
               </p>
-              <p className="mt-2 text-2xl text-[#101828]" style={{ fontWeight: 800 }}>
+              <p
+                className="mt-1.5 whitespace-nowrap"
+                style={{ color: item.color, fontWeight: 800, fontSize: "22px", lineHeight: "22px", letterSpacing: "-0.66px" }}
+              >
                 {item.value}
+                <span
+                  className="ml-0.5"
+                  style={{ fontWeight: 500, fontSize: "14px", lineHeight: "20px", letterSpacing: 0, verticalAlign: "2px" }}
+                >
+                  {dramaUnit}
+                </span>
               </p>
-            </button>
+            </div>
           );
         })}
       </div>

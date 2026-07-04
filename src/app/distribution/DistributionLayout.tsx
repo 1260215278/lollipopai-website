@@ -497,9 +497,9 @@ function SidebarNav({
 
             {settlementOpen && (
               <div className="ml-[34px] mt-0.5 space-y-0.5">
-                <SubRow to="/distribution/payment" label={t.nav.payment} />
                 <SubRow to="/distribution/earnings" label={t.nav.earnings} />
                 {canViewWithdraw && <SubRow to="/distribution/withdraw" label={t.nav.withdraw} />}
+                <SubRow to="/distribution/payment" label={t.nav.payment} />
               </div>
             )}
           </div>

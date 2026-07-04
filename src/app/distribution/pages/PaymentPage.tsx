@@ -38,18 +38,32 @@ export function PaymentPage() {
   const [actingId, setActingId] = useState<number | null>(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
-  const load = useCallback(async () => {
-    setLoading(true);
+  const load = useCallback(async (showLoading = true) => {
+    if (showLoading) setLoading(true);
     try {
       const res = await getPayoutAccounts();
       setCompanyName(res.companyName);
       setAccounts(res.list);
     } catch {
-      setCompanyName("");
-      setAccounts([]);
+      if (showLoading) {
+        setCompanyName("");
+        setAccounts([]);
+      }
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
+  }, []);
+
+  const patchSavedAccount = useCallback((saved: PayoutAccount) => {
+    setCompanyName(saved.companyName);
+    setAccounts((prev) => {
+      const exists = prev.some((account) => account.id === saved.id);
+      const next = exists
+        ? prev.map((account) => (account.id === saved.id ? saved : account))
+        : [saved, ...prev];
+      if (saved.isDefault !== 1) return next;
+      return next.map((account) => (account.id === saved.id ? account : { ...account, isDefault: 0 }));
+    });
   }, []);
 
   useEffect(() => {
@@ -75,14 +89,14 @@ export function PaymentPage() {
         branch: draft.branch.trim() || undefined,
         isDefault: draft.isDefault,
       };
-      if (mode === "edit") await updatePayoutAccount(body);
-      else await addPayoutAccount(body);
+      const saved = mode === "edit" ? await updatePayoutAccount(body) : await addPayoutAccount(body);
+      patchSavedAccount(saved);
       setMode("view");
       setEditingAccount(null);
       setSaveSuccess(true);
       window.setTimeout(() => setSaveSuccess(false), 3000);
       toast.success(mode === "edit" ? t.updateSuccess : t.addSuccess);
-      await load();
+      await load(false);
     } catch {
       // http 已 toast
     } finally {
@@ -113,8 +127,9 @@ export function PaymentPage() {
     setActingId(id);
     try {
       await deletePayoutAccount(id);
+      setAccounts((prev) => prev.filter((account) => account.id !== id));
       toast.success(t.deleteSuccess);
-      await load();
+      await load(false);
     } catch {
       // http 已 toast
     } finally {
@@ -126,8 +141,9 @@ export function PaymentPage() {
     setActingId(id);
     try {
       await setDefaultPayoutAccount(id);
+      setAccounts((prev) => prev.map((account) => ({ ...account, isDefault: account.id === id ? 1 : 0 })));
       toast.success(t.setDefaultSuccess);
-      await load();
+      await load(false);
     } catch {
       // http 已 toast
     } finally {
@@ -252,7 +268,7 @@ function BoundView({
 }) {
   return (
     <>
-      <div className="grid gap-4 xl:grid-cols-2">
+      <div className="flex flex-col gap-4">
         {accounts.map((account) => {
           const isDefault = account.isDefault === 1;
           const busy = actingId === account.id;

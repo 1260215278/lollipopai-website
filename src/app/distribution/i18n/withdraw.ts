@@ -16,11 +16,13 @@ export interface WithdrawMessages {
   blockAlreadyApplied: string;
   blockNoEarnings: string;
   chartTitle: string;
+  chartSubtitle: string;
   chartByTime: string;
   chartByDrama: string;
   chartAmount: string;
   chartCumulative: string;
-  topCourses: string;
+  compareCourses: string;
+  selectCourse: string;
   emptyChart: string;
   recordsTitle: string;
   statusFilter: string;
@@ -31,6 +33,8 @@ export interface WithdrawMessages {
   colPeriod: string;
   colType: string;
   colRatio: string;
+  colTypeRatio: string;
+  colAccountNo: string;
   colCreator: string;
   colDate: string;
   colStatus: string;
@@ -89,11 +93,13 @@ export const withdraw: Record<Locale, WithdrawMessages> = {
     blockAlreadyApplied: "本月已提交申请",
     blockNoEarnings: "暂无可结算收益",
     chartTitle: "结算概况",
+    chartSubtitle: "各剧集按月结算趋势",
     chartByTime: "按时间",
     chartByDrama: "按剧集",
     chartAmount: "结算金额",
     chartCumulative: "累计结算总额",
-    topCourses: "累计 Top3 剧集",
+    compareCourses: "对比剧集：",
+    selectCourse: "选择剧集",
     emptyChart: "暂无结算图表数据",
     recordsTitle: "结算记录",
     statusFilter: "结算状态",
@@ -104,7 +110,9 @@ export const withdraw: Record<Locale, WithdrawMessages> = {
     colPeriod: "结算周期",
     colType: "结算类型",
     colRatio: "结算比例",
-    colCreator: "申请金额 (CNY)",
+    colTypeRatio: "结算类型比例",
+    colAccountNo: "账户号码",
+    colCreator: "结算金额",
     colDate: "结算日期",
     colStatus: "结算状态",
     colAction: "操作",
@@ -160,11 +168,13 @@ export const withdraw: Record<Locale, WithdrawMessages> = {
     blockAlreadyApplied: "本月已提交申請",
     blockNoEarnings: "暫無可結算收益",
     chartTitle: "結算概況",
+    chartSubtitle: "各劇集按月結算趨勢",
     chartByTime: "按時間",
     chartByDrama: "按劇集",
     chartAmount: "結算金額",
     chartCumulative: "累計結算總額",
-    topCourses: "累計 Top3 劇集",
+    compareCourses: "對比劇集：",
+    selectCourse: "選擇劇集",
     emptyChart: "暫無結算圖表資料",
     recordsTitle: "結算記錄",
     statusFilter: "結算狀態",
@@ -175,7 +185,9 @@ export const withdraw: Record<Locale, WithdrawMessages> = {
     colPeriod: "結算週期",
     colType: "結算類型",
     colRatio: "結算比例",
-    colCreator: "申請金額 (CNY)",
+    colTypeRatio: "結算類型比例",
+    colAccountNo: "帳戶號碼",
+    colCreator: "結算金額",
     colDate: "結算日期",
     colStatus: "結算狀態",
     colAction: "操作",
@@ -231,11 +243,13 @@ export const withdraw: Record<Locale, WithdrawMessages> = {
     blockAlreadyApplied: "Already submitted this month",
     blockNoEarnings: "No settleable earnings",
     chartTitle: "Settlement Overview",
+    chartSubtitle: "Monthly settlement trends by drama",
     chartByTime: "By Time",
     chartByDrama: "By Drama",
     chartAmount: "Settlement Amount",
     chartCumulative: "Cumulative Settled",
-    topCourses: "Top 3 Dramas",
+    compareCourses: "Compare dramas:",
+    selectCourse: "Select",
     emptyChart: "No chart data",
     recordsTitle: "Settlement Records",
     statusFilter: "Status",
@@ -246,7 +260,9 @@ export const withdraw: Record<Locale, WithdrawMessages> = {
     colPeriod: "Period",
     colType: "Type",
     colRatio: "Ratio",
-    colCreator: "Amount (CNY)",
+    colTypeRatio: "Type / Ratio",
+    colAccountNo: "Account No.",
+    colCreator: "Amount",
     colDate: "Settlement Date",
     colStatus: "Status",
     colAction: "Action",
@@ -302,11 +318,13 @@ export const withdraw: Record<Locale, WithdrawMessages> = {
     blockAlreadyApplied: "Já enviado este mês",
     blockNoEarnings: "Sem receitas liquidáveis",
     chartTitle: "Visão de Liquidação",
+    chartSubtitle: "Tendências mensais por drama",
     chartByTime: "Por Tempo",
     chartByDrama: "Por Drama",
     chartAmount: "Valor de Liquidação",
     chartCumulative: "Total Acumulado",
-    topCourses: "Top 3 Dramas",
+    compareCourses: "Comparar dramas:",
+    selectCourse: "Selecionar",
     emptyChart: "Sem dados de gráfico",
     recordsTitle: "Registros de Liquidação",
     statusFilter: "Status",
@@ -317,7 +335,9 @@ export const withdraw: Record<Locale, WithdrawMessages> = {
     colPeriod: "Período",
     colType: "Tipo",
     colRatio: "Proporção",
-    colCreator: "Valor (CNY)",
+    colTypeRatio: "Tipo / Proporção",
+    colAccountNo: "Nº da Conta",
+    colCreator: "Valor",
     colDate: "Data de Liquidação",
     colStatus: "Status",
     colAction: "Ação",

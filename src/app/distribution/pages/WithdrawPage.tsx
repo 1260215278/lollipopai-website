@@ -18,7 +18,6 @@ import { toast } from "sonner";
 import { useI18n } from "../../i18n";
 import { PageLoading } from "../components/settlement/PageHeader";
 import { EmptyState } from "../components/settlement/EmptyState";
-import { TypeBadge } from "../components/settlement/Badge";
 import {
   getSettlementSummary,
   getSettlementRecords,
@@ -27,7 +26,6 @@ import {
   getEarningsCoursesDropdown,
   applySettlement,
   type EarningsCourseOption,
-  type EarningsPublishScope,
   type SettlementChart,
   type SettlementRecord,
   type SettlementRecordDetail,
@@ -45,7 +43,6 @@ const cny = (n: number) =>
   `¥ ${(n ?? 0).toLocaleString("zh-CN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
 type StatusFilter = "all" | SettlementStatus;
-type ScopeFilter = "all" | EarningsPublishScope;
 type ChartMode = "time" | "drama";
 
 interface SettlementAccountSnapshot {
@@ -90,12 +87,16 @@ function recentMonthRange(): { startMonth: string; endMonth: string } {
 
 function makeLineData(chart: SettlementChart) {
   return chart.months.map((month, index) => {
-    const row: Record<string, string | number> = { month };
+    const row: Record<string, string | number> = { month, label: chartMonthLabel(month) };
     chart.series.forEach((series) => {
       row[String(series.courseId)] = series.points[index] ?? 0;
     });
     return row;
   });
+}
+
+function chartMonthLabel(month: string): string {
+  return `${Number(month.slice(5, 7))}月`;
 }
 
 export function WithdrawPage() {
@@ -117,15 +118,14 @@ export function WithdrawPage() {
   const [detail, setDetail] = useState<SettlementRecordDetail | null>(null);
 
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
-  const [scopeFilter, setScopeFilter] = useState<ScopeFilter>("all");
   const [statusOpen, setStatusOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [chartMode, setChartMode] = useState<ChartMode>("time");
-  const [selectedCourseId, setSelectedCourseId] = useState<number | "all">("all");
-  const [startMonth, setStartMonth] = useState(initialRange.startMonth);
-  const [endMonth, setEndMonth] = useState(initialRange.endMonth);
+  const [selectedCourseIds, setSelectedCourseIds] = useState<number[]>([]);
+  const [startMonth] = useState(initialRange.startMonth);
+  const [endMonth] = useState(initialRange.endMonth);
   const statusRef = useRef<HTMLDivElement>(null);
   const didInitialLoad = useRef(false);
 
@@ -151,7 +151,6 @@ export function WithdrawPage() {
         page,
         limit: RECORD_PAGE_SIZE,
         status: statusFilter === "all" ? undefined : statusFilter,
-        scope: scopeFilter === "all" ? undefined : scopeFilter,
         keyword: search.trim() || undefined,
       });
       setRecords(pageData.list);
@@ -161,7 +160,7 @@ export function WithdrawPage() {
     } finally {
       setRecordsLoading(false);
     }
-  }, [page, statusFilter, scopeFilter, search]);
+  }, [page, statusFilter, search]);
 
   const loadChart = useCallback(async () => {
     setChartLoading(true);
@@ -170,7 +169,7 @@ export function WithdrawPage() {
         await getSettlementChart({
           startMonth: startMonth || undefined,
           endMonth: endMonth || undefined,
-          courseIds: selectedCourseId === "all" ? undefined : [selectedCourseId],
+          courseIds: selectedCourseIds.length > 0 ? selectedCourseIds : undefined,
         }),
       );
     } catch {
@@ -178,7 +177,7 @@ export function WithdrawPage() {
     } finally {
       setChartLoading(false);
     }
-  }, [startMonth, endMonth, selectedCourseId]);
+  }, [startMonth, endMonth, selectedCourseIds]);
 
   useEffect(() => {
     const run = async () => {
@@ -287,15 +286,12 @@ export function WithdrawPage() {
 
       <ChartCard
         t={t}
+        summary={summary}
         mode={chartMode}
         setMode={setChartMode}
         courses={courses}
-        selectedCourseId={selectedCourseId}
-        setSelectedCourseId={setSelectedCourseId}
-        startMonth={startMonth}
-        setStartMonth={setStartMonth}
-        endMonth={endMonth}
-        setEndMonth={setEndMonth}
+        selectedCourseIds={selectedCourseIds}
+        setSelectedCourseIds={setSelectedCourseIds}
         chart={chart}
         lineData={lineData}
         barData={barData}
@@ -313,14 +309,11 @@ export function WithdrawPage() {
         statusFilter={statusFilter}
         setStatusFilter={setStatusFilter}
         setStatusOpen={setStatusOpen}
-        scopeFilter={scopeFilter}
-        setScopeFilter={setScopeFilter}
         search={search}
         setSearch={setSearch}
         setPage={setPage}
         totalPage={totalPage}
         page={page}
-        statusText={statusText}
         groupText={groupText}
         onDetail={(id) => void openDetail(id)}
       />
@@ -384,141 +377,194 @@ function SummaryCard({
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-4">
-          <Metric label={t.totalSettled} value={cny(summary?.totalSettledCny ?? 0)} />
-          <Metric label={t.settledCount} value={String(summary?.settledCount ?? 0)} />
-          <Metric label={t.pendingTotal} value={cny(summary?.pendingTotalCny ?? 0)} accent />
-          <div>
-            <button
-              type="button"
-              disabled={!canApply || applying}
-              onClick={onApply}
-              className="h-10 px-5 rounded-[14px] text-sm text-white disabled:text-[#6a7282] disabled:bg-gray-100 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2"
-              style={{ background: canApply ? "#111111" : undefined, fontWeight: 600 }}
-            >
-              {applying ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-              {applyButtonText}
-            </button>
-            {blockReasonText && <p className="text-[11px] text-[#99a1af] mt-1 text-right">{blockReasonText}</p>}
-          </div>
+        <div>
+          <button
+            type="button"
+            disabled={!canApply || applying}
+            onClick={onApply}
+            className="h-10 min-w-[146px] px-5 rounded-[14px] text-sm text-white disabled:text-[#6a7282] disabled:bg-gray-100 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2"
+            style={{ background: canApply ? "#111111" : undefined, fontWeight: 600 }}
+          >
+            {applying ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+            {applyButtonText}
+          </button>
+          {blockReasonText && <p className="text-[11px] text-[#99a1af] mt-1 text-right">{blockReasonText}</p>}
         </div>
       </div>
-    </div>
-  );
-}
-
-function Metric({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
-  return (
-    <div className="text-right">
-      <p className="text-xs text-[#99a1af]">{label}</p>
-      <p className="text-lg tabular-nums" style={{ fontWeight: 800, color: accent ? "#e8192c" : "#101828" }}>
-        {value}
-      </p>
     </div>
   );
 }
 
 function ChartCard({
   t,
+  summary,
   mode,
   setMode,
   courses,
-  selectedCourseId,
-  setSelectedCourseId,
-  startMonth,
-  setStartMonth,
-  endMonth,
-  setEndMonth,
+  selectedCourseIds,
+  setSelectedCourseIds,
   chart,
   lineData,
   barData,
   loading,
 }: {
   t: WithdrawMsg;
+  summary: SettlementSummary | null;
   mode: ChartMode;
   setMode: (mode: ChartMode) => void;
   courses: EarningsCourseOption[];
-  selectedCourseId: number | "all";
-  setSelectedCourseId: (id: number | "all") => void;
-  startMonth: string;
-  setStartMonth: (month: string) => void;
-  endMonth: string;
-  setEndMonth: (month: string) => void;
+  selectedCourseIds: number[];
+  setSelectedCourseIds: React.Dispatch<React.SetStateAction<number[]>>;
   chart: SettlementChart;
   lineData: Record<string, string | number>[];
   barData: { name: string; total: number }[];
   loading: boolean;
 }) {
+  const activeCourseIds = new Set(
+    selectedCourseIds.length > 0 ? selectedCourseIds : chart.series.map((series) => series.courseId),
+  );
+  const selectableCourses = courses.filter((course) => !activeCourseIds.has(course.courseId));
+  const removeCourse = (courseId: number) => {
+    if (selectedCourseIds.length > 0) {
+      setSelectedCourseIds((ids) => ids.filter((id) => id !== courseId));
+      return;
+    }
+    setSelectedCourseIds(chart.series.filter((series) => series.courseId !== courseId).map((series) => series.courseId));
+  };
+  const addCourse = (courseId: number) => {
+    setSelectedCourseIds((ids) => {
+      const baseIds = ids.length > 0 ? ids : chart.series.map((series) => series.courseId);
+      return Array.from(new Set([...baseIds, courseId]));
+    });
+  };
+
   return (
-    <div className="bg-white rounded-2xl border border-[#f3f4f6] overflow-hidden">
-      <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-4 border-b border-[#f3f4f6]">
-        <h3 className="text-sm text-[#101828]" style={{ fontWeight: 700 }}>
-          {t.chartTitle}
-        </h3>
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setMode("time")}
-            className="h-8 px-3 rounded-lg text-xs"
-            style={{ background: mode === "time" ? "#111111" : "#f3f4f6", color: mode === "time" ? "#fff" : "#364153", fontWeight: 600 }}
-          >
-            {t.chartByTime}
-          </button>
-          <button
-            type="button"
-            onClick={() => setMode("drama")}
-            className="h-8 px-3 rounded-lg text-xs"
-            style={{ background: mode === "drama" ? "#111111" : "#f3f4f6", color: mode === "drama" ? "#fff" : "#364153", fontWeight: 600 }}
-          >
-            {t.chartByDrama}
-          </button>
-          <input type="month" value={startMonth} onChange={(e) => setStartMonth(e.target.value)} className="h-8 px-2 rounded-lg border border-[#e5e7eb] text-xs" />
-          <input type="month" value={endMonth} onChange={(e) => setEndMonth(e.target.value)} className="h-8 px-2 rounded-lg border border-[#e5e7eb] text-xs" />
-          <select
-            value={selectedCourseId}
-            onChange={(e) => setSelectedCourseId(e.target.value === "all" ? "all" : Number(e.target.value))}
-            className="h-8 px-2 rounded-lg border border-[#e5e7eb] text-xs bg-white"
-          >
-            <option value="all">{t.topCourses}</option>
-            {courses.map((course) => (
-              <option key={course.courseId} value={course.courseId}>
-                {course.courseTitle}
-              </option>
-            ))}
-          </select>
+    <div className="bg-white rounded-2xl border border-[#f3f4f6] overflow-hidden p-6 min-h-[340px]">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h3 className="text-sm leading-5 text-[#101828]" style={{ fontWeight: 700 }}>
+            {t.chartTitle}
+          </h3>
+          <p className="text-xs leading-4 text-[#99a1af] mt-0.5">{t.chartSubtitle}</p>
+        </div>
+        <div className="flex flex-wrap items-start gap-3">
+          <ChartMetric label={t.totalSettled} value={cny(summary?.totalSettledCny ?? 0)} />
+          <ChartMetric label={t.groupSettled} value={String(summary?.settledCount ?? 0)} accent />
+          <div className="h-[29px] rounded-full border border-[#f3f4f6] bg-white p-[1px] flex items-center">
+            <button
+              type="button"
+              onClick={() => setMode("time")}
+              className="h-[27px] w-16 rounded-full text-xs transition-colors"
+              style={{ background: mode === "time" ? "#111111" : "transparent", color: mode === "time" ? "#fff" : "#6a7282", fontWeight: 600 }}
+            >
+              {t.chartByTime}
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode("drama")}
+              className="h-[27px] w-16 rounded-full text-xs transition-colors"
+              style={{ background: mode === "drama" ? "#111111" : "transparent", color: mode === "drama" ? "#fff" : "#6a7282", fontWeight: 600 }}
+            >
+              {t.chartByDrama}
+            </button>
+          </div>
         </div>
       </div>
-      <div className="h-72 p-4">
+
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+        <div className="min-h-[29px] flex flex-wrap items-center gap-2">
+          <span className="text-xs leading-4 text-[#6a7282]">{t.compareCourses}</span>
+          {chart.series.map((series, index) => (
+            <CourseChip
+              key={series.courseId}
+              label={series.courseName}
+              color={chartColors[index % chartColors.length]}
+              onRemove={() => removeCourse(series.courseId)}
+            />
+          ))}
+        </div>
+        <select
+          value=""
+          onChange={(e) => {
+            if (e.target.value) addCourse(Number(e.target.value));
+          }}
+          className="h-[29px] w-[92px] rounded-full border border-[#e5e7eb] bg-white px-3 text-xs text-[#364153] outline-none"
+          style={{ fontWeight: 500 }}
+        >
+          <option value="">{t.selectCourse}</option>
+          {selectableCourses.map((course) => (
+            <option key={course.courseId} value={course.courseId}>
+              {course.courseTitle}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="h-[192px] mt-1">
         {loading ? (
           <PageLoading />
         ) : chart.series.length === 0 ? (
           <EmptyState className="py-12" icon={<BarChart3 className="w-6 h-6" />} title={t.emptyChart} />
         ) : mode === "time" ? (
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={lineData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} />
-              <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#9CA3AF" }} axisLine={false} tickLine={false} />
+            <LineChart data={lineData} margin={{ top: 18, right: 6, left: 0, bottom: 2 }}>
+              <CartesianGrid strokeDasharray="2 3" stroke="#F3F4F6" vertical={false} />
+              <XAxis dataKey="label" tick={{ fontSize: 11, fill: "#9CA3AF" }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 11, fill: "#9CA3AF" }} axisLine={false} tickLine={false} />
               <Tooltip formatter={(v: number) => [cny(v), t.chartAmount]} />
-              <Legend wrapperStyle={{ fontSize: 12 }} />
+              <Legend wrapperStyle={{ fontSize: 12, paddingTop: 8 }} />
               {chart.series.map((series, index) => (
-                <Line key={series.courseId} type="monotone" dataKey={String(series.courseId)} name={series.courseName} stroke={chartColors[index % chartColors.length]} strokeWidth={2} dot={false} />
+                <Line
+                  key={series.courseId}
+                  type="monotone"
+                  dataKey={String(series.courseId)}
+                  name={series.courseName}
+                  stroke={chartColors[index % chartColors.length]}
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                  activeDot={{ r: 4 }}
+                />
               ))}
             </LineChart>
           </ResponsiveContainer>
         ) : (
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={barData} layout="vertical" margin={{ top: 10, right: 20, left: 20, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" horizontal={false} />
+            <BarChart data={barData} layout="vertical" margin={{ top: 18, right: 6, left: 8, bottom: 2 }}>
+              <CartesianGrid strokeDasharray="2 3" stroke="#F3F4F6" horizontal={false} />
               <XAxis type="number" tick={{ fontSize: 11, fill: "#9CA3AF" }} axisLine={false} tickLine={false} />
-              <YAxis dataKey="name" type="category" width={110} tick={{ fontSize: 11, fill: "#6B7280" }} axisLine={false} tickLine={false} />
+              <YAxis dataKey="name" type="category" width={112} tick={{ fontSize: 11, fill: "#6B7280" }} axisLine={false} tickLine={false} />
               <Tooltip formatter={(v: number) => [cny(v), t.chartCumulative]} />
-              <Bar dataKey="total" name={t.chartCumulative} fill="#111111" radius={[0, 4, 4, 0]} />
+              <Bar dataKey="total" name={t.chartCumulative} fill="#111111" radius={[0, 6, 6, 0]} barSize={16} />
             </BarChart>
           </ResponsiveContainer>
         )}
       </div>
     </div>
+  );
+}
+
+function ChartMetric({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
+  return (
+    <div className="rounded-2xl bg-[#f9fafb] px-4 py-2 min-w-[61px]">
+      <p className="text-[11px] leading-[17px] text-[#99a1af]">{label}</p>
+      <p className="text-sm leading-5 tabular-nums" style={{ fontWeight: 800, color: accent ? "#16a34a" : "#101828" }}>
+        {value}
+      </p>
+    </div>
+  );
+}
+
+function CourseChip({ label, color, onRemove }: { label: string; color: string; onRemove: () => void }) {
+  return (
+    <span
+      className="h-[21px] inline-flex items-center gap-1.5 rounded-full px-2.5 text-xs whitespace-nowrap"
+      style={{ background: `${color}14`, color, fontWeight: 500 }}
+    >
+      {label}
+      <button type="button" onClick={onRemove} className="text-current opacity-70 hover:opacity-100" aria-label={label}>
+        <X className="w-3 h-3" />
+      </button>
+    </span>
   );
 }
 
@@ -533,14 +579,11 @@ function RecordsCard({
   statusFilter,
   setStatusFilter,
   setStatusOpen,
-  scopeFilter,
-  setScopeFilter,
   search,
   setSearch,
   setPage,
   totalPage,
   page,
-  statusText,
   groupText,
   onDetail,
 }: {
@@ -554,14 +597,11 @@ function RecordsCard({
   statusFilter: StatusFilter;
   setStatusFilter: (status: StatusFilter) => void;
   setStatusOpen: (open: boolean | ((value: boolean) => boolean)) => void;
-  scopeFilter: ScopeFilter;
-  setScopeFilter: (scope: ScopeFilter) => void;
   search: string;
   setSearch: (search: string) => void;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   totalPage: number;
   page: number;
-  statusText: (status: SettlementStatus) => string;
   groupText: (group: SettlementStatusGroup) => string;
   onDetail: (id: number) => void;
 }) {
@@ -601,18 +641,6 @@ function RecordsCard({
               </div>
             )}
           </div>
-          <select
-            value={scopeFilter}
-            onChange={(e) => {
-              setScopeFilter(e.target.value === "all" ? "all" : Number(e.target.value) as EarningsPublishScope);
-              setPage(1);
-            }}
-            className="h-8 px-2 rounded-lg border border-[#e5e7eb] text-xs bg-white"
-          >
-            <option value="all">{t.scopeAll}</option>
-            <option value={1}>{t.typeAccount}</option>
-            <option value={2}>{t.typeFull}</option>
-          </select>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
             <input
@@ -630,15 +658,25 @@ function RecordsCard({
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[1060px]">
+        <table className="w-full min-w-[1120px]">
+          <colgroup>
+            <col className="w-[180px]" />
+            <col className="w-[120px]" />
+            <col className="w-[110px]" />
+            <col className="w-[200px]" />
+            <col className="w-[130px]" />
+            <col className="w-[185px]" />
+            <col className="w-[110px]" />
+            <col className="w-[100px]" />
+          </colgroup>
           <thead>
             <tr className="border-b border-[#f3f4f6] bg-gray-50/50">
               <Th>{t.colOrderNo}</Th>
-              <Th>{t.colPeriod}</Th>
-              <Th>{t.colType}</Th>
-              <Th>{t.colRatio}</Th>
-              <Th>{t.colCreator}</Th>
               <Th>{t.colDate}</Th>
+              <Th>{t.colPeriod}</Th>
+              <Th>{t.colTypeRatio}</Th>
+              <Th>{t.colAccountNo}</Th>
+              <Th>{t.colCreator}</Th>
               <Th>{t.colStatus}</Th>
               <Th>{t.colAction}</Th>
             </tr>
@@ -647,30 +685,32 @@ function RecordsCard({
             <tbody>
               {records.map((row) => (
                 <tr key={row.id} className="border-t border-gray-50 hover:bg-gray-50/50 transition-colors">
-                  <td className="px-5 py-3.5 text-xs text-[#4a5565] tabular-nums">{row.orderNo}</td>
-                  <td className="px-5 py-3.5 text-xs text-[#4a5565]">{row.periodMonth}</td>
-                  <td className="px-5 py-3.5">
-                    <TypeBadge type={row.publishScope === 2 ? "full" : "account"} label={row.publishScope === 2 ? t.typeFull : t.typeAccount} />
+                  <td className="px-5 py-[18px] text-xs text-[#4a5565] tabular-nums">{row.orderNo}</td>
+                  <td className="px-5 py-[18px] text-xs text-[#4a5565] whitespace-nowrap">
+                    {row.statusGroup === "settled" ? row.payTime ?? "—" : row.applyTime ?? "—"}
                   </td>
-                  <td className="px-5 py-3.5 text-xs text-[#4a5565]">{row.ratioLabel}</td>
+                  <td className="px-5 py-[18px] text-xs text-[#4a5565]">{row.periodMonth}</td>
                   <td className="px-5 py-3.5">
+                    <TypeRatioBadge
+                      type={row.publishScope === 2 ? "full" : "account"}
+                      label={`${row.publishScope === 2 ? t.typeFull : t.typeAccount} ${row.ratioLabel}`}
+                    />
+                  </td>
+                  <td className="px-5 py-[18px] text-xs text-[#4a5565] tabular-nums">{row.accountNoMasked ?? "—"}</td>
+                  <td className="px-5 py-[18px]">
                     <span className="text-sm text-[#101828]" style={{ fontWeight: 700 }}>
                       {cny(row.creatorCny)}
                     </span>
                   </td>
-                  <td className="px-5 py-3.5 text-xs text-[#4a5565] whitespace-nowrap">
-                    {row.statusGroup === "settled" ? row.payTime ?? "—" : row.applyTime ?? "—"}
-                  </td>
                   <td className="px-5 py-3.5">
                     <StatusBadge group={row.statusGroup} label={groupText(row.statusGroup)} />
-                    <p className="text-[11px] text-[#99a1af] mt-1">{statusText(row.status)}</p>
                   </td>
                   <td className="px-5 py-3.5">
                     <button
                       type="button"
                       onClick={() => onDetail(row.id)}
-                      className="inline-flex items-center gap-1.5 h-8 px-3 rounded-[14px] border border-[#e5e7eb] text-xs text-[#364153] hover:bg-gray-50"
-                      style={{ fontWeight: 600 }}
+                      className="inline-flex items-center gap-1 h-8 text-xs text-[#99a1af] hover:text-[#4a5565]"
+                      style={{ fontWeight: 500 }}
                     >
                       <Eye className="w-3.5 h-3.5" />
                       {t.detail}
@@ -874,7 +914,7 @@ function StatusBadge({ group, label }: { group: SettlementStatusGroup; label: st
   const map = {
     applied: { background: "#FFF7ED", color: "#ea580c" },
     settled: { background: "#F0FDF4", color: "#16a34a" },
-    failed: { background: "#FEF2F2", color: "#dc2626" },
+    failed: { background: "#F3F4F6", color: "#9ca3af" },
   } as const;
   const style = map[group];
   return (
@@ -884,9 +924,21 @@ function StatusBadge({ group, label }: { group: SettlementStatusGroup; label: st
   );
 }
 
+function TypeRatioBadge({ type, label }: { type: "full" | "account"; label: string }) {
+  const style =
+    type === "full"
+      ? { background: "#FFF1F2", color: "#e8192c" }
+      : { background: "#EFF6FF", color: "#3b82f6" };
+  return (
+    <span className="inline-flex h-6 items-center rounded-full px-2.5 text-xs whitespace-nowrap" style={{ ...style, fontWeight: 600 }}>
+      {label}
+    </span>
+  );
+}
+
 function Th({ children }: { children: React.ReactNode }) {
   return (
-    <th className="px-5 py-3 text-left align-top">
+    <th className="px-5 py-2.5 text-left align-top">
       <span className="text-xs text-[#6a7282]" style={{ fontWeight: 500 }}>
         {children}
       </span>

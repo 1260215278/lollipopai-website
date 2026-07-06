@@ -33,6 +33,15 @@ export interface AccountNotify {
   notifySms: 0 | 1;
 }
 
+export const accountSmsCodeScenes = {
+  changePassword: "change_password",
+  twoFactorEnable: "two_factor_enable",
+  twoFactorDisable: "two_factor_disable",
+  cancelAccount: "cancel_account",
+} as const;
+
+export type AccountSmsCodeScene = typeof accountSmsCodeScenes[keyof typeof accountSmsCodeScenes];
+
 export interface AccountCompany {
   companyName: string | null;
   creditCode: string | null;
@@ -100,7 +109,7 @@ export function sendAccountEmailCode(email: string): Promise<void> {
   return http.get<void>("/publisher/account/sendEmailCode", { params: { email } });
 }
 
-export function sendAccountSmsCode(scene?: string): Promise<void> {
+export function sendAccountSmsCode(scene: AccountSmsCodeScene): Promise<void> {
   return http.get<void>("/publisher/account/sendSmsCode", { params: { scene } });
 }
 

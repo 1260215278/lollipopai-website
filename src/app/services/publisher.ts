@@ -72,28 +72,63 @@ export interface PublisherSubmitBody {
   idCardBack: string;
   /** 是否同意合作协议，必须为 1 */
   agreementAgreed: number;
-  /** 用户实际看到/同意的合作协议版本号（取自 getPublisherAgreement 返回的 version；bug12） */
+  /** 合作协议当前版本号，来自 app/common/type/3017 */
   agreementVersion?: string;
 }
 
 /** 入驻协议类型：合作协议 / 隐私政策 */
 export type AgreementType = "cooperation" | "privacy";
 
-/** GET /app/publisher/agreements 响应（按当前 Accept-Language 返回对应语种正文） */
+interface AppCommonConfig {
+  id: number;
+  type: number;
+  value: string;
+  min: string;
+  max: string | null;
+  conditionFrom: string | null;
+  createAt: string | null;
+}
+
+const PUBLISHER_AGREEMENT_COMMON_TYPE = {
+  cooperationVersion: 3017,
+  privacyVersion: 3018,
+  cooperationContent: 3104,
+  privacyContent: 3105,
+} as const;
+
+/** GET /app/common/type/{type} 配置响应 */
+function getAppCommonConfig(type: number): Promise<AppCommonConfig> {
+  return http.get<AppCommonConfig>(`/app/common/type/${type}`, { auth: false });
+}
+
+/** 入驻协议配置（正文与版本来自配置中心 type=3017/3018/3104/3105） */
 export interface PublisherAgreement {
   type: AgreementType;
-  /** 版本号（提交时回写到 submit 的 agreementVersion） */
+  /** 协议版本号 */
   version: string;
   /** 协议正文 */
   content: string;
 }
 
 /**
- * 查询入驻协议正文（bug12）：type=cooperation 合作协议 / privacy 隐私政策。
- * 正文语种随当前 Accept-Language；type 非法后端返回 403313。
+ * 查询入驻协议配置：type=cooperation 合作协议 / privacy 隐私政策。
+ * 当前版本号：3017/3018；富文本正文：3104/3105。
  */
 export function getPublisherAgreement(type: AgreementType): Promise<PublisherAgreement> {
-  return http.get<PublisherAgreement>("/app/publisher/agreements", { params: { type }, auth: false });
+  const versionType = type === "cooperation"
+    ? PUBLISHER_AGREEMENT_COMMON_TYPE.cooperationVersion
+    : PUBLISHER_AGREEMENT_COMMON_TYPE.privacyVersion;
+  const contentType = type === "cooperation"
+    ? PUBLISHER_AGREEMENT_COMMON_TYPE.cooperationContent
+    : PUBLISHER_AGREEMENT_COMMON_TYPE.privacyContent;
+  return Promise.all([
+    getAppCommonConfig(versionType),
+    getAppCommonConfig(contentType),
+  ]).then(([version, content]) => ({
+    type,
+    version: version.value,
+    content: content.value,
+  }));
 }
 
 /** 入驻状态机审核态枚举 */

@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import { useI18n, type Locale } from "../../i18n";
 import { PageLoading } from "../components/settlement/PageHeader";
 import {
+  accountSmsCodeScenes,
   bindAccountEmail,
   changeAccountPassword,
   getAccountInfo,
@@ -29,11 +30,14 @@ import {
   getAccountSessions,
   kickAccountSession,
   logoutOtherAccountSessions,
+  sendAccountSmsCode,
   sendAccountEmailCode,
   updateAvatar,
   updateCompany,
   updateNickname,
   updateNotify,
+  enableAccountTwoFactor,
+  disableAccountTwoFactor,
   type AccountCompany,
   type AccountInfo,
   type AccountLoginRecord,
@@ -41,7 +45,7 @@ import {
   type AccountSession,
 } from "../../services/account";
 import { ALIOSS_UPLOAD_PATH, uploadFile } from "../../services/upload";
-import { normalizeImageFile } from "../../services/heic";
+import { getOssHeicJpgUrl } from "../../services/heic";
 
 type AccountMsg = ReturnType<typeof useI18n>["messages"]["distribution"]["account"];
 type TabKey = "info" | "security" | "devices";
@@ -53,6 +57,8 @@ const emptyCompany: AccountCompany = {
   companyAddress: "",
   companyPhone: "",
 };
+const PASSWORD_MIN = 6;
+const PASSWORD_MAX = 20;
 
 export function AccountPage() {
   const { messages, locale } = useI18n();
@@ -210,15 +216,21 @@ function ProfileCard({ t, info, onProfileChange }: { t: AccountMsg; info: Accoun
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [nicknameOpen, setNicknameOpen] = useState(false);
+  const [avatarBroken, setAvatarBroken] = useState(false);
+  const showAvatar = !!info.profile.avatar && !avatarBroken;
+
+  useEffect(() => {
+    setAvatarBroken(false);
+  }, [info.profile.avatar]);
 
   const changeAvatar = async (file: File | undefined) => {
     if (!file) return;
     setUploading(true);
     try {
-      const normalized = await normalizeImageFile(file);
-      const url = await uploadFile(normalized, ALIOSS_UPLOAD_PATH);
-      await updateAvatar(url);
-      onProfileChange({ avatar: url });
+      const url = await uploadFile(file, ALIOSS_UPLOAD_PATH);
+      const avatarUrl = getOssHeicJpgUrl(file, url);
+      await updateAvatar(avatarUrl);
+      onProfileChange({ avatar: avatarUrl });
       toast.success(t.saveSuccess);
     } catch {
       // uploadFile / http 已 toast
@@ -231,8 +243,8 @@ function ProfileCard({ t, info, onProfileChange }: { t: AccountMsg; info: Accoun
   return (
     <>
       <div className="flex items-center gap-5 rounded-2xl border border-[#f3f4f6] bg-white p-6">
-        {info.profile.avatar ? (
-          <img src={info.profile.avatar} alt="" className="h-20 w-20 rounded-full bg-gray-100 object-cover" />
+        {showAvatar ? (
+          <img src={info.profile.avatar} alt="" className="h-20 w-20 rounded-full bg-gray-100 object-cover" onError={() => setAvatarBroken(true)} />
         ) : (
           <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#111111] text-[28px] text-white" style={{ fontWeight: 700 }}>
             {avatarText}
@@ -420,6 +432,7 @@ function NotificationCard({ t, notify, onNotifyChange }: { t: AccountMsg; notify
 
 function SecurityTab({ t, info, onReload }: { t: AccountMsg; info: AccountInfo; onReload: () => Promise<void> }) {
   const [passwordOpen, setPasswordOpen] = useState(false);
+  const [twoFactorOpen, setTwoFactorOpen] = useState(false);
   const [suggestionsOpen, setSuggestionsOpen] = useState(false);
   const levelLabel = info.security.securityLevel === 3 ? t.high : info.security.securityLevel === 2 ? t.medium : t.low;
   const suggestions = buildSecuritySuggestions(t, info);
@@ -428,7 +441,7 @@ function SecurityTab({ t, info, onReload }: { t: AccountMsg; info: AccountInfo; 
     <div className="max-w-[672px]">
       <Card title={t.accountSecurity}>
         <SecurityRow icon={<KeyRound className="h-4 w-4" />} label={t.password} value={info.security.passwordSet ? t.set : t.notSet} badge={info.security.passwordSet ? t.safe : t.improveSuggested} tone={info.security.passwordSet ? "green" : "orange"} actionLabel={t.changePasswordAction} onManage={() => setPasswordOpen(true)} />
-        <SecurityRow icon={<ShieldCheck className="h-4 w-4" />} label={t.twoFactor} value={t.phoneVerifyCode} badge={info.security.twoFactorEnabled ? t.enabled : t.notSet} tone={info.security.twoFactorEnabled ? "green" : "orange"} actionLabel={t.manage} onManage={() => toast.info(t.smsScenePending)} />
+        <SecurityRow icon={<ShieldCheck className="h-4 w-4" />} label={t.twoFactor} value={t.phoneVerifyCode} badge={info.security.twoFactorEnabled ? t.enabled : t.notSet} tone={info.security.twoFactorEnabled ? "green" : "orange"} actionLabel={t.manage} onManage={() => setTwoFactorOpen(true)} />
         <SecurityRow icon={<AlertCircle className="h-4 w-4" />} label={t.securityTitle} value={levelLabel} badge={info.security.securityLevel === 3 ? t.safe : t.improveSuggested} tone={info.security.securityLevel === 3 ? "green" : "orange"} actionLabel={t.viewSuggestions} onManage={() => setSuggestionsOpen(true)} last />
       </Card>
       {passwordOpen && (
@@ -438,6 +451,17 @@ function SecurityTab({ t, info, onReload }: { t: AccountMsg; info: AccountInfo; 
           onClose={() => setPasswordOpen(false)}
           onSaved={async () => {
             setPasswordOpen(false);
+            await onReload();
+          }}
+        />
+      )}
+      {twoFactorOpen && (
+        <TwoFactorModal
+          t={t}
+          enabled={info.security.twoFactorEnabled}
+          onClose={() => setTwoFactorOpen(false)}
+          onSaved={async () => {
+            setTwoFactorOpen(false);
             await onReload();
           }}
         />
@@ -463,6 +487,12 @@ function DevicesTab({
   onReload: () => Promise<void>;
 }) {
   const [acting, setActing] = useState<string | null>(null);
+
+  useEffect(() => {
+    const id = window.setInterval(() => void onReload(), 30000);
+    return () => window.clearInterval(id);
+  }, [onReload]);
+
   const logoutOthers = async () => {
     setActing("all");
     try {
@@ -481,7 +511,6 @@ function DevicesTab({
       setActing(null);
     }
   };
-
   return (
     <div className="max-w-[672px] space-y-5">
       <div className="flex items-center gap-3 rounded-xl border border-[#bfdbfe] bg-[#eff6ff] px-4 py-3">
@@ -514,7 +543,9 @@ function DevicesTab({
         {loginRecords.length === 0 ? (
           <EmptyCardText>{t.emptyLoginRecords}</EmptyCardText>
         ) : (
-          loginRecords.map((record, index) => <LoginRecordRow key={`${record.loginTime}-${index}`} t={t} locale={locale} record={record} last={index === loginRecords.length - 1} />)
+          loginRecords.map((record, index) => (
+            <LoginRecordRow key={`${record.loginTime}-${index}`} t={t} locale={locale} record={record} last={index === loginRecords.length - 1} />
+          ))
         )}
       </Card>
     </div>
@@ -731,8 +762,38 @@ function PasswordModal({ t, passwordSet, onClose, onSaved }: { t: AccountMsg; pa
   const [smsCode, setSmsCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [sending, setSending] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  const sendCode = async () => {
+    setSending(true);
+    try {
+      await sendAccountSmsCode(accountSmsCodeScenes.changePassword);
+      toast.success(t.codeSent);
+    } catch {
+      // http 已 toast
+    } finally {
+      setSending(false);
+    }
+  };
+
   const save = async () => {
+    if (passwordSet && !oldPassword.trim()) {
+      toast.error(t.passwordRequired);
+      return;
+    }
+    if (!passwordSet && !smsCode.trim()) {
+      toast.error(t.codeRequired);
+      return;
+    }
+    if (!newPassword || !confirmPassword) {
+      toast.error(t.passwordRequired);
+      return;
+    }
+    if (newPassword.length < PASSWORD_MIN || newPassword.length > PASSWORD_MAX) {
+      toast.error(t.passwordLengthInvalid);
+      return;
+    }
     if (newPassword !== confirmPassword) {
       toast.error(t.passwordMismatch);
       return;
@@ -751,9 +812,80 @@ function PasswordModal({ t, passwordSet, onClose, onSaved }: { t: AccountMsg; pa
   return (
     <DialogShell title={t.passwordTitle} onClose={onClose}>
       <div className="space-y-4">
-        {passwordSet ? <DialogInput label={t.oldPassword} value={oldPassword} onChange={setOldPassword} type="password" /> : <DialogInput label={t.smsCode} value={smsCode} onChange={setSmsCode} />}
-        <DialogInput label={t.newPassword} value={newPassword} onChange={setNewPassword} type="password" />
-        <DialogInput label={t.confirmPassword} value={confirmPassword} onChange={setConfirmPassword} type="password" />
+        {passwordSet ? (
+          <DialogInput label={t.oldPassword} value={oldPassword} onChange={setOldPassword} type="password" />
+        ) : (
+          <div>
+            <p className="mb-3 text-xs text-[#6a7282]" style={{ lineHeight: "19.5px" }}>{t.smsScenePending}</p>
+            <div className="grid grid-cols-[1fr_auto] items-end gap-2">
+              <DialogInput label={t.smsCode} value={smsCode} onChange={setSmsCode} />
+              <button type="button" onClick={() => void sendCode()} disabled={sending} className="flex h-10 items-center gap-1.5 rounded-[10px] border border-[#e5e7eb] px-3 text-xs text-[#4a5565]" style={{ fontWeight: 600 }}>
+                {sending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+                {t.sendCode}
+              </button>
+            </div>
+          </div>
+        )}
+        <DialogInput label={t.newPassword} value={newPassword} onChange={setNewPassword} type="password" minLength={PASSWORD_MIN} maxLength={PASSWORD_MAX} />
+        <DialogInput label={t.confirmPassword} value={confirmPassword} onChange={setConfirmPassword} type="password" minLength={PASSWORD_MIN} maxLength={PASSWORD_MAX} />
+      </div>
+      <DialogActions t={t} saving={saving} onCancel={onClose} onConfirm={() => void save()} />
+    </DialogShell>
+  );
+}
+
+function TwoFactorModal({ t, enabled, onClose, onSaved }: { t: AccountMsg; enabled: boolean; onClose: () => void; onSaved: () => Promise<void> }) {
+  const [smsCode, setSmsCode] = useState("");
+  const [sending, setSending] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const smsScene = enabled ? accountSmsCodeScenes.twoFactorDisable : accountSmsCodeScenes.twoFactorEnable;
+
+  const sendCode = async () => {
+    setSending(true);
+    try {
+      await sendAccountSmsCode(smsScene);
+      toast.success(t.codeSent);
+    } catch {
+      // http 已 toast
+    } finally {
+      setSending(false);
+    }
+  };
+
+  useEffect(() => {
+    void sendCode();
+  }, []);
+
+  const save = async () => {
+    if (!smsCode.trim()) {
+      toast.error(t.codeRequired);
+      return;
+    }
+    setSaving(true);
+    try {
+      if (enabled) {
+        await disableAccountTwoFactor({ smsCode: smsCode.trim() });
+      } else {
+        await enableAccountTwoFactor({ smsCode: smsCode.trim() });
+      }
+      toast.success(t.saveSuccess);
+      await onSaved();
+    } catch {
+      // http 已 toast
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <DialogShell title={t.twoFactor} onClose={onClose}>
+      <p className="mb-4 text-xs text-[#6a7282]" style={{ lineHeight: "19.5px" }}>{t.smsScenePending}</p>
+      <div className="grid grid-cols-[1fr_auto] items-end gap-2">
+        <DialogInput label={t.smsCode} value={smsCode} onChange={setSmsCode} />
+        <button type="button" onClick={() => void sendCode()} disabled={sending} className="flex h-10 items-center gap-1.5 rounded-[10px] border border-[#e5e7eb] px-3 text-xs text-[#4a5565]" style={{ fontWeight: 600 }}>
+          {sending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+          {t.sendCode}
+        </button>
       </div>
       <DialogActions t={t} saving={saving} onCancel={onClose} onConfirm={() => void save()} />
     </DialogShell>
@@ -796,11 +928,27 @@ function DialogShell({ title, children, onClose }: { title: string; children: Re
   );
 }
 
-function DialogInput({ label, value, onChange, type = "text", autoComplete }: { label: string; value: string; onChange: (value: string) => void; type?: string; autoComplete?: string }) {
+function DialogInput({
+  label,
+  value,
+  onChange,
+  type = "text",
+  autoComplete,
+  minLength,
+  maxLength,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  type?: string;
+  autoComplete?: string;
+  minLength?: number;
+  maxLength?: number;
+}) {
   return (
     <label className="block">
       <span className="mb-1.5 block text-xs text-[#364153]" style={{ fontWeight: 600 }}>{label}</span>
-      <input type={type} value={value} onChange={(event) => onChange(event.target.value)} autoComplete={autoComplete} className="h-10 w-full rounded-[10px] border border-[#e5e7eb] px-3 text-sm outline-none focus:border-[#111111]" />
+      <input type={type} value={value} onChange={(event) => onChange(event.target.value)} autoComplete={autoComplete} minLength={minLength} maxLength={maxLength} className="h-10 w-full rounded-[10px] border border-[#e5e7eb] px-3 text-sm outline-none focus:border-[#111111]" />
     </label>
   );
 }

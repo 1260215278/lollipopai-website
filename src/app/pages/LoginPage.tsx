@@ -9,6 +9,8 @@ import { SiteHeader, type SiteNavItem } from "../components/SiteHeader";
 import { AreaCodeSelect } from "../components/AreaCodeSelect";
 import { ApiError } from "../services/http";
 import {
+  loginByPhone,
+  loginByEmail,
   loginByPhonePassword,
   loginByEmailPassword,
   registerByPhone,
@@ -21,15 +23,18 @@ import promoImg from "../../imports/login-promo.jpg";
 import appIcon from "../../imports/login-app-icon.png";
 
 type Mode = "login" | "register";
+type LoginMethod = "password" | "code";
 
 /** 密码最小长度（与 H5 一致） */
 const PWD_MIN = 6;
+/** 邮箱账号最大长度（后端限制 50） */
+const EMAIL_MAX = 50;
 
 /**
  * 登录 / 注册页 —— figma 15141-27973，登录逻辑复用短剧 H5。
  *
  * 双态（顶栏「注册」→ /login?mode=register，「登录」→ /login）：
- *   登录：单输入框智能识别手机号/邮箱 + 密码（手机走 registerCode 密码登录，邮箱走 emailLogin）；
+ *   登录：可切换密码登录 / 验证码登录；单输入框智能识别手机号/邮箱；
  *   注册：账号 + 验证码 + 密码（手机走 registerCode 带 msg，邮箱走 emailRegister）。
  * token 在响应顶层 = appToken，成功后写入并跳首页 /。
  */
@@ -40,6 +45,7 @@ export function LoginPage() {
   const [searchParams] = useSearchParams();
 
   const [mode, setMode] = useState<Mode>(searchParams.get("mode") === "register" ? "register" : "login");
+  const [loginMethod, setLoginMethod] = useState<LoginMethod>("password");
   const [account, setAccount] = useState("");
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
@@ -50,6 +56,7 @@ export function LoginPage() {
   const [submitting, setSubmitting] = useState(false);
 
   const isRegister = mode === "register";
+  const isCodeLogin = !isRegister && loginMethod === "code";
   // 纯数字且非空 → 手机号模式（显示区号）；否则按邮箱处理（与 H5 一致）
   const isPhoneMode = /^[0-9]+$/.test(account);
 
@@ -66,8 +73,13 @@ export function LoginPage() {
   }, [countdown]);
 
   const onAccountChange = (v: string) => {
-    // 手机号模式（纯数字）限制 ≤20 位；邮箱模式不限（bug6）
-    if (/^[0-9]+$/.test(v) && v.length > 20) return;
+    // 手机号模式（纯数字）限制 ≤20 位；邮箱模式限制 ≤50 位
+    if (/^[0-9]+$/.test(v)) {
+      if (v.length > 20) return;
+      setAccount(v);
+      return;
+    }
+    if (v.length > EMAIL_MAX) return;
     setAccount(v);
   };
 
@@ -100,11 +112,11 @@ export function LoginPage() {
       toast.error(t.vAccountRequired);
       return;
     }
-    if (isRegister && !code.trim()) {
+    if ((isRegister || isCodeLogin) && !code.trim()) {
       toast.error(t.vCodeRequired);
       return;
     }
-    if (!password) {
+    if (!isCodeLogin && !password) {
       toast.error(t.vPasswordRequired);
       return;
     }
@@ -119,6 +131,12 @@ export function LoginPage() {
           await registerByPhone({ phone: acc, code: code.trim(), password, areaCode });
         } else {
           await registerByEmail({ email: acc, password, code: code.trim() });
+        }
+      } else if (loginMethod === "code") {
+        if (isPhoneMode) {
+          await loginByPhone({ phone: acc, code: code.trim(), areaCode });
+        } else {
+          await loginByEmail({ emailName: acc, code: code.trim() });
         }
       } else if (isPhoneMode) {
         await loginByPhonePassword({ phone: acc, password, areaCode });
@@ -176,7 +194,31 @@ export function LoginPage() {
                   {isRegister ? t.registerSubtitle : t.subtitle}
                 </p>
 
-                <div className="mt-8 space-y-4">
+                {!isRegister && (
+                  <div className="mt-6 grid grid-cols-2 gap-1 rounded-[12px] border border-white/10 bg-[#333]/60 p-1">
+                    {(["password", "code"] as LoginMethod[]).map((method) => {
+                      const selected = loginMethod === method;
+                      return (
+                        <button
+                          key={method}
+                          type="button"
+                          onClick={() => {
+                            setLoginMethod(method);
+                            setCode("");
+                            setPassword("");
+                            setCountdown(0);
+                          }}
+                          className={`h-9 rounded-[9px] text-sm transition-colors ${selected ? "bg-white text-[#333]" : "text-white/60 hover:text-white"}`}
+                          style={{ fontWeight: 600 }}
+                        >
+                          {method === "password" ? t.passwordLogin : t.codeLogin}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
+                <div className={`${isRegister ? "mt-8" : "mt-6"} space-y-4`}>
                   {/* 账号：手机号或邮箱（智能识别） */}
                   <div>
                     <label className="block text-xs text-[#6a7282] mb-1.5" style={{ fontWeight: 500 }}>
@@ -189,12 +231,13 @@ export function LoginPage() {
                         value={account}
                         onChange={(e) => onAccountChange(e.target.value)}
                         placeholder={t.accountPlaceholder}
+                        maxLength={isPhoneMode ? 20 : EMAIL_MAX}
                       />
                     </div>
                   </div>
 
-                  {/* 验证码（仅注册态） */}
-                  {isRegister && (
+                  {/* 验证码（注册态 / 验证码登录态） */}
+                  {(isRegister || isCodeLogin) && (
                     <div>
                       <label className="block text-xs text-[#6a7282] mb-1.5" style={{ fontWeight: 500 }}>
                         {t.codeLabel}
@@ -223,35 +266,37 @@ export function LoginPage() {
                   )}
 
                   {/* 密码 */}
-                  <div>
-                    <label className="block text-xs text-[#6a7282] mb-1.5" style={{ fontWeight: 500 }}>
-                      {t.passwordPlaceholder}
-                    </label>
-                    <div className="relative">
-                      <input
-                        className={inputCls + " pr-11"}
-                        type={showPwd ? "text" : "password"}
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder={t.passwordPlaceholder}
-                        maxLength={20}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") void onSubmit();
-                        }}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPwd((s) => !s)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white/80"
-                        aria-label={showPwd ? "Hide password" : "Show password"}
-                      >
-                        {showPwd ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
+                  {!isCodeLogin && (
+                    <div>
+                      <label className="block text-xs text-[#6a7282] mb-1.5" style={{ fontWeight: 500 }}>
+                        {t.passwordPlaceholder}
+                      </label>
+                      <div className="relative">
+                        <input
+                          className={inputCls + " pr-11"}
+                          type={showPwd ? "text" : "password"}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          placeholder={t.passwordPlaceholder}
+                          maxLength={20}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") void onSubmit();
+                          }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPwd((s) => !s)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white/80"
+                          aria-label={showPwd ? "Hide password" : "Show password"}
+                        >
+                          {showPwd ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   {/* 忘记密码（仅登录态） */}
-                  {!isRegister && (
+                  {!isRegister && loginMethod === "password" && (
                     <div className="flex justify-end">
                       <button
                         type="button"
@@ -280,6 +325,8 @@ export function LoginPage() {
                       type="button"
                       onClick={() => {
                         setCode("");
+                        setPassword("");
+                        setCountdown(0);
                         setMode(isRegister ? "login" : "register");
                       }}
                       className="text-xs text-[#99a1af] hover:text-white transition-colors"

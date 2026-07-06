@@ -22,6 +22,7 @@ interface DraftState {
 }
 
 const emptyDraft: DraftState = { accountNo: "", bank: "", branch: "", isDefault: false };
+const PAYOUT_FIELD_MAX = 50;
 
 export function PaymentPage() {
   const { messages } = useI18n();
@@ -454,10 +455,11 @@ function PaymentForm({
                 type="text"
                 value={draft.accountNo}
                 onChange={(e) => {
-                  setDraft((p) => ({ ...p, accountNo: e.target.value.replace(/\D/g, "") }));
+                  setDraft((p) => ({ ...p, accountNo: e.target.value.replace(/\D/g, "").slice(0, PAYOUT_FIELD_MAX) }));
                   clearError("accountNo");
                 }}
                 placeholder={t.accountNoPlaceholder}
+                maxLength={PAYOUT_FIELD_MAX}
                 className={inputCls(errors.accountNo) + " font-mono"}
               />
               {errors.accountNo && <p className="text-xs text-red-500 mt-1">{errors.accountNo}</p>}
@@ -471,10 +473,11 @@ function PaymentForm({
                 type="text"
                 value={draft.bank}
                 onChange={(e) => {
-                  setDraft((p) => ({ ...p, bank: e.target.value }));
+                  setDraft((p) => ({ ...p, bank: e.target.value.slice(0, PAYOUT_FIELD_MAX) }));
                   clearError("bank");
                 }}
                 placeholder={t.bankPlaceholder}
+                maxLength={PAYOUT_FIELD_MAX}
                 className={inputCls(errors.bank)}
               />
               {errors.bank && <p className="text-xs text-red-500 mt-1">{errors.bank}</p>}
@@ -490,8 +493,9 @@ function PaymentForm({
               <input
                 type="text"
                 value={draft.branch}
-                onChange={(e) => setDraft((p) => ({ ...p, branch: e.target.value }))}
+                onChange={(e) => setDraft((p) => ({ ...p, branch: e.target.value.slice(0, PAYOUT_FIELD_MAX) }))}
                 placeholder={t.branchPlaceholder}
+                maxLength={PAYOUT_FIELD_MAX}
                 className={inputCls()}
               />
             </div>

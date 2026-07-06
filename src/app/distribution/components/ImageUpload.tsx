@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { UploadCloud, Loader2, X } from "lucide-react";
 import { uploadFile, ALIOSS_UPLOAD_PATH } from "../../services/upload";
-import { normalizeImageFile } from "../../services/heic";
+import { getOssHeicJpgUrl } from "../../services/heic";
 import { cn } from "../../components/ui/utils";
 
 /**
@@ -82,10 +82,9 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   const doUpload = async (file: File) => {
     setUploading(true);
     try {
-      // bug9：HEIC 先转 JPEG（浏览器不渲染 HEIC）；入驻证照走 /alioss/upload（入驻文档 §2.3）
-      const norm = await normalizeImageFile(file);
-      const url = await uploadFile(norm, ALIOSS_UPLOAD_PATH);
-      onChange(url);
+      // bug9：HEIC 上传原文件，保存 OSS 动态转 JPG URL；入驻证照走 /alioss/upload（入驻文档 §2.3）
+      const url = await uploadFile(file, ALIOSS_UPLOAD_PATH);
+      onChange(getOssHeicJpgUrl(file, url));
     } catch {
       // uploadFile 已 toast；保持当前值不变
     } finally {

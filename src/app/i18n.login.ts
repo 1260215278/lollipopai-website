@@ -24,6 +24,8 @@ export interface LoginMessages {
   codeSent: string;
   loginSuccess: string;
   /** 密码登录 / 邮箱登录 / 忘记密码（照搬 H5 逻辑新增） */
+  passwordLogin: string;
+  codeLogin: string;
   accountPlaceholder: string;
   passwordPlaceholder: string;
   forgotPassword: string;
@@ -52,7 +54,7 @@ export const loginMessages: Record<Locale, LoginMessages> = {
     sloganLine2: "收获好回报",
     welcomeTitle: "欢迎使用 Lollipop",
     subtitle: "请使用手机号或邮箱登录您的账号",
-    phoneLabel: "手机号",
+    phoneLabel: "账号",
     phonePlaceholder: "请输入手机号",
     codeLabel: "请输入验证码",
     codePlaceholder: "请输入验证码",
@@ -64,6 +66,8 @@ export const loginMessages: Record<Locale, LoginMessages> = {
     vCodeRequired: "请输入验证码",
     codeSent: "验证码已发送",
     loginSuccess: "登录成功",
+    passwordLogin: "密码登录",
+    codeLogin: "验证码登录",
     accountPlaceholder: "请输入手机号或邮箱",
     passwordPlaceholder: "请输入密码",
     forgotPassword: "忘记密码？",
@@ -89,7 +93,7 @@ export const loginMessages: Record<Locale, LoginMessages> = {
     sloganLine2: "收穫好回報",
     welcomeTitle: "歡迎使用 Lollipop",
     subtitle: "請使用手機號或郵箱登入您的帳號",
-    phoneLabel: "手機號",
+    phoneLabel: "帳號",
     phonePlaceholder: "請輸入手機號",
     codeLabel: "請輸入驗證碼",
     codePlaceholder: "請輸入驗證碼",
@@ -101,6 +105,8 @@ export const loginMessages: Record<Locale, LoginMessages> = {
     vCodeRequired: "請輸入驗證碼",
     codeSent: "驗證碼已發送",
     loginSuccess: "登入成功",
+    passwordLogin: "密碼登入",
+    codeLogin: "驗證碼登入",
     accountPlaceholder: "請輸入手機號或郵箱",
     passwordPlaceholder: "請輸入密碼",
     forgotPassword: "忘記密碼？",
@@ -126,7 +132,7 @@ export const loginMessages: Record<Locale, LoginMessages> = {
     sloganLine2: "rewarded well.", // TODO(verify)
     welcomeTitle: "Welcome to Lollipop",
     subtitle: "Sign in with your phone number or email",
-    phoneLabel: "Phone number",
+    phoneLabel: "Account",
     phonePlaceholder: "Enter phone number",
     codeLabel: "Verification code",
     codePlaceholder: "Enter verification code",
@@ -138,6 +144,8 @@ export const loginMessages: Record<Locale, LoginMessages> = {
     vCodeRequired: "Please enter the verification code",
     codeSent: "Verification code sent",
     loginSuccess: "Signed in",
+    passwordLogin: "Password",
+    codeLogin: "Code",
     accountPlaceholder: "Phone number or email",
     passwordPlaceholder: "Enter password",
     forgotPassword: "Forgot password?",
@@ -163,7 +171,7 @@ export const loginMessages: Record<Locale, LoginMessages> = {
     sloganLine2: "boas recompensas.", // TODO(verify)
     welcomeTitle: "Bem-vindo ao Lollipop",
     subtitle: "Entre com seu telefone ou e-mail",
-    phoneLabel: "Número de telefone",
+    phoneLabel: "Conta",
     phonePlaceholder: "Digite o número de telefone",
     codeLabel: "Código de verificação",
     codePlaceholder: "Digite o código de verificação",
@@ -175,6 +183,8 @@ export const loginMessages: Record<Locale, LoginMessages> = {
     vCodeRequired: "Digite o código de verificação",
     codeSent: "Código de verificação enviado",
     loginSuccess: "Conectado",
+    passwordLogin: "Senha",
+    codeLogin: "Código",
     accountPlaceholder: "Telefone ou e-mail",
     passwordPlaceholder: "Digite a senha",
     forgotPassword: "Esqueceu a senha?",

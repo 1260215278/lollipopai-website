@@ -25,6 +25,8 @@ import {
   fileNameFromUrl,
   fmt,
   VIDEO_ACCEPT,
+  VIDEO_MAX,
+  EPISODE_TITLE_LIMIT,
 } from "./shared";
 import { parseEpisodeTemplate } from "./episodeTemplate";
 
@@ -155,6 +157,10 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
 
   const handleFileSelect = (ep: number, file: File) => {
     if (!canEditEpisodes) return;
+    if (file.size > VIDEO_MAX) {
+      toast.error(t.fileTooLarge);
+      return;
+    }
     setRows((prev) => prev.map((e) => (e.episodeNo === ep ? { ...e, newFile: file, newDuration: "" } : e)));
     void readVideoDuration(file).then((dur) =>
       setRows((prev) => prev.map((e) => (e.episodeNo === ep ? { ...e, newDuration: dur } : e))),
@@ -224,7 +230,7 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
   };
 
   const updateTitle = (ep: number, title: string) =>
-    setRows((prev) => prev.map((e) => (e.episodeNo === ep ? { ...e, title } : e)));
+    setRows((prev) => prev.map((e) => (e.episodeNo === ep ? { ...e, title: title.slice(0, EPISODE_TITLE_LIMIT) } : e)));
 
   const handleSave = async () => {
     if (!canEditEpisodes) return;
@@ -403,6 +409,7 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
                         onChange={(e) => updateTitle(ep.episodeNo, e.target.value)}
                         disabled={!canEditEpisodes}
                         placeholder={fmt(t.epTitlePlaceholder, { ep: ep.episodeNo })}
+                        maxLength={EPISODE_TITLE_LIMIT}
                         className="px-3 py-2 rounded-lg border border-gray-200 text-sm outline-none hover:border-gray-400 focus:border-black transition-all min-w-0 disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed"
                       />
                       <span className="text-xs text-gray-500">

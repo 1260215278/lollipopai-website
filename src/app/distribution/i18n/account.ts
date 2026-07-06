@@ -86,6 +86,7 @@ export interface AccountMessages {
   newPassword: string;
   confirmPassword: string;
   passwordRequired: string;
+  passwordLengthInvalid: string;
   passwordMismatch: string;
   smsCode: string;
   smsScenePending: string;
@@ -179,6 +180,7 @@ const zhCN: AccountMessages = {
   newPassword: "新密码",
   confirmPassword: "确认新密码",
   passwordRequired: "请输入密码",
+  passwordLengthInvalid: "密码长度需为 6-20 位",
   passwordMismatch: "两次输入的新密码不一致",
   smsCode: "短信验证码",
   smsScenePending: "验证码将发送到发行账户主账号手机号",
@@ -249,6 +251,7 @@ export const account: Record<Locale, AccountMessages> = {
     newPassword: "新密碼",
     confirmPassword: "確認新密碼",
     passwordRequired: "請輸入密碼",
+    passwordLengthInvalid: "密碼長度需為 6-20 位",
     passwordMismatch: "兩次輸入的新密碼不一致",
     smsCode: "簡訊驗證碼",
     smsScenePending: "驗證碼將發送到發行帳戶主帳號手機號",
@@ -342,6 +345,7 @@ export const account: Record<Locale, AccountMessages> = {
     newPassword: "New Password",
     confirmPassword: "Confirm New Password",
     passwordRequired: "Enter the password",
+    passwordLengthInvalid: "Password must be 6-20 characters",
     passwordMismatch: "The new passwords do not match",
     smsCode: "SMS Code",
     smsScenePending: "The code will be sent to the publisher account owner phone number",
@@ -424,6 +428,7 @@ export const account: Record<Locale, AccountMessages> = {
     newPassword: "Nova Senha",
     confirmPassword: "Confirmar Nova Senha",
     passwordRequired: "Digite a senha",
+    passwordLengthInvalid: "A senha deve ter 6 a 20 caracteres",
     passwordMismatch: "As novas senhas não coincidem",
     smsCode: "Código SMS",
     smsScenePending: "O código será enviado ao telefone do titular da conta publisher",

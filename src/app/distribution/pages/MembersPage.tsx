@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Info, X, User, ChevronDown, Check, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useI18n } from "../../i18n";
+import { AreaCodeSelect } from "../../components/AreaCodeSelect";
 import { PageLoading } from "../components/settlement/PageHeader";
 import {
   getMemberList,
@@ -41,7 +42,7 @@ function defaultAddableRole(roles: MemberRoleCard[]): AddableMemberRole {
  * 对接 /publisher/member/list、/roles、/add、/remove。
  */
 export function MembersPage() {
-  const { messages } = useI18n();
+  const { messages, locale } = useI18n();
   const t = messages.distribution.members;
 
   const [loading, setLoading] = useState(true);
@@ -164,6 +165,7 @@ export function MembersPage() {
       {addOpen && (
         <AddMemberModal
           t={t}
+          locale={locale}
           addableRoles={addableRoles}
           defaultRole={defaultAddableRole(roles)}
           onClose={() => setAddOpen(false)}
@@ -343,18 +345,21 @@ function RoleCard({ role }: { role: MemberRoleCard }) {
 
 function AddMemberModal({
   t,
+  locale,
   addableRoles,
   defaultRole,
   onClose,
   onSuccess,
 }: {
   t: MembersMsg;
+  locale: string;
   addableRoles: MemberRoleCard[];
   defaultRole: AddableMemberRole;
   onClose: () => void;
   onSuccess: () => void;
 }) {
   const [role, setRole] = useState<AddableMemberRole>(defaultRole);
+  const [areaCode, setAreaCode] = useState("+86");
   const [phone, setPhone] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -380,7 +385,7 @@ function AddMemberModal({
     }
     setSubmitting(true);
     try {
-      await addMember({ phone: phone.trim(), role });
+      await addMember({ phone: `${areaCode}${phone.trim()}`, role });
       onSuccess();
     } catch {
       // http 已 toast
@@ -456,21 +461,25 @@ function AddMemberModal({
             <span className="text-[#fb2c36]">*</span>
             {t.phoneLabel}
           </label>
-          <input
-            type="text"
-            inputMode="tel"
-            value={phone}
-            onChange={(e) => {
-              setPhone(e.target.value.slice(0, 32));
-              if (phoneError) setPhoneError("");
-            }}
-            placeholder={t.phonePlaceholder}
-            className={`mt-1.5 w-full h-[45px] px-4 rounded-[14px] border text-sm outline-none transition-all placeholder:text-[rgba(10,10,10,0.5)] ${
-              phoneError
-                ? "border-[#fb2c36] focus:border-[#fb2c36]"
-                : "border-[#e5e7eb] hover:border-gray-400 focus:border-[#111]"
-            }`}
-          />
+          <div className="mt-1.5 flex gap-2">
+            <AreaCodeSelect value={areaCode} onChange={setAreaCode} locale={locale} variant="light" />
+            <input
+              type="text"
+              inputMode="tel"
+              value={phone}
+              onChange={(e) => {
+                setPhone(e.target.value.replace(/\D/g, "").slice(0, 20));
+                if (phoneError) setPhoneError("");
+              }}
+              placeholder={t.phonePlaceholder}
+              maxLength={20}
+              className={`min-w-0 flex-1 h-[46px] px-4 rounded-[14px] border text-sm outline-none transition-all placeholder:text-[rgba(10,10,10,0.5)] ${
+                phoneError
+                  ? "border-[#fb2c36] focus:border-[#fb2c36]"
+                  : "border-[#e5e7eb] hover:border-gray-400 focus:border-[#111]"
+              }`}
+            />
+          </div>
           {phoneError && <p className="text-xs text-[#fb2c36] mt-1.5">{phoneError}</p>}
         </div>
 

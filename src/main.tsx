@@ -1,6 +1,6 @@
 
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import App from "./app/App.tsx";
 import { DistributionRoutes } from "./app/distribution/routes";
 import { LoginPage } from "./app/pages/LoginPage";
@@ -22,7 +22,9 @@ createRoot(document.getElementById("root")!).render(
         {/* 出品方公开主页（bug18） */}
         <Route path="/creator/:userId" element={<CreatorProfilePage />} />
         {/* 营销站（内部状态路由保持不动） */}
-        <Route path="/*" element={<App />} />
+        <Route path="/" element={<App />} />
+        {/* 未知路由回首页，避免落到空白页 */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   </I18nProvider>

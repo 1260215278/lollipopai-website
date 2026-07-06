@@ -361,7 +361,7 @@ export const content: Record<Locale, ContentMessages> = {
 
     colEp: "集数",
     colEpTitle: "剧集标题",
-    colVideoFile: "视频文件（最大 500MB）",
+    colVideoFile: "视频文件（最大 100MB）",
     colSize: "大小",
     colDuration: "时长",
     colStatus: "状态",
@@ -370,7 +370,7 @@ export const content: Record<Locale, ContentMessages> = {
     epStatusPending: "待上传",
     epStatusReady: "已选择",
     epStatusError: "错误",
-    fileTooLarge: "文件超过 500MB 限制",
+    fileTooLarge: "文件超过 100MB 限制",
     readingDuration: "读取中…",
     uploadSummary: "共 {total} 集，已选择 {selected} 集",
 
@@ -597,7 +597,7 @@ export const content: Record<Locale, ContentMessages> = {
 
     colEp: "集數",
     colEpTitle: "劇集標題",
-    colVideoFile: "影片檔案（最大 500MB）",
+    colVideoFile: "影片檔案（最大 100MB）",
     colSize: "大小",
     colDuration: "時長",
     colStatus: "狀態",
@@ -606,7 +606,7 @@ export const content: Record<Locale, ContentMessages> = {
     epStatusPending: "待上傳",
     epStatusReady: "已選擇",
     epStatusError: "錯誤",
-    fileTooLarge: "檔案超過 500MB 限制",
+    fileTooLarge: "檔案超過 100MB 限制",
     readingDuration: "讀取中…",
     uploadSummary: "共 {total} 集，已選擇 {selected} 集",
 
@@ -834,7 +834,7 @@ export const content: Record<Locale, ContentMessages> = {
 
     colEp: "Ep.",
     colEpTitle: "Title",
-    colVideoFile: "Video File (max 500MB)",
+    colVideoFile: "Video File (max 100MB)",
     colSize: "Size",
     colDuration: "Duration",
     colStatus: "Status",
@@ -843,7 +843,7 @@ export const content: Record<Locale, ContentMessages> = {
     epStatusPending: "Pending",
     epStatusReady: "Ready",
     epStatusError: "Error",
-    fileTooLarge: "File exceeds 500MB limit",
+    fileTooLarge: "File exceeds 100MB limit",
     readingDuration: "Reading…",
     uploadSummary: "{selected} / {total} selected",
 
@@ -1071,7 +1071,7 @@ export const content: Record<Locale, ContentMessages> = {
 
     colEp: "Ep.",
     colEpTitle: "Título",
-    colVideoFile: "Arquivo de vídeo (máx. 500MB)",
+    colVideoFile: "Arquivo de vídeo (máx. 100MB)",
     colSize: "Tamanho",
     colDuration: "Duração",
     colStatus: "Status",
@@ -1080,7 +1080,7 @@ export const content: Record<Locale, ContentMessages> = {
     epStatusPending: "Pendente",
     epStatusReady: "Pronto",
     epStatusError: "Erro",
-    fileTooLarge: "Arquivo excede o limite de 500MB",
+    fileTooLarge: "Arquivo excede o limite de 100MB",
     readingDuration: "Lendo…",
     uploadSummary: "{selected} / {total} selecionados",
 

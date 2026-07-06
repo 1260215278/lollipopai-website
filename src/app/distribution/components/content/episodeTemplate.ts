@@ -1,4 +1,4 @@
-import { fileNameFromUrl } from "./shared";
+import { EPISODE_TITLE_LIMIT, fileNameFromUrl } from "./shared";
 
 export interface TemplateEpisodeRow {
   episodeNo: number;
@@ -44,7 +44,7 @@ export async function parseEpisodeTemplate(file: File, plannedEpisodes: number):
       const episodeNo = Number(cellText(row[episodeIndex]));
       const videoUrl = cellText(row[videoIndex]);
       if (!Number.isInteger(episodeNo) || episodeNo < 1 || episodeNo > plannedEpisodes || !videoUrl) return null;
-      const title = cellText(row[titleIndex]);
+      const title = cellText(row[titleIndex]).slice(0, EPISODE_TITLE_LIMIT);
       return {
         episodeNo,
         title: title || undefined,

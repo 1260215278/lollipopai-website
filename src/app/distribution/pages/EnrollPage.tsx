@@ -5,6 +5,7 @@ import { Send, Loader2, CheckCircle2, ArrowRight, X, RefreshCw } from "lucide-re
 import { toast } from "sonner";
 import { useI18n, type Locale } from "../../i18n";
 import { Footer } from "../../components/Footer";
+import { AreaCodeSelect } from "../../components/AreaCodeSelect";
 import { ImageUpload } from "../components/ImageUpload";
 import welcomeBanner from "../../../imports/发行入驻-欢迎横幅.png";
 import { SiteHeader, type SiteNavItem } from "../../components/SiteHeader";
@@ -46,6 +47,65 @@ function publisherEmailLanguage(locale: Locale): string {
     default:
       return "en";
   }
+}
+
+function phoneWithAreaCode(phone: string, areaCode: string): string {
+  return `${areaCode}${phone}`;
+}
+
+const AGREEMENT_HTML_TAGS = new Set([
+  "a",
+  "b",
+  "blockquote",
+  "br",
+  "em",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "i",
+  "li",
+  "ol",
+  "p",
+  "strong",
+  "u",
+  "ul",
+]);
+
+function sanitizeAgreementHtml(content: string): string {
+  if (!/<[a-z][\s\S]*>/i.test(content)) return "";
+  const doc = new DOMParser().parseFromString(content, "text/html");
+  const walk = (node: Node) => {
+    Array.from(node.childNodes).forEach((child) => {
+      if (child.nodeType === Node.COMMENT_NODE) {
+        child.remove();
+        return;
+      }
+      if (child.nodeType !== Node.ELEMENT_NODE) return;
+      const el = child as HTMLElement;
+      const tag = el.tagName.toLowerCase();
+      if (tag === "script" || tag === "style") {
+        el.remove();
+        return;
+      }
+      if (!AGREEMENT_HTML_TAGS.has(tag)) {
+        el.replaceWith(doc.createTextNode(el.textContent ?? ""));
+        return;
+      }
+      Array.from(el.attributes).forEach((attr) => {
+        const name = attr.name.toLowerCase();
+        if (tag === "a" && name === "href" && /^(https?:|mailto:)/i.test(attr.value.trim())) return;
+        el.removeAttribute(attr.name);
+      });
+      if (tag === "a") {
+        el.setAttribute("target", "_blank");
+        el.setAttribute("rel", "noreferrer");
+      }
+      walk(el);
+    });
+  };
+  walk(doc.body);
+  return doc.body.innerHTML;
 }
 
 function enteredKey(account: string): string {
@@ -96,6 +156,7 @@ export function EnrollPage() {
 
   // 表单字段（对应接口字段；图片为上传后 URL）
   const [contactMode, setContactMode] = useState<ContactMode>("phone");
+  const [areaCode, setAreaCode] = useState("+86");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
@@ -217,7 +278,7 @@ export function EnrollPage() {
     setSending(true);
     try {
       if (mode === "phone") {
-        await sendPublisherCode({ phone: phone.trim() });
+        await sendPublisherCode({ phone: boundPhone ? phone.trim() : phoneWithAreaCode(phone.trim(), areaCode) });
       } else {
         await sendPublisherCode({ email: email.trim(), language: publisherEmailLanguage(locale) });
       }
@@ -256,7 +317,7 @@ export function EnrollPage() {
     try {
       const mode = boundPhone ? "phone" : boundEmail ? "email" : contactMode;
       const res = await submitPublisher({
-        ...(mode === "phone" ? { phone: phone.trim() } : { email: email.trim() }),
+        ...(mode === "phone" ? { phone: boundPhone ? phone.trim() : phoneWithAreaCode(phone.trim(), areaCode) } : { email: email.trim() }),
         code: code.trim(),
         companyName: companyName.trim(),
         businessLicense: businessLicense!,
@@ -265,7 +326,6 @@ export function EnrollPage() {
         idCardFront: idCardFront!,
         idCardBack: idCardBack!,
         agreementAgreed: 1,
-        // bug12：回写用户实际看到的合作协议版本（拉取失败则不传，由后端回填）
         ...(agreements.cooperation?.version ? { agreementVersion: agreements.cooperation.version } : {}),
       });
       toast.success(t.submitSuccess);
@@ -375,6 +435,9 @@ export function EnrollPage() {
       <FormView
         t={t}
         contactMode={boundPhone ? "phone" : boundEmail ? "email" : contactMode}
+        areaCode={areaCode}
+        setAreaCode={setAreaCode}
+        locale={locale}
         setContactMode={(mode) => {
           setContactMode(mode);
           clearError("phone");
@@ -486,6 +549,9 @@ const inputCls =
 function FormView(props: {
   t: EM;
   contactMode: ContactMode;
+  areaCode: string;
+  setAreaCode: (v: string) => void;
+  locale: Locale;
   setContactMode: (mode: ContactMode) => void;
   canSwitchContactMode: boolean;
   phone: string;
@@ -605,15 +671,20 @@ function FormView(props: {
               error={errors.phone}
               hint={props.boundPhone ? t.phoneBoundHint : t.phoneRegisterHint}
             >
-              <input
-                className={inputCls + (props.boundPhone ? " opacity-60 cursor-not-allowed" : "")}
-                value={props.phone}
-                placeholder={t.phonePlaceholder}
-                readOnly={!!props.boundPhone}
-                onChange={(e) => props.setPhone(e.target.value.replace(/\D/g, "").slice(0, 20))}
-                inputMode="numeric"
-                maxLength={20}
-              />
+              <div className="flex gap-2">
+                {!props.boundPhone && (
+                  <AreaCodeSelect value={props.areaCode} onChange={props.setAreaCode} locale={props.locale} />
+                )}
+                <input
+                  className={`${inputCls} flex-1${props.boundPhone ? " opacity-60 cursor-not-allowed" : ""}`}
+                  value={props.phone}
+                  placeholder={t.phonePlaceholder}
+                  readOnly={!!props.boundPhone}
+                  onChange={(e) => props.setPhone(e.target.value.replace(/\D/g, "").slice(0, 20))}
+                  inputMode="numeric"
+                  maxLength={20}
+                />
+              </div>
             </DarkField>
           ) : (
             <DarkField
@@ -987,7 +1058,7 @@ function RejectedView({ t, reason, onResubmit }: { t: EM; reason: string; onResu
         {reason ? (
           <>
             <p className="text-xs uppercase tracking-[0.3px] text-[#99a1af]">{t.rejectReasonLabel}</p>
-            <p className="text-sm text-[#4a5565] mt-3 leading-relaxed">{reason}</p>
+            <p className="text-sm text-[#4a5565] mt-3 leading-relaxed whitespace-pre-wrap break-words">{reason}</p>
           </>
         ) : (
           <>
@@ -1035,6 +1106,7 @@ function AgreementModal({
   closeLabel: string;
   onClose: () => void;
 }) {
+  const richHtml = sanitizeAgreementHtml(body);
   return (
     <AnimatePresence>
       {open && (
@@ -1064,8 +1136,8 @@ function AgreementModal({
                 <X className="w-4 h-4" />
               </button>
             </div>
-            <div className="px-6 py-5 overflow-y-auto text-sm text-[#d1d5dc] leading-relaxed whitespace-pre-wrap">
-              {body}
+            <div className={`px-6 py-5 overflow-y-auto text-sm text-[#d1d5dc] leading-relaxed break-words ${richHtml ? "[&_a]:text-white [&_a]:underline [&_blockquote]:border-l [&_blockquote]:border-white/20 [&_blockquote]:pl-3 [&_h1]:mb-3 [&_h1]:text-xl [&_h1]:font-bold [&_h2]:mb-3 [&_h2]:text-lg [&_h2]:font-bold [&_h3]:mb-2 [&_h3]:text-base [&_h3]:font-bold [&_li]:mb-1 [&_ol]:mb-3 [&_ol]:list-decimal [&_ol]:pl-5 [&_p]:mb-3 [&_strong]:font-bold [&_ul]:mb-3 [&_ul]:list-disc [&_ul]:pl-5" : "whitespace-pre-wrap"}`}>
+              {richHtml ? <div dangerouslySetInnerHTML={{ __html: richHtml }} /> : body}
             </div>
             <div className="px-6 py-4 border-t border-white/10 flex justify-end">
               <button

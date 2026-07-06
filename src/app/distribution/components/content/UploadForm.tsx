@@ -15,7 +15,7 @@ import {
 import { toast } from "sonner";
 import type { ContentMessages } from "../../i18n/content";
 import { uploadFile, PUBLISHER_UPLOAD_PATH } from "../../../services/upload";
-import { normalizeImageFile } from "../../../services/heic";
+import { getOssHeicJpgUrl } from "../../../services/heic";
 import { ApiError } from "../../../services/http";
 import {
   saveBasic,
@@ -52,6 +52,8 @@ import {
   formatDuration,
   fileNameFromUrl,
   readVideoDuration,
+  VIDEO_MAX,
+  EPISODE_TITLE_LIMIT,
 } from "./shared";
 import { parseEpisodeTemplate } from "./episodeTemplate";
 
@@ -60,8 +62,6 @@ const DESC_LIMIT = 200;
 const NAME_LIMIT = 100;
 /** 封面上限 10MB（与后端 /publisher/course/upload 图片校验对齐） */
 const COVER_MAX = 10 * 1024 * 1024;
-/** 剧集视频上限 500MB（与后端 /publisher/course/upload 视频校验对齐） */
-const VIDEO_MAX = 500 * 1024 * 1024;
 /** 发布配置不进后端草稿，按 courseId 在前端缓存。 */
 const PUB_CONFIG_CACHE_PREFIX = "distribution.upload.publishConfig.";
 
@@ -191,10 +191,9 @@ function CopyrightProofUpload({
     if (!file) return;
     setUploading(true);
     try {
-      // bug9：HEIC 图片证明先转 JPEG；PDF 等原样上传
-      const norm = await normalizeImageFile(file);
-      const url = await uploadFile(norm, PUBLISHER_UPLOAD_PATH);
-      onChange(url);
+      // bug9：HEIC 图片证明上传原文件，保存 OSS 动态转 JPG URL；PDF 等原样上传
+      const url = await uploadFile(file, PUBLISHER_UPLOAD_PATH);
+      onChange(getOssHeicJpgUrl(file, url));
     } catch {
       // uploadFile 已 toast
     } finally {
@@ -444,10 +443,9 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
     setCoverError("");
     setCoverUploading(true);
     try {
-      // bug9：HEIC 先转 JPEG；封面走发行方专用 /publisher/course/upload（@PublisherLogin）。
-      const norm = await normalizeImageFile(file);
-      const url = await uploadFile(norm, PUBLISHER_UPLOAD_PATH);
-      bi({ cover: url });
+      // bug9：HEIC 上传原文件，保存 OSS 动态转 JPG URL；封面走发行方专用 /publisher/course/upload（@PublisherLogin）。
+      const url = await uploadFile(file, PUBLISHER_UPLOAD_PATH);
+      bi({ cover: getOssHeicJpgUrl(file, url) });
     } catch {
       setCoverError(t.coverUploadFailed);
     } finally {
@@ -549,7 +547,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
     let anyFail = false;
     for (const r of pending) {
       try {
-        // 视频同封面，走发行方专用 /publisher/course/upload（publisher token，视频上限 500MB）。
+        // 视频同封面，走发行方专用 /publisher/course/upload（publisher token）。
         const url = await uploadFile(r.file as File, PUBLISHER_UPLOAD_PATH);
         const res = await saveEpisode({
           courseId,
@@ -1101,8 +1099,9 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                       <input
                         type="text"
                         value={v.title}
-                        onChange={(e) => updateVideo(v.episodeNo, { title: e.target.value })}
+                        onChange={(e) => updateVideo(v.episodeNo, { title: e.target.value.slice(0, EPISODE_TITLE_LIMIT) })}
                         placeholder={fmt(t.epTitlePlaceholder, { ep: v.episodeNo })}
+                        maxLength={EPISODE_TITLE_LIMIT}
                         className="px-3 py-2 rounded-lg border border-gray-200 text-sm outline-none hover:border-gray-400 focus:border-black transition-all min-w-0"
                       />
                       <div>

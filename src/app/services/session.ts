@@ -130,7 +130,7 @@ export async function loginByPhone(input: PhoneLoginInput): Promise<string> {
 /* ── 密码登录 / 邮箱登录 / 忘记密码（照搬短剧 H5 loginPhone.vue / forgetPwd.vue 逻辑） ──
  *   接口与字段以 H5 为准：
  *   - 手机密码登录：POST /app/Login/registerCode { phone:区号+号, password, platform }（不传 msg 即密码登录）
- *   - 邮箱密码登录：POST(form) /app/Login/emailLogin { emailName, password, isFirebaseEmail:"1" }
+ *   - 邮箱密码登录：POST /app/Login/emailLogin { emailName, password, isFirebaseEmail:"1" }
  *   - 手机找回：发码 GET /app/Login/sendMsg/{区号+号}/forget；重置 POST /app/Login/forgetPwd { phone, pwd, msg }
  *   - 邮箱找回：发码 POST /app/Login/sendEmailMsg?emailName=&type=2&language=；重置 POST(form) /app/Login/forgetPassWord { emailName, password, code }
  *   登录类响应 token 均在顶层（同 registerCode），故用裸 fetch 解析。*/
@@ -170,18 +170,18 @@ export async function loginByPhonePassword(input: {
   return parseLoginResponse(res);
 }
 
-/** 邮箱 + 密码登录（H5：POST form /app/Login/emailLogin）。 */
+/** 邮箱 + 密码登录（H5：POST JSON /app/Login/emailLogin）。 */
 export async function loginByEmailPassword(input: { email: string; password: string }): Promise<string> {
   let res: Response;
   try {
     res = await fetch(`${BASE_URL}/app/Login/emailLogin`, {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept-Language": getAcceptLanguage() },
-      body: new URLSearchParams({
+      headers: { "Content-Type": "application/json", "Accept-Language": getAcceptLanguage() },
+      body: JSON.stringify({
         emailName: input.email,
         password: input.password,
         isFirebaseEmail: "1",
-      }).toString(),
+      }),
     });
   } catch {
     throw new ApiError(-1, getMessages().distribution.common.networkError);
@@ -215,19 +215,19 @@ export async function registerByPhone(input: {
   return parseLoginResponse(res);
 }
 
-/** 邮箱注册（H5：POST form /app/Login/emailRegister；web 不传设备 sysPhone）。 */
+/** 邮箱注册（H5：POST JSON /app/Login/emailRegister；web 不传设备 sysPhone）。 */
 export async function registerByEmail(input: { email: string; password: string; code: string }): Promise<string> {
   let res: Response;
   try {
     res = await fetch(`${BASE_URL}/app/Login/emailRegister`, {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept-Language": getAcceptLanguage() },
-      body: new URLSearchParams({
+      headers: { "Content-Type": "application/json", "Accept-Language": getAcceptLanguage() },
+      body: JSON.stringify({
         emailName: input.email,
         password: input.password,
         code: input.code,
         platform: "h5",
-      }).toString(),
+      }),
     });
   } catch {
     throw new ApiError(-1, getMessages().distribution.common.networkError);

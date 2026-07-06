@@ -5,6 +5,7 @@
  * 统一响应 {code,msg,data}；账号信息相关接口仅超管可用，无权由 http 层 toast 后端 msg。
  */
 import { http } from "./http";
+import type { PageResult } from "./content";
 
 export interface AccountProfile {
   accountCode: string;
@@ -85,6 +86,11 @@ export interface AccountLoginRecord {
   success: boolean;
 }
 
+export interface AccountLoginRecordQuery {
+  page?: number;
+  limit?: number;
+}
+
 export function getAccountInfo(): Promise<AccountInfo> {
   return http.get<AccountInfo>("/publisher/account/info");
 }
@@ -151,8 +157,13 @@ export function logoutOtherAccountSessions(): Promise<void> {
   return http.post<void>("/publisher/account/sessions/logoutAll", {});
 }
 
-export function getAccountLoginRecords(): Promise<AccountLoginRecord[]> {
-  return http.get<AccountLoginRecord[]>("/publisher/account/loginRecords");
+export function getAccountLoginRecords(query: AccountLoginRecordQuery = {}): Promise<PageResult<AccountLoginRecord>> {
+  return http.get<PageResult<AccountLoginRecord>>("/publisher/account/loginRecords", {
+    params: {
+      page: query.page ?? 1,
+      limit: query.limit ?? 10,
+    },
+  });
 }
 
 export function logoutAccount(): Promise<void> {

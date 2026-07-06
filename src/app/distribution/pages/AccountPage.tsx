@@ -3,6 +3,8 @@ import {
   AlertCircle,
   Bell,
   Building2,
+  ChevronLeft,
+  ChevronRight,
   CheckCircle2,
   Copy,
   Edit2,
@@ -59,6 +61,7 @@ const emptyCompany: AccountCompany = {
 };
 const PASSWORD_MIN = 6;
 const PASSWORD_MAX = 20;
+const LOGIN_RECORD_PAGE_SIZE = 10;
 
 export function AccountPage() {
   const { messages, locale } = useI18n();
@@ -68,6 +71,8 @@ export function AccountPage() {
   const [info, setInfo] = useState<AccountInfo | null>(null);
   const [sessions, setSessions] = useState<AccountSession[]>([]);
   const [loginRecords, setLoginRecords] = useState<AccountLoginRecord[]>([]);
+  const [loginRecordPage, setLoginRecordPage] = useState(1);
+  const [loginRecordTotalPage, setLoginRecordTotalPage] = useState(1);
   const [deviceLoading, setDeviceLoading] = useState(false);
 
   const loadInfo = useCallback(async () => {
@@ -106,14 +111,23 @@ export function AccountPage() {
     try {
       const [nextSessions, nextLoginRecords] = await Promise.all([
         getAccountSessions().catch(() => []),
-        getAccountLoginRecords().catch(() => []),
+        getAccountLoginRecords({ page: loginRecordPage, limit: LOGIN_RECORD_PAGE_SIZE }).catch(() => ({
+          totalCount: 0,
+          pageSize: LOGIN_RECORD_PAGE_SIZE,
+          totalPage: 1,
+          currPage: loginRecordPage,
+          list: [],
+        })),
       ]);
+      const nextLoginRecordTotalPage = nextLoginRecords.totalPage > 0 ? nextLoginRecords.totalPage : 1;
       setSessions(nextSessions);
-      setLoginRecords(nextLoginRecords);
+      setLoginRecords(nextLoginRecords.list);
+      setLoginRecordTotalPage(nextLoginRecordTotalPage);
+      if (loginRecordPage > nextLoginRecordTotalPage) setLoginRecordPage(nextLoginRecordTotalPage);
     } finally {
       setDeviceLoading(false);
     }
-  }, []);
+  }, [loginRecordPage]);
 
   useEffect(() => {
     void loadInfo();
@@ -147,8 +161,11 @@ export function AccountPage() {
             loading={deviceLoading}
             sessions={sessions}
             loginRecords={loginRecords}
+            loginRecordPage={loginRecordPage}
+            loginRecordTotalPage={loginRecordTotalPage}
             locale={locale}
             onReload={loadDevices}
+            onLoginRecordPageChange={setLoginRecordPage}
           />
         )}
       </div>
@@ -476,15 +493,21 @@ function DevicesTab({
   loading,
   sessions,
   loginRecords,
+  loginRecordPage,
+  loginRecordTotalPage,
   locale,
   onReload,
+  onLoginRecordPageChange,
 }: {
   t: AccountMsg;
   loading: boolean;
   sessions: AccountSession[];
   loginRecords: AccountLoginRecord[];
+  loginRecordPage: number;
+  loginRecordTotalPage: number;
   locale: Locale;
   onReload: () => Promise<void>;
+  onLoginRecordPageChange: (page: number) => void;
 }) {
   const [acting, setActing] = useState<string | null>(null);
 
@@ -540,12 +563,39 @@ function DevicesTab({
         )}
       </Card>
       <Card title={t.recentLogins}>
-        {loginRecords.length === 0 ? (
+        {loading ? (
+          <PageLoading />
+        ) : loginRecords.length === 0 ? (
           <EmptyCardText>{t.emptyLoginRecords}</EmptyCardText>
         ) : (
           loginRecords.map((record, index) => (
             <LoginRecordRow key={`${record.loginTime}-${index}`} t={t} locale={locale} record={record} last={index === loginRecords.length - 1} />
           ))
+        )}
+        {!loading && loginRecordTotalPage > 1 && (
+          <div className="flex items-center justify-end gap-3 border-t border-gray-100 px-4 py-3">
+            <button
+              type="button"
+              onClick={() => onLoginRecordPageChange(loginRecordPage - 1)}
+              disabled={loginRecordPage <= 1}
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+              aria-label="Previous page"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            <span className="text-sm tabular-nums text-gray-600">
+              {loginRecordPage} / {loginRecordTotalPage}
+            </span>
+            <button
+              type="button"
+              onClick={() => onLoginRecordPageChange(loginRecordPage + 1)}
+              disabled={loginRecordPage >= loginRecordTotalPage}
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+              aria-label="Next page"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
         )}
       </Card>
     </div>

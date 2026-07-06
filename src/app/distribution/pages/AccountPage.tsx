@@ -268,12 +268,12 @@ function ProfileCard({ t, info, onProfileChange }: { t: AccountMsg; info: Accoun
           </div>
         )}
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 min-w-0">
             <h2 className="truncate text-base text-[#101828]" style={{ fontWeight: 700 }}>
               {info.profile.nickname || t.unset}
             </h2>
             {info.profile.certified === 1 && (
-              <span className="rounded-md bg-[#dcfce7] px-2 py-0.5 text-xs text-[#16a34a]" style={{ fontWeight: 600 }}>
+              <span className="shrink-0 whitespace-nowrap rounded-md bg-[#dcfce7] px-2 py-0.5 text-xs text-[#16a34a]" style={{ fontWeight: 600 }}>
                 {t.certified}
               </span>
             )}

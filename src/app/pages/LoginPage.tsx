@@ -169,12 +169,12 @@ export function LoginPage() {
             <img src={promoImg} alt="" className="absolute inset-0 w-full h-full object-cover object-[center_42%]" />
             <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/45" />
             <div className="relative z-10 pt-[50px] px-12 text-left max-w-[560px]">
-              <p className="text-white leading-[58px]" style={{ fontWeight: 900, fontSize: "50px", letterSpacing: "5px" }}>
+              {/* <p className="text-white leading-[58px]" style={{ fontWeight: 900, fontSize: "50px", letterSpacing: "5px" }}>
                 {t.sloganLine1}
               </p>
               <p className="text-white leading-[58px]" style={{ fontWeight: 900, fontSize: "50px", letterSpacing: "5px" }}>
                 {t.sloganLine2}
-              </p>
+              </p> */}
             </div>
           </div>
 

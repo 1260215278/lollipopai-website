@@ -40,7 +40,7 @@ export function ContentPage() {
   const { currentMember } = useOutletContext<DistributionOutletContext>();
   const t = messages.distribution.content;
   const dramaUnit = messages.distribution.overview.unitDrama;
-  const canManageCourse = currentMember?.role !== 3;
+  const canManageCourse = currentMember?.permissions?.includes("COURSE_MANAGE") === true;
 
   const [view, setView] = useState<View>("list");
   const [dramas, setDramas] = useState<PublisherCourseRow[]>([]);

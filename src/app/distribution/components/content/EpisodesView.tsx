@@ -48,6 +48,12 @@ interface Row {
   title: string;
   /** 0 待提交（无行）/ 1 已上传 / 2 上传失败 */
   uploadStatus: number;
+  /** 转码状态 0未转码/1转码中/2已完成/3失败（20260707 item 8） */
+  vodStatus?: number;
+  /** 是否可播放（vodStatus===2）；false 时按 vodStatus 展示转码中/转码失败 */
+  playable?: boolean;
+  /** 转码失败原因（vodStatus===3 时有值，如外链 URL 不可达） */
+  transcodeMsg?: string | null;
   videoDuration: number;
   videoSize: number;
   videoUrl: string;
@@ -61,7 +67,8 @@ interface Row {
 /**
  * 剧集视频管理（img_10）。
  * 列表来自 GET /publisher/course/episodes（仅已建行的集）；未建行的集号按 plannedEpisodes
- * 补「待提交」虚拟行。上传走 /publisher/course/upload → saveEpisode（同 episodeNo 覆盖）；不含转码态。
+ * 补「待提交」虚拟行。上传走 /publisher/course/upload → saveEpisode（同 episodeNo 覆盖）。
+ * 状态列在已上传但 playable=false 时按 vodStatus 展示转码中/转码失败（20260707 item 8）。
  */
 export const EpisodesView: React.FC<EpisodesViewProps> = ({
   t,
@@ -93,6 +100,9 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
           episodeNo: no,
           title: found?.title || fmt(t.epLabelN, { ep: no }),
           uploadStatus: found?.uploadStatus ?? 0,
+          vodStatus: found?.vodStatus,
+          playable: found?.playable,
+          transcodeMsg: found?.transcodeMsg,
           videoDuration: found?.videoDuration ?? 0,
           videoSize: found?.videoSize ?? 0,
           videoUrl: found?.videoUrl ?? "",
@@ -391,6 +401,22 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
               <div className="divide-y divide-gray-50 max-h-[520px] overflow-y-auto">
                 {rows.map((ep) => {
                   const st = uploadStatusStyle[ep.uploadStatus] ?? uploadStatusStyle[0];
+                  // item 8：已上传但不可播时按转码态展示（uploadStatus 只表示已入库，不代表能播）
+                  const showTranscode = !ep.newFile && ep.uploadStatus === 1 && ep.playable === false;
+                  const transcodeFailed = showTranscode && ep.vodStatus === 3;
+                  const statusColor = transcodeFailed ? "#EF4444" : showTranscode ? "#EA580C" : st.color;
+                  const statusIcon = transcodeFailed ? (
+                    <AlertCircle className="w-3.5 h-3.5" />
+                  ) : showTranscode ? (
+                    <Clock className="w-3.5 h-3.5" />
+                  ) : (
+                    st.icon
+                  );
+                  const statusLabel = transcodeFailed
+                    ? t.epTranscodeFailed
+                    : showTranscode
+                      ? t.epStatusProcessing
+                      : uploadStatusLabel(ep.uploadStatus, t);
                   return (
                     <div
                       key={ep.episodeNo}
@@ -419,18 +445,25 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
                         {ep.newFile ? `${((ep.newFile.size) / 1024 / 1024).toFixed(1)} MB` : formatBytes(ep.videoSize)}
                       </span>
                       <span className="text-xs text-gray-500">{ep.uploadDate || "—"}</span>
-                      <div className="flex items-center gap-1.5" style={{ color: st.color }}>
-                        {st.icon}
-                        <span className="text-xs" style={{ fontWeight: 500 }}>
-                          {uploadStatusLabel(ep.uploadStatus, t)}
-                        </span>
-                        {ep.newFile && (
-                          <span
-                            className="ml-1 px-1.5 py-0.5 rounded text-[10px] bg-indigo-100 text-indigo-600"
-                            style={{ fontWeight: 600 }}
-                          >
-                            {t.epStatusNew}
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5" style={{ color: statusColor }}>
+                          {statusIcon}
+                          <span className="text-xs" style={{ fontWeight: 500 }}>
+                            {statusLabel}
                           </span>
+                          {ep.newFile && (
+                            <span
+                              className="ml-1 px-1.5 py-0.5 rounded text-[10px] bg-indigo-100 text-indigo-600"
+                              style={{ fontWeight: 600 }}
+                            >
+                              {t.epStatusNew}
+                            </span>
+                          )}
+                        </div>
+                        {transcodeFailed && ep.transcodeMsg && (
+                          <p className="mt-0.5 text-[10px] text-red-400 truncate" title={ep.transcodeMsg}>
+                            {ep.transcodeMsg}
+                          </p>
                         )}
                       </div>
                       <div className="flex items-center gap-2">

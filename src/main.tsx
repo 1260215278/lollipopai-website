@@ -21,8 +21,12 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         {/* 出品方公开主页（bug18） */}
         <Route path="/creator/:userId" element={<CreatorProfilePage />} />
-        {/* 营销站（内部状态路由保持不动） */}
-        <Route path="/" element={<App />} />
+        {/* 营销站 */}
+        <Route path="/" element={<App initialPage="home" />} />
+        <Route path="/creating" element={<App initialPage="creating" />} />
+        <Route path="/download" element={<App initialPage="download" />} />
+        <Route path="/contact" element={<App initialPage="contact" />} />
+        <Route path="/about" element={<App initialPage="about" />} />
         {/* 未知路由回首页，避免落到空白页 */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

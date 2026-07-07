@@ -178,7 +178,7 @@ export function CreatorProfilePage() {
           )}
         </main>
 
-        <Footer onNavigate={() => navigate("/")} />
+        <Footer onNavigate={(page) => navigate(page === "home" ? "/" : `/${page}`)} />
       </div>
     </ErrorBoundary>
   );
@@ -190,10 +190,10 @@ function ProfileHeader() {
   const links = messages.navbar.links;
   const navItems: SiteNavItem[] = [
     { key: "home", label: links.home, onClick: () => navigate("/") },
-    { key: "creating", label: links.creating, onClick: () => navigate({ pathname: "/", hash: "#creators" }) },
+    { key: "creating", label: links.creating, onClick: () => navigate("/creating") },
     { key: "distribution", label: messages.distribution.nav.entry, onClick: () => navigate("/distribution") },
-    { key: "download", label: links.download, onClick: () => navigate({ pathname: "/", hash: "#download" }) },
-    { key: "contact", label: links.contact, onClick: () => navigate({ pathname: "/", hash: "#contact" }) },
+    { key: "download", label: links.download, onClick: () => navigate("/download") },
+    { key: "contact", label: links.contact, onClick: () => navigate("/contact") },
   ];
   return <SiteHeader navItems={navItems} onLogoClick={() => navigate("/")} sticky />;
 }

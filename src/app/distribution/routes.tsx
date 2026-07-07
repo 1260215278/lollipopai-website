@@ -13,7 +13,7 @@ import { AccountPage } from "./pages/AccountPage";
 
 /**
  * 发行中心子路由（挂载于 /distribution/*）。
- * - /distribution           → 入驻流程（EnrollPage 内部按 /status 决定四态）
+ * - /distribution           → 发行中心入口（Layout 内部按 byAppToken 决定工作台/入驻/登录）
  * - /distribution/enroll    → 入驻申请
  * - /distribution/overview  → 数据概览（带侧边栏 Layout）
  * - /distribution/content   → 上剧中心
@@ -25,7 +25,7 @@ export function DistributionRoutes() {
     <ErrorBoundary>
       <Toaster position="top-center" richColors />
       <Routes>
-        <Route index element={<Navigate to="enroll" replace />} />
+        <Route index element={<Navigate to="overview" replace />} />
         <Route path="enroll" element={<EnrollPage />} />
         <Route element={<DistributionLayout />}>
           <Route path="overview" element={<OverviewPage />} />
@@ -36,7 +36,7 @@ export function DistributionRoutes() {
           <Route path="account" element={<AccountPage />} />
           <Route path="members" element={<MembersPage />} />
         </Route>
-        <Route path="*" element={<Navigate to="enroll" replace />} />
+        <Route path="*" element={<Navigate to="/distribution/enroll" replace />} />
       </Routes>
     </ErrorBoundary>
   );

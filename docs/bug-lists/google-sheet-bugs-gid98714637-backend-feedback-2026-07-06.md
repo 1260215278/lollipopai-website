@@ -14,10 +14,10 @@
 |    8 | 验证码登录与邮箱登录场景                           | 当前前端验证码登录复用已有 `loginByPhone` / `loginByEmail`，邮箱验证码发码仍复用现有 `/app/Login/sendEmailMsg?type=1`。如后端希望“邮箱验证码登录”与“邮箱注册验证码”分开，请提供独立发码场景或参数。                        | 登录页已显示“密码登录 / 验证码登录”切换；注册仍要求验证码 + 密码。          |
 |   10 | 新邮箱申请审核通过后异常提示，英文环境也返回非英文 | 请排查后管审核通过接口及异步开通流程，返回稳定错误码；`msg` 需按 `Accept-Language` 或后管语言返回对应语种。                                                                                                                | 前端不硬编码后端错误文案，只展示接口返回。                                  |
 |   19 | 成员页面角色名、状态名、权限说明可能仍显示中文     | 如这些字段由后端返回，请返回语言无关枚举值，或按请求语言返回翻译后的展示文案；避免前端猜测中文含义。                                                                                                                       | 前端静态文案已多语言；后端返回展示字段不做猜测翻译。                        |
-|   20 | 账号信息登录记录要求每页 10 条                     | 当前 `/publisher/account/loginRecords` 契约返回最近 20 条数组。若要分页，请支持 `GET /publisher/account/loginRecords?page=1&limit=10`，返回 `{ totalCount, pageSize, totalPage, currPage, list }` 或项目既有标准分页结构。 | 已撤掉本地分页，避免假分页；当前按后端返回列表直接展示。                    |
+|   20 | 账号信息登录记录要求每页 10 条                     | 后端已支持 `GET /publisher/account/loginRecords?page=1&limit=10`，并在 `data` 返回 `{ totalCount, pageSize, totalPage, currPage, list }` 分页结构。                                      | 前端已接入真实后端分页，按 `data.list` 展示并用 `totalPage` 控制翻页。      |
 
 ## 本轮额外扫描结论
 
-- `src/app/distribution/pages/AccountPage.tsx` 原先对 `loginRecords` 做本地 `slice` 分页，已撤掉。
+- `src/app/distribution/pages/AccountPage.tsx` 已接入后端分页，不再对 `loginRecords` 做本地 `slice` 分页。
 - `ContentPage`、`EarningsPage`、`WithdrawPage`、上剧列表等分页均传 `page/limit` 并读取后端分页响应，不属于本地假分页。
 - 其他 `slice` 命中为头像首字母、字符串截断、输入长度限制或模板解析，不属于需要后端分页配合的问题。

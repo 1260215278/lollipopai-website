@@ -16,7 +16,15 @@ export interface MembersMessages {
   phoneLine: string;
   selfTag: string;
   remove: string;
+  assign: string;
   rolesSectionTitle: string;
+  roleOwner: string;
+  roleAdmin: string;
+  roleStaff: string;
+  roleDescriptions: Record<number, string>;
+  statusActive: string;
+  statusInactive: string;
+  permissionLabels: Record<string, string>;
   addModalTitle: string;
   memberTypeLabel: string;
   phoneLabel: string;
@@ -29,6 +37,12 @@ export interface MembersMessages {
   removeModalDesc: string;
   removeConfirm: string;
   removeSuccess: string;
+  assignModalTitle: string;
+  assignModalDesc: string;
+  assignEmpty: string;
+  assignSelectedCount: string;
+  assignSave: string;
+  assignSuccess: string;
 }
 
 export const members: Record<Locale, MembersMessages> = {
@@ -44,7 +58,39 @@ export const members: Record<Locale, MembersMessages> = {
     phoneLine: "手机: {phone}",
     selfTag: "（我）",
     remove: "移除",
+    assign: "分配",
     rolesSectionTitle: "角色权限说明",
+    roleOwner: "超管",
+    roleAdmin: "管理员",
+    roleStaff: "员工",
+    roleDescriptions: {
+      1: "拥有账户下所有功能权限，可管理成员、账号安全、剧目和结算。",
+      2: "可查看并管理账户下全部剧目，不能管理账号安全和成员。",
+      3: "可查看被分配的剧目和数据，不可进行剧目管理操作。",
+    },
+    statusActive: "使用中",
+    statusInactive: "已停用",
+    permissionLabels: {
+      dashboard: "数据概览",
+      DASHBOARD_VIEW: "数据概览",
+      course: "剧目管理",
+      course_manage: "剧目管理",
+      COURSE_MANAGE: "剧目管理",
+      course_view_assigned: "可见剧目",
+      COURSE_VIEW_ASSIGNED: "可见剧目",
+      settlement_view: "结算数据",
+      SETTLEMENT_VIEW: "结算数据",
+      settlement_withdraw: "提现",
+      SETTLEMENT_WITHDRAW: "提现",
+      contract_view: "合同查看",
+      CONTRACT_VIEW: "合同查看",
+      contract_manage: "合同管理",
+      CONTRACT_MANAGE: "合同管理",
+      account_setting: "账号设置",
+      ACCOUNT_SETTING: "账号设置",
+      member_manage: "成员管理",
+      MEMBER_MANAGE: "成员管理",
+    },
     addModalTitle: "添加账号",
     memberTypeLabel: "成员类型",
     phoneLabel: "账号手机号",
@@ -58,6 +104,12 @@ export const members: Record<Locale, MembersMessages> = {
       "移除后，当前成员账号将不再属于此账户，将无权限管理并查看账户内剧目、收益等，移除后无法恢复，请是否移除当前成员？",
     removeConfirm: "确认移除",
     removeSuccess: "成员已移除",
+    assignModalTitle: "分配剧目",
+    assignModalDesc: "选择 {name} 可查看的剧目。",
+    assignEmpty: "暂无可分配剧目",
+    assignSelectedCount: "已选 {n} 部",
+    assignSave: "保存分配",
+    assignSuccess: "剧目分配已保存",
   },
   "zh-TW": {
     title: "成員管理",
@@ -71,7 +123,39 @@ export const members: Record<Locale, MembersMessages> = {
     phoneLine: "手機: {phone}",
     selfTag: "（我）",
     remove: "移除",
+    assign: "分配",
     rolesSectionTitle: "角色權限說明",
+    roleOwner: "超管",
+    roleAdmin: "管理員",
+    roleStaff: "員工",
+    roleDescriptions: {
+      1: "擁有帳戶下所有功能權限，可管理成員、帳號安全、劇目和結算。",
+      2: "可查看並管理帳戶下全部劇目，不能管理帳號安全和成員。",
+      3: "可查看被分配的劇目和資料，不可進行劇目管理操作。",
+    },
+    statusActive: "使用中",
+    statusInactive: "已停用",
+    permissionLabels: {
+      dashboard: "數據概覽",
+      DASHBOARD_VIEW: "數據概覽",
+      course: "劇目管理",
+      course_manage: "劇目管理",
+      COURSE_MANAGE: "劇目管理",
+      course_view_assigned: "可見劇目",
+      COURSE_VIEW_ASSIGNED: "可見劇目",
+      settlement_view: "結算資料",
+      SETTLEMENT_VIEW: "結算資料",
+      settlement_withdraw: "提現",
+      SETTLEMENT_WITHDRAW: "提現",
+      contract_view: "合約查看",
+      CONTRACT_VIEW: "合約查看",
+      contract_manage: "合約管理",
+      CONTRACT_MANAGE: "合約管理",
+      account_setting: "帳號設定",
+      ACCOUNT_SETTING: "帳號設定",
+      member_manage: "成員管理",
+      MEMBER_MANAGE: "成員管理",
+    },
     addModalTitle: "新增帳號",
     memberTypeLabel: "成員類型",
     phoneLabel: "帳號手機號",
@@ -85,6 +169,12 @@ export const members: Record<Locale, MembersMessages> = {
       "移除後，當前成員帳號將不再屬於此帳戶，將無權限管理並查看帳戶內劇目、收益等，移除後無法恢復，請是否移除當前成員？",
     removeConfirm: "確認移除",
     removeSuccess: "成員已移除",
+    assignModalTitle: "分配劇目",
+    assignModalDesc: "選擇 {name} 可查看的劇目。",
+    assignEmpty: "暫無可分配劇目",
+    assignSelectedCount: "已選 {n} 部",
+    assignSave: "儲存分配",
+    assignSuccess: "劇目分配已儲存",
   },
   en: {
     title: "Member Management",
@@ -98,7 +188,39 @@ export const members: Record<Locale, MembersMessages> = {
     phoneLine: "Phone: {phone}",
     selfTag: "(Me)",
     remove: "Remove",
+    assign: "Assign",
     rolesSectionTitle: "Role Permissions",
+    roleOwner: "Owner",
+    roleAdmin: "Admin",
+    roleStaff: "Staff",
+    roleDescriptions: {
+      1: "Full access to members, account security, dramas, and settlements.",
+      2: "Can view and manage all dramas, but cannot manage account security or members.",
+      3: "Can view assigned dramas and data, but cannot manage dramas.",
+    },
+    statusActive: "Active",
+    statusInactive: "Disabled",
+    permissionLabels: {
+      dashboard: "Dashboard",
+      DASHBOARD_VIEW: "Dashboard",
+      course: "Drama Management",
+      course_manage: "Drama Management",
+      COURSE_MANAGE: "Drama Management",
+      course_view_assigned: "Assigned Dramas",
+      COURSE_VIEW_ASSIGNED: "Assigned Dramas",
+      settlement_view: "Settlement Data",
+      SETTLEMENT_VIEW: "Settlement Data",
+      settlement_withdraw: "Withdrawals",
+      SETTLEMENT_WITHDRAW: "Withdrawals",
+      contract_view: "Contract View",
+      CONTRACT_VIEW: "Contract View",
+      contract_manage: "Contract Management",
+      CONTRACT_MANAGE: "Contract Management",
+      account_setting: "Account Settings",
+      ACCOUNT_SETTING: "Account Settings",
+      member_manage: "Member Management",
+      MEMBER_MANAGE: "Member Management",
+    },
     addModalTitle: "Add Account",
     memberTypeLabel: "Member Role",
     phoneLabel: "Phone Number",
@@ -112,6 +234,12 @@ export const members: Record<Locale, MembersMessages> = {
       "After removal, this member will no longer belong to this account and will lose access to dramas, earnings, and other data. This action cannot be undone. Do you want to remove this member?",
     removeConfirm: "Confirm Remove",
     removeSuccess: "Member removed",
+    assignModalTitle: "Assign Dramas",
+    assignModalDesc: "Select the dramas {name} can view.",
+    assignEmpty: "No dramas available",
+    assignSelectedCount: "{n} selected",
+    assignSave: "Save Assignments",
+    assignSuccess: "Assignments saved",
   },
   pt: {
     title: "Gestão de Membros",
@@ -125,7 +253,39 @@ export const members: Record<Locale, MembersMessages> = {
     phoneLine: "Telefone: {phone}",
     selfTag: "(Eu)",
     remove: "Remover",
+    assign: "Atribuir",
     rolesSectionTitle: "Permissões por Função",
+    roleOwner: "Proprietário",
+    roleAdmin: "Administrador",
+    roleStaff: "Equipe",
+    roleDescriptions: {
+      1: "Acesso total a membros, segurança da conta, dramas e liquidações.",
+      2: "Pode ver e gerenciar todos os dramas, mas não gerencia segurança da conta nem membros.",
+      3: "Pode ver dramas e dados atribuídos, mas não gerencia dramas.",
+    },
+    statusActive: "Ativo",
+    statusInactive: "Desativado",
+    permissionLabels: {
+      dashboard: "Painel",
+      DASHBOARD_VIEW: "Painel",
+      course: "Gestão de Dramas",
+      course_manage: "Gestão de Dramas",
+      COURSE_MANAGE: "Gestão de Dramas",
+      course_view_assigned: "Dramas Atribuídos",
+      COURSE_VIEW_ASSIGNED: "Dramas Atribuídos",
+      settlement_view: "Dados de Liquidação",
+      SETTLEMENT_VIEW: "Dados de Liquidação",
+      settlement_withdraw: "Saques",
+      SETTLEMENT_WITHDRAW: "Saques",
+      contract_view: "Visualização de Contratos",
+      CONTRACT_VIEW: "Visualização de Contratos",
+      contract_manage: "Gestão de Contratos",
+      CONTRACT_MANAGE: "Gestão de Contratos",
+      account_setting: "Configurações da Conta",
+      ACCOUNT_SETTING: "Configurações da Conta",
+      member_manage: "Gestão de Membros",
+      MEMBER_MANAGE: "Gestão de Membros",
+    },
     addModalTitle: "Adicionar Conta",
     memberTypeLabel: "Função do Membro",
     phoneLabel: "Número de Telefone",
@@ -139,5 +299,11 @@ export const members: Record<Locale, MembersMessages> = {
       "Após a remoção, este membro não pertencerá mais a esta conta e perderá acesso a dramas, receitas e outros dados. Esta ação não pode ser desfeita. Deseja remover este membro?",
     removeConfirm: "Confirmar Remoção",
     removeSuccess: "Membro removido",
+    assignModalTitle: "Atribuir Dramas",
+    assignModalDesc: "Selecione os dramas que {name} pode visualizar.",
+    assignEmpty: "Nenhum drama disponível",
+    assignSelectedCount: "{n} selecionados",
+    assignSave: "Salvar Atribuições",
+    assignSuccess: "Atribuições salvas",
   },
 };

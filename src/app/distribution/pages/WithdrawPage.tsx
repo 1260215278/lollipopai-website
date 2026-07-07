@@ -377,7 +377,7 @@ function SummaryCard({
           </div>
         </div>
 
-        <div>
+        <div className="flex flex-col items-end">
           <button
             type="button"
             disabled={!canApply || applying}
@@ -388,7 +388,7 @@ function SummaryCard({
             {applying ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
             {applyButtonText}
           </button>
-          {blockReasonText && <p className="text-[11px] text-[#99a1af] mt-1 text-right">{blockReasonText}</p>}
+          {blockReasonText && <p className="mt-1 text-right text-[11px] leading-relaxed text-[#99a1af] whitespace-nowrap">{blockReasonText}</p>}
         </div>
       </div>
     </div>

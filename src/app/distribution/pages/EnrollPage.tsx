@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { useI18n, type Locale } from "../../i18n";
 import { Footer } from "../../components/Footer";
 import { AreaCodeSelect } from "../../components/AreaCodeSelect";
+import { COUNTRY_CODES } from "../../data/countryCodes";
 import { ImageUpload } from "../components/ImageUpload";
 import welcomeBanner from "../../../imports/发行入驻-欢迎横幅.png";
 import { SiteHeader, type SiteNavItem } from "../../components/SiteHeader";
@@ -29,6 +30,7 @@ import {
  * 用户点过一次后，再访问 /distribution/enroll 直接跳转发行中心。
  */
 const ENTERED_KEY_PREFIX = "lp_enroll_entered_";
+const DEFAULT_AREA_CODE = "+86";
 
 type ContactMode = "phone" | "email";
 
@@ -51,6 +53,27 @@ function publisherEmailLanguage(locale: Locale): string {
 
 function phoneWithAreaCode(phone: string, areaCode: string): string {
   return `${areaCode}${phone}`;
+}
+
+const COUNTRY_CODES_BY_LENGTH = [...COUNTRY_CODES].sort((a, b) => b.dialCode.length - a.dialCode.length);
+
+function splitPhoneAreaCode(phone: string, fallbackAreaCode: string = DEFAULT_AREA_CODE): { areaCode: string; phone: string } {
+  const value = phone.trim();
+  if (!value) return { areaCode: fallbackAreaCode, phone: "" };
+  if (!value.startsWith("+")) return { areaCode: fallbackAreaCode, phone: value.replace(/\D/g, "") };
+
+  const match = COUNTRY_CODES_BY_LENGTH.find((item) => value.startsWith(item.dialCode));
+  if (!match) return { areaCode: fallbackAreaCode, phone: value.replace(/\D/g, "") };
+  return {
+    areaCode: match.dialCode,
+    phone: value.slice(match.dialCode.length).replace(/\D/g, ""),
+  };
+}
+
+function phoneForRequest(phone: string, areaCode: string): string {
+  const value = phone.trim();
+  if (value.startsWith("+")) return value.replace(/\s/g, "");
+  return phoneWithAreaCode(value.replace(/\D/g, ""), areaCode);
 }
 
 const AGREEMENT_HTML_TAGS = new Set([
@@ -156,7 +179,7 @@ export function EnrollPage() {
 
   // 表单字段（对应接口字段；图片为上传后 URL）
   const [contactMode, setContactMode] = useState<ContactMode>("phone");
-  const [areaCode, setAreaCode] = useState("+86");
+  const [areaCode, setAreaCode] = useState(DEFAULT_AREA_CODE);
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
@@ -182,9 +205,15 @@ export function EnrollPage() {
   const boundAccount = boundPhone || boundEmail;
   const canSwitchContactMode = !boundPhone && !boundEmail;
 
-  const prefill = (apply: PublisherApply) => {
+  const setPhoneValue = (value: string, fallbackAreaCode: string = DEFAULT_AREA_CODE) => {
+    const parsed = splitPhoneAreaCode(value, fallbackAreaCode);
+    setAreaCode(parsed.areaCode);
+    setPhone(parsed.phone);
+  };
+
+  const prefill = (apply: PublisherApply, fallbackAreaCode: string = DEFAULT_AREA_CODE) => {
     if (apply.phone?.trim()) {
-      setPhone(apply.phone);
+      setPhoneValue(apply.phone, fallbackAreaCode);
       setContactMode("phone");
     }
     if (apply.email?.trim()) {
@@ -208,12 +237,16 @@ export function EnrollPage() {
     }
     // 已登录默认回填登录账号（手机或邮箱）；若存在历史申请则由下方 prefill 覆盖
     const login = getLoginName().trim();
+    let fallbackAreaCode = DEFAULT_AREA_CODE;
     if (login) {
       if (isEmailAccount(login)) {
         setEmail(login);
         setContactMode("email");
       } else {
-        setPhone(login);
+        const parsed = splitPhoneAreaCode(login);
+        fallbackAreaCode = parsed.areaCode;
+        setAreaCode(parsed.areaCode);
+        setPhone(parsed.phone);
         setContactMode("phone");
       }
     }
@@ -221,7 +254,7 @@ export function EnrollPage() {
     try {
       const s = await getPublisherStatus();
       setStatus(s);
-      if (s.apply) prefill(s.apply);
+      if (s.apply) prefill(s.apply, fallbackAreaCode);
     } catch {
       // http 已 toast；登录态失效/无后端时回退到空表单，便于继续填写
       setStatus(null);
@@ -278,7 +311,7 @@ export function EnrollPage() {
     setSending(true);
     try {
       if (mode === "phone") {
-        await sendPublisherCode({ phone: boundPhone ? phone.trim() : phoneWithAreaCode(phone.trim(), areaCode) });
+        await sendPublisherCode({ phone: phoneForRequest(phone, areaCode) });
       } else {
         await sendPublisherCode({ email: email.trim(), language: publisherEmailLanguage(locale) });
       }
@@ -316,8 +349,9 @@ export function EnrollPage() {
     setSubmitting(true);
     try {
       const mode = boundPhone ? "phone" : boundEmail ? "email" : contactMode;
+      const submitPhone = phoneForRequest(phone, areaCode);
       const res = await submitPublisher({
-        ...(mode === "phone" ? { phone: boundPhone ? phone.trim() : phoneWithAreaCode(phone.trim(), areaCode) } : { email: email.trim() }),
+        ...(mode === "phone" ? { phone: submitPhone } : { email: email.trim() }),
         code: code.trim(),
         companyName: companyName.trim(),
         businessLicense: businessLicense!,
@@ -336,7 +370,7 @@ export function EnrollPage() {
       if (res.token) {
         setAppToken(res.token);
         const displayName =
-          res.user?.phone ?? res.user?.email ?? (mode === "phone" ? phone.trim() : email.trim());
+          res.user?.phone ?? res.user?.email ?? (mode === "phone" ? submitPhone : email.trim());
         setLoginName(displayName);
       }
       await loadStatus(); // 回到服务端权威状态（登录态 → 审核中）
@@ -481,7 +515,7 @@ export function EnrollPage() {
     <div className="min-h-screen flex flex-col bg-[#0a0000]" style={{ fontFamily: "Inter, system-ui, sans-serif" }}>
       <EnrollHeader />
       <main className="flex-1">{view}</main>
-      <Footer onNavigate={() => navigate("/")} />
+      <Footer onNavigate={(page) => navigate(page === "home" ? "/" : `/${page}`)} />
 
       {/* 合作协议 / 隐私政策 弹窗 */}
       <AgreementModal
@@ -506,10 +540,10 @@ function EnrollHeader() {
   const links = messages.navbar.links;
   const navItems: SiteNavItem[] = [
     { key: "home", label: links.home, onClick: () => navigate("/") },
-    { key: "creating", label: links.creating, onClick: () => navigate({ pathname: "/", hash: "#creators" }) },
+    { key: "creating", label: links.creating, onClick: () => navigate("/creating") },
     { key: "distribution", label: messages.distribution.nav.entry, active: true, onClick: () => navigate("/distribution") },
-    { key: "download", label: links.download, onClick: () => navigate({ pathname: "/", hash: "#download" }) },
-    { key: "contact", label: links.contact, onClick: () => navigate({ pathname: "/", hash: "#contact" }) },
+    { key: "download", label: links.download, onClick: () => navigate("/download") },
+    { key: "contact", label: links.contact, onClick: () => navigate("/contact") },
   ];
   return <SiteHeader navItems={navItems} onLogoClick={() => navigate("/")} sticky />;
 }
@@ -672,7 +706,11 @@ function FormView(props: {
               hint={props.boundPhone ? t.phoneBoundHint : t.phoneRegisterHint}
             >
               <div className="flex gap-2">
-                {!props.boundPhone && (
+                {props.boundPhone ? (
+                  <div className="flex h-[46px] items-center whitespace-nowrap rounded-[10px] border border-white/10 bg-[#333] px-3 text-sm text-white/80">
+                    {props.areaCode}
+                  </div>
+                ) : (
                   <AreaCodeSelect value={props.areaCode} onChange={props.setAreaCode} locale={props.locale} />
                 )}
                 <input
@@ -999,7 +1037,7 @@ function ApprovedView({
                   </div>
                 ) : syncStatus === 2 ? (
                   <div className="mt-2 space-y-1.5 text-sm text-[#4a5565]">
-                    <p>{tenantStatus?.tenantSyncMsg || t.swiftFailed}</p>
+                    {tenantStatus?.tenantSyncMsg && <p>{tenantStatus.tenantSyncMsg}</p>}
                     {tenantStatus?.tenantSyncTime && <p>{t.swiftLastSync}: {tenantStatus.tenantSyncTime}</p>}
                   </div>
                 ) : (

@@ -4,7 +4,8 @@
  * 发行中心登录链（见《20260622-发行中心-上剧-接口文档》§0.0 与 postman）：
  *   1) App 登录拿 appToken：POST /app/Login/emailAuth（返回顶层 token = appToken）
  *   2) 换 publisher token：POST /publisher/login/byAppToken?appToken=<appToken>
- *      （校验 is_publisher=1；返回 data = publisherToken）
+ *      （校验是否为有效发行中心成员；返回 data = publisherToken。账号开启两步验证时
+ *      响应带顶层 stage=2FA_REQUIRED，需再走 /publisher/login/verify2fa，见文件底部）
  *   3) 之后 /publisher/** 请求头带 publisherToken（由 http.ts 自动注入）
  *
  * 注意：emailAuth 的 token 在响应**顶层**（非 {code,msg,data} 的 data），故用裸 fetch
@@ -132,7 +133,7 @@ export async function loginByPhone(input: PhoneLoginInput): Promise<string> {
  *   - 手机密码登录：POST /app/Login/registerCode { phone:区号+号, password, platform }（不传 msg 即密码登录）
  *   - 邮箱密码登录：POST /app/Login/emailLogin { emailName, password, isFirebaseEmail:"1" }
  *   - 手机找回：发码 GET /app/Login/sendMsg/{区号+号}/forget；重置 POST /app/Login/forgetPwd { phone, pwd, msg }
- *   - 邮箱找回：发码 POST /app/Login/sendEmailMsg?emailName=&type=2&language=；重置 POST(form) /app/Login/forgetPassWord { emailName, password, code }
+ *   - 邮箱找回：发码 POST /app/Login/sendEmailMsg?emailName=&type=2&language=；重置 POST /app/Login/forgetPassWord { emailName, password, code }
  *   登录类响应 token 均在顶层（同 registerCode），故用裸 fetch 解析。*/
 
 /** 通用顶层登录响应解析：成功写 appToken 返回，失败抛后端文案 */
@@ -271,7 +272,7 @@ export function resetPhonePassword(input: {
   );
 }
 
-/** 重置密码-邮箱（H5：POST form /app/Login/forgetPassWord { emailName, password, code }）。 */
+/** 重置密码-邮箱（H5：POST JSON /app/Login/forgetPassWord { emailName, password, code }）。 */
 export async function resetEmailPassword(input: {
   email: string;
   password: string;
@@ -281,12 +282,12 @@ export async function resetEmailPassword(input: {
   try {
     res = await fetch(`${BASE_URL}/app/Login/forgetPassWord`, {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept-Language": getAcceptLanguage() },
-      body: new URLSearchParams({
+      headers: { "Content-Type": "application/json", "Accept-Language": getAcceptLanguage() },
+      body: JSON.stringify({
         emailName: input.email,
         password: input.password,
         code: input.code,
-      }).toString(),
+      }),
     });
   } catch {
     throw new ApiError(-1, getMessages().distribution.common.networkError);
@@ -297,37 +298,97 @@ export async function resetEmailPassword(input: {
   }
 }
 
+/* ── 两步验证登录（20260707 后端反馈 item 12） ──
+ *   已开 2FA 的账号调 byAppToken 时后端先发短信码，响应新增顶层 stage="2FA_REQUIRED"，
+ *   data 为 { challengeToken, phoneMask, expireSeconds }；未开 2FA 响应不变（无 stage 字段）。
+ *   二次校验走 POST /publisher/login/verify2fa，入参为 @RequestParam（query，非 JSON body）。 */
+
+/** byAppToken 的 2FA 待校验载荷（stage=2FA_REQUIRED 时的 data） */
+export interface PublisherTwoFactorChallenge {
+  /** 临时 token，5 分钟有效 */
+  challengeToken: string;
+  /** 收码手机号掩码，如 +86****2400 */
+  phoneMask: string;
+  /** 验证码有效秒数（300） */
+  expireSeconds: number;
+}
+
+/** byAppToken 换取结果：直接拿到 token，或进入 2FA 二次校验 */
+export type PublisherLoginResult =
+  | { stage: "token"; token: string }
+  | { stage: "2fa"; challenge: PublisherTwoFactorChallenge };
+
+/** byAppToken 完整响应信封（判定 2FA 只看顶层 stage 字段，不推断 data 形态） */
+interface ByAppTokenEnvelope {
+  code: number;
+  msg: string;
+  stage?: string;
+  data: string | { token: string } | PublisherTwoFactorChallenge;
+}
+
 /**
- * 用 appToken 换取发行中心 publisher token（byAppToken），成功写入并返回。
- * 校验账号 is_publisher=1；否则后端返回「无权限，请联系管理员授权」。
+ * 用 appToken 换取发行中心 publisher token（byAppToken）。
+ * - 未开 2FA：成功写入 publisher token 并返回 { stage:"token" }（原逻辑不变）；
+ * - 已开 2FA：后端已发短信码，返回 { stage:"2fa", challenge }，待 verify2fa 后才有正式 token；
+ * - 已开 2FA 但成员未绑手机号：抛 403398（提示联系账号管理员）。
+ * 校验账号是否为有效发行中心成员；无成员身份时后端返回 40020。
  */
-export async function exchangePublisherToken(appToken?: string): Promise<string> {
+export async function exchangePublisherToken(appToken?: string): Promise<PublisherLoginResult> {
   const at = appToken ?? getAppToken();
   if (!at) {
     throw new ApiError(401, "missing app token");
   }
-  // byAppToken 是登录换取动作，自身不需要带 token 头
-  // 两份官方材料口径不一：接口文档 §0.0 称 data 直接是 token 字符串；postman 倾向 data.token。
-  // 故兼容两种形态（非撒网猜测，均为文档明列形态），联调时以后端实测为准。
-  const data = await http.post<string | { token: string }>("/publisher/login/byAppToken", undefined, {
+  // byAppToken 是登录换取动作，自身不需要带 token 头；stage 在响应顶层，故 pick raw
+  const envelope = await http.post<ByAppTokenEnvelope>("/publisher/login/byAppToken", undefined, {
     params: { appToken: at },
     auth: false,
+    toastOnError: false,
+    pick: "raw",
   });
+  if (envelope.stage === "2FA_REQUIRED") {
+    const challenge = envelope.data as PublisherTwoFactorChallenge;
+    if (!challenge?.challengeToken) {
+      throw new ApiError(-1, "byAppToken: empty 2FA challenge");
+    }
+    return { stage: "2fa", challenge };
+  }
+  // 两份官方材料口径不一：接口文档 §0.0 称 data 直接是 token 字符串；postman 倾向 data.token。
+  // 故兼容两种形态（非撒网猜测，均为文档明列形态），联调时以后端实测为准。
+  const data = envelope.data as string | { token: string };
   const publisherToken = typeof data === "string" ? data : data?.token;
   if (!publisherToken) {
     throw new ApiError(-1, "byAppToken: empty publisher token");
+  }
+  setPublisherToken(publisherToken);
+  return { stage: "token", token: publisherToken };
+}
+
+/**
+ * 提交两步验证短信码（POST /publisher/login/verify2fa，公开接口）。
+ * ⚠️ 入参是 @RequestParam（query），不能用 JSON body。成功响应与普通登录同结构，
+ * 写入 publisher token 并返回。失败错误码：403397 码错/过期可重试；403396 会话失效需重走 byAppToken。
+ */
+export async function verifyPublisherTwoFactor(challengeToken: string, code: string): Promise<string> {
+  const data = await http.post<string | { token: string }>("/publisher/login/verify2fa", undefined, {
+    params: { challengeToken, code },
+    auth: false,
+    toastOnError: false,
+  });
+  const publisherToken = typeof data === "string" ? data : data?.token;
+  if (!publisherToken) {
+    throw new ApiError(-1, "verify2fa: empty publisher token");
   }
   setPublisherToken(publisherToken);
   return publisherToken;
 }
 
 /**
- * 确保已持有 publisher token：已有则直接返回；否则用 appToken 换取。
+ * 确保已持有 publisher token：已有则直接返回；否则用 appToken 换取（可能进入 2FA 分支）。
  * 进入发行中心（/publisher/** 调用前）调用。
  */
-export async function ensurePublisherToken(): Promise<string> {
+export async function ensurePublisherAccess(): Promise<PublisherLoginResult> {
   const existing = getPublisherToken();
-  if (existing) return existing;
+  if (existing) return { stage: "token", token: existing };
   return exchangePublisherToken();
 }
 

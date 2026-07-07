@@ -23,9 +23,11 @@ import {
 import { toast } from "sonner";
 import { useI18n, type Locale } from "../../i18n";
 import { PageLoading } from "../components/settlement/PageHeader";
+import { AreaCodeSelect } from "../../components/AreaCodeSelect";
 import {
   accountSmsCodeScenes,
   bindAccountEmail,
+  bindAccountPhone,
   changeAccountPassword,
   getAccountInfo,
   getAccountLoginRecords,
@@ -34,6 +36,7 @@ import {
   logoutOtherAccountSessions,
   sendAccountSmsCode,
   sendAccountEmailCode,
+  sendBindPhoneCode,
   updateAvatar,
   updateCompany,
   updateNickname,
@@ -62,6 +65,7 @@ const emptyCompany: AccountCompany = {
 const PASSWORD_MIN = 6;
 const PASSWORD_MAX = 20;
 const LOGIN_RECORD_PAGE_SIZE = 10;
+const ACCOUNT_FIELD_MAX = 50;
 
 export function AccountPage() {
   const { messages, locale } = useI18n();
@@ -325,6 +329,7 @@ function ProfileCard({ t, info, onProfileChange }: { t: AccountMsg; info: Accoun
 
 function DataCard({ t, info, onReload }: { t: AccountMsg; info: AccountInfo; onReload: () => Promise<void> }) {
   const [emailOpen, setEmailOpen] = useState(false);
+  const [phoneOpen, setPhoneOpen] = useState(false);
   const copyCode = async () => {
     await navigator.clipboard?.writeText(info.profile.accountCode);
     toast.success(t.copied);
@@ -334,7 +339,15 @@ function DataCard({ t, info, onReload }: { t: AccountMsg; info: AccountInfo; onR
     <>
       <Card title={t.accountData}>
         <InfoRow icon={<Hash className="h-4 w-4" />} label={t.uid} value={info.profile.accountCode || "—"} actionIcon={<Copy className="h-3.5 w-3.5" />} actionLabel={t.copy} onAction={copyCode} />
-        <InfoRow icon={<Phone className="h-4 w-4" />} label={t.phone} value={info.contact.phoneMask || t.unset} badge={info.contact.phoneBound ? t.bound : undefined} />
+        <InfoRow
+          icon={<Phone className="h-4 w-4" />}
+          label={t.phone}
+          value={info.contact.phoneMask || t.unset}
+          badge={info.contact.phoneBound ? t.bound : undefined}
+          actionIcon={<Edit2 className="h-3.5 w-3.5" />}
+          actionLabel={info.contact.phoneBound ? t.changePhoneAction : t.bindPhoneAction}
+          onAction={() => setPhoneOpen(true)}
+        />
         <InfoRow icon={<Globe2 className="h-4 w-4" />} label={t.email} value={info.contact.emailMask || t.unset} actionIcon={<Edit2 className="h-3.5 w-3.5" />} actionLabel={t.edit} onAction={() => setEmailOpen(true)} last />
       </Card>
       {emailOpen && (
@@ -344,6 +357,17 @@ function DataCard({ t, info, onReload }: { t: AccountMsg; info: AccountInfo; onR
           onClose={() => setEmailOpen(false)}
           onSaved={async () => {
             setEmailOpen(false);
+            await onReload();
+          }}
+        />
+      )}
+      {phoneOpen && (
+        <BindPhoneModal
+          t={t}
+          phoneBound={info.contact.phoneBound}
+          onClose={() => setPhoneOpen(false)}
+          onSaved={async () => {
+            setPhoneOpen(false);
             await onReload();
           }}
         />
@@ -370,10 +394,10 @@ function CompanyCard({ t, company, onCompanyChange }: { t: AccountMsg; company: 
     setSaving(true);
     try {
       const nextCompany: AccountCompany = {
-        companyName: draft.companyName.trim(),
-        creditCode: draft.creditCode.trim(),
-        companyAddress: draft.companyAddress.trim(),
-        companyPhone: draft.companyPhone.trim(),
+        companyName: draft.companyName.trim().slice(0, ACCOUNT_FIELD_MAX),
+        creditCode: draft.creditCode.trim().slice(0, ACCOUNT_FIELD_MAX),
+        companyAddress: draft.companyAddress.trim().slice(0, ACCOUNT_FIELD_MAX),
+        companyPhone: draft.companyPhone.trim().slice(0, ACCOUNT_FIELD_MAX),
       };
       await updateCompany(nextCompany);
       toast.success(t.saveSuccess);
@@ -407,10 +431,10 @@ function CompanyCard({ t, company, onCompanyChange }: { t: AccountMsg; company: 
     >
       {editing ? (
         <div className="space-y-4 p-5">
-          <CompanyInput label={t.companyName} value={draft.companyName} onChange={(v) => { setDraft((p) => ({ ...p, companyName: v })); setError(""); }} error={error} required />
-          <CompanyInput label={t.creditCode} value={draft.creditCode} onChange={(v) => setDraft((p) => ({ ...p, creditCode: v }))} />
-          <CompanyInput label={t.companyAddress} value={draft.companyAddress} onChange={(v) => setDraft((p) => ({ ...p, companyAddress: v }))} />
-          <CompanyInput label={t.companyPhone} value={draft.companyPhone} onChange={(v) => setDraft((p) => ({ ...p, companyPhone: v }))} />
+          <CompanyInput label={t.companyName} value={draft.companyName} onChange={(v) => { setDraft((p) => ({ ...p, companyName: v })); setError(""); }} error={error} required maxLength={ACCOUNT_FIELD_MAX} />
+          <CompanyInput label={t.creditCode} value={draft.creditCode} onChange={(v) => setDraft((p) => ({ ...p, creditCode: v }))} maxLength={ACCOUNT_FIELD_MAX} />
+          <CompanyInput label={t.companyAddress} value={draft.companyAddress} onChange={(v) => setDraft((p) => ({ ...p, companyAddress: v }))} maxLength={ACCOUNT_FIELD_MAX} />
+          <CompanyInput label={t.companyPhone} value={draft.companyPhone} onChange={(v) => setDraft((p) => ({ ...p, companyPhone: v }))} maxLength={ACCOUNT_FIELD_MAX} />
         </div>
       ) : (
         <>
@@ -640,14 +664,14 @@ function GhostButton({ icon, label, onClick }: { icon?: React.ReactNode; label: 
   );
 }
 
-function CompanyInput({ label, value, onChange, error, required }: { label: string; value: string; onChange: (value: string) => void; error?: string; required?: boolean }) {
+function CompanyInput({ label, value, onChange, error, required, maxLength }: { label: string; value: string; onChange: (value: string) => void; error?: string; required?: boolean; maxLength?: number }) {
   return (
     <label className="block">
       <span className="mb-1.5 block text-xs text-[#364153]" style={{ fontWeight: 600 }}>
         {label}
         {required && <span className="ml-1 text-[#fb2c36]">*</span>}
       </span>
-      <input value={value} onChange={(e) => onChange(e.target.value)} className={`h-10 w-full rounded-[10px] border px-3 text-sm outline-none ${error ? "border-[#fb2c36]" : "border-[#e5e7eb] focus:border-[#111111]"}`} />
+      <input value={value} onChange={(e) => onChange(maxLength ? e.target.value.slice(0, maxLength) : e.target.value)} maxLength={maxLength} className={`h-10 w-full rounded-[10px] border px-3 text-sm outline-none ${error ? "border-[#fb2c36]" : "border-[#e5e7eb] focus:border-[#111111]"}`} />
       {error && <span className="mt-1 block text-xs text-[#fb2c36]">{error}</span>}
     </label>
   );
@@ -729,10 +753,10 @@ function LoginRecordRow({ t, locale, record, last }: { t: AccountMsg; locale: Lo
 }
 
 function NicknameModal({ t, initialNickname, onClose, onSaved }: { t: AccountMsg; initialNickname: string; onClose: () => void; onSaved: (nickname: string) => Promise<void> }) {
-  const [nickname, setNickname] = useState(initialNickname);
+  const [nickname, setNickname] = useState(initialNickname.slice(0, ACCOUNT_FIELD_MAX));
   const [saving, setSaving] = useState(false);
   const save = async () => {
-    const next = nickname.trim();
+    const next = nickname.trim().slice(0, ACCOUNT_FIELD_MAX);
     if (!next) return;
     setSaving(true);
     try {
@@ -747,7 +771,7 @@ function NicknameModal({ t, initialNickname, onClose, onSaved }: { t: AccountMsg
   };
   return (
     <DialogShell title={t.editNickname} onClose={onClose}>
-      <DialogInput label={t.editNickname} value={nickname} onChange={setNickname} autoComplete="nickname" />
+      <DialogInput label={t.editNickname} value={nickname} onChange={setNickname} autoComplete="nickname" maxLength={ACCOUNT_FIELD_MAX} />
       <DialogActions t={t} saving={saving} onCancel={onClose} onConfirm={() => void save()} />
     </DialogShell>
   );
@@ -796,6 +820,81 @@ function BindEmailModal({ t, initialEmail, onClose, onSaved }: { t: AccountMsg; 
         <DialogInput label={t.emailInput} value={email} onChange={setEmail} autoComplete="email" />
         <div className="grid grid-cols-[1fr_auto] items-end gap-2">
           <DialogInput label={t.codeInput} value={code} onChange={setCode} />
+          <button type="button" onClick={() => void sendCode()} disabled={sending} className="flex h-10 items-center gap-1.5 rounded-[10px] border border-[#e5e7eb] px-3 text-xs text-[#4a5565]" style={{ fontWeight: 600 }}>
+            {sending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+            {t.sendCode}
+          </button>
+        </div>
+      </div>
+      <DialogActions t={t} saving={saving} onCancel={onClose} onConfirm={() => void save()} />
+    </DialogShell>
+  );
+}
+
+/** 绑定/换绑登录手机号（20260707 item 15b）。
+ *  手机号用含区号完整号（E.164，带 "+"）；发码与提交必须用同一个手机号字符串。 */
+function BindPhoneModal({ t, phoneBound, onClose, onSaved }: { t: AccountMsg; phoneBound: boolean; onClose: () => void; onSaved: () => Promise<void> }) {
+  const { locale } = useI18n();
+  const [areaCode, setAreaCode] = useState("+86");
+  const [phone, setPhone] = useState("");
+  const [code, setCode] = useState("");
+  const [sending, setSending] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const fullPhone = `${areaCode}${phone}`;
+
+  const sendCode = async () => {
+    if (!phone) {
+      toast.error(t.phoneRequired);
+      return;
+    }
+    setSending(true);
+    try {
+      await sendBindPhoneCode(fullPhone);
+      toast.success(t.codeSent);
+    } catch {
+      // http 已 toast
+    } finally {
+      setSending(false);
+    }
+  };
+  const save = async () => {
+    if (!phone) {
+      toast.error(t.phoneRequired);
+      return;
+    }
+    if (!code.trim()) {
+      toast.error(t.codeRequired);
+      return;
+    }
+    setSaving(true);
+    try {
+      await bindAccountPhone(fullPhone, code.trim());
+      toast.success(t.saveSuccess);
+      await onSaved();
+    } catch {
+      // http 已 toast（40021 占用 / 40023 码错 / 401179 过期）
+    } finally {
+      setSaving(false);
+    }
+  };
+  return (
+    <DialogShell title={phoneBound ? t.changePhoneTitle : t.bindPhoneTitle} onClose={onClose}>
+      <div className="space-y-4">
+        <label className="block">
+          <span className="mb-1.5 block text-xs text-[#364153]" style={{ fontWeight: 600 }}>{t.phoneInput}</span>
+          <div className="flex items-center gap-2">
+            <AreaCodeSelect value={areaCode} onChange={setAreaCode} locale={locale} variant="light" />
+            <input
+              value={phone}
+              onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
+              inputMode="numeric"
+              autoComplete="tel-national"
+              className="h-[46px] min-w-0 flex-1 rounded-[10px] border border-[#e5e7eb] px-3 text-sm outline-none focus:border-[#111111]"
+            />
+          </div>
+        </label>
+        <div className="grid grid-cols-[1fr_auto] items-end gap-2">
+          <DialogInput label={t.smsCode} value={code} onChange={setCode} />
           <button type="button" onClick={() => void sendCode()} disabled={sending} className="flex h-10 items-center gap-1.5 rounded-[10px] border border-[#e5e7eb] px-3 text-xs text-[#4a5565]" style={{ fontWeight: 600 }}>
             {sending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
             {t.sendCode}

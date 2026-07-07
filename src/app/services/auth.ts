@@ -81,8 +81,11 @@ export function getPublisherToken(): string {
 
 /** 写入 App 主账号 token（emailAuth 登录成功后调用；null=清除）。 */
 export function setAppToken(token: string | null): void {
-  appToken = token ?? "";
+  const nextToken = token ?? "";
+  const changed = nextToken !== appToken;
+  appToken = nextToken;
   writeStorage(APP_TOKEN_KEY, appToken);
+  if (changed) setPublisherToken(null);
   if (token) sessionExpiredHandled = false;
   emitAuthChange();
 }

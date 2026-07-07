@@ -139,8 +139,7 @@ export function ForgotPasswordPage() {
               <img
                 src={appIcon}
                 alt="Lollipop"
-                className="absolute left-1/2 -translate-x-1/2 -top-[45px] w-[134px] h-[134px] rounded-[20px] border border-[#f8fed0] object-cover"
-                style={{ boxShadow: "0px 4px 12.4px 0px rgba(255,220,224,0.35)" }}
+                className="absolute left-1/2 -translate-x-1/2 -top-[45px] w-[134px] h-[134px] rounded-[20px] object-cover"
               />
               <div className="bg-[#1c1c1c] border border-[#666] rounded-[31px] pt-[104px] pb-10 px-8 sm:px-12">
                 <h2 className="text-center text-white" style={{ fontWeight: 700, fontSize: "26px", letterSpacing: 0 }}>
@@ -246,7 +245,7 @@ export function ForgotPasswordPage() {
         </main>
       </div>
 
-      <Footer onNavigate={() => navigate("/")} />
+      <Footer onNavigate={(page) => navigate(page === "home" ? "/" : `/${page}`)} />
     </div>
   );
 }
@@ -257,10 +256,10 @@ function ForgotHeader() {
   const links = messages.navbar.links;
   const navItems: SiteNavItem[] = [
     { key: "home", label: links.home, onClick: () => navigate("/") },
-    { key: "creating", label: links.creating, onClick: () => navigate({ pathname: "/", hash: "#creators" }) },
+    { key: "creating", label: links.creating, onClick: () => navigate("/creating") },
     { key: "distribution", label: messages.distribution.nav.entry, onClick: () => navigate("/distribution") },
-    { key: "download", label: links.download, onClick: () => navigate({ pathname: "/", hash: "#download" }) },
-    { key: "contact", label: links.contact, onClick: () => navigate({ pathname: "/", hash: "#contact" }) },
+    { key: "download", label: links.download, onClick: () => navigate("/download") },
+    { key: "contact", label: links.contact, onClick: () => navigate("/contact") },
   ];
   return <SiteHeader navItems={navItems} onLogoClick={() => navigate("/")} sticky />;
 }

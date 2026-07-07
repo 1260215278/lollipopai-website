@@ -216,6 +216,8 @@ export interface ContentMessages {
   epStatusUploaded: string;
   epStatusProcessing: string;
   epStatusFailed: string;
+  /** 转码失败（vodStatus=3，20260707 item 8） */
+  epTranscodeFailed: string;
   epStatusNew: string;
   epUploading: string;
   /** "提交上传 ({n})" */
@@ -457,6 +459,7 @@ export const content: Record<Locale, ContentMessages> = {
     epStatusUploaded: "已上传",
     epStatusProcessing: "转码中",
     epStatusFailed: "上传失败",
+    epTranscodeFailed: "转码失败",
     epStatusNew: "待提交",
     epUploading: "上传中…",
     epSubmitN: "提交上传 ({n})",
@@ -693,6 +696,7 @@ export const content: Record<Locale, ContentMessages> = {
     epStatusUploaded: "已上傳",
     epStatusProcessing: "轉碼中",
     epStatusFailed: "上傳失敗",
+    epTranscodeFailed: "轉碼失敗",
     epStatusNew: "待提交",
     epUploading: "上傳中…",
     epSubmitN: "提交上傳 ({n})",
@@ -930,6 +934,7 @@ export const content: Record<Locale, ContentMessages> = {
     epStatusUploaded: "Uploaded",
     epStatusProcessing: "Processing",
     epStatusFailed: "Failed",
+    epTranscodeFailed: "Transcode Failed",
     epStatusNew: "New",
     epUploading: "Uploading…",
     epSubmitN: "Submit ({n})",
@@ -1167,6 +1172,7 @@ export const content: Record<Locale, ContentMessages> = {
     epStatusUploaded: "Enviado",
     epStatusProcessing: "Processando",
     epStatusFailed: "Falha no envio",
+    epTranscodeFailed: "Falha na transcodificação",
     epStatusNew: "Novo",
     epUploading: "Enviando…",
     epSubmitN: "Enviar ({n})",

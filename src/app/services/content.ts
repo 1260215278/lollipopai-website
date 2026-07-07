@@ -139,8 +139,14 @@ export interface EpisodeItem {
   fileName?: string | null;
   /** 上传日期（部分接口返回） */
   uploadDate?: string;
-  /** 上传态 1已上传/2上传失败 */
+  /** 上传态 1已上传/2上传失败（仅表示已提交入库，不代表能播） */
   uploadStatus: number;
+  /** 转码状态 0未转码/1转码中/2已完成/3失败（20260707 item 8 新增） */
+  vodStatus?: number;
+  /** 是否可播放（等价 vodStatus===2；20260707 item 8 新增） */
+  playable?: boolean;
+  /** 转码失败原因（vodStatus===3 时有值，如外链 URL 不可达；20260707 item 8 新增） */
+  transcodeMsg?: string | null;
 }
 
 /* ─── Step1 暂存基本信息（§3.1） ──────────────────────────────── */

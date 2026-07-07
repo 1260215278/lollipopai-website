@@ -8,7 +8,7 @@ export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) 
     { key: "home", page: "home" },
     { key: "aboutUs", page: "about" },
     { key: "download", page: "download" },
-    // { key: "contactUs", page: "contact" },
+    { key: "contactUs", page: "contact" },
   ] as const;
 
   return (
@@ -29,24 +29,18 @@ export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) 
               {messages.footer.titles.contact}
             </h4>
             <div className="space-y-3.5">
-              <p className="text-[#ffffff]" style={{ fontSize: "0.85rem", fontWeight: 700 }}>{messages.footer.titles.customerService}</p>
               <div className="flex items-center gap-3 text-gray-400" style={{ fontSize: "0.85rem" }}>
                 <Mail className="w-4 h-4 flex-shrink-0" />
-                <span>service@lollipop.im</span>
+                <span>{messages.contact.cards[1].detail}</span>
               </div>
-              <p className="text-[#ffffff]" style={{ fontSize: "0.85rem", fontWeight: 700 }}>{messages.footer.titles.businessContact}</p>
               <div className="flex items-center gap-3 text-gray-400" style={{ fontSize: "0.85rem" }}>
-                <Mail className="w-4 h-4 flex-shrink-0" />
-                <span>business@lollipop.im</span>
-              </div>
-              {/* <div className="flex items-center gap-3 text-gray-400" style={{ fontSize: "0.85rem" }}>
                 <Phone className="w-4 h-4 flex-shrink-0" />
-                <span>+852 9273 5725</span>
-              </div> */}
-              {/* <div className="flex items-start gap-3 text-gray-400" style={{ fontSize: "0.85rem" }}>
+                <span>{messages.contact.cards[0].detail}</span>
+              </div>
+              <div className="flex items-start gap-3 text-gray-400" style={{ fontSize: "0.85rem" }}>
                 <MapPin className="w-4 h-4 flex-shrink-0 mt-0.5" />
                 <span>{messages.footer.address}</span>
-              </div> */}
+              </div>
             </div>
           </div>
 
@@ -62,20 +56,6 @@ export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) 
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();
-                      if (item.page === "download") {
-                        if (onNavigate) {
-                          onNavigate("home");
-                        }
-
-                        setTimeout(() => {
-                          const el = document.getElementById("download");
-                          if (el) {
-                            el.scrollIntoView({ behavior: "smooth" });
-                          }
-                        }, 100);
-                        return;
-                      }
-
                       if (onNavigate) {
                         onNavigate(item.page);
                         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -116,12 +96,12 @@ export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) 
         {/* Bottom */}
         <div className="border-t border-white/10 pt-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex gap-6">
-            {/* <a href="#" className="text-gray-500 hover:text-white transition-colors" style={{ fontSize: "0.8rem" }}>
+            <a href="#" onClick={(e) => e.preventDefault()} className="text-gray-500 hover:text-white transition-colors" style={{ fontSize: "0.8rem" }}>
               {messages.common.privacyPolicy}
             </a>
-            <a href="#" className="text-gray-500 hover:text-white transition-colors" style={{ fontSize: "0.8rem" }}>
+            <a href="#" onClick={(e) => e.preventDefault()} className="text-gray-500 hover:text-white transition-colors" style={{ fontSize: "0.8rem" }}>
               {messages.common.termsOfService}
-            </a> */}
+            </a>
           </div>
           <p className="text-gray-600" style={{ fontSize: "0.75rem" }}>
             &copy; 2026 {messages.common.brand}. {messages.common.allRightsReserved}

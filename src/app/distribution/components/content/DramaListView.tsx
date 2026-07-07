@@ -167,7 +167,7 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
             <thead>
               <tr className="border-b border-gray-100 bg-gray-50/50">
                 {columns.map((col, i) => (
-                  <th key={i} className="px-4 py-3 text-left">
+                  <th key={i} className="px-4 py-3 text-left whitespace-nowrap">
                     <span className="text-xs text-gray-500" style={{ fontWeight: 500 }}>
                       {col}
                     </span>
@@ -199,7 +199,7 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
                       key={drama.courseId}
                       className="border-t border-gray-50 hover:bg-gray-50/50 transition-colors"
                     >
-                      <td className="px-4 py-4">
+                      <td className="px-4 py-4 min-w-[240px]">
                         <div className="flex items-center gap-3">
                           <div className="w-9 h-12 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
                             {drama.titleImg ? (
@@ -228,10 +228,10 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
                           </div>
                         </div>
                       </td>
-                      <td className="px-4 py-4">
+                      <td className="px-4 py-4 whitespace-nowrap">
                         <span className="text-xs text-gray-600">{languageLabel(drama.languageType, languages)}</span>
                       </td>
-                      <td className="px-4 py-4">
+                      <td className="px-4 py-4 whitespace-nowrap">
                         <span
                           className="px-2 py-0.5 rounded-full text-xs"
                           style={{
@@ -246,7 +246,7 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
                       {/* 审核状态（驳回时附后端驳回原因 auditRemark） */}
                       <td className="px-4 py-4">
                         <span
-                          className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs w-fit"
+                          className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs w-fit whitespace-nowrap"
                           style={{ background: auStyle.bg, color: auStyle.color, fontWeight: 500 }}
                         >
                           {isReviewing && (
@@ -266,7 +266,7 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
                         )}
                       </td>
                       {/* 上架状态（仅审核通过显示） */}
-                      <td className="px-4 py-4">
+                      <td className="px-4 py-4 whitespace-nowrap">
                         {isApproved && hasShelfStatus && shStyle ? (
                           <span
                             className="px-2.5 py-1 rounded-full text-xs"
@@ -278,12 +278,12 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
                           <span className="text-xs text-gray-300">—</span>
                         )}
                       </td>
-                      <td className="px-4 py-4">
+                      <td className="px-4 py-4 whitespace-nowrap">
                         <span className="text-xs text-gray-600">
                           {drama.copyrightType === 1 ? t.copyrightSelf : t.copyrightLicensed}
                         </span>
                       </td>
-                      <td className="px-4 py-4">
+                      <td className="px-4 py-4 whitespace-nowrap">
                         <span
                           className="px-2 py-0.5 rounded text-xs"
                           style={{

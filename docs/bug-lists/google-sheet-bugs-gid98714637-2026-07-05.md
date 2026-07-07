@@ -42,7 +42,7 @@
 | 17 | 已修复 | 修改登录密码增加空值校验；新密码限制 6-20 字符，并同步 `maxLength/minLength`。 |
 | 18 | 已修复 | 成员管理添加账号增加区号选择，提交时拼接 `${areaCode}${phone}`，避免已注册海外手机号被判定未注册。 |
 | 19 | 部分确认 | 成员页面前端静态文案已有多语言；若角色名、状态名、权限说明仍显示中文，来源是后端返回字段，需要后端按语言返回或提供可翻译枚举。 |
-| 20 | 已调整 / 待后端 | 已撤掉账号信息登录记录本地分页，当前仅按后端 `/publisher/account/loginRecords` 返回列表展示。若要求每页 10 条，需要后端补分页参数和分页响应；已补后端反馈文档。 |
+| 20 | 已完成 | 后端已支持 `/publisher/account/loginRecords?page=1&limit=10` 和 `data.{totalCount,pageSize,totalPage,currPage,list}`，前端已接入真实分页并按 `data.list` 展示。 |
 | 21 | 已修复 | 注册页邮箱账号限制最大 50 字符；手机号仍限制 20 位。 |
 | 22 | 已修复 | 登录/注册账号输入标签从“手机号/Phone number”等改为“账号/Account/Conta”。 |
 
@@ -341,6 +341,8 @@ emailName=testcs01%40supser.de&password=a123123&isFirebaseEmail=1
 
 
 就产生了一个新的记录，，需要做一下分页，
+
+处理结果：后端已支持分页参数和分页响应，前端已接入真实分页。
 
 ### 21. 短剧官网
 

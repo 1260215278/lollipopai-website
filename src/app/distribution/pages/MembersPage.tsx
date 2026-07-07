@@ -7,11 +7,14 @@ import { PageLoading } from "../components/settlement/PageHeader";
 import {
   getMemberList,
   getMemberRoles,
+  getMemberCourseAssignment,
+  assignMemberCourses,
   addMember,
   removeMember,
   type PublisherMember,
   type MemberRoleCard,
   type AddableMemberRole,
+  type MemberCoursePoolItem,
 } from "../../services/member";
 
 type MembersMsg = ReturnType<typeof useI18n>["messages"]["distribution"]["members"];
@@ -36,6 +39,35 @@ function defaultAddableRole(roles: MemberRoleCard[]): AddableMemberRole {
   return (staff?.code ?? addable[0]?.code ?? 3) as AddableMemberRole;
 }
 
+function roleLabel(role: number, t: MembersMsg, fallback?: string) {
+  switch (role) {
+    case 1:
+      return t.roleOwner;
+    case 2:
+      return t.roleAdmin;
+    case 3:
+      return t.roleStaff;
+    default:
+      return fallback || "—";
+  }
+}
+
+function statusLabel(status: number, t: MembersMsg, fallback?: string) {
+  switch (status) {
+    case 1:
+      return t.statusActive;
+    case 0:
+      return t.statusInactive;
+    default:
+      return fallback || "—";
+  }
+}
+
+function permissionLabel(key: string, name: string, t: MembersMsg) {
+  const normalized = key.toUpperCase();
+  return t.permissionLabels[key] || t.permissionLabels[normalized] || t.permissionLabels[key.toLowerCase()] || name;
+}
+
 /**
  * 成员管理 —— figma 15149-28384(列表) / 28629(添加) / 28908(下拉) /
  * 29474(校验错误) / 29755(移除确认)。
@@ -54,6 +86,7 @@ export function MembersPage() {
 
   const [addOpen, setAddOpen] = useState(false);
   const [removeTarget, setRemoveTarget] = useState<PublisherMember | null>(null);
+  const [assignTarget, setAssignTarget] = useState<PublisherMember | null>(null);
 
   const load = useCallback(async (showLoading = true) => {
     if (showLoading) setLoading(true);
@@ -130,7 +163,7 @@ export function MembersPage() {
 
       {/* ── 成员表格 figma 15149-28486 ── */}
       <div className="mt-6 bg-white rounded-2xl border border-[#f3f4f6] overflow-hidden">
-        <div className="grid grid-cols-[minmax(0,1fr)_176px_176px_100px] px-6 py-3 border-b border-[#f3f4f6] bg-[#f9fafb]/50">
+        <div className="grid grid-cols-[minmax(0,1fr)_176px_176px_150px] px-6 py-3 border-b border-[#f3f4f6] bg-[#f9fafb]/50">
           {[t.colMemberInfo, t.colAccountStatus, t.colMemberType, t.colAction].map((label) => (
             <span key={label} className="text-xs text-[#6a7282]" style={{ fontWeight: 500 }}>
               {label}
@@ -142,7 +175,7 @@ export function MembersPage() {
           <div className="py-16" />
         ) : (
           members.map((m) => (
-            <MemberRow key={m.memberUserId} member={m} t={t} onRemove={() => setRemoveTarget(m)} />
+            <MemberRow key={m.memberUserId} member={m} t={t} onAssign={() => setAssignTarget(m)} onRemove={() => setRemoveTarget(m)} />
           ))
         )}
       </div>
@@ -155,7 +188,7 @@ export function MembersPage() {
           </h3>
           <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-4">
             {roles.map((role) => (
-              <RoleCard key={role.code} role={role} />
+              <RoleCard key={role.code} role={role} t={t} />
             ))}
           </div>
         </div>
@@ -191,6 +224,18 @@ export function MembersPage() {
           }}
         />
       )}
+
+      {assignTarget && (
+        <AssignCourseModal
+          t={t}
+          member={assignTarget}
+          onClose={() => setAssignTarget(null)}
+          onSuccess={() => {
+            setAssignTarget(null);
+            toast.success(t.assignSuccess);
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -200,17 +245,19 @@ export function MembersPage() {
 function MemberRow({
   member: m,
   t,
+  onAssign,
   onRemove,
 }: {
   member: PublisherMember;
   t: MembersMsg;
+  onAssign: () => void;
   onRemove: () => void;
 }) {
   const theme = ROLE_THEME[m.role] ?? ROLE_THEME[3];
   const active = m.status === 1;
 
   return (
-    <div className="grid grid-cols-[minmax(0,1fr)_176px_176px_100px] items-center px-6 h-[72px] border-b border-[#f9fafb] last:border-0">
+    <div className="grid grid-cols-[minmax(0,1fr)_176px_176px_150px] items-center px-6 h-[72px] border-b border-[#f9fafb] last:border-0">
       {/* 成员信息 */}
       <div className="flex items-center gap-3 min-w-0">
         <MemberAvatar avatar={m.avatar} size={40} />
@@ -243,7 +290,7 @@ function MemberRow({
             className="w-1.5 h-1.5 rounded-full flex-shrink-0"
             style={{ background: active ? "#16a34a" : "#9ca3af" }}
           />
-          {m.statusName}
+          {statusLabel(m.status, t, m.statusName)}
         </span>
       </div>
 
@@ -253,12 +300,22 @@ function MemberRow({
           className="inline-block px-2.5 py-1 rounded-[8px] text-xs"
           style={{ fontWeight: 700, background: theme.bg, color: theme.text }}
         >
-          {m.roleName}
+          {roleLabel(m.role, t, m.roleName)}
         </span>
       </div>
 
       {/* 操作 */}
-      <div>
+      <div className="flex items-center gap-3">
+        {m.role === 3 && (
+          <button
+            type="button"
+            onClick={onAssign}
+            className="text-xs text-[#4a5565] transition-opacity hover:text-[#111111]"
+            style={{ fontWeight: 500 }}
+          >
+            {t.assign}
+          </button>
+        )}
         <button
           type="button"
           disabled={!m.removable}
@@ -304,7 +361,7 @@ function MemberAvatar({ avatar, size = 40 }: { avatar: string | null; size?: num
 
 /* ── 角色权限卡 figma 15149-28532 ───────────────────────────── */
 
-function RoleCard({ role }: { role: MemberRoleCard }) {
+function RoleCard({ role, t }: { role: MemberRoleCard; t: MembersMsg }) {
   const theme = ROLE_THEME[role.code] ?? ROLE_THEME[3];
 
   return (
@@ -313,10 +370,10 @@ function RoleCard({ role }: { role: MemberRoleCard }) {
         className="inline-block px-2.5 py-1 rounded-[8px] text-xs"
         style={{ fontWeight: 700, background: theme.bg, color: theme.text }}
       >
-        {role.name}
+        {roleLabel(role.code, t, role.name)}
       </span>
       <p className="mt-3 text-xs text-[#6a7282]" style={{ lineHeight: "19.5px" }}>
-        {role.description}
+        {t.roleDescriptions[role.code] || role.description}
       </p>
       <ul className="mt-4 space-y-1.5">
         {role.permissions.map((p) => (
@@ -327,11 +384,11 @@ function RoleCard({ role }: { role: MemberRoleCard }) {
             />
             {p.allowed ? (
               <span className="text-xs text-[#374151]" style={{ fontWeight: 500 }}>
-                {p.name}
+                {permissionLabel(p.key, p.name, t)}
               </span>
             ) : (
               <span className="text-xs text-[#9ca3af]" style={{ fontWeight: 400 }}>
-                ✕ {p.name}
+                ✕ {permissionLabel(p.key, p.name, t)}
               </span>
             )}
           </li>
@@ -424,7 +481,7 @@ function AddMemberModal({
             className="mt-1.5 w-full h-[45px] flex items-center justify-between px-4 rounded-[14px] border border-[#e5e7eb] text-sm bg-white hover:border-gray-400 transition-colors"
           >
             <span className="text-[#1e2939]" style={{ fontWeight: 500 }}>
-              {selectedRole?.name ?? "—"}
+              {selectedRole ? roleLabel(selectedRole.code, t, selectedRole.name) : "—"}
             </span>
             <ChevronDown
               className="w-4 h-4 text-[#99a1af] transition-transform"
@@ -447,7 +504,7 @@ function AddMemberModal({
                   }`}
                   style={{ fontWeight: r.code === role ? 500 : 400 }}
                 >
-                  {r.name}
+                  {roleLabel(r.code, t, r.name)}
                   {r.code === role && <Check className="w-4 h-4 text-[#101828]" />}
                 </button>
               ))}
@@ -502,6 +559,153 @@ function AddMemberModal({
             {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
             {t.confirm}
           </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AssignCourseModal({
+  t,
+  member,
+  onClose,
+  onSuccess,
+}: {
+  t: MembersMsg;
+  member: PublisherMember;
+  onClose: () => void;
+  onSuccess: () => void;
+}) {
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [pool, setPool] = useState<MemberCoursePoolItem[]>([]);
+  const [selected, setSelected] = useState<Set<number>>(() => new Set());
+
+  useEffect(() => {
+    let alive = true;
+    setLoading(true);
+    getMemberCourseAssignment(member.memberUserId)
+      .then((data) => {
+        if (!alive) return;
+        setPool(data.pool);
+        setSelected(new Set(data.assignedCourseIds));
+      })
+      .catch(() => undefined)
+      .finally(() => {
+        if (alive) setLoading(false);
+      });
+    return () => {
+      alive = false;
+    };
+  }, [member.memberUserId]);
+
+  const toggleCourse = (courseId: number) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(courseId)) next.delete(courseId);
+      else next.add(courseId);
+      return next;
+    });
+  };
+
+  const save = async () => {
+    if (saving) return;
+    setSaving(true);
+    try {
+      await assignMemberCourses({ memberUserId: member.memberUserId, courseIds: Array.from(selected) });
+      onSuccess();
+    } catch {
+      // http 已 toast
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <div className="relative w-full max-w-[620px] bg-white rounded-2xl shadow-2xl p-6">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h3 className="text-[#101828]" style={{ fontWeight: 700, fontSize: "17px", lineHeight: "25.5px" }}>
+              {t.assignModalTitle}
+            </h3>
+            <p className="mt-1 text-xs text-[#6a7282]">
+              {t.assignModalDesc.replace("{name}", member.nickname || member.phoneMask)}
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            className="text-[#99a1af] hover:text-gray-600 transition-colors"
+            aria-label={t.cancel}
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="mt-5 max-h-[420px] overflow-y-auto rounded-[14px] border border-[#f3f4f6]">
+          {loading ? (
+            <div className="flex items-center justify-center py-12 text-[#99a1af]">
+              <Loader2 className="w-5 h-5 animate-spin" />
+            </div>
+          ) : pool.length === 0 ? (
+            <div className="py-12 text-center text-sm text-[#99a1af]">{t.assignEmpty}</div>
+          ) : (
+            <div className="divide-y divide-[#f3f4f6]">
+              {pool.map((course) => {
+                const checked = selected.has(course.courseId);
+                return (
+                  <button
+                    key={course.courseId}
+                    type="button"
+                    onClick={() => toggleCourse(course.courseId)}
+                    className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-[#f9fafb]"
+                  >
+                    <span
+                      className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-md border"
+                      style={{ borderColor: checked ? "#111111" : "#d1d5db", background: checked ? "#111111" : "white" }}
+                    >
+                      {checked && <Check className="h-3.5 w-3.5 text-white" />}
+                    </span>
+                    <div className="h-12 w-9 flex-shrink-0 overflow-hidden rounded-md bg-[#f3f4f6]">
+                      {course.titleImg ? <img src={course.titleImg} alt="" className="h-full w-full object-cover" /> : null}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm text-[#101828]" style={{ fontWeight: 600 }}>
+                        {course.title}
+                      </p>
+                      <p className="mt-0.5 text-xs text-[#99a1af]">D{course.courseId}</p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        <div className="mt-5 flex items-center justify-between gap-3">
+          <span className="text-xs text-[#99a1af]">
+            {t.assignSelectedCount.replace("{n}", String(selected.size))}
+          </span>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={onClose}
+              disabled={saving}
+              className="h-[40px] px-5 rounded-[12px] border border-[#e5e7eb] text-sm text-[#364153] hover:bg-gray-50 transition-colors disabled:opacity-60"
+              style={{ fontWeight: 500 }}
+            >
+              {t.cancel}
+            </button>
+            <button
+              onClick={() => void save()}
+              disabled={saving || loading}
+              className="h-[40px] px-5 rounded-[12px] bg-[#111111] text-white text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-60"
+              style={{ fontWeight: 600 }}
+            >
+              {saving && <Loader2 className="w-4 h-4 animate-spin" />}
+              {t.assignSave}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -566,7 +770,7 @@ function RemoveMemberModal({
               {member.nickname}
             </p>
             <p className="text-xs text-[#99a1af] mt-1 truncate">
-              {member.roleName}
+              {roleLabel(member.role, t, member.roleName)}
               <span className="text-[#d1d5dc]">|</span>
               {member.phoneMask}
             </p>

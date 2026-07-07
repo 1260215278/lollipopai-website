@@ -115,8 +115,26 @@ export function sendAccountEmailCode(email: string): Promise<void> {
   return http.get<void>("/publisher/account/sendEmailCode", { params: { email } });
 }
 
+/** 给已绑定手机号发码（改密/开关 2FA 用）；绑新号请用 sendBindPhoneCode，勿混用。 */
 export function sendAccountSmsCode(scene: AccountSmsCodeScene): Promise<void> {
   return http.get<void>("/publisher/account/sendSmsCode", { params: { scene } });
+}
+
+/**
+ * 绑定/换绑登录手机号-发码（20260707 item 15b）。
+ * phone 必须是含区号的完整号（E.164，带 "+"，如 +12127128166）；
+ * 发码与提交必须用同一个手机号字符串（验证码按手机号为 key 存查）。
+ */
+export function sendBindPhoneCode(phone: string): Promise<void> {
+  return http.get<void>("/publisher/account/sendPhoneCode", { params: { phone } });
+}
+
+/**
+ * 绑定/换绑登录手机号-提交（@RequestBody JSON，勿用 form）。
+ * 失败码：40021 手机号已被占用 / 40023 验证码不正确 / 401179 验证码过期 / 403336 手机号或验证码为空。
+ */
+export function bindAccountPhone(phone: string, code: string): Promise<void> {
+  return http.post<void>("/publisher/account/bindPhone", { phone, code });
 }
 
 export function bindAccountEmail(email: string, code: string): Promise<void> {

@@ -51,17 +51,30 @@
 
 ## 2. Tab「设备管理」
 
-### 2.1 GET `/publisher/account/loginRecords` — 近期登录记录（新增）
+### 2.1 GET `/publisher/account/loginRecords` — 近期登录记录（分页）
 
-当前成员最近 **20** 条，登录时间倒序，**含失败尝试**：
+请求参数：
+
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| `page` | number | 当前页，默认 1 |
+| `limit` | number | 每页条数，前端传 10 |
+
+当前成员登录记录，登录时间倒序，**含失败尝试**：
 
 ```json
 {
   "code": 0,
-  "data": [
-    { "device": "Chrome · Windows", "location": "CN", "loginTime": "2026-06-30 09:42:00", "success": true },
-    { "device": "未知设备",          "location": null, "loginTime": "2026-06-01 03:12:00", "success": false }
-  ]
+  "data": {
+    "totalCount": 2,
+    "pageSize": 10,
+    "totalPage": 1,
+    "currPage": 1,
+    "list": [
+      { "device": "Chrome · Windows", "location": "CN", "loginTime": "2026-06-30 09:42:00", "success": true },
+      { "device": "未知设备",          "location": null, "loginTime": "2026-06-01 03:12:00", "success": false }
+    ]
+  }
 }
 ```
 

@@ -13,6 +13,7 @@ import {
   Loader2,
   Bell,
   AlertTriangle,
+  ShieldCheck,
   Users,
   UserRound,
 } from "lucide-react";
@@ -22,7 +23,12 @@ import type { DistributionMessages } from "./i18n.distribution";
 import { clearTokens, isAppAuthed, isPublisherAuthed } from "../services/auth";
 import { ApiError } from "../services/http";
 import { logoutAccount } from "../services/account";
-import { ensurePublisherToken } from "../services/session";
+import {
+  ensurePublisherAccess,
+  exchangePublisherToken,
+  verifyPublisherTwoFactor,
+  type PublisherTwoFactorChallenge,
+} from "../services/session";
 import {
   getPublisherStatus,
   getPublisherTenantStatus,
@@ -33,6 +39,15 @@ import { getCurrentMember, type CurrentPublisherMember } from "../services/membe
 import lollipopLogo from "../../imports/Lollipop1.png";
 
 const NAME_PREVIEW_LIMIT = 10;
+const PERMISSION = {
+  DASHBOARD_VIEW: "DASHBOARD_VIEW",
+  COURSE_VIEW_ASSIGNED: "COURSE_VIEW_ASSIGNED",
+  COURSE_MANAGE: "COURSE_MANAGE",
+  SETTLEMENT_VIEW: "SETTLEMENT_VIEW",
+  SETTLEMENT_WITHDRAW: "SETTLEMENT_WITHDRAW",
+  ACCOUNT_SETTING: "ACCOUNT_SETTING",
+  MEMBER_MANAGE: "MEMBER_MANAGE",
+} as const;
 
 export interface DistributionOutletContext {
   currentMember: CurrentPublisherMember | null;
@@ -42,6 +57,54 @@ function previewName(name: string) {
   const chars = Array.from(name);
   if (chars.length <= NAME_PREVIEW_LIMIT) return name;
   return `${chars.slice(0, NAME_PREVIEW_LIMIT).join("")}...`;
+}
+
+function hasPermission(member: CurrentPublisherMember | null, permission: string): boolean {
+  return member?.permissions?.includes(permission) === true;
+}
+
+function canViewOverview(member: CurrentPublisherMember | null): boolean {
+  return hasPermission(member, PERMISSION.DASHBOARD_VIEW);
+}
+
+function canViewContent(member: CurrentPublisherMember | null): boolean {
+  return hasPermission(member, PERMISSION.COURSE_VIEW_ASSIGNED) || hasPermission(member, PERMISSION.COURSE_MANAGE);
+}
+
+function canViewSettlement(member: CurrentPublisherMember | null): boolean {
+  return hasPermission(member, PERMISSION.SETTLEMENT_VIEW);
+}
+
+function canWithdraw(member: CurrentPublisherMember | null): boolean {
+  return hasPermission(member, PERMISSION.SETTLEMENT_WITHDRAW);
+}
+
+function canViewAccount(member: CurrentPublisherMember | null): boolean {
+  return hasPermission(member, PERMISSION.ACCOUNT_SETTING);
+}
+
+function canViewMembers(member: CurrentPublisherMember | null): boolean {
+  return hasPermission(member, PERMISSION.MEMBER_MANAGE);
+}
+
+function canAccessPath(member: CurrentPublisherMember | null, path: string): boolean {
+  if (path.includes("/content")) return canViewContent(member);
+  if (path.includes("/earnings")) return canViewSettlement(member);
+  if (path.includes("/withdraw")) return canWithdraw(member);
+  if (path.includes("/payment")) return canViewSettlement(member);
+  if (path.includes("/account")) return canViewAccount(member);
+  if (path.includes("/members")) return canViewMembers(member);
+  return canViewOverview(member);
+}
+
+function firstAllowedPath(member: CurrentPublisherMember | null): string {
+  if (canViewOverview(member)) return "/distribution/overview";
+  if (canViewContent(member)) return "/distribution/content";
+  if (canViewSettlement(member)) return "/distribution/earnings";
+  if (canWithdraw(member)) return "/distribution/withdraw";
+  if (canViewAccount(member)) return "/distribution/account";
+  if (canViewMembers(member)) return "/distribution/members";
+  return "/distribution/enroll";
 }
 
 /** 发行中心后台外壳：左侧边栏 + 顶部头部 + 内容区 <Outlet />
@@ -68,6 +131,10 @@ export function DistributionLayout() {
   // publisher token 是否就绪：已持有则直接 true；否则等 byAppToken 换取完成再放行子页面，
   // 避免子页面（overview 等）在 token 换到前就发 /publisher/** 请求导致首次 401「token 失效」。
   const [tokenReady, setTokenReady] = useState(() => isPublisherAuthed());
+  const [memberReady, setMemberReady] = useState(false);
+  const [entryError, setEntryError] = useState("");
+  // byAppToken 返回 stage=2FA_REQUIRED 时的待校验载荷：非空则先展示二次验证码界面
+  const [twoFactorChallenge, setTwoFactorChallenge] = useState<PublisherTwoFactorChallenge | null>(null);
   // 顶栏展示的公司名（优先取 member/me.publisherName，兜底 /app/publisher/status 的 apply.companyName）
   const [companyName, setCompanyName] = useState("");
   // swift 租户开通状态：失败（tenantSyncStatus=2）时顶栏展示通知铃铛 + 失败弹窗 + 重试
@@ -91,6 +158,7 @@ export function DistributionLayout() {
     let alive = true;
     if (isPublisherAuthed()) {
       setTokenReady(true);
+      setEntryError("");
       return () => {
         alive = false;
       };
@@ -102,15 +170,33 @@ export function DistributionLayout() {
       };
     }
     setTokenReady(false);
-    ensurePublisherToken()
-      .then(() => {
-        if (alive) setTokenReady(true);
+    setMemberReady(false);
+    setEntryError("");
+    ensurePublisherAccess()
+      .then((result) => {
+        if (!alive) return;
+        if (result.stage === "2fa") {
+          setTwoFactorChallenge(result.challenge);
+          return;
+        }
+        setTokenReady(true);
       })
       .catch((err) => {
         if (!alive) return;
-        // 401 已由 http 层清 token 并跳登录，勿再误导向入驻页
-        if (err instanceof ApiError && err.code === 401) return;
-        navigate("/distribution/enroll", { replace: true });
+        const code = err instanceof ApiError ? err.code : -1;
+        if (code === 40020) {
+          navigate("/distribution/enroll", { replace: true });
+          return;
+        }
+        if (code === 401 || code === 401181 || code === 401182) {
+          clearTokens();
+          navigate("/login", { replace: true });
+          return;
+        }
+        // 403398：已开 2FA 但该成员未绑手机号，无法下发短信码 → 提示联系账号管理员处理
+        const msg = code === 403398 ? t.twoFactor.bindPhoneFirst : err instanceof Error ? err.message : t.common.serverError;
+        toast.error(msg);
+        setEntryError(msg);
       });
     return () => {
       alive = false;
@@ -132,36 +218,38 @@ export function DistributionLayout() {
   }, []);
 
   useEffect(() => {
-    if (!tokenReady) return;
+    if (!tokenReady) {
+      setCurrentMember(null);
+      setMemberReady(false);
+      return;
+    }
     let alive = true;
+    setMemberReady(false);
+    setEntryError("");
     getCurrentMember()
       .then((member) => {
-        if (alive) setCurrentMember(member);
+        if (!alive) return;
+        setCurrentMember(member);
+        setMemberReady(true);
       })
-      .catch(() => {
-        if (alive) setCurrentMember(null);
+      .catch((err) => {
+        if (!alive) return;
+        const msg = err instanceof Error ? err.message : t.common.serverError;
+        setCurrentMember(null);
+        setEntryError(msg);
+        setMemberReady(true);
       });
     return () => {
       alive = false;
     };
-  }, [tokenReady]);
+  }, [t.common.serverError, tokenReady]);
 
   useEffect(() => {
-    if (!currentMember) return;
-    const role = currentMember.role;
-    const path = location.pathname;
-    const blocked =
-      (role === 3 && (
-        path.includes("/payment") ||
-        path.includes("/earnings") ||
-        path.includes("/withdraw") ||
-        path.includes("/account") ||
-        path.includes("/members")
-      )) ||
-      (role === 2 && (path.includes("/withdraw") || path.includes("/account") || path.includes("/members")));
-
-    if (blocked) navigate("/distribution/overview", { replace: true });
-  }, [currentMember, location.pathname, navigate]);
+    if (!memberReady || !currentMember) return;
+    if (!canAccessPath(currentMember, location.pathname)) {
+      navigate(firstAllowedPath(currentMember), { replace: true });
+    }
+  }, [currentMember, location.pathname, memberReady, navigate]);
 
   // 拉取 swift 租户开通状态：失败时顶栏出现通知铃铛（开通在审核通过后异步进行，此处只读一次即可）
   useEffect(() => {
@@ -374,7 +462,28 @@ export function DistributionLayout() {
         </header>
 
         <main className="flex-1 overflow-y-auto">
-          {tokenReady ? (
+          {entryError ? (
+            <div className="h-full flex items-center justify-center p-8">
+              <div className="max-w-md rounded-2xl bg-white border border-gray-100 px-6 py-5 text-center shadow-sm">
+                <AlertTriangle className="w-6 h-6 text-[#E8192C] mx-auto" />
+                <p className="text-sm text-gray-700 mt-3 leading-relaxed">{entryError}</p>
+              </div>
+            </div>
+          ) : twoFactorChallenge && !tokenReady ? (
+            <TwoFactorGate
+              t={t}
+              challenge={twoFactorChallenge}
+              onChallenge={setTwoFactorChallenge}
+              onVerified={() => {
+                setTwoFactorChallenge(null);
+                setTokenReady(true);
+              }}
+              onBlocked={(msg) => {
+                setTwoFactorChallenge(null);
+                setEntryError(msg);
+              }}
+            />
+          ) : tokenReady && memberReady && currentMember && canAccessPath(currentMember, location.pathname) ? (
             <Outlet context={{ currentMember } satisfies DistributionOutletContext} />
           ) : (
             <div className="h-full flex items-center justify-center">
@@ -433,6 +542,156 @@ export function DistributionLayout() {
   );
 }
 
+/** 两步验证登录界面（item 12）：byAppToken 返回 stage=2FA_REQUIRED 后，
+ *  展示 phoneMask + 短信验证码输入 + 有效期倒计时；verify2fa 成功才放行工作台。
+ *  重发 = 重新调 byAppToken（后端会重发短信并返回新 challengeToken）。 */
+function TwoFactorGate({
+  t,
+  challenge,
+  onChallenge,
+  onVerified,
+  onBlocked,
+}: {
+  t: DistributionMessages;
+  challenge: PublisherTwoFactorChallenge;
+  onChallenge: (challenge: PublisherTwoFactorChallenge) => void;
+  onVerified: () => void;
+  onBlocked: (msg: string) => void;
+}) {
+  const navigate = useNavigate();
+  const [code, setCode] = useState("");
+  const [remaining, setRemaining] = useState(challenge.expireSeconds);
+  const [verifying, setVerifying] = useState(false);
+  const [resending, setResending] = useState(false);
+  const expired = remaining <= 0;
+
+  useEffect(() => {
+    setRemaining(challenge.expireSeconds);
+    const id = window.setInterval(() => setRemaining((s) => (s > 0 ? s - 1 : 0)), 1000);
+    return () => window.clearInterval(id);
+  }, [challenge]);
+
+  // 账号/成员/账户状态变化类错误：按各自语义回入驻页或登录页；返回是否已处理
+  const handleFatal = (errCode: number): boolean => {
+    if (errCode === 40020) {
+      navigate("/distribution/enroll", { replace: true });
+      return true;
+    }
+    if (errCode === 401 || errCode === 401181 || errCode === 401182 || errCode === 403347) {
+      clearTokens();
+      navigate("/login", { replace: true });
+      return true;
+    }
+    return false;
+  };
+
+  const resend = async () => {
+    if (resending) return;
+    setResending(true);
+    try {
+      const result = await exchangePublisherToken();
+      if (result.stage === "2fa") {
+        setCode("");
+        onChallenge(result.challenge);
+        toast.success(t.twoFactor.resent);
+      } else {
+        // 期间管理员关闭了 2FA：byAppToken 直接给了正式 token，放行
+        onVerified();
+      }
+    } catch (err) {
+      const errCode = err instanceof ApiError ? err.code : -1;
+      if (handleFatal(errCode)) return;
+      if (errCode === 403398) {
+        onBlocked(t.twoFactor.bindPhoneFirst);
+        return;
+      }
+      toast.error(err instanceof Error ? err.message : t.common.serverError);
+    } finally {
+      setResending(false);
+    }
+  };
+
+  const verify = async () => {
+    const value = code.trim();
+    if (!value) {
+      toast.error(t.twoFactor.codeRequired);
+      return;
+    }
+    if (verifying) return;
+    setVerifying(true);
+    try {
+      await verifyPublisherTwoFactor(challenge.challengeToken, value);
+      onVerified();
+    } catch (err) {
+      const errCode = err instanceof ApiError ? err.code : -1;
+      if (handleFatal(errCode)) return;
+      toast.error(err instanceof Error ? err.message : t.common.serverError);
+      // 403397 码错/过期：challengeToken 未失效可重填重试；403396 会话失效：重走 byAppToken 拿新码
+      if (errCode === 403396) {
+        setCode("");
+        await resend();
+      }
+    } finally {
+      setVerifying(false);
+    }
+  };
+
+  return (
+    <div className="h-full flex items-center justify-center p-8">
+      <div className="w-full max-w-[400px] rounded-2xl bg-white border border-gray-100 px-6 py-7 shadow-sm">
+        <span className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-50 mx-auto">
+          <ShieldCheck className="w-6 h-6 text-[#111111]" />
+        </span>
+        <h3 className="mt-4 text-center text-[#111111]" style={{ fontWeight: 700, fontSize: "1rem" }}>
+          {t.twoFactor.title}
+        </h3>
+        <p className="mt-2 text-center text-sm text-gray-500 leading-relaxed">
+          {t.twoFactor.desc.replace("{phone}", challenge.phoneMask)}
+        </p>
+        <label className="block mt-5">
+          <span className="mb-1.5 block text-xs text-[#364153]" style={{ fontWeight: 600 }}>
+            {t.twoFactor.codeLabel}
+          </span>
+          <input
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") void verify();
+            }}
+            placeholder={t.twoFactor.codePlaceholder}
+            autoComplete="one-time-code"
+            inputMode="numeric"
+            className="h-11 w-full rounded-[10px] border border-[#e5e7eb] px-3 text-sm outline-none focus:border-[#111111]"
+          />
+        </label>
+        <p className={`mt-2 text-xs ${expired ? "text-[#E8192C]" : "text-gray-400"}`}>
+          {expired ? t.twoFactor.expired : t.twoFactor.expireIn.replace("{s}", String(remaining))}
+        </p>
+        <button
+          type="button"
+          onClick={() => void verify()}
+          disabled={verifying || expired}
+          className="mt-5 flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#111111] text-sm text-white transition-all hover:opacity-90 disabled:opacity-60"
+          style={{ fontWeight: 600 }}
+        >
+          {verifying && <Loader2 className="w-4 h-4 animate-spin" />}
+          {t.twoFactor.verify}
+        </button>
+        <button
+          type="button"
+          onClick={() => void resend()}
+          disabled={resending}
+          className="mt-3 flex h-10 w-full items-center justify-center gap-2 rounded-[10px] border border-[#e5e7eb] text-sm text-[#4a5565] transition-colors hover:bg-gray-50 disabled:opacity-60"
+          style={{ fontWeight: 500 }}
+        >
+          {resending && <Loader2 className="w-4 h-4 animate-spin" />}
+          {t.twoFactor.resend}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 /** 侧边栏内容（logo + 导航），桌面与移动端抽屉共用 */
 function SidebarNav({
   t,
@@ -447,11 +706,12 @@ function SidebarNav({
   onToggleSettlement: () => void;
   currentMember: CurrentPublisherMember | null;
 }) {
-  const role = currentMember?.role;
-  const canViewSettlement = role === undefined || role !== 3;
-  const canViewWithdraw = role === undefined || role === 1;
-  const canViewAccount = role === undefined || role === 1;
-  const canViewMembers = role === undefined || role === 1;
+  const showOverview = canViewOverview(currentMember);
+  const showContent = canViewContent(currentMember);
+  const showSettlement = canViewSettlement(currentMember);
+  const showWithdraw = canWithdraw(currentMember);
+  const showAccount = canViewAccount(currentMember);
+  const showMembers = canViewMembers(currentMember);
 
   return (
     <>
@@ -470,10 +730,10 @@ function SidebarNav({
       </div>
 
       <nav className="flex-1 px-3 py-4 space-y-0.5">
-        <SideRow to="/distribution/overview" icon={<BarChart2 className="w-[15px] h-[15px]" />} label={t.nav.overview} />
-        <SideRow to="/distribution/content" icon={<Video className="w-[15px] h-[15px]" />} label={t.nav.content} />
+        {showOverview && <SideRow to="/distribution/overview" icon={<BarChart2 className="w-[15px] h-[15px]" />} label={t.nav.overview} />}
+        {showContent && <SideRow to="/distribution/content" icon={<Video className="w-[15px] h-[15px]" />} label={t.nav.content} />}
 
-        {canViewSettlement && (
+        {showSettlement && (
           <div>
             <button
               onClick={onToggleSettlement}
@@ -498,21 +758,21 @@ function SidebarNav({
             {settlementOpen && (
               <div className="ml-[34px] mt-0.5 space-y-0.5">
                 <SubRow to="/distribution/earnings" label={t.nav.earnings} />
-                {canViewWithdraw && <SubRow to="/distribution/withdraw" label={t.nav.withdraw} />}
+                {showWithdraw && <SubRow to="/distribution/withdraw" label={t.nav.withdraw} />}
                 <SubRow to="/distribution/payment" label={t.nav.payment} />
               </div>
             )}
           </div>
         )}
 
-        {canViewAccount && (
+        {showAccount && (
           <SideRow
             to="/distribution/account"
             icon={<UserRound className="w-[15px] h-[15px]" />}
             label={t.nav.account}
           />
         )}
-        {canViewMembers && (
+        {showMembers && (
           <SideRow
             to="/distribution/members"
             icon={<Users className="w-[15px] h-[15px]" />}

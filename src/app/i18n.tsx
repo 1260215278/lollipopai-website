@@ -92,24 +92,24 @@ const enMessages = {
   },
   aiFeatures: {
     eyebrow: "AI-Powered Creation",
-    title: "Create with AI, Stream on Lollipop",
-    description: "Lollipop brings revolutionary AI tools to every storyteller. Generate, edit, and publish your short dramas directly to a global audience.",
+    title: "Create with AI, Stream on Luno TV",
+    description: "Luno TV brings revolutionary AI creation tools to every storyteller — generate, edit, and publish your short dramas directly to a global audience.",
     features: [
       {
         title: "AI Image Generation",
-        desc: "Create stunning scene visuals from text prompts and turn ideas into production-ready frames in seconds.",
+        desc: "Create stunning scene visuals with text prompts. Bring your creative vision to life instantly.",
       },
       {
         title: "AI Face Swap",
-        desc: "Replace character faces smoothly with deep-learning continuity built for immersive short-form storytelling.",
+        desc: "Seamlessly swap character faces with advanced deep-learning technology for perfect continuity.",
       },
       {
         title: "AI Video Creation",
-        desc: "Turn scripts into cinematic clips with automated transitions, effects, and voiceovers.",
+        desc: "Transform scripts into cinematic short clips. Auto-generate transitions, effects and voiceovers.",
       },
       {
         title: "Style Transfer",
-        desc: "Apply film-inspired grading and visual styles with one tap for a polished final look.",
+        desc: "Apply cinematic color grading and visual styles from your favorite films with one click.",
       },
     ],
   },
@@ -226,11 +226,11 @@ const enMessages = {
   creator: {
     eyebrow: "Creator Program",
     title: "Become the Next Million-View Creator",
-    description: "Lollipop offers industry-leading revenue share and creative support so standout creators can build sustainable careers.",
+    description: "Lollipop offers the industry's highest revenue share and comprehensive creative support for quality creators. Let great content receive the rewards it deserves.",
     benefits: [
-      "70% revenue share, among the highest in the industry",
-      "Full access to the AI creation toolkit",
-      "Dedicated creator success support",
+      "70% revenue share — highest in the industry",
+      "Full AI creation toolkit access",
+      "Dedicated creator success manager",
       "Global distribution across 50+ countries",
       "Monthly bonus rewards for top performers",
     ],
@@ -243,10 +243,10 @@ const enMessages = {
   },
   downloadCta: {
     eyebrow: "Available Now",
-    title: "Your Next Obsession Is One Tap Away",
-    description: "Join millions of viewers worldwide. Download free and enjoy 7 days of Premium access with no commitment.",
+    title: "Your Next Obsession is One Tap Away",
+    description: "Join millions of viewers worldwide. Download free and get 7 days of Premium access — no commitment.",
     featuredTitle: "Download Lollipop",
-    featuredDescription: "Available on iOS and Android with 4K streaming, offline downloads, and 5,000+ premium short dramas.",
+    featuredDescription: "Available on iOS & Android. 4K streaming, offline downloads, and 5,000+ premium short dramas.",
     featuredShowTitle: "Obsessed With My Boss · Pt.2",
     featuredTimer: "0:42",
     notification: "New Episode!",
@@ -265,8 +265,8 @@ const enMessages = {
     companyTitle: "Company Overview",
     companySub: "A global short drama platform empowering creators and audiences",
     companyParagraphs: [
-      "Lollipop is a joint venture between Hong Kong-based Nyx Entertainment Group and the Korean Cultural Investment Fund. Its strategic goal is to systematically bring K-Contents to global audiences through co-productions and international partnerships.",
-      "The platform is expanding across China, Japan, North America, Europe, Southeast Asia, and the Middle East while accelerating localized growth strategies.",
+      "Lollipop is a joint venture between Hong Kong-based Nyx Entertainment Group and the Korean Cultural Investment Fund. The fund's strategic goal is to systematically promote K-Contents globally, with a strong focus on co-productions with international production partners.",
+      "It is actively expanding into diversified global markets including China, Japan, North America, Europe, Southeast Asia and the Middle East, while accelerating localization strategies.",
     ],
     companyStats: [
       { num: "50M+", label: "Global Users" },
@@ -274,12 +274,12 @@ const enMessages = {
       { num: "30+", label: "Countries" },
     ],
     teamTitle: "Outstanding Team",
-    teamSub: "A world-class leadership team driving entertainment innovation",
+    teamSub: "A world-class leadership team driving innovation in entertainment",
     team: [
-      { name: "James C.", role: "Co-Founder", desc: "Entertainment and technology veteran with extensive industry experience." },
-      { name: "Sarah L.", role: "Operations", desc: "Global operations specialist with deep expertise in multi-market growth." },
-      { name: "David P.", role: "Technology", desc: "AI and distributed systems expert with a strong engineering background." },
-      { name: "Emily W.", role: "Finance", desc: "Seasoned finance professional with strategic investment experience." },
+      { name: "James C.", role: "Co-Founder", desc: "Veteran in entertainment & technology with extensive industry experience." },
+      { name: "Sarah L.", role: "Operations", desc: "Global operations specialist with multi-market scaling expertise." },
+      { name: "David P.", role: "Technology", desc: "Expert in AI and distributed systems with deep technical background." },
+      { name: "Emily W.", role: "Finance", desc: "Seasoned finance professional with strategic investment background." },
     ],
     partnersTitle: "Strategic Partners",
     partnersSub: "Collaborating with industry leaders across the globe",
@@ -296,6 +296,7 @@ const enMessages = {
   },
   contact: {
     title: "Contact Us",
+    subtitle: "Reach out through any of the channels below",
     cards: [
       { title: "Phone", detail: "+852 9273 5725" },
       { title: "Email", detail: "info@xinvest.cc" },
@@ -311,7 +312,7 @@ const enMessages = {
       businessContact: "Business Contact",
       customerService: "Customer Service",
       website: "Website",
-      languages: "Languages",
+      languages: "Services",
     },
     links: {
       home: "Home",
@@ -616,6 +617,7 @@ const translations: Record<Locale, TranslationMessages> = {
     },
     contact: {
       title: "联系我们",
+      subtitle: "通过以下任一渠道联系我们",
       cards: [
         { title: "电话", detail: "+852 9273 5725" },
         { title: "邮箱", detail: "info@xinvest.cc" },
@@ -631,7 +633,7 @@ const translations: Record<Locale, TranslationMessages> = {
         businessContact: "商务联系",
         customerService: "联系客服",
         website: "网站",
-        languages: "语言",
+        languages: "服务",
       },
       links: {
         home: "首页",
@@ -931,6 +933,7 @@ const translations: Record<Locale, TranslationMessages> = {
     },
     contact: {
       title: "聯絡我們",
+      subtitle: "透過以下任一渠道聯絡我們",
       cards: [
         { title: "電話", detail: "+852 9273 5725" },
         { title: "電子郵件", detail: "info@xinvest.cc" },
@@ -946,7 +949,7 @@ const translations: Record<Locale, TranslationMessages> = {
         businessContact: "商務聯繫",
         customerService: "聯絡客服",
         website: "網站",
-        languages: "語言",
+        languages: "服務",
       },
       links: {
         home: "首頁",
@@ -1246,6 +1249,7 @@ const translations: Record<Locale, TranslationMessages> = {
     },
     contact: {
       title: "Fale Conosco",
+      subtitle: "Entre em contato por qualquer um dos canais abaixo",
       cards: [
         { title: "Telefone", detail: "+852 9273 5725" },
         { title: "E-mail", detail: "info@xinvest.cc" },
@@ -1261,7 +1265,7 @@ const translations: Record<Locale, TranslationMessages> = {
         businessContact: "Contato Comercial",
         customerService: "Atendimento ao Cliente",
         website: "Site",
-        languages: "Idiomas",
+        languages: "Serviços",
       },
       links: {
         home: "Início",

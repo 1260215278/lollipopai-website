@@ -25,8 +25,11 @@ export async function parseEpisodeTemplate(file: File, plannedEpisodes: number):
   const workbook = XLSX.read(buffer, { type: "array" });
   const sheet = workbook.Sheets[workbook.SheetNames[0]];
   if (!sheet) return [];
+  const ref = sheet["!ref"];
+  if (!ref) return [];
+  const range = XLSX.utils.decode_range(ref);
 
-  const rows = XLSX.utils.sheet_to_json<unknown[]>(sheet, { header: 1, defval: "", blankrows: false });
+  const rows = XLSX.utils.sheet_to_json<unknown[]>(sheet, { header: 1, defval: "", blankrows: true });
   const headerRowIndex = rows.findIndex((row) =>
     row.some((cell) => {
       const text = cellText(cell);
@@ -37,12 +40,18 @@ export async function parseEpisodeTemplate(file: File, plannedEpisodes: number):
   const episodeIndex = header.length ? findHeaderIndex(header, ["集号", "集數", "episode"], 0) : 0;
   const titleIndex = header.length ? findHeaderIndex(header, ["剧集标题", "劇集標題", "标题", "標題", "title"], 1) : 1;
   const videoIndex = header.length ? findHeaderIndex(header, ["视频链接", "影片連結", "video", "url", "link"], 2) : 2;
-  const bodyRows = rows.slice(headerRowIndex >= 0 ? headerRowIndex + 1 : 0);
+  const bodyStartIndex = headerRowIndex >= 0 ? headerRowIndex + 1 : 0;
+  const bodyRows = rows.slice(bodyStartIndex);
 
   return bodyRows
-    .map((row) => {
+    .map((row, offset) => {
       const episodeNo = Number(cellText(row[episodeIndex]));
-      const videoUrl = cellText(row[videoIndex]);
+      const sheetRowIndex = range.s.r + bodyStartIndex + offset;
+      const sheetColIndex = range.s.c + videoIndex;
+      const videoCell = sheet[XLSX.utils.encode_cell({ r: sheetRowIndex, c: sheetColIndex })] as { l?: { Target?: string } } | undefined;
+      const rawVideoUrl = cellText(row[videoIndex]);
+      const linkTarget = cellText(videoCell?.l?.Target);
+      const videoUrl = /^https?:\/\//i.test(rawVideoUrl) ? rawVideoUrl : (linkTarget || rawVideoUrl);
       if (!Number.isInteger(episodeNo) || episodeNo < 1 || episodeNo > plannedEpisodes || !videoUrl) return null;
       const title = cellText(row[titleIndex]).slice(0, EPISODE_TITLE_LIMIT);
       return {

@@ -89,7 +89,6 @@ export interface EnrollMessages {
   swiftAccountStatus: string;
   swiftOpening: string;
   swiftReady: string;
-  swiftFailed: string;
   swiftAccount: string;
   swiftInitialPassword: string;
   swiftTenantId: string;
@@ -184,7 +183,6 @@ export const enroll: Record<Locale, EnrollMessages> = {
     swiftAccountStatus: "Swift 账号状态",
     swiftOpening: "Swift 账号开通中，请稍后。",
     swiftReady: "Swift 账号已开通。",
-    swiftFailed: "开通中，请稍后。",
     swiftAccount: "登录账号",
     swiftInitialPassword: "初始密码",
     swiftTenantId: "Swift 租户编号",
@@ -280,7 +278,6 @@ export const enroll: Record<Locale, EnrollMessages> = {
     swiftAccountStatus: "Swift 帳號狀態",
     swiftOpening: "Swift 帳號開通中，請稍後。",
     swiftReady: "Swift 帳號已開通。",
-    swiftFailed: "開通中，請稍後。",
     swiftAccount: "登入帳號",
     swiftInitialPassword: "初始密碼",
     swiftTenantId: "Swift 租戶編號",
@@ -376,7 +373,6 @@ export const enroll: Record<Locale, EnrollMessages> = {
     swiftAccountStatus: "Swift Account Status",
     swiftOpening: "Swift account provisioning is in progress. Please check again later.",
     swiftReady: "Swift account is ready.",
-    swiftFailed: "Provisioning is in progress. Please check again later.",
     swiftAccount: "Login account",
     swiftInitialPassword: "Initial password",
     swiftTenantId: "Swift tenant ID",
@@ -472,7 +468,6 @@ export const enroll: Record<Locale, EnrollMessages> = {
     swiftAccountStatus: "Status da Conta Swift",
     swiftOpening: "A conta Swift está sendo provisionada. Verifique novamente mais tarde.",
     swiftReady: "A conta Swift está pronta.",
-    swiftFailed: "O provisionamento está em andamento. Verifique novamente mais tarde.",
     swiftAccount: "Conta de login",
     swiftInitialPassword: "Senha inicial",
     swiftTenantId: "ID do tenant Swift",

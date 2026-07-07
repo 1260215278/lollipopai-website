@@ -3,7 +3,7 @@ import { motion } from "motion/react";
 import { Apple, Smartphone, Star, Mail, Check, Play, Download, ArrowRight } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { QRCodeSVG } from "qrcode.react";
-import bossPoster from "../../imports/Im-Obsessed-With-My-Boss-Part-II.png";
+import downloadPoster from "../../imports/figma/download-poster.png";
 import { useI18n } from "../i18n";
 
 const APP_STORE_URL = "https://h5.lollipop.im/";
@@ -13,6 +13,8 @@ export function DownloadCTA() {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
   const { messages } = useI18n();
+  const titleAccent = "One Tap Away";
+  const hasAccentTitle = messages.downloadCta.title.includes(titleAccent);
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,7 +46,15 @@ export function DownloadCTA() {
             </span>
           </span>
           <h2 className="text-white" style={{ fontFamily: "Playfair Display", fontSize: "clamp(1.8rem, 4vw, 3rem)", fontWeight: 800, lineHeight: 1.2 }}>
-            {messages.downloadCta.title}
+            {hasAccentTitle ? (
+              <>
+                {messages.downloadCta.title.replace(titleAccent, "").trim()}
+                <br />
+                <span className="bg-gradient-to-r from-red-400 via-orange-400 to-red-400 bg-clip-text text-transparent">{titleAccent}</span>
+              </>
+            ) : (
+              messages.downloadCta.title
+            )}
           </h2>
           <p className="text-gray-500 mt-4 max-w-lg mx-auto" style={{ fontSize: "0.95rem", lineHeight: 1.7 }}>
             {messages.downloadCta.description}
@@ -73,7 +83,7 @@ export function DownloadCTA() {
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-5 bg-gray-900 rounded-b-2xl z-20" />
                     <div className="w-full h-full rounded-[1.5rem] overflow-hidden relative">
                       <ImageWithFallback
-                        src={bossPoster}
+                        src={downloadPoster}
                         alt="I'm Obsessed With My Boss Part II"
                         className="w-full h-full object-cover"
                       />
@@ -96,14 +106,6 @@ export function DownloadCTA() {
                       </div>
                     </div>
                   </div>
-                  {/* Floating notification */}
-                  <motion.div
-                    animate={{ y: [0, -6, 0] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute -top-4 right-[-1rem] z-30 bg-gradient-to-r from-red-500 to-orange-500 rounded-full px-3.5 py-1.5 shadow-lg shadow-red-900/40 whitespace-nowrap"
-                  >
-                    <span className="text-white" style={{ fontSize: "0.65rem", fontWeight: 700 }}>🎬 {messages.downloadCta.notification}</span>
-                  </motion.div>
                 </div>
 
                 {/* Download content */}
@@ -157,38 +159,14 @@ export function DownloadCTA() {
           >
             {/* QR Code card */}
             <div className="flex-1 rounded-3xl border border-white/5 bg-gradient-to-br from-white/[0.03] to-white/[0.01] p-6 flex flex-col items-center justify-center text-center hover:border-red-500/20 transition-all duration-500 group">
-              <p className="text-white mb-1" style={{ fontSize: "0.9rem", fontWeight: 600 }}>{messages.common.scanToDownload}</p>
-              <p className="text-gray-500 mb-5" style={{ fontSize: "0.75rem" }}>{messages.common.pointCameraAtQr}</p>
-
-              <div className="flex items-stretch justify-center gap-4 w-full">
-                {/* App Store QR */}
-                <div className="flex-1 flex flex-col items-center">
-                  <div className="relative mb-3">
-                    <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl blur-lg opacity-20 group-hover:opacity-40 transition-opacity" />
-                    <div className="relative bg-white rounded-2xl p-3 shadow-xl">
-                      <QRCodeSVG value={APP_STORE_URL} size={96} level="M" marginSize={0} className="w-24 h-24" />
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1.5 text-white/90">
-                    <Apple className="w-3.5 h-3.5" />
-                    <span style={{ fontSize: "0.75rem", fontWeight: 600 }}>{messages.common.scanForAppStore}</span>
-                  </div>
-                </div>
-
-                {/* Google Play QR */}
-                <div className="flex-1 flex flex-col items-center">
-                  <div className="relative mb-3">
-                    <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl blur-lg opacity-20 group-hover:opacity-40 transition-opacity" />
-                    <div className="relative bg-white rounded-2xl p-3 shadow-xl">
-                      <QRCodeSVG value={GOOGLE_PLAY_URL} size={96} level="M" marginSize={0} className="w-24 h-24" />
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1.5 text-white/90">
-                    <Smartphone className="w-3.5 h-3.5" />
-                    <span style={{ fontSize: "0.75rem", fontWeight: 600 }}>{messages.common.scanForGooglePlay}</span>
-                  </div>
+              <div className="relative mb-5">
+                <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl blur-lg opacity-20 group-hover:opacity-40 transition-opacity" />
+                <div className="relative bg-white rounded-2xl p-4 shadow-xl">
+                  <QRCodeSVG value={APP_STORE_URL} size={128} level="M" marginSize={0} className="w-32 h-32" />
                 </div>
               </div>
+              <p className="text-white mb-1" style={{ fontSize: "0.9rem", fontWeight: 600 }}>{messages.common.scanToDownload}</p>
+              <p className="text-gray-500" style={{ fontSize: "0.75rem" }}>{messages.common.pointCameraAtQr}</p>
             </div>
 
             {/* Email subscribe card */}

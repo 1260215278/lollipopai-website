@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { ImagePlus, UserRound, Video, Palette, BrainCircuit } from "lucide-react";
-import aiImg1 from "../../imports/AI创作.jpg";
-import aiImg2 from "../../imports/AI图片.jpg";
+import aiImg1 from "../../imports/figma/creating-phone-left.png";
+import aiImg2 from "../../imports/figma/creating-phone-right.png";
 import { useI18n } from "../i18n";
 
 const featureAssets = [

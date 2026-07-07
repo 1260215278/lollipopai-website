@@ -74,6 +74,12 @@ export interface AccountMessages {
   unknownLocation: string;
   refresh: string;
   bindEmailTitle: string;
+  bindPhoneAction: string;
+  changePhoneAction: string;
+  bindPhoneTitle: string;
+  changePhoneTitle: string;
+  phoneInput: string;
+  phoneRequired: string;
   emailInput: string;
   codeInput: string;
   sendCode: string;
@@ -168,6 +174,12 @@ const zhCN: AccountMessages = {
   unknownLocation: "未知位置",
   refresh: "刷新",
   bindEmailTitle: "绑定邮箱",
+  bindPhoneAction: "绑定",
+  changePhoneAction: "换绑",
+  bindPhoneTitle: "绑定登录手机号",
+  changePhoneTitle: "换绑登录手机号",
+  phoneInput: "手机号",
+  phoneRequired: "请输入手机号",
   emailInput: "邮箱地址",
   codeInput: "邮箱验证码",
   sendCode: "发送验证码",
@@ -239,6 +251,12 @@ export const account: Record<Locale, AccountMessages> = {
     offline: "離線",
     refresh: "重新整理",
     bindEmailTitle: "綁定信箱",
+    bindPhoneAction: "綁定",
+    changePhoneAction: "換綁",
+    bindPhoneTitle: "綁定登入手機號",
+    changePhoneTitle: "換綁登入手機號",
+    phoneInput: "手機號",
+    phoneRequired: "請輸入手機號",
     emailInput: "信箱地址",
     codeInput: "信箱驗證碼",
     sendCode: "發送驗證碼",
@@ -333,6 +351,12 @@ export const account: Record<Locale, AccountMessages> = {
     unknownLocation: "Unknown Location",
     refresh: "Refresh",
     bindEmailTitle: "Bind Email",
+    bindPhoneAction: "Bind",
+    changePhoneAction: "Change",
+    bindPhoneTitle: "Bind Login Phone",
+    changePhoneTitle: "Change Login Phone",
+    phoneInput: "Phone Number",
+    phoneRequired: "Enter the phone number",
     emailInput: "Email Address",
     codeInput: "Email Code",
     sendCode: "Send Code",
@@ -416,6 +440,12 @@ export const account: Record<Locale, AccountMessages> = {
     unknownLocation: "Local desconhecido",
     refresh: "Atualizar",
     bindEmailTitle: "Vincular E-mail",
+    bindPhoneAction: "Vincular",
+    changePhoneAction: "Alterar",
+    bindPhoneTitle: "Vincular Telefone de Login",
+    changePhoneTitle: "Alterar Telefone de Login",
+    phoneInput: "Número de Telefone",
+    phoneRequired: "Digite o número de telefone",
     emailInput: "Endereço de E-mail",
     codeInput: "Código do E-mail",
     sendCode: "Enviar Código",

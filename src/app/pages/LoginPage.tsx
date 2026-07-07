@@ -143,7 +143,7 @@ export function LoginPage() {
       } else {
         await loginByEmailPassword({ email: acc, password });
       }
-      setLoginName(acc);
+      setLoginName(isPhoneMode ? `${areaCode}${acc}` : acc);
       toast.success(isRegister ? t.registerSuccess : t.loginSuccess);
       navigate("/");
     } catch (err) {
@@ -296,15 +296,18 @@ export function LoginPage() {
                   )}
 
                   {/* 忘记密码（仅登录态） */}
-                  {!isRegister && loginMethod === "password" && (
-                    <div className="flex justify-end">
-                      <button
-                        type="button"
-                        onClick={() => navigate("/forgot-password")}
-                        className="text-xs text-[#99a1af] hover:text-white transition-colors"
-                      >
-                        {t.forgotPassword}
-                      </button>
+                  {!isRegister && (
+                    <div className="flex justify-end h-5">
+                      {loginMethod === "password" && (
+                        <button
+                          type="button"
+                          onClick={() => navigate("/forgot-password")}
+                          className="text-xs text-[#99a1af] hover:text-white transition-colors"
+                          style={{ lineHeight: "20px" }}
+                        >
+                          {t.forgotPassword}
+                        </button>
+                      )}
                     </div>
                   )}
 
@@ -345,7 +348,7 @@ export function LoginPage() {
         </main>
       </div>
 
-      <Footer onNavigate={() => navigate("/")} />
+      <Footer onNavigate={(page) => navigate(page === "home" ? "/" : `/${page}`)} />
     </div>
   );
 }
@@ -357,10 +360,10 @@ function LoginHeader() {
   const links = messages.navbar.links;
   const navItems: SiteNavItem[] = [
     { key: "home", label: links.home, onClick: () => navigate("/") },
-    { key: "creating", label: links.creating, onClick: () => navigate({ pathname: "/", hash: "#creators" }) },
+    { key: "creating", label: links.creating, onClick: () => navigate("/creating") },
     { key: "distribution", label: messages.distribution.nav.entry, onClick: () => navigate("/distribution") },
-    { key: "download", label: links.download, onClick: () => navigate({ pathname: "/", hash: "#download" }) },
-    { key: "contact", label: links.contact, onClick: () => navigate({ pathname: "/", hash: "#contact" }) },
+    { key: "download", label: links.download, onClick: () => navigate("/download") },
+    { key: "contact", label: links.contact, onClick: () => navigate("/contact") },
   ];
   return <SiteHeader navItems={navItems} onLogoClick={() => navigate("/")} sticky />;
 }

@@ -557,11 +557,12 @@ function ChartMetric({ label, value, accent }: { label: string; value: string; a
 function CourseChip({ label, color, onRemove }: { label: string; color: string; onRemove: () => void }) {
   return (
     <span
-      className="h-[21px] inline-flex items-center gap-1.5 rounded-full px-2.5 text-xs whitespace-nowrap"
+      className="h-[21px] max-w-[180px] min-w-0 inline-flex items-center gap-1.5 rounded-full px-2.5 text-xs whitespace-nowrap"
       style={{ background: `${color}14`, color, fontWeight: 500 }}
+      title={label}
     >
-      {label}
-      <button type="button" onClick={onRemove} className="text-current opacity-70 hover:opacity-100" aria-label={label}>
+      <span className="truncate">{label}</span>
+      <button type="button" onClick={onRemove} className="flex-shrink-0 text-current opacity-70 hover:opacity-100" aria-label={label}>
         <X className="w-3 h-3" />
       </button>
     </span>

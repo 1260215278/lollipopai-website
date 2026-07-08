@@ -411,7 +411,17 @@ export function OverviewPage() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[760px]">
+          <table className="w-full min-w-[900px] table-fixed">
+            <colgroup>
+              <col className="w-[92px]" />
+              <col />
+              <col className="w-[88px]" />
+              <col className="w-[108px]" />
+              <col className="w-[90px]" />
+              <col className="w-[90px]" />
+              <col className="w-[90px]" />
+              <col className="w-[90px]" />
+            </colgroup>
             <thead>
               <tr className="bg-gray-50/60">
                 {[
@@ -424,7 +434,7 @@ export function OverviewPage() {
                   t.colComments,
                   t.colShares,
                 ].map((col, i) => (
-                  <th key={i} className="px-5 py-3 text-left">
+                  <th key={i} className="px-5 py-3 text-left whitespace-nowrap">
                     <span className="text-xs text-gray-500" style={{ fontWeight: 500 }}>
                       {col}
                     </span>
@@ -435,7 +445,7 @@ export function OverviewPage() {
             <tbody>
               {ranking.map((row) => (
                 <tr key={row.courseId} className="border-t border-gray-50 hover:bg-gray-50/50 transition-colors">
-                  <td className="px-5 py-3.5">
+                  <td className="px-5 py-3.5 whitespace-nowrap">
                     <div className="flex items-center gap-2">
                       <span
                         className="w-6 h-6 rounded-md flex items-center justify-center text-xs"
@@ -450,40 +460,40 @@ export function OverviewPage() {
                       <RankTrend row={row} t={t} />
                     </div>
                   </td>
-                  <td className="px-5 py-3.5">
-                    <p className="text-sm text-gray-900" style={{ fontWeight: 600 }}>
+                  <td className="px-5 py-3.5 min-w-0">
+                    <p className="truncate text-sm text-gray-900" title={row.title} style={{ fontWeight: 600 }}>
                       {row.title}
                     </p>
                   </td>
-                  <td className="px-5 py-3.5">
+                  <td className="px-5 py-3.5 whitespace-nowrap">
                     <span className="text-xs text-gray-600">
                       {row.episodeCount}
                       {t.unitEpisode}
                     </span>
                   </td>
-                  <td className="px-5 py-3.5">
+                  <td className="px-5 py-3.5 whitespace-nowrap">
                     <span className="text-sm text-gray-900" style={{ fontWeight: 600 }}>
                       {formatCompact(row.playCount, locale)}
                     </span>
                   </td>
-                  <td className="px-5 py-3.5">
+                  <td className="px-5 py-3.5 whitespace-nowrap">
                     <div className="flex items-center gap-1 text-xs text-gray-600">
-                      <Heart className="w-3 h-3 text-red-400" />
+                      <Heart className="w-3 h-3 text-red-400 flex-shrink-0" />
                       {formatCompact(row.likeCount, locale)}
                     </div>
                   </td>
-                  <td className="px-5 py-3.5">
+                  <td className="px-5 py-3.5 whitespace-nowrap">
                     <div className="flex items-center gap-1 text-xs text-gray-600">
-                      <Star className="w-3 h-3 text-indigo-400" />
+                      <Star className="w-3 h-3 text-indigo-400 flex-shrink-0" />
                       {formatCompact(row.collectCount, locale)}
                     </div>
                   </td>
-                  <td className="px-5 py-3.5">
+                  <td className="px-5 py-3.5 whitespace-nowrap">
                     <span className="text-xs text-gray-600">{formatCount(row.commentCount, locale)}</span>
                   </td>
-                  <td className="px-5 py-3.5">
+                  <td className="px-5 py-3.5 whitespace-nowrap">
                     <div className="flex items-center gap-1 text-xs text-gray-600">
-                      <Share2 className="w-3 h-3 text-gray-400" />
+                      <Share2 className="w-3 h-3 text-gray-400 flex-shrink-0" />
                       {formatCount(row.shareCount, locale)}
                     </div>
                   </td>

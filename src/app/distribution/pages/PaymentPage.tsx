@@ -290,7 +290,7 @@ function BoundView({
                         {account.companyName || "—"}
                       </p>
                       {isDefault && (
-                        <span className="px-1.5 py-0.5 rounded-md border border-[#fcd34d] bg-[#fffbeb] text-[10px] text-[#d97706]" style={{ fontWeight: 600 }}>
+                        <span className="shrink-0 px-1.5 py-0.5 rounded-md border border-[#fcd34d] bg-[#fffbeb] text-[10px] text-[#d97706]" style={{ fontWeight: 600 }}>
                           {t.defaultBadge}
                         </span>
                       )}
@@ -298,7 +298,7 @@ function BoundView({
                     <p className="text-xs text-[#99a1af] mt-0.5 font-mono">{maskAccount(account.accountNo)}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-1.5">
+                <div className="flex flex-shrink-0 items-center gap-1.5">
                   {!isDefault && (
                     <IconButton
                       label={t.setDefault}
@@ -321,7 +321,7 @@ function BoundView({
                 {rows.map((item, i) => (
                   <div key={i} className="flex items-center justify-between py-3 border-b border-gray-50 last:border-0">
                     <span className="text-xs text-[#99a1af] w-24 flex-shrink-0">{item.label}</span>
-                    <span className="text-sm text-[#1e2939] flex-1 text-right" style={{ fontWeight: 700 }}>
+                    <span className="min-w-0 flex-1 truncate text-right text-sm text-[#1e2939]" title={item.val} style={{ fontWeight: 700 }}>
                       {item.val}
                     </span>
                   </div>

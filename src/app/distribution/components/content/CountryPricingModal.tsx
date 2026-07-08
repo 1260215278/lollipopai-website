@@ -58,44 +58,55 @@ export const CountryPricingModal: React.FC<CountryPricingModalProps> = ({
           ) : rows.length === 0 ? (
             <div className="py-12 text-center text-sm text-gray-400">{t.emptyTitle}</div>
           ) : (
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-100">
-                  <th className="text-left pb-2 text-xs text-gray-500" style={{ fontWeight: 500 }}>
-                    {t.pricingColCountry}
-                  </th>
-                  <th className="text-left pb-2 text-xs text-gray-500" style={{ fontWeight: 500 }}>
-                    {t.pricingColSingle}
-                  </th>
-                  <th className="text-left pb-2 text-xs text-gray-500" style={{ fontWeight: 500 }}>
-                    {t.pricingColWholeLe50}
-                  </th>
-                  <th className="text-left pb-2 text-xs text-gray-500" style={{ fontWeight: 500 }}>
-                    {t.pricingColWholeGt50}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((c) => (
-                  <tr key={c.country} className="border-b border-gray-50 last:border-0">
-                    <td className="py-3">
-                      <span className="text-gray-800" style={{ fontWeight: 600 }}>
-                        {c.countryName || c.country}
-                      </span>
-                    </td>
-                    <td className="py-3 text-gray-900" style={{ fontWeight: 700 }}>
-                      {formatUsd(c.episodePriceUsd)}
-                    </td>
-                    <td className="py-3 text-gray-900" style={{ fontWeight: 700 }}>
-                      {formatUsd(c.wholePriceLe50Usd)}
-                    </td>
-                    <td className="py-3 text-gray-900" style={{ fontWeight: 700 }}>
-                      {formatUsd(c.wholePriceGt50Usd)}
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[520px] table-fixed text-sm">
+                <colgroup>
+                  <col className="w-[160px]" />
+                  <col className="w-[120px]" />
+                  <col className="w-[120px]" />
+                  <col className="w-[120px]" />
+                </colgroup>
+                <thead>
+                  <tr className="border-b border-gray-100">
+                    <th className="text-left pb-2 pr-4 text-xs text-gray-500 whitespace-nowrap" style={{ fontWeight: 500 }}>
+                      {t.pricingColCountry}
+                    </th>
+                    <th className="text-left pb-2 pr-4 text-xs text-gray-500 whitespace-nowrap" style={{ fontWeight: 500 }}>
+                      {t.pricingColSingle}
+                    </th>
+                    <th className="text-left pb-2 pr-4 text-xs text-gray-500 whitespace-nowrap" style={{ fontWeight: 500 }}>
+                      {t.pricingColWholeLe50}
+                    </th>
+                    <th className="text-left pb-2 text-xs text-gray-500 whitespace-nowrap" style={{ fontWeight: 500 }}>
+                      {t.pricingColWholeGt50}
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {rows.map((c) => {
+                    const countryName = c.countryName || c.country;
+                    return (
+                      <tr key={c.country} className="border-b border-gray-50 last:border-0">
+                        <td className="py-3 pr-4 min-w-0">
+                          <span className="block truncate text-gray-800" title={countryName} style={{ fontWeight: 600 }}>
+                            {countryName}
+                          </span>
+                        </td>
+                        <td className="py-3 pr-4 text-gray-900 whitespace-nowrap" style={{ fontWeight: 700 }}>
+                          {formatUsd(c.episodePriceUsd)}
+                        </td>
+                        <td className="py-3 pr-4 text-gray-900 whitespace-nowrap" style={{ fontWeight: 700 }}>
+                          {formatUsd(c.wholePriceLe50Usd)}
+                        </td>
+                        <td className="py-3 text-gray-900 whitespace-nowrap" style={{ fontWeight: 700 }}>
+                          {formatUsd(c.wholePriceGt50Usd)}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
       </div>

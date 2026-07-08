@@ -823,6 +823,7 @@ function DetailModal({
   onClose: () => void;
 }) {
   const snapshot = parseAccountSnapshot(detail?.accountSnapshot ?? null);
+  const [previewVoucherUrl, setPreviewVoucherUrl] = useState<string | null>(null);
   return (
     <ModalShell onClose={onClose}>
       <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
@@ -845,6 +846,9 @@ function DetailModal({
               <InfoLine label={t.detailStatus} value={groupText(detail.statusGroup)} />
               <InfoLine label={t.detailGross} value={cny(detail.grossCny)} />
               <InfoLine label={t.detailPlatform} value={cny(detail.platformCny)} />
+              {detail.statusGroup === "settled" && (
+                <VoucherImageLine label={t.detailVoucher} url={detail.payVoucherUrl} onPreview={setPreviewVoucherUrl} />
+              )}
             </div>
             {detail.statusGroup === "failed" && detail.auditRemark && (
               <div className="mt-4 rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-600">
@@ -878,6 +882,21 @@ function DetailModal({
           </>
         )}
       </div>
+      {previewVoucherUrl && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-6" onClick={() => setPreviewVoucherUrl(null)}>
+          <div className="relative max-h-full max-w-5xl" onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              onClick={() => setPreviewVoucherUrl(null)}
+              className="absolute -right-3 -top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white text-gray-500 shadow-lg hover:text-gray-700"
+              aria-label="Close"
+            >
+              <X className="h-4 w-4" />
+            </button>
+            <img src={previewVoucherUrl} alt={t.detailVoucher} className="max-h-[82vh] max-w-[90vw] rounded-xl bg-white object-contain shadow-2xl" />
+          </div>
+        </div>
+      )}
     </ModalShell>
   );
 }
@@ -901,12 +920,35 @@ function CloseButton({ onClose }: { onClose: () => void }) {
 }
 
 function InfoLine({ label, value, strong }: { label: string; value: string; strong?: boolean }) {
+  const displayValue = value || "—";
   return (
-    <div className="flex items-center justify-between gap-4 rounded-xl bg-gray-50 px-4 py-3">
-      <span className="text-xs text-[#99a1af]">{label}</span>
-      <span className="text-sm text-[#101828] tabular-nums text-right" style={{ fontWeight: strong ? 800 : 600 }}>
-        {value || "—"}
+    <div className="flex items-start justify-between gap-4 rounded-xl bg-gray-50 px-4 py-3">
+      <span className="shrink-0 text-xs leading-5 text-[#99a1af]">{label}</span>
+      <span
+        className="min-w-0 flex-1 break-all text-right text-sm leading-5 text-[#101828] tabular-nums"
+        title={displayValue}
+        style={{ fontWeight: strong ? 800 : 600 }}
+      >
+        {displayValue}
       </span>
+    </div>
+  );
+}
+
+function VoucherImageLine({ label, url, onPreview }: { label: string; url: string | null; onPreview: (url: string) => void }) {
+  if (!url) return <InfoLine label={label} value="—" />;
+
+  return (
+    <div className="col-span-2 flex items-start justify-between gap-4 rounded-xl bg-gray-50 px-4 py-3">
+      <span className="shrink-0 text-xs leading-5 text-[#99a1af]">{label}</span>
+      <button
+        type="button"
+        onClick={() => onPreview(url)}
+        className="min-w-0 rounded-lg border border-gray-200 bg-white p-1 shadow-sm transition hover:border-[#e8192c]"
+        title={url}
+      >
+        <img src={url} alt={label} className="h-24 max-w-full rounded-md object-contain" />
+      </button>
     </div>
   );
 }

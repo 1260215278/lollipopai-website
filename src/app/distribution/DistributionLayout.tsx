@@ -3,6 +3,7 @@ import { NavLink, Outlet, useNavigate, useLocation } from "react-router";
 import {
   Video,
   Wallet,
+  ArrowLeft,
   ChevronDown,
   Globe,
   LogOut,
@@ -141,12 +142,18 @@ export function DistributionLayout() {
   const memberDisplayName = (currentMember?.phoneMask || currentMember?.nickname || "").trim();
   const hasPublisherName = publisherName.length > 0;
   const headerName = memberDisplayName || (hasPublisherName ? previewName(publisherName) : t.common.publisher);
+  const returnHomeLabel =
+    currentLanguage.code === "zh-CN"
+      ? "返回官网"
+      : currentLanguage.code === "zh-TW"
+        ? "返回官網"
+        : `${t.common.back} ${messages.common.brand}`;
 
   useEffect(() => {
     if (inSettlement) setSettlementOpen(true);
   }, [inSettlement]);
 
-  // 进入后台页：无登录态直接去登录；有 appToken 但无 publisher token，则优先用 byAppToken 换取。
+  // 进入后台页：无登录态直接去入驻申请；有 appToken 但无 publisher token，则优先用 byAppToken 换取。
   // 换取失败不直接拦截：回落 /app/publisher/status，把新用户/审核中/驳回导向入驻状态页。
   useEffect(() => {
     let alive = true;
@@ -159,7 +166,7 @@ export function DistributionLayout() {
       };
     }
     if (!isAppAuthed()) {
-      navigate("/login", { replace: true });
+      navigate("/distribution/enroll", { replace: true });
       return () => {
         alive = false;
       };
@@ -367,6 +374,15 @@ export function DistributionLayout() {
               aria-label={t.common.menu}
             >
               <Menu className="w-5 h-5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("/")}
+              className="inline-flex h-9 items-center gap-1.5  pointer rounded-lg px-2.5 text-sm text-[#111111] transition-colors hover:bg-gray-50 flex-shrink-0"
+              style={{ fontWeight: 600 }}
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>{returnHomeLabel}</span>
             </button>
           </div>
 

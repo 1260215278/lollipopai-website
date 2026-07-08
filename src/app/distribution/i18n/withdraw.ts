@@ -59,6 +59,7 @@ export interface WithdrawMessages {
   detailStatus: string;
   detailGross: string;
   detailPlatform: string;
+  detailVoucher: string;
   itemCourse: string;
   itemGross: string;
   itemCreator: string;
@@ -136,6 +137,7 @@ export const withdraw: Record<Locale, WithdrawMessages> = {
     detailStatus: "申请状态",
     detailGross: "总流水",
     detailPlatform: "平台分成",
+    detailVoucher: "打款凭证",
     itemCourse: "剧集 ID",
     itemGross: "总流水",
     itemCreator: "出品方实得",
@@ -211,6 +213,7 @@ export const withdraw: Record<Locale, WithdrawMessages> = {
     detailStatus: "申請狀態",
     detailGross: "總流水",
     detailPlatform: "平台分成",
+    detailVoucher: "打款憑證",
     itemCourse: "劇集 ID",
     itemGross: "總流水",
     itemCreator: "出品方實得",
@@ -286,6 +289,7 @@ export const withdraw: Record<Locale, WithdrawMessages> = {
     detailStatus: "Request Status",
     detailGross: "Gross",
     detailPlatform: "Platform Share",
+    detailVoucher: "Payment Voucher",
     itemCourse: "Course ID",
     itemGross: "Gross",
     itemCreator: "Publisher Net",
@@ -361,6 +365,7 @@ export const withdraw: Record<Locale, WithdrawMessages> = {
     detailStatus: "Status",
     detailGross: "Bruto",
     detailPlatform: "Parcela da plataforma",
+    detailVoucher: "Comprovante de pagamento",
     itemCourse: "ID do Curso",
     itemGross: "Bruto",
     itemCreator: "Líquido do produtor",

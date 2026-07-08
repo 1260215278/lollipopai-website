@@ -12,7 +12,7 @@ import { AccountPage } from "./pages/AccountPage";
 
 /**
  * 发行中心子路由（挂载于 /distribution/*）。
- * - /distribution           → 发行中心入口（Layout 内部按 byAppToken 决定后台/入驻/登录）
+ * - /distribution           → 发行中心入口（Layout 内部按登录态/byAppToken 决定后台/入驻）
  * - /distribution/enroll    → 入驻申请
  * - /distribution/content   → 上剧中心
  * - /distribution/payment | earnings | withdraw → 结算中心

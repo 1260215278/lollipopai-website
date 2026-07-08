@@ -35,7 +35,7 @@
 | 9 | 前端已修复 | 账号信息昵称输入限制 50 字符，提交前也收敛到 50 字符。 |
 | 10 | 前端已修复 | 账号信息公司名称、统一社会信用代码、注册地址、联系电话 4 个输入框限制 50 字符，提交前也收敛到 50 字符。 |
 | 11 | 前端已处理，待后端部署验证 | 后端已提供两步验证登录契约：`byAppToken` 返回顶层 `stage=2FA_REQUIRED` 和 challenge，前端已接入二次验证码界面与 `/publisher/login/verify2fa`；后端需先部署 test 分支和 403396-403398 i18n/DDL。 |
-| 12 | 前端已处理 | 成员页为员工角色补充“分配”入口，打开弹窗读取 `/publisher/member/course/list`，保存时调用 `/publisher/member/course/assign` 覆盖员工可见剧目。 |
+| 12 | 前端已调整，需后端同步 | 成员页已移除员工“分配”入口和弹窗；上剧中心入口改按 `me().permissions` 中的 `COURSE_VIEW_ASSIGNED` 放行。后端需默认授予员工该权限，并确认员工可见剧目范围。 |
 | 13 | 前端已处理，另有后端风险 | 成员页角色、状态、常见权限 key 增加前端多语言映射；未知权限 key 仍回退后端返回文案，需要后端保持稳定 key 或按语言返回。 |
 | 14 | 前端已处理，待后端部署验证 | 后端已修邮箱账号信息回显，并提供绑定登录手机号接口；前端直接信任 `/publisher/account/info.contact.emailMask/emailBound`，并已接入 `/publisher/account/sendPhoneCode` 与 `/publisher/account/bindPhone`。 |
 | 15 | 需要后端配合 | 账号信息通知开关前端只负责保存 `notifyEmail/notifySms`；登录通知发送和发送记录/失败记录应由后端登录与通知服务落库，已记录反馈文档。 |

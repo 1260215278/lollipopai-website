@@ -7,14 +7,11 @@ import { PageLoading } from "../components/settlement/PageHeader";
 import {
   getMemberList,
   getMemberRoles,
-  getMemberCourseAssignment,
-  assignMemberCourses,
   addMember,
   removeMember,
   type PublisherMember,
   type MemberRoleCard,
   type AddableMemberRole,
-  type MemberCoursePoolItem,
 } from "../../services/member";
 
 type MembersMsg = ReturnType<typeof useI18n>["messages"]["distribution"]["members"];
@@ -86,7 +83,6 @@ export function MembersPage() {
 
   const [addOpen, setAddOpen] = useState(false);
   const [removeTarget, setRemoveTarget] = useState<PublisherMember | null>(null);
-  const [assignTarget, setAssignTarget] = useState<PublisherMember | null>(null);
 
   const load = useCallback(async (showLoading = true) => {
     if (showLoading) setLoading(true);
@@ -175,7 +171,7 @@ export function MembersPage() {
           <div className="py-16" />
         ) : (
           members.map((m) => (
-            <MemberRow key={m.memberUserId} member={m} t={t} onAssign={() => setAssignTarget(m)} onRemove={() => setRemoveTarget(m)} />
+            <MemberRow key={m.memberUserId} member={m} t={t} onRemove={() => setRemoveTarget(m)} />
           ))
         )}
       </div>
@@ -224,18 +220,6 @@ export function MembersPage() {
           }}
         />
       )}
-
-      {assignTarget && (
-        <AssignCourseModal
-          t={t}
-          member={assignTarget}
-          onClose={() => setAssignTarget(null)}
-          onSuccess={() => {
-            setAssignTarget(null);
-            toast.success(t.assignSuccess);
-          }}
-        />
-      )}
     </div>
   );
 }
@@ -245,12 +229,10 @@ export function MembersPage() {
 function MemberRow({
   member: m,
   t,
-  onAssign,
   onRemove,
 }: {
   member: PublisherMember;
   t: MembersMsg;
-  onAssign: () => void;
   onRemove: () => void;
 }) {
   const theme = ROLE_THEME[m.role] ?? ROLE_THEME[3];
@@ -306,16 +288,6 @@ function MemberRow({
 
       {/* 操作 */}
       <div className="flex items-center gap-3">
-        {m.role === 3 && (
-          <button
-            type="button"
-            onClick={onAssign}
-            className="text-xs text-[#4a5565] transition-opacity hover:text-[#111111]"
-            style={{ fontWeight: 500 }}
-          >
-            {t.assign}
-          </button>
-        )}
         <button
           type="button"
           disabled={!m.removable}
@@ -559,153 +531,6 @@ function AddMemberModal({
             {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
             {t.confirm}
           </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function AssignCourseModal({
-  t,
-  member,
-  onClose,
-  onSuccess,
-}: {
-  t: MembersMsg;
-  member: PublisherMember;
-  onClose: () => void;
-  onSuccess: () => void;
-}) {
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [pool, setPool] = useState<MemberCoursePoolItem[]>([]);
-  const [selected, setSelected] = useState<Set<number>>(() => new Set());
-
-  useEffect(() => {
-    let alive = true;
-    setLoading(true);
-    getMemberCourseAssignment(member.memberUserId)
-      .then((data) => {
-        if (!alive) return;
-        setPool(data.pool);
-        setSelected(new Set(data.assignedCourseIds));
-      })
-      .catch(() => undefined)
-      .finally(() => {
-        if (alive) setLoading(false);
-      });
-    return () => {
-      alive = false;
-    };
-  }, [member.memberUserId]);
-
-  const toggleCourse = (courseId: number) => {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      if (next.has(courseId)) next.delete(courseId);
-      else next.add(courseId);
-      return next;
-    });
-  };
-
-  const save = async () => {
-    if (saving) return;
-    setSaving(true);
-    try {
-      await assignMemberCourses({ memberUserId: member.memberUserId, courseIds: Array.from(selected) });
-      onSuccess();
-    } catch {
-      // http 已 toast
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative w-full max-w-[620px] bg-white rounded-2xl shadow-2xl p-6">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h3 className="text-[#101828]" style={{ fontWeight: 700, fontSize: "17px", lineHeight: "25.5px" }}>
-              {t.assignModalTitle}
-            </h3>
-            <p className="mt-1 text-xs text-[#6a7282]">
-              {t.assignModalDesc.replace("{name}", member.nickname || member.phoneMask)}
-            </p>
-          </div>
-          <button
-            onClick={onClose}
-            className="text-[#99a1af] hover:text-gray-600 transition-colors"
-            aria-label={t.cancel}
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        <div className="mt-5 max-h-[420px] overflow-y-auto rounded-[14px] border border-[#f3f4f6]">
-          {loading ? (
-            <div className="flex items-center justify-center py-12 text-[#99a1af]">
-              <Loader2 className="w-5 h-5 animate-spin" />
-            </div>
-          ) : pool.length === 0 ? (
-            <div className="py-12 text-center text-sm text-[#99a1af]">{t.assignEmpty}</div>
-          ) : (
-            <div className="divide-y divide-[#f3f4f6]">
-              {pool.map((course) => {
-                const checked = selected.has(course.courseId);
-                return (
-                  <button
-                    key={course.courseId}
-                    type="button"
-                    onClick={() => toggleCourse(course.courseId)}
-                    className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-[#f9fafb]"
-                  >
-                    <span
-                      className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-md border"
-                      style={{ borderColor: checked ? "#111111" : "#d1d5db", background: checked ? "#111111" : "white" }}
-                    >
-                      {checked && <Check className="h-3.5 w-3.5 text-white" />}
-                    </span>
-                    <div className="h-12 w-9 flex-shrink-0 overflow-hidden rounded-md bg-[#f3f4f6]">
-                      {course.titleImg ? <img src={course.titleImg} alt="" className="h-full w-full object-cover" /> : null}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm text-[#101828]" style={{ fontWeight: 600 }}>
-                        {course.title}
-                      </p>
-                      <p className="mt-0.5 text-xs text-[#99a1af]">D{course.courseId}</p>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
-        <div className="mt-5 flex items-center justify-between gap-3">
-          <span className="text-xs text-[#99a1af]">
-            {t.assignSelectedCount.replace("{n}", String(selected.size))}
-          </span>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={onClose}
-              disabled={saving}
-              className="h-[40px] px-5 rounded-[12px] border border-[#e5e7eb] text-sm text-[#364153] hover:bg-gray-50 transition-colors disabled:opacity-60"
-              style={{ fontWeight: 500 }}
-            >
-              {t.cancel}
-            </button>
-            <button
-              onClick={() => void save()}
-              disabled={saving || loading}
-              className="h-[40px] px-5 rounded-[12px] bg-[#111111] text-white text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-60"
-              style={{ fontWeight: 600 }}
-            >
-              {saving && <Loader2 className="w-4 h-4 animate-spin" />}
-              {t.assignSave}
-            </button>
-          </div>
         </div>
       </div>
     </div>

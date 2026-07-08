@@ -4,7 +4,6 @@ import type { Locale } from "../../i18n";
 export interface NavMessages {
   /** 营销站 Navbar 的发行中心入口 */
   entry: string;
-  overview: string;
   content: string;
   settlement: string;
   payment: string;
@@ -17,7 +16,6 @@ export interface NavMessages {
 export const nav: Record<Locale, NavMessages> = {
   "zh-CN": {
     entry: "发行中心",
-    overview: "播放数据",
     content: "发行新剧",
     settlement: "收益中心",
     payment: "收款信息",
@@ -28,7 +26,6 @@ export const nav: Record<Locale, NavMessages> = {
   },
   "zh-TW": {
     entry: "發行中心",
-    overview: "數據概覽",
     content: "上劇",
     settlement: "結算中心",
     payment: "收款管理",
@@ -39,7 +36,6 @@ export const nav: Record<Locale, NavMessages> = {
   },
   en: {
     entry: "Distribution",
-    overview: "Overview",
     content: "Upload Drama",
     settlement: "Settlement",
     payment: "Payment Accounts",
@@ -50,7 +46,6 @@ export const nav: Record<Locale, NavMessages> = {
   },
   pt: {
     entry: "Distribuição",
-    overview: "Visão geral",
     content: "Publicar drama",
     settlement: "Liquidação",
     payment: "Contas de recebimento",

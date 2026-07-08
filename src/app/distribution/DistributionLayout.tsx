@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { NavLink, Outlet, useNavigate, useLocation } from "react-router";
 import {
-  BarChart2,
   Video,
   Wallet,
   ChevronDown,
@@ -30,6 +29,7 @@ import {
   type PublisherTwoFactorChallenge,
 } from "../services/session";
 import {
+  AuditStatus,
   getPublisherStatus,
   getPublisherTenantStatus,
   retryPublisherTenantSync,
@@ -40,7 +40,6 @@ import lollipopLogo from "../../imports/Lollipop1.png";
 
 const NAME_PREVIEW_LIMIT = 10;
 const PERMISSION = {
-  DASHBOARD_VIEW: "DASHBOARD_VIEW",
   COURSE_VIEW_ASSIGNED: "COURSE_VIEW_ASSIGNED",
   COURSE_MANAGE: "COURSE_MANAGE",
   SETTLEMENT_VIEW: "SETTLEMENT_VIEW",
@@ -61,10 +60,6 @@ function previewName(name: string) {
 
 function hasPermission(member: CurrentPublisherMember | null, permission: string): boolean {
   return member?.permissions?.includes(permission) === true;
-}
-
-function canViewOverview(member: CurrentPublisherMember | null): boolean {
-  return hasPermission(member, PERMISSION.DASHBOARD_VIEW);
 }
 
 function canViewContent(member: CurrentPublisherMember | null): boolean {
@@ -94,11 +89,10 @@ function canAccessPath(member: CurrentPublisherMember | null, path: string): boo
   if (path.includes("/payment")) return canViewSettlement(member);
   if (path.includes("/account")) return canViewAccount(member);
   if (path.includes("/members")) return canViewMembers(member);
-  return canViewOverview(member);
+  return canViewContent(member);
 }
 
 function firstAllowedPath(member: CurrentPublisherMember | null): string {
-  if (canViewOverview(member)) return "/distribution/overview";
   if (canViewContent(member)) return "/distribution/content";
   if (canViewSettlement(member)) return "/distribution/earnings";
   if (canWithdraw(member)) return "/distribution/withdraw";
@@ -152,13 +146,14 @@ export function DistributionLayout() {
     if (inSettlement) setSettlementOpen(true);
   }, [inSettlement]);
 
-  // 进入后台页：无登录态直接去登录；有 appToken 但无 publisher token，则用 byAppToken 换取。
-  // 换取失败说明还不是发行者或登录态失效，回入驻页，不放行子页面请求 /publisher/**。
+  // 进入后台页：无登录态直接去登录；有 appToken 但无 publisher token，则优先用 byAppToken 换取。
+  // 换取失败不直接拦截：回落 /app/publisher/status，把新用户/审核中/驳回导向入驻状态页。
   useEffect(() => {
     let alive = true;
     if (isPublisherAuthed()) {
       setTokenReady(true);
       setEntryError("");
+      setTwoFactorChallenge(null);
       return () => {
         alive = false;
       };
@@ -172,6 +167,7 @@ export function DistributionLayout() {
     setTokenReady(false);
     setMemberReady(false);
     setEntryError("");
+    setTwoFactorChallenge(null);
     ensurePublisherAccess()
       .then((result) => {
         if (!alive) return;
@@ -179,24 +175,34 @@ export function DistributionLayout() {
           setTwoFactorChallenge(result.challenge);
           return;
         }
+        setTwoFactorChallenge(null);
         setTokenReady(true);
       })
-      .catch((err) => {
+      .catch(async (err) => {
         if (!alive) return;
-        const code = err instanceof ApiError ? err.code : -1;
-        if (code === 40020) {
+        const loginMsg = err instanceof Error ? err.message : t.common.serverError;
+        try {
+          const status = await getPublisherStatus({ toastOnError: false });
+          if (!alive) return;
+          if (status.auditStatus === AuditStatus.APPROVED || status.isPublisher === 1) {
+            toast.error(loginMsg);
+            setEntryError(loginMsg);
+            return;
+          }
           navigate("/distribution/enroll", { replace: true });
           return;
+        } catch (statusErr) {
+          if (!alive) return;
+          const code = statusErr instanceof ApiError ? statusErr.code : -1;
+          if (code === 401 || code === 401181 || code === 401182) {
+            clearTokens();
+            navigate("/login", { replace: true });
+            return;
+          }
+          // status 无法确认时保留 byAppToken 的后端文案，避免误导用户进入错误状态。
+          toast.error(loginMsg);
+          setEntryError(loginMsg);
         }
-        if (code === 401 || code === 401181 || code === 401182) {
-          clearTokens();
-          navigate("/login", { replace: true });
-          return;
-        }
-        // 403398：已开 2FA 但该成员未绑手机号，无法下发短信码 → 提示联系账号管理员处理
-        const msg = code === 403398 ? t.twoFactor.bindPhoneFirst : err instanceof Error ? err.message : t.common.serverError;
-        toast.error(msg);
-        setEntryError(msg);
       });
     return () => {
       alive = false;
@@ -362,12 +368,6 @@ export function DistributionLayout() {
             >
               <Menu className="w-5 h-5" />
             </button>
-            <span
-              className="hidden sm:inline-block text-sm whitespace-nowrap"
-              style={{ fontWeight: 600, color: "#111111" }}
-            >
-              {t.common.workspace}
-            </span>
           </div>
 
           <div className="flex items-center gap-2 flex-shrink-0">
@@ -469,7 +469,7 @@ export function DistributionLayout() {
                 <p className="text-sm text-gray-700 mt-3 leading-relaxed">{entryError}</p>
               </div>
             </div>
-          ) : twoFactorChallenge && !tokenReady ? (
+          ) : !tokenReady && isAppAuthed() ? (
             <TwoFactorGate
               t={t}
               challenge={twoFactorChallenge}
@@ -542,8 +542,9 @@ export function DistributionLayout() {
   );
 }
 
-/** 两步验证登录界面（item 12）：byAppToken 返回 stage=2FA_REQUIRED 后，
- *  展示 phoneMask + 短信验证码输入 + 有效期倒计时；verify2fa 成功才放行工作台。
+/** 两步验证登录界面（item 12）：byAppToken 请求发起后立即展示界面；
+ *  challenge 返回前先允许用户看到验证码输入区域，challenge 返回后展示 phoneMask + 倒计时并可校验。
+ *  verify2fa 成功才放行后台。
  *  重发 = 重新调 byAppToken（后端会重发短信并返回新 challengeToken）。 */
 function TwoFactorGate({
   t,
@@ -553,19 +554,24 @@ function TwoFactorGate({
   onBlocked,
 }: {
   t: DistributionMessages;
-  challenge: PublisherTwoFactorChallenge;
+  challenge: PublisherTwoFactorChallenge | null;
   onChallenge: (challenge: PublisherTwoFactorChallenge) => void;
   onVerified: () => void;
   onBlocked: (msg: string) => void;
 }) {
   const navigate = useNavigate();
   const [code, setCode] = useState("");
-  const [remaining, setRemaining] = useState(challenge.expireSeconds);
+  const [remaining, setRemaining] = useState(challenge?.expireSeconds ?? 0);
   const [verifying, setVerifying] = useState(false);
   const [resending, setResending] = useState(false);
-  const expired = remaining <= 0;
+  const waitingForChallenge = challenge === null;
+  const expired = !waitingForChallenge && remaining <= 0;
 
   useEffect(() => {
+    if (!challenge) {
+      setRemaining(0);
+      return;
+    }
     setRemaining(challenge.expireSeconds);
     const id = window.setInterval(() => setRemaining((s) => (s > 0 ? s - 1 : 0)), 1000);
     return () => window.clearInterval(id);
@@ -586,7 +592,7 @@ function TwoFactorGate({
   };
 
   const resend = async () => {
-    if (resending) return;
+    if (resending || waitingForChallenge) return;
     setResending(true);
     try {
       const result = await exchangePublisherToken();
@@ -612,6 +618,7 @@ function TwoFactorGate({
   };
 
   const verify = async () => {
+    if (!challenge) return;
     const value = code.trim();
     if (!value) {
       toast.error(t.twoFactor.codeRequired);
@@ -645,9 +652,10 @@ function TwoFactorGate({
         <h3 className="mt-4 text-center text-[#111111]" style={{ fontWeight: 700, fontSize: "1rem" }}>
           {t.twoFactor.title}
         </h3>
-        <p className="mt-2 text-center text-sm text-gray-500 leading-relaxed">
-          {t.twoFactor.desc.replace("{phone}", challenge.phoneMask)}
-        </p>
+        <div className="mt-2 flex min-h-[22px] items-center justify-center gap-2 text-center text-sm text-gray-500 leading-relaxed">
+          {waitingForChallenge && <Loader2 className="h-4 w-4 animate-spin text-gray-400" />}
+          <span>{challenge ? t.twoFactor.desc.replace("{phone}", challenge.phoneMask) : t.twoFactor.pendingDesc}</span>
+        </div>
         <label className="block mt-5">
           <span className="mb-1.5 block text-xs text-[#364153]" style={{ fontWeight: 600 }}>
             {t.twoFactor.codeLabel}
@@ -656,7 +664,7 @@ function TwoFactorGate({
             value={code}
             onChange={(e) => setCode(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter") void verify();
+              if (e.key === "Enter" && !waitingForChallenge) void verify();
             }}
             placeholder={t.twoFactor.codePlaceholder}
             autoComplete="one-time-code"
@@ -664,13 +672,15 @@ function TwoFactorGate({
             className="h-11 w-full rounded-[10px] border border-[#e5e7eb] px-3 text-sm outline-none focus:border-[#111111]"
           />
         </label>
-        <p className={`mt-2 text-xs ${expired ? "text-[#E8192C]" : "text-gray-400"}`}>
-          {expired ? t.twoFactor.expired : t.twoFactor.expireIn.replace("{s}", String(remaining))}
-        </p>
+        {challenge && (
+          <p className={`mt-2 text-xs ${expired ? "text-[#E8192C]" : "text-gray-400"}`}>
+            {expired ? t.twoFactor.expired : t.twoFactor.expireIn.replace("{s}", String(remaining))}
+          </p>
+        )}
         <button
           type="button"
           onClick={() => void verify()}
-          disabled={verifying || expired}
+          disabled={verifying || expired || waitingForChallenge}
           className="mt-5 flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#111111] text-sm text-white transition-all hover:opacity-90 disabled:opacity-60"
           style={{ fontWeight: 600 }}
         >
@@ -680,7 +690,7 @@ function TwoFactorGate({
         <button
           type="button"
           onClick={() => void resend()}
-          disabled={resending}
+          disabled={resending || waitingForChallenge}
           className="mt-3 flex h-10 w-full items-center justify-center gap-2 rounded-[10px] border border-[#e5e7eb] text-sm text-[#4a5565] transition-colors hover:bg-gray-50 disabled:opacity-60"
           style={{ fontWeight: 500 }}
         >
@@ -706,7 +716,6 @@ function SidebarNav({
   onToggleSettlement: () => void;
   currentMember: CurrentPublisherMember | null;
 }) {
-  const showOverview = canViewOverview(currentMember);
   const showContent = canViewContent(currentMember);
   const showSettlement = canViewSettlement(currentMember);
   const showWithdraw = canWithdraw(currentMember);
@@ -730,7 +739,6 @@ function SidebarNav({
       </div>
 
       <nav className="flex-1 px-3 py-4 space-y-0.5">
-        {showOverview && <SideRow to="/distribution/overview" icon={<BarChart2 className="w-[15px] h-[15px]" />} label={t.nav.overview} />}
         {showContent && <SideRow to="/distribution/content" icon={<Video className="w-[15px] h-[15px]" />} label={t.nav.content} />}
 
         {showSettlement && (

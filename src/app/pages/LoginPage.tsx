@@ -298,16 +298,14 @@ export function LoginPage() {
                   {/* 忘记密码（仅登录态） */}
                   {!isRegister && (
                     <div className="flex justify-end h-5">
-                      {loginMethod === "password" && (
-                        <button
-                          type="button"
-                          onClick={() => navigate("/forgot-password")}
-                          className="text-xs text-[#99a1af] hover:text-white transition-colors"
-                          style={{ lineHeight: "20px" }}
-                        >
-                          {t.forgotPassword}
-                        </button>
-                      )}
+                      <button
+                        type="button"
+                        onClick={() => navigate("/forgot-password")}
+                        className="text-xs text-[#99a1af] hover:text-white transition-colors"
+                        style={{ lineHeight: "20px" }}
+                      >
+                        {t.forgotPassword}
+                      </button>
                     </div>
                   )}
 

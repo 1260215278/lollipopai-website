@@ -16,7 +16,6 @@ export interface MembersMessages {
   phoneLine: string;
   selfTag: string;
   remove: string;
-  assign: string;
   rolesSectionTitle: string;
   roleOwner: string;
   roleAdmin: string;
@@ -37,12 +36,6 @@ export interface MembersMessages {
   removeModalDesc: string;
   removeConfirm: string;
   removeSuccess: string;
-  assignModalTitle: string;
-  assignModalDesc: string;
-  assignEmpty: string;
-  assignSelectedCount: string;
-  assignSave: string;
-  assignSuccess: string;
 }
 
 export const members: Record<Locale, MembersMessages> = {
@@ -50,7 +43,7 @@ export const members: Record<Locale, MembersMessages> = {
     title: "成员管理",
     addAccount: "添加账号",
     bannerText:
-      "管理员已拥有账户下全部剧目的查看权和管理权，无需对管理员进行剧目分配、查看操作。",
+      "管理员已拥有账户下全部剧目的查看权和管理权；员工默认具备可见剧目权限，无需在成员页手动分配。",
     colMemberInfo: "成员信息",
     colAccountStatus: "账号状态",
     colMemberType: "成员类型",
@@ -58,7 +51,6 @@ export const members: Record<Locale, MembersMessages> = {
     phoneLine: "手机: {phone}",
     selfTag: "（我）",
     remove: "移除",
-    assign: "分配",
     rolesSectionTitle: "角色权限说明",
     roleOwner: "超管",
     roleAdmin: "管理员",
@@ -66,7 +58,7 @@ export const members: Record<Locale, MembersMessages> = {
     roleDescriptions: {
       1: "拥有账户下所有功能权限，可管理成员、账号安全、剧目和结算。",
       2: "可查看并管理账户下全部剧目，不能管理账号安全和成员。",
-      3: "可查看被分配的剧目和数据，不可进行剧目管理操作。",
+      3: "可创建并送审新剧，默认查看账户下全部剧目和基础数据，不能上/下架。",
     },
     statusActive: "使用中",
     statusInactive: "已停用",
@@ -104,18 +96,12 @@ export const members: Record<Locale, MembersMessages> = {
       "移除后，当前成员账号将不再属于此账户，将无权限管理并查看账户内剧目、收益等，移除后无法恢复，请是否移除当前成员？",
     removeConfirm: "确认移除",
     removeSuccess: "成员已移除",
-    assignModalTitle: "分配剧目",
-    assignModalDesc: "选择 {name} 可查看的剧目。",
-    assignEmpty: "暂无可分配剧目",
-    assignSelectedCount: "已选 {n} 部",
-    assignSave: "保存分配",
-    assignSuccess: "剧目分配已保存",
   },
   "zh-TW": {
     title: "成員管理",
     addAccount: "新增帳號",
     bannerText:
-      "管理員已擁有帳戶下全部劇目的查看權和管理權，無需對管理員進行劇目分配、查看操作。",
+      "管理員已擁有帳戶下全部劇目的查看權和管理權；員工預設具備可見劇目權限，無需在成員頁手動分配。",
     colMemberInfo: "成員資訊",
     colAccountStatus: "帳號狀態",
     colMemberType: "成員類型",
@@ -123,7 +109,6 @@ export const members: Record<Locale, MembersMessages> = {
     phoneLine: "手機: {phone}",
     selfTag: "（我）",
     remove: "移除",
-    assign: "分配",
     rolesSectionTitle: "角色權限說明",
     roleOwner: "超管",
     roleAdmin: "管理員",
@@ -131,7 +116,7 @@ export const members: Record<Locale, MembersMessages> = {
     roleDescriptions: {
       1: "擁有帳戶下所有功能權限，可管理成員、帳號安全、劇目和結算。",
       2: "可查看並管理帳戶下全部劇目，不能管理帳號安全和成員。",
-      3: "可查看被分配的劇目和資料，不可進行劇目管理操作。",
+      3: "可建立並送審新劇，預設查看帳戶下全部劇目和基礎資料，不能上/下架。",
     },
     statusActive: "使用中",
     statusInactive: "已停用",
@@ -169,18 +154,12 @@ export const members: Record<Locale, MembersMessages> = {
       "移除後，當前成員帳號將不再屬於此帳戶，將無權限管理並查看帳戶內劇目、收益等，移除後無法恢復，請是否移除當前成員？",
     removeConfirm: "確認移除",
     removeSuccess: "成員已移除",
-    assignModalTitle: "分配劇目",
-    assignModalDesc: "選擇 {name} 可查看的劇目。",
-    assignEmpty: "暫無可分配劇目",
-    assignSelectedCount: "已選 {n} 部",
-    assignSave: "儲存分配",
-    assignSuccess: "劇目分配已儲存",
   },
   en: {
     title: "Member Management",
     addAccount: "Add Account",
     bannerText:
-      "Admins already have full view and management rights for all dramas under this account. No need to assign or manage dramas for admins separately.",
+      "Admins already have full view and management rights for all dramas under this account. Staff have drama visibility by default, so no manual assignment is needed here.",
     colMemberInfo: "Member",
     colAccountStatus: "Status",
     colMemberType: "Role",
@@ -188,7 +167,6 @@ export const members: Record<Locale, MembersMessages> = {
     phoneLine: "Phone: {phone}",
     selfTag: "(Me)",
     remove: "Remove",
-    assign: "Assign",
     rolesSectionTitle: "Role Permissions",
     roleOwner: "Owner",
     roleAdmin: "Admin",
@@ -196,7 +174,7 @@ export const members: Record<Locale, MembersMessages> = {
     roleDescriptions: {
       1: "Full access to members, account security, dramas, and settlements.",
       2: "Can view and manage all dramas, but cannot manage account security or members.",
-      3: "Can view assigned dramas and data, but cannot manage dramas.",
+      3: "Can create and submit new dramas for review, and view all dramas and basic data by default. Cannot shelf or unshelf dramas.",
     },
     statusActive: "Active",
     statusInactive: "Disabled",
@@ -234,18 +212,12 @@ export const members: Record<Locale, MembersMessages> = {
       "After removal, this member will no longer belong to this account and will lose access to dramas, earnings, and other data. This action cannot be undone. Do you want to remove this member?",
     removeConfirm: "Confirm Remove",
     removeSuccess: "Member removed",
-    assignModalTitle: "Assign Dramas",
-    assignModalDesc: "Select the dramas {name} can view.",
-    assignEmpty: "No dramas available",
-    assignSelectedCount: "{n} selected",
-    assignSave: "Save Assignments",
-    assignSuccess: "Assignments saved",
   },
   pt: {
     title: "Gestão de Membros",
     addAccount: "Adicionar Conta",
     bannerText:
-      "Administradores já possuem direitos completos de visualização e gestão de todos os dramas desta conta. Não é necessário atribuir dramas aos administradores.",
+      "Administradores já possuem direitos completos de visualização e gestão de todos os dramas desta conta. Membros da equipe têm visibilidade de dramas por padrão, sem atribuição manual nesta página.",
     colMemberInfo: "Membro",
     colAccountStatus: "Status",
     colMemberType: "Função",
@@ -253,7 +225,6 @@ export const members: Record<Locale, MembersMessages> = {
     phoneLine: "Telefone: {phone}",
     selfTag: "(Eu)",
     remove: "Remover",
-    assign: "Atribuir",
     rolesSectionTitle: "Permissões por Função",
     roleOwner: "Proprietário",
     roleAdmin: "Administrador",
@@ -261,7 +232,7 @@ export const members: Record<Locale, MembersMessages> = {
     roleDescriptions: {
       1: "Acesso total a membros, segurança da conta, dramas e liquidações.",
       2: "Pode ver e gerenciar todos os dramas, mas não gerencia segurança da conta nem membros.",
-      3: "Pode ver dramas e dados atribuídos, mas não gerencia dramas.",
+      3: "Pode criar e enviar novos dramas para revisão, e ver todos os dramas e dados básicos por padrão. Não pode publicar ou retirar dramas da prateleira.",
     },
     statusActive: "Ativo",
     statusInactive: "Desativado",
@@ -299,11 +270,5 @@ export const members: Record<Locale, MembersMessages> = {
       "Após a remoção, este membro não pertencerá mais a esta conta e perderá acesso a dramas, receitas e outros dados. Esta ação não pode ser desfeita. Deseja remover este membro?",
     removeConfirm: "Confirmar Remoção",
     removeSuccess: "Membro removido",
-    assignModalTitle: "Atribuir Dramas",
-    assignModalDesc: "Selecione os dramas que {name} pode visualizar.",
-    assignEmpty: "Nenhum drama disponível",
-    assignSelectedCount: "{n} selecionados",
-    assignSave: "Salvar Atribuições",
-    assignSuccess: "Atribuições salvas",
   },
 };

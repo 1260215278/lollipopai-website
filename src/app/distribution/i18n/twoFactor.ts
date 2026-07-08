@@ -5,6 +5,7 @@ export interface TwoFactorMessages {
   title: string;
   /** {phone} 占位为后端返回的 phoneMask */
   desc: string;
+  pendingDesc: string;
   codeLabel: string;
   codePlaceholder: string;
   codeRequired: string;
@@ -22,6 +23,7 @@ export const twoFactor: Record<Locale, TwoFactorMessages> = {
   "zh-CN": {
     title: "两步验证",
     desc: "验证码已发送至 {phone}，请输入短信验证码完成登录",
+    pendingDesc: "验证码发送中，收到后可直接填写",
     codeLabel: "短信验证码",
     codePlaceholder: "请输入验证码",
     codeRequired: "请输入验证码",
@@ -35,6 +37,7 @@ export const twoFactor: Record<Locale, TwoFactorMessages> = {
   "zh-TW": {
     title: "兩步驗證",
     desc: "驗證碼已發送至 {phone}，請輸入簡訊驗證碼完成登入",
+    pendingDesc: "驗證碼發送中，收到後可直接填寫",
     codeLabel: "簡訊驗證碼",
     codePlaceholder: "請輸入驗證碼",
     codeRequired: "請輸入驗證碼",
@@ -48,6 +51,7 @@ export const twoFactor: Record<Locale, TwoFactorMessages> = {
   en: {
     title: "Two-factor Verification",
     desc: "A verification code has been sent to {phone}. Enter the SMS code to finish signing in.",
+    pendingDesc: "The code is being sent. You can enter it as soon as it arrives.",
     codeLabel: "SMS Code",
     codePlaceholder: "Enter the code",
     codeRequired: "Enter the code",
@@ -61,6 +65,7 @@ export const twoFactor: Record<Locale, TwoFactorMessages> = {
   pt: {
     title: "Verificação em Duas Etapas",
     desc: "Um código de verificação foi enviado para {phone}. Digite o código SMS para concluir o login.",
+    pendingDesc: "O código está sendo enviado. Você pode digitá-lo assim que chegar.",
     codeLabel: "Código SMS",
     codePlaceholder: "Digite o código",
     codeRequired: "Digite o código",

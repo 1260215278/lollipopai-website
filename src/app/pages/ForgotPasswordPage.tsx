@@ -124,14 +124,6 @@ export function ForgotPasswordPage() {
           <div className="hidden lg:block lg:w-[46%] relative overflow-hidden">
             <img src={promoImg} alt="" className="absolute inset-0 w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/45" />
-            <div className="relative z-10 pt-[68px] px-12 text-center">
-              <p className="text-white leading-[65px]" style={{ fontWeight: 900, fontSize: "54px", letterSpacing: "5px" }}>
-                {t.sloganLine1}
-              </p>
-              <p className="text-white leading-[65px]" style={{ fontWeight: 900, fontSize: "54px", letterSpacing: "5px" }}>
-                {t.sloganLine2}
-              </p>
-            </div>
           </div>
 
           <div className="flex-1 flex items-center justify-center bg-[#030301] px-6 py-16">

@@ -39,7 +39,7 @@ interface DramaDetailViewProps {
   t: ContentMessages;
   detail: CourseDetail;
   languages: LanguageOption[];
-  canManageCourse: boolean;
+  canUploadCourse: boolean;
   onBack: () => void;
   onManageEpisodes: () => void;
 }
@@ -49,7 +49,7 @@ export const DramaDetailView: React.FC<DramaDetailViewProps> = ({
   t,
   detail,
   languages,
-  canManageCourse,
+  canUploadCourse,
   onBack,
   onManageEpisodes,
 }) => {
@@ -67,7 +67,7 @@ export const DramaDetailView: React.FC<DramaDetailViewProps> = ({
   const distLabelBg = publish.publishScope === 2 ? "#FFF1F2" : "#F3F4F6";
 
   const phoneLabels = { home: t.phoneHome, forYou: t.phoneForYou, me: t.phoneMe };
-  const canContinueUpload = canManageCourse && (detail.auditStatus === AuditStatus.DRAFT || detail.auditStatus === AuditStatus.REJECTED);
+  const canContinueUpload = canUploadCourse && (detail.auditStatus === AuditStatus.DRAFT || detail.auditStatus === AuditStatus.REJECTED);
 
   return (
     <div className="p-8">
@@ -135,7 +135,7 @@ export const DramaDetailView: React.FC<DramaDetailViewProps> = ({
                 <p className="text-xs text-gray-500 mb-1.5" style={{ fontWeight: 500 }}>
                   {t.detailDescription}
                 </p>
-                <p className="text-sm text-gray-700 leading-relaxed">
+                <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap break-all">
                   {basic.details || t.detailNoDescription}
                 </p>
               </div>

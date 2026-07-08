@@ -140,8 +140,8 @@ export const AuditStatus = {
 } as const;
 
 /** 查询入驻状态（进页面先调用，决定展示哪种状态） */
-export function getPublisherStatus(): Promise<PublisherStatus> {
-  return http.get<PublisherStatus>("/app/publisher/status");
+export function getPublisherStatus(options: { toastOnError?: boolean } = {}): Promise<PublisherStatus> {
+  return http.get<PublisherStatus>("/app/publisher/status", options);
 }
 
 /** GET /app/publisher/tenantStatus 响应（swift 租户开通状态，2026-06-26 新增；需登录） */

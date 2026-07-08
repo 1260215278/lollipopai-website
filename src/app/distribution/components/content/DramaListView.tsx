@@ -36,6 +36,7 @@ interface DramaListViewProps {
   loading: boolean;
   searchQuery: string;
   onSearch: (v: string) => void;
+  canUploadCourse: boolean;
   canManageCourse: boolean;
   onUpload: () => void;
   onViewDetail: (d: PublisherCourseRow) => void;
@@ -48,6 +49,17 @@ interface DramaListViewProps {
   onPageChange: (page: number) => void;
 }
 
+function formatRevenueRatio(platformRatio: number, creatorRatio: number) {
+  const bothPercentTens =
+    Number.isInteger(platformRatio) &&
+    Number.isInteger(creatorRatio) &&
+    platformRatio % 10 === 0 &&
+    creatorRatio % 10 === 0;
+  const platform = bothPercentTens ? platformRatio / 10 : platformRatio;
+  const creator = bothPercentTens ? creatorRatio / 10 : creatorRatio;
+  return `${platform}:${creator}`;
+}
+
 /** 短剧列表（img_1 / img_9）。表格 + 行内操作菜单。 */
 export const DramaListView: React.FC<DramaListViewProps> = ({
   t,
@@ -58,6 +70,7 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
   loading,
   searchQuery,
   onSearch,
+  canUploadCourse,
   canManageCourse,
   onUpload,
   onViewDetail,
@@ -149,7 +162,7 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
             className="w-full pl-9 pr-4 py-2 text-xs border border-gray-200 rounded-lg bg-white outline-none focus:border-gray-400"
           />
         </div>
-        {canManageCourse && <div className="ml-auto flex items-center gap-2">
+        {canUploadCourse && <div className="ml-auto flex items-center gap-2">
           <button
             onClick={onUpload}
             className="px-4 py-2 rounded-lg text-white text-xs flex items-center gap-1.5 hover:opacity-90"
@@ -292,7 +305,8 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
                             fontWeight: 500,
                           }}
                         >
-                          {drama.revenue.revenueText}
+                          {drama.revenue.publishScope === 2 ? t.distFull : t.distAccount}{" "}
+                          {formatRevenueRatio(drama.revenue.platformRatio, drama.revenue.creatorRatio)}
                         </span>
                       </td>
                       <td className="px-4 py-4">
@@ -404,7 +418,7 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
                         <Film className="w-7 h-7 text-gray-300" />
                       </div>
                       <p className="text-sm text-gray-400">{t.emptyTitle}</p>
-                      {canManageCourse && (
+                      {canUploadCourse && (
                         <button
                           onClick={onUpload}
                           className="mt-1 px-5 py-2 rounded-lg text-white text-xs hover:opacity-90"

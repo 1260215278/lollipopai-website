@@ -64,21 +64,6 @@ export interface MemberRoleCard {
   permissions: MemberRolePermission[];
 }
 
-/** 员工可分配剧目池行（GET /publisher/member/course/list）。 */
-export interface MemberCoursePoolItem {
-  courseId: number;
-  title: string;
-  titleImg: string | null;
-  /** 审核状态，沿用上剧中心 auditStatus 枚举。 */
-  auditStatus: number;
-}
-
-/** 员工已分配剧目 + 可选池。 */
-export interface MemberCourseAssignment {
-  assignedCourseIds: number[];
-  pool: MemberCoursePoolItem[];
-}
-
 /** 添加成员请求体。 */
 export interface AddMemberBody {
   phone: string;
@@ -94,12 +79,6 @@ export interface RemoveMemberBody {
 export interface UpdateMemberRoleBody {
   memberUserId: number;
   role: AddableMemberRole;
-}
-
-/** 覆盖式分配员工剧目请求体。 */
-export interface AssignMemberCoursesBody {
-  memberUserId: number;
-  courseIds: number[];
 }
 
 /** 查询成员列表（超管置顶，服务端已排序）。 */
@@ -130,21 +109,4 @@ export function updateMemberRole(body: UpdateMemberRoleBody): Promise<void> {
 /** 角色权限说明（3 张角色卡，驱动说明区与添加下拉）。 */
 export function getMemberRoles(): Promise<MemberRoleCard[]> {
   return http.get<MemberRoleCard[]>("/publisher/member/roles");
-}
-
-/** 查询员工剧目分配池（超管/管理员；员工本身无需分配会返回 403345）。 */
-export function getMemberCourseAssignment(memberUserId: number): Promise<MemberCourseAssignment> {
-  return http.get<MemberCourseAssignment>("/publisher/member/course/list", {
-    params: { memberUserId },
-  });
-}
-
-/** 覆盖式分配员工可见剧目。 */
-export function assignMemberCourses(body: AssignMemberCoursesBody): Promise<void> {
-  return http.post<void>("/publisher/member/course/assign", body);
-}
-
-/** 取消员工部分剧目分配。 */
-export function unassignMemberCourses(body: AssignMemberCoursesBody): Promise<void> {
-  return http.post<void>("/publisher/member/course/unassign", body);
 }

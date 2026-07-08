@@ -18,7 +18,6 @@ export interface CommonMessages {
   empty: string;
   optional: string;
   brand: string;
-  workspace: string;
   logout: string;
   language: string;
   publisher: string;
@@ -44,7 +43,6 @@ export const common: Record<Locale, CommonMessages> = {
     empty: "暂无数据",
     optional: "选填",
     brand: "Lollipop发行中心",
-    workspace: "工作台",
     logout: "退出登录",
     language: "语言",
     publisher: "发行者",
@@ -68,7 +66,6 @@ export const common: Record<Locale, CommonMessages> = {
     empty: "暫無資料",
     optional: "選填",
     brand: "Lollipop 發行中心",
-    workspace: "工作台",
     logout: "登出",
     language: "語言",
     publisher: "發行者",
@@ -92,7 +89,6 @@ export const common: Record<Locale, CommonMessages> = {
     empty: "No data",
     optional: "Optional",
     brand: "Lollipop Distribution",
-    workspace: "Workspace",
     logout: "Log Out",
     language: "Language",
     publisher: "Publisher",
@@ -116,7 +112,6 @@ export const common: Record<Locale, CommonMessages> = {
     empty: "Sem dados",
     optional: "Opcional",
     brand: "Lollipop Distribuição",
-    workspace: "Espaço de trabalho",
     logout: "Sair",
     language: "Idioma",
     publisher: "Distribuidor",

@@ -41,6 +41,8 @@ export function ContentPage() {
   const t = messages.distribution.content;
   const dramaUnit = messages.distribution.overview.unitDrama;
   const canManageCourse = currentMember?.permissions?.includes("COURSE_MANAGE") === true;
+  const canViewAssignedCourse = currentMember?.permissions?.includes("COURSE_VIEW_ASSIGNED") === true;
+  const canUploadCourse = canManageCourse || canViewAssignedCourse;
 
   const [view, setView] = useState<View>("list");
   const [dramas, setDramas] = useState<PublisherCourseRow[]>([]);
@@ -98,8 +100,8 @@ export function ContentPage() {
   }, []);
 
   useEffect(() => {
-    if (!canManageCourse && view === "form") setView("list");
-  }, [canManageCourse, view]);
+    if (!canUploadCourse && view === "form") setView("list");
+  }, [canUploadCourse, view]);
 
   // 按当前页 + 搜索词加载（搜索防抖 300ms）
   useEffect(() => {
@@ -166,7 +168,7 @@ export function ContentPage() {
   };
 
   /* ── 视图分发 ── */
-  if (view === "form" && canManageCourse) {
+  if (view === "form" && canUploadCourse) {
     return (
       <UploadForm
         t={t}
@@ -193,7 +195,7 @@ export function ContentPage() {
         t={t}
         detail={detail}
         languages={languages}
-        canManageCourse={canManageCourse}
+        canUploadCourse={canUploadCourse}
         onBack={() => setView("list")}
         onManageEpisodes={() => openEpisodesFromDetail(detail)}
       />
@@ -208,7 +210,7 @@ export function ContentPage() {
         title={episodesCtx.title}
         plannedEpisodes={episodesCtx.plannedEpisodes}
         auditStatus={episodesCtx.auditStatus}
-        canManageCourse={canManageCourse}
+        canUploadCourse={canUploadCourse}
         onBack={() => setView(episodesCtx.backTo)}
         onChanged={() => {
           void loadStats();
@@ -229,6 +231,7 @@ export function ContentPage() {
         loading={loading}
         searchQuery={searchQuery}
         onSearch={setSearchQuery}
+        canUploadCourse={canUploadCourse}
         canManageCourse={canManageCourse}
         onUpload={() => setView("form")}
         onViewDetail={(d) => void openDetail(d)}

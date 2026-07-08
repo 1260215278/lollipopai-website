@@ -417,13 +417,13 @@ export function EnrollPage() {
 
   useEffect(() => {
     if (!loading && redirectDashboard) {
-      navigate("/distribution/overview", { replace: true });
+      navigate("/distribution/content", { replace: true });
     }
   }, [loading, redirectDashboard, navigate]);
 
   const enterDashboard = () => {
     markEnteredDashboard(boundAccount);
-    navigate("/distribution/overview");
+    navigate("/distribution/content");
   };
 
   const onRetryTenantSync = async () => {

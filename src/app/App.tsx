@@ -4,13 +4,10 @@ import { Navbar } from "./components/Navbar";
 import { HeroSection, StatsSection } from "./components/HeroSection";
 import { TrendingSection } from "./components/TrendingSection";
 import { NewReleasesSection } from "./components/NewReleasesSection";
-import { AIFeaturesSection } from "./components/AIFeaturesSection";
 import { GenresSection } from "./components/GenresSection";
 import { WhyChooseSection } from "./components/WhyChooseSection";
 import { Web2Web3Section } from "./components/Web2Web3Section";
 import { TestimonialsSection } from "./components/TestimonialsSection";
-import { CreatorSection } from "./components/CreatorSection";
-import { DownloadCTA } from "./components/DownloadCTA";
 import { Footer } from "./components/Footer";
 import { BackToTop } from "./components/BackToTop";
 import { AboutPage } from "./components/AboutPage";
@@ -56,14 +53,11 @@ export default function App({ initialPage = "home" }: { initialPage?: MarketingP
           <StatsSection />
           <TrendingSection />
           <NewReleasesSection />
-          <AIFeaturesSection />
           <GenresSection />
           {/* <WhyChooseSection /> */}
           {/* <PricingSection /> */}
           {/* <Web2Web3Section /> */}
           <TestimonialsSection />
-          <CreatorSection onNavigate={handleNavigate} />
-          <DownloadCTA />
           <Footer onNavigate={handleNavigate} />
         </>
       )}

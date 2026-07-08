@@ -11,13 +11,21 @@ function cellText(value: unknown): string {
   return String(value ?? "").trim();
 }
 
+function matchesHeaderCell(cell: unknown, names: string[]): boolean {
+  const normalized = cellText(cell).toLowerCase();
+  return names.some((name) => normalized.includes(name.toLowerCase()));
+}
+
 function findHeaderIndex(header: unknown[], names: string[], fallback: number): number {
   const index = header.findIndex((cell) => {
-    const normalized = cellText(cell).toLowerCase();
-    return names.some((name) => normalized.includes(name));
+    return matchesHeaderCell(cell, names);
   });
   return index >= 0 ? index : fallback;
 }
+
+const EPISODE_HEADER_NAMES = ["集号", "集數", "episode"];
+const TITLE_HEADER_NAMES = ["剧集标题", "劇集標題", "标题", "標題", "title"];
+const VIDEO_HEADER_NAMES = ["视频链接", "影片連結", "video", "url", "link"];
 
 export async function parseEpisodeTemplate(file: File, plannedEpisodes: number): Promise<TemplateEpisodeRow[]> {
   const XLSX = await import("xlsx");
@@ -30,16 +38,15 @@ export async function parseEpisodeTemplate(file: File, plannedEpisodes: number):
   const range = XLSX.utils.decode_range(ref);
 
   const rows = XLSX.utils.sheet_to_json<unknown[]>(sheet, { header: 1, defval: "", blankrows: true });
-  const headerRowIndex = rows.findIndex((row) =>
-    row.some((cell) => {
-      const text = cellText(cell);
-      return text.includes("集号") || text.includes("集數") || text.toLowerCase().includes("episode");
-    }),
-  );
+  const headerRowIndex = rows.findIndex((row) => {
+    const episodeColumn = row.findIndex((cell) => matchesHeaderCell(cell, EPISODE_HEADER_NAMES));
+    const videoColumn = row.findIndex((cell) => matchesHeaderCell(cell, VIDEO_HEADER_NAMES));
+    return episodeColumn >= 0 && videoColumn >= 0 && episodeColumn !== videoColumn;
+  });
   const header = headerRowIndex >= 0 ? rows[headerRowIndex] : [];
-  const episodeIndex = header.length ? findHeaderIndex(header, ["集号", "集數", "episode"], 0) : 0;
-  const titleIndex = header.length ? findHeaderIndex(header, ["剧集标题", "劇集標題", "标题", "標題", "title"], 1) : 1;
-  const videoIndex = header.length ? findHeaderIndex(header, ["视频链接", "影片連結", "video", "url", "link"], 2) : 2;
+  const episodeIndex = header.length ? findHeaderIndex(header, EPISODE_HEADER_NAMES, 0) : 0;
+  const titleIndex = header.length ? findHeaderIndex(header, TITLE_HEADER_NAMES, 1) : 1;
+  const videoIndex = header.length ? findHeaderIndex(header, VIDEO_HEADER_NAMES, 2) : 2;
   const bodyStartIndex = headerRowIndex >= 0 ? headerRowIndex + 1 : 0;
   const bodyRows = rows.slice(bodyStartIndex);
 

@@ -36,7 +36,7 @@ interface EpisodesViewProps {
   title: string;
   plannedEpisodes: number;
   auditStatus: number;
-  canManageCourse?: boolean;
+  canUploadCourse?: boolean;
   onBack: () => void;
   /** 保存成功后通知上层刷新列表计数 */
   onChanged?: () => void;
@@ -76,7 +76,7 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
   title,
   plannedEpisodes,
   auditStatus,
-  canManageCourse = true,
+  canUploadCourse = true,
   onBack,
   onChanged,
 }) => {
@@ -163,7 +163,7 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
 
   const stat = data?.stat ?? { uploaded: 0, failed: 0, pending: plannedEpisodes };
   const pendingLocal = rows.filter((e) => e.newFile).length;
-  const canEditEpisodes = canManageCourse && (auditStatus === AuditStatus.DRAFT || auditStatus === AuditStatus.REJECTED);
+  const canEditEpisodes = canUploadCourse && (auditStatus === AuditStatus.DRAFT || auditStatus === AuditStatus.REJECTED);
 
   const handleFileSelect = (ep: number, file: File) => {
     if (!canEditEpisodes) return;

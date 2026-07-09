@@ -37,6 +37,8 @@ export interface EarningsMessages {
   colOrders: string;
   colViewCount: string;
   colAmount: string;
+  colHistorySettled: string;
+  colTotalCreator: string;
   colSettleStatus: string;
   /** 收益类型 */
   typeFull: string;
@@ -80,7 +82,9 @@ export const earnings: Record<Locale, EarningsMessages> = {
     colShare: "分成比例",
     colOrders: "订单数",
     colViewCount: "播放量",
-    colAmount: "出品方实得",
+    colAmount: "本月结算金额",
+    colHistorySettled: "历史结算",
+    colTotalCreator: "总收益",
     colSettleStatus: "结算状态",
     typeFull: "全量推荐",
     typeAccount: "账号主页",
@@ -119,7 +123,9 @@ export const earnings: Record<Locale, EarningsMessages> = {
     colShare: "分成比例",
     colOrders: "訂單數",
     colViewCount: "播放量",
-    colAmount: "出品方實得",
+    colAmount: "本月結算金額",
+    colHistorySettled: "歷史結算",
+    colTotalCreator: "總收益",
     colSettleStatus: "結算狀態",
     typeFull: "全量推薦",
     typeAccount: "帳號主頁",
@@ -158,7 +164,9 @@ export const earnings: Record<Locale, EarningsMessages> = {
     colShare: "Share Ratio",
     colOrders: "Orders",
     colViewCount: "Views",
-    colAmount: "Creator Earned",
+    colAmount: "Monthly Settlement",
+    colHistorySettled: "Historical Settled",
+    colTotalCreator: "Total Earnings",
     colSettleStatus: "Settlement Status",
     typeFull: "Full Distribution",
     typeAccount: "Account Homepage",
@@ -197,7 +205,9 @@ export const earnings: Record<Locale, EarningsMessages> = {
     colShare: "Proporção de divisão",
     colOrders: "Pedidos",
     colViewCount: "Visualizações",
-    colAmount: "Receita do criador",
+    colAmount: "Liquidação mensal",
+    colHistorySettled: "Histórico liquidado",
+    colTotalCreator: "Receita total",
     colSettleStatus: "Status de Liquidação",
     typeFull: "Distribuição total",
     typeAccount: "Página da conta",

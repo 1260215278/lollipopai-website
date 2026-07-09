@@ -182,6 +182,8 @@ export function EarningsPage() {
     t.colViewCount,
     t.colSettleStatus,
     t.colAmount,
+    t.colHistorySettled,
+    t.colTotalCreator,
   ];
 
   return (
@@ -351,8 +353,8 @@ export function EarningsPage() {
 
             {/* 表头 */}
             <div className="overflow-x-auto">
-              <div className="min-w-[1120px]">
-                <div className="grid grid-cols-[110px_90px_minmax(220px,1fr)_150px_90px_80px_100px_100px_130px] px-5 py-2.5 bg-gray-50/60 border-b border-[#f3f4f6]">
+              <div className="min-w-[1380px]">
+                <div className="grid grid-cols-[110px_90px_minmax(220px,1fr)_150px_90px_80px_100px_100px_130px_120px_120px] px-5 py-2.5 bg-gray-50/60 border-b border-[#f3f4f6]">
                   {tableCols.map((col, i) => (
                     <span key={i} className="text-xs text-[#6a7282] whitespace-nowrap" style={{ fontWeight: 500 }}>
                       {col}
@@ -370,7 +372,7 @@ export function EarningsPage() {
                       {detail.map((row) => (
                         <div
                           key={`${row.courseId}-${row.earnDate}`}
-                          className="grid grid-cols-[110px_90px_minmax(220px,1fr)_150px_90px_80px_100px_100px_130px] px-5 py-3.5 items-center hover:bg-gray-50/50 transition-colors"
+                          className="grid grid-cols-[110px_90px_minmax(220px,1fr)_150px_90px_80px_100px_100px_130px_120px_120px] px-5 py-3.5 items-center hover:bg-gray-50/50 transition-colors"
                         >
                           <span className="text-xs text-gray-500 whitespace-nowrap">{row.earnDate}</span>
                           <span className="text-xs text-gray-500 whitespace-nowrap tabular-nums">{row.courseId}</span>
@@ -406,6 +408,12 @@ export function EarningsPage() {
                           </div>
                           <span className="text-sm text-[#101828] whitespace-nowrap" style={{ fontWeight: 700 }}>
                             {usd(row.creatorUsd)}
+                          </span>
+                          <span className="text-sm text-gray-700 whitespace-nowrap tabular-nums" style={{ fontWeight: 600 }}>
+                            {usd(row.historySettledUsd)}
+                          </span>
+                          <span className="text-sm text-[#101828] whitespace-nowrap tabular-nums" style={{ fontWeight: 700 }}>
+                            {usd(row.totalCreatorUsd)}
                           </span>
                         </div>
                       ))}

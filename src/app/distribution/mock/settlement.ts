@@ -72,13 +72,13 @@ export const mockEarningsSummary: EarningsSummary = {
  * publishScope：1=账号主页(8:2) / 2=全量推荐(6:4)。
  */
 export const mockEarningsDetail: EarningsDetailRow[] = [
-  { earnDate: "2026-06-29", courseId: 101, courseTitle: "星河恋人", courseImg: "", publishScope: 2, ratioLabel: "6:4", orderCount: 12, grossUsd: 2807.5, creatorUsd: 1684.5, ratio: 60, viewCount: 1123000, settleStatus: 1 },
-  { earnDate: "2026-05-28", courseId: 101, courseTitle: "星河恋人", courseImg: "", publishScope: 2, ratioLabel: "6:4", orderCount: 18, grossUsd: 3600.0, creatorUsd: 2160.0, ratio: 60, viewCount: 1123000, settleStatus: 2 },
-  { earnDate: "2026-05-26", courseId: 102, courseTitle: "穿越千年寻你", courseImg: "", publishScope: 1, ratioLabel: "8:2", orderCount: 10, grossUsd: 1500.0, creatorUsd: 1200.0, ratio: 80, viewCount: 926000, settleStatus: 2 },
-  { earnDate: "2026-05-21", courseId: 103, courseTitle: "总裁的秘密", courseImg: "", publishScope: 2, ratioLabel: "6:4", orderCount: 5, grossUsd: 428.33, creatorUsd: 257.0, ratio: 60, viewCount: 625000, settleStatus: 2 },
-  { earnDate: "2026-04-18", courseId: 101, courseTitle: "星河恋人", courseImg: "", publishScope: 2, ratioLabel: "6:4", orderCount: 14, grossUsd: 2702.5, creatorUsd: 1621.5, ratio: 60, viewCount: 1123000, settleStatus: 2 },
-  { earnDate: "2026-04-11", courseId: 102, courseTitle: "穿越千年寻你", courseImg: "", publishScope: 1, ratioLabel: "8:2", orderCount: 8, grossUsd: 1500.0, creatorUsd: 1200.0, ratio: 80, viewCount: 926000, settleStatus: 2 },
-  { earnDate: "2026-03-09", courseId: 101, courseTitle: "星河恋人", courseImg: "", publishScope: 2, ratioLabel: "6:4", orderCount: 11, grossUsd: 2240.0, creatorUsd: 1344.0, ratio: 60, viewCount: 1123000, settleStatus: 0 },
+  { earnDate: "2026-06-29", courseId: 101, courseTitle: "星河恋人", courseImg: "", publishScope: 2, ratioLabel: "6:4", orderCount: 12, grossUsd: 2807.5, creatorUsd: 1684.5, totalCreatorUsd: 6810.0, historySettledUsd: 3781.5, ratio: 60, viewCount: 1123000, settleStatus: 1 },
+  { earnDate: "2026-05-28", courseId: 101, courseTitle: "星河恋人", courseImg: "", publishScope: 2, ratioLabel: "6:4", orderCount: 18, grossUsd: 3600.0, creatorUsd: 2160.0, totalCreatorUsd: 6810.0, historySettledUsd: 3781.5, ratio: 60, viewCount: 1123000, settleStatus: 2 },
+  { earnDate: "2026-05-26", courseId: 102, courseTitle: "穿越千年寻你", courseImg: "", publishScope: 1, ratioLabel: "8:2", orderCount: 10, grossUsd: 1500.0, creatorUsd: 1200.0, totalCreatorUsd: 2400.0, historySettledUsd: 2400.0, ratio: 80, viewCount: 926000, settleStatus: 2 },
+  { earnDate: "2026-05-21", courseId: 103, courseTitle: "总裁的秘密", courseImg: "", publishScope: 2, ratioLabel: "6:4", orderCount: 5, grossUsd: 428.33, creatorUsd: 257.0, totalCreatorUsd: 257.0, historySettledUsd: 257.0, ratio: 60, viewCount: 625000, settleStatus: 2 },
+  { earnDate: "2026-04-18", courseId: 101, courseTitle: "星河恋人", courseImg: "", publishScope: 2, ratioLabel: "6:4", orderCount: 14, grossUsd: 2702.5, creatorUsd: 1621.5, totalCreatorUsd: 6810.0, historySettledUsd: 3781.5, ratio: 60, viewCount: 1123000, settleStatus: 2 },
+  { earnDate: "2026-04-11", courseId: 102, courseTitle: "穿越千年寻你", courseImg: "", publishScope: 1, ratioLabel: "8:2", orderCount: 8, grossUsd: 1500.0, creatorUsd: 1200.0, totalCreatorUsd: 2400.0, historySettledUsd: 2400.0, ratio: 80, viewCount: 926000, settleStatus: 2 },
+  { earnDate: "2026-03-09", courseId: 101, courseTitle: "星河恋人", courseImg: "", publishScope: 2, ratioLabel: "6:4", orderCount: 11, grossUsd: 2240.0, creatorUsd: 1344.0, totalCreatorUsd: 6810.0, historySettledUsd: 3781.5, ratio: 60, viewCount: 1123000, settleStatus: 0 },
 ];
 
 /**

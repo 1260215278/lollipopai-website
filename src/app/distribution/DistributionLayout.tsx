@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { NavLink, Outlet, useNavigate, useLocation } from "react-router";
 import {
+  BarChart3,
   Video,
   Wallet,
   ArrowLeft,
@@ -41,6 +42,7 @@ import lollipopLogo from "../../imports/Lollipop1.png";
 
 const NAME_PREVIEW_LIMIT = 10;
 const PERMISSION = {
+  DASHBOARD_VIEW: "DASHBOARD_VIEW",
   COURSE_VIEW_ASSIGNED: "COURSE_VIEW_ASSIGNED",
   COURSE_MANAGE: "COURSE_MANAGE",
   SETTLEMENT_VIEW: "SETTLEMENT_VIEW",
@@ -61,6 +63,10 @@ function previewName(name: string) {
 
 function hasPermission(member: CurrentPublisherMember | null, permission: string): boolean {
   return member?.permissions?.includes(permission) === true;
+}
+
+function canViewDashboard(member: CurrentPublisherMember | null): boolean {
+  return hasPermission(member, PERMISSION.DASHBOARD_VIEW);
 }
 
 function canViewContent(member: CurrentPublisherMember | null): boolean {
@@ -84,6 +90,7 @@ function canViewMembers(member: CurrentPublisherMember | null): boolean {
 }
 
 function canAccessPath(member: CurrentPublisherMember | null, path: string): boolean {
+  if (path.includes("/overview")) return canViewDashboard(member);
   if (path.includes("/content")) return canViewContent(member);
   if (path.includes("/earnings")) return canViewSettlement(member);
   if (path.includes("/withdraw")) return canWithdraw(member);
@@ -94,6 +101,7 @@ function canAccessPath(member: CurrentPublisherMember | null, path: string): boo
 }
 
 function firstAllowedPath(member: CurrentPublisherMember | null): string {
+  if (canViewDashboard(member)) return "/distribution/overview";
   if (canViewContent(member)) return "/distribution/content";
   if (canViewSettlement(member)) return "/distribution/earnings";
   if (canWithdraw(member)) return "/distribution/withdraw";
@@ -732,6 +740,7 @@ function SidebarNav({
   onToggleSettlement: () => void;
   currentMember: CurrentPublisherMember | null;
 }) {
+  const showDashboard = canViewDashboard(currentMember);
   const showContent = canViewContent(currentMember);
   const showSettlement = canViewSettlement(currentMember);
   const showWithdraw = canWithdraw(currentMember);
@@ -755,6 +764,13 @@ function SidebarNav({
       </div>
 
       <nav className="flex-1 px-3 py-4 space-y-0.5">
+        {showDashboard && (
+          <SideRow
+            to="/distribution/overview"
+            icon={<BarChart3 className="w-[15px] h-[15px]" />}
+            label={t.overview.title}
+          />
+        )}
         {showContent && <SideRow to="/distribution/content" icon={<Video className="w-[15px] h-[15px]" />} label={t.nav.content} />}
 
         {showSettlement && (

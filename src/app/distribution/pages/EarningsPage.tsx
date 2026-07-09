@@ -24,11 +24,17 @@ const usd = (n: number) =>
 const formatViews = (n: number | null, locale: string) =>
   n === null ? "--" : new Intl.NumberFormat(locale, { notation: "compact", maximumFractionDigits: 1 }).format(n);
 
-function getDefaultMonth(months: string[]): string {
+/** 当前日历年月（yyyy-MM）。 */
+function currentCalendarMonth(): string {
   const now = new Date();
-  const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+}
 
-  return months.includes(currentMonth) ? currentMonth : months[0] ?? "";
+/** 默认选中月：优先本月；否则取有收益的最新月；再否则本月。 */
+function getDefaultMonth(months: string[]): string {
+  const currentMonth = currentCalendarMonth();
+  if (months.includes(currentMonth)) return currentMonth;
+  return months[0] ?? currentMonth;
 }
 
 function monthDateRange(month: string): { startDate: string; endDate: string } {
@@ -40,8 +46,16 @@ function monthDateRange(month: string): { startDate: string; endDate: string } {
   };
 }
 
-function monthTabLabel(month: string, template: string): string {
-  return template.replace("{n}", String(Number(month.slice(5, 7))));
+function toMonthKey(year: number, month: number): string {
+  return `${year}-${String(month).padStart(2, "0")}`;
+}
+
+/** 该月是否晚于当前自然月（不可选未来月）。 */
+function isFutureMonth(year: number, month: number): boolean {
+  const now = new Date();
+  const cy = now.getFullYear();
+  const cm = now.getMonth() + 1;
+  return year > cy || (year === cy && month > cm);
 }
 
 /** 结算状态徽标：0待结算灰 / 1结算中蓝 / 2已结算绿。 */
@@ -78,8 +92,11 @@ export function EarningsPage() {
   const [detail, setDetail] = useState<EarningsDetailRow[]>([]);
   const [detailTotal, setDetailTotal] = useState(0);
   const [courses, setCourses] = useState<EarningsCourseOption[]>([]);
-  const [months, setMonths] = useState<string[]>([]);
-  const [activeMonth, setActiveMonth] = useState<string>("");
+  /** 有收益数据的 yyyy-MM 列表（接口倒序、跨年），用于月份浅底高亮与年份边界。 */
+  const [monthsWithData, setMonthsWithData] = useState<string[]>([]);
+  const [activeMonth, setActiveMonth] = useState<string>(currentCalendarMonth);
+  /** 年份切换器当前展示年。 */
+  const [viewYear, setViewYear] = useState<number>(() => new Date().getFullYear());
   const [courseFilter, setCourseFilter] = useState<number | "all">("all");
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -97,14 +114,26 @@ export function EarningsPage() {
       setHasAccount(acc.bound);
       setSummary(sum);
       setCourses(courseOptions);
-      setMonths(availableMonths);
-      setActiveMonth((prev) => (availableMonths.includes(prev) ? prev : getDefaultMonth(availableMonths)));
+      setMonthsWithData(availableMonths);
+      setActiveMonth((prev) => {
+        if (prev && !isFutureMonth(Number(prev.slice(0, 4)), Number(prev.slice(5, 7)))) {
+          return prev;
+        }
+        return getDefaultMonth(availableMonths);
+      });
     } catch {
       // http 已 toast
     } finally {
       setLoading(false);
     }
   }, []);
+
+  // 选中月变化时把年份切换器对齐到该年
+  useEffect(() => {
+    if (!activeMonth) return;
+    const y = Number(activeMonth.slice(0, 4));
+    if (!Number.isNaN(y)) setViewYear(y);
+  }, [activeMonth]);
 
   useEffect(() => {
     void loadOverview();
@@ -149,6 +178,26 @@ export function EarningsPage() {
 
   const totalPage = Math.max(1, Math.ceil(detailTotal / DETAIL_PAGE_SIZE));
 
+  const calendarYear = new Date().getFullYear();
+  const yearsFromData = monthsWithData.map((m) => Number(m.slice(0, 4)));
+  const minYear = yearsFromData.length > 0 ? Math.min(...yearsFromData) : calendarYear;
+  const maxYear = Math.max(calendarYear, ...(yearsFromData.length > 0 ? yearsFromData : [calendarYear]));
+  const canPrevYear = viewYear > minYear;
+  const canNextYear = viewYear < maxYear;
+
+  const selectMonth = (year: number, month: number) => {
+    if (isFutureMonth(year, month)) return;
+    setActiveMonth(toMonthKey(year, month));
+    setViewYear(year);
+    setPage(1);
+  };
+
+  const shiftYear = (delta: number) => {
+    const next = viewYear + delta;
+    if (next < minYear || next > maxYear) return;
+    setViewYear(next);
+  };
+
   if (loading) {
     return (
       <div className="p-8">
@@ -185,6 +234,60 @@ export function EarningsPage() {
     t.colHistorySettled,
     t.colTotalCreator,
   ];
+
+  /** 设计稿 figma 15607-11611：年份箭头 + 固定 1–12 月；选中黑底；有数据月浅底；未来月禁用。 */
+  const yearMonthSwitcher = (
+    <div className="flex items-center gap-3 flex-wrap">
+      <div className="flex items-center gap-1">
+        <button
+          type="button"
+          onClick={() => shiftYear(-1)}
+          disabled={!canPrevYear}
+          className="w-7 h-7 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          aria-label="Previous year"
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+        <span className="min-w-[3rem] text-center text-sm text-[#101828] tabular-nums" style={{ fontWeight: 600 }}>
+          {viewYear}
+        </span>
+        <button
+          type="button"
+          onClick={() => shiftYear(1)}
+          disabled={!canNextYear}
+          className="w-7 h-7 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          aria-label="Next year"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
+      <div className="flex items-center gap-1 flex-wrap">
+        {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => {
+          const key = toMonthKey(viewYear, month);
+          const selected = activeMonth === key;
+          const future = isFutureMonth(viewYear, month);
+          const hasData = monthsWithData.includes(key);
+          return (
+            <button
+              key={key}
+              type="button"
+              disabled={future}
+              onClick={() => selectMonth(viewYear, month)}
+              className="px-2.5 py-1.5 rounded-md text-xs transition-all whitespace-nowrap"
+              style={{
+                background: selected ? "#111111" : hasData && !future ? "#F3F4F6" : "transparent",
+                color: selected ? "#FFFFFF" : future ? "#D1D5DB" : "#9CA3AF",
+                fontWeight: selected ? 600 : 400,
+                cursor: future ? "not-allowed" : "pointer",
+              }}
+            >
+              {t.monthLabel.replace("{n}", String(month))}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
 
   return (
     <div className="p-8 space-y-5">
@@ -288,37 +391,20 @@ export function EarningsPage() {
 
       {/* ── 收益详情 ── */}
       <div className="bg-white rounded-2xl border border-[#f3f4f6] overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-[#f3f4f6]">
+        <div className="flex items-center justify-between gap-4 px-5 py-4 border-b border-[#f3f4f6] flex-wrap">
           <h3 className="text-sm text-[#101828]" style={{ fontWeight: 700 }}>
             {t.detailTitle}
           </h3>
-          {hasAccount && months.length > 0 && (
-            <div className="flex items-center gap-1 bg-gray-50 rounded-xl p-1 flex-wrap">
-              {months.map((m) => (
-                <button
-                  key={m}
-                  onClick={() => {
-                    setActiveMonth(m);
-                    setPage(1);
-                  }}
-                  className="px-3 py-1.5 rounded-lg text-xs transition-all"
-                  style={{
-                    background: activeMonth === m ? "white" : "transparent",
-                    color: activeMonth === m ? "#101828" : "#9CA3AF",
-                    fontWeight: activeMonth === m ? 600 : 400,
-                    boxShadow: activeMonth === m ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
-                  }}
-                >
-                  {monthTabLabel(m, t.monthLabel)}
-                </button>
-              ))}
-            </div>
-          )}
+          <div className="text-xs text-gray-400 flex items-center gap-1">
+            <Info className="w-3.5 h-3.5" />
+            {t.updatedDaily}
+          </div>
         </div>
 
         {hasAccount ? (
           <>
-            <div className="flex items-center gap-3 px-5 py-3 border-b border-[#f3f4f6] bg-gray-50/30">
+            {/* 设计稿：左侧筛选/搜索，右侧年份 + 1–12 月切换 */}
+            <div className="flex items-center gap-3 px-5 py-3 border-b border-[#f3f4f6] bg-gray-50/30 flex-wrap">
               <select
                 value={courseFilter}
                 onChange={(e) => {
@@ -335,7 +421,7 @@ export function EarningsPage() {
                   </option>
                 ))}
               </select>
-              <div className="relative max-w-xs flex-1">
+              <div className="relative max-w-xs w-full sm:w-auto sm:flex-1 sm:max-w-xs">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
                 <input
                   type="text"
@@ -345,10 +431,7 @@ export function EarningsPage() {
                   className="w-full pl-9 pr-3 py-2 text-xs border border-[#e5e7eb] rounded-lg bg-white outline-none focus:border-gray-400 transition-colors"
                 />
               </div>
-              <div className="ml-auto text-xs text-gray-400 flex items-center gap-1">
-                <Info className="w-3.5 h-3.5" />
-                {t.updatedDaily}
-              </div>
+              <div className="ml-auto">{yearMonthSwitcher}</div>
             </div>
 
             {/* 表头 */}

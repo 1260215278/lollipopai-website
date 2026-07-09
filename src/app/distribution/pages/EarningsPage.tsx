@@ -328,7 +328,6 @@ export function EarningsPage() {
               { icon: <Wallet className="w-4 h-4" />, label: t.withdrawable, val: summary?.withdrawableUsd ?? 0 },
               { icon: <Clock className="w-4 h-4" />, label: t.processing, val: summary?.processingUsd ?? 0 },
               { icon: <CheckCircle2 className="w-4 h-4" />, label: t.withdrawn, val: summary?.withdrawnUsd ?? 0 },
-              { icon: <Info className="w-4 h-4" />, label: t.pending, val: summary?.pendingUsd ?? 0 },
             ].map((item, i) => (
               <div key={i} className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 flex-shrink-0">

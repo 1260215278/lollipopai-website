@@ -31,6 +31,7 @@ export interface EarningsMessages {
   updatedDaily: string;
   colDate: string;
   colDrama: string;
+  colDramaId: string;
   colType: string;
   colShare: string;
   colOrders: string;
@@ -74,6 +75,7 @@ export const earnings: Record<Locale, EarningsMessages> = {
     updatedDaily: "数据每日更新",
     colDate: "归集日期",
     colDrama: "剧集名称",
+    colDramaId: "剧集ID",
     colType: "收益类型",
     colShare: "分成比例",
     colOrders: "订单数",
@@ -112,6 +114,7 @@ export const earnings: Record<Locale, EarningsMessages> = {
     updatedDaily: "資料每日更新",
     colDate: "歸集日期",
     colDrama: "劇集名稱",
+    colDramaId: "劇集ID",
     colType: "收益類型",
     colShare: "分成比例",
     colOrders: "訂單數",
@@ -150,6 +153,7 @@ export const earnings: Record<Locale, EarningsMessages> = {
     updatedDaily: "Updated daily",
     colDate: "Date",
     colDrama: "Drama",
+    colDramaId: "Drama ID",
     colType: "Type",
     colShare: "Share Ratio",
     colOrders: "Orders",
@@ -188,6 +192,7 @@ export const earnings: Record<Locale, EarningsMessages> = {
     updatedDaily: "Atualizado diariamente",
     colDate: "Data",
     colDrama: "Drama",
+    colDramaId: "ID do drama",
     colType: "Tipo",
     colShare: "Proporção de divisão",
     colOrders: "Pedidos",

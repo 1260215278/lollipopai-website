@@ -174,6 +174,7 @@ export function EarningsPage() {
 
   const tableCols = [
     t.colDate,
+    t.colDramaId,
     t.colDrama,
     t.colType,
     t.colShare,
@@ -350,8 +351,8 @@ export function EarningsPage() {
 
             {/* 表头 */}
             <div className="overflow-x-auto">
-              <div className="min-w-[1020px]">
-                <div className="grid grid-cols-[110px_1fr_150px_90px_80px_100px_100px_130px] px-5 py-2.5 bg-gray-50/60 border-b border-[#f3f4f6]">
+              <div className="min-w-[1120px]">
+                <div className="grid grid-cols-[110px_90px_minmax(220px,1fr)_150px_90px_80px_100px_100px_130px] px-5 py-2.5 bg-gray-50/60 border-b border-[#f3f4f6]">
                   {tableCols.map((col, i) => (
                     <span key={i} className="text-xs text-[#6a7282] whitespace-nowrap" style={{ fontWeight: 500 }}>
                       {col}
@@ -369,9 +370,10 @@ export function EarningsPage() {
                       {detail.map((row) => (
                         <div
                           key={`${row.courseId}-${row.earnDate}`}
-                          className="grid grid-cols-[110px_1fr_150px_90px_80px_100px_100px_130px] px-5 py-3.5 items-center hover:bg-gray-50/50 transition-colors"
+                          className="grid grid-cols-[110px_90px_minmax(220px,1fr)_150px_90px_80px_100px_100px_130px] px-5 py-3.5 items-center hover:bg-gray-50/50 transition-colors"
                         >
                           <span className="text-xs text-gray-500 whitespace-nowrap">{row.earnDate}</span>
+                          <span className="text-xs text-gray-500 whitespace-nowrap tabular-nums">{row.courseId}</span>
                           <div className="flex items-center gap-2.5 min-w-0">
                             <div className="w-7 h-9 rounded-lg bg-gray-100 overflow-hidden flex items-center justify-center flex-shrink-0">
                               {row.courseImg ? (
@@ -381,11 +383,8 @@ export function EarningsPage() {
                               )}
                             </div>
                             <div className="min-w-0">
-                              <p className="text-sm text-[#101828] truncate" style={{ fontWeight: 600 }}>
+                              <p className="text-sm text-[#101828] truncate" title={row.courseTitle} style={{ fontWeight: 600 }}>
                                 {row.courseTitle}
-                              </p>
-                              <p className="text-[11px] text-gray-400 font-mono mt-0.5 tabular-nums">
-                                ID {row.courseId}
                               </p>
                             </div>
                           </div>

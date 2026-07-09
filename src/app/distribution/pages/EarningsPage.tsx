@@ -4,9 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { useI18n } from "../../i18n";
 import { PageLoading } from "../components/settlement/PageHeader";
 import { TypeBadge } from "../components/settlement/Badge";
-import { EmptyState } from "../components/settlement/EmptyState";
 import {
-  getPayoutAccount,
   getEarningsSummary,
   getEarningsMonths,
   getEarningsDetail,
@@ -20,6 +18,8 @@ const DETAIL_PAGE_SIZE = 10;
 
 const usd = (n: number) =>
   `$ ${(n ?? 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+const optionalUsd = (n?: number | null) => (n == null ? "--" : usd(n));
 
 const formatViews = (n: number | null, locale: string) =>
   n === null ? "--" : new Intl.NumberFormat(locale, { notation: "compact", maximumFractionDigits: 1 }).format(n);
@@ -78,7 +78,7 @@ function SettleStatusBadge({ status, label }: { status: 0 | 1 | 2; label: string
 
 /**
  * 收益明细 —— 对接 /publisher/settlement/overview、/earnings、/courses。
- * 是否有收款账户决定展示数据态还是暂无态（同原型 hasPaymentAccount）。
+ * 收益数据与收款账户是否绑定解耦；未绑定收款账户时仍展示已产生的收益明细。
  */
 export function EarningsPage() {
   const { messages, locale } = useI18n();
@@ -87,7 +87,6 @@ export function EarningsPage() {
 
   const [loading, setLoading] = useState(true);
   const [detailLoading, setDetailLoading] = useState(false);
-  const [hasAccount, setHasAccount] = useState(false);
   const [summary, setSummary] = useState<EarningsSummary | null>(null);
   const [detail, setDetail] = useState<EarningsDetailRow[]>([]);
   const [detailTotal, setDetailTotal] = useState(0);
@@ -105,13 +104,11 @@ export function EarningsPage() {
   const loadOverview = useCallback(async () => {
     setLoading(true);
     try {
-      const [acc, sum, courseOptions, availableMonths] = await Promise.all([
-        getPayoutAccount(),
+      const [sum, courseOptions, availableMonths] = await Promise.all([
         getEarningsSummary(),
         getEarningsCoursesDropdown(),
         getEarningsMonths(),
       ]);
-      setHasAccount(acc.bound);
       setSummary(sum);
       setCourses(courseOptions);
       setMonthsWithData(availableMonths);
@@ -151,7 +148,7 @@ export function EarningsPage() {
   }, [debouncedSearch]);
 
   const loadDetail = useCallback(async () => {
-    if (!hasAccount || !activeMonth) return;
+    if (!activeMonth) return;
     setDetailLoading(true);
     try {
       const { startDate, endDate } = monthDateRange(activeMonth);
@@ -170,7 +167,7 @@ export function EarningsPage() {
     } finally {
       setDetailLoading(false);
     }
-  }, [hasAccount, activeMonth, page, courseFilter, debouncedSearch]);
+  }, [activeMonth, page, courseFilter, debouncedSearch]);
 
   useEffect(() => {
     void loadDetail();
@@ -208,6 +205,7 @@ export function EarningsPage() {
 
   const typeLabel = (scope: EarningsDetailRow["publishScope"]) => (scope === 2 ? t.typeFull : t.typeAccount);
   const typeValue = (scope: EarningsDetailRow["publishScope"]) => (scope === 2 ? "full" : "account");
+  const hasSummary = summary !== null;
   const growthText = summary?.growthRate === null ? "--" : t.growthVsLastMonth.replace("{rate}", String(summary?.growthRate ?? 0));
 
   const settleStatusLabel = (status: EarningsDetailRow["settleStatus"]) => {
@@ -218,7 +216,7 @@ export function EarningsPage() {
 
   const chartData = (summary?.monthlyTrend ?? []).map((m) => ({
     label: t.monthLabel.replace("{n}", String(Number(m.month.slice(5, 7)))),
-    total: hasAccount ? m.amountUsd : 0,
+    total: m.amountUsd,
   }));
 
   const tableCols = [
@@ -308,12 +306,12 @@ export function EarningsPage() {
                 fontWeight: 800,
                 fontSize: "2.25rem",
                 letterSpacing: 0,
-                color: hasAccount ? "#101828" : "#D1D5DB",
+                color: hasSummary ? "#101828" : "#D1D5DB",
               }}
             >
-              {usd(hasAccount ? summary?.totalCumulativeUsd ?? 0 : 0)}
+              {usd(summary?.totalCumulativeUsd ?? 0)}
             </p>
-            {hasAccount && summary && (
+            {summary && (
               <div className="flex items-center gap-1 mt-1 text-xs text-green-600">
                 <TrendingUp className="w-3 h-3" />
                 {growthText}
@@ -336,8 +334,8 @@ export function EarningsPage() {
                 </div>
                 <div>
                   <p className="text-xs text-gray-500">{item.label}</p>
-                  <p className="text-sm mt-0.5" style={{ fontWeight: 700, color: hasAccount ? "#101828" : "#D1D5DB" }}>
-                    {usd(hasAccount ? item.val : 0)}
+                  <p className="text-sm mt-0.5" style={{ fontWeight: 700, color: hasSummary ? "#101828" : "#D1D5DB" }}>
+                    {usd(item.val)}
                   </p>
                 </div>
               </div>
@@ -346,10 +344,10 @@ export function EarningsPage() {
 
           <div className="ml-auto flex flex-wrap items-center gap-4">
             {[
-              { label: t.relatedDramas, val: hasAccount ? String(summary?.relatedDramas ?? 0) : "0", accent: false },
-              { label: t.settlementBills, val: hasAccount ? String(summary?.settlementBillCount ?? 0) : "0", accent: false },
-              { label: t.yesterday, val: usd(hasAccount ? summary?.yesterdayUsd ?? 0 : 0), accent: false },
-              { label: t.estThisMonth, val: usd(hasAccount ? summary?.estThisMonthUsd ?? 0 : 0), accent: true },
+              { label: t.relatedDramas, val: String(summary?.relatedDramas ?? 0), accent: false },
+              { label: t.settlementBills, val: String(summary?.settlementBillCount ?? 0), accent: false },
+              { label: t.yesterday, val: usd(summary?.yesterdayUsd ?? 0), accent: false },
+              { label: t.estThisMonth, val: usd(summary?.estThisMonthUsd ?? 0), accent: true },
             ].map((item, i) => (
               <div key={i} className="text-center px-4 py-2 rounded-xl bg-gray-50">
                 <p className="text-xs text-gray-400 mb-0.5">{item.label}</p>
@@ -357,7 +355,7 @@ export function EarningsPage() {
                   className="text-sm"
                   style={{
                     fontWeight: 700,
-                    color: hasAccount ? (item.accent ? "#e8192c" : "#101828") : "#D1D5DB",
+                    color: hasSummary ? (item.accent ? "#e8192c" : "#101828") : "#D1D5DB",
                   }}
                 >
                   {item.val}
@@ -373,7 +371,7 @@ export function EarningsPage() {
             {t.monthlyTrend}
           </p>
           <div className="h-44">
-            <ResponsiveContainer key={`earnings-bar-${hasAccount}`} width="100%" height="100%">
+            <ResponsiveContainer key={`earnings-bar-${hasSummary}`} width="100%" height="100%">
               <BarChart data={chartData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} />
                 <XAxis dataKey="label" tick={{ fontSize: 11, fill: "#9CA3AF" }} axisLine={false} tickLine={false} />
@@ -401,8 +399,7 @@ export function EarningsPage() {
           </div>
         </div>
 
-        {hasAccount ? (
-          <>
+        <>
             {/* 设计稿：左侧筛选/搜索，右侧年份 + 1–12 月切换 */}
             <div className="flex items-center gap-3 px-5 py-3 border-b border-[#f3f4f6] bg-gray-50/30 flex-wrap">
               <select
@@ -493,10 +490,10 @@ export function EarningsPage() {
                             {usd(row.creatorUsd)}
                           </span>
                           <span className="text-sm text-gray-700 whitespace-nowrap tabular-nums" style={{ fontWeight: 600 }}>
-                            {usd(row.historySettledUsd)}
+                            {optionalUsd(row.historySettledUsd)}
                           </span>
                           <span className="text-sm text-[#101828] whitespace-nowrap tabular-nums" style={{ fontWeight: 700 }}>
-                            {usd(row.totalCreatorUsd)}
+                            {optionalUsd(row.totalCreatorUsd)}
                           </span>
                         </div>
                       ))}
@@ -538,15 +535,7 @@ export function EarningsPage() {
                 </button>
               </div>
             )}
-          </>
-        ) : (
-          <EmptyState
-            className="py-16"
-            icon={<Wallet className="w-7 h-7" />}
-            title={t.emptyTitle}
-            desc={t.emptyDesc}
-          />
-        )}
+        </>
       </div>
     </div>
   );

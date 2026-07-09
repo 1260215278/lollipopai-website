@@ -143,10 +143,10 @@ export interface EarningsDetailRow {
   grossUsd: number;
   /** 当日出品方实得 */
   creatorUsd: number;
-  /** 该剧全期创作者累计应得，USD；不随月份筛选变化 */
-  totalCreatorUsd: number;
-  /** 该剧累计已打款结算金额，USD；不随月份筛选变化 */
-  historySettledUsd: number;
+  /** 该剧全期创作者累计应得，USD；不随月份筛选变化。后端未返回时页面展示 --。 */
+  totalCreatorUsd?: number | null;
+  /** 该剧累计已打款结算金额，USD；不随月份筛选变化。后端未返回时页面展示 --。 */
+  historySettledUsd?: number | null;
   /** 创作者分成百分比，80 或 60 */
   ratio: number;
   /** 该剧累计播放量（course.view_counts） */

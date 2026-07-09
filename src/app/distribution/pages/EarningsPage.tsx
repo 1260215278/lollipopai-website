@@ -380,9 +380,14 @@ export function EarningsPage() {
                                 <Film className="w-3.5 h-3.5 text-gray-300" />
                               )}
                             </div>
-                            <span className="text-sm text-[#101828] truncate" style={{ fontWeight: 600 }}>
-                              {row.courseTitle}
-                            </span>
+                            <div className="min-w-0">
+                              <p className="text-sm text-[#101828] truncate" style={{ fontWeight: 600 }}>
+                                {row.courseTitle}
+                              </p>
+                              <p className="text-[11px] text-gray-400 font-mono mt-0.5 tabular-nums">
+                                ID {row.courseId}
+                              </p>
+                            </div>
                           </div>
                           <div>
                             <TypeBadge type={typeValue(row.publishScope)} label={typeLabel(row.publishScope)} />

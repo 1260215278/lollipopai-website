@@ -298,7 +298,7 @@ const enMessages = {
     title: "Contact Us",
     subtitle: "Reach out through any of the channels below",
     cards: [
-      { title: "Phone", detail: "+852 9273 5725" },
+      { title: "Phone", detail: "+65 80742120" },
       { title: "Email", detail: "business@lollipop.im" },
       { title: "Telegram", detail: "Contact Us" },
       { title: "WhatsApp", detail: "Contact Us" },
@@ -619,7 +619,7 @@ const translations: Record<Locale, TranslationMessages> = {
       title: "联系我们",
       subtitle: "通过以下任一渠道联系我们",
       cards: [
-        { title: "电话", detail: "+852 9273 5725" },
+        { title: "电话", detail: "+65 80742120" },
         { title: "邮箱", detail: "business@lollipop.im" },
         { title: "Telegram", detail: "联系我们" },
         { title: "WhatsApp", detail: "联系我们" },
@@ -935,7 +935,7 @@ const translations: Record<Locale, TranslationMessages> = {
       title: "聯絡我們",
       subtitle: "透過以下任一渠道聯絡我們",
       cards: [
-        { title: "電話", detail: "+852 9273 5725" },
+        { title: "電話", detail: "+65 80742120" },
         { title: "電子郵件", detail: "business@lollipop.im" },
         { title: "Telegram", detail: "聯絡我們" },
         { title: "WhatsApp", detail: "聯絡我們" },
@@ -1251,7 +1251,7 @@ const translations: Record<Locale, TranslationMessages> = {
       title: "Fale Conosco",
       subtitle: "Entre em contato por qualquer um dos canais abaixo",
       cards: [
-        { title: "Telefone", detail: "+852 9273 5725" },
+        { title: "Telefone", detail: "+65 80742120" },
         { title: "E-mail", detail: "business@lollipop.im" },
         { title: "Telegram", detail: "Fale conosco" },
         { title: "WhatsApp", detail: "Fale conosco" },

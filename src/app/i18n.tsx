@@ -641,7 +641,7 @@ const translations: Record<Locale, TranslationMessages> = {
         download: "下载",
         contactUs: "联系我们",
       },
-      address: "新加坡 757088 3 Gambas Crescent, Nordcom One #04-01",
+      address: "3 GAMBAS CRESCENT, #04-01, NORDCOM ONE, SINGAPORE 757088",
     },
     videoModal: {
       title: "预告即将上线",
@@ -957,7 +957,7 @@ const translations: Record<Locale, TranslationMessages> = {
         download: "下載",
         contactUs: "聯絡我們",
       },
-      address: "新加坡 757088 3 Gambas Crescent, Nordcom One #04-01",
+      address: "3 GAMBAS CRESCENT, #04-01, NORDCOM ONE, SINGAPORE 757088",
     },
     videoModal: {
       title: "預告即將上線",
@@ -1273,7 +1273,7 @@ const translations: Record<Locale, TranslationMessages> = {
         download: "Download",
         contactUs: "Fale Conosco",
       },
-      address: "3 Gambas Crescent, #04-01, Nordcom One, Singapura 757088",
+      address: "3 GAMBAS CRESCENT, #04-01, NORDCOM ONE, SINGAPORE 757088",
     },
     videoModal: {
       title: "Prévia em breve",

@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 import logoImg from "../../imports/Lollipop1.png";
 import { useI18n } from "../i18n";
 
@@ -33,10 +33,12 @@ export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) 
                 <Mail className="w-4 h-4 flex-shrink-0" />
                 <span>{messages.contact.cards[1].detail}</span>
               </div>
+              {/* 暂隐手机号
               <div className="flex items-center gap-3 text-gray-400" style={{ fontSize: "0.85rem" }}>
                 <Phone className="w-4 h-4 flex-shrink-0" />
                 <span>{messages.contact.cards[0].detail}</span>
               </div>
+              */}
               <div className="flex items-start gap-3 text-gray-400" style={{ fontSize: "0.85rem" }}>
                 <MapPin className="w-4 h-4 flex-shrink-0 mt-0.5" />
                 <span>{messages.footer.address}</span>

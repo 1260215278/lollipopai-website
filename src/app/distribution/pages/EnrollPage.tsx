@@ -9,6 +9,8 @@ import { AreaCodeSelect } from "../../components/AreaCodeSelect";
 import { COUNTRY_CODES } from "../../data/countryCodes";
 import { ImageUpload } from "../components/ImageUpload";
 import welcomeBanner from "../../../imports/发行入驻-欢迎横幅.png";
+import welcomeBannerCn from "../../../imports/发行入驻-欢迎横幅-cn.png";
+import welcomeBannerEn from "../../../imports/发行入驻-欢迎横幅-en.png";
 import { SiteHeader, type SiteNavItem } from "../../components/SiteHeader";
 import { ApiError } from "../../services/http";
 import { getLoginName, isAppAuthed, setAppToken, setLoginName } from "../../services/auth";
@@ -620,6 +622,8 @@ function FormView(props: {
 }) {
   const { t, errors, contactMode } = props;
   const isPhoneMode = contactMode === "phone";
+  const directBanner = props.locale === "zh-CN" ? welcomeBannerCn : props.locale === "en" ? welcomeBannerEn : null;
+  const isChineseBannerCopy = props.locale === "zh-TW";
 
   // 勾选文案：将 {terms}/{privacy} 占位渲染为可点击链接（点击打开弹窗，不触发勾选切换）；
   // 其余纯文本点击仍可切换勾选框。
@@ -660,13 +664,32 @@ function FormView(props: {
     <div className="max-w-[672px] mx-auto px-6 py-10">
       {/* 申请表单卡片（figma 15237-33706：#090101 + 24px 内边距 + 16px 圆角） */}
       <div className="bg-[#090101] rounded-[16px] p-6">
-        {/* 欢迎横幅：figma 15237-33708 导出的图片资源，整图出血至卡片边缘并保留顶部圆角 */}
-        <div className="-mx-6 -mt-6 mb-6">
-          <img
-            src={welcomeBanner}
-            alt={t.bannerTitle}
-            className="block w-full rounded-t-[16px] select-none pointer-events-none"
-          />
+        {/* 简体中文与英文使用设计资源；其余语言保留前端 i18n 文案层。 */}
+        <div className="relative -mx-6 -mt-6 mb-6 aspect-[1544/500] overflow-hidden rounded-t-[16px]">
+          {directBanner ? (
+            <img
+              src={directBanner}
+              alt={t.bannerTitle}
+              className="block w-full select-none pointer-events-none"
+            />
+          ) : (
+            <>
+              <img
+                src={welcomeBanner}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 block h-full w-full object-cover select-none pointer-events-none"
+              />
+              <div className="enroll-banner-copy absolute left-[44.5%] top-[8%] z-10 w-[37%] text-[#ffd480]">
+                <p className={isChineseBannerCopy ? "whitespace-nowrap text-[14px] font-semibold leading-[1.2] sm:text-[30px]" : "whitespace-nowrap text-[11px] font-semibold leading-[1.2] sm:text-[20px]"}>
+                  {t.bannerTitle}
+                </p>
+                <p className={isChineseBannerCopy ? "mt-[7%] whitespace-nowrap text-[10px] font-normal leading-[1.2] sm:text-[18px]" : "mt-[5%] text-[7px] font-normal leading-[1.2] sm:text-[9px]"}>
+                  {t.bannerSubtitle}
+                </p>
+              </div>
+            </>
+          )}
         </div>
 
         <h1 className="text-white" style={{ fontWeight: 500, fontSize: "1.5rem", letterSpacing: "0.07px" }}>

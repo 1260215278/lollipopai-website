@@ -661,30 +661,38 @@ function FormView(props: {
   });
 
   return (
-    <div className="max-w-[672px] mx-auto px-6 py-10">
+    <div className="w-full max-w-[720px] mx-auto px-6 py-10">
       {/* 申请表单卡片（figma 15237-33706：#090101 + 24px 内边距 + 16px 圆角） */}
       <div className="bg-[#090101] rounded-[16px] p-6">
-        {/* 简体中文与英文使用设计资源；其余语言保留前端 i18n 文案层。 */}
-        <div className="relative -mx-6 -mt-6 mb-6 aspect-[1544/500] overflow-hidden rounded-t-[16px]">
+        {/* 简中与英文直接使用完整图片；繁中与葡语只覆盖原图文案区。 */}
+        <div className="relative -mx-6 -mt-6 mb-2 aspect-[1544/500] overflow-hidden rounded-t-[16px]">
           {directBanner ? (
             <img
               src={directBanner}
               alt={t.bannerTitle}
-              className="block w-full select-none pointer-events-none"
+              className="absolute inset-0 block h-full w-full select-none pointer-events-none"
             />
           ) : (
             <>
               <img
+                src={welcomeBannerCn}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 block h-full w-full select-none pointer-events-none"
+              />
+              {/* 无字底图与 Figma 原图在文案区背景一致，仅裁出该区域覆盖简中文字。 */}
+              <img
                 src={welcomeBanner}
                 alt=""
                 aria-hidden="true"
-                className="absolute inset-0 block h-full w-full object-cover select-none pointer-events-none"
+                className="absolute inset-0 block h-full w-full select-none pointer-events-none"
+                style={{ clipPath: "inset(16% 23.575% 53% 42.746%)" }}
               />
-              <div className="enroll-banner-copy absolute left-[44.5%] top-[8%] z-10 w-[37%] text-[#ffd480]">
-                <p className={isChineseBannerCopy ? "whitespace-nowrap text-[14px] font-semibold leading-[1.2] sm:text-[30px]" : "whitespace-nowrap text-[11px] font-semibold leading-[1.2] sm:text-[20px]"}>
+              <div className="enroll-banner-copy absolute left-[44.3%] top-[18%] z-10 w-[37%] text-[#ffd480]">
+                <p className={isChineseBannerCopy ? "whitespace-nowrap text-[12px] font-semibold leading-[1.2] sm:text-[24px]" : "text-[10px] font-semibold leading-[1.2] sm:text-[20px]"}>
                   {t.bannerTitle}
                 </p>
-                <p className={isChineseBannerCopy ? "mt-[7%] whitespace-nowrap text-[10px] font-normal leading-[1.2] sm:text-[18px]" : "mt-[5%] text-[7px] font-normal leading-[1.2] sm:text-[9px]"}>
+                <p className={isChineseBannerCopy ? "mt-2 whitespace-nowrap text-[8px] font-normal leading-[1.2] sm:text-[14px]" : "mt-2 text-[7px] font-normal leading-[1.2] sm:text-[12px]"}>
                   {t.bannerSubtitle}
                 </p>
               </div>

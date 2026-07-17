@@ -14,11 +14,14 @@ import { toast } from "sonner";
 import { getAppToken, getPublisherToken, handleUnauthorized } from "./auth";
 import { getMessages, getAcceptLanguage } from "../i18n";
 
-const API_BASE: string = import.meta.env.VITE_API_BASE 
-// || "https://www.testshort.top";
+// 未配置时必须落空串，不能是 undefined：否则模板字符串会拼成字面量 "undefined/sqx_fast"
+// （线上就会出现 https://www.lollipop.im/undefined/sqx_fast/...，并常伴随静态站 405）。
+// 空串 = 相对路径 /sqx_fast（同域；dev 由 vite proxy 转发，prod 由网关反代）。
+// 直连后端时设 VITE_API_BASE=https://xxx（需后端 CORS）。
+const API_BASE: string = (import.meta.env.VITE_API_BASE as string | undefined) || "";
 /** 后端统一 context-path */
 export const CONTEXT_PATH = "/sqx_fast";
-/** 请求基础地址：${VITE_API_BASE}/sqx_fast */
+/** 请求基础地址：${VITE_API_BASE}/sqx_fast；未配置 VITE_API_BASE 时为 /sqx_fast */
 export const BASE_URL = `${API_BASE}${CONTEXT_PATH}`;
 
 /** 统一响应结构。分页接口数据放在顶层 `page`（renren-fast 约定，见接口文档 §0）。 */

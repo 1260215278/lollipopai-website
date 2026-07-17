@@ -14,7 +14,8 @@ import { toast } from "sonner";
 import { getAppToken, getPublisherToken, handleUnauthorized } from "./auth";
 import { getMessages, getAcceptLanguage } from "../i18n";
 
-const API_BASE: string = import.meta.env.VITE_API_BASE || "https://www.testshort.top";
+const API_BASE: string = import.meta.env.VITE_API_BASE 
+// || "https://www.testshort.top";
 /** 后端统一 context-path */
 export const CONTEXT_PATH = "/sqx_fast";
 /** 请求基础地址：${VITE_API_BASE}/sqx_fast */

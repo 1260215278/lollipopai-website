@@ -10,8 +10,8 @@ export const IMAGE_ACCEPT = "image/jpeg,image/png,image/gif,image/bmp,image/webp
 export const VIDEO_ACCEPT = "video/mp4,video/x-msvideo,video/quicktime,video/x-ms-wmv,video/x-flv,video/x-matroska,video/webm,.mp4,.avi,.mov,.wmv,.flv,.mkv,.webm,.m4v";
 export const HIGHLIGHT_ACCEPT = "video/mp4,video/quicktime,.mp4,.mov";
 export const COPYRIGHT_PROOF_ACCEPT = `${IMAGE_ACCEPT},application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.pdf,.doc,.docx`;
-/** 前端展示与拦截的视频大小上限。 */
-export const VIDEO_MAX = 100 * 1024 * 1024;
+/** 前端展示与拦截的视频大小上限（与 /publisher/course/upload 一致）。 */
+export const VIDEO_MAX = 500 * 1024 * 1024;
 /** 单集标题上限。 */
 export const EPISODE_TITLE_LIMIT = 50;
 

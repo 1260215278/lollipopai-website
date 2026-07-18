@@ -543,7 +543,7 @@ function EnrollHeader() {
   const navItems: SiteNavItem[] = [
     { key: "home", label: links.home, onClick: () => navigate("/") },
     { key: "creating", label: links.creating, onClick: () => navigate("/creating") },
-    { key: "distribution", label: messages.distribution.nav.entry, active: true, onClick: () => navigate("/distribution") },
+    { key: "distribution", label: messages.distribution.nav.entry, active: true },
     { key: "download", label: links.download, onClick: () => navigate("/download") },
     { key: "contact", label: links.contact, onClick: () => navigate("/contact") },
   ];

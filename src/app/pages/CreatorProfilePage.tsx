@@ -12,6 +12,7 @@ import {
   type PublisherProfile,
   type PublisherProfileCourse,
 } from "../services/publisher";
+import { useDistributionEntryNavigation } from "../distribution/entryNavigation";
 
 /** 公开主页文案（4 语言，仿 i18n.login 独立字典；本页为最简公开页，待 figma 后再细化）。 */
 const profileMessages: Record<Locale, { dramas: string; plays: string; empty: string; notFound: string; loadMore: string }> = {
@@ -187,11 +188,12 @@ export function CreatorProfilePage() {
 function ProfileHeader() {
   const { messages } = useI18n();
   const navigate = useNavigate();
+  const enterDistribution = useDistributionEntryNavigation();
   const links = messages.navbar.links;
   const navItems: SiteNavItem[] = [
     { key: "home", label: links.home, onClick: () => navigate("/") },
     { key: "creating", label: links.creating, onClick: () => navigate("/creating") },
-    { key: "distribution", label: messages.distribution.nav.entry, onClick: () => navigate("/distribution") },
+    { key: "distribution", label: messages.distribution.nav.entry, onClick: enterDistribution },
     { key: "download", label: links.download, onClick: () => navigate("/download") },
     { key: "contact", label: links.contact, onClick: () => navigate("/contact") },
   ];

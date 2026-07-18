@@ -7,10 +7,12 @@ import { LoginPage } from "./app/pages/LoginPage";
 import { ForgotPasswordPage } from "./app/pages/ForgotPasswordPage";
 import { CreatorProfilePage } from "./app/pages/CreatorProfilePage";
 import { I18nProvider } from "./app/i18n.tsx";
+import { Toaster } from "./app/components/ui/sonner";
 import "./styles/index.css";
 
 createRoot(document.getElementById("root")!).render(
   <I18nProvider>
+    <Toaster position="top-center" richColors />
     <BrowserRouter>
       <Routes>
         {/* 发行中心后台子应用 */}

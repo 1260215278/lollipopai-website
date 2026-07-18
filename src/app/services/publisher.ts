@@ -53,6 +53,41 @@ export interface PublisherStatus {
   apply: PublisherApply | null;
 }
 
+export type PublisherEntryTarget =
+  | "ENROLL"
+  | "APPLICATION_PENDING"
+  | "APPLICATION_REJECTED"
+  | "CONSOLE"
+  | "CONSOLE_2FA"
+  | "BLOCKED";
+
+export type PublisherEntryBlockReason =
+  | "MEMBER_DISABLED"
+  | "PUBLISHER_DISABLED"
+  | "MEMBER_MISSING_AFTER_APPROVAL";
+
+interface PublisherEntryStatusBase {
+  hasActiveMember: boolean;
+  auditStatus: 0 | 1 | 2 | null;
+  isPublisher: 0 | 1;
+  twoFactorRequired: boolean;
+  rejectReason: string | null;
+}
+
+/** GET /app/publisher/entryStatus 响应：官网预取后按 entryTarget 直接路由。 */
+export type PublisherEntryStatus = PublisherEntryStatusBase & (
+  | {
+      entryTarget: Exclude<PublisherEntryTarget, "BLOCKED">;
+      blockReason: null;
+      blockMessage: null;
+    }
+  | {
+      entryTarget: "BLOCKED";
+      blockReason: PublisherEntryBlockReason;
+      blockMessage: string;
+    }
+);
+
 /** POST /app/publisher/submit 请求体（严格按接口文档；phone/email 二选一） */
 export interface PublisherSubmitBody {
   /** 二选一：申请手机号（与 email 都传时后端手机号优先） */
@@ -142,6 +177,13 @@ export const AuditStatus = {
 /** 查询入驻状态（进页面先调用，决定展示哪种状态） */
 export function getPublisherStatus(options: { toastOnError?: boolean } = {}): Promise<PublisherStatus> {
   return http.get<PublisherStatus>("/app/publisher/status", options);
+}
+
+/** 发行中心入口预检（App token、只读无副作用，不发码/不签发 publisher token）。 */
+export function getPublisherEntryStatus(
+  options: { toastOnError?: boolean; signal?: AbortSignal } = {},
+): Promise<PublisherEntryStatus> {
+  return http.get<PublisherEntryStatus>("/app/publisher/entryStatus", options);
 }
 
 /** GET /app/publisher/tenantStatus 响应（swift 租户开通状态，2026-06-26 新增；需登录） */

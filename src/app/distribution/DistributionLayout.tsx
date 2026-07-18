@@ -38,6 +38,7 @@ import {
   type PublisherTenantStatus,
 } from "../services/publisher";
 import { getCurrentMember, type CurrentPublisherMember } from "../services/member";
+import type { DistributionNavigationState } from "./entryNavigation";
 import lollipopLogo from "../../imports/Lollipop1.png";
 
 const NAME_PREVIEW_LIMIT = 10;
@@ -118,6 +119,7 @@ export function DistributionLayout() {
   const t = messages.distribution;
   const navigate = useNavigate();
   const location = useLocation();
+  const expectsTwoFactor = (location.state as DistributionNavigationState | null)?.publisherEntryTarget === "CONSOLE_2FA";
 
   const inSettlement =
     location.pathname.includes("/payment") ||
@@ -195,6 +197,10 @@ export function DistributionLayout() {
       })
       .catch(async (err) => {
         if (!alive) return;
+        if (err instanceof ApiError && err.code === 403398) {
+          setEntryError(t.twoFactor.bindPhoneFirst);
+          return;
+        }
         const loginMsg = err instanceof Error ? err.message : t.common.serverError;
         try {
           const status = await getPublisherStatus({ toastOnError: false });
@@ -222,7 +228,7 @@ export function DistributionLayout() {
     return () => {
       alive = false;
     };
-  }, [navigate]);
+  }, [navigate, t.twoFactor.bindPhoneFirst]);
 
   // 拉取入驻状态，用 apply.companyName 作为顶栏展示名（status 用 appToken，登录后即可用）
   useEffect(() => {
@@ -493,7 +499,7 @@ export function DistributionLayout() {
                 <p className="text-sm text-gray-700 mt-3 leading-relaxed">{entryError}</p>
               </div>
             </div>
-          ) : !tokenReady && isAppAuthed() ? (
+          ) : !tokenReady && (twoFactorChallenge || expectsTwoFactor) ? (
             <TwoFactorGate
               t={t}
               challenge={twoFactorChallenge}
@@ -566,8 +572,8 @@ export function DistributionLayout() {
   );
 }
 
-/** 两步验证登录界面（item 12）：byAppToken 请求发起后立即展示界面；
- *  challenge 返回前先允许用户看到验证码输入区域，challenge 返回后展示 phoneMask + 倒计时并可校验。
+/** 两步验证登录界面（item 12）：entryStatus 已确认 2FA 后立即展示；
+ *  challenge 返回前显示发码中，返回后展示 phoneMask + 倒计时并允许校验。
  *  verify2fa 成功才放行后台。
  *  重发 = 重新调 byAppToken（后端会重发短信并返回新 challengeToken）。 */
 function TwoFactorGate({

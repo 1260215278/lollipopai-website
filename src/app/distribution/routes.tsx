@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate } from "react-router";
-import { Toaster } from "../components/ui/sonner";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { DistributionLayout } from "./DistributionLayout";
 import { EnrollPage } from "./pages/EnrollPage";
@@ -23,7 +22,6 @@ import { AccountPage } from "./pages/AccountPage";
 export function DistributionRoutes() {
   return (
     <ErrorBoundary>
-      <Toaster position="top-center" richColors />
       <Routes>
         <Route index element={<Navigate to="overview" replace />} />
         <Route path="enroll" element={<EnrollPage />} />

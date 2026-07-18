@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
-import { Toaster } from "../components/ui/sonner";
 import { useI18n } from "../i18n";
 import { Footer } from "../components/Footer";
 import { SiteHeader, type SiteNavItem } from "../components/SiteHeader";
@@ -16,6 +15,7 @@ import {
 } from "../services/session";
 import promoImg from "../../imports/login-promo.jpg";
 import appIcon from "../../imports/login-app-icon.png";
+import { useDistributionEntryNavigation } from "../distribution/entryNavigation";
 
 /** 密码最小长度（与 H5 forgetPwd.vue minlength 一致） */
 const PWD_MIN = 6;
@@ -115,7 +115,6 @@ export function ForgotPasswordPage() {
 
   return (
     <div className="w-full bg-black" style={{ fontFamily: "Inter, system-ui, sans-serif" }}>
-      <Toaster position="top-center" richColors />
 
       <div className="min-h-screen flex flex-col">
         <ForgotHeader />
@@ -245,11 +244,12 @@ export function ForgotPasswordPage() {
 function ForgotHeader() {
   const { messages } = useI18n();
   const navigate = useNavigate();
+  const enterDistribution = useDistributionEntryNavigation();
   const links = messages.navbar.links;
   const navItems: SiteNavItem[] = [
     { key: "home", label: links.home, onClick: () => navigate("/") },
     { key: "creating", label: links.creating, onClick: () => navigate("/creating") },
-    { key: "distribution", label: messages.distribution.nav.entry, onClick: () => navigate("/distribution") },
+    { key: "distribution", label: messages.distribution.nav.entry, onClick: enterDistribution },
     { key: "download", label: links.download, onClick: () => navigate("/download") },
     { key: "contact", label: links.contact, onClick: () => navigate("/contact") },
   ];

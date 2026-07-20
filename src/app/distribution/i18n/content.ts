@@ -124,6 +124,11 @@ export interface ContentMessages {
   readingDuration: string;
   /** "共 {total} 集，已选择 {selected} 集" */
   uploadSummary: string;
+  batchUpload: string;
+  batchUploadEpisodes: string;
+  uploadFolder: string;
+  /** 批量选择的视频数量超过计划集数。 */
+  batchUploadTooMany: string;
 
   // ── Step 3 发布配置 ──
   distSectionTitle: string;
@@ -375,6 +380,10 @@ export const content: Record<Locale, ContentMessages> = {
     fileTooLarge: "文件超过 500MB 限制",
     readingDuration: "读取中…",
     uploadSummary: "共 {total} 集，已选择 {selected} 集",
+    batchUpload: "批量上传",
+    batchUploadEpisodes: "批量上传集数",
+    uploadFolder: "上传文件夹",
+    batchUploadTooMany: "最多可上传 {total} 集，当前选择了 {selected} 个视频",
 
     distSectionTitle: "发布范围",
     distSectionDesc: "选择短剧的展示位置，影响曝光量与收益方式",
@@ -612,6 +621,10 @@ export const content: Record<Locale, ContentMessages> = {
     fileTooLarge: "檔案超過 500MB 限制",
     readingDuration: "讀取中…",
     uploadSummary: "共 {total} 集，已選擇 {selected} 集",
+    batchUpload: "批量上傳",
+    batchUploadEpisodes: "批量上傳集數",
+    uploadFolder: "上傳資料夾",
+    batchUploadTooMany: "最多可上傳 {total} 集，目前選擇了 {selected} 個影片",
 
     distSectionTitle: "發佈範圍",
     distSectionDesc: "選擇短劇的展示位置，影響曝光量與收益方式",
@@ -850,6 +863,10 @@ export const content: Record<Locale, ContentMessages> = {
     fileTooLarge: "File exceeds 500MB limit",
     readingDuration: "Reading…",
     uploadSummary: "{selected} / {total} selected",
+    batchUpload: "Batch Upload",
+    batchUploadEpisodes: "Upload Multiple Episodes",
+    uploadFolder: "Upload Folder",
+    batchUploadTooMany: "You can upload up to {total} episodes; {selected} videos were selected",
 
     distSectionTitle: "Distribution",
     distSectionDesc: "Choose where your drama appears — affects exposure and revenue method",
@@ -1088,6 +1105,10 @@ export const content: Record<Locale, ContentMessages> = {
     fileTooLarge: "Arquivo excede o limite de 500MB",
     readingDuration: "Lendo…",
     uploadSummary: "{selected} / {total} selecionados",
+    batchUpload: "Upload em lote",
+    batchUploadEpisodes: "Enviar vários episódios",
+    uploadFolder: "Enviar pasta",
+    batchUploadTooMany: "Você pode enviar no máximo {total} episódios; {selected} vídeos foram selecionados",
 
     distSectionTitle: "Distribuição",
     distSectionDesc: "Escolha onde seu drama aparece — afeta o alcance e a receita",

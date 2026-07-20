@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   ArrowLeft,
+  ChevronDown,
   Upload,
   X,
   RotateCcw,
   Film,
+  Files,
+  FolderOpen,
   AlertCircle,
   Info,
   User,
@@ -41,6 +44,12 @@ import { StepIndicator } from "../StepIndicator";
 import { PhoneMockup } from "./PhoneMockup";
 import { CountryPricingModal } from "./CountryPricingModal";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../../../components/ui/dropdown-menu";
+import {
   COPYRIGHT_PROOF_ACCEPT,
   Field,
   HIGHLIGHT_ACCEPT,
@@ -56,6 +65,7 @@ import {
   EPISODE_TITLE_LIMIT,
 } from "./shared";
 import { parseEpisodeTemplate } from "./episodeTemplate";
+import { getFolderEpisodeTitle, prepareBatchVideoFiles } from "./batchVideoFiles";
 
 const DESC_LIMIT = 200;
 /** 短剧名称上限 100 字符（bug16：避免超长提交后端异常） */
@@ -303,6 +313,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
 
   const coverRef = useRef<HTMLInputElement>(null);
   const templateInputRef = useRef<HTMLInputElement>(null);
+  const batchVideoInputRef = useRef<HTMLInputElement>(null);
+  const folderInputRef = useRef<HTMLInputElement>(null);
   const highlightRef = useRef<HTMLInputElement>(null);
   const restoredPubConfigCourse = useRef<number | null>(null);
 
@@ -347,6 +359,10 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
     if (courseId === null) return;
     setCachedPubConfig(courseId, pubConfig);
   }, [courseId, pubConfig]);
+
+  useEffect(() => {
+    if (step === 2) folderInputRef.current?.setAttribute("webkitdirectory", "");
+  }, [step]);
 
   // 恢复服务端草稿
   useEffect(() => {
@@ -519,14 +535,32 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
   const updateVideo = (ep: number, field: Partial<VideoRow>) =>
     setVideos((v) => v.map((item) => (item.episodeNo === ep ? { ...item, ...field } : item)));
 
-  const onPickVideo = (ep: number, file: File | undefined) => {
+  const onPickVideo = (ep: number, file: File | undefined, title?: string) => {
     if (!file) return;
     if (file.size > VIDEO_MAX) {
       updateVideo(ep, { file: null, duration: "", fileError: t.fileTooLarge });
       return;
     }
-    updateVideo(ep, { file, fileError: "", duration: "" });
+    updateVideo(ep, {
+      file,
+      fileError: "",
+      duration: "",
+      ...(title ? { title: title.slice(0, EPISODE_TITLE_LIMIT) } : {}),
+    });
     void readVideoDuration(file).then((dur) => updateVideo(ep, { duration: dur }));
+  };
+
+  const onPickBatchVideos = (fileList: FileList | null) => {
+    if (!fileList) return;
+    const files = prepareBatchVideoFiles(fileList, VIDEO_ACCEPT);
+    if (files.length === 0) return;
+    if (files.length > videos.length) {
+      toast.error(fmt(t.batchUploadTooMany, { total: videos.length, selected: files.length }));
+      return;
+    }
+    files.forEach((file, index) => {
+      onPickVideo(videos[index].episodeNo, file, getFolderEpisodeTitle(file) || undefined);
+    });
   };
 
   /** Step2 → 上传已选视频（直传 OSS + saveEpisode）→ Step3 */
@@ -1203,8 +1237,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
               </div>
             </div>
           </div>
-          <div className="flex items-center justify-between px-5 py-3.5 border-t border-gray-100 bg-gray-50/40">
-            <div className="flex items-center gap-3 min-w-0">
+          <div className="flex flex-col gap-3 px-5 py-3.5 border-t border-gray-100 bg-gray-50/40 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-wrap items-center gap-3 min-w-0">
               <input
                 ref={templateInputRef}
                 type="file"
@@ -1212,7 +1246,29 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                 className="hidden"
                 onChange={(e) => void importTemplate(e.target.files?.[0])}
               />
-              <span className="text-xs text-gray-500">
+              <input
+                ref={batchVideoInputRef}
+                type="file"
+                accept={VIDEO_ACCEPT}
+                multiple
+                className="hidden"
+                onChange={(e) => {
+                  onPickBatchVideos(e.target.files);
+                  e.target.value = "";
+                }}
+              />
+              <input
+                ref={folderInputRef}
+                type="file"
+                accept={VIDEO_ACCEPT}
+                multiple
+                className="hidden"
+                onChange={(e) => {
+                  onPickBatchVideos(e.target.files);
+                  e.target.value = "";
+                }}
+              />
+              <span className="w-full text-xs text-gray-500 whitespace-nowrap sm:w-auto">
                 {fmt(t.episodesBreadcrumbCount, { total: videos.length, done: uploadedCount })}
                 {selectedVideoCount > 0 && ` · ${fmt(t.uploadSummary, { total: videos.length, selected: selectedVideoCount })}`}
               </span>
@@ -1220,7 +1276,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                 type="button"
                 onClick={() => void downloadTemplate()}
                 disabled={templateDownloading}
-                className="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-600 hover:bg-gray-50 disabled:opacity-60 inline-flex items-center gap-1.5"
+                className="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-600 hover:bg-gray-50 disabled:opacity-60 inline-flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap"
                 style={{ fontWeight: 600 }}
               >
                 {templateDownloading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
@@ -1230,14 +1286,37 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                 type="button"
                 onClick={() => templateInputRef.current?.click()}
                 disabled={templateImporting}
-                className="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-600 hover:bg-gray-50 disabled:opacity-60 inline-flex items-center gap-1.5"
+                className="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-600 hover:bg-gray-50 disabled:opacity-60 inline-flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap"
                 style={{ fontWeight: 600 }}
               >
                 {templateImporting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 {templateImporting ? t.templateImporting : t.importTemplate}
               </button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    className="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-600 hover:bg-gray-50 inline-flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap"
+                    style={{ fontWeight: 600 }}
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                    {t.batchUpload}
+                    <ChevronDown className="w-3 h-3" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="min-w-[168px]">
+                  <DropdownMenuItem onSelect={() => batchVideoInputRef.current?.click()}>
+                    <Files />
+                    {t.batchUploadEpisodes}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => folderInputRef.current?.click()}>
+                    <FolderOpen />
+                    {t.uploadFolder}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-end gap-3 flex-shrink-0">
               <button
                 onClick={() => setStep(1)}
                 className="px-5 py-2 rounded-xl border border-gray-200 text-gray-700 text-sm hover:bg-gray-50"

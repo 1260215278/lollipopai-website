@@ -25,7 +25,7 @@ interface EmailAuthResponse {
 
 export interface EmailLoginInput {
   emailName: string;
-  /** 验证码（万能验证码测试期 763694） */
+  /** 验证码 */
   code: string;
   /** 平台标识，H5 端为 "h5" */
   platform?: string;

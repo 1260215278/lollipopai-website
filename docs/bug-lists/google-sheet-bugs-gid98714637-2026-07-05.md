@@ -107,7 +107,7 @@ https://www.testshort.top/sqx_fast/app/publisher/submit
 
 {
     ""phone"": ""5463463464"",
-    ""code"": ""763694"",
+    ""code"": ""[historical-test-code-removed]"",
     ""companyName"": ""g341g 23g32g"",
     ""businessLicense"": ""https://oss.lollipop.im/20260701/cca8dc93154a462c8571ab2f7ec94adf.jpeg"",
     ""legalPersonName"": ""3f22f"",
@@ -209,14 +209,14 @@ a123123
 避免用户在发行中心直接验证码提交申请
 造成账号没有密码的情况
 
-### 9. 短剧官网--邮箱账号使用万能验证码注册成功后，登录也抛异常
+### 9. 短剧官网--邮箱账号使用历史测试码注册成功后，登录也抛异常
 
 - 表格行号：10
 - 复测列：(空)
 
 问题描述：
 
-短剧官网--邮箱账号使用万能验证码注册成功后，登录也抛异常
+短剧官网--邮箱账号使用历史测试码注册成功后，登录也抛异常
 我看是post的接口，前端传参异常使用的表达格式
 
 https://www.testshort.top/sqx_fast/app/Login/emailLogin

@@ -6,7 +6,7 @@
  * 列表载荷在顶层 `page`（用 pick:"page" 取）。
  *
  * 数据契约硬约束：字段一律来自接口文档，不臆造、不写撒网式兜底；枚举用后端数值。
- * 上传走「前端直传 OSS（services/upload.ts）→ 拿 URL → saveEpisode」，后端 ffprobe
+ * 上传走「前端切片上传（services/upload.ts）→ 服务端合并并写对象存储 → 拿 URL → saveEpisode」，后端 ffprobe
  * 回写大小/时长，不在前端伪造。
  */
 import { getPublisherToken } from "./auth";
@@ -154,7 +154,7 @@ export interface EpisodeItem {
 export interface SaveBasicBody {
   /** 空=新建草稿；非空=更新草稿 */
   courseId: number | null;
-  /** 封面 URL（先 /publisher/course/upload 得 URL，9:16） */
+  /** 封面 URL（完成 /publisher/course/upload/* 切片上传后得到，9:16） */
   titleImg: string;
   title: string;
   /** 剧情简介 ≤200 */
@@ -203,7 +203,7 @@ export interface SaveEpisodeBody {
   episodeNo: number;
   /** 剧集标题（选填） */
   title?: string;
-  /** 视频 URL（≤500MB，先 /publisher/course/upload 直传 OSS 得到） */
+  /** 视频 URL（≤500MB，完成 /publisher/course/upload/* 切片上传后得到） */
   videoUrl: string;
   /** 原始文件名，用于行内回显 */
   fileName?: string;

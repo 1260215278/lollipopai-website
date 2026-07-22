@@ -14,6 +14,7 @@ import {
   Home,
   Sparkles,
   Loader2,
+  Square,
 } from "lucide-react";
 import { toast } from "sonner";
 import type { ContentMessages } from "../../i18n/content";
@@ -98,6 +99,8 @@ interface VideoRow {
   fileError: string;
   /** 0 待提交 / 1 已上传 / 2 上传失败 */
   uploadStatus: number;
+  /** 当前文件的切片上传进度；null 表示未在上传。 */
+  uploadProgress: number | null;
   /** 已上传集回显：视频大小（字节，后端回写） */
   videoSize: number;
   /** 已上传集回显：视频时长（秒，后端回写） */
@@ -269,7 +272,7 @@ function CopyrightProofUpload({
 /**
  * 上剧流程（三步，分步草稿暂存）：
  *  Step1 基本信息 → POST saveBasic（含语言/标签，返回 courseId）
- *  Step2 上传剧集 → 每个视频直传 OSS → POST saveEpisode（同 episodeNo 覆盖）
+ *  Step2 上传剧集 → 每个视频切片上传 → POST saveEpisode（同 episodeNo 覆盖）
  *  Step3 发布配置 → POST publish（仅 发布范围 + 上架设置；价格按国家平台只读）
  * 进入时自动恢复服务端草稿（GET draft）。
  */
@@ -317,6 +320,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
   const folderInputRef = useRef<HTMLInputElement>(null);
   const highlightRef = useRef<HTMLInputElement>(null);
   const restoredPubConfigCourse = useRef<number | null>(null);
+  const uploadAbortRef = useRef<AbortController | null>(null);
+  const uploadStoppedByUserRef = useRef(false);
 
   const bi = (field: Partial<BasicInfo>) => setBasicInfo((p) => ({ ...p, ...field }));
 
@@ -364,6 +369,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
     if (step === 2) folderInputRef.current?.setAttribute("webkitdirectory", "");
   }, [step]);
 
+  useEffect(() => () => uploadAbortRef.current?.abort(), []);
+
   // 恢复服务端草稿
   useEffect(() => {
     void fetchDraft()
@@ -403,6 +410,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
               duration: "",
               fileError: "",
               uploadStatus: ep?.uploadStatus ?? 0,
+              uploadProgress: null,
               videoSize: ep?.videoSize ?? 0,
               videoDuration: ep?.videoDuration ?? 0,
               videoUrl: ep?.videoUrl || "",
@@ -515,6 +523,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
               duration: "",
               fileError: "",
               uploadStatus: 0,
+              uploadProgress: null,
               videoSize: 0,
               videoDuration: 0,
               videoUrl: "",
@@ -538,13 +547,14 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
   const onPickVideo = (ep: number, file: File | undefined, title?: string) => {
     if (!file) return;
     if (file.size > VIDEO_MAX) {
-      updateVideo(ep, { file: null, duration: "", fileError: t.fileTooLarge });
+      updateVideo(ep, { file: null, duration: "", fileError: t.fileTooLarge, uploadProgress: null });
       return;
     }
     updateVideo(ep, {
       file,
       fileError: "",
       duration: "",
+      uploadProgress: null,
       ...(title ? { title: title.slice(0, EPISODE_TITLE_LIMIT) } : {}),
     });
     void readVideoDuration(file).then((dur) => updateVideo(ep, { duration: dur }));
@@ -563,7 +573,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
     });
   };
 
-  /** Step2 → 上传已选视频（直传 OSS + saveEpisode）→ Step3 */
+  /** Step2 → 切片上传已选视频 + saveEpisode → Step3 */
   const goStep3 = async () => {
     if (courseId === null || uploadingEps) return;
     const pending = videos.filter((v) => v.file);
@@ -577,44 +587,81 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
       setStep(3);
       return;
     }
+    const controller = new AbortController();
+    uploadAbortRef.current = controller;
+    uploadStoppedByUserRef.current = false;
     setUploadingEps(true);
     let anyFail = false;
-    for (const r of pending) {
-      try {
-        // 视频同封面，走发行方专用 /publisher/course/upload（publisher token）。
-        const url = await uploadFile(r.file as File, PUBLISHER_UPLOAD_PATH);
-        const res = await saveEpisode({
-          courseId,
-          episodeNo: r.episodeNo,
-          title: r.title || undefined,
-          videoUrl: url,
-          fileName: r.file?.name,
-        });
-        updateVideo(r.episodeNo, {
-          uploadStatus: res.uploadStatus,
-          file: null,
-          duration: "",
-          videoSize: res.videoSize,
-          videoDuration: res.videoDuration,
-          videoUrl: url,
-          fileName: r.file?.name || "",
-        });
-        if (res.uploadStatus === 1) {
-          uploaded.add(r.episodeNo);
-        } else {
+    let stoppedByUser = false;
+    try {
+      for (const r of pending) {
+        if (controller.signal.aborted) break;
+        try {
+          updateVideo(r.episodeNo, { uploadProgress: 0, fileError: "" });
+          const url = await uploadFile(
+            r.file as File,
+            PUBLISHER_UPLOAD_PATH,
+            controller.signal,
+            (percent) => updateVideo(r.episodeNo, { uploadProgress: percent }),
+          );
+          const res = await saveEpisode({
+            courseId,
+            episodeNo: r.episodeNo,
+            title: r.title || undefined,
+            videoUrl: url,
+            fileName: r.file?.name,
+          });
+          updateVideo(r.episodeNo, {
+            uploadStatus: res.uploadStatus,
+            file: null,
+            duration: "",
+            fileError: "",
+            uploadProgress: null,
+            videoSize: res.videoSize,
+            videoDuration: res.videoDuration,
+            videoUrl: url,
+            fileName: r.file?.name || "",
+          });
+          if (res.uploadStatus === 1) {
+            uploaded.add(r.episodeNo);
+          } else {
+            anyFail = true;
+          }
+        } catch (error) {
+          if (controller.signal.aborted) break;
           anyFail = true;
+          updateVideo(r.episodeNo, {
+            uploadStatus: 2,
+            fileError: error instanceof Error ? error.message : t.videoUploadFailed,
+            uploadProgress: null,
+          });
         }
-      } catch {
-        anyFail = true;
-        updateVideo(r.episodeNo, { uploadStatus: 2 });
       }
+    } finally {
+      stoppedByUser = controller.signal.aborted && uploadStoppedByUserRef.current;
+      if (uploadAbortRef.current === controller) uploadAbortRef.current = null;
+      uploadStoppedByUserRef.current = false;
+      setUploadingEps(false);
     }
-    setUploadingEps(false);
+    if (controller.signal.aborted) {
+      setVideos((prev) =>
+        prev.map((video) =>
+          video.file && video.uploadProgress !== null ? { ...video, uploadProgress: null } : video,
+        ),
+      );
+      if (stoppedByUser) toast(t.uploadStopped);
+      return;
+    }
     if (anyFail || uploaded.size < videos.length) {
       toast.error(t.videoUploadFailed);
       return;
     }
     setStep(3);
+  };
+
+  const stopEpisodeUpload = () => {
+    uploadStoppedByUserRef.current = true;
+    uploadAbortRef.current?.abort();
   };
 
   const onPickHighlight = async (file: File | undefined) => {
@@ -662,6 +709,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
         duration: "",
         fileError: "",
         uploadStatus: 0,
+        uploadProgress: null,
         videoSize: 0,
         videoDuration: 0,
         videoUrl: "",
@@ -714,6 +762,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
           duration: "",
           fileError: "",
           uploadStatus: res.uploadStatus,
+          uploadProgress: null,
           videoSize: res.videoSize,
           videoDuration: res.videoDuration,
           videoUrl: entry.videoUrl,
@@ -1120,6 +1169,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
               <div className="divide-y divide-gray-50 max-h-[460px] overflow-y-auto">
                 {videos.map((v) => {
                   const isUploaded = v.uploadStatus === 1;
+                  const isUploading = v.file !== null && v.uploadProgress !== null;
                   return (
                     <div
                       key={v.episodeNo}
@@ -1134,6 +1184,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                         type="text"
                         value={v.title}
                         onChange={(e) => updateVideo(v.episodeNo, { title: e.target.value.slice(0, EPISODE_TITLE_LIMIT) })}
+                        disabled={uploadingEps}
                         placeholder={fmt(t.epTitlePlaceholder, { ep: v.episodeNo })}
                         maxLength={EPISODE_TITLE_LIMIT}
                         className="px-3 py-2 rounded-lg border border-gray-200 text-sm outline-none hover:border-gray-400 focus:border-black transition-all min-w-0"
@@ -1143,6 +1194,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                           ref={v.fileRef}
                           type="file"
                           accept={VIDEO_ACCEPT}
+                          disabled={uploadingEps}
                           onChange={(e) => {
                             const f = e.target.files?.[0];
                             e.target.value = "";
@@ -1156,7 +1208,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                             <span className="text-xs text-red-500 truncate">{v.fileError}</span>
                             <button
                               onClick={() => updateVideo(v.episodeNo, { fileError: "" })}
-                              className="text-gray-400 hover:text-gray-600 flex-shrink-0 ml-1"
+                              disabled={uploadingEps}
+                              className="text-gray-400 hover:text-gray-600 disabled:opacity-50 flex-shrink-0 ml-1"
                             >
                               <X className="w-3 h-3" />
                             </button>
@@ -1167,7 +1220,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                             <span className="text-xs text-gray-700 truncate flex-1 max-w-[140px]">{v.file.name}</span>
                             <button
                               onClick={() => updateVideo(v.episodeNo, { file: null, duration: "" })}
-                              className="text-gray-400 hover:text-gray-600 flex-shrink-0"
+                              disabled={uploadingEps}
+                              className="text-gray-400 hover:text-gray-600 disabled:opacity-50 flex-shrink-0"
                             >
                               <X className="w-3.5 h-3.5" />
                             </button>
@@ -1180,7 +1234,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                             </span>
                             <button
                               onClick={() => v.fileRef.current?.click()}
-                              className="flex items-center gap-1 px-2 py-1 rounded-lg border border-dashed border-gray-300 text-xs text-gray-500 hover:border-gray-400 flex-shrink-0"
+                              disabled={uploadingEps}
+                              className="flex items-center gap-1 px-2 py-1 rounded-lg border border-dashed border-gray-300 text-xs text-gray-500 hover:border-gray-400 disabled:opacity-50 flex-shrink-0"
                               style={{ fontWeight: 500 }}
                             >
                               <Upload className="w-3 h-3" />
@@ -1188,7 +1243,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                             </button>
                             <button
                               onClick={() => void removeUploadedVideo(v.episodeNo)}
-                              className="text-gray-400 hover:text-red-500 flex-shrink-0"
+                              disabled={uploadingEps}
+                              className="text-gray-400 hover:text-red-500 disabled:opacity-50 flex-shrink-0"
                             >
                               <X className="w-3.5 h-3.5" />
                             </button>
@@ -1196,7 +1252,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                         ) : (
                           <button
                             onClick={() => v.fileRef.current?.click()}
-                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-dashed border-gray-300 text-xs text-gray-500 hover:border-gray-400"
+                            disabled={uploadingEps}
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-dashed border-gray-300 text-xs text-gray-500 hover:border-gray-400 disabled:opacity-50"
                             style={{ fontWeight: 500 }}
                           >
                             <Upload className="w-3.5 h-3.5" />
@@ -1215,6 +1272,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                         style={{
                           color: v.fileError
                             ? "#EF4444"
+                            : isUploading
+                              ? "#4F46E5"
                             : isUploaded
                               ? "#16A34A"
                               : v.file
@@ -1223,13 +1282,16 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                           fontWeight: v.file || v.fileError || isUploaded ? 500 : 400,
                         }}
                       >
-                        {v.fileError
-                          ? t.epStatusError
-                          : isUploaded
-                            ? t.epStatusUploaded
-                            : v.file
-                              ? t.epStatusReady
-                              : t.epStatusPending}
+                        {isUploading && <Loader2 className="w-3 h-3 animate-spin" />}
+                        {isUploading
+                          ? `${t.epUploading} ${v.uploadProgress}%`
+                          : v.fileError
+                            ? t.epStatusError
+                            : isUploaded
+                              ? t.epStatusUploaded
+                              : v.file
+                                ? t.epStatusReady
+                                : t.epStatusPending}
                       </span>
                     </div>
                   );
@@ -1251,6 +1313,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                 type="file"
                 accept={VIDEO_ACCEPT}
                 multiple
+                disabled={uploadingEps}
                 className="hidden"
                 onChange={(e) => {
                   onPickBatchVideos(e.target.files);
@@ -1262,6 +1325,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                 type="file"
                 accept={VIDEO_ACCEPT}
                 multiple
+                disabled={uploadingEps}
                 className="hidden"
                 onChange={(e) => {
                   onPickBatchVideos(e.target.files);
@@ -1275,7 +1339,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
               <button
                 type="button"
                 onClick={() => void downloadTemplate()}
-                disabled={templateDownloading}
+                disabled={templateDownloading || uploadingEps}
                 className="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-600 hover:bg-gray-50 disabled:opacity-60 inline-flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap"
                 style={{ fontWeight: 600 }}
               >
@@ -1285,7 +1349,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
               <button
                 type="button"
                 onClick={() => templateInputRef.current?.click()}
-                disabled={templateImporting}
+                disabled={templateImporting || uploadingEps}
                 className="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-600 hover:bg-gray-50 disabled:opacity-60 inline-flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap"
                 style={{ fontWeight: 600 }}
               >
@@ -1296,7 +1360,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                 <DropdownMenuTrigger asChild>
                   <button
                     type="button"
-                    className="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-600 hover:bg-gray-50 inline-flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap"
+                    disabled={uploadingEps}
+                    className="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-600 hover:bg-gray-50 disabled:opacity-60 inline-flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap"
                     style={{ fontWeight: 600 }}
                   >
                     <Upload className="w-3.5 h-3.5" />
@@ -1319,11 +1384,23 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
             <div className="flex items-center justify-end gap-3 flex-shrink-0">
               <button
                 onClick={() => setStep(1)}
-                className="px-5 py-2 rounded-xl border border-gray-200 text-gray-700 text-sm hover:bg-gray-50"
+                disabled={uploadingEps}
+                className="px-5 py-2 rounded-xl border border-gray-200 text-gray-700 text-sm hover:bg-gray-50 disabled:opacity-60 disabled:cursor-not-allowed"
                 style={{ fontWeight: 500 }}
               >
                 {t.prev}
               </button>
+              {uploadingEps && (
+                <button
+                  type="button"
+                  onClick={stopEpisodeUpload}
+                  className="px-4 py-2 rounded-xl border border-red-200 text-red-600 text-sm hover:bg-red-50 inline-flex items-center gap-2"
+                  style={{ fontWeight: 600 }}
+                >
+                  <Square className="w-3.5 h-3.5" fill="currentColor" />
+                  {t.stopUpload}
+                </button>
+              )}
               <button
                 onClick={() => void goStep3()}
                 disabled={uploadingEps}

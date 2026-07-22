@@ -129,6 +129,8 @@ export interface ContentMessages {
   uploadFolder: string;
   /** 批量选择的视频数量超过计划集数。 */
   batchUploadTooMany: string;
+  stopUpload: string;
+  uploadStopped: string;
 
   // ── Step 3 发布配置 ──
   distSectionTitle: string;
@@ -384,6 +386,8 @@ export const content: Record<Locale, ContentMessages> = {
     batchUploadEpisodes: "批量上传集数",
     uploadFolder: "上传文件夹",
     batchUploadTooMany: "最多可上传 {total} 集，当前选择了 {selected} 个视频",
+    stopUpload: "停止上传",
+    uploadStopped: "已停止上传，未完成的视频仍保留待上传",
 
     distSectionTitle: "发布范围",
     distSectionDesc: "选择短剧的展示位置，影响曝光量与收益方式",
@@ -625,6 +629,8 @@ export const content: Record<Locale, ContentMessages> = {
     batchUploadEpisodes: "批量上傳集數",
     uploadFolder: "上傳資料夾",
     batchUploadTooMany: "最多可上傳 {total} 集，目前選擇了 {selected} 個影片",
+    stopUpload: "停止上傳",
+    uploadStopped: "已停止上傳，未完成的影片仍保留待上傳",
 
     distSectionTitle: "發佈範圍",
     distSectionDesc: "選擇短劇的展示位置，影響曝光量與收益方式",
@@ -867,6 +873,8 @@ export const content: Record<Locale, ContentMessages> = {
     batchUploadEpisodes: "Upload Multiple Episodes",
     uploadFolder: "Upload Folder",
     batchUploadTooMany: "You can upload up to {total} episodes; {selected} videos were selected",
+    stopUpload: "Stop Upload",
+    uploadStopped: "Upload stopped. Unfinished videos remain ready to upload",
 
     distSectionTitle: "Distribution",
     distSectionDesc: "Choose where your drama appears — affects exposure and revenue method",
@@ -1109,6 +1117,8 @@ export const content: Record<Locale, ContentMessages> = {
     batchUploadEpisodes: "Enviar vários episódios",
     uploadFolder: "Enviar pasta",
     batchUploadTooMany: "Você pode enviar no máximo {total} episódios; {selected} vídeos foram selecionados",
+    stopUpload: "Parar envio",
+    uploadStopped: "Envio interrompido. Os vídeos não concluídos continuam prontos para envio",
 
     distSectionTitle: "Distribuição",
     distSectionDesc: "Escolha onde seu drama aparece — afeta o alcance e a receita",

@@ -4,6 +4,7 @@ import type { Locale } from "../../i18n";
 export interface CommonMessages {
   networkError: string;
   serverError: string;
+  uploadRequestTooLarge: string;
   loading: string;
   submit: string;
   submitting: string;
@@ -29,6 +30,7 @@ export const common: Record<Locale, CommonMessages> = {
   "zh-CN": {
     networkError: "网络异常，请稍后重试",
     serverError: "服务器繁忙，请稍后重试",
+    uploadRequestTooLarge: "文件超过当前上传通道限制，请联系平台管理员",
     loading: "加载中...",
     submit: "提交",
     submitting: "提交中...",
@@ -52,6 +54,7 @@ export const common: Record<Locale, CommonMessages> = {
   "zh-TW": {
     networkError: "網路異常，請稍後重試",
     serverError: "伺服器繁忙，請稍後重試",
+    uploadRequestTooLarge: "檔案超過目前上傳通道限制，請聯絡平台管理員",
     loading: "載入中...",
     submit: "提交",
     submitting: "提交中...",
@@ -75,6 +78,7 @@ export const common: Record<Locale, CommonMessages> = {
   en: {
     networkError: "Network error, please try again later",
     serverError: "Server is busy, please try again later",
+    uploadRequestTooLarge: "The file exceeds the current upload gateway limit. Contact the platform administrator",
     loading: "Loading...",
     submit: "Submit",
     submitting: "Submitting...",
@@ -98,6 +102,7 @@ export const common: Record<Locale, CommonMessages> = {
   pt: {
     networkError: "Erro de rede, tente novamente mais tarde",
     serverError: "Servidor ocupado, tente novamente mais tarde",
+    uploadRequestTooLarge: "O arquivo excede o limite atual do canal de envio. Contate o administrador da plataforma",
     loading: "Carregando...",
     submit: "Enviar",
     submitting: "Enviando...",

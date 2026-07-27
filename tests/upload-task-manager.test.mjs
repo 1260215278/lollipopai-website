@@ -45,3 +45,20 @@ test("opening an actively uploading draft preserves its running state and progre
   assert.match(formSource, /progress: isUploading\s*\? existingTask\.progress/);
   assert.match(formSource, /status: isUploading\s*\? "uploading"/);
 });
+
+test("upload task menu supports delete with secondary confirm and clears server draft", () => {
+  assert.match(layoutSource, /onDeleteTask=\{requestDeleteUploadTask\}/);
+  assert.match(layoutSource, /taskPendingDelete/);
+  assert.match(layoutSource, /confirmDeleteUploadTask/);
+  assert.match(layoutSource, /deleteUploadTaskTitle/);
+  assert.match(layoutSource, /await clearDraft\(task\.courseId\)/);
+  assert.match(layoutSource, /removeUploadTask\(task\.id\)/);
+  assert.match(layoutSource, /params\.get\("uploadTask"\) === task\.id/);
+  assert.match(layoutSource, /Trash2/);
+  const commonSource = readSource("src/app/distribution/i18n/common.ts");
+  assert.match(commonSource, /deleteUploadTask:/);
+  assert.match(commonSource, /deleteUploadTaskTitle:/);
+  assert.match(commonSource, /deleteUploadTaskDesc:/);
+  assert.match(commonSource, /deleteUploadTaskOk:/);
+  assert.match(commonSource, /deleteUploadTaskSuccess:/);
+});

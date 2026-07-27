@@ -36,6 +36,16 @@ export interface CommonMessages {
   uploadDraft: string;
   uploadTaskProgress: string;
   noUploadTasks: string;
+  /** 上传任务列表项「删除」按钮 aria/title */
+  deleteUploadTask: string;
+  /** 删除上传任务二次确认标题 */
+  deleteUploadTaskTitle: string;
+  /** 删除上传任务二次确认说明（含服务端草稿会一并删除） */
+  deleteUploadTaskDesc: string;
+  /** 删除上传任务确认按钮 */
+  deleteUploadTaskOk: string;
+  /** 删除成功 toast */
+  deleteUploadTaskSuccess: string;
 }
 
 export const common: Record<Locale, CommonMessages> = {
@@ -74,6 +84,12 @@ export const common: Record<Locale, CommonMessages> = {
     uploadDraft: "草稿",
     uploadTaskProgress: "{done}/{total} 集 · {percent}%",
     noUploadTasks: "暂无上传任务",
+    deleteUploadTask: "删除任务",
+    deleteUploadTaskTitle: "删除上传任务？",
+    deleteUploadTaskDesc:
+      "删除后本地进度将清除；若已创建服务端草稿，草稿也会一并删除且不可恢复。上传中的任务会立即中断。",
+    deleteUploadTaskOk: "确认删除",
+    deleteUploadTaskSuccess: "上传任务已删除",
   },
   "zh-TW": {
     networkError: "網路異常，請稍後重試",
@@ -110,6 +126,12 @@ export const common: Record<Locale, CommonMessages> = {
     uploadDraft: "草稿",
     uploadTaskProgress: "{done}/{total} 集 · {percent}%",
     noUploadTasks: "暫無上傳任務",
+    deleteUploadTask: "刪除任務",
+    deleteUploadTaskTitle: "刪除上傳任務？",
+    deleteUploadTaskDesc:
+      "刪除後本地進度將清除；若已建立服務端草稿，草稿也會一併刪除且不可恢復。上傳中的任務會立即中斷。",
+    deleteUploadTaskOk: "確認刪除",
+    deleteUploadTaskSuccess: "上傳任務已刪除",
   },
   en: {
     networkError: "Network error, please try again later",
@@ -146,6 +168,12 @@ export const common: Record<Locale, CommonMessages> = {
     uploadDraft: "Draft",
     uploadTaskProgress: "{done}/{total} eps · {percent}%",
     noUploadTasks: "No upload tasks",
+    deleteUploadTask: "Delete task",
+    deleteUploadTaskTitle: "Delete this upload task?",
+    deleteUploadTaskDesc:
+      "Local progress will be cleared. If a server draft exists, it will also be deleted permanently. An in-progress upload will stop immediately.",
+    deleteUploadTaskOk: "Delete",
+    deleteUploadTaskSuccess: "Upload task deleted",
   },
   pt: {
     networkError: "Erro de rede, tente novamente mais tarde",
@@ -182,5 +210,11 @@ export const common: Record<Locale, CommonMessages> = {
     uploadDraft: "Rascunho",
     uploadTaskProgress: "{done}/{total} eps · {percent}%",
     noUploadTasks: "Nenhuma tarefa de envio",
+    deleteUploadTask: "Excluir tarefa",
+    deleteUploadTaskTitle: "Excluir esta tarefa de envio?",
+    deleteUploadTaskDesc:
+      "O progresso local será limpo. Se existir um rascunho no servidor, ele também será excluído permanentemente. Um envio em andamento será interrompido imediatamente.",
+    deleteUploadTaskOk: "Excluir",
+    deleteUploadTaskSuccess: "Tarefa de envio excluída",
   },
 };

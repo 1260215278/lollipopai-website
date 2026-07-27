@@ -20,6 +20,8 @@ import {
   ListVideo,
   Plus,
   Play,
+  Trash2,
+  AlertCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useI18n } from "../i18n";
@@ -43,7 +45,7 @@ import {
 import { getCurrentMember, type CurrentPublisherMember } from "../services/member";
 import type { DistributionNavigationState } from "./entryNavigation";
 import lollipopLogo from "../../imports/Lollipop1.png";
-import { fetchDraftTasks } from "../services/content";
+import { clearDraft, fetchDraftTasks } from "../services/content";
 import {
   clearUploadTasks,
   createUploadTask,
@@ -145,6 +147,9 @@ export function DistributionLayout() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [uploadTasksOpen, setUploadTasksOpen] = useState(false);
+  /** 待删除的上传任务（非空时展示二次确认弹窗） */
+  const [taskPendingDelete, setTaskPendingDelete] = useState<UploadTask | null>(null);
+  const [deletingTask, setDeletingTask] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
   const userRef = useRef<HTMLDivElement>(null);
   const uploadTasksRef = useRef<HTMLDivElement>(null);
@@ -400,6 +405,33 @@ export function DistributionLayout() {
     openUploadTask(task.id);
   };
 
+  /** 点删除图标：收起菜单并弹出二次确认 */
+  const requestDeleteUploadTask = (task: UploadTask) => {
+    setUploadTasksOpen(false);
+    setTaskPendingDelete(task);
+  };
+
+  /** 二次确认后：中断上传、清服务端草稿、移除本地任务；若正在编辑该任务则回到列表 */
+  const confirmDeleteUploadTask = async () => {
+    if (!taskPendingDelete || deletingTask) return;
+    const task = taskPendingDelete;
+    setDeletingTask(true);
+    try {
+      if (task.courseId !== null) {
+        await clearDraft(task.courseId).catch(() => undefined);
+      }
+      removeUploadTask(task.id);
+      const params = new URLSearchParams(location.search);
+      if (params.get("uploadTask") === task.id) {
+        navigate("/distribution/content", { replace: true });
+      }
+      toast.success(t.common.deleteUploadTaskSuccess);
+      setTaskPendingDelete(null);
+    } finally {
+      setDeletingTask(false);
+    }
+  };
+
   return (
     <div
       className="flex h-screen bg-[#F5F5F5] overflow-hidden"
@@ -474,6 +506,7 @@ export function DistributionLayout() {
                 onToggle={() => setUploadTasksOpen((value) => !value)}
                 onOpenTask={openUploadTask}
                 onCreateTask={createAndOpenUploadTask}
+                onDeleteTask={requestDeleteUploadTask}
               />
             )}
             {/* swift 开通失败通知铃铛（仅失败时出现，点击打开说明弹窗可重试） */}
@@ -643,6 +676,53 @@ export function DistributionLayout() {
           </div>
         </div>
       )}
+
+      {/* 删除上传任务二次确认 */}
+      {taskPendingDelete && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => {
+              if (!deletingTask) setTaskPendingDelete(null);
+            }}
+          />
+          <div className="relative w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-2xl">
+            <div className="p-6">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50">
+                <AlertCircle className="h-5 w-5 text-amber-500" />
+              </div>
+              <h3 className="mb-2 text-gray-900" style={{ fontWeight: 700, fontSize: "1rem" }}>
+                {t.common.deleteUploadTaskTitle}
+              </h3>
+              <p className="mb-2 text-sm text-gray-500 leading-relaxed">
+                {taskPendingDelete.title || t.common.newUploadTask}
+              </p>
+              <p className="mb-5 text-sm text-gray-500 leading-relaxed">{t.common.deleteUploadTaskDesc}</p>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  disabled={deletingTask}
+                  onClick={() => setTaskPendingDelete(null)}
+                  className="flex-1 rounded-xl border border-gray-200 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-60"
+                  style={{ fontWeight: 500 }}
+                >
+                  {t.common.cancel}
+                </button>
+                <button
+                  type="button"
+                  disabled={deletingTask}
+                  onClick={() => void confirmDeleteUploadTask()}
+                  className="flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+                  style={{ background: "#111111", fontWeight: 600 }}
+                >
+                  {deletingTask && <Loader2 className="h-4 w-4 animate-spin" />}
+                  {t.common.deleteUploadTaskOk}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -659,6 +739,7 @@ function UploadTaskMenu({
   onToggle,
   onOpenTask,
   onCreateTask,
+  onDeleteTask,
 }: {
   containerRef: RefObject<HTMLDivElement | null>;
   tasks: UploadTask[];
@@ -667,6 +748,7 @@ function UploadTaskMenu({
   onToggle: () => void;
   onOpenTask: (taskId: string) => void;
   onCreateTask: () => void;
+  onDeleteTask: (task: UploadTask) => void;
 }) {
   const statusLabel = (task: UploadTask) => {
     if (task.status === "uploading") return t.common.uploading;
@@ -728,51 +810,67 @@ function UploadTaskMenu({
                   ? Math.min(100, Math.max(task.progress, Math.round((task.uploadedEpisodes / total) * 100)))
                   : task.progress;
                 return (
-                  <button
-                    type="button"
+                  <div
                     key={task.id}
-                    onClick={() => onOpenTask(task.id)}
-                    className="block w-full border-b border-gray-50 px-4 py-3 text-left transition-colors last:border-b-0 hover:bg-gray-50"
+                    className="flex items-start gap-1 border-b border-gray-50 px-2 py-2 last:border-b-0 hover:bg-gray-50"
                   >
-                    <div className="flex items-start gap-3">
-                      <span className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-500">
-                        {task.status === "uploading" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
-                      </span>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2">
-                          <p className="min-w-0 flex-1 truncate text-sm text-gray-900" style={{ fontWeight: 600 }}>
-                            {task.title || t.common.newUploadTask}
+                    <button
+                      type="button"
+                      onClick={() => onOpenTask(task.id)}
+                      className="min-w-0 flex-1 rounded-lg px-2 py-1.5 text-left transition-colors"
+                    >
+                      <div className="flex items-start gap-3">
+                        <span className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-500">
+                          {task.status === "uploading" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <p className="min-w-0 flex-1 truncate text-sm text-gray-900" style={{ fontWeight: 600 }}>
+                              {task.title || t.common.newUploadTask}
+                            </p>
+                            <span
+                              className={`flex-shrink-0 rounded px-1.5 py-0.5 text-[10px] ${
+                                task.status === "failed"
+                                  ? "bg-red-50 text-red-600"
+                                  : task.status === "uploading"
+                                    ? "bg-blue-50 text-blue-600"
+                                    : "bg-gray-100 text-gray-500"
+                              }`}
+                              style={{ fontWeight: 600 }}
+                            >
+                              {statusLabel(task)}
+                            </span>
+                          </div>
+                          <p className="mt-1 text-[11px] text-gray-400">
+                            {formatTaskMessage(t.common.uploadTaskProgress, {
+                              done: task.uploadedEpisodes,
+                              total,
+                              percent,
+                            })}
                           </p>
-                          <span
-                            className={`flex-shrink-0 rounded px-1.5 py-0.5 text-[10px] ${
-                              task.status === "failed"
-                                ? "bg-red-50 text-red-600"
-                                : task.status === "uploading"
-                                  ? "bg-blue-50 text-blue-600"
-                                  : "bg-gray-100 text-gray-500"
-                            }`}
-                            style={{ fontWeight: 600 }}
-                          >
-                            {statusLabel(task)}
-                          </span>
+                          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-gray-100">
+                            <div
+                              className={`h-full rounded-full transition-[width] ${task.status === "failed" ? "bg-red-500" : "bg-[#111111]"}`}
+                              style={{ width: `${percent}%` }}
+                            />
+                          </div>
+                          {task.error && <p className="mt-1.5 truncate text-[11px] text-red-500">{task.error}</p>}
                         </div>
-                        <p className="mt-1 text-[11px] text-gray-400">
-                          {formatTaskMessage(t.common.uploadTaskProgress, {
-                            done: task.uploadedEpisodes,
-                            total,
-                            percent,
-                          })}
-                        </p>
-                        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-gray-100">
-                          <div
-                            className={`h-full rounded-full transition-[width] ${task.status === "failed" ? "bg-red-500" : "bg-[#111111]"}`}
-                            style={{ width: `${percent}%` }}
-                          />
-                        </div>
-                        {task.error && <p className="mt-1.5 truncate text-[11px] text-red-500">{task.error}</p>}
                       </div>
-                    </div>
-                  </button>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDeleteTask(task);
+                      }}
+                      className="mt-1 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500"
+                      aria-label={t.common.deleteUploadTask}
+                      title={t.common.deleteUploadTask}
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
                 );
               })
             )}

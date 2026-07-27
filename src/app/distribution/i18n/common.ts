@@ -24,6 +24,18 @@ export interface CommonMessages {
   publisher: string;
   menu: string;
   close: string;
+  uploadTasks: string;
+  uploadTaskCount: string;
+  newUploadTask: string;
+  continueUpload: string;
+  pauseUpload: string;
+  uploading: string;
+  uploadPaused: string;
+  uploadReady: string;
+  uploadFailed: string;
+  uploadDraft: string;
+  uploadTaskProgress: string;
+  noUploadTasks: string;
 }
 
 export const common: Record<Locale, CommonMessages> = {
@@ -50,6 +62,18 @@ export const common: Record<Locale, CommonMessages> = {
     publisher: "发行者",
     menu: "菜单",
     close: "关闭",
+    uploadTasks: "上传任务",
+    uploadTaskCount: "{n} 个上传任务",
+    newUploadTask: "新建上传",
+    continueUpload: "继续上传",
+    pauseUpload: "挂起任务",
+    uploading: "上传中",
+    uploadPaused: "已挂起",
+    uploadReady: "待发布",
+    uploadFailed: "上传失败",
+    uploadDraft: "草稿",
+    uploadTaskProgress: "{done}/{total} 集 · {percent}%",
+    noUploadTasks: "暂无上传任务",
   },
   "zh-TW": {
     networkError: "網路異常，請稍後重試",
@@ -74,6 +98,18 @@ export const common: Record<Locale, CommonMessages> = {
     publisher: "發行者",
     menu: "選單",
     close: "關閉",
+    uploadTasks: "上傳任務",
+    uploadTaskCount: "{n} 個上傳任務",
+    newUploadTask: "新增上傳",
+    continueUpload: "繼續上傳",
+    pauseUpload: "掛起任務",
+    uploading: "上傳中",
+    uploadPaused: "已掛起",
+    uploadReady: "待發布",
+    uploadFailed: "上傳失敗",
+    uploadDraft: "草稿",
+    uploadTaskProgress: "{done}/{total} 集 · {percent}%",
+    noUploadTasks: "暫無上傳任務",
   },
   en: {
     networkError: "Network error, please try again later",
@@ -98,6 +134,18 @@ export const common: Record<Locale, CommonMessages> = {
     publisher: "Publisher",
     menu: "Menu",
     close: "Close",
+    uploadTasks: "Upload tasks",
+    uploadTaskCount: "{n} upload tasks",
+    newUploadTask: "New upload",
+    continueUpload: "Continue upload",
+    pauseUpload: "Pause task",
+    uploading: "Uploading",
+    uploadPaused: "Paused",
+    uploadReady: "Ready to publish",
+    uploadFailed: "Upload failed",
+    uploadDraft: "Draft",
+    uploadTaskProgress: "{done}/{total} eps · {percent}%",
+    noUploadTasks: "No upload tasks",
   },
   pt: {
     networkError: "Erro de rede, tente novamente mais tarde",
@@ -122,5 +170,17 @@ export const common: Record<Locale, CommonMessages> = {
     publisher: "Distribuidor",
     menu: "Menu",
     close: "Fechar",
+    uploadTasks: "Tarefas de envio",
+    uploadTaskCount: "{n} tarefas de envio",
+    newUploadTask: "Novo envio",
+    continueUpload: "Continuar envio",
+    pauseUpload: "Pausar tarefa",
+    uploading: "Enviando",
+    uploadPaused: "Pausado",
+    uploadReady: "Pronto para publicar",
+    uploadFailed: "Falha no envio",
+    uploadDraft: "Rascunho",
+    uploadTaskProgress: "{done}/{total} eps · {percent}%",
+    noUploadTasks: "Nenhuma tarefa de envio",
   },
 };

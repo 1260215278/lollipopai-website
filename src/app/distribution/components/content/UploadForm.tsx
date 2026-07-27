@@ -15,9 +15,11 @@ import {
   Sparkles,
   Loader2,
   Square,
+  PauseCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import type { ContentMessages } from "../../i18n/content";
+import type { CommonMessages } from "../../i18n/common";
 import { uploadFile, PUBLISHER_UPLOAD_PATH } from "../../../services/upload";
 import { getOssHeicJpgUrl } from "../../../services/heic";
 import { ApiError } from "../../../services/http";
@@ -67,6 +69,17 @@ import {
 } from "./shared";
 import { parseEpisodeTemplate } from "./episodeTemplate";
 import { getFolderEpisodeTitle, prepareBatchVideoFiles } from "./batchVideoFiles";
+import {
+  getPendingUploadFiles,
+  getUploadTask,
+  clearPendingUploadFiles,
+  pauseUploadTask,
+  removePendingUploadFile,
+  setPendingUploadFile,
+  startUploadTask,
+  updateUploadTask,
+  useUploadTasks,
+} from "../../uploadTaskStore";
 
 const DESC_LIMIT = 200;
 /** 短剧名称上限 100 字符（bug16：避免超长提交后端异常） */
@@ -129,6 +142,10 @@ interface PublishConfigState {
 
 interface UploadFormProps {
   t: ContentMessages;
+  common: CommonMessages;
+  taskId: string;
+  /** null 表示新建任务，不读取账户下其他草稿。 */
+  resumeCourseId: number | null;
   onCancel: () => void;
   /** 送审成功后回调：上层刷新列表并返回 */
   onSubmitted: () => void;
@@ -276,9 +293,16 @@ function CopyrightProofUpload({
  *  Step3 发布配置 → POST publish（仅 发布范围 + 上架设置；价格按国家平台只读）
  * 进入时自动恢复服务端草稿（GET draft）。
  */
-export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted }) => {
-  const [step, setStep] = useState<1 | 2 | 3>(1);
-  const [courseId, setCourseId] = useState<number | null>(null);
+export const UploadForm: React.FC<UploadFormProps> = ({
+  t,
+  common,
+  taskId,
+  resumeCourseId,
+  onCancel,
+  onSubmitted,
+}) => {
+  const [step, setStep] = useState<1 | 2 | 3>(() => getUploadTask(taskId)?.step ?? (resumeCourseId === null ? 1 : 2));
+  const [courseId, setCourseId] = useState<number | null>(() => resumeCourseId);
   const [basicInfo, setBasicInfo] = useState<BasicInfo>(emptyBasic);
   const [videos, setVideos] = useState<VideoRow[]>([]);
   const [pubConfig, setPubConfig] = useState<PublishConfigState>({
@@ -320,13 +344,21 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
   const folderInputRef = useRef<HTMLInputElement>(null);
   const highlightRef = useRef<HTMLInputElement>(null);
   const restoredPubConfigCourse = useRef<number | null>(null);
-  const uploadAbortRef = useRef<AbortController | null>(null);
-  const uploadStoppedByUserRef = useRef(false);
+  const mountedRef = useRef(true);
+  const pendingFilesRef = useRef<Map<number, File>>(getPendingUploadFiles(taskId));
+  const taskSnapshot = useUploadTasks().find((task) => task.id === taskId) ?? null;
 
   const bi = (field: Partial<BasicInfo>) => setBasicInfo((p) => ({ ...p, ...field }));
 
   /** 计划集数（一旦草稿已建则锁定） */
   const plannedLocked = courseId !== null;
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   // 语言列表
   useEffect(() => {
@@ -366,17 +398,27 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
   }, [courseId, pubConfig]);
 
   useEffect(() => {
+    updateUploadTask(taskId, { step });
+  }, [step, taskId]);
+
+  useEffect(() => {
     if (step === 2) folderInputRef.current?.setAttribute("webkitdirectory", "");
   }, [step]);
 
-  useEffect(() => () => uploadAbortRef.current?.abort(), []);
+  useEffect(() => {
+    setUploadingEps(taskSnapshot?.status === "uploading");
+  }, [taskSnapshot?.status]);
 
   // 恢复服务端草稿
   useEffect(() => {
-    void fetchDraft()
+    if (resumeCourseId === null) return;
+    let active = true;
+    const storedFiles = pendingFilesRef.current;
+    void fetchDraft(resumeCourseId)
       .then((draft) => {
-        if (!draft) return;
+        if (!active || !draft) return;
         const c = draft.course;
+        const existingTask = getUploadTask(taskId);
         setCourseId(c.courseId);
         setBasicInfo({
           cover: c.titleImg || "",
@@ -406,11 +448,11 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
             return {
               episodeNo: no,
               title: ep?.title || "",
-              file: null,
+              file: storedFiles.get(no) ?? null,
               duration: "",
               fileError: "",
               uploadStatus: ep?.uploadStatus ?? 0,
-              uploadProgress: null,
+              uploadProgress: existingTask?.currentEpisode === no ? existingTask.currentFileProgress : null,
               videoSize: ep?.videoSize ?? 0,
               videoDuration: ep?.videoDuration ?? 0,
               videoUrl: ep?.videoUrl || "",
@@ -419,10 +461,51 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
             };
           }),
         );
+        const uploadedEpisodes = draft.episodes.filter((episode) => episode.uploadStatus === 1).length;
+        const totalEpisodes = c.plannedEpisodes || 0;
+        const isUploading = existingTask?.status === "uploading";
+        updateUploadTask(taskId, {
+          courseId: c.courseId,
+          title: c.title,
+          totalEpisodes,
+          uploadedEpisodes,
+          selectedEpisodes: storedFiles.size,
+          currentEpisode: isUploading ? existingTask.currentEpisode : null,
+          currentFileProgress: isUploading ? existingTask.currentFileProgress : 0,
+          progress: isUploading
+            ? existingTask.progress
+            : totalEpisodes > 0
+              ? Math.round((uploadedEpisodes / totalEpisodes) * 100)
+              : 0,
+          step: existingTask?.step ?? (uploadedEpisodes >= totalEpisodes && totalEpisodes > 0 ? 3 : 2),
+          status: isUploading
+            ? "uploading"
+            : existingTask?.status === "failed"
+              ? "failed"
+              : uploadedEpisodes >= totalEpisodes && totalEpisodes > 0
+                ? "ready"
+                : "paused",
+        });
         setDraftRestored(true);
       })
       .catch(() => undefined);
-  }, []);
+    return () => {
+      active = false;
+    };
+  }, [resumeCourseId, taskId]);
+
+  useEffect(() => {
+    if (courseId === null) return;
+    setVideos((prev) =>
+      prev.map((video) => ({
+        ...video,
+        uploadProgress:
+          taskSnapshot?.status === "uploading" && taskSnapshot.currentEpisode === video.episodeNo
+            ? taskSnapshot.currentFileProgress
+            : null,
+      })),
+    );
+  }, [courseId, taskSnapshot?.currentEpisode, taskSnapshot?.currentFileProgress, taskSnapshot?.status]);
 
   // 语言变化时加载标签集和类别集
   useEffect(() => {
@@ -449,6 +532,20 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
       removeCachedPubConfig(courseId);
       toast.success(t.draftCleared);
     }
+    pendingFilesRef.current.clear();
+    clearPendingUploadFiles(taskId);
+    updateUploadTask(taskId, {
+      courseId: null,
+      title: "",
+      totalEpisodes: 0,
+      uploadedEpisodes: 0,
+      selectedEpisodes: 0,
+      currentEpisode: null,
+      progress: 0,
+      step: 1,
+      status: "draft",
+      error: "",
+    });
     setCourseId(null);
     setBasicInfo(emptyBasic);
     setVideos([]);
@@ -510,6 +607,19 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
         copyrightProof: basicInfo.copyrightType === 2 ? basicInfo.copyrightProof : "",
       });
       setCourseId(res.courseId);
+      const uploadedEpisodes = videos.filter((video) => video.uploadStatus === 1).length;
+      updateUploadTask(taskId, {
+        courseId: res.courseId,
+        title: basicInfo.name,
+        totalEpisodes: planned,
+        uploadedEpisodes,
+        selectedEpisodes: pendingFilesRef.current.size,
+        currentEpisode: null,
+        progress: planned > 0 ? (uploadedEpisodes / planned) * 100 : 0,
+        step: 2,
+        status: "paused",
+        error: "",
+      });
       // 构建/保留剧集行
       setVideos((prev) =>
         Array.from({ length: planned }, (_, i) => {
@@ -547,9 +657,13 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
   const onPickVideo = (ep: number, file: File | undefined, title?: string) => {
     if (!file) return;
     if (file.size > VIDEO_MAX) {
+      removePendingUploadFile(taskId, ep);
+      pendingFilesRef.current.delete(ep);
       updateVideo(ep, { file: null, duration: "", fileError: t.fileTooLarge, uploadProgress: null });
       return;
     }
+    pendingFilesRef.current.set(ep, file);
+    setPendingUploadFile(taskId, ep, file);
     updateVideo(ep, {
       file,
       fileError: "",
@@ -573,6 +687,12 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
     });
   };
 
+  const clearSelectedVideo = (episodeNo: number) => {
+    pendingFilesRef.current.delete(episodeNo);
+    removePendingUploadFile(taskId, episodeNo);
+    updateVideo(episodeNo, { file: null, duration: "", uploadProgress: null });
+  };
+
   /** Step2 → 切片上传已选视频 + saveEpisode → Step3 */
   const goStep3 = async () => {
     if (courseId === null || uploadingEps) return;
@@ -584,84 +704,62 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
       return;
     }
     if (pending.length === 0 && uploaded.size === videos.length) {
+      updateUploadTask(taskId, { status: "ready", step: 3, progress: 100, uploadedEpisodes: uploaded.size });
       setStep(3);
       return;
     }
-    const controller = new AbortController();
-    uploadAbortRef.current = controller;
-    uploadStoppedByUserRef.current = false;
     setUploadingEps(true);
-    let anyFail = false;
-    let stoppedByUser = false;
     try {
-      for (const r of pending) {
-        if (controller.signal.aborted) break;
-        try {
-          updateVideo(r.episodeNo, { uploadProgress: 0, fileError: "" });
-          const url = await uploadFile(
-            r.file as File,
-            PUBLISHER_UPLOAD_PATH,
-            controller.signal,
-            (percent) => updateVideo(r.episodeNo, { uploadProgress: percent }),
-          );
-          const res = await saveEpisode({
-            courseId,
-            episodeNo: r.episodeNo,
-            title: r.title || undefined,
-            videoUrl: url,
-            fileName: r.file?.name,
-          });
-          updateVideo(r.episodeNo, {
-            uploadStatus: res.uploadStatus,
-            file: null,
-            duration: "",
-            fileError: "",
-            uploadProgress: null,
-            videoSize: res.videoSize,
-            videoDuration: res.videoDuration,
-            videoUrl: url,
-            fileName: r.file?.name || "",
-          });
-          if (res.uploadStatus === 1) {
-            uploaded.add(r.episodeNo);
-          } else {
-            anyFail = true;
-          }
-        } catch (error) {
-          if (controller.signal.aborted) break;
-          anyFail = true;
-          updateVideo(r.episodeNo, {
-            uploadStatus: 2,
-            fileError: error instanceof Error ? error.message : t.videoUploadFailed,
-            uploadProgress: null,
-          });
-        }
-      }
-    } finally {
-      stoppedByUser = controller.signal.aborted && uploadStoppedByUserRef.current;
-      if (uploadAbortRef.current === controller) uploadAbortRef.current = null;
-      uploadStoppedByUserRef.current = false;
-      setUploadingEps(false);
-    }
-    if (controller.signal.aborted) {
-      setVideos((prev) =>
-        prev.map((video) =>
-          video.file && video.uploadProgress !== null ? { ...video, uploadProgress: null } : video,
-        ),
+      const run = startUploadTask(
+        taskId,
+        courseId,
+        videos.length,
+        pending.map((video) => ({
+          episodeNo: video.episodeNo,
+          title: video.title,
+          file: video.file as File,
+        })),
       );
-      if (stoppedByUser) toast(t.uploadStopped);
-      return;
+      const result = await run;
+      if (!mountedRef.current) return;
+      if (result.completed.length > 0) {
+        const completed = new Map(result.completed.map((item) => [item.episodeNo, item]));
+        setVideos((prev) =>
+          prev.map((video) => {
+            const item = completed.get(video.episodeNo);
+            if (!item) return { ...video, uploadProgress: null };
+            pendingFilesRef.current.delete(video.episodeNo);
+            return {
+              ...video,
+              uploadStatus: item.result.uploadStatus,
+              file: null,
+              duration: "",
+              fileError: item.result.uploadStatus === 1 ? "" : t.videoUploadFailed,
+              uploadProgress: null,
+              videoSize: item.result.videoSize ?? 0,
+              videoDuration: item.result.videoDuration ?? 0,
+              videoUrl: item.videoUrl,
+              fileName: item.fileName,
+            };
+          }),
+        );
+      }
+      if (result.stopped) {
+        toast(t.uploadStopped);
+        return;
+      }
+      if (result.failedEpisodes.length > 0) {
+        toast.error(t.videoUploadFailed);
+        return;
+      }
+      setStep(3);
+    } finally {
+      if (mountedRef.current) setUploadingEps(false);
     }
-    if (anyFail || uploaded.size < videos.length) {
-      toast.error(t.videoUploadFailed);
-      return;
-    }
-    setStep(3);
   };
 
   const stopEpisodeUpload = () => {
-    uploadStoppedByUserRef.current = true;
-    uploadAbortRef.current?.abort();
+    pauseUploadTask(taskId);
   };
 
   const onPickHighlight = async (file: File | undefined) => {
@@ -714,6 +812,13 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
         videoDuration: 0,
         videoUrl: "",
         fileName: "",
+      });
+      const uploadedEpisodes = Math.max(0, videos.filter((video) => video.uploadStatus === 1).length - 1);
+      updateUploadTask(taskId, {
+        uploadedEpisodes,
+        progress: videos.length > 0 ? (uploadedEpisodes / videos.length) * 100 : 0,
+        status: "paused",
+        step: 2,
       });
     } catch {
       // http 已 toast
@@ -771,6 +876,15 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
         if (entry.title) patch.title = entry.title;
         updateVideo(entry.episodeNo, patch);
       }
+      const importedEpisodes = new Set(entries.map((entry) => entry.episodeNo));
+      const alreadyUploaded = videos.filter((video) => video.uploadStatus === 1 && !importedEpisodes.has(video.episodeNo)).length;
+      const uploadedEpisodes = alreadyUploaded + entries.length;
+      updateUploadTask(taskId, {
+        uploadedEpisodes,
+        progress: videos.length > 0 ? (uploadedEpisodes / videos.length) * 100 : 0,
+        step: uploadedEpisodes >= videos.length && videos.length > 0 ? 3 : 2,
+        status: uploadedEpisodes >= videos.length && videos.length > 0 ? "ready" : "paused",
+      });
       toast.success(fmt(t.templateImportSuccess, { n: entries.length }));
     } catch {
       toast.error(t.templateImportFailed);
@@ -818,7 +932,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
         onSubmitted();
       }
     } finally {
-      setSubmitting(false);
+      if (mountedRef.current) setSubmitting(false);
     }
   };
 
@@ -842,6 +956,33 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
         <h2 className="text-gray-900" style={{ fontWeight: 700, fontSize: "1.0625rem" }}>
           {t.uploadTitle}
         </h2>
+        {courseId !== null && (
+          <button
+            type="button"
+            onClick={() => {
+              if (taskSnapshot?.status !== "uploading") {
+                updateUploadTask(taskId, {
+                  courseId,
+                  title: basicInfo.name,
+                  totalEpisodes: videos.length,
+                  uploadedEpisodes: uploadedCount,
+                  selectedEpisodes: pendingFilesRef.current.size,
+                  currentEpisode: null,
+                  currentFileProgress: 0,
+                  progress: videos.length > 0 ? (uploadedCount / videos.length) * 100 : 0,
+                  step,
+                  status: uploadedCount >= videos.length && videos.length > 0 ? "ready" : "paused",
+                });
+              }
+              onCancel();
+            }}
+            className="ml-auto inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs text-gray-600 transition-colors hover:bg-gray-50"
+            style={{ fontWeight: 600 }}
+          >
+            <PauseCircle className="h-3.5 w-3.5" />
+            {common.pauseUpload}
+          </button>
+        )}
       </div>
 
       {draftRestored && (
@@ -1219,7 +1360,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ t, onCancel, onSubmitted
                             <Film className="w-4 h-4 text-gray-400 flex-shrink-0" />
                             <span className="text-xs text-gray-700 truncate flex-1 max-w-[140px]">{v.file.name}</span>
                             <button
-                              onClick={() => updateVideo(v.episodeNo, { file: null, duration: "" })}
+                              onClick={() => clearSelectedVideo(v.episodeNo)}
                               disabled={uploadingEps}
                               className="text-gray-400 hover:text-gray-600 disabled:opacity-50 flex-shrink-0"
                             >

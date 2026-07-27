@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, type RefObject } from "react";
 import { NavLink, Outlet, useNavigate, useLocation } from "react-router";
 import {
   BarChart3,
@@ -17,6 +17,9 @@ import {
   ShieldCheck,
   Users,
   UserRound,
+  ListVideo,
+  Plus,
+  Play,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useI18n } from "../i18n";
@@ -40,6 +43,16 @@ import {
 import { getCurrentMember, type CurrentPublisherMember } from "../services/member";
 import type { DistributionNavigationState } from "./entryNavigation";
 import lollipopLogo from "../../imports/Lollipop1.png";
+import { fetchDraftTasks } from "../services/content";
+import {
+  clearUploadTasks,
+  createUploadTask,
+  getUploadTasksSnapshot,
+  removeUploadTask,
+  upsertUploadTaskForCourse,
+  useUploadTasks,
+  type UploadTask,
+} from "./uploadTaskStore";
 
 const NAME_PREVIEW_LIMIT = 10;
 const PERMISSION = {
@@ -54,6 +67,7 @@ const PERMISSION = {
 
 export interface DistributionOutletContext {
   currentMember: CurrentPublisherMember | null;
+  openUploadTask: (taskId: string) => void;
 }
 
 function previewName(name: string) {
@@ -130,8 +144,12 @@ export function DistributionLayout() {
   const [langOpen, setLangOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [uploadTasksOpen, setUploadTasksOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
   const userRef = useRef<HTMLDivElement>(null);
+  const uploadTasksRef = useRef<HTMLDivElement>(null);
+  const syncedUploadTasksAccountRef = useRef<number | null>(null);
+  const uploadTasks = useUploadTasks();
 
   // publisher token 是否就绪：已持有则直接 true；否则等 byAppToken 换取完成再放行子页面，
   // 避免子页面（overview 等）在 token 换到前就发 /publisher/** 请求导致首次 401「token 失效」。
@@ -230,6 +248,40 @@ export function DistributionLayout() {
     };
   }, [navigate, t.twoFactor.bindPhoneFirst]);
 
+  useEffect(() => {
+    if (!tokenReady || !memberReady || !currentMember || !canViewContent(currentMember)) return;
+    let active = true;
+    const accountId = currentMember.accountId ?? currentMember.memberUserId;
+    void fetchDraftTasks()
+      .then((drafts) => {
+        if (!active) return;
+        const activeCourseIds = new Set(drafts.map((draft) => draft.courseId));
+        drafts.forEach((draft) => {
+          upsertUploadTaskForCourse(
+            draft.courseId,
+            draft.title,
+            draft.plannedEpisodes,
+            draft.uploadedEpisodes,
+          );
+        });
+        const currentTasks = getUploadTasksSnapshot();
+        const accountChanged = syncedUploadTasksAccountRef.current !== accountId;
+        currentTasks.forEach((task) => {
+          if (
+            (accountChanged && task.courseId === null) ||
+            (task.courseId !== null && !activeCourseIds.has(task.courseId))
+          ) {
+            removeUploadTask(task.id);
+          }
+        });
+        syncedUploadTasksAccountRef.current = accountId;
+      })
+      .catch(() => undefined);
+    return () => {
+      active = false;
+    };
+  }, [tokenReady, memberReady, currentMember]);
+
   // 拉取入驻状态，用 apply.companyName 作为顶栏展示名（status 用 appToken，登录后即可用）
   useEffect(() => {
     if (!isAppAuthed()) return;
@@ -318,6 +370,7 @@ export function DistributionLayout() {
     const handler = (e: MouseEvent) => {
       if (langRef.current && !langRef.current.contains(e.target as Node)) setLangOpen(false);
       if (userRef.current && !userRef.current.contains(e.target as Node)) setUserMenuOpen(false);
+      if (uploadTasksRef.current && !uploadTasksRef.current.contains(e.target as Node)) setUploadTasksOpen(false);
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
@@ -332,8 +385,19 @@ export function DistributionLayout() {
         // 本地退出不能被服务端会话清理失败阻塞。
       }
     }
+    clearUploadTasks();
     clearTokens();
     navigate("/login");
+  };
+
+  const openUploadTask = (taskId: string) => {
+    setUploadTasksOpen(false);
+    navigate(`/distribution/content?uploadTask=${encodeURIComponent(taskId)}`);
+  };
+
+  const createAndOpenUploadTask = () => {
+    const task = createUploadTask();
+    openUploadTask(task.id);
   };
 
   return (
@@ -401,6 +465,17 @@ export function DistributionLayout() {
           </div>
 
           <div className="flex items-center gap-2 flex-shrink-0">
+            {currentMember && canViewContent(currentMember) && (
+              <UploadTaskMenu
+                containerRef={uploadTasksRef}
+                tasks={uploadTasks}
+                open={uploadTasksOpen}
+                t={t}
+                onToggle={() => setUploadTasksOpen((value) => !value)}
+                onOpenTask={openUploadTask}
+                onCreateTask={createAndOpenUploadTask}
+              />
+            )}
             {/* swift 开通失败通知铃铛（仅失败时出现，点击打开说明弹窗可重试） */}
             {tenantFailed && (
               <button
@@ -514,7 +589,7 @@ export function DistributionLayout() {
               }}
             />
           ) : tokenReady && memberReady && currentMember && canAccessPath(currentMember, location.pathname) ? (
-            <Outlet context={{ currentMember } satisfies DistributionOutletContext} />
+            <Outlet context={{ currentMember, openUploadTask } satisfies DistributionOutletContext} />
           ) : (
             <div className="h-full flex items-center justify-center">
               <Loader2 className="w-7 h-7 animate-spin text-gray-400" />
@@ -565,6 +640,142 @@ export function DistributionLayout() {
                 {t.common.retry}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function formatTaskMessage(template: string, values: Record<string, string | number>): string {
+  return template.replace(/\{(\w+)\}/g, (match, key) => (key in values ? String(values[key]) : match));
+}
+
+function UploadTaskMenu({
+  containerRef,
+  tasks,
+  open,
+  t,
+  onToggle,
+  onOpenTask,
+  onCreateTask,
+}: {
+  containerRef: RefObject<HTMLDivElement | null>;
+  tasks: UploadTask[];
+  open: boolean;
+  t: DistributionMessages;
+  onToggle: () => void;
+  onOpenTask: (taskId: string) => void;
+  onCreateTask: () => void;
+}) {
+  const statusLabel = (task: UploadTask) => {
+    if (task.status === "uploading") return t.common.uploading;
+    if (task.status === "paused") return t.common.uploadPaused;
+    if (task.status === "ready") return t.common.uploadReady;
+    if (task.status === "failed") return t.common.uploadFailed;
+    return t.common.uploadDraft;
+  };
+
+  return (
+    <div ref={containerRef} className="relative">
+      <button
+        type="button"
+        onClick={onToggle}
+        className="relative flex h-9 items-center gap-2 rounded-lg border border-gray-200 px-3 text-xs text-gray-600 transition-colors hover:bg-gray-50"
+        style={{ fontWeight: 600 }}
+        aria-label={t.common.uploadTasks}
+        title={t.common.uploadTasks}
+      >
+        <ListVideo className="h-4 w-4" />
+        <span className="hidden md:inline">{t.common.uploadTasks}</span>
+        {tasks.length > 0 && (
+          <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-[#111111] px-1 text-[10px] text-white">
+            {tasks.length}
+          </span>
+        )}
+      </button>
+
+      {open && (
+        <div className="fixed inset-x-3 top-[56px] z-50 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-xl sm:absolute sm:inset-x-auto sm:right-0 sm:top-full sm:mt-2 sm:w-[340px]">
+          <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
+            <div>
+              <p className="text-sm text-gray-900" style={{ fontWeight: 700 }}>{t.common.uploadTasks}</p>
+              <p className="mt-0.5 text-[11px] text-gray-400">
+                {formatTaskMessage(t.common.uploadTaskCount, { n: tasks.length })}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={onCreateTask}
+              className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-[#111111] px-3 text-xs text-white transition-opacity hover:opacity-90"
+              style={{ fontWeight: 600 }}
+            >
+              <Plus className="h-3.5 w-3.5" />
+              {t.common.newUploadTask}
+            </button>
+          </div>
+
+          <div className="max-h-[420px] overflow-y-auto">
+            {tasks.length === 0 ? (
+              <div className="flex flex-col items-center justify-center px-4 py-10 text-gray-400">
+                <ListVideo className="h-7 w-7" />
+                <p className="mt-2 text-xs">{t.common.noUploadTasks}</p>
+              </div>
+            ) : (
+              tasks.map((task) => {
+                const total = task.totalEpisodes;
+                const percent = total > 0
+                  ? Math.min(100, Math.max(task.progress, Math.round((task.uploadedEpisodes / total) * 100)))
+                  : task.progress;
+                return (
+                  <button
+                    type="button"
+                    key={task.id}
+                    onClick={() => onOpenTask(task.id)}
+                    className="block w-full border-b border-gray-50 px-4 py-3 text-left transition-colors last:border-b-0 hover:bg-gray-50"
+                  >
+                    <div className="flex items-start gap-3">
+                      <span className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-500">
+                        {task.status === "uploading" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <p className="min-w-0 flex-1 truncate text-sm text-gray-900" style={{ fontWeight: 600 }}>
+                            {task.title || t.common.newUploadTask}
+                          </p>
+                          <span
+                            className={`flex-shrink-0 rounded px-1.5 py-0.5 text-[10px] ${
+                              task.status === "failed"
+                                ? "bg-red-50 text-red-600"
+                                : task.status === "uploading"
+                                  ? "bg-blue-50 text-blue-600"
+                                  : "bg-gray-100 text-gray-500"
+                            }`}
+                            style={{ fontWeight: 600 }}
+                          >
+                            {statusLabel(task)}
+                          </span>
+                        </div>
+                        <p className="mt-1 text-[11px] text-gray-400">
+                          {formatTaskMessage(t.common.uploadTaskProgress, {
+                            done: task.uploadedEpisodes,
+                            total,
+                            percent,
+                          })}
+                        </p>
+                        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-gray-100">
+                          <div
+                            className={`h-full rounded-full transition-[width] ${task.status === "failed" ? "bg-red-500" : "bg-[#111111]"}`}
+                            style={{ width: `${percent}%` }}
+                          />
+                        </div>
+                        {task.error && <p className="mt-1.5 truncate text-[11px] text-red-500">{task.error}</p>}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })
+            )}
           </div>
         </div>
       )}

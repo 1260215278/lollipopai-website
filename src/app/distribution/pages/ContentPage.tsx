@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { AlertCircle, Loader2 } from "lucide-react";
-import { useOutletContext } from "react-router";
+import { useOutletContext, useSearchParams } from "react-router";
 import { useI18n } from "../../i18n";
 import type { DistributionOutletContext } from "../DistributionLayout";
 import {
@@ -17,6 +17,7 @@ import { DramaListView } from "../components/content/DramaListView";
 import { DramaDetailView } from "../components/content/DramaDetailView";
 import { EpisodesView } from "../components/content/EpisodesView";
 import { UploadForm } from "../components/content/UploadForm";
+import { createUploadTask, getUploadTask, removeUploadTask } from "../uploadTaskStore";
 
 type View = "list" | "form" | "detail" | "episodes";
 
@@ -38,6 +39,7 @@ interface EpisodesCtx {
 export function ContentPage() {
   const { messages } = useI18n();
   const { currentMember } = useOutletContext<DistributionOutletContext>();
+  const [searchParams, setSearchParams] = useSearchParams();
   const t = messages.distribution.content;
   const dramaUnit = messages.distribution.overview.unitDrama;
   const canManageCourse = currentMember?.permissions?.includes("COURSE_MANAGE") === true;
@@ -58,6 +60,7 @@ export function ContentPage() {
   const [detailLoading, setDetailLoading] = useState(false);
   const [episodesCtx, setEpisodesCtx] = useState<EpisodesCtx | null>(null);
   const [confirmOffline, setConfirmOffline] = useState<PublisherCourseRow | null>(null);
+  const [activeTaskId, setActiveTaskId] = useState<string | null>(null);
 
   const loadStats = useCallback(async () => {
     try {
@@ -102,6 +105,21 @@ export function ContentPage() {
   useEffect(() => {
     if (!canUploadCourse && view === "form") setView("list");
   }, [canUploadCourse, view]);
+
+  useEffect(() => {
+    if (!canUploadCourse) return;
+    const requestedTaskId = searchParams.get("uploadTask");
+    if (!requestedTaskId) return;
+    const task = getUploadTask(requestedTaskId);
+    if (!task) {
+      const next = new URLSearchParams(searchParams);
+      next.delete("uploadTask");
+      setSearchParams(next, { replace: true });
+      return;
+    }
+    setActiveTaskId(task.id);
+    setView("form");
+  }, [canUploadCourse, searchParams, setSearchParams]);
 
   // 按当前页 + 搜索词加载（搜索防抖 300ms）
   useEffect(() => {
@@ -167,14 +185,44 @@ export function ContentPage() {
     void loadList(searchQuery, page);
   };
 
+  const openNewUpload = () => {
+    const task = createUploadTask();
+    setActiveTaskId(task.id);
+    setSearchParams({ uploadTask: task.id });
+    setView("form");
+  };
+
+  const closeUpload = () => {
+    const task = activeTaskId ? getUploadTask(activeTaskId) : null;
+    if (task?.courseId === null) removeUploadTask(task.id);
+    setView("list");
+    setActiveTaskId(null);
+    const next = new URLSearchParams(searchParams);
+    next.delete("uploadTask");
+    setSearchParams(next, { replace: true });
+  };
+
   /* ── 视图分发 ── */
   if (view === "form" && canUploadCourse) {
+    const task = activeTaskId ? getUploadTask(activeTaskId) : null;
+    if (!task) {
+      return (
+        <div className="p-8 flex items-center justify-center py-32 text-gray-400">
+          <Loader2 className="w-6 h-6 animate-spin" />
+        </div>
+      );
+    }
     return (
       <UploadForm
+        key={task.id}
         t={t}
-        onCancel={() => setView("list")}
+        common={messages.distribution.common}
+        taskId={task.id}
+        resumeCourseId={task.courseId}
+        onCancel={closeUpload}
         onSubmitted={() => {
-          setView("list");
+          removeUploadTask(task.id);
+          closeUpload();
           void loadStats();
           void loadList(searchQuery, page);
         }}
@@ -233,7 +281,7 @@ export function ContentPage() {
         onSearch={setSearchQuery}
         canUploadCourse={canUploadCourse}
         canManageCourse={canManageCourse}
-        onUpload={() => setView("form")}
+        onUpload={openNewUpload}
         onViewDetail={(d) => void openDetail(d)}
         onManageEpisodes={(d) => openEpisodes(d)}
         onToggleShelf={handleToggleShelf}

@@ -1,0 +1,451 @@
+import { useSyncExternalStore } from "react";
+import { saveEpisode, type SaveEpisodeResult } from "../services/content";
+import { PUBLISHER_UPLOAD_PATH, uploadFile } from "../services/upload";
+
+/**
+ * 上传任务只保存任务元数据；File 对象保留在当前标签页内存中，避免把视频内容写入 localStorage。
+ * 服务端草稿是恢复的权威来源，任务元数据用于跨路由/刷新后找到对应 courseId。
+ */
+export type UploadTaskStatus = "draft" | "uploading" | "paused" | "ready" | "failed";
+
+export interface UploadTask {
+  id: string;
+  courseId: number | null;
+  title: string;
+  totalEpisodes: number;
+  uploadedEpisodes: number;
+  selectedEpisodes: number;
+  currentEpisode: number | null;
+  currentFileProgress: number;
+  progress: number;
+  step: 1 | 2 | 3;
+  status: UploadTaskStatus;
+  error: string;
+  updatedAt: number;
+}
+
+export interface CreateUploadTaskInput {
+  courseId?: number | null;
+  title?: string;
+  totalEpisodes?: number;
+  step?: 1 | 2 | 3;
+}
+
+export type UploadTaskPatch = Partial<
+  Pick<
+    UploadTask,
+    | "courseId"
+    | "title"
+    | "totalEpisodes"
+    | "uploadedEpisodes"
+    | "selectedEpisodes"
+    | "currentEpisode"
+    | "currentFileProgress"
+    | "progress"
+    | "step"
+    | "status"
+    | "error"
+  >
+>;
+
+const STORAGE_KEY = "distribution.upload.tasks.v2";
+
+const tasks = new Map<string, UploadTask>();
+const pendingFiles = new Map<string, Map<number, File>>();
+const uploadControllers = new Map<string, AbortController>();
+const uploadRuns = new Map<string, Promise<UploadTaskRunResult>>();
+const listeners = new Set<() => void>();
+let snapshotCache: UploadTask[] = [];
+let hydrated = false;
+let persistTimer: ReturnType<typeof setTimeout> | null = null;
+let idSequence = 0;
+
+function isBrowser(): boolean {
+  return typeof window !== "undefined";
+}
+
+function isTaskStatus(value: unknown): value is UploadTaskStatus {
+  return value === "draft" || value === "uploading" || value === "paused" || value === "ready" || value === "failed";
+}
+
+function isStep(value: unknown): value is 1 | 2 | 3 {
+  return value === 1 || value === 2 || value === 3;
+}
+
+function parsePersistedTask(value: unknown): UploadTask | null {
+  if (!value || typeof value !== "object") return null;
+  const raw = value as Record<string, unknown>;
+  if (typeof raw.id !== "string" || raw.id.length === 0) return null;
+  if (raw.courseId !== null && (typeof raw.courseId !== "number" || !Number.isInteger(raw.courseId))) return null;
+  if (typeof raw.title !== "string") return null;
+  if (typeof raw.totalEpisodes !== "number" || !Number.isInteger(raw.totalEpisodes) || raw.totalEpisodes < 0) return null;
+  if (typeof raw.uploadedEpisodes !== "number" || !Number.isInteger(raw.uploadedEpisodes) || raw.uploadedEpisodes < 0) return null;
+  if (typeof raw.selectedEpisodes !== "number" || !Number.isInteger(raw.selectedEpisodes) || raw.selectedEpisodes < 0) return null;
+  if (raw.currentEpisode !== null && (typeof raw.currentEpisode !== "number" || !Number.isInteger(raw.currentEpisode))) return null;
+  if (typeof raw.currentFileProgress !== "number" || !Number.isFinite(raw.currentFileProgress)) return null;
+  if (typeof raw.progress !== "number" || !Number.isFinite(raw.progress)) return null;
+  if (!isStep(raw.step) || !isTaskStatus(raw.status)) return null;
+  if (typeof raw.error !== "string" || typeof raw.updatedAt !== "number" || !Number.isFinite(raw.updatedAt)) return null;
+
+  return {
+    id: raw.id,
+    courseId: raw.courseId,
+    title: raw.title,
+    totalEpisodes: raw.totalEpisodes,
+    uploadedEpisodes: raw.uploadedEpisodes,
+    selectedEpisodes: 0,
+    currentEpisode: null,
+    currentFileProgress: 0,
+    progress: raw.totalEpisodes > 0 ? Math.round((raw.uploadedEpisodes / raw.totalEpisodes) * 100) : 0,
+    step: raw.step,
+    // A reload cannot keep an in-flight AbortSignal/File stream alive.
+    status: raw.status === "uploading" ? "paused" : raw.status,
+    error: raw.error,
+    updatedAt: raw.updatedAt,
+  };
+}
+
+function rebuildSnapshot(): void {
+  snapshotCache = [...tasks.values()]
+    .sort((a, b) => b.updatedAt - a.updatedAt)
+    .map((task) => ({ ...task }));
+}
+
+function persistNow(): void {
+  persistTimer = null;
+  if (!isBrowser()) return;
+  try {
+    const serializable = [...tasks.values()].filter((task) => task.courseId !== null).map(({ id, courseId, title, totalEpisodes, uploadedEpisodes, selectedEpisodes, currentEpisode, currentFileProgress, progress, step, status, error, updatedAt }) => ({
+      id,
+      courseId,
+      title,
+      totalEpisodes,
+      uploadedEpisodes,
+      selectedEpisodes,
+      currentEpisode,
+      currentFileProgress,
+      progress,
+      step,
+      status,
+      error,
+      updatedAt,
+    }));
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(serializable));
+  } catch {
+    // 隐私模式、配额不足或禁用存储时，当前会话内存态仍可用。
+  }
+}
+
+function schedulePersist(): void {
+  if (persistTimer !== null) return;
+  persistTimer = globalThis.setTimeout(persistNow, 120);
+}
+
+function hydrate(): void {
+  if (hydrated) return;
+  hydrated = true;
+  if (isBrowser()) {
+    try {
+      const raw = window.localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed: unknown = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          parsed.map(parsePersistedTask).forEach((task) => {
+            if (task) tasks.set(task.id, task);
+          });
+        }
+      }
+    } catch {
+      // 损坏的旧缓存不阻断页面，下一次写入时会被替换。
+    }
+  }
+  rebuildSnapshot();
+}
+
+function commit(): void {
+  rebuildSnapshot();
+  schedulePersist();
+  listeners.forEach((listener) => listener());
+}
+
+function makeId(): string {
+  idSequence += 1;
+  if (isBrowser() && typeof window.crypto?.randomUUID === "function") return window.crypto.randomUUID();
+  return `upload-task-${Date.now()}-${idSequence}`;
+}
+
+function clampProgress(progress: number): number {
+  return Math.max(0, Math.min(100, Math.round(progress)));
+}
+
+export function subscribeUploadTasks(listener: () => void): () => void {
+  hydrate();
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
+export function getUploadTasksSnapshot(): UploadTask[] {
+  hydrate();
+  return snapshotCache;
+}
+
+export function useUploadTasks(): UploadTask[] {
+  return useSyncExternalStore(subscribeUploadTasks, getUploadTasksSnapshot, getUploadTasksSnapshot);
+}
+
+export function getUploadTask(taskId: string): UploadTask | null {
+  hydrate();
+  const task = tasks.get(taskId);
+  return task ? { ...task } : null;
+}
+
+export function getUploadTaskByCourseId(courseId: number): UploadTask | null {
+  hydrate();
+  for (const task of tasks.values()) {
+    if (task.courseId === courseId) return { ...task };
+  }
+  return null;
+}
+
+export function createUploadTask(input: CreateUploadTaskInput = {}): UploadTask {
+  hydrate();
+  const now = Date.now();
+  const task: UploadTask = {
+    id: makeId(),
+    courseId: input.courseId ?? null,
+    title: input.title ?? "",
+    totalEpisodes: input.totalEpisodes ?? 0,
+    uploadedEpisodes: 0,
+    selectedEpisodes: 0,
+    currentEpisode: null,
+    currentFileProgress: 0,
+    progress: 0,
+    step: input.step ?? 1,
+    status: "draft",
+    error: "",
+    updatedAt: now,
+  };
+  tasks.set(task.id, task);
+  pendingFiles.set(task.id, new Map());
+  commit();
+  return { ...task };
+}
+
+/** 将服务端已有草稿接入任务列表，避免升级后遗留草稿消失。 */
+export function upsertUploadTaskForCourse(courseId: number, title: string, totalEpisodes: number, uploadedEpisodes: number): UploadTask {
+  hydrate();
+  const existing = getUploadTaskByCourseId(courseId);
+  if (existing) {
+    updateUploadTask(existing.id, { title, totalEpisodes, uploadedEpisodes, step: uploadedEpisodes >= totalEpisodes && totalEpisodes > 0 ? 3 : 2 });
+    return getUploadTask(existing.id) as UploadTask;
+  }
+  const task = createUploadTask({ courseId, title, totalEpisodes, step: uploadedEpisodes >= totalEpisodes && totalEpisodes > 0 ? 3 : 2 });
+  updateUploadTask(task.id, { uploadedEpisodes, progress: totalEpisodes > 0 ? Math.round((uploadedEpisodes / totalEpisodes) * 100) : 0, status: "paused" });
+  return getUploadTask(task.id) as UploadTask;
+}
+
+export function updateUploadTask(taskId: string, patch: UploadTaskPatch): void {
+  hydrate();
+  const task = tasks.get(taskId);
+  if (!task) return;
+  const next: UploadTask = {
+    ...task,
+    ...patch,
+    progress: patch.progress === undefined ? task.progress : clampProgress(patch.progress),
+    updatedAt: Date.now(),
+  };
+  tasks.set(taskId, next);
+  commit();
+}
+
+export function setPendingUploadFile(taskId: string, episodeNo: number, file: File): void {
+  hydrate();
+  if (!tasks.has(taskId)) return;
+  const files = pendingFiles.get(taskId) ?? new Map<number, File>();
+  files.set(episodeNo, file);
+  pendingFiles.set(taskId, files);
+  updateUploadTask(taskId, { selectedEpisodes: files.size });
+}
+
+export function removePendingUploadFile(taskId: string, episodeNo: number): void {
+  hydrate();
+  const files = pendingFiles.get(taskId);
+  if (!files) return;
+  files.delete(episodeNo);
+  updateUploadTask(taskId, { selectedEpisodes: files.size });
+}
+
+export function getPendingUploadFiles(taskId: string): Map<number, File> {
+  hydrate();
+  return new Map(pendingFiles.get(taskId) ?? []);
+}
+
+export function clearPendingUploadFiles(taskId: string): void {
+  hydrate();
+  pendingFiles.delete(taskId);
+  const task = tasks.get(taskId);
+  if (task) updateUploadTask(taskId, { selectedEpisodes: 0 });
+}
+
+export function removeUploadTask(taskId: string): void {
+  hydrate();
+  uploadControllers.get(taskId)?.abort();
+  uploadControllers.delete(taskId);
+  tasks.delete(taskId);
+  pendingFiles.delete(taskId);
+  commit();
+}
+
+export function clearUploadTasks(): void {
+  hydrate();
+  uploadControllers.forEach((controller) => controller.abort());
+  uploadControllers.clear();
+  uploadRuns.clear();
+  tasks.clear();
+  pendingFiles.clear();
+  commit();
+}
+
+export interface UploadTaskQueueItem {
+  episodeNo: number;
+  title: string;
+  file: File;
+}
+
+export interface UploadTaskCompletedItem {
+  episodeNo: number;
+  fileName: string;
+  videoUrl: string;
+  result: SaveEpisodeResult;
+}
+
+export interface UploadTaskRunResult {
+  completed: UploadTaskCompletedItem[];
+  failedEpisodes: number[];
+  stopped: boolean;
+}
+
+export function pauseUploadTask(taskId: string): void {
+  uploadControllers.get(taskId)?.abort();
+  updateUploadTask(taskId, {
+    status: "paused",
+    currentEpisode: null,
+    currentFileProgress: 0,
+  });
+}
+
+/**
+ * 上传在页面组件之外运行，因此切换路由或挂起表单不会中断；不同 taskId 可并发执行。
+ * 同一任务重复调用会复用正在运行的 Promise，避免重复上传同一批文件。
+ */
+export function startUploadTask(
+  taskId: string,
+  courseId: number,
+  totalEpisodes: number,
+  queue: UploadTaskQueueItem[],
+): Promise<UploadTaskRunResult> {
+  hydrate();
+  const activeRun = uploadRuns.get(taskId);
+  if (activeRun) return activeRun;
+
+  const run = (async (): Promise<UploadTaskRunResult> => {
+    const controller = new AbortController();
+    uploadControllers.set(taskId, controller);
+    const completed: UploadTaskCompletedItem[] = [];
+    const failedEpisodes: number[] = [];
+    let uploadedEpisodes = tasks.get(taskId)?.uploadedEpisodes ?? 0;
+    let lastError = "";
+
+    updateUploadTask(taskId, {
+      courseId,
+      totalEpisodes,
+      selectedEpisodes: pendingFiles.get(taskId)?.size ?? queue.length,
+      currentEpisode: queue[0]?.episodeNo ?? null,
+      currentFileProgress: 0,
+      progress: totalEpisodes > 0 ? (uploadedEpisodes / totalEpisodes) * 100 : 0,
+      step: 2,
+      status: "uploading",
+      error: "",
+    });
+
+    for (const item of queue) {
+      if (controller.signal.aborted) break;
+      try {
+        updateUploadTask(taskId, {
+          currentEpisode: item.episodeNo,
+          currentFileProgress: 0,
+          status: "uploading",
+          error: "",
+        });
+        const videoUrl = await uploadFile(
+          item.file,
+          PUBLISHER_UPLOAD_PATH,
+          controller.signal,
+          (percent) => {
+            const overall = totalEpisodes > 0 ? ((uploadedEpisodes + percent / 100) / totalEpisodes) * 100 : percent;
+            updateUploadTask(taskId, {
+              currentEpisode: item.episodeNo,
+              currentFileProgress: percent,
+              progress: overall,
+              status: "uploading",
+            });
+          },
+        );
+        const result = await saveEpisode({
+          courseId,
+          episodeNo: item.episodeNo,
+          title: item.title || undefined,
+          videoUrl,
+          fileName: item.file.name,
+        });
+        if (result.uploadStatus === 1) uploadedEpisodes += 1;
+        else failedEpisodes.push(item.episodeNo);
+        pendingFiles.get(taskId)?.delete(item.episodeNo);
+        completed.push({ episodeNo: item.episodeNo, fileName: item.file.name, videoUrl, result });
+        updateUploadTask(taskId, {
+          uploadedEpisodes,
+          selectedEpisodes: pendingFiles.get(taskId)?.size ?? 0,
+          currentEpisode: null,
+          currentFileProgress: 0,
+          progress: totalEpisodes > 0 ? (uploadedEpisodes / totalEpisodes) * 100 : 0,
+        });
+      } catch (error) {
+        if (controller.signal.aborted) break;
+        failedEpisodes.push(item.episodeNo);
+        lastError = error instanceof Error ? error.message : "";
+        updateUploadTask(taskId, {
+          status: "failed",
+          currentEpisode: null,
+          currentFileProgress: 0,
+          error: lastError,
+        });
+      }
+    }
+
+    const stopped = controller.signal.aborted;
+    const selectedEpisodes = pendingFiles.get(taskId)?.size ?? 0;
+    updateUploadTask(taskId, {
+      uploadedEpisodes,
+      selectedEpisodes,
+      currentEpisode: null,
+      currentFileProgress: 0,
+      progress: totalEpisodes > 0 ? (uploadedEpisodes / totalEpisodes) * 100 : 0,
+      step: uploadedEpisodes >= totalEpisodes && totalEpisodes > 0 ? 3 : 2,
+      status: stopped
+        ? "paused"
+        : failedEpisodes.length > 0
+          ? "failed"
+          : uploadedEpisodes >= totalEpisodes && totalEpisodes > 0
+            ? "ready"
+            : "paused",
+      error: failedEpisodes.length > 0 && !stopped ? lastError : "",
+    });
+    return { completed, failedEpisodes, stopped };
+  })().finally(() => {
+    uploadControllers.delete(taskId);
+    uploadRuns.delete(taskId);
+  });
+
+  uploadRuns.set(taskId, run);
+  return run;
+}

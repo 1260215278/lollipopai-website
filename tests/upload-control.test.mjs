@@ -7,6 +7,7 @@ const uploadSource = readSource("src/app/services/upload.ts");
 const commonMessagesSource = readSource("src/app/distribution/i18n/common.ts");
 const contentMessagesSource = readSource("src/app/distribution/i18n/content.ts");
 const uploadFormSource = readSource("src/app/distribution/components/content/UploadForm.tsx");
+const uploadTaskStoreSource = readSource("src/app/distribution/uploadTaskStore.ts");
 const episodesViewSource = readSource("src/app/distribution/components/content/EpisodesView.tsx");
 
 test("upload service reports gateway 413 before attempting to parse the HTML response", () => {
@@ -44,11 +45,13 @@ test("upload service passes through AbortSignal without showing a network-error 
   assert.match(uploadSource, /catch \(error\) \{\s*if \(signal\?\.aborted\) throw error;/);
 });
 
-test("new-drama batch upload stops the current request and keeps unfinished files selected", () => {
-  assert.match(uploadFormSource, /const controller = new AbortController\(\)/);
-  assert.match(uploadFormSource, /uploadFile\([\s\S]*?r\.file as File,[\s\S]*?controller\.signal,[\s\S]*?uploadProgress: percent/);
-  assert.match(uploadFormSource, /if \(controller\.signal\.aborted\) break;[\s\S]*?updateVideo\(r\.episodeNo/);
-  assert.match(uploadFormSource, /const stopEpisodeUpload = \(\) => \{[\s\S]*?uploadAbortRef\.current\?\.abort\(\)/);
+test("new-drama batch upload runs in the global task manager and keeps unfinished files selected", () => {
+  assert.match(uploadTaskStoreSource, /const uploadRuns = new Map<string, Promise<UploadTaskRunResult>>\(\)/);
+  assert.match(uploadTaskStoreSource, /const controller = new AbortController\(\)/);
+  assert.match(uploadTaskStoreSource, /uploadFile\([\s\S]*?item\.file,[\s\S]*?controller\.signal,[\s\S]*?currentFileProgress: percent/);
+  assert.match(uploadTaskStoreSource, /if \(controller\.signal\.aborted\) break/);
+  assert.match(uploadFormSource, /const run = startUploadTask\([\s\S]*?file: video\.file as File/);
+  assert.match(uploadFormSource, /const stopEpisodeUpload = \(\) => \{[\s\S]*?pauseUploadTask\(taskId\)/);
   assert.match(uploadFormSource, /<Square[\s\S]*?\{t\.stopUpload\}/);
   assert.match(uploadFormSource, /`\$\{t\.epUploading\} \$\{v\.uploadProgress\}%`/);
 });

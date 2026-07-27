@@ -175,7 +175,7 @@ export interface SaveBasicBody {
   copyrightProof?: string;
 }
 
-/** 暂存基本信息，返回 courseId（新建/更新草稿） */
+/** 暂存基本信息，返回 courseId（courseId 为空时始终新建独立草稿）。 */
 export function saveBasic(body: SaveBasicBody): Promise<{ courseId: number }> {
   return http.post<{ courseId: number }>("/publisher/course/saveBasic", body);
 }
@@ -314,9 +314,29 @@ export interface DraftResponse {
   episodes: EpisodeItem[];
 }
 
-/** 取当前用户进行中的草稿（无草稿返回 null） */
-export function fetchDraft(): Promise<DraftResponse | null> {
-  return http.get<DraftResponse | null>("/publisher/course/draft");
+/** 上传任务中心使用的服务端草稿摘要。 */
+export interface DraftTaskSummary {
+  courseId: number;
+  title: string;
+  titleImg: string;
+  plannedEpisodes: number;
+  uploadedEpisodes: number;
+  updateTime: string;
+}
+
+/** 获取当前发行账户的全部进行中草稿，用于恢复多部剧上传任务。 */
+export function fetchDraftTasks(): Promise<DraftTaskSummary[]> {
+  return http.get<DraftTaskSummary[]>("/publisher/course/drafts", { toastOnError: false });
+}
+
+/**
+ * 取进行中的草稿；传 courseId 时按指定短剧恢复，省略时兼容返回最近创建的一部草稿。
+ * 多任务上传必须传 courseId，避免多个草稿互相覆盖。
+ */
+export function fetchDraft(courseId?: number): Promise<DraftResponse | null> {
+  return http.get<DraftResponse | null>("/publisher/course/draft", {
+    params: { courseId },
+  });
 }
 
 /** 清空草稿（物理删除，不可恢复）。courseId 为 query 参数。 */

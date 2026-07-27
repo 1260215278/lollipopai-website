@@ -170,16 +170,22 @@ export const InfoRow: React.FC<{ icon: React.ReactNode; label: string; children:
 );
 
 /** 表单字段容器 */
-export const Field: React.FC<{ label: string; required?: boolean; children: React.ReactNode; hint?: string }> = ({
-  label,
-  required,
-  children,
-  hint,
-}) => (
+export const Field: React.FC<{
+  label: string;
+  required?: boolean;
+  children: React.ReactNode;
+  hint?: string;
+  /** 提示文案 class，默认与「选择集数后不可修改」一致的灰色小字；可传 text-red-500 等 */
+  hintClassName?: string;
+}> = ({ label, required, children, hint, hintClassName = "text-gray-400" }) => (
   <div>
     <label className="block text-sm text-gray-700 mb-2" style={{ fontWeight: 600 }}>
       {label} {required && <span className="text-red-500">*</span>}
-      {hint && <span className="ml-2 text-xs text-gray-400" style={{ fontWeight: 400 }}>{hint}</span>}
+      {hint && (
+        <span className={`ml-2 text-xs ${hintClassName}`} style={{ fontWeight: 400 }}>
+          {hint}
+        </span>
+      )}
     </label>
     {children}
   </div>

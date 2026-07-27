@@ -32,17 +32,20 @@ export class ErrorBoundary extends Component<Props, State> {
   render() {
     if (!this.state.hasError) return this.props.children;
     const t = getMessages().distribution.common;
+    // 浅色兜底：避免发行中心等内容区因渲染异常整页黑屏
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-black text-white px-6 text-center">
-        <p className="text-sm text-white/70">{t.serverError}</p>
-        <button
-          type="button"
-          onClick={this.handleRetry}
-          className="h-[40px] px-5 rounded-[10px] bg-white text-[#111] text-sm"
-          style={{ fontWeight: 500 }}
-        >
-          {t.retry}
-        </button>
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-[#F5F5F5] px-6 text-center">
+        <div className="w-full max-w-sm rounded-2xl border border-gray-100 bg-white px-6 py-8 shadow-sm">
+          <p className="text-sm text-gray-600 leading-relaxed">{t.serverError}</p>
+          <button
+            type="button"
+            onClick={this.handleRetry}
+            className="mt-5 h-[40px] px-5 rounded-[10px] bg-[#111111] text-white text-sm hover:opacity-90"
+            style={{ fontWeight: 500 }}
+          >
+            {t.retry}
+          </button>
+        </div>
       </div>
     );
   }

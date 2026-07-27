@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   ArrowLeft,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Upload,
   X,
   RotateCcw,
@@ -9,7 +11,6 @@ import {
   Files,
   FolderOpen,
   AlertCircle,
-  Info,
   User,
   Home,
   Sparkles,
@@ -45,7 +46,6 @@ import { CHANNEL_VALUES, channelToGender, genderToChannel, type ChannelValue } f
 import type { Highlight } from "./types";
 import { StepIndicator } from "../StepIndicator";
 import { PhoneMockup } from "./PhoneMockup";
-import { CountryPricingModal } from "./CountryPricingModal";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -62,6 +62,7 @@ import {
   fmt,
   formatBytes,
   formatDuration,
+  formatUsd,
   fileNameFromUrl,
   readVideoDuration,
   VIDEO_MAX,
@@ -100,7 +101,7 @@ interface BasicInfo {
   tags: string[];
   /** 版权类型 1自制/2授权 */
   copyrightType: number;
-  /** 版权证明文件 URL（仅授权 copyrightType=2 时使用） */
+  /** 版权证明文件 URL（自制/授权均必填） */
   copyrightProof: string;
 }
 
@@ -202,7 +203,7 @@ function parseCachedPubConfig(raw: string | null): PublishConfigState | null {
 }
 
 /**
- * 版权证明上传（授权版权必填）。支持图片 + PDF + Word，走 /publisher/course/upload（文档 ≤20MB）。
+ * 版权证明上传（自制/授权均必填）。支持图片 + PDF + Word，走 /publisher/course/upload（文档 ≤20MB）。
  * 文档无法 <img> 预览，故已上传时展示文件名链接（点开新标签查看）。
  */
 function CopyrightProofUpload({
@@ -286,11 +287,14 @@ function CopyrightProofUpload({
   );
 }
 
+/** 各国收费规则内联表每页条数 */
+const PRICE_RULE_PAGE_SIZE = 5;
+
 /**
  * 上剧流程（三步，分步草稿暂存）：
  *  Step1 基本信息 → POST saveBasic（含语言/标签，返回 courseId）
  *  Step2 上传剧集 → 每个视频切片上传 → POST saveEpisode（同 episodeNo 覆盖）
- *  Step3 发布配置 → POST publish（仅 发布范围 + 上架设置；价格按国家平台只读）
+ *  Step3 发布配置 → POST publish（高光 + 发布范围 + 各国收费规则；上架固定立即上架）
  * 进入时自动恢复服务端草稿（GET draft）。
  */
 export const UploadForm: React.FC<UploadFormProps> = ({
@@ -328,9 +332,9 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   const [coverError, setCoverError] = useState("");
   const [coverUploading, setCoverUploading] = useState(false);
   const [draftRestored, setDraftRestored] = useState(false);
-  const [showPricing, setShowPricing] = useState(false);
   const [priceRows, setPriceRows] = useState<PriceRuleCountry[]>([]);
   const [priceLoading, setPriceLoading] = useState(false);
+  const [pricePage, setPricePage] = useState(1);
   const [revenueOptions, setRevenueOptions] = useState<RevenueOption[]>([]);
   const [savingBasic, setSavingBasic] = useState(false);
   const [uploadingEps, setUploadingEps] = useState(false);
@@ -404,6 +408,27 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   useEffect(() => {
     if (step === 2) folderInputRef.current?.setAttribute("webkitdirectory", "");
   }, [step]);
+
+  // Step3 进入时加载各国收费规则（内联展示，不再走弹窗）
+  useEffect(() => {
+    if (step !== 3) return;
+    let active = true;
+    setPriceLoading(true);
+    setPricePage(1);
+    fetchPriceRule(parseInt(basicInfo.totalEpisodes) || undefined)
+      .then((rows) => {
+        if (active) setPriceRows(rows);
+      })
+      .catch(() => {
+        if (active) setPriceRows([]);
+      })
+      .finally(() => {
+        if (active) setPriceLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [step, basicInfo.totalEpisodes]);
 
   useEffect(() => {
     setUploadingEps(taskSnapshot?.status === "uploading");
@@ -583,8 +608,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     !!basicInfo.languageType &&
     basicInfo.classificationId !== null &&
     basicInfo.tags.length > 0 &&
-    // 授权版权需上传版权证明
-    (basicInfo.copyrightType !== 2 || !!basicInfo.copyrightProof);
+    // 自制/授权均需上传版权证明
+    !!basicInfo.copyrightProof;
 
   /** Step1 → saveBasic → Step2 */
   const goStep2 = async () => {
@@ -603,8 +628,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
         courseLabel: basicInfo.tags.join(","),
         classificationId: basicInfo.classificationId as number,
         copyrightType: basicInfo.copyrightType,
-        // 仅授权时提交版权证明；自制版权由后端强制清空。
-        copyrightProof: basicInfo.copyrightType === 2 ? basicInfo.copyrightProof : "",
+        copyrightProof: basicInfo.copyrightProof,
       });
       setCourseId(res.courseId);
       const uploadedEpisodes = videos.filter((video) => video.uploadStatus === 1).length;
@@ -693,7 +717,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     updateVideo(episodeNo, { file: null, duration: "", uploadProgress: null });
   };
 
-  /** Step2 → 切片上传已选视频 + saveEpisode → Step3 */
+  /** Step2 → 切片上传已选视频 + saveEpisode → Step3（进入 Step3 后内联拉价规则，不再调用 openPricing） */
   const goStep3 = async () => {
     if (courseId === null || uploadingEps) return;
     const pending = videos.filter((v) => v.file);
@@ -894,16 +918,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     }
   };
 
-  const openPricing = () => {
-    setShowPricing(true);
-    setPriceLoading(true);
-    fetchPriceRule(parseInt(basicInfo.totalEpisodes) || undefined)
-      .then((rows) => setPriceRows(rows))
-      .catch(() => setPriceRows([]))
-      .finally(() => setPriceLoading(false));
-  };
-
-  /** Step3 → publish 送审 */
+  /** Step3 → publish 送审（上架固定立即上架，不再暴露上架设置） */
   const handleSubmit = async () => {
     if (courseId === null || submitting) return;
     if (!highlight.videoUrl) {
@@ -916,7 +931,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
       await publishCourse({
         courseId,
         publishScope: pubConfig.publishScope,
-        onShelfNow: pubConfig.onShelfNow,
+        onShelfNow: true,
       });
       removeCachedPubConfig(courseId);
       toast.success(t.submitSuccess);
@@ -940,6 +955,12 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   const phoneLabels = { home: t.phoneHome, forYou: t.phoneForYou, me: t.phoneMe };
   const uploadedCount = videos.filter((v) => v.uploadStatus === 1).length;
   const selectedVideoCount = videos.filter((v) => v.file).length;
+  const priceTotalPage = Math.max(1, Math.ceil(priceRows.length / PRICE_RULE_PAGE_SIZE));
+  const safePricePage = Math.min(pricePage, priceTotalPage);
+  const pagedPriceRows = priceRows.slice(
+    (safePricePage - 1) * PRICE_RULE_PAGE_SIZE,
+    safePricePage * PRICE_RULE_PAGE_SIZE,
+  );
 
   return (
     <div className="p-8">
@@ -1076,7 +1097,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
 
             {/* 字段 */}
             <div className="flex-1 p-5 overflow-y-auto space-y-4">
-              <Field label={t.nameLabel} required>
+              <Field label={t.nameLabel} required hint={t.nameLangHint} hintClassName="text-red-500">
                 <input
                   type="text"
                   value={basicInfo.name}
@@ -1087,7 +1108,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                 />
               </Field>
 
-              <Field label={t.descLabel} required>
+              <Field label={t.descLabel} required hint={t.descLangHint} hintClassName="text-red-500">
                 <div className="relative">
                   <textarea
                     value={basicInfo.description}
@@ -1258,16 +1279,14 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                 </div>
               </Field>
 
-              {/* 授权版权 → 需上传版权证明（copyrightType=2 必填；支持图片/PDF/Word，走 /publisher/course/upload） */}
-              {basicInfo.copyrightType === 2 && (
-                <Field label={t.copyrightProofLabel} required>
-                  <CopyrightProofUpload
-                    t={t}
-                    value={basicInfo.copyrightProof}
-                    onChange={(url) => bi({ copyrightProof: url })}
-                  />
-                </Field>
-              )}
+              {/* 自制/授权均须上传版权证明（图片/PDF/Word，走 /publisher/course/upload） */}
+              <Field label={t.copyrightProofLabel} required>
+                <CopyrightProofUpload
+                  t={t}
+                  value={basicInfo.copyrightProof}
+                  onChange={(url) => bi({ copyrightProof: url })}
+                />
+              </Field>
             </div>
           </div>
 
@@ -1477,7 +1496,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                 {fmt(t.episodesBreadcrumbCount, { total: videos.length, done: uploadedCount })}
                 {selectedVideoCount > 0 && ` · ${fmt(t.uploadSummary, { total: videos.length, selected: selectedVideoCount })}`}
               </span>
-              <button
+              {/* <button
                 type="button"
                 onClick={() => void downloadTemplate()}
                 disabled={templateDownloading || uploadingEps}
@@ -1486,8 +1505,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({
               >
                 {templateDownloading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 {t.downloadTemplate}
-              </button>
-              <button
+              </button> */}
+              {/* <button
                 type="button"
                 onClick={() => templateInputRef.current?.click()}
                 disabled={templateImporting || uploadingEps}
@@ -1496,8 +1515,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({
               >
                 {templateImporting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 {templateImporting ? t.templateImporting : t.importTemplate}
-              </button>
-              <DropdownMenu>
+              </button> */}
+              {/* <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
                     type="button"
@@ -1520,7 +1539,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                     {t.uploadFolder}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
-              </DropdownMenu>
+              </DropdownMenu> */}
             </div>
             <div className="flex items-center justify-end gap-3 flex-shrink-0">
               <button
@@ -1556,9 +1575,70 @@ export const UploadForm: React.FC<UploadFormProps> = ({
         </div>
       )}
 
-      {/* ── Step 3 发布配置（仅 发布范围 + 上架设置） ── */}
+      {/* ── Step 3 发布配置：高光 → 发布范围 → 各国收费规则（默认立即上架） ── */}
       {step === 3 && (
         <div className="max-w-4xl space-y-5">
+          {/* 高光时刻（置顶） */}
+          <div className="bg-white rounded-2xl border border-gray-100 p-6">
+            <h3 className="text-sm text-gray-900 mb-4" style={{ fontWeight: 700 }}>
+              {t.uploadHighlight} <span className="text-red-500">*</span>
+            </h3>
+            <input
+              ref={highlightRef}
+              type="file"
+              accept={HIGHLIGHT_ACCEPT}
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                e.target.value = "";
+                void onPickHighlight(f);
+              }}
+            />
+            {highlight.videoUrl ? (
+              <div className="flex items-center gap-3 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3">
+                <Film className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm text-gray-800" style={{ fontWeight: 600 }}>
+                    {highlight.fileName || fileNameFromUrl(highlight.videoUrl)}
+                  </p>
+                  <p className="mt-0.5 text-xs text-gray-400">
+                    {highlight.fileSize !== null ? formatBytes(highlight.fileSize) : "—"}{" "}
+                    {highlight.uploadTime ? `· ${highlight.uploadTime}` : ""}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => highlightRef.current?.click()}
+                  disabled={highlight.uploading}
+                  className="text-xs text-gray-500 hover:text-gray-900 disabled:opacity-50"
+                  style={{ fontWeight: 500 }}
+                >
+                  {highlight.uploading ? t.highlightUploading : t.epActionReplace}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => void removeHighlight()}
+                  disabled={highlight.uploading}
+                  className="text-gray-400 hover:text-red-500 disabled:opacity-50"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => highlightRef.current?.click()}
+                disabled={highlight.uploading}
+                className="w-full h-[88px] rounded-xl border border-dashed border-gray-300 flex flex-col items-center justify-center gap-1.5 text-gray-400 hover:border-gray-400 transition-colors disabled:opacity-60"
+              >
+                {highlight.uploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-5 h-5" />}
+                <span className="text-sm">{highlight.uploading ? t.highlightUploading : t.uploadHighlight}</span>
+              </button>
+            )}
+            {highlight.error && <p className="mt-2 text-xs text-red-500">{highlight.error}</p>}
+          </div>
+
+          {/* 发布范围 */}
           <div className="bg-white rounded-2xl border border-gray-100 p-6">
             <h3 className="text-sm text-gray-900 mb-1" style={{ fontWeight: 700 }}>
               {t.distSectionTitle}
@@ -1697,105 +1777,97 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             </div>
           </div>
 
+          {/* 各国收费规则：默认展开，每页 5 条 */}
           <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
             <div className="p-6 border-b border-gray-100">
-              <h3 className="text-sm text-gray-900 mb-4" style={{ fontWeight: 700 }}>
-                {t.uploadHighlight} <span className="text-red-500">*</span>
+              <h3 className="text-sm text-gray-900 mb-1" style={{ fontWeight: 700 }}>
+                {t.pricingTitle}
               </h3>
-              <input
-                ref={highlightRef}
-                type="file"
-                accept={HIGHLIGHT_ACCEPT}
-                className="hidden"
-                onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  e.target.value = "";
-                  void onPickHighlight(f);
-                }}
-              />
-              {highlight.videoUrl ? (
-                <div className="flex items-center gap-3 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3">
-                  <Film className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm text-gray-800" style={{ fontWeight: 600 }}>
-                      {highlight.fileName || fileNameFromUrl(highlight.videoUrl)}
-                    </p>
-                    <p className="mt-0.5 text-xs text-gray-400">
-                      {highlight.fileSize !== null ? formatBytes(highlight.fileSize) : "—"} {highlight.uploadTime ? `· ${highlight.uploadTime}` : ""}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => highlightRef.current?.click()}
-                    disabled={highlight.uploading}
-                    className="text-xs text-gray-500 hover:text-gray-900 disabled:opacity-50"
-                    style={{ fontWeight: 500 }}
-                  >
-                    {highlight.uploading ? t.highlightUploading : t.epActionReplace}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => void removeHighlight()}
-                    disabled={highlight.uploading}
-                    className="text-gray-400 hover:text-red-500 disabled:opacity-50"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
+              <p className="text-xs text-gray-400 mb-4">{t.pricingDesc}</p>
+              {priceLoading ? (
+                <div className="flex items-center justify-center py-12 text-gray-400">
+                  <Loader2 className="w-5 h-5 animate-spin" />
                 </div>
+              ) : priceRows.length === 0 ? (
+                <div className="py-10 text-center text-sm text-gray-400">{t.emptyTitle}</div>
               ) : (
-                <button
-                  type="button"
-                  onClick={() => highlightRef.current?.click()}
-                  disabled={highlight.uploading}
-                  className="w-full h-[88px] rounded-xl border border-dashed border-gray-300 flex flex-col items-center justify-center gap-1.5 text-gray-400 hover:border-gray-400 transition-colors disabled:opacity-60"
-                >
-                  {highlight.uploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-5 h-5" />}
-                  <span className="text-sm">{highlight.uploading ? t.highlightUploading : t.uploadHighlight}</span>
-                </button>
-              )}
-              {highlight.error && <p className="mt-2 text-xs text-red-500">{highlight.error}</p>}
-            </div>
-
-            {/* 各国家收费规则（只读入口） */}
-            <div className="p-6 border-b border-gray-100">
-              <button
-                type="button"
-                onClick={openPricing}
-                className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-700 transition-colors"
-                style={{ fontWeight: 500 }}
-              >
-                <Info className="w-3.5 h-3.5" />
-                {t.viewPricingRules}
-              </button>
-            </div>
-
-            {/* 上架设置 */}
-            <div className="p-6 border-b border-gray-100">
-              <h3 className="text-sm text-gray-900 mb-4" style={{ fontWeight: 700 }}>
-                {t.publishSettingsTitle}
-              </h3>
-              <div className="flex gap-5">
-                {[
-                  { val: true, label: t.publishNowOption },
-                  { val: false, label: t.publishLaterOption },
-                ].map((opt) => (
-                  <label key={String(opt.val)} className="flex items-center gap-2 cursor-pointer">
-                    <div
-                      onClick={() => setPubConfig((p) => ({ ...p, onShelfNow: opt.val }))}
-                      className="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0"
-                      style={{ borderColor: pubConfig.onShelfNow === opt.val ? "#111111" : "#D1D5DB" }}
-                    >
-                      {pubConfig.onShelfNow === opt.val && <div className="w-2 h-2 rounded-full bg-[#111111]" />}
+                <>
+                  <div className="overflow-x-auto">
+                    <table className="w-full min-w-[520px] table-fixed text-sm">
+                      <colgroup>
+                        <col className="w-[160px]" />
+                        <col className="w-[120px]" />
+                        <col className="w-[120px]" />
+                        <col className="w-[120px]" />
+                      </colgroup>
+                      <thead>
+                        <tr className="border-b border-gray-100">
+                          <th className="text-left pb-2 pr-4 text-xs text-gray-500 whitespace-nowrap" style={{ fontWeight: 500 }}>
+                            {t.pricingColCountry}
+                          </th>
+                          <th className="text-left pb-2 pr-4 text-xs text-gray-500 whitespace-nowrap" style={{ fontWeight: 500 }}>
+                            {t.pricingColSingle}
+                          </th>
+                          <th className="text-left pb-2 pr-4 text-xs text-gray-500 whitespace-nowrap" style={{ fontWeight: 500 }}>
+                            {t.pricingColWholeLe50}
+                          </th>
+                          <th className="text-left pb-2 text-xs text-gray-500 whitespace-nowrap" style={{ fontWeight: 500 }}>
+                            {t.pricingColWholeGt50}
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {pagedPriceRows.map((c) => {
+                          const countryName = c.countryName || c.country;
+                          return (
+                            <tr key={c.country} className="border-b border-gray-50 last:border-0">
+                              <td className="py-3 pr-4 min-w-0">
+                                <span className="block truncate text-gray-800" title={countryName} style={{ fontWeight: 600 }}>
+                                  {countryName}
+                                </span>
+                              </td>
+                              <td className="py-3 pr-4 text-gray-900 whitespace-nowrap" style={{ fontWeight: 700 }}>
+                                {formatUsd(c.episodePriceUsd)}
+                              </td>
+                              <td className="py-3 pr-4 text-gray-900 whitespace-nowrap" style={{ fontWeight: 700 }}>
+                                {formatUsd(c.wholePriceLe50Usd)}
+                              </td>
+                              <td className="py-3 text-gray-900 whitespace-nowrap" style={{ fontWeight: 700 }}>
+                                {formatUsd(c.wholePriceGt50Usd)}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                  {priceTotalPage > 1 && (
+                    <div className="mt-4 flex items-center justify-center gap-3">
+                      <button
+                        type="button"
+                        disabled={safePricePage <= 1}
+                        onClick={() => setPricePage(Math.max(1, safePricePage - 1))}
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-600 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+                        aria-label="prev page"
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </button>
+                      <span className="min-w-[3.5rem] text-center text-xs text-gray-500" style={{ fontWeight: 600 }}>
+                        {safePricePage} / {priceTotalPage}
+                      </span>
+                      <button
+                        type="button"
+                        disabled={safePricePage >= priceTotalPage}
+                        onClick={() => setPricePage(Math.min(priceTotalPage, safePricePage + 1))}
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-600 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+                        aria-label="next page"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </button>
                     </div>
-                    <span
-                      className="text-sm text-gray-700"
-                      style={{ fontWeight: pubConfig.onShelfNow === opt.val ? 600 : 400 }}
-                    >
-                      {opt.label}
-                    </span>
-                  </label>
-                ))}
-              </div>
+                  )}
+                </>
+              )}
             </div>
 
             <div className="flex items-center justify-between px-5 py-3.5 bg-gray-50/40">
@@ -1829,8 +1901,6 @@ export const UploadForm: React.FC<UploadFormProps> = ({
           </div>
         </div>
       )}
-
-      <CountryPricingModal open={showPricing} onClose={() => setShowPricing(false)} t={t} rows={priceRows} loading={priceLoading} />
     </div>
   );
 };

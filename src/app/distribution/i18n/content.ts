@@ -59,7 +59,7 @@ export interface ContentMessages {
   revenueFullShort: string;
   copyrightSelf: string;
   copyrightLicensed: string;
-  /** 版权证明上传（仅授权时显示） */
+  /** 版权证明上传（自制/授权均必填） */
   copyrightProofLabel: string;
   copyrightProofPrompt: string;
   copyrightProofFormat: string;
@@ -99,8 +99,12 @@ export interface ContentMessages {
   coverTooLarge: string;
   nameLabel: string;
   namePlaceholder: string;
+  /** 短剧名称旁红字提示：按所选语言填写标题 */
+  nameLangHint: string;
   descLabel: string;
   descPlaceholder: string;
+  /** 剧情简介旁红字提示：按所选语言填写简介 */
+  descLangHint: string;
   episodesLabel: string;
   episodesLockHint: string;
   episodesPlaceholder: string;
@@ -359,8 +363,10 @@ export const content: Record<Locale, ContentMessages> = {
     coverTooLarge: "封面超过 10MB 限制",
     nameLabel: "短剧名称",
     namePlaceholder: "请输入短剧名称",
+    nameLangHint: "输入对应语言短剧标题",
     descLabel: "剧情简介",
     descPlaceholder: "请输入剧情简介，介绍人物背景、核心矛盾与情感主线……",
+    descLangHint: "输入对应语言剧情简介",
     episodesLabel: "集数",
     episodesLockHint: "选择集数后不可修改",
     episodesPlaceholder: "请输入集数",
@@ -602,8 +608,10 @@ export const content: Record<Locale, ContentMessages> = {
     coverTooLarge: "封面超過 10MB 限制",
     nameLabel: "短劇名稱",
     namePlaceholder: "請輸入短劇名稱",
+    nameLangHint: "輸入對應語言短劇標題",
     descLabel: "劇情簡介",
     descPlaceholder: "請輸入劇情簡介，介紹人物背景、核心衝突與情感主線……",
+    descLangHint: "輸入對應語言劇情簡介",
     episodesLabel: "集數",
     episodesLockHint: "選擇集數後不可修改",
     episodesPlaceholder: "請輸入集數",
@@ -846,8 +854,10 @@ export const content: Record<Locale, ContentMessages> = {
     coverTooLarge: "Cover exceeds the 10MB limit",
     nameLabel: "Drama Name",
     namePlaceholder: "Enter drama name",
+    nameLangHint: "Enter the title in the selected language",
     descLabel: "Description",
     descPlaceholder: "Introduce characters, conflict, and emotional arc...",
+    descLangHint: "Enter the synopsis in the selected language",
     episodesLabel: "Episodes",
     episodesLockHint: "Cannot be changed once set",
     episodesPlaceholder: "e.g. 30",
@@ -1090,8 +1100,10 @@ export const content: Record<Locale, ContentMessages> = {
     coverTooLarge: "A capa excede o limite de 10MB",
     nameLabel: "Nome do drama",
     namePlaceholder: "Digite o nome do drama",
+    nameLangHint: "Digite o título no idioma selecionado",
     descLabel: "Descrição",
     descPlaceholder: "Apresente personagens, conflito e arco emocional...",
+    descLangHint: "Digite a sinopse no idioma selecionado",
     episodesLabel: "Episódios",
     episodesLockHint: "Não pode ser alterado depois de definido",
     episodesPlaceholder: "ex.: 30",

@@ -45,6 +45,24 @@ export interface CurrentPublisherMember {
   avatar?: string | null;
   phoneMask?: string | null;
   publisherName?: string | null;
+  /**
+   * 资料是否完整（头像 + 英文自定义昵称）。
+   * 后端 2026-07-28 起返回；缺省时前端用 profileRules 兜底判定。
+   */
+  profileComplete?: boolean;
+}
+
+/** POST /publisher/member/completeProfile 请求体 */
+export interface CompleteMemberProfileBody {
+  nickname: string;
+  avatar: string;
+}
+
+/** completeProfile 成功 data */
+export interface CompleteMemberProfileResult {
+  nickname: string;
+  avatar: string;
+  profileComplete: boolean;
 }
 
 /** 角色权限项（roles 接口 permissions 数组元素）。 */
@@ -89,6 +107,14 @@ export function getMemberList(): Promise<PublisherMember[]> {
 /** 当前登录成员身份，用于角色驱动的侧边栏与写按钮显隐。 */
 export function getCurrentMember(): Promise<CurrentPublisherMember> {
   return http.get<CurrentPublisherMember>("/publisher/member/me");
+}
+
+/**
+ * 强制完善当前成员头像 + 英文昵称（任意登录成员改自己）。
+ * 失败码：403435 昵称为空 / 403436 非英文 / 403437 头像为空。
+ */
+export function completeMemberProfile(body: CompleteMemberProfileBody): Promise<CompleteMemberProfileResult> {
+  return http.post<CompleteMemberProfileResult>("/publisher/member/completeProfile", body);
 }
 
 /** 添加成员。错误码 403328–403331 由 http 层 toast 后端 msg。 */

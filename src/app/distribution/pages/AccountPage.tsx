@@ -51,6 +51,7 @@ import {
 } from "../../services/account";
 import { ALIOSS_UPLOAD_PATH, uploadFile } from "../../services/upload";
 import { getOssHeicJpgUrl } from "../../services/heic";
+import { isEnglishNickname, NICKNAME_MAX } from "../profileRules";
 
 type AccountMsg = ReturnType<typeof useI18n>["messages"]["distribution"]["account"];
 type TabKey = "info" | "security" | "devices";
@@ -65,7 +66,7 @@ const emptyCompany: AccountCompany = {
 const PASSWORD_MIN = 6;
 const PASSWORD_MAX = 20;
 const LOGIN_RECORD_PAGE_SIZE = 10;
-const ACCOUNT_FIELD_MAX = 50;
+const ACCOUNT_FIELD_MAX = NICKNAME_MAX;
 
 export function AccountPage() {
   const { messages, locale } = useI18n();
@@ -753,11 +754,20 @@ function LoginRecordRow({ t, locale, record, last }: { t: AccountMsg; locale: Lo
 }
 
 function NicknameModal({ t, initialNickname, onClose, onSaved }: { t: AccountMsg; initialNickname: string; onClose: () => void; onSaved: (nickname: string) => Promise<void> }) {
+  const { messages } = useI18n();
+  const profileT = messages.distribution.profileSetup;
   const [nickname, setNickname] = useState(initialNickname.slice(0, ACCOUNT_FIELD_MAX));
   const [saving, setSaving] = useState(false);
   const save = async () => {
     const next = nickname.trim().slice(0, ACCOUNT_FIELD_MAX);
-    if (!next) return;
+    if (!next) {
+      toast.error(profileT.nicknameRequired);
+      return;
+    }
+    if (!isEnglishNickname(next)) {
+      toast.error(profileT.nicknameEnglishOnly);
+      return;
+    }
     setSaving(true);
     try {
       await updateNickname(next);
@@ -772,6 +782,7 @@ function NicknameModal({ t, initialNickname, onClose, onSaved }: { t: AccountMsg
   return (
     <DialogShell title={t.editNickname} onClose={onClose}>
       <DialogInput label={t.editNickname} value={nickname} onChange={setNickname} autoComplete="nickname" maxLength={ACCOUNT_FIELD_MAX} />
+      <p className="mt-2 text-[10px] leading-[15px] text-[#99a1af]">{profileT.nicknameHelper}</p>
       <DialogActions t={t} saving={saving} onCancel={onClose} onConfirm={() => void save()} />
     </DialogShell>
   );

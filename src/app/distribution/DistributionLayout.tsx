@@ -55,6 +55,8 @@ import {
   useUploadTasks,
   type UploadTask,
 } from "./uploadTaskStore";
+import { ProfileSetupModal } from "./components/ProfileSetupModal";
+import { isProfileComplete } from "./profileRules";
 
 const NAME_PREVIEW_LIMIT = 10;
 const PERMISSION = {
@@ -175,6 +177,12 @@ export function DistributionLayout() {
   const memberDisplayName = (currentMember?.phoneMask || currentMember?.nickname || "").trim();
   const hasPublisherName = publisherName.length > 0;
   const headerName = memberDisplayName || (hasPublisherName ? previewName(publisherName) : t.common.publisher);
+  // 强制资料：后端 profileComplete 优先；缺省字段时用本地规则兜底
+  const needProfileSetup =
+    !!currentMember &&
+    (typeof currentMember.profileComplete === "boolean"
+      ? !currentMember.profileComplete
+      : !isProfileComplete(currentMember.nickname, currentMember.avatar, currentMember.memberUserId));
   const returnHomeLabel =
     currentLanguage.code === "zh-CN"
       ? "返回官网"
@@ -631,6 +639,26 @@ export function DistributionLayout() {
         </main>
       </div>
 
+      {/* 强制完善头像+英文昵称（Figma 16590:1513，不可关闭） */}
+      {tokenReady && memberReady && currentMember && needProfileSetup && (
+        <ProfileSetupModal
+          initialNickname={currentMember.nickname || ""}
+          initialAvatar={currentMember.avatar}
+          onCompleted={(result) => {
+            setCurrentMember((prev) =>
+              prev
+                ? {
+                    ...prev,
+                    nickname: result.nickname,
+                    avatar: result.avatar,
+                    profileComplete: true,
+                  }
+                : prev,
+            );
+          }}
+        />
+      )}
+
       {/* swift 开通失败说明弹窗（点击通知铃铛打开，可手动重试） */}
       {tenantModalOpen && (
         <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
@@ -1079,6 +1107,7 @@ function SidebarNav({
       </div>
 
       <nav className="flex-1 px-3 py-4 space-y-0.5">
+        {showContent && <SideRow to="/distribution/content" icon={<Video className="w-[15px] h-[15px]" />} label={t.nav.content} />}
         {showDashboard && (
           <SideRow
             to="/distribution/overview"
@@ -1086,7 +1115,6 @@ function SidebarNav({
             label={t.overview.title}
           />
         )}
-        {showContent && <SideRow to="/distribution/content" icon={<Video className="w-[15px] h-[15px]" />} label={t.nav.content} />}
 
         {showSettlement && (
           <div>

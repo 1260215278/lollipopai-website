@@ -18,6 +18,7 @@ import { tenant, type TenantMessages } from "./i18n/tenant";
 import { twoFactor, type TwoFactorMessages } from "./i18n/twoFactor";
 import { members, type MembersMessages } from "./i18n/members";
 import { account, type AccountMessages } from "./i18n/account";
+import { profileSetup, type ProfileSetupMessages } from "./i18n/profileSetup";
 
 export interface DistributionMessages {
   common: CommonMessages;
@@ -32,6 +33,7 @@ export interface DistributionMessages {
   twoFactor: TwoFactorMessages;
   members: MembersMessages;
   account: AccountMessages;
+  profileSetup: ProfileSetupMessages;
 }
 
 function compose(locale: Locale): DistributionMessages {
@@ -48,6 +50,7 @@ function compose(locale: Locale): DistributionMessages {
     twoFactor: twoFactor[locale],
     members: members[locale],
     account: account[locale],
+    profileSetup: profileSetup[locale],
   };
 }
 

@@ -174,9 +174,14 @@ export function DistributionLayout() {
   const [retrying, setRetrying] = useState(false);
   const tenantFailed = tenant?.tenantSyncStatus === 2;
   const publisherName = (currentMember?.publisherName || companyName).trim();
-  const memberDisplayName = (currentMember?.phoneMask || currentMember?.nickname || "").trim();
+  const memberNickname = (currentMember?.nickname || "").trim();
+  const memberPhoneMask = (currentMember?.phoneMask || "").trim();
   const hasPublisherName = publisherName.length > 0;
-  const headerName = memberDisplayName || (hasPublisherName ? previewName(publisherName) : t.common.publisher);
+  // 顶栏优先昵称；手机号仅在下拉菜单展示
+  const headerName =
+    memberNickname ||
+    memberPhoneMask ||
+    (hasPublisherName ? previewName(publisherName) : t.common.publisher);
   // 强制资料：后端 profileComplete 优先；缺省字段时用本地规则兜底
   const needProfileSetup =
     !!currentMember &&
@@ -572,27 +577,42 @@ export function DistributionLayout() {
                 className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 rounded-lg px-2 py-1 transition-colors"
                 onClick={() => setUserMenuOpen((v) => !v)}
               >
-                <div className="w-8 h-8 rounded-full bg-[#111111] flex items-center justify-center flex-shrink-0">
-                  <User className="w-4 h-4 text-white" />
-                </div>
+                {currentMember?.avatar ? (
+                  <img
+                    src={currentMember.avatar}
+                    alt=""
+                    className="w-8 h-8 rounded-full object-cover flex-shrink-0 bg-gray-100"
+                  />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-[#111111] flex items-center justify-center flex-shrink-0">
+                    <User className="w-4 h-4 text-white" />
+                  </div>
+                )}
                 <div className="hidden sm:block text-left leading-tight min-w-0 max-w-[120px]">
-                  <p className="text-xs whitespace-nowrap" style={{ fontWeight: 600, color: "#111111" }}>
+                  <p className="text-xs whitespace-nowrap truncate" style={{ fontWeight: 600, color: "#111111" }}>
                     {headerName}
                   </p>
-                  {hasPublisherName && <p className="text-[11px] text-gray-400 mt-0.5">{t.common.publisher}</p>}
+                  {hasPublisherName && <p className="text-[11px] text-gray-400 mt-0.5 truncate">{t.common.publisher}</p>}
                 </div>
                 <ChevronDown className="w-3.5 h-3.5 text-gray-400 ml-0.5" />
               </div>
               {userMenuOpen && (
                 <div className="absolute top-full right-0 mt-1 w-[240px] bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden">
-                  {hasPublisherName && (
+                  {memberPhoneMask ? (
+                    <div className="px-4 py-3 border-b border-gray-100">
+                      <p className="text-[11px] text-gray-400" style={{ fontWeight: 500 }}>{t.account.phone}</p>
+                      <p className="mt-1 text-sm text-gray-800 break-words" style={{ fontWeight: 600 }}>
+                        {memberPhoneMask}
+                      </p>
+                    </div>
+                  ) : hasPublisherName ? (
                     <div className="px-4 py-3 border-b border-gray-100">
                       <p className="text-[11px] text-gray-400" style={{ fontWeight: 500 }}>{t.common.publisher}</p>
                       <p className="mt-1 text-sm text-gray-800 break-words" style={{ fontWeight: 600 }}>
                         {publisherName}
                       </p>
                     </div>
-                  )}
+                  ) : null}
                   <button
                     onClick={() => void handleLogout()}
                     className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-left text-gray-700 hover:bg-gray-50 transition-colors"

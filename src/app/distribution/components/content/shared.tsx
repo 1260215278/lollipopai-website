@@ -175,7 +175,7 @@ export const Field: React.FC<{
   required?: boolean;
   children: React.ReactNode;
   hint?: string;
-  /** 提示文案 class，默认与「选择集数后不可修改」一致的灰色小字；可传 text-red-500 等 */
+  /** 提示文案 class，默认与「根据实际集数填写…」一致的灰色小字；可传 text-red-500 等 */
   hintClassName?: string;
 }> = ({ label, required, children, hint, hintClassName = "text-gray-400" }) => (
   <div>

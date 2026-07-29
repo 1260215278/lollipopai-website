@@ -8,6 +8,8 @@ import {
   Video,
   EyeOff,
   Eye,
+  Pin,
+  PinOff,
   AlertCircle,
   Loader2,
   CheckCircle2,
@@ -43,6 +45,8 @@ interface DramaListViewProps {
   onManageEpisodes: (d: PublisherCourseRow) => void;
   /** 上架/下架（仅 auditStatus=2 可点）；下架的确认弹窗由上层处理 */
   onToggleShelf: (d: PublisherCourseRow) => void;
+  /** 置顶/取消置顶 */
+  onTogglePin: (d: PublisherCourseRow) => void;
   /** 分页（bug20）：当前页 / 总页数 / 翻页回调 */
   page: number;
   totalPage: number;
@@ -76,6 +80,7 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
   onViewDetail,
   onManageEpisodes,
   onToggleShelf,
+  onTogglePin,
   page,
   totalPage,
   onPageChange,
@@ -222,14 +227,25 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
                             )}
                           </div>
                           <div className="min-w-0">
-                            <button
-                              onClick={() => onViewDetail(drama)}
-                              title={drama.title}
-                              className="block max-w-full text-sm text-gray-900 truncate hover:underline text-left"
-                              style={{ fontWeight: 600 }}
-                            >
-                              {drama.title}
-                            </button>
+                            <div className="flex items-center gap-1.5 min-w-0">
+                              {drama.publisherPin === 1 && (
+                                <span
+                                  className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] flex-shrink-0"
+                                  style={{ background: "#FFF1F2", color: "#E8192C", fontWeight: 600 }}
+                                >
+                                  <Pin className="w-2.5 h-2.5" />
+                                  {t.actionPin}
+                                </span>
+                              )}
+                              <button
+                                onClick={() => onViewDetail(drama)}
+                                title={drama.title}
+                                className="block max-w-full text-sm text-gray-900 truncate hover:underline text-left"
+                                style={{ fontWeight: 600 }}
+                              >
+                                {drama.title}
+                              </button>
+                            </div>
                             <p className="text-xs text-gray-400 mt-0.5 font-mono">{drama.dramaNo}</p>
                             <p className="text-xs text-gray-400 mt-0.5">
                               {fmt(t.episodesUploaded, {
@@ -375,6 +391,28 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
                                 <Video className="w-3.5 h-3.5" />
                                 {t.actionEpisodes}
                               </button>
+                              {canManageCourse && (
+                                <button
+                                  onClick={() => {
+                                    onTogglePin(drama);
+                                    setMenu(null);
+                                  }}
+                                  className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-left text-gray-700 hover:bg-gray-50"
+                                  style={{ fontWeight: 500 }}
+                                >
+                                  {drama.publisherPin === 1 ? (
+                                    <>
+                                      <PinOff className="w-3.5 h-3.5" />
+                                      {t.actionUnpin}
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Pin className="w-3.5 h-3.5" />
+                                      {t.actionPin}
+                                    </>
+                                  )}
+                                </button>
+                              )}
                               {isApproved && canManageCourse && (
                                 <>
                                   <div className="h-px bg-gray-100 mx-3" />

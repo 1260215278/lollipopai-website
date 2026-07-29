@@ -8,6 +8,7 @@ import {
   fetchCourseStats,
   fetchCourseDetail,
   setShelf,
+  setCoursePin,
   type PublisherCourseRow,
   type CourseDetail,
   type CourseStats,
@@ -177,6 +178,14 @@ export function ContentPage() {
     }
   };
 
+  const handleTogglePin = (d: PublisherCourseRow) => {
+    if (!canManageCourse) return;
+    const nextPinned = d.publisherPin !== 1;
+    void setCoursePin(d.courseId, nextPinned).then(() => {
+      void loadList(searchQuery, page);
+    });
+  };
+
   const doConfirmOffline = async () => {
     if (!confirmOffline || !canManageCourse) return;
     await setShelf(confirmOffline.courseId, false).catch(() => undefined);
@@ -285,6 +294,7 @@ export function ContentPage() {
         onViewDetail={(d) => void openDetail(d)}
         onManageEpisodes={(d) => openEpisodes(d)}
         onToggleShelf={handleToggleShelf}
+        onTogglePin={handleTogglePin}
         page={page}
         totalPage={totalPage}
         onPageChange={setPage}

@@ -68,6 +68,8 @@ export interface PublisherCourseRow {
   copyrightType: number;
   /** 收益方式（20260703 汇总版改为嵌套对象） */
   revenue: CourseRevenue;
+  /** 发行者置顶 0否 1是 */
+  publisherPin?: number;
   createTime: string;
 }
 
@@ -121,6 +123,11 @@ export function fetchCourseStats(): Promise<CourseStats> {
 /** 上架(true) / 下架(false)。仅 auditStatus=2 可操作。 */
 export function setShelf(courseId: number, onShelf: boolean): Promise<unknown> {
   return http.post<unknown>("/publisher/course/shelf", { courseId, onShelf });
+}
+
+/** 置顶(true) / 取消置顶(false)。需 COURSE_MANAGE。 */
+export function setCoursePin(courseId: number, pinned: boolean): Promise<{ courseId: number; publisherPin: number }> {
+  return http.post<{ courseId: number; publisherPin: number }>("/publisher/course/pin", { courseId, pinned });
 }
 
 /* ─── 剧集明细类型（§4 / §6） ──────────────────────────────────── */

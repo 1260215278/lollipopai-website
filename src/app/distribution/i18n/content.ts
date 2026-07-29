@@ -71,6 +71,8 @@ export interface ContentMessages {
   actionRepublish: string;
   actionPublishNow: string;
   actionReviewLocked: string;
+  actionPin: string;
+  actionUnpin: string;
 
   // ── 下架确认弹窗 ──
   offlineConfirmTitle: string;
@@ -339,6 +341,8 @@ export const content: Record<Locale, ContentMessages> = {
     actionRepublish: "重新上架",
     actionPublishNow: "立即上架",
     actionReviewLocked: "审核中，暂不可操作",
+    actionPin: "置顶",
+    actionUnpin: "取消置顶",
 
     offlineConfirmTitle: "确认下架此短剧？",
     offlineConfirmDesc: "下架后该剧集将对用户不可见，收益将暂停结算。您可以随时重新上架。",
@@ -368,7 +372,7 @@ export const content: Record<Locale, ContentMessages> = {
     descPlaceholder: "请输入剧情简介，介绍人物背景、核心矛盾与情感主线……",
     descLangHint: "输入对应语言剧情简介",
     episodesLabel: "集数",
-    episodesLockHint: "选择集数后不可修改",
+    episodesLockHint: "根据实际集数填写，须准确无误，填后不可修改",
     episodesPlaceholder: "请输入集数",
     channelLabel: "频道",
     tagsLabel: "标签",
@@ -584,6 +588,8 @@ export const content: Record<Locale, ContentMessages> = {
     actionRepublish: "重新上架",
     actionPublishNow: "立即上架",
     actionReviewLocked: "審核中，暫不可操作",
+    actionPin: "置頂",
+    actionUnpin: "取消置頂",
 
     offlineConfirmTitle: "確認下架此短劇？",
     offlineConfirmDesc: "下架後該劇集將對使用者不可見，收益將暫停結算。您可以隨時重新上架。",
@@ -613,7 +619,7 @@ export const content: Record<Locale, ContentMessages> = {
     descPlaceholder: "請輸入劇情簡介，介紹人物背景、核心衝突與情感主線……",
     descLangHint: "輸入對應語言劇情簡介",
     episodesLabel: "集數",
-    episodesLockHint: "選擇集數後不可修改",
+    episodesLockHint: "根據實際集數填寫，須準確無誤，填後不可修改",
     episodesPlaceholder: "請輸入集數",
     channelLabel: "頻道",
     tagsLabel: "標籤",
@@ -829,6 +835,8 @@ export const content: Record<Locale, ContentMessages> = {
     actionRepublish: "Re-publish",
     actionPublishNow: "Publish Now",
     actionReviewLocked: "Under review, locked",
+    actionPin: "Pin to Top",
+    actionUnpin: "Unpin",
 
     offlineConfirmTitle: "Take this drama offline?",
     offlineConfirmDesc:
@@ -859,7 +867,7 @@ export const content: Record<Locale, ContentMessages> = {
     descPlaceholder: "Introduce characters, conflict, and emotional arc...",
     descLangHint: "Enter the synopsis in the selected language",
     episodesLabel: "Episodes",
-    episodesLockHint: "Cannot be changed once set",
+    episodesLockHint: "Enter the actual episode count accurately; cannot be changed after filling in",
     episodesPlaceholder: "e.g. 30",
     channelLabel: "Channel",
     tagsLabel: "Tags",
@@ -1075,6 +1083,8 @@ export const content: Record<Locale, ContentMessages> = {
     actionRepublish: "Republicar",
     actionPublishNow: "Publicar agora",
     actionReviewLocked: "Em análise, bloqueado",
+    actionPin: "Fixar no topo",
+    actionUnpin: "Desafixar",
 
     offlineConfirmTitle: "Despublicar este drama?",
     offlineConfirmDesc:
@@ -1105,7 +1115,7 @@ export const content: Record<Locale, ContentMessages> = {
     descPlaceholder: "Apresente personagens, conflito e arco emocional...",
     descLangHint: "Digite a sinopse no idioma selecionado",
     episodesLabel: "Episódios",
-    episodesLockHint: "Não pode ser alterado depois de definido",
+    episodesLockHint: "Preencha com o número real de episódios, com precisão; não pode ser alterado depois",
     episodesPlaceholder: "ex.: 30",
     channelLabel: "Canal",
     tagsLabel: "Tags",

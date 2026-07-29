@@ -36,7 +36,9 @@ export default defineConfig({
   },
 
   // dev 反向代理：前端请求相对 /sqx_fast/** → 真实后端，规避跨域；联调即开即用。
+  // host: true 监听 0.0.0.0，本机 IP 可访问（手机/同网设备联调）。
   server: {
+    host: true,
     proxy: {
       '/sqx_fast': {
         target: DEV_API_TARGET,

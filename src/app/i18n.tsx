@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { distributionMessages } from "./distribution/i18n.distribution";
 import { loginMessages } from "./i18n.login";
+import { applySeoMeta, seoMessages } from "./i18n.seo";
 
 export type Locale = "zh-TW" | "zh-CN" | "en" | "pt";
 
@@ -1382,6 +1383,8 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     }
 
     document.documentElement.lang = locale;
+    // 切换语言时同步 SEO title / description / keywords / Open Graph
+    applySeoMeta(seoMessages[locale] ?? seoMessages.en);
   }, [locale]);
 
   const currentLanguage = localeOptions.find((item) => item.code === locale) ?? localeOptions[2];

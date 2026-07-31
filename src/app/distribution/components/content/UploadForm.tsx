@@ -4,6 +4,7 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  Download,
   Upload,
   X,
   RotateCcw,
@@ -1317,6 +1318,85 @@ export const UploadForm: React.FC<UploadFormProps> = ({
       {/* ── Step 2 上传剧集 ── */}
       {step === 2 && (
         <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden max-w-4xl">
+          {/* 工具栏：进度 + 下载模版 / 批量上传（Figma 15607:16524，位于表格上方） */}
+          <div className="flex flex-col gap-3 px-5 py-3 border-b border-gray-100 bg-gray-50/30 sm:flex-row sm:items-center sm:justify-between">
+            <span
+              className="text-xs whitespace-nowrap min-w-0"
+              style={{
+                fontWeight: 500,
+                color: selectedVideoCount + uploadedCount >= videos.length && videos.length > 0 ? "#16A34A" : "#6B7280",
+              }}
+            >
+              {fmt(t.uploadSummary, { total: videos.length, selected: selectedVideoCount + uploadedCount })}
+            </span>
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <input
+                ref={templateInputRef}
+                type="file"
+                accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                className="hidden"
+                onChange={(e) => void importTemplate(e.target.files?.[0])}
+              />
+              <input
+                ref={batchVideoInputRef}
+                type="file"
+                accept={VIDEO_ACCEPT}
+                multiple
+                disabled={uploadingEps}
+                className="hidden"
+                onChange={(e) => {
+                  onPickBatchVideos(e.target.files);
+                  e.target.value = "";
+                }}
+              />
+              <input
+                ref={folderInputRef}
+                type="file"
+                accept={VIDEO_ACCEPT}
+                multiple
+                disabled={uploadingEps}
+                className="hidden"
+                onChange={(e) => {
+                  onPickBatchVideos(e.target.files);
+                  e.target.value = "";
+                }}
+              />
+              {/* <button
+                type="button"
+                onClick={() => void downloadTemplate()}
+                disabled={templateDownloading || uploadingEps}
+                className="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-600 hover:bg-gray-50 disabled:opacity-60 inline-flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap"
+                style={{ fontWeight: 500 }}
+              >
+                {templateDownloading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+                {t.downloadTemplate}
+              </button>  */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    disabled={uploadingEps}
+                    className="px-3 py-1.5 rounded-lg text-white text-xs hover:opacity-90 disabled:opacity-60 inline-flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap"
+                    style={{ background: "#374151", fontWeight: 500 }}
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                    {t.batchUpload}
+                    <ChevronDown className="w-3 h-3" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="min-w-[168px]">
+                  <DropdownMenuItem onSelect={() => batchVideoInputRef.current?.click()}>
+                    <Files />
+                    {t.batchUploadEpisodes}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => folderInputRef.current?.click()}>
+                    <FolderOpen />
+                    {t.uploadFolder}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
           <div className="overflow-x-auto">
             <div className="min-w-[680px]">
               <div className="grid grid-cols-[72px_1fr_1fr_100px_90px_90px] gap-3 px-5 py-3 border-b border-gray-100 bg-gray-50/60">
@@ -1460,87 +1540,10 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             </div>
           </div>
           <div className="flex flex-col gap-3 px-5 py-3.5 border-t border-gray-100 bg-gray-50/40 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex flex-wrap items-center gap-3 min-w-0">
-              <input
-                ref={templateInputRef}
-                type="file"
-                accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                className="hidden"
-                onChange={(e) => void importTemplate(e.target.files?.[0])}
-              />
-              <input
-                ref={batchVideoInputRef}
-                type="file"
-                accept={VIDEO_ACCEPT}
-                multiple
-                disabled={uploadingEps}
-                className="hidden"
-                onChange={(e) => {
-                  onPickBatchVideos(e.target.files);
-                  e.target.value = "";
-                }}
-              />
-              <input
-                ref={folderInputRef}
-                type="file"
-                accept={VIDEO_ACCEPT}
-                multiple
-                disabled={uploadingEps}
-                className="hidden"
-                onChange={(e) => {
-                  onPickBatchVideos(e.target.files);
-                  e.target.value = "";
-                }}
-              />
-              <span className="w-full text-xs text-gray-500 whitespace-nowrap sm:w-auto">
-                {fmt(t.episodesBreadcrumbCount, { total: videos.length, done: uploadedCount })}
-                {selectedVideoCount > 0 && ` · ${fmt(t.uploadSummary, { total: videos.length, selected: selectedVideoCount })}`}
-              </span>
-              {/* <button
-                type="button"
-                onClick={() => void downloadTemplate()}
-                disabled={templateDownloading || uploadingEps}
-                className="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-600 hover:bg-gray-50 disabled:opacity-60 inline-flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap"
-                style={{ fontWeight: 600 }}
-              >
-                {templateDownloading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                {t.downloadTemplate}
-              </button> */}
-              {/* <button
-                type="button"
-                onClick={() => templateInputRef.current?.click()}
-                disabled={templateImporting || uploadingEps}
-                className="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-600 hover:bg-gray-50 disabled:opacity-60 inline-flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap"
-                style={{ fontWeight: 600 }}
-              >
-                {templateImporting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                {templateImporting ? t.templateImporting : t.importTemplate}
-              </button> */}
-              {/* <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button
-                    type="button"
-                    disabled={uploadingEps}
-                    className="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-600 hover:bg-gray-50 disabled:opacity-60 inline-flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap"
-                    style={{ fontWeight: 600 }}
-                  >
-                    <Upload className="w-3.5 h-3.5" />
-                    {t.batchUpload}
-                    <ChevronDown className="w-3 h-3" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="min-w-[168px]">
-                  <DropdownMenuItem onSelect={() => batchVideoInputRef.current?.click()}>
-                    <Files />
-                    {t.batchUploadEpisodes}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => folderInputRef.current?.click()}>
-                    <FolderOpen />
-                    {t.uploadFolder}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu> */}
-            </div>
+            <span className="text-xs text-gray-500 whitespace-nowrap">
+              {fmt(t.episodesBreadcrumbCount, { total: videos.length, done: uploadedCount })}
+              {selectedVideoCount > 0 && ` · ${fmt(t.uploadSummary, { total: videos.length, selected: selectedVideoCount })}`}
+            </span>
             <div className="flex items-center justify-end gap-3 flex-shrink-0">
               <button
                 onClick={() => setStep(1)}

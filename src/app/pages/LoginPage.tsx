@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
@@ -31,6 +31,21 @@ const PWD_MIN = 6;
 const EMAIL_MAX = 50;
 
 /**
+ * 读取 controlled input 的真实值。
+ * 浏览器 autofill 常只改 DOM、不触发 React onChange，导致 state 仍为空；
+ * 发码/提交时必须以 DOM 值为准，否则会误报「请输入账号」或走错通道。
+ */
+function readFieldValue(ref: RefObject<HTMLInputElement | null>, stateValue: string): string {
+  const dom = ref.current?.value ?? "";
+  return (dom || stateValue).trim();
+}
+
+/** 纯数字账号 → 手机号模式（与 H5 一致） */
+function isPhoneAccount(value: string): boolean {
+  return /^[0-9]+$/.test(value);
+}
+
+/**
  * 登录 / 注册页 —— figma 15141-27973，登录逻辑复用短剧 H5。
  *
  * 双态（顶栏「注册」→ /login?mode=register，「登录」→ /login）：
@@ -54,11 +69,14 @@ export function LoginPage() {
   const [countdown, setCountdown] = useState(0);
   const [sending, setSending] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const accountRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const codeRef = useRef<HTMLInputElement>(null);
 
   const isRegister = mode === "register";
   const isCodeLogin = !isRegister && loginMethod === "code";
   // 纯数字且非空 → 手机号模式（显示区号）；否则按邮箱处理（与 H5 一致）
-  const isPhoneMode = /^[0-9]+$/.test(account);
+  const isPhoneMode = isPhoneAccount(account);
 
   // 顶栏在本页内切换 ?mode= 时同步状态
   useEffect(() => {
@@ -74,7 +92,7 @@ export function LoginPage() {
 
   const onAccountChange = (v: string) => {
     // 手机号模式（纯数字）限制 ≤20 位；邮箱模式限制 ≤50 位
-    if (/^[0-9]+$/.test(v)) {
+    if (isPhoneAccount(v)) {
       if (v.length > 20) return;
       setAccount(v);
       return;
@@ -83,16 +101,56 @@ export function LoginPage() {
     setAccount(v);
   };
 
+  /**
+   * 浏览器 autofill 可能在挂载后静默写入 DOM。
+   * 短延迟回读一次，把账号同步进 state（区号选择等 UI 依赖 isPhoneMode）。
+   */
+  useEffect(() => {
+    const syncAutofill = () => {
+      const el = accountRef.current;
+      if (!el?.value || el.value === account) return;
+      onAccountChange(el.value);
+    };
+    const t1 = window.setTimeout(syncAutofill, 100);
+    const t2 = window.setTimeout(syncAutofill, 500);
+    return () => {
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+    };
+    // 仅挂载/切 tab 时探测；account 变化由 onChange 覆盖
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode, loginMethod]);
+
+  /** 发码/提交前：合并 autofill DOM 值并回写 state，返回规范化后的账号 */
+  const resolveAccount = (): string => {
+    const acc = readFieldValue(accountRef, account);
+    if (acc && acc !== account) onAccountChange(acc);
+    return acc;
+  };
+
+  const resolvePassword = (): string => {
+    const pwd = passwordRef.current?.value ?? password;
+    if (pwd && pwd !== password) setPassword(pwd);
+    return pwd;
+  };
+
+  const resolveCode = (): string => {
+    const c = readFieldValue(codeRef, code);
+    if (c && c !== code) setCode(c);
+    return c;
+  };
+
   const onSendCode = async () => {
     if (countdown > 0 || sending) return;
-    const acc = account.trim();
+    const acc = resolveAccount();
     if (!acc) {
       toast.error(t.vAccountRequired);
       return;
     }
+    const phoneMode = isPhoneAccount(acc);
     setSending(true);
     try {
-      if (isPhoneMode) {
+      if (phoneMode) {
         await sendPhoneLoginCode(acc, areaCode);
       } else {
         await sendRegisterEmailCode(acc);
@@ -107,43 +165,46 @@ export function LoginPage() {
   };
 
   const onSubmit = async () => {
-    const acc = account.trim();
+    const acc = resolveAccount();
+    const pwd = resolvePassword();
+    const codeVal = resolveCode();
+    const phoneMode = isPhoneAccount(acc);
     if (!acc) {
       toast.error(t.vAccountRequired);
       return;
     }
-    if ((isRegister || isCodeLogin) && !code.trim()) {
+    if ((isRegister || isCodeLogin) && !codeVal) {
       toast.error(t.vCodeRequired);
       return;
     }
-    if (!isCodeLogin && !password) {
+    if (!isCodeLogin && !pwd) {
       toast.error(t.vPasswordRequired);
       return;
     }
-    if (isRegister && password.length < PWD_MIN) {
+    if (isRegister && pwd.length < PWD_MIN) {
       toast.error(t.vPasswordTooShort);
       return;
     }
     setSubmitting(true);
     try {
       if (isRegister) {
-        if (isPhoneMode) {
-          await registerByPhone({ phone: acc, code: code.trim(), password, areaCode });
+        if (phoneMode) {
+          await registerByPhone({ phone: acc, code: codeVal, password: pwd, areaCode });
         } else {
-          await registerByEmail({ email: acc, password, code: code.trim() });
+          await registerByEmail({ email: acc, password: pwd, code: codeVal });
         }
       } else if (loginMethod === "code") {
-        if (isPhoneMode) {
-          await loginByPhone({ phone: acc, code: code.trim(), areaCode });
+        if (phoneMode) {
+          await loginByPhone({ phone: acc, code: codeVal, areaCode });
         } else {
-          await loginByEmail({ emailName: acc, code: code.trim() });
+          await loginByEmail({ emailName: acc, code: codeVal });
         }
-      } else if (isPhoneMode) {
-        await loginByPhonePassword({ phone: acc, password, areaCode });
+      } else if (phoneMode) {
+        await loginByPhonePassword({ phone: acc, password: pwd, areaCode });
       } else {
-        await loginByEmailPassword({ email: acc, password });
+        await loginByEmailPassword({ email: acc, password: pwd });
       }
-      setLoginName(isPhoneMode ? `${areaCode}${acc}` : acc);
+      setLoginName(phoneMode ? `${areaCode}${acc}` : acc);
       toast.success(isRegister ? t.registerSuccess : t.loginSuccess);
       navigate("/");
     } catch (err) {
@@ -226,11 +287,19 @@ export function LoginPage() {
                     <div className="flex gap-2">
                       {isPhoneMode && <AreaCodeSelect value={areaCode} onChange={setAreaCode} locale={locale} />}
                       <input
+                        ref={accountRef}
                         className={inputCls + " flex-1"}
                         value={account}
                         onChange={(e) => onAccountChange(e.target.value)}
+                        onBlur={() => {
+                          const v = accountRef.current?.value ?? "";
+                          if (v && v !== account) onAccountChange(v);
+                        }}
                         placeholder={t.accountPlaceholder}
                         maxLength={isPhoneMode ? 20 : EMAIL_MAX}
+                        name="username"
+                        autoComplete="username"
+                        inputMode={isPhoneMode ? "tel" : "email"}
                       />
                     </div>
                   </div>
@@ -243,16 +312,19 @@ export function LoginPage() {
                       </label>
                       <div className="flex gap-2">
                         <input
+                          ref={codeRef}
                           className={inputCls + " flex-1"}
                           value={code}
                           onChange={(e) => setCode(e.target.value)}
                           placeholder={t.codePlaceholder}
                           inputMode="numeric"
                           maxLength={8}
+                          name="one-time-code"
+                          autoComplete="one-time-code"
                         />
                         <button
                           type="button"
-                          onClick={onSendCode}
+                          onClick={() => void onSendCode()}
                           disabled={countdown > 0 || sending}
                           className="h-[46px] min-w-[108px] px-4 rounded-[10px] bg-white text-[#333] text-sm whitespace-nowrap flex items-center justify-center gap-2 transition-opacity hover:opacity-90 disabled:opacity-50"
                           style={{ fontWeight: 500 }}
@@ -272,12 +344,19 @@ export function LoginPage() {
                       </label>
                       <div className="relative">
                         <input
+                          ref={passwordRef}
                           className={inputCls + " pr-11"}
                           type={showPwd ? "text" : "password"}
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
+                          onBlur={() => {
+                            const v = passwordRef.current?.value ?? "";
+                            if (v && v !== password) setPassword(v);
+                          }}
                           placeholder={t.passwordPlaceholder}
                           maxLength={20}
+                          name={isRegister ? "new-password" : "password"}
+                          autoComplete={isRegister ? "new-password" : "current-password"}
                           onKeyDown={(e) => {
                             if (e.key === "Enter") void onSubmit();
                           }}
@@ -310,7 +389,8 @@ export function LoginPage() {
 
                   {/* 提交 */}
                   <button
-                    onClick={onSubmit}
+                    type="button"
+                    onClick={() => void onSubmit()}
                     disabled={submitting}
                     className="w-full h-12 rounded-[14px] bg-[#f22323] text-white text-sm flex items-center justify-center gap-2 transition-all hover:opacity-90 active:scale-[0.99] disabled:opacity-70 mt-2"
                     style={{ fontWeight: 600 }}

@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { Mail, Phone, MapPin } from "lucide-react";
 import logoImg from "../../imports/Lollipop1.png";
 import { useI18n } from "../i18n";
@@ -96,12 +97,22 @@ export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) 
         {/* Bottom */}
         <div className="border-t border-white/10 pt-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex gap-6">
-            <a href="#" onClick={(e) => e.preventDefault()} className="text-gray-500 hover:text-white transition-colors" style={{ fontSize: "0.8rem" }}>
+            <Link
+              to="/privacy"
+              className="text-gray-500 hover:text-white transition-colors"
+              style={{ fontSize: "0.8rem" }}
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            >
               {messages.common.privacyPolicy}
-            </a>
-            <a href="#" onClick={(e) => e.preventDefault()} className="text-gray-500 hover:text-white transition-colors" style={{ fontSize: "0.8rem" }}>
+            </Link>
+            <Link
+              to="/terms"
+              className="text-gray-500 hover:text-white transition-colors"
+              style={{ fontSize: "0.8rem" }}
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            >
               {messages.common.termsOfService}
-            </a>
+            </Link>
           </div>
           <p className="text-gray-600" style={{ fontSize: "0.75rem" }}>
             &copy; 2026 {messages.common.brand}. {messages.common.allRightsReserved}

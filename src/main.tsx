@@ -6,6 +6,7 @@ import { DistributionRoutes } from "./app/distribution/routes";
 import { LoginPage } from "./app/pages/LoginPage";
 import { ForgotPasswordPage } from "./app/pages/ForgotPasswordPage";
 import { CreatorProfilePage } from "./app/pages/CreatorProfilePage";
+import { PrivacyPolicyPage, TermsOfServicePage } from "./app/pages/LegalDocumentPage";
 import { I18nProvider } from "./app/i18n.tsx";
 import { Toaster } from "./app/components/ui/sonner";
 import "./styles/index.css";
@@ -23,6 +24,9 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         {/* 出品方公开主页（bug18） */}
         <Route path="/creator/:userId" element={<CreatorProfilePage />} />
+        {/* 用户协议 / 隐私政策（与 H5 me/setting/xieyi、mimi 同源配置） */}
+        <Route path="/terms" element={<TermsOfServicePage />} />
+        <Route path="/privacy" element={<PrivacyPolicyPage />} />
         {/* 营销站 */}
         <Route path="/" element={<App initialPage="home" />} />
         <Route path="/creating" element={<App initialPage="creating" />} />

@@ -41,6 +41,9 @@ const enMessages = {
     downloadOnThe: "Download on the",
     getItOn: "GET IT ON",
     languageUpdated: "Language",
+    loading: "Loading...",
+    loadFailed: "Failed to load. Please try again.",
+    retry: "Retry",
   },
   navbar: {
     links: {
@@ -362,6 +365,9 @@ const translations: Record<Locale, TranslationMessages> = {
       downloadOnThe: "下载自",
       getItOn: "获取于",
       languageUpdated: "语言",
+      loading: "加载中...",
+      loadFailed: "加载失败，请重试。",
+      retry: "重试",
     },
     navbar: {
       links: {
@@ -678,6 +684,9 @@ const translations: Record<Locale, TranslationMessages> = {
       downloadOnThe: "下載自",
       getItOn: "獲取於",
       languageUpdated: "語言",
+      loading: "載入中...",
+      loadFailed: "載入失敗，請重試。",
+      retry: "重試",
     },
     navbar: {
       links: {
@@ -994,6 +1003,9 @@ const translations: Record<Locale, TranslationMessages> = {
       downloadOnThe: "Baixe na",
       getItOn: "BAIXE NO",
       languageUpdated: "Idioma",
+      loading: "Carregando...",
+      loadFailed: "Falha ao carregar. Tente novamente.",
+      retry: "Tentar novamente",
     },
     navbar: {
       links: {

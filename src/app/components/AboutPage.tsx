@@ -3,6 +3,10 @@ import { motion, useInView } from "motion/react";
 import bannerBg from "../../imports/关于我们-_banner-背景-1.png";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import companyImg from "../../imports/压缩图片.png";
+import teamJames from "../../imports/figma/team-james.png";
+import teamSarah from "../../imports/figma/team-sarah.png";
+import teamDavid from "../../imports/figma/team-david.png";
+import teamEmily from "../../imports/figma/team-emily.png";
 import { Footer } from "./Footer";
 import { useI18n } from "../i18n";
 
@@ -35,13 +39,8 @@ function SectionTitle({ title, sub }: { title: string; sub?: string }) {
   );
 }
 
-/* ── Team ── */
-const teamAssets = [
-  { photo: "https://images.unsplash.com/photo-1738566061505-556830f8b8f5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhc2lhbiUyMGJ1c2luZXNzJTIwZXhlY3V0aXZlJTIwcG9ydHJhaXQlMjBtYW58ZW58MXx8fHwxNzc2NjY5NDQ3fDA&ixlib=rb-4.1.0&q=60&w=256" },
-  { photo: "https://images.unsplash.com/photo-1758518729459-235dcaadc611?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjB3b21hbiUyMGV4ZWN1dGl2ZSUyMGhlYWRzaG90fGVufDF8fHx8MTc3NjY2OTQ0OHww&ixlib=rb-4.1.0&q=60&w=256" },
-  { photo: "https://images.unsplash.com/photo-1629507208649-70919ca33793?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxidXNpbmVzcyUyMG1hbiUyMHBvcnRyYWl0JTIwcHJvZmVzc2lvbmFsJTIwc3VpdHxlbnwxfHx8fDE3NzY2Njk0NDl8MA&ixlib=rb-4.1.0&q=60&w=256" },
-  { photo: "https://images.unsplash.com/photo-1610387694365-19fafcc86d86?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb3Jwb3JhdGUlMjB3b21hbiUyMHBvcnRyYWl0JTIwcHJvZmVzc2lvbmFsfGVufDF8fHx8MTc3NjY2OTQ0OXww&ixlib=rb-4.1.0&q=60&w=256" },
-];
+/* ── Team (Figma 16795:18481) ── */
+const teamPhotos = [teamJames, teamSarah, teamDavid, teamEmily];
 
 /* ── Partners ── */
 const partnerAssets = [
@@ -60,7 +59,7 @@ export function AboutPage({ onNavigate }: { onNavigate?: (page: string) => void 
   const { messages } = useI18n();
   const team = messages.about.team.map((member, index) => ({
     ...member,
-    photo: teamAssets[index].photo,
+    photo: teamPhotos[index],
   }));
   const partners = messages.about.partners.map((partner, index) => ({
     ...partner,
@@ -139,7 +138,7 @@ export function AboutPage({ onNavigate }: { onNavigate?: (page: string) => void 
                 <ImageWithFallback src={m.photo} alt={m.name} className="w-full h-full object-cover" loading="lazy" />
               </div>
               <h3 className="text-white mb-1" style={{ fontSize: "1.05rem", fontWeight: 600 }}>{m.name}</h3>
-              {/* <p className="text-red-400 mb-3" style={{ fontSize: "0.8rem", fontWeight: 500 }}>{m.role}</p> */}
+              <p className="text-red-400 mb-3" style={{ fontSize: "0.8rem", fontWeight: 500 }}>{m.role}</p>
               <p className="text-gray-500" style={{ fontSize: "0.8rem", lineHeight: 1.6 }}>{m.desc}</p>
             </motion.div>
           ))}

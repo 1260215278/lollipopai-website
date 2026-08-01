@@ -7,7 +7,6 @@ export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) 
   const { messages, languages, currentLanguage, setLocale } = useI18n();
   const websiteLinks = [
     { key: "home", page: "home" },
-    { key: "aboutUs", page: "about" },
     { key: "download", page: "download" },
     { key: "contactUs", page: "contact" },
   ] as const;

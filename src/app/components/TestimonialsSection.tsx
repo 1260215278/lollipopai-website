@@ -1,6 +1,8 @@
+import { useEffect } from "react";
 import { Star } from "lucide-react";
 import { motion } from "motion/react";
 import { useI18n } from "../i18n";
+import { setPageSchema, clearPageSchema } from "../i18n.seo";
 
 const reviewAvatars = [
   "https://images.unsplash.com/photo-1608185383614-43fdb19019ad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx5b3VuZyUyMHdoaXRlJTIwd29tYW4lMjBwb3J0cmFpdCUyMGhlYWRzaG90fGVufDF8fHx8MTc3NjY3MzA3Mnww&ixlib=rb-4.1.0&q=80&w=200",
@@ -13,9 +15,9 @@ const reviewAvatars = [
   "https://images.unsplash.com/photo-1688125287898-ef48c07788e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxldXJvcGVhbiUyMHdvbWFuJTIwYmxvbmRlJTIwcG9ydHJhaXR8ZW58MXx8fHwxNzc2NjczMDc1fDA&ixlib=rb-4.1.0&q=80&w=200",
 ];
 
-function ReviewCard({ r }: { r: { name: string; role: string; text: string; avatar: string } }) {
+function ReviewCard({ r, ariaHidden }: { r: { name: string; role: string; text: string; avatar: string }; ariaHidden?: boolean }) {
   return (
-    <div className="flex-shrink-0 w-[340px] p-5 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-red-500/20 transition-all duration-300 mx-2">
+    <div className="flex-shrink-0 w-[340px] p-5 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-red-500/20 transition-all duration-300 mx-2" aria-hidden={ariaHidden}>
       <div className="flex gap-1 mb-3">
         {Array.from({ length: 5 }).map((_, i) => (
           <Star key={i} className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
@@ -23,7 +25,7 @@ function ReviewCard({ r }: { r: { name: string; role: string; text: string; avat
       </div>
       <p className="text-gray-300 mb-4" style={{ fontSize: "0.85rem", lineHeight: 1.7 }}>"{r.text}"</p>
       <div className="flex items-center gap-3">
-        <img src={r.avatar} alt={r.name} className="w-9 h-9 rounded-full object-cover border border-white/10" />
+        <img src={r.avatar} alt={r.name} className="w-9 h-9 rounded-full object-cover border border-white/10" loading="lazy" />
         <div>
           <p className="text-white" style={{ fontSize: "0.85rem", fontWeight: 600 }}>{r.name}</p>
           <p className="text-gray-500" style={{ fontSize: "0.7rem" }}>{r.role}</p>
@@ -44,7 +46,8 @@ function MarqueeRow({ items, direction }: { items: Array<{ name: string; role: s
         }}
       >
         {doubled.map((r, i) => (
-          <ReviewCard key={`${r.name}-${i}`} r={r} />
+          // 仅首份评价对无障碍/爬虫可见，复制份（无缝滚动用）标记为 aria-hidden 去重
+          <ReviewCard key={`${r.name}-${i}`} r={r} ariaHidden={i >= items.length} />
         ))}
       </div>
     </div>
@@ -59,6 +62,27 @@ export function TestimonialsSection() {
   }));
   const row1 = reviews.slice(0, 4);
   const row2 = reviews.slice(4);
+
+  // SEO: 部署 Review Schema（rich snippet 机会）。
+  // 注意：不输出 AggregateRating —— 目前没有真实评分数据来源，硬编码的
+  // ratingValue（4.5/4.9 等）会被 Google 判为欺骗性结构化数据，风险高于收益。
+  useEffect(() => {
+    const reviewItems = reviews.map((r) => ({
+      "@type": "Review",
+      author: { "@type": "Person", name: r.name },
+      reviewBody: r.text,
+    }));
+
+    setPageSchema({
+      "@context": "https://schema.org",
+      "@type": "Product",
+      name: "Lollipop AI — Short Drama Platform",
+      description: "AI-powered short drama platform with 5,000+ premium shows, AI creation tools, and 70% creator revenue share.",
+      review: reviewItems,
+    });
+
+    return () => clearPageSchema();
+  }, [reviews]);
 
   return (
     <section className="py-20 bg-gradient-to-b from-[#0a0000] to-[#0d0000] overflow-hidden">

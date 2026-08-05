@@ -3,29 +3,162 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" type="image/png" href="/src/imports/logo.png" />
-        <!-- 默认 SEO（爬虫/首屏）；运行时由 i18n.seo 按语言覆盖 -->
-        <title>Lollipop AI — AI × Creator Economy × A New Era of Short-Form Entertainment</title>
+        <link rel="icon" type="image/png" href="/og-image.png" />
+
+        <!-- Preconnect to external image CDN for faster image loading -->
+        <link rel="preconnect" href="https://images.unsplash.com" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+
+        <!-- 全局默认 SEO（静态写入；dev 与构建模板共用，无需 JS 即可被爬虫读取）。
+             运行时若路由有专属文案，由 i18n.seo 覆盖；构建时由 prerender-plugin 按路由覆盖。 -->
+        <title>Lollipop AI — AI Short Drama & Creator Platform</title>
         <meta
             name="description"
-            content="Welcome to Lollipop AI — AI × Creator Economy × A New Era of Short-Form Entertainment. Here, content is more than expression — it is an extension of value. Lollipop builds a next-generation platform where AI creators and audiences interact, combining AI creation, video content, and user incentives for an immersive digital entertainment experience. LunoTV 1.5 AI tools: text-to-image, image-to-image, text-to-video, image/video-to-video. Thousands of exclusive short dramas and AI original videos across every genre."
+            content="Lollipop AI: 5,000+ AI short dramas, AI creation tools (text-to-video, face swap), 70% creator revenue share. Free on iOS & Android in 50+ countries."
         />
-        <meta
-            name="keywords"
-            content="Lollipop AI,LunoTV,AI creation,text to image,image to image,text to video,image to video,video to video,short drama,AI short video,creator economy,AI short drama,Lollipop"
-        />
+
+        <!-- Open Graph -->
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="Lollipop AI — AI × Creator Economy × A New Era of Short-Form Entertainment" />
+        <meta property="og:site_name" content="Lollipop AI" />
+        <meta property="og:title" content="Lollipop AI — AI Short Drama & Creator Platform" />
         <meta
             property="og:description"
-            content="Welcome to Lollipop AI — AI × Creator Economy × A New Era of Short-Form Entertainment. AI creation tools and thousands of premium short dramas in one platform."
+            content="Lollipop AI: 5,000+ AI short dramas, AI creation tools (text-to-video, face swap), 70% creator revenue share. Free on iOS & Android in 50+ countries."
         />
+        <meta property="og:url" content="https://www.lollipop.im/" />
+        <meta property="og:image" content="https://www.lollipop.im/og-image.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+
+        <!-- Twitter Card -->
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Lollipop AI — AI × Creator Economy × A New Era of Short-Form Entertainment" />
+        <meta name="twitter:site" content="@lollipopai" />
+        <meta name="twitter:title" content="Lollipop AI — AI Short Drama & Creator Platform" />
         <meta
             name="twitter:description"
-            content="Welcome to Lollipop AI — AI × Creator Economy × A New Era of Short-Form Entertainment. AI creation tools and thousands of premium short dramas in one platform."
+            content="Lollipop AI: 5,000+ AI short dramas, AI creation tools (text-to-video, face swap), 70% creator revenue share. Free on iOS & Android in 50+ countries."
         />
+        <meta name="twitter:image" content="https://www.lollipop.im/og-image.png" />
+
+        <!-- Canonical / Robots / hreflang -->
+        <link rel="canonical" href="https://www.lollipop.im/" />
+        <meta
+            name="robots"
+            content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+        />
+        <link rel="alternate" hreflang="en" href="https://www.lollipop.im/?lang=en" />
+        <link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/?lang=zh-CN" />
+        <link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/?lang=zh-TW" />
+        <link rel="alternate" hreflang="pt" href="https://www.lollipop.im/?lang=pt" />
+        <link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/" />
+
+        <!-- 全局结构化数据（site-schema）：所有页面共用，预渲染不会被覆盖 -->
+        <script type="application/ld+json" id="site-schema">
+            {
+                "@context": "https://schema.org",
+                "@graph": [
+                    {
+                        "@type": "Organization",
+                        "name": "Lollipop AI",
+                        "url": "https://www.lollipop.im",
+                        "logo": "https://www.lollipop.im/og-image.png",
+                        "slogan": "AI × Creator Economy × A New Era of Short-Form Entertainment",
+                        "sameAs": [
+                            "https://x.com/wwwLollipopim",
+                            "https://twitter.com/wwwLollipopim",
+                            "https://youtube.com/@Lollipop-AI-one",
+                            "https://instagram.com/lollipopaiapp",
+                            "https://play.google.com/store/apps/details?id=com.StargetVenturesLLC.hks"
+                        ],
+                        "contactPoint": {
+                            "@type": "ContactPoint",
+                            "email": "business@lollipop.im",
+                            "contactType": "sales",
+                            "areaServed": "Worldwide"
+                        }
+                    },
+                    {
+                        "@type": "MobileApplication",
+                        "name": "Lollipop AI",
+                        "operatingSystem": "iOS, Android",
+                        "applicationCategory": "EntertainmentApplication",
+                        "downloadUrl": "https://www.lollipop.im/download",
+                        "offers": {
+                            "@type": "Offer",
+                            "price": "0",
+                            "priceCurrency": "USD"
+                        }
+                    },
+                    {
+                        "@type": "WebSite",
+                        "name": "Lollipop AI",
+                        "url": "https://www.lollipop.im",
+                        "potentialAction": {
+                            "@type": "SearchAction",
+                            "target": "https://www.lollipop.im/?q={search_term_string}",
+                            "query-input": "required name=search_term_string"
+                        }
+                    },
+                    {
+                        "@type": "BreadcrumbList",
+                        "itemListElement": [
+                            {
+                                "@type": "ListItem",
+                                "position": 1,
+                                "name": "Home",
+                                "item": "https://www.lollipop.im/"
+                            }
+                        ]
+                    },
+                    {
+                        "@type": "FAQPage",
+                        "mainEntity": [
+                            {
+                                "@type": "Question",
+                                "name": "What is Lollipop AI?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Lollipop AI is a global AI-powered short drama platform that combines 5,000+ premium short dramas with AI creation tools (text-to-video, image-to-video, face swap, style transfer). Creators earn up to 70% revenue share. Available on iOS and Android."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "Is Lollipop AI free to download?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Yes. Lollipop AI is free to download on the App Store and Google Play. Premium short dramas and advanced AI creation features are available through optional in-app purchases and creator subscriptions."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "How do creators make money on Lollipop AI?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Creators earn a 70% revenue share - the highest in the industry - from ad revenue, premium subscriptions, tips, and brand sponsorships. AI tools let you produce short dramas in under an hour with no editing experience."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "What AI tools does Lollipop AI offer?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "LunoTV 1.5 includes text-to-image, image-to-image, text-to-video, image/video-to-video, face swap, and style transfer, supporting 4K output across 50+ countries."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "Which devices and countries support Lollipop AI?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Lollipop AI runs on iOS and Android in 50+ countries with multilingual subtitles (English, Chinese, Portuguese and more), 4K streaming, and offline downloads."
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        </script>
+
         <style>
             html,
             body {

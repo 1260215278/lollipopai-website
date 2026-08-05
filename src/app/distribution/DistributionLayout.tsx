@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useI18n } from "../i18n";
+import { applyNoIndexMeta } from "../i18n.seo";
 import type { DistributionMessages } from "./i18n.distribution";
 import { clearTokens, isAppAuthed, isPublisherAuthed } from "../services/auth";
 import { ApiError } from "../services/http";
@@ -198,6 +199,23 @@ export function DistributionLayout() {
   useEffect(() => {
     if (inSettlement) setSettlementOpen(true);
   }, [inSettlement]);
+
+  // 后台页面 noindex + 动态 title（基于当前路由）
+  useEffect(() => {
+    const nav = t.nav;
+    const brand = messages.common.brand;
+    let pageTitle = nav.entry; // 兜底
+    const path = location.pathname;
+    if (path.includes("/overview")) pageTitle = `${nav.entry} · ${messages.distribution.overview?.title ?? ""}`;
+    else if (path.includes("/content")) pageTitle = `${nav.entry} · ${nav.content}`;
+    else if (path.includes("/payment")) pageTitle = `${nav.entry} · ${nav.payment}`;
+    else if (path.includes("/earnings")) pageTitle = `${nav.entry} · ${nav.earnings}`;
+    else if (path.includes("/withdraw")) pageTitle = `${nav.entry} · ${nav.withdraw}`;
+    else if (path.includes("/account")) pageTitle = `${nav.entry} · ${nav.account}`;
+    else if (path.includes("/members")) pageTitle = `${nav.entry} · ${nav.members}`;
+    pageTitle = pageTitle.trim().replace(/\s·\s*$/, "");
+    applyNoIndexMeta(`${pageTitle} | ${brand}`);
+  }, [location.pathname, t, messages.common.brand]);
 
   // 进入后台页：无登录态直接去入驻申请；有 appToken 但无 publisher token，则优先用 byAppToken 换取。
   // 换取失败不直接拦截：回落 /app/publisher/status，把新用户/审核中/驳回导向入驻状态页。

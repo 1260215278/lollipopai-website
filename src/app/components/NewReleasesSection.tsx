@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { Link } from "react-router";
 import { motion } from "motion/react";
 import { Star, Heart, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
@@ -11,12 +12,12 @@ import nrImg6 from "../../imports/e4347dc082a84ac0817906e1a68d5b36.png";
 import { useI18n } from "../i18n";
 
 const newShowAssets = [
-  { id: 101, image: nrImg1, rating: "9.2" },
-  { id: 102, image: nrImg2, rating: "9.0" },
-  { id: 103, image: nrImg3, rating: "9.4" },
-  { id: 104, image: nrImg4, rating: "8.9" },
-  { id: 105, image: nrImg5, rating: "9.1" },
-  { id: 106, image: nrImg6, rating: "9.3" },
+  { id: 101, slug: "crimson-dynasty", image: nrImg1, rating: "9.2" },
+  { id: 102, slug: "neon-abyss", image: nrImg2, rating: "9.0" },
+  { id: 103, slug: "whispered-love", image: nrImg3, rating: "9.4" },
+  { id: 104, slug: "the-forgotten", image: nrImg4, rating: "8.9" },
+  { id: 105, slug: "iron-will", image: nrImg5, rating: "9.1" },
+  { id: 106, slug: "cloud-atlas", image: nrImg6, rating: "9.3" },
 ];
 
 export function NewReleasesSection() {
@@ -61,13 +62,10 @@ export function NewReleasesSection() {
           </button>
           <div ref={scrollRef} className="flex gap-5 overflow-x-auto pb-4" style={{ scrollbarWidth: "none" }}>
             {newShows.map((show, idx) => (
-            <motion.div
+            <Link
               key={show.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.08 }}
-              className="group flex-shrink-0 w-[260px] md:w-[280px] cursor-pointer"
+              to={`/drama/${show.slug}`}
+              className="group flex-shrink-0 w-[260px] md:w-[280px] cursor-pointer block"
             >
               <div className="relative rounded-xl overflow-hidden mb-3 aspect-[3/4]">
                 <ImageWithFallback src={show.image} alt={show.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" decoding="async" />
@@ -97,7 +95,7 @@ export function NewReleasesSection() {
                 </span>
                 <span className="text-gray-500" style={{ fontSize: "0.8rem" }}>{show.genre}</span>
               </div>
-            </motion.div>
+            </Link>
           ))}
           </div>
         </div>

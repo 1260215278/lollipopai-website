@@ -2,8 +2,10 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { Loader2, Film, Play } from "lucide-react";
 import { useI18n, type Locale } from "../i18n";
+import { applyCustomSeoMeta, setPageSchema, clearPageSchema } from "../i18n.seo";
 import { Footer } from "../components/Footer";
-import { SiteHeader, type SiteNavItem } from "../components/SiteHeader";
+import { SiteHeader } from "../components/SiteHeader";
+import { useNavItems } from "../components/useNavItems";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { ApiError } from "../services/http";
 import {
@@ -12,7 +14,6 @@ import {
   type PublisherProfile,
   type PublisherProfileCourse,
 } from "../services/publisher";
-import { useDistributionEntryNavigation } from "../distribution/entryNavigation";
 
 /** 公开主页文案（4 语言，仿 i18n.login 独立字典；本页为最简公开页，待 figma 后再细化）。 */
 const profileMessages: Record<Locale, { dramas: string; plays: string; empty: string; notFound: string; loadMore: string }> = {
@@ -83,6 +84,41 @@ export function CreatorProfilePage() {
       alive = false;
     };
   }, [userId]);
+
+  // SEO: 动态设置 meta + Person Schema（创作者公开主页可被搜索引擎索引）
+  useEffect(() => {
+    if (notFound || !profile) {
+      clearPageSchema();
+      return;
+    }
+
+    const canonicalPath = `/creator/${userId}`;
+    applyCustomSeoMeta(
+      {
+        title: `${profile.userName} — Short Drama Creator | Lollipop AI`,
+        description: `Explore ${profile.userName}'s short dramas on Lollipop AI. ${profile.totalDramas} published dramas with ${formatCount(profile.totalPlays)} total plays. Watch premium AI and live-action short dramas.`,
+      },
+      canonicalPath,
+    );
+
+    setPageSchema({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: profile.userName,
+      url: `https://www.lollipop.im/creator/${userId}`,
+      image: profile.avatar,
+      jobTitle: "Short Drama Creator",
+      worksFor: {
+        "@type": "Organization",
+        name: "Lollipop AI",
+        url: "https://www.lollipop.im",
+      },
+      description: `Short drama creator on Lollipop AI with ${profile.totalDramas} published dramas and ${formatCount(profile.totalPlays)} total plays.`,
+      knowsAbout: ["Short Drama", "AI Content Creation", "Video Production"],
+    });
+
+    return () => clearPageSchema();
+  }, [profile, notFound, userId]);
 
   return (
     <ErrorBoundary>
@@ -186,16 +222,8 @@ export function CreatorProfilePage() {
 }
 
 function ProfileHeader() {
-  const { messages } = useI18n();
   const navigate = useNavigate();
-  const enterDistribution = useDistributionEntryNavigation();
-  const links = messages.navbar.links;
-  const navItems: SiteNavItem[] = [
-    { key: "home", label: links.home, onClick: () => navigate("/") },
-    { key: "creating", label: links.creating, onClick: () => navigate("/creating") },
-    { key: "distribution", label: messages.distribution.nav.entry, onClick: enterDistribution },
-    { key: "download", label: links.download, onClick: () => navigate("/download") },
-    { key: "contact", label: links.contact, onClick: () => navigate("/contact") },
-  ];
+  const navItems = useNavItems();
+
   return <SiteHeader navItems={navItems} onLogoClick={() => navigate("/")} sticky />;
 }

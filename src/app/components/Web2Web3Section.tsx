@@ -20,7 +20,8 @@ const statAssets = [
 ];
 
 function AnimatedCounter({ end, suffix, inView }: { end: number; suffix: string; inView: boolean }) {
-  const [count, setCount] = useState(0);
+  // SSR 直接渲染终值，避免爬虫看到 0；客户端做计数动画（suppressHydrationWarning 屏蔽初值差异）
+  const [count, setCount] = useState(typeof window === "undefined" ? end : 0);
   useEffect(() => {
     if (!inView) return;
     let frame: number;
@@ -35,7 +36,7 @@ function AnimatedCounter({ end, suffix, inView }: { end: number; suffix: string;
     frame = requestAnimationFrame(step);
     return () => cancelAnimationFrame(frame);
   }, [inView, end]);
-  return <>{count}{suffix}</>;
+  return <span suppressHydrationWarning>{count}{suffix}</span>;
 }
 
 export function Web2Web3Section() {

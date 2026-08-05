@@ -4,7 +4,8 @@ import { TrendingUp, Users, DollarSign, Award, ArrowRight } from "lucide-react";
 import { useI18n } from "../i18n";
 
 function Counter({ target, suffix }: { target: number; suffix: string }) {
-  const [count, setCount] = useState(0);
+  // SSR 直接渲染终值，避免爬虫看到 0；客户端做计数动画（suppressHydrationWarning 屏蔽初值差异）
+  const [count, setCount] = useState(typeof window === "undefined" ? target : 0);
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true });
   useEffect(() => {
@@ -17,7 +18,7 @@ function Counter({ target, suffix }: { target: number; suffix: string }) {
     }, 16);
     return () => clearInterval(t);
   }, [inView, target]);
-  return <span className="font-[Inter]" ref={ref}>{count.toLocaleString()}{suffix}</span>;
+  return <span className="font-[Inter]" ref={ref} suppressHydrationWarning>{count.toLocaleString()}{suffix}</span>;
 }
 
 const statAssets = [

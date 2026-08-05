@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { Link } from "react-router";
 import { motion } from "motion/react";
 import { Star, Heart, ChevronLeft, ChevronRight, Flame, Trophy } from "lucide-react";
 import img1 from "../../imports/Temptation_CEO.jpg";
@@ -10,12 +11,12 @@ import img6 from "../../imports/Why_jump_off_the_building.jpg";
 import { useI18n } from "../i18n";
 
 const showAssets = [
-  { id: 1, image: img1, rank: 1, rating: "9.8" },
-  { id: 2, image: img2, rank: 2, rating: "9.5" },
-  { id: 3, image: img3, rank: 3, rating: "9.6" },
-  { id: 4, image: img4, rank: 4, rating: "9.1" },
-  { id: 5, image: img5, rank: 5, rating: "9.0" },
-  { id: 6, image: img6, rank: 6, rating: "9.4" },
+  { id: 1, slug: "temptation-ceo", image: img1, rank: 1, rating: "9.8" },
+  { id: 2, slug: "the-bride-who-fell-from-the-sky", image: img2, rank: 2, rating: "9.5" },
+  { id: 3, slug: "the-revenge-of-the-plus-size-wife", image: img3, rank: 3, rating: "9.6" },
+  { id: 4, slug: "my-royal-alpha-boyfriend", image: img4, rank: 4, rating: "9.1" },
+  { id: 5, slug: "dark-secrets", image: img5, rank: 5, rating: "9.0" },
+  { id: 6, slug: "why-jump-off-the-building", image: img6, rank: 6, rating: "9.4" },
 ];
 
 const rankColors: Record<number, string> = { 1: "from-yellow-500 to-amber-600", 2: "from-gray-300 to-gray-500", 3: "from-orange-600 to-amber-800" };
@@ -67,13 +68,10 @@ export function TrendingSection() {
           </button>
           <div ref={scrollRef} className="flex gap-5 overflow-x-auto pb-4" style={{ scrollbarWidth: "none" }}>
             {shows.map((show, idx) => (
-              <motion.div
+              <Link
                 key={show.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.08 }}
-                className="group flex-shrink-0 w-[260px] md:w-[280px] cursor-pointer"
+                to={`/drama/${show.slug}`}
+                className="group flex-shrink-0 w-[260px] md:w-[280px] cursor-pointer block"
               >
                 <div className="relative rounded-xl overflow-hidden mb-3 aspect-[3/4]">
                   <img src={show.image} alt={show.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" decoding="async" />
@@ -111,7 +109,7 @@ export function TrendingSection() {
                   </span>
                   <span className="text-gray-500" style={{ fontSize: "0.8rem" }}>{show.genre}</span>
                 </div>
-              </motion.div>
+              </Link>
             ))}
           </div>
         </div>

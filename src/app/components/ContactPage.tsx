@@ -134,8 +134,7 @@ export function ContactPage({ onNavigate }: { onNavigate: (page: string) => void
               </div>
               <h3 className="text-white mt-5" style={{ fontSize: "1.1rem", fontWeight: 700, lineHeight: "26.4px" }}>{card.title}</h3>
               <a
-                href="#"
-                onClick={(e) => e.preventDefault()}
+                href={`mailto:${card.detail}`}
                 className="inline-block text-gray-300 underline underline-offset-2 mt-2"
                 style={{ fontSize: "0.9rem", lineHeight: "21.6px" }}
               >

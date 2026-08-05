@@ -76,11 +76,11 @@ export function SiteHeader({
     if (mobile) {
       const cls = `block w-full text-left py-3 border-b border-white/5 transition-colors ${color}`;
       return item.to ? (
-        <Link key={item.key} to={item.to} onClick={close} className={cls} style={{ fontSize: "0.9rem", fontWeight: 500 }}>
+        <Link key={item.key} to={item.to} onClick={() => { close(); item.onClick?.(); }} className={cls} style={{ fontSize: "0.9rem", fontWeight: 700 }}>
           {item.label}
         </Link>
       ) : (
-        <button key={item.key} onClick={() => { close(); item.onClick?.(); }} className={cls} style={{ fontSize: "0.9rem", fontWeight: 500 }}>
+        <button key={item.key} onClick={() => { close(); item.onClick?.(); }} className={cls} style={{ fontSize: "0.9rem", fontWeight: 700 }}>
           {item.label}
         </button>
       );
@@ -93,13 +93,16 @@ export function SiteHeader({
       />
     );
     const cls = `transition-colors relative group cursor-pointer ${color}`;
+    // 优先使用 to（渲染为 <a href>，利于爬虫抓取）；onClick 作为增强（如登录态判断）保留。
+    // 当存在 onClick 时，Link 的 onClick 会拦截导航——若需默认跳转则调用 navigate(to)。
+    // 但此处 onClick 都是导航类逻辑（enterDistribution / go 等），会自动 navigate，无需额外处理。
     return item.to ? (
-      <Link key={item.key} to={item.to} className={cls} style={{ fontSize: "0.9rem", fontWeight: 500 }}>
+      <Link key={item.key} to={item.to} onClick={item.onClick} className={cls} style={{ fontSize: "0.9rem", fontWeight: 700 }}>
         {item.label}
         {underline}
       </Link>
     ) : (
-      <button key={item.key} onClick={item.onClick} className={cls} style={{ fontSize: "0.9rem", fontWeight: 500 }}>
+      <button key={item.key} onClick={item.onClick} className={cls} style={{ fontSize: "0.9rem", fontWeight: 700 }}>
         {item.label}
         {underline}
       </button>
@@ -115,12 +118,12 @@ export function SiteHeader({
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <button onClick={onLogoClick} className="flex items-center gap-2.5 cursor-pointer">
+        <Link to="/" onClick={onLogoClick} className="flex items-center gap-2.5 cursor-pointer">
           <img src={logoImg} alt="Lollipop" className="h-9 w-auto rounded-[8px]" />
           <span className="text-white tracking-wide" style={{ fontSize: "1.3rem", fontWeight: 700 }}>
             {messages.common.brand}
           </span>
-        </button>
+        </Link>
 
         {/* Desktop Nav */}
         <div className="hidden lg:flex items-center gap-8">{navItems.map((i) => renderNavItem(i))}</div>

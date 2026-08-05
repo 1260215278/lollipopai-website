@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { distributionMessages } from "./distribution/i18n.distribution";
 import { loginMessages } from "./i18n.login";
-import { applySeoMeta, seoMessages } from "./i18n.seo";
+import { applySeoMeta, getPageSeo } from "./i18n.seo";
 
 export type Locale = "zh-TW" | "zh-CN" | "en" | "pt";
 
@@ -50,6 +50,7 @@ const enMessages = {
       home: "Home",
       creating: "Creating",
       download: "Download",
+      blog: "Blog",
       contact: "Contact",
     },
     signUp: "Sign Up",
@@ -66,6 +67,7 @@ const enMessages = {
       { label: "Global Users" },
       { label: "Countries & Regions" },
     ],
+    quickLinks: { blog: "Blog", genres: "Genres", popular: "Popular", aiTools: "AI Tools" },
   },
   trending: {
     eyebrow: "Trending Now",
@@ -87,7 +89,7 @@ const enMessages = {
     badge: "NEW",
     shows: [
       { title: "Crimson Dynasty", genre: "Historical · Power", meta: "45 EP" },
-      { title: "Neon Abyss", genre: "Ficção Científica · Thriller", meta: "36 EP" },
+      { title: "Neon Abyss", genre: "Sci-Fi · Thriller", meta: "36 EP" },
       { title: "Whispered Love", genre: "Romance · Drama", meta: "55 EP" },
       { title: "The Forgotten", genre: "Mystery · Suspense", meta: "40 EP" },
       { title: "Iron Will", genre: "Action · Martial Arts", meta: "48 EP" },
@@ -129,7 +131,7 @@ const enMessages = {
       { name: "Fantasy", count: "120+ Shows" },
       { name: "Action", count: "90+ Shows" },
       { name: "Horror", count: "85+ Shows" },
-      { name: "Ficção Científica", count: "75+ Shows" },
+      { name: "Sci-Fi", count: "75+ Shows" },
       { name: "Family", count: "110+ Shows" },
       { name: "Historical", count: "95+ Shows" },
     ],
@@ -321,14 +323,69 @@ const enMessages = {
     links: {
       home: "Home",
       aboutUs: "About Us",
+      creating: "Creating",
       download: "Download",
       contactUs: "Contact Us",
     },
     address: "3 GAMBAS CRESCENT, #04-01, NORDCOM ONE, SINGAPORE 757088",
-  },
-  videoModal: {
-    title: "Preview Coming Soon",
+    },
+    videoModal: {
+      title: "Preview Coming Soon",
     description: "Full episode available in the app",
+  },
+  dynamicPages: {
+    backToHome: "Back to Home",
+    home: "Home",
+    blog: "Blog",
+    genres: "Genres",
+    backToBlog: "Back to Blog",
+    explore: "Explore",
+    notFoundGenre: "Genre not found.",
+    notFoundDrama: "Drama not found.",
+    notFoundRegion: "Region not found.",
+    notFoundArticle: "Article not found.",
+    shortDrames: "Short Dramas",
+    exploreOtherGenres: "Explore Other Genres",
+    moreDramasComingSoon: "More {0} dramas coming soon. Check back weekly for new releases!",
+    ep: "EP",
+    synopsis: "Synopsis",
+    relatedDramas: "Related Dramas You Might Like",
+    watchOnLollipop: "Watch on Lollipop AI",
+    downloadApp: "Download App",
+    views: "views",
+    episodes: "episodes",
+    market: "Market",
+    shortDramasIn: "Short Dramas in {0}",
+    popularIn: "Popular in {0}",
+    paymentMethodsIn: "Payment Methods in {0}",
+    localTips: "Local Tips",
+    startWatchingIn: "Start Watching in {0}",
+    downloadFree: "Download Free",
+    availableInOtherRegions: "Available in Other Regions",
+    lollipopBlog: "Lollipop AI Blog",
+    insightsGuidesTrends: "Insights, Guides & Trends",
+    blogDescription: "Deep dives into AI short dramas, the creator economy, and the future of mobile entertainment.",
+    allPosts: "All Posts",
+    industryInsights: "Industry Insights",
+    creatorEconomy: "Creator Economy",
+    creatorGuides: "Creator Guides",
+    readMore: "Read more",
+    updated: "Updated:",
+    previous: "Previous",
+    next: "Next",
+    downloadAppDesc: "Download Lollipop AI and enjoy 5,000+ premium short dramas. Free to download, no subscription required to start.",
+    organizationName: "Lollipop AI",
+    howToSteps: [
+      { name: "Write Your Script", text: "Write a compelling story with 1-3 minute episodes. Focus on a single dramatic question per episode with cliffhanger endings." },
+      { name: "Design Your Characters", text: "Use LunoTV 1.5 text-to-image tool to create character designs from text descriptions. Maintain consistency across episodes." },
+      { name: "Generate Your Scenes", text: "Use text-to-video tool with detailed prompts describing setting, action, and mood to generate video clips." },
+      { name: "Add Voice and Music", text: "Record voice acting or collaborate with voice actors. Add background music from Lollipop AI royalty-free library." },
+      { name: "Edit and Polish", text: "Use video-to-video tool for consistent visual styles. Add transitions, subtitles, and episode titles." },
+      { name: "Publish on Lollipop AI", text: "Upload through creator distribution center. Add title, thumbnail, synopsis, and genre tags." },
+      { name: "Promote Your Drama", text: "Share on social media, engage with viewers, collaborate with other creators. Focus on engagement to boost algorithmic promotion." },
+    ],
+    howToTotalTime: "PT2H",
+    relatedPosts: "Related Posts",
   },
   distribution: distributionMessages.en,
   login: loginMessages.en,
@@ -374,6 +431,7 @@ const translations: Record<Locale, TranslationMessages> = {
         home: "首页",
         creating: "创作", // TODO(verify) Creating 中文用词
         download: "下载",
+        blog: "博客",
         contact: "联系我们",
       },
       signUp: "注册",
@@ -390,6 +448,7 @@ const translations: Record<Locale, TranslationMessages> = {
         { label: "全球用户" },
         { label: "国家和地区" },
       ],
+      quickLinks: { blog: "博客", genres: "分类", popular: "热门", aiTools: "AI 工具" },
     },
     trending: {
       eyebrow: "热门趋势",
@@ -645,6 +704,7 @@ const translations: Record<Locale, TranslationMessages> = {
       links: {
         home: "首页",
         aboutUs: "关于我们",
+        creating: "创作",
         download: "下载",
         contactUs: "联系我们",
       },
@@ -653,6 +713,60 @@ const translations: Record<Locale, TranslationMessages> = {
     videoModal: {
       title: "预告即将上线",
       description: "完整剧集请在 App 内观看",
+    },
+    dynamicPages: {
+      backToHome: "返回首页",
+      home: "首页",
+      blog: "博客",
+      genres: "品类",
+      backToBlog: "返回博客",
+      explore: "探索",
+      notFoundGenre: "未找到该品类。",
+      notFoundDrama: "未找到该剧集。",
+      notFoundRegion: "未找到该地区。",
+      notFoundArticle: "未找到该文章。",
+      shortDrames: "短剧",
+      exploreOtherGenres: "探索其他品类",
+      moreDramasComingSoon: "更多{0}短剧即将上线，敬请期待每周更新！",
+      ep: "集",
+      synopsis: "剧情简介",
+      relatedDramas: "你可能喜欢的剧集",
+      watchOnLollipop: "在 Lollipop AI 观看",
+      downloadApp: "下载 App",
+      views: "次观看",
+      episodes: "集",
+      market: "市场",
+      shortDramasIn: "{0}短剧",
+      popularIn: "{0}热门剧集",
+      paymentMethodsIn: "{0}支付方式",
+      localTips: "本地提示",
+      startWatchingIn: "在{0}开始观看",
+      downloadFree: "免费下载",
+      availableInOtherRegions: "可用的其他地区",
+      lollipopBlog: "Lollipop AI 博客",
+      insightsGuidesTrends: "洞察、指南与趋势",
+      blogDescription: "深入探讨 AI 短剧、创作者经济和移动娱乐的未来。",
+      allPosts: "全部文章",
+      industryInsights: "行业洞察",
+      creatorEconomy: "创作者经济",
+      creatorGuides: "创作者指南",
+      readMore: "阅读更多",
+      updated: "更新于：",
+      previous: "上一篇",
+      next: "下一篇",
+      downloadAppDesc: "下载 Lollipop AI，畅享 5,000+ 精品短剧。免费下载，无需订阅即可开始观看。",
+      organizationName: "Lollipop AI",
+      howToSteps: [
+        { name: "编写剧本", text: "创作一个 1-3 分钟每集的引人入胜的故事。每集聚焦一个戏剧性疑问，结尾留下悬念。" },
+        { name: "设计角色", text: "使用 LunoTV 1.5 文生图工具，通过文字描述生成角色设计。保持跨集角色一致性。" },
+        { name: "生成场景", text: "使用文生视频工具，通过描述场景、动作和氛围的详细提示词生成视频片段。" },
+        { name: "添加配音与音乐", text: "自行录制配音或与声优合作。从 Lollipop AI 免版税音乐库添加背景音乐。" },
+        { name: "剪辑与润色", text: "使用视频转视频工具保持一致的视觉风格。添加转场、字幕和剧集标题。" },
+        { name: "发布到 Lollipop AI", text: "通过创作者分发中心上传。添加标题、缩略图、剧情简介和类型标签。" },
+        { name: "推广你的短剧", text: "在社交媒体分享，与观众互动，与其他创作者合作。专注互动以提升算法推荐。" },
+      ],
+      howToTotalTime: "PT2H",
+      relatedPosts: "相关文章",
     },
     distribution: distributionMessages["zh-CN"],
     login: loginMessages["zh-CN"],
@@ -693,6 +807,7 @@ const translations: Record<Locale, TranslationMessages> = {
         home: "首頁",
         creating: "創作", // TODO(verify) Creating 中文用詞
         download: "下載",
+        blog: "部落格",
         contact: "聯絡我們",
       },
       signUp: "註冊",
@@ -709,6 +824,7 @@ const translations: Record<Locale, TranslationMessages> = {
         { label: "全球用戶" },
         { label: "國家與地區" },
       ],
+      quickLinks: { blog: "部落格", genres: "分類", popular: "熱門", aiTools: "AI 工具" },
     },
     trending: {
       eyebrow: "熱門趨勢",
@@ -964,6 +1080,7 @@ const translations: Record<Locale, TranslationMessages> = {
       links: {
         home: "首頁",
         aboutUs: "關於我們",
+        creating: "創作",
         download: "下載",
         contactUs: "聯絡我們",
       },
@@ -972,6 +1089,60 @@ const translations: Record<Locale, TranslationMessages> = {
     videoModal: {
       title: "預告即將上線",
       description: "完整劇集請在 App 內觀看",
+    },
+    dynamicPages: {
+      backToHome: "返回首頁",
+      home: "首頁",
+      blog: "部落格",
+      genres: "品類",
+      backToBlog: "返回部落格",
+      explore: "探索",
+      notFoundGenre: "未找到該品類。",
+      notFoundDrama: "未找到該劇集。",
+      notFoundRegion: "未找到該地區。",
+      notFoundArticle: "未找到該文章。",
+      shortDrames: "短劇",
+      exploreOtherGenres: "探索其他品類",
+      moreDramasComingSoon: "更多{0}短劇即將上線，敬請期待每週更新！",
+      ep: "集",
+      synopsis: "劇情簡介",
+      relatedDramas: "你可能喜歡的劇集",
+      watchOnLollipop: "在 Lollipop AI 觀看",
+      downloadApp: "下載 App",
+      views: "次觀看",
+      episodes: "集",
+      market: "市場",
+      shortDramasIn: "{0}短劇",
+      popularIn: "{0}熱門劇集",
+      paymentMethodsIn: "{0}支付方式",
+      localTips: "本地提示",
+      startWatchingIn: "在{0}開始觀看",
+      downloadFree: "免費下載",
+      availableInOtherRegions: "可用的其他地區",
+      lollipopBlog: "Lollipop AI 部落格",
+      insightsGuidesTrends: "洞察、指南與趨勢",
+      blogDescription: "深入探討 AI 短劇、創作者經濟和行動娛樂的未來。",
+      allPosts: "全部文章",
+      industryInsights: "行業洞察",
+      creatorEconomy: "創作者經濟",
+      creatorGuides: "創作者指南",
+      readMore: "閱讀更多",
+      updated: "更新於：",
+      previous: "上一篇",
+      next: "下一篇",
+      downloadAppDesc: "下載 Lollipop AI，暢享 5,000+ 精品短劇。免費下載，無需訂閱即可開始觀看。",
+      organizationName: "Lollipop AI",
+      howToSteps: [
+        { name: "編寫劇本", text: "創作一個 1-3 分鐘每集的引人入勝的故事。每集聚焦一個戲劇性疑問，結尾留下懸念。" },
+        { name: "設計角色", text: "使用 LunoTV 1.5 文生圖工具，透過文字描述生成角色設計。保持跨集角色一致性。" },
+        { name: "生成場景", text: "使用文生視頻工具，透過描述場景、動作和氛圍的詳細提示詞生成影片片段。" },
+        { name: "添加配音與音樂", text: "自行錄製配音或與聲優合作。從 Lollipop AI 免版稅音樂庫添加背景音樂。" },
+        { name: "剪輯與潤色", text: "使用影片轉影片工具保持一致的視覺風格。添加轉場、字幕和劇集標題。" },
+        { name: "發佈到 Lollipop AI", text: "透過創作者分發中心上傳。添加標題、縮圖、劇情簡介和類型標籤。" },
+        { name: "推廣你的短劇", text: "在社群媒體分享，與觀眾互動，與其他創作者合作。專注互動以提升演算法推薦。" },
+      ],
+      howToTotalTime: "PT2H",
+      relatedPosts: "相關文章",
     },
     distribution: distributionMessages["zh-TW"],
     login: loginMessages["zh-TW"],
@@ -1012,6 +1183,7 @@ const translations: Record<Locale, TranslationMessages> = {
         home: "Início",
         creating: "Criação", // TODO(verify) Creating 葡译
         download: "Baixar",
+        blog: "Blog",
         contact: "Contato",
       },
       signUp: "Cadastrar",
@@ -1028,6 +1200,7 @@ const translations: Record<Locale, TranslationMessages> = {
         { label: "Usuários Globais" },
         { label: "Países e Regiões" },
       ],
+      quickLinks: { blog: "Blog", genres: "Categorias", popular: "Populares", aiTools: "IA" },
     },
     trending: {
       eyebrow: "Em Alta Agora",
@@ -1283,6 +1456,7 @@ const translations: Record<Locale, TranslationMessages> = {
       links: {
         home: "Início",
         aboutUs: "Sobre Nós",
+        creating: "Criação",
         download: "Download",
         contactUs: "Fale Conosco",
       },
@@ -1291,6 +1465,60 @@ const translations: Record<Locale, TranslationMessages> = {
     videoModal: {
       title: "Prévia em breve",
       description: "Episódio completo disponível no app",
+    },
+    dynamicPages: {
+      backToHome: "Voltar ao Início",
+      home: "Início",
+      blog: "Blog",
+      genres: "Gêneros",
+      backToBlog: "Voltar ao Blog",
+      explore: "Explorar",
+      notFoundGenre: "Gênero não encontrado.",
+      notFoundDrama: "Drama não encontrado.",
+      notFoundRegion: "Região não encontrada.",
+      notFoundArticle: "Artigo não encontrado.",
+      shortDrames: "Dramas Curtos",
+      exploreOtherGenres: "Explorar Outros Gêneros",
+      moreDramasComingSoon: "Mais dramas de {0} em breve. Volte semanalmente para novos lançamentos!",
+      ep: "EP",
+      synopsis: "Sinopse",
+      relatedDramas: "Dramas Relacionados Que Você Pode Gostar",
+      watchOnLollipop: "Assistir no Lollipop AI",
+      downloadApp: "Baixar App",
+      views: "visualizações",
+      episodes: "episódios",
+      market: "Mercado",
+      shortDramasIn: "Dramas Curtos em {0}",
+      popularIn: "Popular em {0}",
+      paymentMethodsIn: "Formas de Pagamento em {0}",
+      localTips: "Dicas Locais",
+      startWatchingIn: "Comece a Assistir em {0}",
+      downloadFree: "Baixar Grátis",
+      availableInOtherRegions: "Disponível em Outras Regiões",
+      lollipopBlog: "Blog do Lollipop AI",
+      insightsGuidesTrends: "Insights, Guias e Tendências",
+      blogDescription: "Análises profundas sobre dramas curtos com IA, economia de criadores e o futuro do entretenimento móvel.",
+      allPosts: "Todos os Posts",
+      industryInsights: "Insights da Indústria",
+      creatorEconomy: "Economia de Criadores",
+      creatorGuides: "Guias para Criadores",
+      readMore: "Ler mais",
+      updated: "Atualizado:",
+      previous: "Anterior",
+      next: "Próximo",
+      downloadAppDesc: "Baixe o Lollipop AI e desfrute de 5.000+ dramas curtos premium. Download gratuito, sem assinatura necessária para começar.",
+      organizationName: "Lollipop AI",
+      howToSteps: [
+        { name: "Escreva seu Roteiro", text: "Crie uma história envolvente com episódios de 1-3 minutos. Concentre-se em uma única questão dramática por episódio com finais de suspense." },
+        { name: "Desenhe seus Personagens", text: "Use a ferramenta de texto para imagem LunoTV 1.5 para criar designs de personagens a partir de descrições textuais. Mantenha a consistência entre episódios." },
+        { name: "Gere suas Cenas", text: "Use a ferramenta de texto para vídeo com prompts detalhados descrevendo cenário, ação e atmosfera para gerar clipes de vídeo." },
+        { name: "Adicione Voz e Música", text: "Grave dublagem ou colabore com dubladores. Adicione música de fundo da biblioteca livre de royalties do Lollipop AI." },
+        { name: "Edite e Refine", text: "Use a ferramenta de vídeo para vídeo para estilos visuais consistentes. Adicione transições, legendas e títulos de episódios." },
+        { name: "Publique no Lollipop AI", text: "Faça upload pelo centro de distribuição de criadores. Adicione título, miniatura, sinopse e tags de gênero." },
+        { name: "Promova seu Drama", text: "Compartilhe nas redes sociais, interaja com espectadores, colabore com outros criadores. Foque no engajamento para impulsionar a promoção algorítmica." },
+      ],
+      howToTotalTime: "PT2H",
+      relatedPosts: "Artigos Relacionados",
     },
     distribution: distributionMessages.pt,
     login: loginMessages.pt,
@@ -1368,6 +1596,18 @@ function getInitialLocale(): Locale {
     return "en";
   }
 
+  // 1. 优先读取 URL ?lang= 参数（GEO: 让搜索引擎爬虫通过 hreflang 链接进入对应语言版本）
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const urlLang = params.get("lang");
+    if (urlLang && isLocale(urlLang)) {
+      return urlLang;
+    }
+  } catch {
+    // Ignore URL parse failures
+  }
+
+  // 2. 读取 localStorage
   try {
     const savedLocale = window.localStorage.getItem(STORAGE_KEY);
     if (savedLocale && isLocale(savedLocale)) {
@@ -1377,6 +1617,7 @@ function getInitialLocale(): Locale {
     // Ignore storage failures and fall back to browser language.
   }
 
+  // 3. 浏览器语言
   return normalizeLocale(window.navigator.languages?.[0] ?? window.navigator.language);
 }
 
@@ -1395,8 +1636,23 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     }
 
     document.documentElement.lang = locale;
-    // 切换语言时同步 SEO title / description / keywords / Open Graph
-    applySeoMeta(seoMessages[locale] ?? seoMessages.en);
+
+    // 同步 URL ?lang= 参数（replaceState 避免历史栈污染）
+    try {
+      const url = new URL(window.location.href);
+      if (locale === "en" && !url.searchParams.has("lang")) {
+        // 默认语言不添加参数，保持干净 URL
+      } else {
+        url.searchParams.set("lang", locale);
+      }
+      window.history.replaceState(null, "", url.toString());
+    } catch {
+      // Ignore URL update failures
+    }
+
+    // 切换语言时同步 SEO title / description / Open Graph
+    // 默认设置首页 SEO，各页面组件会通过 applySeoMeta 覆盖为页面专属 meta
+    applySeoMeta(getPageSeo("home", locale), "home");
   }, [locale]);
 
   const currentLanguage = localeOptions.find((item) => item.code === locale) ?? localeOptions[2];

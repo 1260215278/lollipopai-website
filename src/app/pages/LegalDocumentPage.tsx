@@ -8,9 +8,10 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Loader2 } from "lucide-react";
 import { useI18n } from "../i18n";
+import { applySeoMeta, getPageSeo, setPageSchema, clearPageSchema, type PageType } from "../i18n.seo";
 import { Footer } from "../components/Footer";
-import { SiteHeader, type SiteNavItem } from "../components/SiteHeader";
-import { useDistributionEntryNavigation } from "../distribution/entryNavigation";
+import { SiteHeader } from "../components/SiteHeader";
+import { useNavItems } from "../components/useNavItems";
 import { getLegalDocument, type LegalDocKind } from "../services/legal";
 
 /** 允许渲染的协议 HTML 标签（与发行入驻协议弹窗一致，防 XSS） */
@@ -85,7 +86,6 @@ const richHtmlClassName =
 function LegalDocumentPage({ kind }: { kind: LegalDocKind }) {
   const { messages, locale } = useI18n();
   const navigate = useNavigate();
-  const enterDistribution = useDistributionEntryNavigation();
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
@@ -120,21 +120,29 @@ function LegalDocumentPage({ kind }: { kind: LegalDocKind }) {
   }, [load, locale]);
 
   useEffect(() => {
-    const brand = messages.common.brand;
-    document.title = `${title} · ${brand}`;
-    return () => {
-      // 离开时不强制还原 SEO 主 title；I18nProvider 在语言变更时会写回
-    };
-  }, [title, messages.common.brand]);
+    const seoPage = kind as PageType;
+    applySeoMeta(getPageSeo(seoPage, locale), seoPage);
 
-  const links = messages.navbar.links;
-  const navItems: SiteNavItem[] = [
-    { key: "home", label: links.home, onClick: () => navigate("/") },
-    { key: "creating", label: links.creating, onClick: () => navigate("/creating") },
-    { key: "distribution", label: messages.distribution.nav.entry, onClick: enterDistribution },
-    { key: "download", label: links.download, onClick: () => navigate("/download") },
-    { key: "contact", label: links.contact, onClick: () => navigate("/contact") },
-  ];
+    // SEO: 法律页面 Schema（WebPage + LegalDocument 标识）
+    setPageSchema({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: title,
+      description: kind === "privacy"
+        ? "Lollipop AI Privacy Policy — how we collect, use, and protect your personal information."
+        : "Lollipop AI Terms of Service — terms and conditions for using the platform.",
+      url: `https://www.lollipop.im/${kind === "privacy" ? "privacy" : "terms"}`,
+      publisher: {
+        "@type": "Organization",
+        name: "Lollipop AI",
+        url: "https://www.lollipop.im",
+      },
+    });
+
+    return () => clearPageSchema();
+  }, [kind, locale, title]);
+
+  const navItems = useNavItems();
 
   const richHtml = sanitizeAgreementHtml(content);
 

@@ -1,14 +1,25 @@
 import { Link } from "react-router";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin, Twitter, Instagram, Youtube, Facebook } from "lucide-react";
 import logoImg from "../../imports/Lollipop1.png";
 import { useI18n } from "../i18n";
 
 export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) {
   const { messages, languages, currentLanguage, setLocale } = useI18n();
   const websiteLinks = [
-    { key: "home", page: "home" },
-    { key: "download", page: "download" },
-    { key: "contactUs", page: "contact" },
+    { key: "home", page: "home", to: "/" },
+    { key: "aboutUs", page: "about", to: "/about" },
+    { key: "creating", page: "creating", to: "/creating" },
+    { key: "download", page: "download", to: "/download" },
+    { key: "contactUs", page: "contact", to: "/contact" },
+  ] as const;
+
+  // Explore links — internal links to genre/blog pages for SEO crawling
+  const exploreLinks = [
+    { label: "Romance Dramas", to: "/genre/romance" },
+    { label: "Thriller Dramas", to: "/genre/thriller" },
+    { label: "CEO Dramas", to: "/genre/ceo-drama" },
+    { label: "Fantasy Dramas", to: "/genre/fantasy" },
+    { label: "Blog", to: "/blog" },
   ] as const;
 
   return (
@@ -22,7 +33,7 @@ export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) 
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
           {/* Contact Column */}
           <div className="mx-[5px] my-[0px]">
             <h4 className="mb-5 text-[#ffffff]" style={{ fontSize: "0.95rem", fontWeight: 700 }}>
@@ -42,6 +53,24 @@ export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) 
                 <span>{messages.footer.address}</span>
               </div>
             </div>
+            {/* Social Media Links — GEO: 提升社交信号可见性 */}
+            <div className="flex items-center gap-4 mt-5">
+              <a href="https://twitter.com/lollipopai" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="text-gray-500 hover:text-white transition-colors">
+                <Twitter className="w-4.5 h-4.5" style={{ width: "1.125rem", height: "1.125rem" }} />
+              </a>
+              <a href="https://www.instagram.com/lollipopai" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-gray-500 hover:text-white transition-colors">
+                <Instagram className="w-4.5 h-4.5" style={{ width: "1.125rem", height: "1.125rem" }} />
+              </a>
+              <a href="https://www.youtube.com/@lollipopai" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="text-gray-500 hover:text-white transition-colors">
+                <Youtube className="w-4.5 h-4.5" style={{ width: "1.125rem", height: "1.125rem" }} />
+              </a>
+              <a href="https://www.facebook.com/lollipopai" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="text-gray-500 hover:text-white transition-colors">
+                <Facebook className="w-4.5 h-4.5" style={{ width: "1.125rem", height: "1.125rem" }} />
+              </a>
+              <a href="https://play.google.com/store/apps/details?id=com.StargetVenturesLLC.hks" target="_blank" rel="noopener noreferrer" aria-label="Google Play" className="text-gray-500 hover:text-white transition-colors" style={{ fontSize: "0.7rem", fontWeight: 600, border: "1px solid rgba(255,255,255,0.1)", borderRadius: "4px", padding: "2px 6px" }}>
+                G Play
+              </a>
+            </div>
           </div>
 
           {/* Website Column */}
@@ -52,20 +81,35 @@ export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) 
             <ul className="space-y-3">
               {websiteLinks.map((item) => (
                 <li key={item.key}>
-                  <a
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (onNavigate) {
-                        onNavigate(item.page);
-                        window.scrollTo({ top: 0, behavior: "smooth" });
-                      }
-                    }}
+                  <Link
+                    to={item.to}
                     className="text-gray-400 hover:text-white transition-colors"
                     style={{ fontSize: "0.85rem" }}
+                    onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                   >
                     {messages.footer.links[item.key]}
-                  </a>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Explore Column — internal links for SEO crawling */}
+          <div className="mx-[10px] my-[0px]">
+            <h4 className="mb-5 text-[#ffffff]" style={{ fontSize: "0.95rem", fontWeight: 700 }}>
+              {messages.dynamicPages.explore}
+            </h4>
+            <ul className="space-y-3">
+              {exploreLinks.map((item) => (
+                <li key={item.to}>
+                  <Link
+                    to={item.to}
+                    className="text-gray-400 hover:text-white transition-colors"
+                    style={{ fontSize: "0.85rem" }}
+                    onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                  >
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>

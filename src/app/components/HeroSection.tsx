@@ -9,7 +9,9 @@ import { useI18n } from "../i18n";
 const bannerImages = [bannerImg, bannerImg2];
 
 function AnimatedCounter({ target, suffix, label }: { target: number; suffix: string; label: string }) {
-  const [count, setCount] = useState(0);
+  // SSR/无 JS 环境下直接渲染终值（真实数字），避免爬虫看到 "0+ / 0M+" 占位；
+  // 客户端首帧从 0 起跳做计数动画。suppressHydrationWarning 屏蔽 SSR/CSR 初值差异告警。
+  const [count, setCount] = useState(typeof window === "undefined" ? target : 0);
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true });
 
@@ -33,7 +35,7 @@ function AnimatedCounter({ target, suffix, label }: { target: number; suffix: st
         fontSize: "clamp(2rem, 5vw, 3.5rem)",
         fontWeight: 900,
         lineHeight: 1.2,
-      }}>
+      }} suppressHydrationWarning>
         {count.toLocaleString()}{suffix}
       </div>
       <p className="text-gray-400 mt-1" style={{ fontSize: "0.85rem" }}>{label}</p>
@@ -110,19 +112,40 @@ export function HeroSection() {
           </a>
         </motion.div>
 
-        {/* Tagline */}
+        {/* Tagline — H1 for SEO（审计报告 P2-14：提升视觉权重） */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.9 }}
           className="text-center mt-8 px-6 z-10 relative"
         >
-          <p className="text-gray-300" style={{ fontSize: "clamp(1rem, 2.5vw, 1.3rem)", lineHeight: 1.8 }}>
+          <h1 className="text-white" style={{ fontSize: "clamp(1.3rem, 3.5vw, 2rem)", lineHeight: 1.6, fontWeight: 700, margin: 0, textShadow: "0 2px 20px rgba(0,0,0,0.8)" }}>
             {messages.hero.taglineLine1}
-          </p>
-          <p className="text-white" style={{ fontSize: "clamp(1.1rem, 2.8vw, 1.5rem)", fontWeight: 700, lineHeight: 1.8 }}>
+          </h1>
+          <p className="bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent" style={{ fontSize: "clamp(1.1rem, 2.8vw, 1.5rem)", fontWeight: 700, lineHeight: 1.8, marginTop: "0.3rem" }}>
             {messages.hero.taglineLine2}
           </p>
+        </motion.div>
+
+        {/* Quick Links — 首页快捷入口（Blog / Genres / Popular / Tools） */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 1.0 }}
+          className="flex flex-wrap items-center justify-center gap-3 mt-5 px-6 z-10 relative"
+        >
+          <a href="/blog" className="px-4 py-2 rounded-full border border-white/20 text-gray-300 hover:text-white hover:border-red-500/50 hover:bg-red-500/10 transition-all text-sm font-medium">
+            {messages.hero.quickLinks?.blog ?? "Blog"}
+          </a>
+          <a href="/genre/romance" className="px-4 py-2 rounded-full border border-white/20 text-gray-300 hover:text-white hover:border-red-500/50 hover:bg-red-500/10 transition-all text-sm font-medium">
+            {messages.hero.quickLinks?.genres ?? "Genres"}
+          </a>
+          <a href="/drama/temptation-ceo" className="px-4 py-2 rounded-full border border-white/20 text-gray-300 hover:text-white hover:border-red-500/50 hover:bg-red-500/10 transition-all text-sm font-medium">
+            {messages.hero.quickLinks?.popular ?? "Popular"}
+          </a>
+          <a href="/creating" className="px-4 py-2 rounded-full bg-gradient-to-r from-red-500/20 to-orange-500/20 border border-red-500/30 text-white hover:border-red-400 hover:bg-red-500/30 transition-all text-sm font-medium">
+            {messages.hero.quickLinks?.aiTools ?? "AI Tools"}
+          </a>
         </motion.div>
 
       </section>

@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Send, Loader2, CheckCircle2, ArrowRight, X, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { useI18n, type Locale } from "../../i18n";
+import { applyNoIndexMeta } from "../../i18n.seo";
 import { Footer } from "../../components/Footer";
 import { AreaCodeSelect } from "../../components/AreaCodeSelect";
 import { COUNTRY_CODES } from "../../data/countryCodes";
@@ -164,6 +165,13 @@ export function EnrollPage() {
   const { messages, locale } = useI18n();
   const t = messages.distribution.enroll;
   const navigate = useNavigate();
+
+  // 后台页面 noindex + 动态 title
+  useEffect(() => {
+    const brand = messages.common.brand;
+    const entryLabel = messages.distribution.nav.entry;
+    applyNoIndexMeta(`${entryLabel} | ${brand}`);
+  }, [messages.common.brand, messages.distribution.nav.entry]);
 
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState<PublisherStatus | null>(null);
@@ -545,6 +553,7 @@ function EnrollHeader() {
     { key: "creating", label: links.creating, onClick: () => navigate("/creating") },
     { key: "distribution", label: messages.distribution.nav.entry, active: true },
     { key: "download", label: links.download, onClick: () => navigate("/download") },
+    { key: "blog", label: links.blog, onClick: () => navigate("/blog") },
     { key: "contact", label: links.contact, onClick: () => navigate("/contact") },
   ];
   return <SiteHeader navItems={navItems} onLogoClick={() => navigate("/")} sticky />;

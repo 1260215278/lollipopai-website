@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { motion } from "motion/react";
-import contactHero from "../../imports/figma/contact-hero.png";
-import companyImg from "../../imports/figma/contact-company.png";
-import teamJames from "../../imports/figma/team-james.png";
-import teamSarah from "../../imports/figma/team-sarah.png";
-import teamDavid from "../../imports/figma/team-david.png";
-import teamEmily from "../../imports/figma/team-emily.png";
+import contactHero from "../../imports/figma/contact-hero.webp";
+import companyImg from "../../imports/figma/contact-company.webp";
+import teamJames from "../../imports/figma/team-james.webp";
+import teamSarah from "../../imports/figma/team-sarah.webp";
+import teamDavid from "../../imports/figma/team-david.webp";
+import teamEmily from "../../imports/figma/team-emily.webp";
 import emailIcon from "../../imports/figma/contact-email-icon.svg";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { Footer } from "./Footer";

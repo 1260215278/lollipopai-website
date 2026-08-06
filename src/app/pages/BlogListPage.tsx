@@ -81,7 +81,7 @@ export function BlogListPage() {
         dateModified: p.updateDate,
         image: {
           "@type": "ImageObject",
-          url: `https://www.lollipop.im${p.coverImage ?? "/blog-images/guide.png"}`,
+          url: `https://www.lollipop.im${p.coverImage ?? "/blog-images/guide.webp"}`,
         },
         author: { "@type": "Person", name: p.author, jobTitle: p.authorRole },
         url: `https://www.lollipop.im/blog/${p.slug}`,
@@ -109,7 +109,7 @@ export function BlogListPage() {
         {/* Background */}
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('/blog-images/hero-bg.png')" }}
+          style={{ backgroundImage: "url('/blog-images/hero-bg.webp')" }}
         />
         {/* Gradient Overlay */}
         <div

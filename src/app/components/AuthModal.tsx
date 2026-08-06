@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { X, Mail, Lock, User, Eye, EyeOff } from "lucide-react";
-import logoImg from "../../imports/Lollipop1.png";
+import logoImg from "../../imports/Lollipop1.webp";
 
 export function AuthModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [mode, setMode] = useState<"login" | "register">("login");

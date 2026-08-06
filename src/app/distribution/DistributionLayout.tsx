@@ -45,7 +45,7 @@ import {
 } from "../services/publisher";
 import { getCurrentMember, type CurrentPublisherMember } from "../services/member";
 import type { DistributionNavigationState } from "./entryNavigation";
-import lollipopLogo from "../../imports/Lollipop1.png";
+import lollipopLogo from "../../imports/Lollipop1.webp";
 import { clearDraft, fetchDraftTasks } from "../services/content";
 import {
   clearUploadTasks,

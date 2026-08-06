@@ -14,8 +14,8 @@ import {
   resetPhonePassword,
   resetEmailPassword,
 } from "../services/session";
-import promoImg from "../../imports/login-promo.jpg";
-import appIcon from "../../imports/login-app-icon.png";
+import promoImg from "../../imports/login-promo.webp";
+import appIcon from "../../imports/login-app-icon.webp";
 
 /** 密码最小长度（与 H5 forgetPwd.vue minlength 一致） */
 const PWD_MIN = 6;

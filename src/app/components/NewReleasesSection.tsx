@@ -3,12 +3,12 @@ import { Link } from "react-router";
 import { motion } from "motion/react";
 import { Star, Heart, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
-import nrImg1 from "../../imports/00_(10).jpg";
-import nrImg2 from "../../imports/8d3cfa78f86f48afa8907beb0548cccb.png";
-import nrImg3 from "../../imports/335be7f8c5134bcbb15ac57b627c0d8d.jpg";
-import nrImg4 from "../../imports/00_(6).jpg";
-import nrImg5 from "../../imports/00_(8).jpg";
-import nrImg6 from "../../imports/e4347dc082a84ac0817906e1a68d5b36.png";
+import nrImg1 from "../../imports/00_(10).webp";
+import nrImg2 from "../../imports/8d3cfa78f86f48afa8907beb0548cccb.webp";
+import nrImg3 from "../../imports/335be7f8c5134bcbb15ac57b627c0d8d.webp";
+import nrImg4 from "../../imports/00_(6).webp";
+import nrImg5 from "../../imports/00_(8).webp";
+import nrImg6 from "../../imports/e4347dc082a84ac0817906e1a68d5b36.webp";
 import { useI18n } from "../i18n";
 
 const newShowAssets = [

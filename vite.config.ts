@@ -22,7 +22,10 @@ function figmaAssetResolver() {
 const DEV_API_TARGET = process.env.VITE_DEV_PROXY_TARGET || 'https://www.testshort.top'
 
 export default defineConfig({
-  base: './',
+  // 部署路径。默认根路径 '/'(绝对)，可保证任意深层路由(如 /distribution/enroll)
+  // 刷新直访时，/assets/*.js 始终指向站点根，不会被相对路径 ./assets 误解析成
+  // /distribution/assets/ 而 404 导致黑屏。子路径部署(如 /lollipop/)请设 VITE_BASE=/lollipop/。
+  base: process.env.VITE_BASE || '/',
   plugins: [
     figmaAssetResolver(),
     // The React and Tailwind plugins are both required for Make, even if

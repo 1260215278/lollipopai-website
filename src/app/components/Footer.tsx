@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { Mail, Phone, MapPin, Twitter, Instagram, Youtube, Facebook } from "lucide-react";
-import logoImg from "../../imports/Lollipop1.png";
+import logoImg from "../../imports/Lollipop1.webp";
 import { useI18n } from "../i18n";
 
 export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) {

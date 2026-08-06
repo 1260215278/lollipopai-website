@@ -2,12 +2,12 @@ import { useState, useRef } from "react";
 import { Link } from "react-router";
 import { motion } from "motion/react";
 import { Star, Heart, ChevronLeft, ChevronRight, Flame, Trophy } from "lucide-react";
-import img1 from "../../imports/Temptation_CEO.jpg";
-import img2 from "../../imports/The_bride_who_fell_from_the_sky.jpg";
-import img3 from "../../imports/The_Revenge_of_the_Plus-Size_Wife.jpg";
-import img4 from "../../imports/My_Royal_Alpha_Boyfriend.jpg";
-import img5 from "../../imports/b27eed6c1c08448293fe93a09e75707b.jpg";
-import img6 from "../../imports/Why_jump_off_the_building.jpg";
+import img1 from "../../imports/Temptation_CEO.webp";
+import img2 from "../../imports/The_bride_who_fell_from_the_sky.webp";
+import img3 from "../../imports/The_Revenge_of_the_Plus-Size_Wife.webp";
+import img4 from "../../imports/My_Royal_Alpha_Boyfriend.webp";
+import img5 from "../../imports/b27eed6c1c08448293fe93a09e75707b.webp";
+import img6 from "../../imports/Why_jump_off_the_building.webp";
 import { useI18n } from "../i18n";
 
 const showAssets = [

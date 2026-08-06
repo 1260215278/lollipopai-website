@@ -19,8 +19,8 @@ import {
   sendRegisterEmailCode,
 } from "../services/session";
 import { setLoginName } from "../services/auth";
-import promoImg from "../../imports/login-promo.jpg";
-import appIcon from "../../imports/login-app-icon.png";
+import promoImg from "../../imports/login-promo.webp";
+import appIcon from "../../imports/login-app-icon.webp";
 
 type Mode = "login" | "register";
 type LoginMethod = "password" | "code";

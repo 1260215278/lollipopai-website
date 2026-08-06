@@ -3,18 +3,18 @@
  * 每部剧包含 SEO 文案、剧情简介（300+字）、VideoObject Schema 所需字段。
  */
 
-import imgTemptationCEO from "../../imports/Temptation_CEO.jpg";
-import imgBrideSky from "../../imports/The_bride_who_fell_from_the_sky.jpg";
-import imgRevengePlus from "../../imports/The_Revenge_of_the_Plus-Size_Wife.jpg";
-import imgRoyalAlpha from "../../imports/My_Royal_Alpha_Boyfriend.jpg";
-import imgDarkSecrets from "../../imports/b27eed6c1c08448293fe93a09e75707b.jpg";
-import imgWhyJump from "../../imports/Why_jump_off_the_building.jpg";
-import imgCrimson from "../../imports/00_(10).jpg";
-import imgNeon from "../../imports/8d3cfa78f86f48afa8907beb0548cccb.png";
-import imgWhispered from "../../imports/335be7f8c5134bcbb15ac57b627c0d8d.jpg";
-import imgForgotten from "../../imports/00_(6).jpg";
-import imgIronWill from "../../imports/00_(8).jpg";
-import imgCloudAtlas from "../../imports/e4347dc082a84ac0817906e1a68d5b36.png";
+import imgTemptationCEO from "../../imports/Temptation_CEO.webp";
+import imgBrideSky from "../../imports/The_bride_who_fell_from_the_sky.webp";
+import imgRevengePlus from "../../imports/The_Revenge_of_the_Plus-Size_Wife.webp";
+import imgRoyalAlpha from "../../imports/My_Royal_Alpha_Boyfriend.webp";
+import imgDarkSecrets from "../../imports/b27eed6c1c08448293fe93a09e75707b.webp";
+import imgWhyJump from "../../imports/Why_jump_off_the_building.webp";
+import imgCrimson from "../../imports/00_(10).webp";
+import imgNeon from "../../imports/8d3cfa78f86f48afa8907beb0548cccb.webp";
+import imgWhispered from "../../imports/335be7f8c5134bcbb15ac57b627c0d8d.webp";
+import imgForgotten from "../../imports/00_(6).webp";
+import imgIronWill from "../../imports/00_(8).webp";
+import imgCloudAtlas from "../../imports/e4347dc082a84ac0817906e1a68d5b36.webp";
 
 /** slug → 海报图片映射 */
 const dramaPosters: Record<string, string> = {

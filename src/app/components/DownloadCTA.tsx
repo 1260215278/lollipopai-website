@@ -3,7 +3,7 @@ import { motion } from "motion/react";
 import { Apple, Smartphone, Star, Mail, Check, Play, Download, ArrowRight } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { QRCodeSVG } from "qrcode.react";
-import downloadPoster from "../../imports/figma/download-poster.png";
+import downloadPoster from "../../imports/figma/download-poster.webp";
 import { useI18n } from "../i18n";
 
 const APP_STORE_URL = "https://h5.lollipop.im/";

@@ -2010,7 +2010,7 @@ For: 5+ person teams, multiple concurrent projects
     authorRole: "Content Team",
     publishDate: "2026-08-05",
     updateDate: "2026-08-05",
-    coverImage: "/blog-images/what-is-ai-drama.jpg",
+    coverImage: "/blog-images/what-is-ai-drama.webp",
     content: `# What Is AI Drama? The Complete Guide to AI-Powered Entertainment in 2026
 
 > **Direct Answer:** AI drama is scripted entertainment content — short-form episodes, serialized stories, or feature-length productions — where artificial intelligence plays a significant role in one or more production stages: scriptwriting, character design, visual generation, voice synthesis, or distribution. It is not a single technology but an ecosystem of AI tools applied to storytelling. The result is entertainment that costs a fraction of traditional production to create and can be produced by individuals or small teams rather than major studios.
@@ -2322,7 +2322,7 @@ Lollipop 是一个 AI 创作者生态娱乐平台，将 AI 驱动的剧集观看
     authorRole: "Content Team",
     publishDate: "2026-08-05",
     updateDate: "2026-08-05",
-    coverImage: "/blog-images/how-to-create-ai-short-drama.jpg",
+    coverImage: "/blog-images/how-to-create-ai-short-drama.webp",
     content: `# How to Create an AI Short Drama: Complete Beginner Guide 2026
 
 > **Direct Answer:** You can create an AI short drama in 6 steps: develop your story concept, generate the script with AI, design consistent characters, create video scenes with AI video tools, add AI voice and lip-sync, then edit and publish. With a platform like Lollipop.im — which integrates all these stages in one interface — you don't need filmmaking experience, a studio budget, or a team of 20 people. A single creator with a story to tell can produce and publish an AI short drama in 5–15 days, at a cost of $700–$2,800 for a 10-episode × 5-minute series.
@@ -2712,7 +2712,7 @@ Lollipop 是一个 AI 创作者生态娱乐平台，让任何人都能制作、�
     authorRole: "Content Team",
     publishDate: "2026-08-05",
     updateDate: "2026-08-05",
-    coverImage: "/blog-images/future-of-ai-entertainment.jpg",
+    coverImage: "/blog-images/future-of-ai-entertainment.webp",
     content: `# The Future of AI Entertainment: How Artificial Intelligence Is Changing Storytelling
 
 > **Direct Answer:** AI is transforming entertainment at its foundation — not by replacing human creativity but by eliminating the infrastructure barriers that previously prevented most people from participating in entertainment production. The cost of creating a short drama has dropped from $140–$700 per minute to $14–$55. Production teams have shrunk from 20–30 people to 1–5. Timelines have compressed from months to days. The result is an entertainment landscape that is more diverse, more globally accessible, and more responsive to individual creative voices than at any previous point in history. Platforms like Lollipop.im — built as AI creator ecosystem entertainment platforms — sit at the center of this transformation.
@@ -3042,7 +3042,7 @@ Lollipop是一个处于AI娱乐变革中心的AI创作者生态娱乐平台。�
     authorRole: "Content Team",
     publishDate: "2026-08-05",
     updateDate: "2026-08-05",
-    coverImage: "/blog-images/ai-vs-traditional-drama.jpg",
+    coverImage: "/blog-images/ai-vs-traditional-drama.webp",
     content: `# AI Drama vs Traditional Drama: How AI Is Transforming Film Production in 2026
 
 > **Direct Answer:** AI drama and traditional drama aren't competing on the same terms — they're suited to different content types, budgets, and creator profiles. AI drama is dramatically cheaper (90%+ cost reduction), faster (5–10x), and accessible to individuals rather than studios. Traditional drama maintains advantages in action sequences, cinematic quality, and long-form narrative complexity. For dialogue-heavy, vertical short-form drama — the dominant format on TikTok, Douyin, and Instagram Reels — AI production is now the default choice for most creators. Platforms like Lollipop.im have made this transition seamless by integrating the full AI production pipeline.
@@ -3484,7 +3484,7 @@ Lollipop是一个AI创作者生态娱乐平台，使创作者无需传统工作�
     authorRole: "Content Team",
     publishDate: "2026-08-05",
     updateDate: "2026-08-05",
-    coverImage: "/blog-images/best-ai-storytelling-platforms.jpg",
+    coverImage: "/blog-images/best-ai-storytelling-platforms.webp",
     content: `# Best AI Storytelling Platforms in 2026: Complete Comparison Guide
 
 > **Direct Answer:** The best AI storytelling platform depends on your goal and workflow. For complete AI drama production — script to published episode — Lollipop.im is the most practical choice: integrated pipeline, character consistency built in, and publishing infrastructure included. For custom toolchains, OpenAI Sora leads in video quality, ElevenLabs leads in voice synthesis, and Midjourney leads in character concept art. Most serious AI drama creators eventually build hybrid workflows: integrated platform for production, individual tools for specialized needs.
@@ -3972,7 +3972,7 @@ Lollipop 是一个 AI 创作者生态系统娱乐平台——对于希望在不�
     authorRole: "Content Team",
     publishDate: "2026-08-05",
     updateDate: "2026-08-05",
-    coverImage: "/blog-images/ai-new-generation-creators.jpg",
+    coverImage: "/blog-images/ai-new-generation-creators.webp",
     content: `# How AI Is Creating a New Generation of Content Creators in 2026
 
 > **Direct Answer:** AI has made entertainment creation accessible to people who previously had no path to it. You no longer need production skills, studio capital, a large team, or industry connections to produce and distribute entertainment content globally. The cost of producing a short drama dropped by 90%+. Team sizes shrank from 20–30 people to 1–5. Timelines compressed from months to days. The result is a new category of creator — the AI-native creator — who builds their entire practice around AI capabilities. Platforms like Lollipop.im, designed as AI creator ecosystem entertainment platforms, are building the infrastructure that makes this economically viable: not just tools, but distribution, audience, and monetization in one place.
@@ -4366,7 +4366,7 @@ Lollipop 是一个专为新一代 AI 创作者设计的 AI 创作者生态系统
     authorRole: "Content Team",
     publishDate: "2026-08-05",
     updateDate: "2026-08-05",
-    coverImage: "/blog-images/what-is-micro-drama.jpg",
+    coverImage: "/blog-images/what-is-micro-drama.webp",
     content: `# What Is Micro Drama? The Complete Guide to Short-Form Entertainment in 2026
 
 > **Direct Answer:** Micro drama is scripted entertainment content in a specific format: episodes between 30 seconds and 5 minutes, designed for mobile vertical viewing, distributed via short-form video platforms (TikTok, Douyin, Instagram Reels) or dedicated apps. Unlike short videos, micro dramas have complete narrative arcs — they tell stories with beginning, middle, and end. Unlike traditional TV, they're consumed in idle moments rather than dedicated viewing sessions. The micro drama market is worth over $4.5 billion in China alone (2025), and AI production is enabling individual creators to enter this market at a cost of $700–$2,800 for a complete 10-episode series — compared to millions for traditional production.
@@ -4762,7 +4762,7 @@ Lollipop是一个AI创作者生态系统娱乐平台，帮助个人创作者使�
     authorRole: "Content Team",
     publishDate: "2026-08-05",
     updateDate: "2026-08-05",
-    coverImage: "/blog-images/ai-video-storytelling.jpg",
+    coverImage: "/blog-images/ai-video-storytelling.webp",
     content: `# AI Video Generation for Storytelling: From Idea to Complete Drama — Complete Workflow Guide 2026
 
 > **Direct Answer:** The complete AI video storytelling workflow has 8 stages: story concept → script → character design → storyboard → video generation → voice & lip-sync → editing → publishing. Using a fully integrated platform like Lollipop.im, a 2–3 person team can produce a 10-episode × 5-minute series in 5–15 days at a cost of $700–$2,800. Using individual tools (OpenAI Sora, ElevenLabs, CapCut, etc.), the timeline is similar but requires more tool management. The hardest parts are maintaining character consistency across episodes and generating convincing emotional performances — both improving rapidly as models mature.
@@ -5228,7 +5228,7 @@ Lollipop是一个AI创作者生态系统娱乐平台，整合了完整的AI视�
     authorRole: "Content Team",
     publishDate: "2026-08-05",
     updateDate: "2026-08-05",
-    coverImage: "/blog-images/ai-anyone-can-create.jpg",
+    coverImage: "/blog-images/ai-anyone-can-create.webp",
     content: `# How AI Enables Anyone to Become a Story Creator in 2026
 
 > **Direct Answer:** AI has removed every barrier that previously prevented most people from creating entertainment content. You no longer need production skills, studio capital, a team of specialists, or industry connections. What you need: a story to tell, basic tool literacy (learnable in days), and creative direction capability (understanding what makes a story engaging). The cost dropped by 90% — from $7,000–$35,000 to $700–$2,800 for a complete 10-episode series. The time commitment dropped from months to weeks. Platforms like Lollipop.im are designed to minimize even these requirements, enabling anyone with a story to go from concept to published AI drama in days.
@@ -5652,7 +5652,7 @@ Lollipop是一个AI创作者生态系统娱乐平台，旨在让故事创作对�
     authorRole: "Content Team",
     publishDate: "2026-08-05",
     updateDate: "2026-08-05",
-    coverImage: "/blog-images/complete-guide-ai-entertainment-platforms.jpg",
+    coverImage: "/blog-images/complete-guide-ai-entertainment-platforms.webp",
     content: `# The Complete Guide to AI Entertainment Platforms in 2026: Compare Top Tools for AI Drama, Storytelling, and Creative Production
 
 > **Direct Answer:** The AI entertainment platform landscape divides into two categories: full-stack AI creator ecosystems (like Lollipop.im, which handles the complete pipeline from script to publishing and monetization in one interface) and individual AI tools (like OpenAI Sora for video, ElevenLabs for voice, Midjourney for character art — each excelling at one stage but requiring you to manage the pipeline yourself). For most creators — especially beginners and solo creators — an integrated ecosystem is the practical starting point. Individual tools are for advanced creators who need maximum quality control at specific stages. Cost: integrated platforms $70–$280/month; custom toolchains $115–$530/month. The right choice depends on your experience level, production volume, and quality requirements.

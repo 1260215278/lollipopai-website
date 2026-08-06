@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Menu, X, Globe, User, LogOut, ChevronDown } from "lucide-react";
 import { Link, useNavigate } from "react-router";
-import logoImg from "../../imports/Lollipop1.png";
+import logoImg from "../../imports/Lollipop1.webp";
 import { useI18n } from "../i18n";
 
 /** 客户端挂载标志：SSR 不渲染 <img>，避免预渲染 HTML 中出现未下载图片导致破裂图标闪现 */

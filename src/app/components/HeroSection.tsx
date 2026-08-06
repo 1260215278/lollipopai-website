@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import { motion, useInView } from "motion/react";
 import { Apple, Smartphone } from "lucide-react";
-import bannerImg from "../../imports/banner6.png";
-import bannerImg2 from "../../imports/每日新闻海报1-1.png";
+import bannerImg from "../../imports/banner6.webp";
+import bannerImg2 from "../../imports/hero-banner2.webp";
 import { ParticleBackground } from "./ParticleBackground";
 import { useI18n } from "../i18n";
 

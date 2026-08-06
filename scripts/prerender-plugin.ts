@@ -59,17 +59,17 @@ interface RouteSeoData {
 
 /** P1-3/P1-4: 剧集 slug → 海报图片 basename 映射（用于 og:image 和 VideoObject thumbnailUrl） */
 const dramaPosterBasenames: Record<string, string> = {
-  "temptation-ceo": "Temptation_CEO.jpg",
-  "the-bride-who-fell-from-the-sky": "The_bride_who_fell_from_the_sky.jpg",
-  "the-revenge-of-the-plus-size-wife": "The_Revenge_of_the_Plus-Size_Wife.jpg",
-  "my-royal-alpha-boyfriend": "My_Royal_Alpha_Boyfriend.jpg",
-  "dark-secrets": "b27eed6c1c08448293fe93a09e75707b.jpg",
-  "why-jump-off-the-building": "Why_jump_off_the_building.jpg",
-  "crimson-dynasty": "00_(10).jpg",
+  "temptation-ceo": "Temptation_CEO.webp",
+  "the-bride-who-fell-from-the-sky": "The_bride_who_fell_from_the_sky.webp",
+  "the-revenge-of-the-plus-size-wife": "The_Revenge_of_the_Plus-Size_Wife.webp",
+  "my-royal-alpha-boyfriend": "My_Royal_Alpha_Boyfriend.webp",
+  "dark-secrets": "b27eed6c1c08448293fe93a09e75707b.webp",
+  "why-jump-off-the-building": "Why_jump_off_the_building.webp",
+  "crimson-dynasty": "00_(10).webp",
   "neon-abyss": "8d3cfa78f86f48afa8907beb0548cccb.png",
-  "whispered-love": "335be7f8c5134bcbb15ac57b627c0d8d.jpg",
-  "the-forgotten": "00_(6).jpg",
-  "iron-will": "00_(8).jpg",
+  "whispered-love": "335be7f8c5134bcbb15ac57b627c0d8d.webp",
+  "the-forgotten": "00_(6).webp",
+  "iron-will": "00_(8).webp",
   "cloud-atlas": "e4347dc082a84ac0817906e1a68d5b36.png",
 };
 

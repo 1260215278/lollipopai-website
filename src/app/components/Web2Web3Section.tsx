@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView, useScroll, useTransform } from "motion/react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
-import bgImg from "../../imports/WEB2-WEB3-背景.png";
+import bgImg from "../../imports/web2-web3-bg.webp";
 import { useI18n } from "../i18n";
 
 const floatingTagPositions = [

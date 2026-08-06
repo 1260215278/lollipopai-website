@@ -282,7 +282,7 @@ export function BlogPostPage() {
         url: "https://www.lollipop.im",
         logo: {
           "@type": "ImageObject",
-          url: "https://www.lollipop.im/src/imports/logo.png",
+          url: "https://www.lollipop.im/src/imports/logo.webp",
         },
       },
       mainEntityOfPage: {
@@ -292,7 +292,7 @@ export function BlogPostPage() {
       articleSection: localizedCategoryLabel,
       image: {
         "@type": "ImageObject",
-        url: `https://www.lollipop.im${post.coverImage ?? "/blog-images/guide.png"}`,
+        url: `https://www.lollipop.im${post.coverImage ?? "/blog-images/guide.webp"}`,
       },
       keywords: `${localizedCategoryLabel}, AI short drama, Lollipop AI, ${post.title}`,
       articleBody: stripMarkdown(postContent ?? post.contentZh).slice(0, 500),

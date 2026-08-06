@@ -1,12 +1,12 @@
 import { useEffect, useRef } from "react";
 import { motion, useInView } from "motion/react";
-import bannerBg from "../../imports/关于我们-_banner-背景-1.png";
+import bannerBg from "../../imports/about-banner-bg.webp";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
-import companyImg from "../../imports/压缩图片.png";
-import teamJames from "../../imports/figma/team-james.png";
-import teamSarah from "../../imports/figma/team-sarah.png";
-import teamDavid from "../../imports/figma/team-david.png";
-import teamEmily from "../../imports/figma/team-emily.png";
+import companyImg from "../../imports/about-company-img.webp";
+import teamJames from "../../imports/figma/team-james.webp";
+import teamSarah from "../../imports/figma/team-sarah.webp";
+import teamDavid from "../../imports/figma/team-david.webp";
+import teamEmily from "../../imports/figma/team-emily.webp";
 import { Footer } from "./Footer";
 import { useI18n } from "../i18n";
 

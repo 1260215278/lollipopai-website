@@ -1,4 +1,4 @@
-import type { Locale } from "../../i18n";
+import type { Locale } from "../../i18n-types";
 
 /**
  * 成员管理文案 —— figma 15149-28384 / 28629 / 29755 等。

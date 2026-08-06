@@ -12,7 +12,8 @@
  * 服务器需配置 fallback 到 index.html（SPA 模式不变），但静态文件优先匹配。
  */
 import type { Plugin } from "vite";
-import { createServer } from "vite";
+import { build } from "vite";
+import react from "@vitejs/plugin-react";
 import {
   readFileSync,
   writeFileSync,
@@ -20,8 +21,10 @@ import {
   existsSync,
   readdirSync,
   statSync,
+  rmSync,
 } from "fs";
 import { join, dirname } from "path";
+import { pathToFileURL } from "url";
 import { blogPosts as dataBlogPosts } from "../src/app/data/blog";
 import { blogFaq } from "../src/app/data/blogFaq";
 
@@ -48,7 +51,27 @@ interface RouteSeoData {
   schema?: object;
   robots?: string;
   image?: string;
+  /** P1-2: <html lang> 属性值（默认 "en"） */
+  lang?: string;
+  /** P1-3: 海报图片 basename（构建时通过 assetMap 解析为 /assets/ 路径） */
+  imageBasename?: string;
 }
+
+/** P1-3/P1-4: 剧集 slug → 海报图片 basename 映射（用于 og:image 和 VideoObject thumbnailUrl） */
+const dramaPosterBasenames: Record<string, string> = {
+  "temptation-ceo": "Temptation_CEO.jpg",
+  "the-bride-who-fell-from-the-sky": "The_bride_who_fell_from_the_sky.jpg",
+  "the-revenge-of-the-plus-size-wife": "The_Revenge_of_the_Plus-Size_Wife.jpg",
+  "my-royal-alpha-boyfriend": "My_Royal_Alpha_Boyfriend.jpg",
+  "dark-secrets": "b27eed6c1c08448293fe93a09e75707b.jpg",
+  "why-jump-off-the-building": "Why_jump_off_the_building.jpg",
+  "crimson-dynasty": "00_(10).jpg",
+  "neon-abyss": "8d3cfa78f86f48afa8907beb0548cccb.png",
+  "whispered-love": "335be7f8c5134bcbb15ac57b627c0d8d.jpg",
+  "the-forgotten": "00_(6).jpg",
+  "iron-will": "00_(8).jpg",
+  "cloud-atlas": "e4347dc082a84ac0817906e1a68d5b36.png",
+};
 
 /**
  * 构建「SSR 渲染出的 dev 图片 basename → 生产 /assets/ 文件」映射。
@@ -252,20 +275,33 @@ function getRouteData(): RouteSeoData[] {
     { slug: "cloud-atlas", title: "Cloud Atlas — Watch Free Short Drama | Lollipop AI", desc: "Watch Cloud Atlas, a fantasy adventure short drama on Lollipop AI. Journey across floating islands in a world above the clouds. Stream all episodes free.", uploadDate: "2026-03-10" },
   ];
   for (const d of dramas) {
+    const posterBasename = dramaPosterBasenames[d.slug];
     const videoSchema = {
       "@context": "https://schema.org",
       "@type": "VideoObject",
       name: d.title.split(" — ")[0],
       description: d.desc,
       uploadDate: d.uploadDate,
-      thumbnailUrl: `${SITE_URL}/og-image.png`,
-      contentUrl: `${SITE_URL}/drama/${d.slug}`,
-      embedUrl: `${SITE_URL}/drama/${d.slug}`,
+      // P1-4: thumbnailUrl 使用剧集专属海报（构建时通过 assetMap 解析）
+      // 会在下方 resolveRouteImages() 中被替换为 /assets/xxx-hash.jpg
+      thumbnailUrl: posterBasename ? `__ASSET:${posterBasename}__` : `${SITE_URL}/og-image.png`,
+      // P1-4: duration 为平均单集时长（所有剧均为 2 分钟/集）
+      duration: "PT2M",
+      // P1-4: regionsAllowed 声明可观看地区
+      regionsAllowed: ["US", "GB", "CA", "AU", "SG", "MY", "PH", "ID", "JP", "KR", "BR", "IN", "DE", "FR"],
+      // contentUrl/embedUrl removed — no web player available; pointing to
+      // the page URL would violate Google's VideoObject spec (requires
+      // actual video file URL / embeddable player). App store link is
+      // already on the page as a CTA button.
+      // aggregateRating removed — platform has no user review system yet;
+      // using views as ratingCount violates Google's review snippet spam
+      // policy and risks manual action penalty.
     };
     routes.push({
       path: `/drama/${d.slug}`,
       title: d.title,
       description: d.desc,
+      imageBasename: posterBasename,
       schema: withBreadcrumb(videoSchema, [
         { name: "Home", url: SITE_URL },
         { name: "Drama", url: SITE_URL },
@@ -458,6 +494,10 @@ function withBreadcrumb(schema: object, items: { name: string; url: string }[]):
 function injectSeoIntoHtml(html: string, data: RouteSeoData): string {
   let result = stripSeoMeta(html);
 
+  // P1-2: 更新 <html lang> 属性（默认 "en"，区域页可按目标语言设置）
+  const lang = data.lang ?? "en";
+  result = result.replace(/<html\s+lang="[^"]*"/i, `<html lang="${lang}"`);
+
   // 1. 替换 <title>
   result = result.replace(/<title>.*?<\/title>/i, `<title>${data.title}</title>`);
 
@@ -573,6 +613,30 @@ function injectHomepageContent(html: string): string {
   return html.replace('<div id="root"></div>', `<div id="root">${content}</div>`);
 }
 
+/**
+ * P1-3/P1-4: 构建 assetMap 后，解析路由数据中的图片占位符。
+ * - route.imageBasename → route.image（og:image 用）
+ * - schema JSON 中的 __ASSET:basename__ → /assets/hash.ext（thumbnailUrl 用）
+ */
+function resolveRouteImages(routes: RouteSeoData[], assetMap: Map<string, string>): void {
+  for (const route of routes) {
+    // 解析 og:image
+    if (route.imageBasename) {
+      const hashed = assetMap.get(route.imageBasename) ?? route.imageBasename;
+      route.image = `${SITE_URL}/assets/${hashed}`;
+    }
+    // 解析 schema 中的 __ASSET:basename__ 占位符
+    if (route.schema) {
+      let schemaStr = JSON.stringify(route.schema);
+      schemaStr = schemaStr.replace(/__ASSET:(.+?)__/g, (_, basename) => {
+        const hashed = assetMap.get(basename) ?? basename;
+        return `${SITE_URL}/assets/${hashed}`;
+      });
+      route.schema = JSON.parse(schemaStr);
+    }
+  }
+}
+
 export function prerenderPlugin(): Plugin {
   return {
     name: "lollipop-prerender",
@@ -593,13 +657,58 @@ export function prerenderPlugin(): Plugin {
       const assetMap = buildAssetMap();
       console.log(`[prerender] asset map built: ${assetMap.size} image(s) for dev-URL → /assets/ rewrite`);
 
+      // P1-3/P1-4: 解析剧集海报图片路径（og:image + VideoObject thumbnailUrl）
+      resolveRouteImages(routes, assetMap);
+
       // ── 初始化 SSR 渲染器（build-time 全量预渲染）──
-      // SSR createServer 在当前环境会死锁，暂时跳过，使用 meta-only 模式
-      // SEO 标签（title/description/OG/JSON-LD）仍然完整注入
+      // 使用 Vite build (SSR mode) 编译 entry-server.tsx 为独立 SSR bundle，
+      // 然后 dynamic import() 加载该 bundle 获取 renderRoute 函数。
+      // Rollup 在编译期解析循环依赖，不会像 ssrLoadModule 那样死锁。
+      // 若 SSR 构建失败，降级为 meta-only 模式，
+      // 此时仅注入 SEO 标签，页面正文为空（爬虫可执行 JS 时仍可获取内容）。
       let renderRouteFn: ((path: string) => string) | null = null;
-      let server: Awaited<ReturnType<typeof createServer>> | null = null;
-      // SSR disabled — meta-only mode
-      console.log("[prerender] SSR skipped (meta-only mode)");
+      const SSR_BUNDLE_DIR = join(outDir, ".ssr");
+      const SSR_BUNDLE_PATH = join(SSR_BUNDLE_DIR, "entry-server.js");
+
+      try {
+        console.log("[prerender] Building SSR bundle...");
+        await build({
+          configFile: false,
+          logLevel: "error",
+          plugins: [
+            react(),
+            {
+              name: "figma-asset-resolver",
+              resolveId(id) {
+                if (id.startsWith("figma:asset/")) {
+                  return join(process.cwd(), "src/assets", id.replace("figma:asset/", ""));
+                }
+              },
+            },
+          ],
+          resolve: {
+            alias: { "@": join(process.cwd(), "src") },
+          },
+          build: {
+            ssr: join("src", "entry-server.tsx"),
+            outDir: SSR_BUNDLE_DIR,
+            write: true,
+            minify: false,
+            sourcemap: false,
+          },
+        });
+        console.log("[prerender] SSR bundle built, loading module...");
+        const entryUrl = pathToFileURL(SSR_BUNDLE_PATH).href;
+        const entryModule = await import(entryUrl);
+        renderRouteFn = entryModule.renderRoute as (path: string) => string;
+        console.log("[prerender] SSR module loaded — full content rendering enabled");
+      } catch (e) {
+        console.warn(
+          "[prerender] SSR build failed, falling back to meta-only mode:",
+          e instanceof Error ? e.message : String(e),
+        );
+        renderRouteFn = null;
+      }
 
       const renderAppHtml = async (path: string): Promise<string | null> => {
         if (!renderRouteFn) return null;
@@ -649,21 +758,31 @@ export function prerenderPlugin(): Plugin {
         writeFileSync(join(outDir, "index.html"), homeHtml, "utf-8");
       }
 
-      if (server) {
+      // 清理临时 SSR bundle
+      try {
+        if (existsSync(SSR_BUNDLE_DIR)) {
+          rmSync(SSR_BUNDLE_DIR, { recursive: true, force: true });
+        }
+      } catch {
+        /* 清理失败忽略 */
+      }
+
+      // P2-1: 更新 sitemap.xml 的 lastmod 为构建日期
+      const sitemapPath = join(outDir, "sitemap.xml");
+      if (existsSync(sitemapPath)) {
         try {
-          // server.close() 在某些环境下可能不释放句柄而挂起，加超时兜底，避免 build 卡死
-          await Promise.race([
-            server.close(),
-            new Promise<void>((_, reject) =>
-              setTimeout(() => reject(new Error("close timeout")), 5000),
-            ),
-          ]);
+          const today = new Date().toISOString().split("T")[0];
+          let sitemap = readFileSync(sitemapPath, "utf-8");
+          sitemap = sitemap.replace(/<lastmod>[^<]+<\/lastmod>/g, `<lastmod>${today}</lastmod>`);
+          writeFileSync(sitemapPath, sitemap, "utf-8");
+          console.log(`[prerender] Updated sitemap.xml lastmod to ${today}`);
         } catch {
-          /* 关闭超时忽略，渲染产物已写完 */
+          /* sitemap 更新失败忽略 */
         }
       }
+
       console.log(
-        `[prerender] Generated ${count} static HTML files (SSR ${renderRouteFn ? "enabled" : "disabled"}) for ${routes.length} routes`,
+        `[prerender] Generated ${count} static HTML files (SSR ${renderRouteFn ? "enabled — full content rendered" : "disabled — meta-only mode"}) for ${routes.length} routes`,
       );
     },
   };

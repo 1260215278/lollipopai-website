@@ -1,4 +1,4 @@
-import type { Locale } from "../../i18n";
+import type { Locale } from "../../i18n-types";
 
 /**
  * 数据概览文案 —— 由 P2 功能 subagent 拥有并扩充。

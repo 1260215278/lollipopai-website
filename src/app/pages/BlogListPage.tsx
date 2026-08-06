@@ -91,8 +91,13 @@ export function BlogListPage() {
     return () => clearPageSchema();
   }, [locale]);
 
+  // 按发布日期降序排序（最新的排最前面）
+  const sortedPosts = [...blogPosts].sort(
+    (a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()
+  );
+
   const filteredPosts: BlogPost[] =
-    activeCategory === "all" ? blogPosts : blogPosts.filter((p) => p.category === activeCategory);
+    activeCategory === "all" ? sortedPosts : sortedPosts.filter((p) => p.category === activeCategory);
 
   return (
     <MarketingPageShell>

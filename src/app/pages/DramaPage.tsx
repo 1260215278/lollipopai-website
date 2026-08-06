@@ -51,17 +51,15 @@ export function DramaPage() {
       thumbnailUrl: getDramaPoster(drama.slug) ? `https://www.lollipop.im${getDramaPoster(drama.slug)}` : `https://www.lollipop.im/og-image.png`,
       uploadDate: drama.uploadDate,
       duration: `PT${drama.durationMin}M`,
-      contentUrl: H5_URL,
-      embedUrl: H5_URL,
       genre: drama.genre,
       numberOfEpisodes: drama.episodes,
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: drama.rating,
-        ratingCount: drama.views,
-        bestRating: "10",
-        worstRating: "1",
-      },
+      // contentUrl/embedUrl removed — no web player available; pointing to
+      // the app store would violate Google's VideoObject spec (requires
+      // actual video file URL / embeddable player). App store link is
+      // already on the page as a CTA button.
+      // aggregateRating removed — platform has no user review system yet;
+      // using views (e.g. "52M") as ratingCount violates Google's
+      // review snippet spam policy and risks manual action penalty.
       publisher: {
         "@type": "Organization",
         name: "Lollipop AI",

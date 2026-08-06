@@ -1,4 +1,4 @@
-import type { Locale } from "../../i18n";
+import type { Locale } from "../../i18n-types";
 
 /** 强制完善发行者资料弹窗（Figma 16590:1513） */
 export interface ProfileSetupMessages {

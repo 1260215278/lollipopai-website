@@ -1,4 +1,4 @@
-import type { Locale } from "../../i18n";
+import type { Locale } from "../../i18n-types";
 
 /** 发行中心通用文案（动作、状态、错误兜底等） */
 export interface CommonMessages {

@@ -1,4 +1,3 @@
-
 import { createRoot } from "react-dom/client";
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
@@ -91,3 +90,13 @@ createRoot(document.getElementById("root")!).render(
     </BrowserRouter>
   </I18nProvider>
 );
+
+/* React 挂载后移除加载遮罩。
+   生产环境：index.html 脚本已监听 CSS 加载并隐藏遮罩，此处为兜底。
+   Dev 环境：React 挂载后立即隐藏，无需等待图片（logo 由客户端挂载后渲染）。 */
+(function hideLoader() {
+  var loader = document.getElementById('app-loader');
+  if (!loader || loader.classList.contains('hidden')) return;
+  loader.classList.add('hidden');
+  setTimeout(function() { loader && loader.remove(); }, 350);
+})();

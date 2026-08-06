@@ -76,11 +76,9 @@ const pageSchemas: Partial<Record<MarketingPage, (locale: string) => object>> = 
           "price": "0",
           "priceCurrency": "USD",
         },
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "4.9",
-          "ratingCount": "2000000",
-        },
+        // aggregateRating removed — ratingCount "2000000" was using download
+        // count as review count, which violates Google's review snippet spam
+        // policy. Re-add only when a real user review system is in place.
         "downloadUrl": "https://play.google.com/store/apps/details?id=com.StargetVenturesLLC.hks",
         "featureList": [
           "5,000+ premium short dramas across 10+ genres",
@@ -103,11 +101,7 @@ const pageSchemas: Partial<Record<MarketingPage, (locale: string) => object>> = 
           "availability": "https://schema.org/InStock",
           "url": "https://www.lollipop.im/download",
         },
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "4.9",
-          "ratingCount": "2000000",
-        },
+        // aggregateRating removed from Product — same reason as above
       },
     ],
   }),

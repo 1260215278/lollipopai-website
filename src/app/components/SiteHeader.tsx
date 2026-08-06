@@ -4,6 +4,13 @@ import { Menu, X, Globe, User, LogOut, ChevronDown } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 import logoImg from "../../imports/Lollipop1.png";
 import { useI18n } from "../i18n";
+
+/** 客户端挂载标志：SSR 不渲染 <img>，避免预渲染 HTML 中出现未下载图片导致破裂图标闪现 */
+function useMounted() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+  return mounted;
+}
 import { isAppAuthed, getLoginName, clearTokens, subscribeAuthChange } from "../services/auth";
 
 /** 顶栏登录态（已登录 + 展示名），登录/退出后即时刷新。 */
@@ -47,6 +54,7 @@ export function SiteHeader({
   const [userOpen, setUserOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
   const userRef = useRef<HTMLDivElement>(null);
+  const mounted = useMounted();
   const { messages, languages, currentLanguage, setLocale } = useI18n();
   const navigate = useNavigate();
   const nav = messages.navbar;
@@ -117,9 +125,13 @@ export function SiteHeader({
       className={`${sticky ? "sticky" : "fixed left-0 right-0"} top-0 z-50 bg-black/60 backdrop-blur-xl border-b border-white/5 shadow-2xl shadow-red-950/10`}
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Logo */}
+        {/* Logo — SSR 不渲染 <img>，避免预渲染 HTML 中未下载图片导致破裂图标闪现 */}
         <Link to="/" onClick={onLogoClick} className="flex items-center gap-2.5 cursor-pointer">
-          <img src={logoImg} alt="Lollipop" className="h-9 w-auto rounded-[8px]" />
+          {mounted ? (
+            <img src={logoImg} alt="Lollipop" className="h-9 w-auto rounded-[8px]" />
+          ) : (
+            <div className="h-9 w-9 rounded-[8px]" aria-hidden="true" />
+          )}
           <span className="text-white tracking-wide" style={{ fontSize: "1.3rem", fontWeight: 700 }}>
             {messages.common.brand}
           </span>

@@ -1,4 +1,4 @@
-import type { Locale } from "../../i18n";
+import type { Locale } from "../../i18n-types";
 
 /**
  * Swift 租户开通通知文案（2026-06-26 新增）。

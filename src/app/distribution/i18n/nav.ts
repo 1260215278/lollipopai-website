@@ -1,4 +1,4 @@
-import type { Locale } from "../../i18n";
+import type { Locale } from "../../i18n-types";
 
 /** 导航文案：营销站 Navbar 入口 + 发行中心侧边栏菜单 */
 export interface NavMessages {

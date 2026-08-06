@@ -1,4 +1,4 @@
-import type { Locale } from "./i18n";
+import type { Locale } from "./i18n-types";
 
 /**
  * 登录页文案（figma 15141-27973：整页·手机号+验证码登录）。

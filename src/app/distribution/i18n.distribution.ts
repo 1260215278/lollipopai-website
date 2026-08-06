@@ -5,7 +5,7 @@
  * 这里组装为单一 distribution 命名空间，再由 ../i18n.tsx 顶层注入到每个语言。
  * 仍是官网同一套 useI18n() 体系，组件统一 messages.distribution.* 访问。
  */
-import type { Locale } from "../i18n";
+import type { Locale } from "../i18n-types";
 import { common, type CommonMessages } from "./i18n/common";
 import { nav, type NavMessages } from "./i18n/nav";
 import { enroll, type EnrollMessages } from "./i18n/enroll";

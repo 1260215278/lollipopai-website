@@ -64,10 +64,11 @@
                         "logo": "https://www.lollipop.im/og-image.png",
                         "slogan": "AI × Creator Economy × A New Era of Short-Form Entertainment",
                         "sameAs": [
-                            "https://x.com/wwwLollipopim",
-                            "https://twitter.com/wwwLollipopim",
-                            "https://youtube.com/@Lollipop-AI-one",
-                            "https://instagram.com/lollipopaiapp",
+                            "https://twitter.com/lollipopai",
+                            "https://www.instagram.com/lollipopai",
+                            "https://www.youtube.com/@lollipopai",
+                            "https://www.tiktok.com/@lollipopai",
+                            "https://www.facebook.com/lollipopai",
                             "https://play.google.com/store/apps/details?id=com.StargetVenturesLLC.hks"
                         ],
                         "contactPoint": {
@@ -142,7 +143,7 @@
                                 "name": "What AI tools does Lollipop AI offer?",
                                 "acceptedAnswer": {
                                     "@type": "Answer",
-                                    "text": "LunoTV 1.5 includes text-to-image, image-to-image, text-to-video, image/video-to-video, face swap, and style transfer, supporting 4K output across 50+ countries."
+                                    "text": "Lollipop AI offers four core AI creation tools via its LunoTV 1.5 toolkit: text-to-image, image-to-image, text-to-video, and image/video-to-video, supporting 4K output across 50+ countries."
                                 }
                             },
                             {
@@ -168,11 +169,80 @@
             #root {
                 height: 100%;
             }
+            /* FOUC 防护：在 CSS 加载前保持深色主题，避免白底黑字闪烁 */
+            body {
+                background-color: #0a0a0a;
+                color: #e5e5e5;
+                font-family: 'Inter', system-ui, -apple-system, sans-serif;
+                line-height: 1.5;
+            }
+            h1, h2, h3, h4, h5, h6 {
+                color: #ffffff;
+                font-weight: 700;
+                margin: 0;
+            }
+            p {
+                margin: 0;
+            }
+            a {
+                color: #ff7e5f;
+                text-decoration: none;
+            }
         </style>
     </head>
 
     <body>
+        <!-- 加载遮罩：CSS/JS 未就绪前纯黑屏，彻底杜绝 FOUC 半成品暴露 -->
+        <div id="app-loader" style="position:fixed;inset:0;background:#0a0a0a;z-index:99999;display:flex;align-items:center;justify-content:center;transition:opacity 0.35s ease;">
+            <div style="width:36px;height:36px;border:3px solid rgba(255,126,95,0.15);border-top-color:#ff7e5f;border-radius:50%;animation:app-loader-spin 0.8s linear infinite;"></div>
+        </div>
+        <style>
+            @keyframes app-loader-spin { to { transform:rotate(360deg); } }
+            #app-loader.hidden { opacity:0; pointer-events:none; }
+        </style>
+
         <div id="root"></div>
+
+        <script>
+            /* 遮罩隐藏策略：CSS 加载完成后即隐藏。
+               logo <img> 已从 SSR 中移除（客户端挂载后渲染），不再需要等待图片下载。
+               Dev 模式无预渲染内容，由 main.tsx 的 hideLoader() 兜底。
+               2 秒超时兜底防止卡死。 */
+            (function() {
+                var loader = document.getElementById('app-loader');
+                function hide() {
+                    if (!loader || loader.classList.contains('hidden')) return;
+                    loader.classList.add('hidden');
+                    setTimeout(function() { loader && loader.remove(); }, 350);
+                }
+                function checkReady() {
+                    var stylesheets = document.querySelectorAll('link[rel="stylesheet"]');
+                    if (stylesheets.length === 0) return; /* CSS 尚未注入 */
+                    /* 检查所有样式表是否已加载 */
+                    var allLoaded = true;
+                    stylesheets.forEach(function(link) {
+                        if (link.sheet) return; /* 已加载 */
+                        allLoaded = false;
+                    });
+                    if (allLoaded) {
+                        hide();
+                    } else {
+                        /* 等待 CSS 加载完成 */
+                        stylesheets.forEach(function(link) {
+                            link.addEventListener('load', hide);
+                            link.addEventListener('error', hide);
+                        });
+                    }
+                }
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', checkReady);
+                } else {
+                    checkReady();
+                }
+                setTimeout(hide, 2000);
+            })();
+        </script>
+
         <script type="module" src="/src/main.tsx"></script>
     </body>
 </html>

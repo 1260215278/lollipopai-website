@@ -24,7 +24,8 @@ import {
   BarChart,
   Bar,
 } from "recharts";
-import { useI18n, type Locale } from "../../i18n";
+import { useI18n } from "../../i18n";
+import type { Locale } from "../../i18n-types";
 import {
   getOverview,
   getTrend,

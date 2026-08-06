@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { Loader2, Film, Play } from "lucide-react";
-import { useI18n, type Locale } from "../i18n";
+import { useI18n } from "../i18n";
+import type { Locale } from "../i18n-types";
 import { applyCustomSeoMeta, setPageSchema, clearPageSchema } from "../i18n.seo";
 import { Footer } from "../components/Footer";
 import { SiteHeader } from "../components/SiteHeader";

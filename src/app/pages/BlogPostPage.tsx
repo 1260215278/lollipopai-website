@@ -233,9 +233,13 @@ export function BlogPostPage() {
     post?.category === "guide" ? dp.creatorGuides :
     post?.categoryLabel ?? "";
 
-  const currentIndex = post ? blogPosts.findIndex((p) => p.slug === post.slug) : -1;
-  const prevPost = currentIndex > 0 ? blogPosts[currentIndex - 1] : null;
-  const nextPost = currentIndex >= 0 && currentIndex < blogPosts.length - 1 ? blogPosts[currentIndex + 1] : null;
+  // 按发布日期降序排序（与列表页一致，最新的排最前面）
+  const sortedPosts = [...blogPosts].sort(
+    (a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()
+  );
+  const currentIndex = post ? sortedPosts.findIndex((p) => p.slug === post.slug) : -1;
+  const prevPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
+  const nextPost = currentIndex >= 0 && currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
 
   useEffect(() => {
     if (!post) {
@@ -443,7 +447,7 @@ export function BlogPostPage() {
 
         {/* Related Posts — 内部链接网络（修复审计 P0-2：原 Markdown Related 链接全部指向首页） */}
         {(() => {
-          const related = blogPosts.filter((p) => p.slug !== post.slug);
+          const related = sortedPosts.filter((p) => p.slug !== post.slug && p.category === post.category).slice(0, 6);
           return (
             <div className="mt-14 pt-8 border-t border-white/5">
               <h2 className="text-white font-bold mb-6" style={{ fontSize: "1.25rem" }}>{dp.relatedPosts}</h2>

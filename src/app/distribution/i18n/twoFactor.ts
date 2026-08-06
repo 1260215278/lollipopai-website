@@ -1,4 +1,4 @@
-import type { Locale } from "../../i18n";
+import type { Locale } from "../../i18n-types";
 
 /** 两步验证登录文案（byAppToken 返回 stage=2FA_REQUIRED 时的二次校验界面） */
 export interface TwoFactorMessages {

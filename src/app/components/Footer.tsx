@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { Mail, Phone, MapPin, Twitter, Instagram, Youtube, Facebook } from "lucide-react";
 import logoImg from "../../imports/Lollipop1.png";
@@ -5,6 +6,8 @@ import { useI18n } from "../i18n";
 
 export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) {
   const { messages, languages, currentLanguage, setLocale } = useI18n();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
   const websiteLinks = [
     { key: "home", page: "home", to: "/" },
     { key: "aboutUs", page: "about", to: "/about" },
@@ -25,9 +28,13 @@ export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) 
   return (
     <footer className="bg-[#111] border-t border-white/5 pt-14 pb-8">
       <div className="max-w-6xl mx-auto px-6">
-        {/* Logo */}
+        {/* Logo — SSR 不渲染 <img>，避免破裂图标闪现 */}
         <div className="flex items-center gap-2.5 mb-10">
-          <img src={logoImg} alt="Lollipop" className="h-9 w-auto rounded-[8px]" />
+          {mounted ? (
+            <img src={logoImg} alt="Lollipop" className="h-9 w-auto rounded-[8px]" />
+          ) : (
+            <div className="h-9 w-9 rounded-[8px]" aria-hidden="true" />
+          )}
           <span className="text-[#ffffff]" style={{ fontSize: "1.5rem", fontWeight: 800, fontStyle: "italic" }}>
             {messages.common.brand}
           </span>

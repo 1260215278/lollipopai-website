@@ -80,8 +80,12 @@ export function HeroSection() {
                 key={i}
                 src={src}
                 alt={messages.hero.bannerAlt[i]}
-                className={`w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${i === 0 ? "relative" : "absolute inset-0"}`}
-                style={{ opacity: activeIndex === i ? 1 : 0 }}
+                className={`w-full h-full object-cover ${i === 0 ? "relative" : "absolute inset-0"}`}
+                style={{
+                  opacity: activeIndex === i ? 1 : 0,
+                  visibility: activeIndex === i ? "visible" : "hidden",
+                  transition: "opacity 1s ease-in-out, visibility 0s linear 1s",
+                }}
                 loading={i === 0 ? "eager" : "lazy"}
                 fetchpriority={i === 0 ? "high" : "low"}
                 decoding="async"

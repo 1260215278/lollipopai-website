@@ -3,7 +3,8 @@ import { distributionMessages } from "./distribution/i18n.distribution";
 import { loginMessages } from "./i18n.login";
 import { applySeoMeta, getPageSeo } from "./i18n.seo";
 
-export type Locale = "zh-TW" | "zh-CN" | "en" | "pt";
+import type { Locale } from "./i18n-types";
+export type { Locale };
 
 export const localeOptions = [
   { code: "zh-TW", label: "繁體中文" },

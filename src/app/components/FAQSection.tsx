@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 import { ChevronDown, ExternalLink, ArrowRight, Shield, Award, Globe, Sparkles } from "lucide-react";
-import { useI18n, type Locale } from "../i18n";
+import { useI18n } from "../i18n";
+import type { Locale } from "../i18n-types";
 
 /* ------------------------------------------------------------------ */
 /* i18n — 自包含 FAQ / Key Takeaways / Glossary 文案                    */

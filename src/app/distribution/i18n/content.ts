@@ -1,4 +1,4 @@
-import type { Locale } from "../../i18n";
+import type { Locale } from "../../i18n-types";
 import { TAG_VALUES, CHANNEL_VALUES } from "../mock/content";
 
 /**

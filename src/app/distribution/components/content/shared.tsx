@@ -11,6 +11,7 @@ export const VIDEO_ACCEPT = "video/mp4,video/x-msvideo,video/quicktime,video/x-m
 export const HIGHLIGHT_ACCEPT = "video/mp4,video/quicktime,.mp4,.mov";
 export const COPYRIGHT_PROOF_ACCEPT = `${IMAGE_ACCEPT},application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.pdf,.doc,.docx`;
 /** 前端展示与拦截的视频大小上限（与 /publisher/course/upload 一致）。 */
+/** 与后端 MAX_VIDEO_SIZE / 切片上限 100×5MB 对齐 */
 export const VIDEO_MAX = 500 * 1024 * 1024;
 /** 单集标题上限。 */
 export const EPISODE_TITLE_LIMIT = 50;

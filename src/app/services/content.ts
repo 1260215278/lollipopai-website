@@ -6,7 +6,8 @@
  * 列表载荷在顶层 `page`（用 pick:"page" 取）。
  *
  * 数据契约硬约束：字段一律来自接口文档，不臆造、不写撒网式兜底；枚举用后端数值。
- * 上传走「前端切片上传（services/upload.ts）→ 服务端合并并写对象存储 → 拿 URL → saveEpisode」，后端 ffprobe
+ * 上传走「前端切片上传（services/upload.ts，对齐 short-play-seven PublisherChunkUpload*）
+ * → 服务端合并并写对象存储 → 拿 URL → saveEpisode」，后端 ffprobe
  * 回写大小/时长，不在前端伪造。
  */
 import { getPublisherToken } from "./auth";

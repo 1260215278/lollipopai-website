@@ -82,6 +82,8 @@ export interface ContentMessages {
   // ── 上剧流程通用 ──
   uploadTitle: string;
   draftRestored: string;
+  /** 草稿恢复后本地 File 已丢失时的补充说明 */
+  draftRestoredReselect: string;
   draftStartFresh: string;
   step1: string;
   step2: string;
@@ -137,6 +139,8 @@ export interface ContentMessages {
   batchUploadTooMany: string;
   stopUpload: string;
   uploadStopped: string;
+  /** complete 合并阶段文案（Step2 / 剧集管理复用） */
+  epMerging: string;
 
   // ── Step 3 发布配置 ──
   distSectionTitle: string;
@@ -350,6 +354,7 @@ export const content: Record<Locale, ContentMessages> = {
 
     uploadTitle: "上传短剧",
     draftRestored: "已恢复上次未完成的草稿内容。",
+    draftRestoredReselect: "本地未上传的视频文件不会保留，请重新选择后再上传。",
     draftStartFresh: "清空重填",
     step1: "短剧基本信息",
     step2: "上传剧集",
@@ -398,6 +403,7 @@ export const content: Record<Locale, ContentMessages> = {
     batchUploadTooMany: "最多可上传 {total} 集，当前选择了 {selected} 个视频",
     stopUpload: "停止上传",
     uploadStopped: "已停止上传，未完成的视频仍保留待上传",
+    epMerging: "合并中…",
 
     distSectionTitle: "发布范围",
     distSectionDesc: "选择短剧的展示位置，影响曝光量与收益方式",
@@ -597,6 +603,7 @@ export const content: Record<Locale, ContentMessages> = {
 
     uploadTitle: "上傳短劇",
     draftRestored: "已還原上次未完成的草稿內容。",
+    draftRestoredReselect: "本機未上傳的影片檔案不會保留，請重新選擇後再上傳。",
     draftStartFresh: "清空重填",
     step1: "短劇基本資訊",
     step2: "上傳劇集",
@@ -645,6 +652,7 @@ export const content: Record<Locale, ContentMessages> = {
     batchUploadTooMany: "最多可上傳 {total} 集，目前選擇了 {selected} 個影片",
     stopUpload: "停止上傳",
     uploadStopped: "已停止上傳，未完成的影片仍保留待上傳",
+    epMerging: "合併中…",
 
     distSectionTitle: "發佈範圍",
     distSectionDesc: "選擇短劇的展示位置，影響曝光量與收益方式",
@@ -845,6 +853,7 @@ export const content: Record<Locale, ContentMessages> = {
 
     uploadTitle: "Upload Drama",
     draftRestored: "Draft restored from your last session.",
+    draftRestoredReselect: "Local video files are not kept after refresh. Please re-select them before uploading.",
     draftStartFresh: "Start fresh",
     step1: "Basic Info",
     step2: "Upload Episodes",
@@ -893,6 +902,7 @@ export const content: Record<Locale, ContentMessages> = {
     batchUploadTooMany: "You can upload up to {total} episodes; {selected} videos were selected",
     stopUpload: "Stop Upload",
     uploadStopped: "Upload stopped. Unfinished videos remain ready to upload",
+    epMerging: "Merging…",
 
     distSectionTitle: "Distribution",
     distSectionDesc: "Choose where your drama appears — affects exposure and revenue method",
@@ -1093,6 +1103,7 @@ export const content: Record<Locale, ContentMessages> = {
 
     uploadTitle: "Enviar drama",
     draftRestored: "Rascunho restaurado da sua última sessão.",
+    draftRestoredReselect: "Os arquivos de vídeo locais não são mantidos após atualizar. Selecione-os novamente antes de enviar.",
     draftStartFresh: "Começar do zero",
     step1: "Informações básicas",
     step2: "Enviar episódios",
@@ -1141,6 +1152,7 @@ export const content: Record<Locale, ContentMessages> = {
     batchUploadTooMany: "Você pode enviar no máximo {total} episódios; {selected} vídeos foram selecionados",
     stopUpload: "Parar envio",
     uploadStopped: "Envio interrompido. Os vídeos não concluídos continuam prontos para envio",
+    epMerging: "Mesclando…",
 
     distSectionTitle: "Distribuição",
     distSectionDesc: "Escolha onde seu drama aparece — afeta o alcance e a receita",

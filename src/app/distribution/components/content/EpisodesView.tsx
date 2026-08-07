@@ -296,10 +296,16 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
             r.newFile as File,
             PUBLISHER_UPLOAD_PATH,
             controller.signal,
-            (percent) =>
+            (percent, phase = "uploading") =>
               setRows((prev) =>
                 prev.map((row) =>
-                  row.episodeNo === r.episodeNo ? { ...row, uploadProgress: percent } : row,
+                  row.episodeNo === r.episodeNo
+                    ? {
+                        ...row,
+                        // complete 阶段固定展示 100%，文案走 epMerging
+                        uploadProgress: phase === "merging" ? 100 : percent,
+                      }
+                    : row,
                 ),
               ),
           );
@@ -336,6 +342,8 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
               row.episodeNo === r.episodeNo ? { ...row, uploadProgress: null } : row,
             ),
           );
+          // 单集失败立即停止后续集，避免长队列静默继续看起来像卡住
+          break;
         }
       }
     } finally {
@@ -535,7 +543,9 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
                     st.icon
                   );
                   const statusLabel = isUploading
-                    ? `${t.epUploading} ${ep.uploadProgress}%`
+                    ? ep.uploadProgress === 100
+                      ? t.epMerging
+                      : `${t.epUploading} ${ep.uploadProgress}%`
                     : transcodeFailed
                       ? t.epTranscodeFailed
                       : showTranscode

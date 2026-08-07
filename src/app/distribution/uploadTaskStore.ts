@@ -1,12 +1,16 @@
 import { useSyncExternalStore } from "react";
 import { saveEpisode, type SaveEpisodeResult } from "../services/content";
-import { PUBLISHER_UPLOAD_PATH, uploadFile } from "../services/upload";
+import { PUBLISHER_UPLOAD_PATH, uploadFile, type UploadProgressPhase } from "../services/upload";
 
 /**
  * 上传任务只保存任务元数据；File 对象保留在当前标签页内存中，避免把视频内容写入 localStorage。
  * 服务端草稿是恢复的权威来源，任务元数据用于跨路由/刷新后找到对应 courseId。
+ *
+ * 并发约定：全局同一时刻只跑一个上传任务（多短剧排队），避免抢带宽表现为「卡住」。
+ * 失败约定：同一任务内任一集失败立即停止后续集，避免 failed/uploading 状态乱跳。
  */
 export type UploadTaskStatus = "draft" | "uploading" | "paused" | "ready" | "failed";
+export type UploadFilePhase = "idle" | UploadProgressPhase;
 
 export interface UploadTask {
   id: string;
@@ -17,6 +21,8 @@ export interface UploadTask {
   selectedEpisodes: number;
   currentEpisode: number | null;
   currentFileProgress: number;
+  /** 当前文件阶段：idle / uploading / merging（complete） */
+  currentFilePhase: UploadFilePhase;
   progress: number;
   step: 1 | 2 | 3;
   status: UploadTaskStatus;
@@ -41,6 +47,7 @@ export type UploadTaskPatch = Partial<
     | "selectedEpisodes"
     | "currentEpisode"
     | "currentFileProgress"
+    | "currentFilePhase"
     | "progress"
     | "step"
     | "status"
@@ -48,17 +55,52 @@ export type UploadTaskPatch = Partial<
   >
 >;
 
+export interface PendingEpisodeMeta {
+  title?: string;
+  duration?: string;
+}
+
+export interface UploadTaskQueueItem {
+  episodeNo: number;
+  title: string;
+  file: File;
+  /**
+   * 本集在本次提交前是否已在服务端 uploadStatus=1。
+   * 替换/重传不得再 +1，否则会出现 13/8 这类超过计划集数。
+   */
+  alreadyUploaded?: boolean;
+}
+
+export interface UploadTaskCompletedItem {
+  episodeNo: number;
+  fileName: string;
+  videoUrl: string;
+  result: SaveEpisodeResult;
+}
+
+export interface UploadTaskRunResult {
+  completed: UploadTaskCompletedItem[];
+  failedEpisodes: number[];
+  stopped: boolean;
+}
+
 const STORAGE_KEY = "distribution.upload.tasks.v2";
 
 const tasks = new Map<string, UploadTask>();
 const pendingFiles = new Map<string, Map<number, File>>();
+/** 跨路由保留的剧集标题/时长（File 之外的轻量 UI 态，不进 localStorage） */
+const pendingEpisodeMeta = new Map<string, Map<number, PendingEpisodeMeta>>();
 const uploadControllers = new Map<string, AbortController>();
 const uploadRuns = new Map<string, Promise<UploadTaskRunResult>>();
+/** 单集上传完成回调：表单卸载后仍可通知已挂载的订阅者即时刷新行态 */
+const episodeCompleteListeners = new Map<string, Set<(item: UploadTaskCompletedItem) => void>>();
 const listeners = new Set<() => void>();
 let snapshotCache: UploadTask[] = [];
 let hydrated = false;
 let persistTimer: ReturnType<typeof setTimeout> | null = null;
 let idSequence = 0;
+/** 全局串行队列尾：保证多任务排队，同一时刻只有一个真正在传。 */
+let globalUploadTail: Promise<void> = Promise.resolve();
 
 function isBrowser(): boolean {
   return typeof window !== "undefined";
@@ -87,16 +129,19 @@ function parsePersistedTask(value: unknown): UploadTask | null {
   if (!isStep(raw.step) || !isTaskStatus(raw.status)) return null;
   if (typeof raw.error !== "string" || typeof raw.updatedAt !== "number" || !Number.isFinite(raw.updatedAt)) return null;
 
+  const totalEpisodes = raw.totalEpisodes;
+  const uploadedEpisodes = clampUploadedEpisodes(raw.uploadedEpisodes, totalEpisodes);
   return {
     id: raw.id,
     courseId: raw.courseId,
     title: raw.title,
-    totalEpisodes: raw.totalEpisodes,
-    uploadedEpisodes: raw.uploadedEpisodes,
+    totalEpisodes,
+    uploadedEpisodes,
     selectedEpisodes: 0,
     currentEpisode: null,
     currentFileProgress: 0,
-    progress: raw.totalEpisodes > 0 ? Math.round((raw.uploadedEpisodes / raw.totalEpisodes) * 100) : 0,
+    currentFilePhase: "idle",
+    progress: totalEpisodes > 0 ? Math.round((uploadedEpisodes / totalEpisodes) * 100) : 0,
     step: raw.step,
     // A reload cannot keep an in-flight AbortSignal/File stream alive.
     status: raw.status === "uploading" ? "paused" : raw.status,
@@ -178,6 +223,24 @@ function clampProgress(progress: number): number {
   return Math.max(0, Math.min(100, Math.round(progress)));
 }
 
+/** 已上传集数不超过计划集数（替换重传、脏 localStorage 都要夹紧） */
+function clampUploadedEpisodes(uploaded: number, total: number): number {
+  const safeTotal = Number.isFinite(total) && total > 0 ? Math.floor(total) : 0;
+  const safeUploaded = Number.isFinite(uploaded) ? Math.floor(uploaded) : 0;
+  if (safeTotal <= 0) return Math.max(0, safeUploaded);
+  return Math.max(0, Math.min(safeTotal, safeUploaded));
+}
+
+/** 全局串行：后进任务等前一个 settle 后再真正开传。 */
+function runExclusiveUpload<T>(work: () => Promise<T>): Promise<T> {
+  const run = globalUploadTail.then(work, work);
+  globalUploadTail = run.then(
+    () => undefined,
+    () => undefined,
+  );
+  return run;
+}
+
 export function subscribeUploadTasks(listener: () => void): () => void {
   hydrate();
   listeners.add(listener);
@@ -219,6 +282,7 @@ export function createUploadTask(input: CreateUploadTaskInput = {}): UploadTask 
     selectedEpisodes: 0,
     currentEpisode: null,
     currentFileProgress: 0,
+    currentFilePhase: "idle",
     progress: 0,
     step: input.step ?? 1,
     status: "draft",
@@ -227,6 +291,7 @@ export function createUploadTask(input: CreateUploadTaskInput = {}): UploadTask 
   };
   tasks.set(task.id, task);
   pendingFiles.set(task.id, new Map());
+  pendingEpisodeMeta.set(task.id, new Map());
   commit();
   return { ...task };
 }
@@ -248,10 +313,20 @@ export function updateUploadTask(taskId: string, patch: UploadTaskPatch): void {
   hydrate();
   const task = tasks.get(taskId);
   if (!task) return;
+  const totalEpisodes = patch.totalEpisodes !== undefined ? patch.totalEpisodes : task.totalEpisodes;
+  const uploadedRaw = patch.uploadedEpisodes !== undefined ? patch.uploadedEpisodes : task.uploadedEpisodes;
+  const uploadedEpisodes = clampUploadedEpisodes(uploadedRaw, totalEpisodes);
+  let progress = patch.progress === undefined ? task.progress : clampProgress(patch.progress);
+  // 仅更新 uploaded 且未显式传 progress 时，用夹紧后的计数重算（避免脏数据 13/8 → 进度仍超 100）
+  if (patch.uploadedEpisodes !== undefined && patch.progress === undefined && totalEpisodes > 0) {
+    progress = clampProgress((uploadedEpisodes / totalEpisodes) * 100);
+  }
   const next: UploadTask = {
     ...task,
     ...patch,
-    progress: patch.progress === undefined ? task.progress : clampProgress(patch.progress),
+    totalEpisodes,
+    uploadedEpisodes,
+    progress,
     updatedAt: Date.now(),
   };
   tasks.set(taskId, next);
@@ -267,11 +342,33 @@ export function setPendingUploadFile(taskId: string, episodeNo: number, file: Fi
   updateUploadTask(taskId, { selectedEpisodes: files.size });
 }
 
+export function setPendingEpisodeMeta(
+  taskId: string,
+  episodeNo: number,
+  patch: PendingEpisodeMeta,
+): void {
+  hydrate();
+  if (!tasks.has(taskId)) return;
+  const meta = pendingEpisodeMeta.get(taskId) ?? new Map<number, PendingEpisodeMeta>();
+  const prev = meta.get(episodeNo) ?? {};
+  meta.set(episodeNo, {
+    title: patch.title !== undefined ? patch.title : prev.title,
+    duration: patch.duration !== undefined ? patch.duration : prev.duration,
+  });
+  pendingEpisodeMeta.set(taskId, meta);
+}
+
+export function getPendingEpisodeMeta(taskId: string): Map<number, PendingEpisodeMeta> {
+  hydrate();
+  return new Map(pendingEpisodeMeta.get(taskId) ?? []);
+}
+
 export function removePendingUploadFile(taskId: string, episodeNo: number): void {
   hydrate();
   const files = pendingFiles.get(taskId);
   if (!files) return;
   files.delete(episodeNo);
+  pendingEpisodeMeta.get(taskId)?.delete(episodeNo);
   updateUploadTask(taskId, { selectedEpisodes: files.size });
 }
 
@@ -283,6 +380,7 @@ export function getPendingUploadFiles(taskId: string): Map<number, File> {
 export function clearPendingUploadFiles(taskId: string): void {
   hydrate();
   pendingFiles.delete(taskId);
+  pendingEpisodeMeta.delete(taskId);
   const task = tasks.get(taskId);
   if (task) updateUploadTask(taskId, { selectedEpisodes: 0 });
 }
@@ -291,8 +389,10 @@ export function removeUploadTask(taskId: string): void {
   hydrate();
   uploadControllers.get(taskId)?.abort();
   uploadControllers.delete(taskId);
+  episodeCompleteListeners.delete(taskId);
   tasks.delete(taskId);
   pendingFiles.delete(taskId);
+  pendingEpisodeMeta.delete(taskId);
   commit();
 }
 
@@ -301,28 +401,39 @@ export function clearUploadTasks(): void {
   uploadControllers.forEach((controller) => controller.abort());
   uploadControllers.clear();
   uploadRuns.clear();
+  episodeCompleteListeners.clear();
   tasks.clear();
   pendingFiles.clear();
+  pendingEpisodeMeta.clear();
   commit();
 }
 
-export interface UploadTaskQueueItem {
-  episodeNo: number;
-  title: string;
-  file: File;
+/** 订阅单集上传完成（用于离开页面再回来或长传过程中即时刷新行状态） */
+export function subscribeUploadEpisodeComplete(
+  taskId: string,
+  listener: (item: UploadTaskCompletedItem) => void,
+): () => void {
+  const set = episodeCompleteListeners.get(taskId) ?? new Set();
+  set.add(listener);
+  episodeCompleteListeners.set(taskId, set);
+  return () => {
+    const current = episodeCompleteListeners.get(taskId);
+    if (!current) return;
+    current.delete(listener);
+    if (current.size === 0) episodeCompleteListeners.delete(taskId);
+  };
 }
 
-export interface UploadTaskCompletedItem {
-  episodeNo: number;
-  fileName: string;
-  videoUrl: string;
-  result: SaveEpisodeResult;
-}
-
-export interface UploadTaskRunResult {
-  completed: UploadTaskCompletedItem[];
-  failedEpisodes: number[];
-  stopped: boolean;
+function emitUploadEpisodeComplete(taskId: string, item: UploadTaskCompletedItem): void {
+  const set = episodeCompleteListeners.get(taskId);
+  if (!set) return;
+  set.forEach((listener) => {
+    try {
+      listener(item);
+    } catch {
+      // 订阅方异常不影响上传主链路
+    }
+  });
 }
 
 export function pauseUploadTask(taskId: string): void {
@@ -331,12 +442,13 @@ export function pauseUploadTask(taskId: string): void {
     status: "paused",
     currentEpisode: null,
     currentFileProgress: 0,
+    currentFilePhase: "idle",
   });
 }
 
 /**
- * 上传在页面组件之外运行，因此切换路由或挂起表单不会中断；不同 taskId 可并发执行。
- * 同一任务重复调用会复用正在运行的 Promise，避免重复上传同一批文件。
+ * 上传在页面组件之外运行，因此切换路由或挂起表单不会中断。
+ * 不同 taskId 全局排队（串行）；同一任务重复调用会复用正在运行的 Promise。
  */
 export function startUploadTask(
   taskId: string,
@@ -348,22 +460,40 @@ export function startUploadTask(
   const activeRun = uploadRuns.get(taskId);
   if (activeRun) return activeRun;
 
-  const run = (async (): Promise<UploadTaskRunResult> => {
-    const controller = new AbortController();
-    uploadControllers.set(taskId, controller);
+  // 排队前即挂上 controller，便于队列等待期间 pause 生效
+  const controller = new AbortController();
+  uploadControllers.set(taskId, controller);
+
+  updateUploadTask(taskId, {
+    courseId,
+    totalEpisodes,
+    selectedEpisodes: pendingFiles.get(taskId)?.size ?? queue.length,
+    currentEpisode: null,
+    currentFileProgress: 0,
+    currentFilePhase: "idle",
+    progress: totalEpisodes > 0 ? ((tasks.get(taskId)?.uploadedEpisodes ?? 0) / totalEpisodes) * 100 : 0,
+    step: 2,
+    status: "uploading",
+    error: "",
+  });
+
+  const run = runExclusiveUpload(async (): Promise<UploadTaskRunResult> => {
+    // 排队期间可能被 pause / 删除
+    if (!tasks.has(taskId) || controller.signal.aborted) {
+      return { completed: [], failedEpisodes: [], stopped: true };
+    }
+
     const completed: UploadTaskCompletedItem[] = [];
     const failedEpisodes: number[] = [];
-    let uploadedEpisodes = tasks.get(taskId)?.uploadedEpisodes ?? 0;
+    // 以任务上的计数为基线并夹紧；替换已上传集不得再 +1
+    let uploadedEpisodes = clampUploadedEpisodes(tasks.get(taskId)?.uploadedEpisodes ?? 0, totalEpisodes);
     let lastError = "";
 
     updateUploadTask(taskId, {
-      courseId,
-      totalEpisodes,
-      selectedEpisodes: pendingFiles.get(taskId)?.size ?? queue.length,
+      uploadedEpisodes,
       currentEpisode: queue[0]?.episodeNo ?? null,
       currentFileProgress: 0,
-      progress: totalEpisodes > 0 ? (uploadedEpisodes / totalEpisodes) * 100 : 0,
-      step: 2,
+      currentFilePhase: queue.length > 0 ? "uploading" : "idle",
       status: "uploading",
       error: "",
     });
@@ -374,18 +504,27 @@ export function startUploadTask(
         updateUploadTask(taskId, {
           currentEpisode: item.episodeNo,
           currentFileProgress: 0,
+          currentFilePhase: "uploading",
           status: "uploading",
           error: "",
         });
+        // 替换已上传集：进度条不占用「新一集」份额，避免分母错觉
+        const countsAsNew = !item.alreadyUploaded;
         const videoUrl = await uploadFile(
           item.file,
           PUBLISHER_UPLOAD_PATH,
           controller.signal,
-          (percent) => {
-            const overall = totalEpisodes > 0 ? ((uploadedEpisodes + percent / 100) / totalEpisodes) * 100 : percent;
+          (percent, phase = "uploading") => {
+            const overall =
+              totalEpisodes > 0
+                ? countsAsNew
+                  ? ((uploadedEpisodes + percent / 100) / totalEpisodes) * 100
+                  : (uploadedEpisodes / totalEpisodes) * 100
+                : percent;
             updateUploadTask(taskId, {
               currentEpisode: item.episodeNo,
               currentFileProgress: percent,
+              currentFilePhase: phase,
               progress: overall,
               status: "uploading",
             });
@@ -398,17 +537,54 @@ export function startUploadTask(
           videoUrl,
           fileName: item.file.name,
         });
-        if (result.uploadStatus === 1) uploadedEpisodes += 1;
-        else failedEpisodes.push(item.episodeNo);
+        // 仅「首次成功入库」的集 +1；同 episodeNo 覆盖替换不重复计数
+        if (result.uploadStatus === 1 && countsAsNew) {
+          uploadedEpisodes = clampUploadedEpisodes(uploadedEpisodes + 1, totalEpisodes);
+        } else if (result.uploadStatus === 1) {
+          uploadedEpisodes = clampUploadedEpisodes(uploadedEpisodes, totalEpisodes);
+        }
+        if (result.uploadStatus !== 1) {
+          // saveEpisode 业务失败：立即停整批；本地文件保留便于重试
+          failedEpisodes.push(item.episodeNo);
+          lastError = "";
+          const failedItem: UploadTaskCompletedItem = {
+            episodeNo: item.episodeNo,
+            fileName: item.file.name,
+            videoUrl,
+            result,
+          };
+          completed.push(failedItem);
+          updateUploadTask(taskId, {
+            uploadedEpisodes,
+            selectedEpisodes: pendingFiles.get(taskId)?.size ?? 0,
+            currentEpisode: null,
+            currentFileProgress: 0,
+            currentFilePhase: "idle",
+            progress: totalEpisodes > 0 ? (uploadedEpisodes / totalEpisodes) * 100 : 0,
+            status: "failed",
+          });
+          emitUploadEpisodeComplete(taskId, failedItem);
+          break;
+        }
         pendingFiles.get(taskId)?.delete(item.episodeNo);
-        completed.push({ episodeNo: item.episodeNo, fileName: item.file.name, videoUrl, result });
+        pendingEpisodeMeta.get(taskId)?.delete(item.episodeNo);
+        const doneItem: UploadTaskCompletedItem = {
+          episodeNo: item.episodeNo,
+          fileName: item.file.name,
+          videoUrl,
+          result,
+        };
+        completed.push(doneItem);
         updateUploadTask(taskId, {
           uploadedEpisodes,
           selectedEpisodes: pendingFiles.get(taskId)?.size ?? 0,
           currentEpisode: null,
           currentFileProgress: 0,
+          currentFilePhase: "idle",
           progress: totalEpisodes > 0 ? (uploadedEpisodes / totalEpisodes) * 100 : 0,
         });
+        // 每集完成后立即通知 UI，避免整批结束前一直显示「已选择」
+        emitUploadEpisodeComplete(taskId, doneItem);
       } catch (error) {
         if (controller.signal.aborted) break;
         failedEpisodes.push(item.episodeNo);
@@ -417,8 +593,11 @@ export function startUploadTask(
           status: "failed",
           currentEpisode: null,
           currentFileProgress: 0,
+          currentFilePhase: "idle",
           error: lastError,
         });
+        // 单集失败立即停止后续集
+        break;
       }
     }
 
@@ -429,6 +608,7 @@ export function startUploadTask(
       selectedEpisodes,
       currentEpisode: null,
       currentFileProgress: 0,
+      currentFilePhase: "idle",
       progress: totalEpisodes > 0 ? (uploadedEpisodes / totalEpisodes) * 100 : 0,
       step: uploadedEpisodes >= totalEpisodes && totalEpisodes > 0 ? 3 : 2,
       status: stopped
@@ -441,7 +621,7 @@ export function startUploadTask(
       error: failedEpisodes.length > 0 && !stopped ? lastError : "",
     });
     return { completed, failedEpisodes, stopped };
-  })().finally(() => {
+  }).finally(() => {
     uploadControllers.delete(taskId);
     uploadRuns.delete(taskId);
   });

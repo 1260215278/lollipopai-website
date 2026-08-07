@@ -16,11 +16,13 @@ test("upload tasks use a versioned metadata store while files stay in memory", (
   assert.doesNotMatch(storeSource, /"Upload failed"/);
 });
 
-test("different dramas can upload concurrently and pausing only stops the selected task", () => {
+test("different dramas queue serially and pausing only stops the selected task", () => {
   assert.match(storeSource, /const uploadControllers = new Map<string, AbortController>\(\)/);
+  assert.match(storeSource, /runExclusiveUpload/);
   assert.match(storeSource, /const activeRun = uploadRuns\.get\(taskId\)/);
   assert.match(storeSource, /uploadControllers\.get\(taskId\)\?\.abort\(\)/);
   assert.match(storeSource, /uploadRuns\.set\(taskId, run\)/);
+  assert.match(storeSource, /currentFilePhase/);
   assert.match(layoutSource, /Math\.min\(100, Math\.max\(task\.progress/);
 });
 

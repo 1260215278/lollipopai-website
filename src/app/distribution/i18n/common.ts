@@ -5,6 +5,8 @@ export interface CommonMessages {
   networkError: string;
   serverError: string;
   uploadRequestTooLarge: string;
+  /** 分片/合并请求超时 */
+  uploadTimeout: string;
   loading: string;
   submit: string;
   submitting: string;
@@ -53,6 +55,7 @@ export const common: Record<Locale, CommonMessages> = {
     networkError: "网络异常，请稍后重试",
     serverError: "服务器繁忙，请稍后重试",
     uploadRequestTooLarge: "文件超过当前上传通道限制，请联系平台管理员",
+    uploadTimeout: "上传超时，请检查网络后重试",
     loading: "加载中...",
     submit: "提交",
     submitting: "提交中...",
@@ -95,6 +98,7 @@ export const common: Record<Locale, CommonMessages> = {
     networkError: "網路異常，請稍後重試",
     serverError: "伺服器繁忙，請稍後重試",
     uploadRequestTooLarge: "檔案超過目前上傳通道限制，請聯絡平台管理員",
+    uploadTimeout: "上傳逾時，請檢查網路後重試",
     loading: "載入中...",
     submit: "提交",
     submitting: "提交中...",
@@ -137,6 +141,7 @@ export const common: Record<Locale, CommonMessages> = {
     networkError: "Network error, please try again later",
     serverError: "Server is busy, please try again later",
     uploadRequestTooLarge: "The file exceeds the current upload gateway limit. Contact the platform administrator",
+    uploadTimeout: "Upload timed out. Check your network and try again",
     loading: "Loading...",
     submit: "Submit",
     submitting: "Submitting...",
@@ -179,6 +184,7 @@ export const common: Record<Locale, CommonMessages> = {
     networkError: "Erro de rede, tente novamente mais tarde",
     serverError: "Servidor ocupado, tente novamente mais tarde",
     uploadRequestTooLarge: "O arquivo excede o limite atual do canal de envio. Contate o administrador da plataforma",
+    uploadTimeout: "Tempo de envio esgotado. Verifique a rede e tente novamente",
     loading: "Carregando...",
     submit: "Enviar",
     submitting: "Enviando...",

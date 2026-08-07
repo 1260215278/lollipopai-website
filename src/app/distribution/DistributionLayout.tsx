@@ -269,7 +269,10 @@ export function DistributionLayout() {
         } catch (statusErr) {
           if (!alive) return;
           const code = statusErr instanceof ApiError ? statusErr.code : -1;
-          if (code === 401 || code === 401181 || code === 401182) {
+          // 401/401181/401182：硬失效；403328：App access 过期（H5 可静默续期，官网无 refresh 链 → 等同重登）
+          // byAppToken 对 401182 常返回 wire code=500，必须靠回落 status 的码把用户送去登录，
+          // 否则会卡在「Token失效」空态（localStorage 仍有过期 token）。
+          if (code === 401 || code === 401181 || code === 401182 || code === 403328) {
             clearTokens();
             navigate("/login", { replace: true });
             return;
@@ -909,7 +912,8 @@ function UploadTaskMenu({
                           </div>
                           <p className="mt-1 text-[11px] text-gray-400">
                             {formatTaskMessage(t.common.uploadTaskProgress, {
-                              done: task.uploadedEpisodes,
+                              // 展示层再夹紧，防止历史脏数据出现 13/8
+                              done: total > 0 ? Math.min(task.uploadedEpisodes, total) : task.uploadedEpisodes,
                               total,
                               percent,
                             })}

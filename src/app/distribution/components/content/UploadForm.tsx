@@ -72,15 +72,19 @@ import {
 import { parseEpisodeTemplate } from "./episodeTemplate";
 import { getFolderEpisodeTitle, prepareBatchVideoFiles } from "./batchVideoFiles";
 import {
+  getPendingEpisodeMeta,
   getPendingUploadFiles,
   getUploadTask,
   clearPendingUploadFiles,
   pauseUploadTask,
   removePendingUploadFile,
+  setPendingEpisodeMeta,
   setPendingUploadFile,
   startUploadTask,
+  subscribeUploadEpisodeComplete,
   updateUploadTask,
   useUploadTasks,
+  type UploadTaskCompletedItem,
 } from "../../uploadTaskStore";
 
 const DESC_LIMIT = 200;
@@ -435,16 +439,45 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     setUploadingEps(taskSnapshot?.status === "uploading");
   }, [taskSnapshot?.status]);
 
-  // 恢复服务端草稿
+  /** 将单集上传结果写回表格行（整批中途即可变「已上传」，不依赖整批结束） */
+  const applyCompletedEpisode = React.useCallback(
+    (item: UploadTaskCompletedItem) => {
+      pendingFilesRef.current.delete(item.episodeNo);
+      setVideos((prev) =>
+        prev.map((video) => {
+          if (video.episodeNo !== item.episodeNo) return video;
+          return {
+            ...video,
+            uploadStatus: item.result.uploadStatus,
+            file: null,
+            duration: "",
+            fileError: item.result.uploadStatus === 1 ? "" : t.videoUploadFailed,
+            uploadProgress: null,
+            videoSize: item.result.videoSize ?? 0,
+            videoDuration: item.result.videoDuration ?? 0,
+            videoUrl: item.videoUrl,
+            fileName: item.fileName,
+          };
+        }),
+      );
+    },
+    [t.videoUploadFailed],
+  );
+
+  // 恢复服务端草稿 + 内存中的待传 File/标题/时长
   useEffect(() => {
     if (resumeCourseId === null) return;
     let active = true;
-    const storedFiles = pendingFilesRef.current;
     void fetchDraft(resumeCourseId)
       .then((draft) => {
         if (!active || !draft) return;
         const c = draft.course;
         const existingTask = getUploadTask(taskId);
+        // 以 store 实时快照为准（勿用 remount 前的过期 Map 副本）
+        const storedFiles = getPendingUploadFiles(taskId);
+        const storedMeta = getPendingEpisodeMeta(taskId);
+        pendingFilesRef.current = new Map(storedFiles);
+
         setCourseId(c.courseId);
         setBasicInfo({
           cover: c.titleImg || "",
@@ -465,39 +498,64 @@ export const UploadForm: React.FC<UploadFormProps> = ({
           fileSize: c.highlightFileSize ?? null,
           uploadTime: c.highlightUploadTime || "",
         }));
-        // 已上传集回显
+        // 已上传集回显；服务端已成功的集清掉本地 File，避免仍显示「已选择」
         const planned = c.plannedEpisodes || 0;
-        setVideos(
-          Array.from({ length: planned }, (_, i) => {
-            const no = i + 1;
-            const ep = draft.episodes.find((e) => e.episodeNo === no);
-            return {
-              episodeNo: no,
-              title: ep?.title || "",
-              file: storedFiles.get(no) ?? null,
-              duration: "",
-              fileError: "",
-              uploadStatus: ep?.uploadStatus ?? 0,
-              uploadProgress: existingTask?.currentEpisode === no ? existingTask.currentFileProgress : null,
-              videoSize: ep?.videoSize ?? 0,
-              videoDuration: ep?.videoDuration ?? 0,
-              videoUrl: ep?.videoUrl || "",
-              fileName: ep?.fileName || "",
-              fileRef: React.createRef<HTMLInputElement>(),
-            };
-          }),
-        );
+        const rows = Array.from({ length: planned }, (_, i) => {
+          const no = i + 1;
+          const ep = draft.episodes.find((e) => e.episodeNo === no);
+          const serverUploaded = (ep?.uploadStatus ?? 0) === 1;
+          if (serverUploaded && storedFiles.has(no)) {
+            removePendingUploadFile(taskId, no);
+            pendingFilesRef.current.delete(no);
+          }
+          const localFile = serverUploaded ? null : storedFiles.get(no) ?? null;
+          const meta = storedMeta.get(no);
+          return {
+            episodeNo: no,
+            // 本地未提交的标题优先，否则用草稿
+            title: (meta?.title && meta.title.length > 0 ? meta.title : ep?.title) || "",
+            file: localFile,
+            duration: localFile ? meta?.duration || "" : "",
+            fileError: "",
+            uploadStatus: ep?.uploadStatus ?? 0,
+            uploadProgress:
+              existingTask?.status === "uploading" && existingTask.currentEpisode === no
+                ? existingTask.currentFileProgress
+                : null,
+            videoSize: ep?.videoSize ?? 0,
+            videoDuration: ep?.videoDuration ?? 0,
+            videoUrl: ep?.videoUrl || "",
+            fileName: ep?.fileName || "",
+            fileRef: React.createRef<HTMLInputElement>(),
+          };
+        });
+        setVideos(rows);
+        // 恢复后补读时长，避免一直「读取中…」
+        rows.forEach((row) => {
+          if (!row.file || row.duration) return;
+          void readVideoDuration(row.file).then((dur) => {
+            if (!active) return;
+            setPendingEpisodeMeta(taskId, row.episodeNo, { duration: dur });
+            setVideos((prev) =>
+              prev.map((video) =>
+                video.episodeNo === row.episodeNo && video.file ? { ...video, duration: dur } : video,
+              ),
+            );
+          });
+        });
         const uploadedEpisodes = draft.episodes.filter((episode) => episode.uploadStatus === 1).length;
         const totalEpisodes = c.plannedEpisodes || 0;
         const isUploading = existingTask?.status === "uploading";
+        const liveSelected = getPendingUploadFiles(taskId).size;
         updateUploadTask(taskId, {
           courseId: c.courseId,
           title: c.title,
           totalEpisodes,
           uploadedEpisodes,
-          selectedEpisodes: storedFiles.size,
+          selectedEpisodes: liveSelected,
           currentEpisode: isUploading ? existingTask.currentEpisode : null,
           currentFileProgress: isUploading ? existingTask.currentFileProgress : 0,
+          currentFilePhase: isUploading ? existingTask.currentFilePhase : "idle",
           progress: isUploading
             ? existingTask.progress
             : totalEpisodes > 0
@@ -519,6 +577,14 @@ export const UploadForm: React.FC<UploadFormProps> = ({
       active = false;
     };
   }, [resumeCourseId, taskId]);
+
+  // 上传任务在表单外运行：每集完成即时刷新行；卸载再进也能订阅到后续完成
+  useEffect(() => {
+    return subscribeUploadEpisodeComplete(taskId, (item) => {
+      if (!mountedRef.current) return;
+      applyCompletedEpisode(item);
+    });
+  }, [taskId, applyCompletedEpisode]);
 
   useEffect(() => {
     if (courseId === null) return;
@@ -676,8 +742,15 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     }
   };
 
-  const updateVideo = (ep: number, field: Partial<VideoRow>) =>
+  const updateVideo = (ep: number, field: Partial<VideoRow>) => {
+    if (field.title !== undefined || field.duration !== undefined) {
+      setPendingEpisodeMeta(taskId, ep, {
+        ...(field.title !== undefined ? { title: field.title } : {}),
+        ...(field.duration !== undefined ? { duration: field.duration } : {}),
+      });
+    }
     setVideos((v) => v.map((item) => (item.episodeNo === ep ? { ...item, ...field } : item)));
+  };
 
   const onPickVideo = (ep: number, file: File | undefined, title?: string) => {
     if (!file) return;
@@ -689,14 +762,20 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     }
     pendingFilesRef.current.set(ep, file);
     setPendingUploadFile(taskId, ep, file);
+    const nextTitle = title ? title.slice(0, EPISODE_TITLE_LIMIT) : undefined;
+    if (nextTitle) setPendingEpisodeMeta(taskId, ep, { title: nextTitle, duration: "" });
+    else setPendingEpisodeMeta(taskId, ep, { duration: "" });
     updateVideo(ep, {
       file,
       fileError: "",
       duration: "",
       uploadProgress: null,
-      ...(title ? { title: title.slice(0, EPISODE_TITLE_LIMIT) } : {}),
+      ...(nextTitle ? { title: nextTitle } : {}),
     });
-    void readVideoDuration(file).then((dur) => updateVideo(ep, { duration: dur }));
+    void readVideoDuration(file).then((dur) => {
+      setPendingEpisodeMeta(taskId, ep, { duration: dur });
+      updateVideo(ep, { duration: dur });
+    });
   };
 
   const onPickBatchVideos = (fileList: FileList | null) => {
@@ -743,31 +822,15 @@ export const UploadForm: React.FC<UploadFormProps> = ({
           episodeNo: video.episodeNo,
           title: video.title,
           file: video.file as File,
+          // 替换已上传集时不得再累加 uploadedEpisodes
+          alreadyUploaded: video.uploadStatus === 1,
         })),
       );
       const result = await run;
       if (!mountedRef.current) return;
+      // 单集完成已由 subscribeUploadEpisodeComplete 即时写回；此处再兜底对齐整批结果
       if (result.completed.length > 0) {
-        const completed = new Map(result.completed.map((item) => [item.episodeNo, item]));
-        setVideos((prev) =>
-          prev.map((video) => {
-            const item = completed.get(video.episodeNo);
-            if (!item) return { ...video, uploadProgress: null };
-            pendingFilesRef.current.delete(video.episodeNo);
-            return {
-              ...video,
-              uploadStatus: item.result.uploadStatus,
-              file: null,
-              duration: "",
-              fileError: item.result.uploadStatus === 1 ? "" : t.videoUploadFailed,
-              uploadProgress: null,
-              videoSize: item.result.videoSize ?? 0,
-              videoDuration: item.result.videoDuration ?? 0,
-              videoUrl: item.videoUrl,
-              fileName: item.fileName,
-            };
-          }),
-        );
+        result.completed.forEach((item) => applyCompletedEpisode(item));
       }
       if (result.stopped) {
         toast(t.uploadStopped);
@@ -1010,7 +1073,10 @@ export const UploadForm: React.FC<UploadFormProps> = ({
       {draftRestored && (
         <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-amber-50 border border-amber-100 mb-5">
           <RotateCcw className="w-4 h-4 text-amber-500 flex-shrink-0" />
-          <p className="text-xs text-amber-700 flex-1">{t.draftRestored}</p>
+          <div className="flex-1 min-w-0">
+            <p className="text-xs text-amber-700">{t.draftRestored}</p>
+            <p className="text-xs text-amber-600/90 mt-0.5">{t.draftRestoredReselect}</p>
+          </div>
           <button
             onClick={() => void discardDraft()}
             className="text-xs text-amber-600 hover:text-amber-800 underline flex-shrink-0"
@@ -1410,6 +1476,11 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                 {videos.map((v) => {
                   const isUploaded = v.uploadStatus === 1;
                   const isUploading = v.file !== null && v.uploadProgress !== null;
+                  const isMerging =
+                    isUploading &&
+                    taskSnapshot?.status === "uploading" &&
+                    taskSnapshot.currentEpisode === v.episodeNo &&
+                    taskSnapshot.currentFilePhase === "merging";
                   return (
                     <div
                       key={v.episodeNo}
@@ -1523,15 +1594,17 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                         }}
                       >
                         {isUploading && <Loader2 className="w-3 h-3 animate-spin" />}
-                        {isUploading
-                          ? `${t.epUploading} ${v.uploadProgress}%`
-                          : v.fileError
-                            ? t.epStatusError
-                            : isUploaded
-                              ? t.epStatusUploaded
-                              : v.file
-                                ? t.epStatusReady
-                                : t.epStatusPending}
+                        {isMerging
+                          ? t.epMerging
+                          : isUploading
+                            ? `${t.epUploading} ${v.uploadProgress}%`
+                            : v.fileError
+                              ? t.epStatusError
+                              : isUploaded
+                                ? t.epStatusUploaded
+                                : v.file
+                                  ? t.epStatusReady
+                                  : t.epStatusPending}
                       </span>
                     </div>
                   );
@@ -1571,7 +1644,11 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                 style={{ background: "#111111", fontWeight: 600 }}
               >
                 {uploadingEps && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                {uploadingEps ? t.epUploading : t.next}
+                {uploadingEps
+                  ? taskSnapshot?.currentFilePhase === "merging"
+                    ? t.epMerging
+                    : t.epUploading
+                  : t.next}
               </button>
             </div>
           </div>

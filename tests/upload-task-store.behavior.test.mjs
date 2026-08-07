@@ -50,7 +50,7 @@ async function loadExecutableStore({ persistedTasks = [] } = {}) {
       "const saveEpisode = (...args) => globalThis.__uploadTaskTestHooks.saveEpisode(...args);",
     )
     .replace(
-      'import { PUBLISHER_UPLOAD_PATH, uploadFile } from "../services/upload";',
+      'import { PUBLISHER_UPLOAD_PATH, uploadFile, type UploadProgressPhase } from "../services/upload";',
       "const PUBLISHER_UPLOAD_PATH = 'test/publisher'; const uploadFile = (...args) => globalThis.__uploadTaskTestHooks.uploadFile(...args);",
     );
   assert.notEqual(isolatedSource, source);
@@ -71,14 +71,14 @@ async function loadExecutableStore({ persistedTasks = [] } = {}) {
 const flushMicrotasks = () => new Promise((resolve) => setImmediate(resolve));
 const waitForPersistence = () => new Promise((resolve) => setTimeout(resolve, 160));
 
-test("upload task store runs different dramas concurrently and pauses only the selected task", async () => {
+test("upload task store serializes different dramas and pauses only the selected task", async () => {
   const { localStorage, store } = await loadExecutableStore();
   const activeUploads = new Map();
 
   globalThis.__uploadTaskTestHooks.uploadFile = (file, _path, signal, onProgress) =>
     new Promise((resolve, reject) => {
       activeUploads.set(file.name, { resolve, signal });
-      onProgress(25);
+      onProgress(25, "uploading");
       signal.addEventListener("abort", () => reject(new Error("aborted")), { once: true });
     });
   globalThis.__uploadTaskTestHooks.saveEpisode = async () => ({
@@ -105,12 +105,21 @@ test("upload task store runs different dramas concurrently and pauses only the s
   ]);
 
   assert.equal(duplicateFirstRun, firstRun);
-  assert.equal(activeUploads.size, 2);
+  await flushMicrotasks();
+
+  // 全局串行：同一时刻只有第一个任务真正在传
+  assert.equal(activeUploads.size, 1);
+  assert.ok(activeUploads.has("first.mp4"));
   assert.equal(store.getUploadTask(first.id).status, "uploading");
   assert.equal(store.getUploadTask(second.id).status, "uploading");
-  assert.equal(activeUploads.get("second.mp4").signal.aborted, false);
+  assert.equal(store.getUploadTask(first.id).currentFilePhase, "uploading");
 
   store.pauseUploadTask(first.id);
+  await flushMicrotasks();
+
+  // 第一个被 pause 后，第二个才开始
+  assert.ok(activeUploads.has("second.mp4"));
+  assert.equal(activeUploads.get("second.mp4").signal.aborted, false);
   activeUploads.get("second.mp4").resolve("https://example.com/second.mp4");
   await flushMicrotasks();
 
@@ -118,17 +127,109 @@ test("upload task store runs different dramas concurrently and pauses only the s
   assert.equal(firstResult.stopped, true);
   assert.equal(secondResult.stopped, false);
   assert.equal(activeUploads.get("first.mp4").signal.aborted, true);
-  assert.equal(activeUploads.get("second.mp4").signal.aborted, false);
   assert.equal(store.getUploadTask(first.id).status, "paused");
   assert.equal(store.getUploadTask(first.id).selectedEpisodes, 1);
   assert.equal(store.getUploadTask(second.id).status, "ready");
   assert.equal(store.getUploadTask(second.id).uploadedEpisodes, 1);
   assert.equal(store.getUploadTask(second.id).selectedEpisodes, 0);
+  assert.equal(store.getUploadTask(second.id).currentFilePhase, "idle");
 
   await waitForPersistence();
   const persisted = localStorage.getItem(STORAGE_KEY);
   assert.equal(persisted.includes("first.mp4"), false);
   assert.equal(persisted.includes("second.mp4"), false);
+});
+
+test("upload task store stops the whole batch after the first failed episode", async () => {
+  const { store } = await loadExecutableStore();
+  const started = [];
+
+  globalThis.__uploadTaskTestHooks.uploadFile = async (file, _path, _signal, onProgress) => {
+    started.push(file.name);
+    onProgress(50, "uploading");
+    if (file.name === "ep1.mp4") throw new Error("chunk failed");
+    return `https://example.com/${file.name}`;
+  };
+  globalThis.__uploadTaskTestHooks.saveEpisode = async () => ({
+    uploadStatus: 1,
+    videoSize: 1,
+    videoDuration: 1,
+  });
+
+  const task = store.createUploadTask({ courseId: 301, title: "失败即停", totalEpisodes: 2, step: 2 });
+  const ep1 = new File(["1"], "ep1.mp4", { type: "video/mp4" });
+  const ep2 = new File(["2"], "ep2.mp4", { type: "video/mp4" });
+  store.setPendingUploadFile(task.id, 1, ep1);
+  store.setPendingUploadFile(task.id, 2, ep2);
+
+  const result = await store.startUploadTask(task.id, 301, 2, [
+    { episodeNo: 1, title: "1", file: ep1 },
+    { episodeNo: 2, title: "2", file: ep2 },
+  ]);
+
+  assert.deepEqual(started, ["ep1.mp4"]);
+  assert.deepEqual(result.failedEpisodes, [1]);
+  assert.equal(result.completed.length, 0);
+  assert.equal(result.stopped, false);
+  assert.equal(store.getUploadTask(task.id).status, "failed");
+  assert.equal(store.getUploadTask(task.id).selectedEpisodes, 2);
+});
+
+test("upload task store does not count replace uploads past totalEpisodes", async () => {
+  const { store } = await loadExecutableStore();
+  let saves = 0;
+
+  globalThis.__uploadTaskTestHooks.uploadFile = async (_file, _path, _signal, onProgress) => {
+    onProgress(100, "merging");
+    return "https://example.com/v.mp4";
+  };
+  globalThis.__uploadTaskTestHooks.saveEpisode = async () => {
+    saves += 1;
+    return { uploadStatus: 1, videoSize: 1, videoDuration: 1 };
+  };
+
+  const task = store.createUploadTask({ courseId: 401, title: "替换计数", totalEpisodes: 2, step: 2 });
+  store.updateUploadTask(task.id, { uploadedEpisodes: 2, progress: 100, status: "ready" });
+
+  const ep1 = new File(["1"], "ep1.mp4", { type: "video/mp4" });
+  const ep2 = new File(["2"], "ep2.mp4", { type: "video/mp4" });
+  store.setPendingUploadFile(task.id, 1, ep1);
+  store.setPendingUploadFile(task.id, 2, ep2);
+
+  await store.startUploadTask(task.id, 401, 2, [
+    { episodeNo: 1, title: "1", file: ep1, alreadyUploaded: true },
+    { episodeNo: 2, title: "2", file: ep2, alreadyUploaded: true },
+  ]);
+
+  assert.equal(saves, 2);
+  assert.equal(store.getUploadTask(task.id).uploadedEpisodes, 2);
+  assert.equal(store.getUploadTask(task.id).totalEpisodes, 2);
+});
+
+test("upload task store clamps inflated uploadedEpisodes from persistence", async () => {
+  const { store } = await loadExecutableStore({
+    persistedTasks: [
+      {
+        id: "inflated-task",
+        courseId: 501,
+        title: "脏数据",
+        totalEpisodes: 8,
+        uploadedEpisodes: 13,
+        selectedEpisodes: 0,
+        currentEpisode: null,
+        currentFileProgress: 0,
+        progress: 100,
+        step: 2,
+        status: "ready",
+        error: "",
+        updatedAt: 1,
+      },
+    ],
+  });
+
+  const restored = store.getUploadTask("inflated-task");
+  assert.equal(restored.uploadedEpisodes, 8);
+  assert.equal(restored.progress, 100);
 });
 
 test("upload task store restores persisted uploads as paused metadata without local Files", async () => {
@@ -157,6 +258,7 @@ test("upload task store restores persisted uploads as paused metadata without lo
   assert.equal(restored.selectedEpisodes, 0);
   assert.equal(restored.currentEpisode, null);
   assert.equal(restored.currentFileProgress, 0);
+  assert.equal(restored.currentFilePhase, "idle");
   assert.equal(restored.progress, 50);
   assert.equal(store.getPendingUploadFiles("persisted-task").size, 0);
 

@@ -3,7 +3,10 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" type="image/png" href="/og-image.png" />
+        <!-- tab/favicon 用正方形 App 图标；og-image.png 是 1200×630 分享图，缩到 tab 只剩黑块 -->
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
 
         <!-- Preconnect to external image CDN for faster image loading -->
         <link rel="preconnect" href="https://images.unsplash.com" />
@@ -169,15 +172,21 @@
             #root {
                 height: 100%;
             }
-            /* FOUC 防护：在 CSS 加载前保持深色主题，避免白底黑字闪烁 */
+            /*
+             * FOUC 防护：仅锁背景与基础排版，避免白底闪烁。
+             * 禁止在此写 body/a/h* 的 color —— 这段 <style> 是 unlayered，
+             * 在 CSS Cascade Layers 下会压过 Tailwind @layer utilities
+             *（如 text-white、text-foreground），导致：
+             *   - 橙底按钮白字被 a{color:#ff7e5f} 冲成淡橙
+             *   - 发行中心浅色表单 input 继承 body 浅灰字色变淡
+             * 字色交给 theme.css / 组件 class。
+             */
             body {
                 background-color: #0a0a0a;
-                color: #e5e5e5;
                 font-family: 'Inter', system-ui, -apple-system, sans-serif;
                 line-height: 1.5;
             }
             h1, h2, h3, h4, h5, h6 {
-                color: #ffffff;
                 font-weight: 700;
                 margin: 0;
             }
@@ -185,7 +194,6 @@
                 margin: 0;
             }
             a {
-                color: #ff7e5f;
                 text-decoration: none;
             }
         </style>

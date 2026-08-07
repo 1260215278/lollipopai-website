@@ -119,7 +119,11 @@ export async function request<T>(path: string, options: RequestOptions = {}): Pr
     throw new ApiError(res.status, msg);
   }
 
-  if (json.code === 401 || res.status === 401) {
+  // 401：硬失效（缺 token / 无效 / 全局作废）。
+  // 403328：App access 过期（AuthorizationInterceptor 给 H5 静默续期用的专用码）。
+  // 官网未接 refreshToken 续期链，403328 与 401 同等处理：清会话并回登录，避免发行中心卡在「Token失效」空态。
+  // 注意：部分业务文案键也曾占用 403328 号段，但 wire code=403328 且走 @Login 拦截器时语义即为 access 过期。
+  if (json.code === 401 || json.code === 403328 || res.status === 401) {
     if (toastOnError) toast.error(json.msg);
     handleUnauthorized();
     throw new ApiError(json.code, json.msg);

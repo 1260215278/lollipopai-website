@@ -37,6 +37,9 @@ async function loadExecutableStore({ persistedTasks = [] } = {}) {
     saveEpisode: async () => {
       throw new Error("saveEpisode test hook not configured");
     },
+    saveHighlight: async () => {
+      throw new Error("saveHighlight test hook not configured");
+    },
   };
 
   const source = await readFile(STORE_PATH, "utf8");
@@ -46,8 +49,12 @@ async function loadExecutableStore({ persistedTasks = [] } = {}) {
       "const useSyncExternalStore = () => { throw new Error('React hook is not used in store behavior tests'); };",
     )
     .replace(
-      'import { saveEpisode, type SaveEpisodeResult } from "../services/content";',
-      "const saveEpisode = (...args) => globalThis.__uploadTaskTestHooks.saveEpisode(...args);",
+      'import { saveEpisode, saveHighlight, type SaveEpisodeResult } from "../services/content";',
+      "const saveEpisode = (...args) => globalThis.__uploadTaskTestHooks.saveEpisode(...args); const saveHighlight = (...args) => globalThis.__uploadTaskTestHooks.saveHighlight(...args);",
+    )
+    .replace(
+      'import { getOssHeicJpgUrl } from "../services/heic";',
+      "const getOssHeicJpgUrl = (_file, url) => url;",
     )
     .replace(
       'import { PUBLISHER_UPLOAD_PATH, uploadFile, type UploadProgressPhase } from "../services/upload";',
@@ -273,4 +280,148 @@ test("upload task store restores persisted uploads as paused metadata without lo
   const persisted = JSON.parse(localStorage.getItem(STORAGE_KEY));
   assert.deepEqual(persisted.map((task) => task.id), ["persisted-task"]);
   assert.equal(JSON.stringify(persisted).includes("transient.mp4"), false);
+});
+
+test("task asset upload keeps copyright/highlight results after simulated form unmount", async () => {
+  const { store } = await loadExecutableStore();
+  const activeUploads = new Map();
+
+  globalThis.__uploadTaskTestHooks.uploadFile = (file, _path, signal, onProgress) =>
+    new Promise((resolve, reject) => {
+      activeUploads.set(file.name, { resolve, reject, signal });
+      onProgress?.(40, "uploading");
+      signal.addEventListener("abort", () => reject(new Error("aborted")), { once: true });
+    });
+  globalThis.__uploadTaskTestHooks.saveHighlight = async (_courseId, videoUrl, fileName) => ({
+    courseId: 701,
+    highlightVideoUrl: videoUrl,
+    highlightFileName: fileName || "highlight.mp4",
+    highlightFileSize: 12,
+    highlightUploadTime: "2026-08-08 12:00:00",
+  });
+
+  const task = store.createUploadTask({ courseId: 701, title: "附属素材", totalEpisodes: 1, step: 1 });
+  const proof = new File(["proof"], "proof.pdf", { type: "application/pdf" });
+  const highlight = new File(["hl"], "highlight.mp4", { type: "video/mp4" });
+
+  const proofRun = store.startTaskAssetUpload(task.id, "copyrightProof", proof);
+  await flushMicrotasks();
+  assert.equal(store.getTaskAsset(task.id, "copyrightProof").status, "uploading");
+  assert.equal(store.getTaskAsset(task.id, "copyrightProof").progress, 40);
+
+  // 模拟切换任务 / unmount：不再持有 React state，仅 store 继续
+  const highlightRun = store.startTaskAssetUpload(task.id, "highlight", highlight, { courseId: 701 });
+  await flushMicrotasks();
+  // 全局串行：版权未完成前高光排队，但状态已标 uploading
+  assert.equal(store.getTaskAsset(task.id, "highlight").status, "uploading");
+  assert.ok(activeUploads.has("proof.pdf"));
+  assert.equal(activeUploads.has("highlight.mp4"), false);
+
+  activeUploads.get("proof.pdf").resolve("https://cdn.example.com/proof.pdf");
+  await flushMicrotasks();
+  await proofRun;
+
+  assert.equal(store.getTaskAsset(task.id, "copyrightProof").status, "done");
+  assert.equal(store.getTaskAsset(task.id, "copyrightProof").url, "https://cdn.example.com/proof.pdf");
+  await flushMicrotasks();
+  assert.ok(activeUploads.has("highlight.mp4"));
+
+  activeUploads.get("highlight.mp4").resolve("https://cdn.example.com/highlight.mp4");
+  await flushMicrotasks();
+  const highlightResult = await highlightRun;
+
+  assert.equal(highlightResult.status, "done");
+  assert.equal(store.getTaskAsset(task.id, "highlight").status, "done");
+  assert.equal(store.getTaskAsset(task.id, "highlight").url, "https://cdn.example.com/highlight.mp4");
+  assert.equal(store.getTaskAsset(task.id, "highlight").fileName, "highlight.mp4");
+  assert.equal(store.getTaskAsset(task.id, "highlight").fileSize, 12);
+});
+
+test("task asset replace aborts previous upload without wiping the new one", async () => {
+  const { store } = await loadExecutableStore();
+  const activeUploads = new Map();
+
+  globalThis.__uploadTaskTestHooks.uploadFile = (file, _path, signal, onProgress) =>
+    new Promise((resolve, reject) => {
+      activeUploads.set(file.name, { resolve, reject, signal });
+      onProgress?.(10, "uploading");
+      signal.addEventListener(
+        "abort",
+        () => reject(Object.assign(new Error("aborted"), { name: "AbortError" })),
+        { once: true },
+      );
+    });
+  globalThis.__uploadTaskTestHooks.saveHighlight = async () => {
+    throw new Error("saveHighlight should not run in this test");
+  };
+
+  const task = store.createUploadTask({ courseId: 702, title: "替换版权", totalEpisodes: 1, step: 1 });
+  const first = new File(["a"], "a.pdf", { type: "application/pdf" });
+  const second = new File(["b"], "b.pdf", { type: "application/pdf" });
+
+  const firstRun = store.startTaskAssetUpload(task.id, "copyrightProof", first);
+  await flushMicrotasks();
+  assert.ok(activeUploads.has("a.pdf"));
+
+  const secondRun = store.startTaskAssetUpload(task.id, "copyrightProof", second);
+  await flushMicrotasks();
+  assert.equal(activeUploads.get("a.pdf").signal.aborted, true);
+  assert.equal(store.getTaskAsset(task.id, "copyrightProof").status, "uploading");
+  assert.equal(store.getTaskAsset(task.id, "copyrightProof").fileName, "b.pdf");
+
+  // 旧请求 abort 后不得把新上传刷成 idle/failed
+  await firstRun.catch(() => undefined);
+  await flushMicrotasks();
+  assert.equal(store.getTaskAsset(task.id, "copyrightProof").status, "uploading");
+  assert.equal(store.getTaskAsset(task.id, "copyrightProof").fileName, "b.pdf");
+
+  // 全局串行：旧 run settle 后新文件才真正 uploadFile
+  await flushMicrotasks();
+  assert.ok(activeUploads.has("b.pdf"));
+  activeUploads.get("b.pdf").resolve("https://cdn.example.com/b.pdf");
+  await secondRun;
+  assert.equal(store.getTaskAsset(task.id, "copyrightProof").status, "done");
+  assert.equal(store.getTaskAsset(task.id, "copyrightProof").url, "https://cdn.example.com/b.pdf");
+});
+
+test("clearTaskAsset aborts in-flight highlight and returns idle", async () => {
+  const { store } = await loadExecutableStore();
+  let aborted = false;
+
+  globalThis.__uploadTaskTestHooks.uploadFile = (_file, _path, signal) =>
+    new Promise((_resolve, reject) => {
+      signal.addEventListener(
+        "abort",
+        () => {
+          aborted = true;
+          reject(Object.assign(new Error("aborted"), { name: "AbortError" }));
+        },
+        { once: true },
+      );
+    });
+  globalThis.__uploadTaskTestHooks.saveHighlight = async () => ({
+    courseId: 1,
+    highlightVideoUrl: "x",
+    highlightFileName: "x",
+    highlightFileSize: 1,
+    highlightUploadTime: "",
+  });
+
+  const task = store.createUploadTask({ courseId: 703, title: "删高光", totalEpisodes: 1, step: 3 });
+  const run = store.startTaskAssetUpload(
+    task.id,
+    "highlight",
+    new File(["h"], "h.mp4", { type: "video/mp4" }),
+    { courseId: 703 },
+  );
+  await flushMicrotasks();
+  assert.equal(store.getTaskAsset(task.id, "highlight").status, "uploading");
+
+  store.clearTaskAsset(task.id, "highlight");
+  await flushMicrotasks();
+  await run.catch(() => undefined);
+
+  assert.equal(aborted, true);
+  assert.equal(store.getTaskAsset(task.id, "highlight").status, "idle");
+  assert.equal(store.getTaskAsset(task.id, "highlight").url, "");
 });

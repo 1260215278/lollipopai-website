@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from "react";
-import { saveEpisode, type SaveEpisodeResult } from "../services/content";
+import { saveEpisode, saveHighlight, type SaveEpisodeResult } from "../services/content";
+import { getOssHeicJpgUrl } from "../services/heic";
 import { PUBLISHER_UPLOAD_PATH, uploadFile, type UploadProgressPhase } from "../services/upload";
 
 /**
@@ -8,9 +9,28 @@ import { PUBLISHER_UPLOAD_PATH, uploadFile, type UploadProgressPhase } from "../
  *
  * 并发约定：全局同一时刻只跑一个上传任务（多短剧排队），避免抢带宽表现为「卡住」。
  * 失败约定：同一任务内任一集失败立即停止后续集，避免 failed/uploading 状态乱跳。
+ *
+ * 版权证明 / 高光时刻：与剧集同一套任务内存态，表单 unmount / 任务切换后上传继续，
+ * 完成结果写回 store，避免本地 uploading 丢失后「永远上传中」或 URL 丢失。
  */
 export type UploadTaskStatus = "draft" | "uploading" | "paused" | "ready" | "failed";
 export type UploadFilePhase = "idle" | UploadProgressPhase;
+/** 任务内附属素材（非剧集队列） */
+export type TaskAssetKind = "copyrightProof" | "highlight";
+export type TaskAssetStatus = "idle" | "uploading" | "done" | "failed";
+
+export interface TaskAssetState {
+  kind: TaskAssetKind;
+  status: TaskAssetStatus;
+  progress: number;
+  phase: UploadFilePhase;
+  fileName: string;
+  url: string;
+  error: string;
+  /** 高光 saveHighlight 回写；版权证明用本地 file.size */
+  fileSize: number | null;
+  uploadTime: string;
+}
 
 export interface UploadTask {
   id: string;
@@ -90,8 +110,13 @@ const tasks = new Map<string, UploadTask>();
 const pendingFiles = new Map<string, Map<number, File>>();
 /** 跨路由保留的剧集标题/时长（File 之外的轻量 UI 态，不进 localStorage） */
 const pendingEpisodeMeta = new Map<string, Map<number, PendingEpisodeMeta>>();
+/** 版权证明 / 高光：仅会话内存，不写 localStorage（含 File 流与 in-flight 态） */
+const taskAssets = new Map<string, Map<TaskAssetKind, TaskAssetState>>();
 const uploadControllers = new Map<string, AbortController>();
 const uploadRuns = new Map<string, Promise<UploadTaskRunResult>>();
+/** key = `${taskId}:${kind}` */
+const assetControllers = new Map<string, AbortController>();
+const assetRuns = new Map<string, Promise<TaskAssetState>>();
 /** 单集上传完成回调：表单卸载后仍可通知已挂载的订阅者即时刷新行态 */
 const episodeCompleteListeners = new Map<string, Set<(item: UploadTaskCompletedItem) => void>>();
 const listeners = new Set<() => void>();
@@ -101,6 +126,46 @@ let persistTimer: ReturnType<typeof setTimeout> | null = null;
 let idSequence = 0;
 /** 全局串行队列尾：保证多任务排队，同一时刻只有一个真正在传。 */
 let globalUploadTail: Promise<void> = Promise.resolve();
+
+function assetRunKey(taskId: string, kind: TaskAssetKind): string {
+  return `${taskId}:${kind}`;
+}
+
+function emptyAssetState(kind: TaskAssetKind): TaskAssetState {
+  return {
+    kind,
+    status: "idle",
+    progress: 0,
+    phase: "idle",
+    fileName: "",
+    url: "",
+    error: "",
+    fileSize: null,
+    uploadTime: "",
+  };
+}
+
+function readAssetState(taskId: string, kind: TaskAssetKind): TaskAssetState {
+  return taskAssets.get(taskId)?.get(kind) ?? emptyAssetState(kind);
+}
+
+function writeAssetState(taskId: string, kind: TaskAssetKind, next: TaskAssetState): void {
+  if (!tasks.has(taskId)) return;
+  const map = taskAssets.get(taskId) ?? new Map<TaskAssetKind, TaskAssetState>();
+  map.set(kind, { ...next, kind });
+  taskAssets.set(taskId, map);
+  commit();
+}
+
+function clearAssetMapsForTask(taskId: string): void {
+  for (const kind of ["copyrightProof", "highlight"] as TaskAssetKind[]) {
+    const key = assetRunKey(taskId, kind);
+    assetControllers.get(key)?.abort();
+    assetControllers.delete(key);
+    assetRuns.delete(key);
+  }
+  taskAssets.delete(taskId);
+}
 
 function isBrowser(): boolean {
   return typeof window !== "undefined";
@@ -390,6 +455,7 @@ export function removeUploadTask(taskId: string): void {
   uploadControllers.get(taskId)?.abort();
   uploadControllers.delete(taskId);
   episodeCompleteListeners.delete(taskId);
+  clearAssetMapsForTask(taskId);
   tasks.delete(taskId);
   pendingFiles.delete(taskId);
   pendingEpisodeMeta.delete(taskId);
@@ -402,10 +468,195 @@ export function clearUploadTasks(): void {
   uploadControllers.clear();
   uploadRuns.clear();
   episodeCompleteListeners.clear();
+  assetControllers.forEach((controller) => controller.abort());
+  assetControllers.clear();
+  assetRuns.clear();
+  taskAssets.clear();
   tasks.clear();
   pendingFiles.clear();
   pendingEpisodeMeta.clear();
   commit();
+}
+
+export function getTaskAsset(taskId: string, kind: TaskAssetKind): TaskAssetState {
+  hydrate();
+  return { ...readAssetState(taskId, kind) };
+}
+
+/** 中止指定附属上传；默认回到 idle（用户替换文件 / 删除任务时用）。 */
+export function abortTaskAssetUpload(taskId: string, kind: TaskAssetKind): void {
+  hydrate();
+  const key = assetRunKey(taskId, kind);
+  assetControllers.get(key)?.abort();
+  assetControllers.delete(key);
+  // 进行中的 run finally 也会清；这里先把 UI 拉回 idle，避免卸载再进时仍显示「上传中」
+  if (readAssetState(taskId, kind).status === "uploading") {
+    writeAssetState(taskId, kind, emptyAssetState(kind));
+  }
+}
+
+export function clearTaskAsset(taskId: string, kind: TaskAssetKind): void {
+  hydrate();
+  abortTaskAssetUpload(taskId, kind);
+  writeAssetState(taskId, kind, emptyAssetState(kind));
+}
+
+/**
+ * 版权证明 / 高光：在 store 内跑上传，表单卸载后仍继续。
+ * - 与剧集共用全局串行队列，避免多路上传抢带宽「假卡死」
+ * - 同 kind 重复调用会中止上一次
+ * - 高光成功后自动 saveHighlight；版权证明只回写 URL（随 saveBasic 落库）
+ */
+export function startTaskAssetUpload(
+  taskId: string,
+  kind: TaskAssetKind,
+  file: File,
+  options: { courseId?: number | null } = {},
+): Promise<TaskAssetState> {
+  hydrate();
+  if (!tasks.has(taskId)) {
+    return Promise.resolve(emptyAssetState(kind));
+  }
+
+  const key = assetRunKey(taskId, kind);
+  // 替换上传：中止旧请求，避免完成回调互相覆盖
+  assetControllers.get(key)?.abort();
+  assetControllers.delete(key);
+
+  const controller = new AbortController();
+  assetControllers.set(key, controller);
+
+  writeAssetState(taskId, kind, {
+    kind,
+    status: "uploading",
+    progress: 0,
+    phase: "uploading",
+    fileName: file.name,
+    url: "",
+    error: "",
+    fileSize: null,
+    uploadTime: "",
+  });
+
+  const isOwner = () => assetControllers.get(key) === controller;
+
+  const run = runExclusiveUpload(async (): Promise<TaskAssetState> => {
+    if (!tasks.has(taskId) || controller.signal.aborted || !isOwner()) {
+      return emptyAssetState(kind);
+    }
+
+    try {
+      let url = await uploadFile(
+        file,
+        PUBLISHER_UPLOAD_PATH,
+        controller.signal,
+        (percent, phase = "uploading") => {
+          // 已被同 kind 新上传接管时禁止回写，避免进度/状态互相踩
+          if (!tasks.has(taskId) || !isOwner() || controller.signal.aborted) return;
+          writeAssetState(taskId, kind, {
+            kind,
+            status: "uploading",
+            progress: percent,
+            phase,
+            fileName: file.name,
+            url: "",
+            error: "",
+            fileSize: null,
+            uploadTime: "",
+          });
+        },
+      );
+
+      if (!tasks.has(taskId) || !isOwner() || controller.signal.aborted) {
+        return emptyAssetState(kind);
+      }
+
+      if (kind === "copyrightProof") {
+        url = getOssHeicJpgUrl(file, url);
+        const done: TaskAssetState = {
+          kind,
+          status: "done",
+          progress: 100,
+          phase: "idle",
+          fileName: file.name,
+          url,
+          error: "",
+          fileSize: file.size,
+          uploadTime: "",
+        };
+        writeAssetState(taskId, kind, done);
+        return done;
+      }
+
+      // highlight：切片上传后立即挂到草稿，切换任务回来可从服务端/store 双源恢复
+      const courseId = options.courseId ?? tasks.get(taskId)?.courseId ?? null;
+      if (courseId === null) {
+        const failed: TaskAssetState = {
+          kind,
+          status: "failed",
+          progress: 0,
+          phase: "idle",
+          fileName: file.name,
+          url: "",
+          error: "courseId required",
+          fileSize: null,
+          uploadTime: "",
+        };
+        writeAssetState(taskId, kind, failed);
+        return failed;
+      }
+
+      const saved = await saveHighlight(courseId, url, file.name);
+      const done: TaskAssetState = {
+        kind,
+        status: "done",
+        progress: 100,
+        phase: "idle",
+        fileName: saved.highlightFileName || file.name,
+        url: saved.highlightVideoUrl,
+        error: "",
+        fileSize: saved.highlightFileSize,
+        uploadTime: saved.highlightUploadTime || "",
+      };
+      // 服务端已落库：即使随后被替换中止，只要仍是 owner 就写 done；非 owner 不覆盖新上传
+      if (tasks.has(taskId) && isOwner()) {
+        writeAssetState(taskId, kind, done);
+      }
+      return done;
+    } catch (error) {
+      if (!tasks.has(taskId) || !isOwner()) {
+        return emptyAssetState(kind);
+      }
+      if (controller.signal.aborted) {
+        // 用户中止 / 删任务 / 替换：回 idle，不落 failed
+        writeAssetState(taskId, kind, emptyAssetState(kind));
+        return emptyAssetState(kind);
+      }
+      const failed: TaskAssetState = {
+        kind,
+        status: "failed",
+        progress: 0,
+        phase: "idle",
+        fileName: file.name,
+        url: "",
+        error: error instanceof Error ? error.message : "",
+        fileSize: null,
+        uploadTime: "",
+      };
+      writeAssetState(taskId, kind, failed);
+      return failed;
+    } finally {
+      if (assetControllers.get(key) === controller) {
+        assetControllers.delete(key);
+      }
+      if (assetRuns.get(key) === run) {
+        assetRuns.delete(key);
+      }
+    }
+  });
+
+  assetRuns.set(key, run);
+  return run;
 }
 
 /** 订阅单集上传完成（用于离开页面再回来或长传过程中即时刷新行状态） */

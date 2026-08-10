@@ -72,14 +72,17 @@ import {
 import { parseEpisodeTemplate } from "./episodeTemplate";
 import { getFolderEpisodeTitle, prepareBatchVideoFiles } from "./batchVideoFiles";
 import {
+  clearTaskAsset,
   getPendingEpisodeMeta,
   getPendingUploadFiles,
+  getTaskAsset,
   getUploadTask,
   clearPendingUploadFiles,
   pauseUploadTask,
   removePendingUploadFile,
   setPendingEpisodeMeta,
   setPendingUploadFile,
+  startTaskAssetUpload,
   startUploadTask,
   subscribeUploadEpisodeComplete,
   updateUploadTask,
@@ -209,32 +212,37 @@ function parseCachedPubConfig(raw: string | null): PublishConfigState | null {
 
 /**
  * 版权证明上传（自制/授权均必填）。支持图片 + PDF + Word，走 /publisher/course/upload（文档 ≤20MB）。
+ * 上传挂在 task store 上：任务切换 / 表单 unmount 后仍继续，完成 URL 写回 onChange，避免丢结果或假「上传中」。
  * 文档无法 <img> 预览，故已上传时展示文件名链接（点开新标签查看）。
  */
 function CopyrightProofUpload({
   t,
+  taskId,
   value,
   onChange,
 }: {
   t: ContentMessages;
+  taskId: string;
   value: string;
   onChange: (url: string) => void;
 }) {
   const ref = useRef<HTMLInputElement>(null);
-  const [uploading, setUploading] = useState(false);
+  // 订阅全局任务快照，asset 状态变更时会 commit 触发重渲染
+  useUploadTasks();
+  const asset = getTaskAsset(taskId, "copyrightProof");
+  const uploading = asset.status === "uploading";
+  const displayUrl = asset.status === "done" && asset.url ? asset.url : value;
 
-  const pick = async (file: File | undefined) => {
-    if (!file) return;
-    setUploading(true);
-    try {
-      // bug9：HEIC 图片证明上传原文件，保存 OSS 动态转 JPG URL；PDF 等原样上传
-      const url = await uploadFile(file, PUBLISHER_UPLOAD_PATH);
-      onChange(getOssHeicJpgUrl(file, url));
-    } catch {
-      // uploadFile 已 toast
-    } finally {
-      setUploading(false);
+  useEffect(() => {
+    if (asset.status === "done" && asset.url && asset.url !== value) {
+      onChange(asset.url);
     }
+  }, [asset.status, asset.url, onChange, value]);
+
+  const pick = (file: File | undefined) => {
+    if (!file) return;
+    // HEIC 转 JPG URL 在 store 内处理；此处只负责发起
+    void startTaskAssetUpload(taskId, "copyrightProof", file);
   };
 
   return (
@@ -247,19 +255,19 @@ function CopyrightProofUpload({
         onChange={(e) => {
           const f = e.target.files?.[0];
           e.target.value = "";
-          void pick(f);
+          pick(f);
         }}
       />
-      {value ? (
+      {displayUrl ? (
         <div className="flex items-center gap-3 px-4 h-[45px] rounded-lg border border-gray-200 bg-gray-50">
           <a
-            href={value}
+            href={displayUrl}
             target="_blank"
             rel="noreferrer"
             className="flex-1 truncate text-sm text-gray-700 hover:underline"
-            title={fileNameFromUrl(value)}
+            title={fileNameFromUrl(displayUrl)}
           >
-            {fileNameFromUrl(value)}
+            {uploading && asset.fileName ? asset.fileName : fileNameFromUrl(displayUrl)}
           </a>
           <button
             type="button"
@@ -278,7 +286,12 @@ function CopyrightProofUpload({
           className="w-full h-[88px] rounded-lg border border-dashed border-gray-300 flex flex-col items-center justify-center gap-1.5 text-gray-400 hover:border-gray-400 transition-colors disabled:opacity-60"
         >
           {uploading ? (
-            <Loader2 className="w-5 h-5 animate-spin" />
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" />
+              {asset.progress > 0 ? (
+                <span className="text-xs text-gray-400">{asset.progress}%</span>
+              ) : null}
+            </>
           ) : (
             <>
               <Upload className="w-5 h-5" />
@@ -356,6 +369,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   const mountedRef = useRef(true);
   const pendingFilesRef = useRef<Map<number, File>>(getPendingUploadFiles(taskId));
   const taskSnapshot = useUploadTasks().find((task) => task.id === taskId) ?? null;
+  const copyrightAsset = getTaskAsset(taskId, "copyrightProof");
+  const highlightAsset = getTaskAsset(taskId, "highlight");
 
   const bi = (field: Partial<BasicInfo>) => setBasicInfo((p) => ({ ...p, ...field }));
 
@@ -439,6 +454,56 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     setUploadingEps(taskSnapshot?.status === "uploading");
   }, [taskSnapshot?.status]);
 
+  // 任务切换回来：用 store 中已完成的版权证明 URL 回填（saveBasic 前仅存会话内存）
+  useEffect(() => {
+    if (copyrightAsset.status === "done" && copyrightAsset.url && copyrightAsset.url !== basicInfo.copyrightProof) {
+      bi({ copyrightProof: copyrightAsset.url });
+    }
+  }, [copyrightAsset.status, copyrightAsset.url, basicInfo.copyrightProof]);
+
+  // 高光上传在 store 内跑：切换任务再进时同步 uploading / 完成 / 失败，避免本地 state 卡死
+  useEffect(() => {
+    if (highlightAsset.status === "uploading") {
+      setHighlight((p) => ({
+        ...p,
+        uploading: true,
+        error: "",
+        fileName: highlightAsset.fileName || p.fileName,
+      }));
+      return;
+    }
+    if (highlightAsset.status === "done" && highlightAsset.url) {
+      setHighlight({
+        videoUrl: highlightAsset.url,
+        fileName: highlightAsset.fileName,
+        fileSize: highlightAsset.fileSize,
+        uploadTime: highlightAsset.uploadTime,
+        file: null,
+        uploading: false,
+        error: "",
+      });
+      return;
+    }
+    if (highlightAsset.status === "failed") {
+      setHighlight((p) => ({
+        ...p,
+        uploading: false,
+        error: highlightAsset.error || t.highlightUploadFailed,
+      }));
+      return;
+    }
+    // idle：仅清掉「上传中」假态，不抹掉草稿/已保存 URL
+    setHighlight((p) => (p.uploading ? { ...p, uploading: false } : p));
+  }, [
+    highlightAsset.status,
+    highlightAsset.url,
+    highlightAsset.fileName,
+    highlightAsset.fileSize,
+    highlightAsset.uploadTime,
+    highlightAsset.error,
+    t.highlightUploadFailed,
+  ]);
+
   /** 将单集上传结果写回表格行（整批中途即可变「已上传」，不依赖整批结束） */
   const applyCompletedEpisode = React.useCallback(
     (item: UploadTaskCompletedItem) => {
@@ -491,13 +556,42 @@ export const UploadForm: React.FC<UploadFormProps> = ({
           copyrightType: c.copyrightType || 1,
           copyrightProof: c.copyrightProof || "",
         });
-        setHighlight((p) => ({
-          ...p,
-          videoUrl: c.highlightVideoUrl || "",
-          fileName: c.highlightFileName || "",
-          fileSize: c.highlightFileSize ?? null,
-          uploadTime: c.highlightUploadTime || "",
-        }));
+        // 草稿高光 + store 进行中/已完成态合并：store 优先（任务切换后后台刚传完）
+        const liveHighlight = getTaskAsset(taskId, "highlight");
+        if (liveHighlight.status === "done" && liveHighlight.url) {
+          setHighlight({
+            videoUrl: liveHighlight.url,
+            fileName: liveHighlight.fileName,
+            fileSize: liveHighlight.fileSize,
+            uploadTime: liveHighlight.uploadTime,
+            file: null,
+            uploading: false,
+            error: "",
+          });
+        } else if (liveHighlight.status === "uploading") {
+          setHighlight((p) => ({
+            ...p,
+            videoUrl: c.highlightVideoUrl || p.videoUrl,
+            fileName: liveHighlight.fileName || c.highlightFileName || "",
+            fileSize: c.highlightFileSize ?? null,
+            uploadTime: c.highlightUploadTime || "",
+            uploading: true,
+            error: "",
+          }));
+        } else {
+          setHighlight((p) => ({
+            ...p,
+            videoUrl: c.highlightVideoUrl || "",
+            fileName: c.highlightFileName || "",
+            fileSize: c.highlightFileSize ?? null,
+            uploadTime: c.highlightUploadTime || "",
+            uploading: false,
+          }));
+        }
+        const liveCopyright = getTaskAsset(taskId, "copyrightProof");
+        if (liveCopyright.status === "done" && liveCopyright.url) {
+          setBasicInfo((prev) => ({ ...prev, copyrightProof: liveCopyright.url }));
+        }
         // 已上传集回显；服务端已成功的集清掉本地 File，避免仍显示「已选择」
         const planned = c.plannedEpisodes || 0;
         const rows = Array.from({ length: planned }, (_, i) => {
@@ -626,6 +720,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     }
     pendingFilesRef.current.clear();
     clearPendingUploadFiles(taskId);
+    clearTaskAsset(taskId, "copyrightProof");
+    clearTaskAsset(taskId, "highlight");
     updateUploadTask(taskId, {
       courseId: null,
       title: "",
@@ -850,33 +946,27 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     pauseUploadTask(taskId);
   };
 
-  const onPickHighlight = async (file: File | undefined) => {
+  const onPickHighlight = (file: File | undefined) => {
     if (!file || courseId === null) return;
     if (file.size > VIDEO_MAX) {
       setHighlight((p) => ({ ...p, error: t.fileTooLarge }));
       return;
     }
     setHighlight((p) => ({ ...p, file, uploading: true, error: "" }));
-    try {
-      const url = await uploadFile(file, PUBLISHER_UPLOAD_PATH);
-      const saved = await saveHighlight(courseId, url, file.name);
-      setHighlight({
-        videoUrl: saved.highlightVideoUrl,
-        fileName: saved.highlightFileName || file.name,
-        fileSize: saved.highlightFileSize,
-        uploadTime: saved.highlightUploadTime || "",
-        file: null,
-        uploading: false,
-        error: "",
-      });
-      toast.success(t.highlightSaved);
-    } catch {
-      setHighlight((p) => ({ ...p, uploading: false, error: t.highlightUploadFailed }));
-    }
+    void startTaskAssetUpload(taskId, "highlight", file, { courseId }).then((result) => {
+      if (!mountedRef.current) return;
+      if (result.status === "done") {
+        toast.success(t.highlightSaved);
+      } else if (result.status === "failed") {
+        toast.error(t.highlightUploadFailed);
+      }
+    });
   };
 
   const removeHighlight = async () => {
     if (courseId === null) return;
+    // 先中止进行中的高光上传，避免删完后又被后台完成写回
+    clearTaskAsset(taskId, "highlight");
     setHighlight((p) => ({ ...p, uploading: true, error: "" }));
     try {
       await saveHighlight(courseId, "");
@@ -1350,6 +1440,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
               <Field label={t.copyrightProofLabel} required>
                 <CopyrightProofUpload
                   t={t}
+                  taskId={taskId}
                   value={basicInfo.copyrightProof}
                   onChange={(url) => bi({ copyrightProof: url })}
                 />

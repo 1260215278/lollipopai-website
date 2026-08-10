@@ -18,6 +18,7 @@ import {
   Loader2,
   Square,
   PauseCircle,
+  Plus,
 } from "lucide-react";
 import { toast } from "sonner";
 import type { ContentMessages } from "../../i18n/content";
@@ -97,6 +98,57 @@ const NAME_LIMIT = 100;
 const COVER_MAX = 10 * 1024 * 1024;
 /** 发布配置不进后端草稿，按 courseId 在前端缓存。 */
 const PUB_CONFIG_CACHE_PREFIX = "distribution.upload.publishConfig.";
+
+/**
+ * 自制确权材料类型（UI 三选一，落库仍走 copyrightProof）：
+ * 1 作品登记证书 / 2 成片可信时间戳 / 3 AI 工程截图
+ */
+type SelfProofKind = 1 | 2 | 3;
+const SELF_PROOF = {
+  REGISTRATION: 1 as SelfProofKind,
+  TIMESTAMP: 2 as SelfProofKind,
+  AI: 3 as SelfProofKind,
+};
+const AI_PROOF_MIN = 4;
+const AI_PROOF_MAX = 20;
+
+/**
+ * 模版图：列表 56px 缩略图 + 弹层全清预览（Figma 17195:516）。
+ * 预览保留源分辨率（AI 3222×1842），不再压到 1200 以免弹层发糊。
+ */
+const SELF_PROOF_THUMBS: Record<SelfProofKind, string> = {
+  1: "/distribution/copyright-templates/work-registration-thumb.jpg",
+  2: "/distribution/copyright-templates/timestamp-thumb.jpg",
+  3: "/distribution/copyright-templates/ai-engineering-thumb.jpg",
+};
+const SELF_PROOF_PREVIEWS: Record<SelfProofKind, string> = {
+  1: "/distribution/copyright-templates/work-registration.jpg",
+  2: "/distribution/copyright-templates/timestamp.jpg",
+  3: "/distribution/copyright-templates/ai-engineering.jpg",
+};
+
+/** 作品登记：截图/PDF；时间戳：PDF；AI：仅图片 */
+const SELF_PROOF_ACCEPT: Record<SelfProofKind, string> = {
+  1: `${IMAGE_ACCEPT},application/pdf,.pdf`,
+  2: "application/pdf,.pdf",
+  3: IMAGE_ACCEPT,
+};
+
+/** copyrightProof 多 URL 用逗号分隔（与 courseLabel 同风格；AI 4–20 张） */
+function splitProofUrls(raw: string): string[] {
+  return raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+function joinProofUrls(urls: string[]): string {
+  return urls.filter(Boolean).join(",");
+}
+
+function inferSelfProofKind(proof: string): SelfProofKind {
+  return splitProofUrls(proof).length > 1 ? SELF_PROOF.AI : SELF_PROOF.REGISTRATION;
+}
 
 interface BasicInfo {
   cover: string;
@@ -211,33 +263,42 @@ function parseCachedPubConfig(raw: string | null): PublishConfigState | null {
 }
 
 /**
- * 版权证明上传（自制/授权均必填）。支持图片 + PDF + Word，走 /publisher/course/upload（文档 ≤20MB）。
- * 上传挂在 task store 上：任务切换 / 表单 unmount 后仍继续，完成 URL 写回 onChange，避免丢结果或假「上传中」。
- * 文档无法 <img> 预览，故已上传时展示文件名链接（点开新标签查看）。
+ * 单文件版权证明上传（授权 / 自制登记证书 / 自制时间戳）。
+ * 上传挂在 task store 上：任务切换 / 表单 unmount 后仍继续，完成 URL 写回 onChange。
  */
 function CopyrightProofUpload({
   t,
   taskId,
   value,
   onChange,
+  accept = COPYRIGHT_PROOF_ACCEPT,
+  prompt,
+  formatHint,
+  emptyHeightClass = "h-[88px]",
 }: {
   t: ContentMessages;
   taskId: string;
   value: string;
   onChange: (url: string) => void;
+  accept?: string;
+  prompt?: string;
+  formatHint?: string;
+  emptyHeightClass?: string;
 }) {
   const ref = useRef<HTMLInputElement>(null);
   // 订阅全局任务快照，asset 状态变更时会 commit 触发重渲染
   useUploadTasks();
   const asset = getTaskAsset(taskId, "copyrightProof");
   const uploading = asset.status === "uploading";
-  const displayUrl = asset.status === "done" && asset.url ? asset.url : value;
+  // 多 URL（AI 截图）场景下单文件组件只看第一个；切换 kind 会清空
+  const singleValue = value.includes(",") ? "" : value;
+  const displayUrl = asset.status === "done" && asset.url ? asset.url : singleValue;
 
   useEffect(() => {
-    if (asset.status === "done" && asset.url && asset.url !== value) {
+    if (asset.status === "done" && asset.url && asset.url !== singleValue) {
       onChange(asset.url);
     }
-  }, [asset.status, asset.url, onChange, value]);
+  }, [asset.status, asset.url, onChange, singleValue]);
 
   const pick = (file: File | undefined) => {
     if (!file) return;
@@ -250,7 +311,7 @@ function CopyrightProofUpload({
       <input
         ref={ref}
         type="file"
-        accept={COPYRIGHT_PROOF_ACCEPT}
+        accept={accept}
         className="hidden"
         onChange={(e) => {
           const f = e.target.files?.[0];
@@ -283,7 +344,7 @@ function CopyrightProofUpload({
           type="button"
           onClick={() => ref.current?.click()}
           disabled={uploading}
-          className="w-full h-[88px] rounded-lg border border-dashed border-gray-300 flex flex-col items-center justify-center gap-1.5 text-gray-400 hover:border-gray-400 transition-colors disabled:opacity-60"
+          className={`w-full ${emptyHeightClass} rounded-[14px] border border-dashed border-gray-200 flex flex-col items-center justify-center gap-1.5 text-gray-500 hover:border-gray-400 transition-colors disabled:opacity-60`}
         >
           {uploading ? (
             <>
@@ -294,13 +355,340 @@ function CopyrightProofUpload({
             </>
           ) : (
             <>
-              <Upload className="w-5 h-5" />
-              <span className="text-sm">{t.copyrightProofPrompt}</span>
-              <span className="text-xs text-gray-300">{t.copyrightProofFormat}</span>
+              <Upload className="w-4 h-4" />
+              <span className="text-xs" style={{ fontWeight: 500 }}>
+                {prompt ?? t.copyrightProofPrompt}
+              </span>
+              {formatHint ? <span className="text-[10px] text-gray-400">{formatHint}</span> : null}
             </>
           )}
         </button>
       )}
+    </div>
+  );
+}
+
+/** AI 工程截图：多图上传 4–20 张，URL 逗号拼接写入 copyrightProof */
+function AiScreenshotUpload({
+  t,
+  value,
+  onChange,
+}: {
+  t: ContentMessages;
+  value: string;
+  onChange: (joined: string) => void;
+}) {
+  const ref = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const urls = splitProofUrls(value);
+  const canAdd = urls.length < AI_PROOF_MAX;
+
+  const pick = async (files: FileList | null) => {
+    if (!files || files.length === 0 || !canAdd) return;
+    const remaining = AI_PROOF_MAX - urls.length;
+    const batch = Array.from(files).slice(0, remaining);
+    if (batch.length === 0) return;
+    setUploading(true);
+    setProgress(0);
+    const next = [...urls];
+    try {
+      for (let i = 0; i < batch.length; i++) {
+        const file = batch[i];
+        const url = await uploadFile(file, PUBLISHER_UPLOAD_PATH);
+        next.push(getOssHeicJpgUrl(file, url));
+        setProgress(Math.round(((i + 1) / batch.length) * 100));
+        onChange(joinProofUrls(next));
+      }
+    } catch {
+      toast.error(t.coverUploadFailed);
+    } finally {
+      setUploading(false);
+      setProgress(0);
+    }
+  };
+
+  const removeAt = (idx: number) => {
+    onChange(joinProofUrls(urls.filter((_, i) => i !== idx)));
+  };
+
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <span className="text-[11px] text-gray-400" style={{ fontWeight: 600 }}>
+          {urls.length > 0
+            ? `${urls.length} / ${AI_PROOF_MAX}`
+            : t.selfProofAiNeedCount}
+        </span>
+        {urls.length > 0 && canAdd ? (
+          <button
+            type="button"
+            onClick={() => ref.current?.click()}
+            disabled={uploading}
+            className="flex items-center gap-1 text-[11px] text-gray-500 hover:text-gray-800 disabled:opacity-50"
+            style={{ fontWeight: 500 }}
+          >
+            {uploading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Plus className="w-3 h-3" />}
+            {t.selfProofAiAdd}
+          </button>
+        ) : null}
+      </div>
+      <input
+        ref={ref}
+        type="file"
+        accept={IMAGE_ACCEPT}
+        multiple
+        className="hidden"
+        onChange={(e) => {
+          void pick(e.target.files);
+          e.target.value = "";
+        }}
+      />
+      {urls.length > 0 ? (
+        <div className="grid grid-cols-4 sm:grid-cols-5 gap-2">
+          {urls.map((url, idx) => (
+            <div
+              key={`${url}-${idx}`}
+              className="relative aspect-square rounded-xl overflow-hidden border border-gray-200 bg-gray-50 group"
+            >
+              <img src={url} alt="" className="w-full h-full object-cover" />
+              <button
+                type="button"
+                onClick={() => removeAt(idx)}
+                className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/60 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                aria-label="remove"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </div>
+          ))}
+          {canAdd ? (
+            <button
+              type="button"
+              onClick={() => ref.current?.click()}
+              disabled={uploading}
+              className="aspect-square rounded-xl border border-dashed border-gray-200 flex flex-col items-center justify-center gap-1 text-gray-400 hover:border-gray-400 disabled:opacity-50"
+            >
+              {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+            </button>
+          ) : null}
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={() => ref.current?.click()}
+          disabled={uploading}
+          className="w-full rounded-[14px] border border-dashed border-gray-200 flex flex-col items-center justify-center gap-1.5 py-[18px] text-gray-500 hover:border-gray-400 transition-colors disabled:opacity-60"
+        >
+          {uploading ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              {progress > 0 ? <span className="text-xs text-gray-400">{progress}%</span> : null}
+            </>
+          ) : (
+            <>
+              <Upload className="w-4 h-4" />
+              <span className="text-xs" style={{ fontWeight: 500 }}>
+                {t.selfProofAiUpload}
+              </span>
+              <span className="text-[10px] text-gray-400">{t.selfProofAiFormat}</span>
+            </>
+          )}
+        </button>
+      )}
+    </div>
+  );
+}
+
+/** 模板预览弹层（Figma 17132:5228 / 17132:5517 / 17195:516） */
+function TemplatePreviewModal({
+  src,
+  caption,
+  onClose,
+  /** AI 工程截图为宽屏，弹层加宽；证书/时间戳保持竖版合适宽度 */
+  wide = false,
+}: {
+  src: string;
+  caption: string;
+  onClose: () => void;
+  wide?: boolean;
+}) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-[80] flex items-center justify-center bg-black/70 p-4 sm:p-6"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+    >
+      <div
+        className={`relative w-full ${wide ? "max-w-[min(1100px,94vw)]" : "max-w-[min(720px,92vw)]"}`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute -top-2 -right-2 z-10 w-8 h-8 rounded-full bg-white shadow flex items-center justify-center text-gray-600 hover:text-gray-900"
+          aria-label="close"
+        >
+          <X className="w-4 h-4" />
+        </button>
+        <div className="rounded-2xl overflow-hidden shadow-2xl bg-white">
+          <img
+            src={src}
+            alt=""
+            className="w-full max-h-[min(80vh,900px)] object-contain bg-[#f9f6ee]"
+            // 高清源图；禁止浏览器默认模糊缩放
+            style={{ imageRendering: "auto" }}
+            decoding="async"
+          />
+        </div>
+        <p className="mt-3 text-center text-xs text-white/90" style={{ fontWeight: 500 }}>
+          {caption}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * 自制确权材料区：三选一卡片 + 对应上传区 + 底部说明（Figma 17195:516）
+ */
+function SelfCopyrightUpload({
+  t,
+  taskId,
+  kind,
+  onKindChange,
+  value,
+  onChange,
+}: {
+  t: ContentMessages;
+  taskId: string;
+  kind: SelfProofKind;
+  onKindChange: (k: SelfProofKind) => void;
+  value: string;
+  onChange: (url: string) => void;
+}) {
+  const [previewKind, setPreviewKind] = useState<SelfProofKind | null>(null);
+
+  const options: {
+    kind: SelfProofKind;
+    title: string;
+    desc: string;
+  }[] = [
+    {
+      kind: SELF_PROOF.REGISTRATION,
+      title: t.selfProofRegistrationTitle,
+      desc: t.selfProofRegistrationDesc,
+    },
+    {
+      kind: SELF_PROOF.TIMESTAMP,
+      title: t.selfProofTimestampTitle,
+      desc: t.selfProofTimestampDesc,
+    },
+    {
+      kind: SELF_PROOF.AI,
+      title: t.selfProofAiTitle,
+      desc: t.selfProofAiDesc,
+    },
+  ];
+
+  return (
+    <div className="pt-3 space-y-3">
+      <p className="text-xs text-gray-500" style={{ fontWeight: 500 }}>
+        {t.selfProofPickHint}
+      </p>
+
+      <div className="space-y-2.5">
+        {options.map((opt) => {
+          const selected = kind === opt.kind;
+          return (
+            <button
+              key={opt.kind}
+              type="button"
+              onClick={() => onKindChange(opt.kind)}
+              className="w-full rounded-[14px] border overflow-hidden text-left transition-colors"
+              style={{
+                borderColor: selected ? "#111111" : "#E5E7EB",
+                background: selected ? "#FAFAFA" : "#FFFFFF",
+                borderWidth: selected ? 1.85 : 1,
+              }}
+            >
+              <div className="flex items-center">
+                <div
+                  className="p-2.5 flex-shrink-0"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setPreviewKind(opt.kind);
+                  }}
+                >
+                  <div className="relative w-14 h-14 rounded-[14px] overflow-hidden bg-[#f9f6ee]">
+                    <img
+                      src={SELF_PROOF_THUMBS[opt.kind]}
+                      alt=""
+                      className="w-full h-full object-cover opacity-80"
+                    />
+                    <span
+                      className="absolute left-1 bottom-1 rounded px-1 py-0.5 text-white bg-black/50 leading-none whitespace-nowrap"
+                      style={{ fontSize: 8, fontWeight: 600 }}
+                    >
+                      {t.selfProofTemplateBadge}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 flex-1 min-w-0 pr-3.5 py-3">
+                  <div
+                    className="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0"
+                    style={{ borderColor: selected ? "#111111" : "#D1D5DB" }}
+                  >
+                    {selected ? <div className="w-2 h-2 rounded-full bg-[#111111]" /> : null}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm text-gray-900 truncate" style={{ fontWeight: 600 }}>
+                      {opt.title}
+                    </p>
+                    <p className="text-[11px] text-gray-400 mt-0.5 truncate">{opt.desc}</p>
+                  </div>
+                </div>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {kind === SELF_PROOF.AI ? (
+        <AiScreenshotUpload t={t} value={value} onChange={onChange} />
+      ) : (
+        <CopyrightProofUpload
+          t={t}
+          taskId={taskId}
+          value={value}
+          onChange={onChange}
+          accept={SELF_PROOF_ACCEPT[kind]}
+          prompt={t.selfProofUploadFile}
+          emptyHeightClass="h-[52px]"
+        />
+      )}
+
+      <div className="rounded-[14px] border border-amber-200 bg-amber-50 px-3.5 py-2.5">
+        <p className="text-[10px] text-amber-900 leading-[16px]">{t.selfProofNote}</p>
+      </div>
+
+      {previewKind !== null ? (
+        <TemplatePreviewModal
+          src={SELF_PROOF_PREVIEWS[previewKind]}
+          caption={t.selfProofTemplateCaption}
+          wide={previewKind === SELF_PROOF.AI}
+          onClose={() => setPreviewKind(null)}
+        />
+      ) : null}
     </div>
   );
 }
@@ -326,6 +714,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   const [step, setStep] = useState<1 | 2 | 3>(() => getUploadTask(taskId)?.step ?? (resumeCourseId === null ? 1 : 2));
   const [courseId, setCourseId] = useState<number | null>(() => resumeCourseId);
   const [basicInfo, setBasicInfo] = useState<BasicInfo>(emptyBasic);
+  /** 自制确权材料类型（仅 UI；落库仅 copyrightProof） */
+  const [selfProofKind, setSelfProofKind] = useState<SelfProofKind>(SELF_PROOF.REGISTRATION);
   const [videos, setVideos] = useState<VideoRow[]>([]);
   const [pubConfig, setPubConfig] = useState<PublishConfigState>({
     publishScope: 1,
@@ -455,11 +845,13 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   }, [taskSnapshot?.status]);
 
   // 任务切换回来：用 store 中已完成的版权证明 URL 回填（saveBasic 前仅存会话内存）
+  // AI 多图不走 task asset，禁止单 URL 覆盖逗号拼接结果
   useEffect(() => {
+    if (selfProofKind === SELF_PROOF.AI && basicInfo.copyrightType === 1) return;
     if (copyrightAsset.status === "done" && copyrightAsset.url && copyrightAsset.url !== basicInfo.copyrightProof) {
       bi({ copyrightProof: copyrightAsset.url });
     }
-  }, [copyrightAsset.status, copyrightAsset.url, basicInfo.copyrightProof]);
+  }, [copyrightAsset.status, copyrightAsset.url, basicInfo.copyrightProof, basicInfo.copyrightType, selfProofKind]);
 
   // 高光上传在 store 内跑：切换任务再进时同步 uploading / 完成 / 失败，避免本地 state 卡死
   useEffect(() => {
@@ -556,6 +948,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
           copyrightType: c.copyrightType || 1,
           copyrightProof: c.copyrightProof || "",
         });
+        setSelfProofKind(inferSelfProofKind(c.copyrightProof || ""));
         // 草稿高光 + store 进行中/已完成态合并：store 优先（任务切换后后台刚传完）
         const liveHighlight = getTaskAsset(taskId, "highlight");
         if (liveHighlight.status === "done" && liveHighlight.url) {
@@ -736,6 +1129,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     });
     setCourseId(null);
     setBasicInfo(emptyBasic);
+    setSelfProofKind(SELF_PROOF.REGISTRATION);
     setVideos([]);
     setStep(1);
     setPubConfig({ publishScope: 1, onShelfNow: true });
@@ -762,6 +1156,14 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     }
   };
 
+  const proofUrls = splitProofUrls(basicInfo.copyrightProof);
+  const proofValid =
+    basicInfo.copyrightType === 2
+      ? proofUrls.length >= 1
+      : selfProofKind === SELF_PROOF.AI
+        ? proofUrls.length >= AI_PROOF_MIN && proofUrls.length <= AI_PROOF_MAX
+        : proofUrls.length === 1;
+
   const step1Valid =
     !!basicInfo.cover &&
     !!basicInfo.name &&
@@ -771,8 +1173,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     !!basicInfo.languageType &&
     basicInfo.classificationId !== null &&
     basicInfo.tags.length > 0 &&
-    // 自制/授权均需上传版权证明
-    !!basicInfo.copyrightProof;
+    // 自制：三选一对应材料；授权：版权证明
+    proofValid;
 
   /** Step1 → saveBasic → Step2 */
   const goStep2 = async () => {
@@ -1419,7 +1821,12 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                   ].map((opt) => (
                     <label key={opt.val} className="flex items-center gap-2 cursor-pointer">
                       <div
-                        onClick={() => bi({ copyrightType: opt.val })}
+                        onClick={() => {
+                          if (basicInfo.copyrightType === opt.val) return;
+                          clearTaskAsset(taskId, "copyrightProof");
+                          bi({ copyrightType: opt.val, copyrightProof: "" });
+                          if (opt.val === 1) setSelfProofKind(SELF_PROOF.REGISTRATION);
+                        }}
                         className="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0"
                         style={{ borderColor: basicInfo.copyrightType === opt.val ? "#111111" : "#D1D5DB" }}
                       >
@@ -1434,17 +1841,36 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                     </label>
                   ))}
                 </div>
+
+                {/* 自制：三选一确权材料（Figma 17195:516） */}
+                {basicInfo.copyrightType === 1 && (
+                  <SelfCopyrightUpload
+                    t={t}
+                    taskId={taskId}
+                    kind={selfProofKind}
+                    onKindChange={(k) => {
+                      if (k === selfProofKind) return;
+                      clearTaskAsset(taskId, "copyrightProof");
+                      bi({ copyrightProof: "" });
+                      setSelfProofKind(k);
+                    }}
+                    value={basicInfo.copyrightProof}
+                    onChange={(url) => bi({ copyrightProof: url })}
+                  />
+                )}
               </Field>
 
-              {/* 自制/授权均须上传版权证明（图片/PDF/Word，走 /publisher/course/upload） */}
-              <Field label={t.copyrightProofLabel} required>
-                <CopyrightProofUpload
-                  t={t}
-                  taskId={taskId}
-                  value={basicInfo.copyrightProof}
-                  onChange={(url) => bi({ copyrightProof: url })}
-                />
-              </Field>
+              {/* 授权：版权证明（图片/PDF/Word） */}
+              {basicInfo.copyrightType === 2 && (
+                <Field label={t.copyrightProofLabel} required>
+                  <CopyrightProofUpload
+                    t={t}
+                    taskId={taskId}
+                    value={basicInfo.copyrightProof}
+                    onChange={(url) => bi({ copyrightProof: url })}
+                  />
+                </Field>
+              )}
             </div>
           </div>
 

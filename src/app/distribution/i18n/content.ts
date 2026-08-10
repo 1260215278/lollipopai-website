@@ -63,6 +63,35 @@ export interface ContentMessages {
   copyrightProofLabel: string;
   copyrightProofPrompt: string;
   copyrightProofFormat: string;
+  /** 自制：请上传以下任意一种确权材料（三选一） */
+  selfProofPickHint: string;
+  /** 作品登记证书 */
+  selfProofRegistrationTitle: string;
+  selfProofRegistrationDesc: string;
+  /** 成片可信时间戳 */
+  selfProofTimestampTitle: string;
+  selfProofTimestampDesc: string;
+  /** AI 工程截图 */
+  selfProofAiTitle: string;
+  selfProofAiDesc: string;
+  /** 模版参考角标 */
+  selfProofTemplateBadge: string;
+  /** 模板预览底部说明 */
+  selfProofTemplateCaption: string;
+  /** 自制单文件上传提示 */
+  selfProofUploadFile: string;
+  /** AI 截图：需上传 4–20 张 */
+  selfProofAiNeedCount: string;
+  /** AI 截图：添加截图 */
+  selfProofAiAdd: string;
+  /** AI 截图：点击上传截图 */
+  selfProofAiUpload: string;
+  /** AI 截图：格式提示 */
+  selfProofAiFormat: string;
+  /** 自制底部提示 */
+  selfProofNote: string;
+  /** AI 截图数量不合法 */
+  selfProofAiCountError: string;
 
   // ── 行内操作菜单 ──
   actionViewDetail: string;
@@ -338,6 +367,22 @@ export const content: Record<Locale, ContentMessages> = {
     copyrightProofLabel: "版权证明",
     copyrightProofPrompt: "点击或拖拽上传版权证明",
     copyrightProofFormat: "支持 JPG、PNG、HEIC、PDF、DOC、DOCX 格式（≤20MB）",
+    selfProofPickHint: "请上传以下任意一种确权材料（三选一）：",
+    selfProofRegistrationTitle: "作品登记证书",
+    selfProofRegistrationDesc: "完整清晰截图 / PDF（1 份）",
+    selfProofTimestampTitle: "成片可信时间戳",
+    selfProofTimestampDesc: "官方时间戳证书 PDF 文件（1 份）",
+    selfProofAiTitle: "AI 工程截图",
+    selfProofAiDesc: "提供 4–20 张截图，包含提示词、操作及生成结果",
+    selfProofTemplateBadge: "模版参考",
+    selfProofTemplateCaption: "模版仅供参考，请上传你自己的证书文件",
+    selfProofUploadFile: "点击上传文件",
+    selfProofAiNeedCount: "需上传 4–20 张",
+    selfProofAiAdd: "添加截图",
+    selfProofAiUpload: "点击上传截图",
+    selfProofAiFormat: "4–20 张，仅支持图片格式",
+    selfProofNote: "注：仅视频截图不作为有效确权材料；附属 .tsa 源文件无需上传，请自行留存备查。",
+    selfProofAiCountError: "AI 工程截图需上传 4–20 张",
 
     actionViewDetail: "查看详情",
     actionEpisodes: "剧集视频",
@@ -587,6 +632,22 @@ export const content: Record<Locale, ContentMessages> = {
     copyrightProofLabel: "版權證明",
     copyrightProofPrompt: "點擊或拖曳上傳版權證明",
     copyrightProofFormat: "支援 JPG、PNG、HEIC、PDF、DOC、DOCX 格式（≤20MB）",
+    selfProofPickHint: "請上傳以下任意一種確權材料（三選一）：",
+    selfProofRegistrationTitle: "作品登記證書",
+    selfProofRegistrationDesc: "完整清晰截圖 / PDF（1 份）",
+    selfProofTimestampTitle: "成片可信時間戳",
+    selfProofTimestampDesc: "官方時間戳證書 PDF 文件（1 份）",
+    selfProofAiTitle: "AI 工程截圖",
+    selfProofAiDesc: "提供 4–20 張截圖，包含提示詞、操作及生成結果",
+    selfProofTemplateBadge: "模版參考",
+    selfProofTemplateCaption: "模版僅供參考，請上傳你自己的證書文件",
+    selfProofUploadFile: "點擊上傳文件",
+    selfProofAiNeedCount: "需上傳 4–20 張",
+    selfProofAiAdd: "添加截圖",
+    selfProofAiUpload: "點擊上傳截圖",
+    selfProofAiFormat: "4–20 張，僅支援圖片格式",
+    selfProofNote: "註：僅視頻截圖不作為有效確權材料；附屬 .tsa 源文件無需上傳，請自行留存備查。",
+    selfProofAiCountError: "AI 工程截圖需上傳 4–20 張",
 
     actionViewDetail: "查看詳情",
     actionEpisodes: "劇集影片",
@@ -836,6 +897,22 @@ export const content: Record<Locale, ContentMessages> = {
     copyrightProofLabel: "Copyright proof",
     copyrightProofPrompt: "Click or drag to upload copyright proof",
     copyrightProofFormat: "Supports JPG, PNG, HEIC, PDF, DOC, DOCX (≤20MB)",
+    selfProofPickHint: "Upload any one of the following proof materials (choose 1 of 3):",
+    selfProofRegistrationTitle: "Work registration certificate",
+    selfProofRegistrationDesc: "Clear screenshot / PDF (1 file)",
+    selfProofTimestampTitle: "Trusted timestamp for final cut",
+    selfProofTimestampDesc: "Official timestamp certificate PDF (1 file)",
+    selfProofAiTitle: "AI production screenshots",
+    selfProofAiDesc: "Provide 4–20 screenshots including prompts, steps, and results",
+    selfProofTemplateBadge: "Sample",
+    selfProofTemplateCaption: "Sample only — please upload your own certificate",
+    selfProofUploadFile: "Click to upload file",
+    selfProofAiNeedCount: "Upload 4–20 images",
+    selfProofAiAdd: "Add screenshots",
+    selfProofAiUpload: "Click to upload screenshots",
+    selfProofAiFormat: "4–20 images, image formats only",
+    selfProofNote: "Note: video-only screenshots are not valid proof; keep any .tsa source files yourself — no need to upload them.",
+    selfProofAiCountError: "AI production screenshots require 4–20 images",
 
     actionViewDetail: "View Details",
     actionEpisodes: "Episode Videos",
@@ -1086,6 +1163,22 @@ export const content: Record<Locale, ContentMessages> = {
     copyrightProofLabel: "Comprovante de direitos autorais",
     copyrightProofPrompt: "Clique ou arraste para enviar o comprovante",
     copyrightProofFormat: "Suporta JPG, PNG, HEIC, PDF, DOC, DOCX (≤20MB)",
+    selfProofPickHint: "Envie qualquer um dos materiais de prova abaixo (escolha 1 de 3):",
+    selfProofRegistrationTitle: "Certificado de registro da obra",
+    selfProofRegistrationDesc: "Captura nítida / PDF (1 arquivo)",
+    selfProofTimestampTitle: "Carimbo de tempo confiável do filme final",
+    selfProofTimestampDesc: "Certificado oficial de carimbo de tempo em PDF (1 arquivo)",
+    selfProofAiTitle: "Capturas do processo de IA",
+    selfProofAiDesc: "Forneça 4–20 capturas com prompts, etapas e resultados",
+    selfProofTemplateBadge: "Modelo",
+    selfProofTemplateCaption: "Apenas modelo — envie o seu próprio certificado",
+    selfProofUploadFile: "Clique para enviar o arquivo",
+    selfProofAiNeedCount: "Envie 4–20 imagens",
+    selfProofAiAdd: "Adicionar capturas",
+    selfProofAiUpload: "Clique para enviar capturas",
+    selfProofAiFormat: "4–20 imagens, apenas formatos de imagem",
+    selfProofNote: "Nota: capturas só de vídeo não contam como prova; arquivos .tsa não precisam ser enviados — guarde-os você mesmo.",
+    selfProofAiCountError: "As capturas de IA exigem de 4 a 20 imagens",
 
     actionViewDetail: "Ver detalhes",
     actionEpisodes: "Vídeos dos episódios",

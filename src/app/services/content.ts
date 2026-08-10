@@ -22,7 +22,7 @@ export const AuditStatus = { DRAFT: 0, REVIEWING: 1, APPROVED: 2, REJECTED: 3 } 
 export const ShelfStatus = { NOT_PUBLISHED: 0, ON_SHELF: 1, OFF_SHELF: 2 } as const;
 /** 发布范围：1 账号主页 / 2 全量推荐 */
 export const PublishScope = { ACCOUNT: 1, FULL: 2 } as const;
-/** 版权类型：1 自制 / 2 授权 */
+/** 版权类型：1 自制 / 2 授权（自制确权材料 UI 三选一，落库仍 copyrightProof） */
 export const CopyrightType = { ORIGINAL: 1, LICENSED: 2 } as const;
 /** 频道：1 男频 / 2 女频 / 3 通用 */
 export const GenderType = { MALE: 1, FEMALE: 2, GENERAL: 3 } as const;
@@ -179,7 +179,12 @@ export interface SaveBasicBody {
   classificationId: number;
   /** 版权类型 1自制/2授权 */
   copyrightType: number;
-  /** 版权证明文件 URL（仅 copyrightType=2 授权时必填；支持 PDF/图片/Word）。 */
+  /**
+   * 版权证明 / 确权材料 URL。
+   * - 授权(2)：合同/证明 1 份
+   * - 自制(1)：作品登记 / 时间戳 为 1 份；AI 工程截图为 4–20 张，逗号分隔多 URL
+   * 历史文档曾写自制清空本字段；现产品要求自制也上传，仍用本字段落库。
+   */
   copyrightProof?: string;
 }
 

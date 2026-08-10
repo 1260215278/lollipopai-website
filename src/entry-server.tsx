@@ -15,6 +15,7 @@
 import { renderToString } from "react-dom/server";
 import { StaticRouter, Routes, Route } from "react-router";
 import { I18nProvider } from "./app/i18n";
+import { getRouterBasename, matchLocalePath } from "./app/localePath";
 import App from "./app/App";
 import { BlogListPage } from "./app/pages/BlogListPage";
 import { BlogPostPage } from "./app/pages/BlogPostPage";
@@ -28,12 +29,19 @@ import {
 
 /**
  * 渲染指定路由为完整 HTML 字符串。
- * @param path 路由路径，例如 "/blog/ai-script-storyboard"
+ * @param path 路由路径，例如 "/blog/ai-script-storyboard" 或 "/zh/about"
+ *
+ * 语言前缀进入 StaticRouter basename，业务 Route 仍为无前缀路径，
+ * 与客户端 BrowserRouter 行为一致。
  */
 export function renderRoute(path: string): string {
+  const localeMatch = matchLocalePath(path, "");
+  const basename = getRouterBasename(path);
+  const routerBasename = basename === "/" ? undefined : basename;
+
   return renderToString(
-    <I18nProvider>
-      <StaticRouter location={path}>
+    <I18nProvider initialLocale={localeMatch?.locale ?? "en"}>
+      <StaticRouter basename={routerBasename} location={path}>
         <Routes>
           {/* 营销站首页（完全同步，无 lazy） */}
           <Route path="/" element={<App initialPage="home" />} />

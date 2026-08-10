@@ -8,10 +8,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/" />
   </url>
 
@@ -21,10 +21,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/about?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/about?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/about?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/about?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/about" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/about" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/about" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/about" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/about" />
   </url>
   <url>
@@ -32,10 +32,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/creating?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/creating?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/creating?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/creating?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/creating" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/creating" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/creating" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/creating" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/creating" />
   </url>
   <url>
@@ -43,10 +43,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/download?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/download?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/download?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/download?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/download" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/download" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/download" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/download" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/download" />
   </url>
   <url>
@@ -54,10 +54,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/contact?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/contact?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/contact?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/contact?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/contact" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/contact" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/contact" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/contact" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/contact" />
   </url>
 
@@ -67,10 +67,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/blog?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/blog?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/blog?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/blog?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/blog" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/blog" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/blog" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/blog" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/blog" />
   </url>
 
@@ -80,10 +80,10 @@
     <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/blog/ai-script-storyboard?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/blog/ai-script-storyboard?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/blog/ai-script-storyboard?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/blog/ai-script-storyboard?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/blog/ai-script-storyboard" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/blog/ai-script-storyboard" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/blog/ai-script-storyboard" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/blog/ai-script-storyboard" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/blog/ai-script-storyboard" />
   </url>
   <url>
@@ -91,10 +91,10 @@
     <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/blog/ai-video-quality?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/blog/ai-video-quality?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/blog/ai-video-quality?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/blog/ai-video-quality?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/blog/ai-video-quality" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/blog/ai-video-quality" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/blog/ai-video-quality" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/blog/ai-video-quality" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/blog/ai-video-quality" />
   </url>
   <url>
@@ -102,10 +102,10 @@
     <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/blog/ai-editing-tools?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/blog/ai-editing-tools?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/blog/ai-editing-tools?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/blog/ai-editing-tools?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/blog/ai-editing-tools" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/blog/ai-editing-tools" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/blog/ai-editing-tools" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/blog/ai-editing-tools" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/blog/ai-editing-tools" />
   </url>
   <url>
@@ -113,10 +113,10 @@
     <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/blog/ai-production-cost?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/blog/ai-production-cost?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/blog/ai-production-cost?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/blog/ai-production-cost?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/blog/ai-production-cost" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/blog/ai-production-cost" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/blog/ai-production-cost" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/blog/ai-production-cost" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/blog/ai-production-cost" />
   </url>
   <url>
@@ -124,10 +124,10 @@
     <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/blog/ai-rendering-pipeline?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/blog/ai-rendering-pipeline?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/blog/ai-rendering-pipeline?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/blog/ai-rendering-pipeline?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/blog/ai-rendering-pipeline" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/blog/ai-rendering-pipeline" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/blog/ai-rendering-pipeline" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/blog/ai-rendering-pipeline" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/blog/ai-rendering-pipeline" />
   </url>
 
@@ -137,10 +137,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/genre/romance?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/genre/romance?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/genre/romance?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/genre/romance?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/genre/romance" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/genre/romance" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/genre/romance" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/genre/romance" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/genre/romance" />
   </url>
   <url>
@@ -148,10 +148,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/genre/revenge?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/genre/revenge?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/genre/revenge?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/genre/revenge?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/genre/revenge" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/genre/revenge" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/genre/revenge" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/genre/revenge" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/genre/revenge" />
   </url>
   <url>
@@ -159,10 +159,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/genre/thriller?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/genre/thriller?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/genre/thriller?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/genre/thriller?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/genre/thriller" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/genre/thriller" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/genre/thriller" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/genre/thriller" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/genre/thriller" />
   </url>
   <url>
@@ -170,10 +170,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/genre/ceo-drama?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/genre/ceo-drama?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/genre/ceo-drama?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/genre/ceo-drama?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/genre/ceo-drama" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/genre/ceo-drama" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/genre/ceo-drama" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/genre/ceo-drama" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/genre/ceo-drama" />
   </url>
   <url>
@@ -181,10 +181,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/genre/fantasy?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/genre/fantasy?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/genre/fantasy?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/genre/fantasy?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/genre/fantasy" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/genre/fantasy" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/genre/fantasy" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/genre/fantasy" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/genre/fantasy" />
   </url>
   <url>
@@ -192,10 +192,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/genre/action?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/genre/action?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/genre/action?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/genre/action?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/genre/action" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/genre/action" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/genre/action" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/genre/action" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/genre/action" />
   </url>
   <url>
@@ -203,10 +203,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/genre/horror?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/genre/horror?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/genre/horror?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/genre/horror?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/genre/horror" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/genre/horror" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/genre/horror" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/genre/horror" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/genre/horror" />
   </url>
   <url>
@@ -214,10 +214,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/genre/sci-fi?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/genre/sci-fi?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/genre/sci-fi?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/genre/sci-fi?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/genre/sci-fi" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/genre/sci-fi" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/genre/sci-fi" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/genre/sci-fi" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/genre/sci-fi" />
   </url>
   <url>
@@ -225,10 +225,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/genre/family?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/genre/family?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/genre/family?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/genre/family?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/genre/family" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/genre/family" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/genre/family" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/genre/family" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/genre/family" />
   </url>
   <url>
@@ -236,10 +236,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/genre/historical?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/genre/historical?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/genre/historical?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/genre/historical?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/genre/historical" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/genre/historical" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/genre/historical" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/genre/historical" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/genre/historical" />
   </url>
 
@@ -249,10 +249,10 @@
     <lastmod>2026-01-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/temptation-ceo?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/drama/temptation-ceo?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/drama/temptation-ceo?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/drama/temptation-ceo?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/temptation-ceo" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/temptation-ceo" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/temptation-ceo" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/temptation-ceo" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/temptation-ceo" />
   </url>
   <url>
@@ -260,10 +260,10 @@
     <lastmod>2026-02-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/the-bride-who-fell-from-the-sky?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/drama/the-bride-who-fell-from-the-sky?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/drama/the-bride-who-fell-from-the-sky?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/drama/the-bride-who-fell-from-the-sky?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/the-bride-who-fell-from-the-sky" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/the-bride-who-fell-from-the-sky" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/the-bride-who-fell-from-the-sky" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/the-bride-who-fell-from-the-sky" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/the-bride-who-fell-from-the-sky" />
   </url>
   <url>
@@ -271,10 +271,10 @@
     <lastmod>2026-01-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/the-revenge-of-the-plus-size-wife?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/drama/the-revenge-of-the-plus-size-wife?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/drama/the-revenge-of-the-plus-size-wife?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/drama/the-revenge-of-the-plus-size-wife?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/the-revenge-of-the-plus-size-wife" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/the-revenge-of-the-plus-size-wife" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/the-revenge-of-the-plus-size-wife" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/the-revenge-of-the-plus-size-wife" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/the-revenge-of-the-plus-size-wife" />
   </url>
   <url>
@@ -282,10 +282,10 @@
     <lastmod>2026-02-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/my-royal-alpha-boyfriend?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/drama/my-royal-alpha-boyfriend?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/drama/my-royal-alpha-boyfriend?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/drama/my-royal-alpha-boyfriend?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/my-royal-alpha-boyfriend" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/my-royal-alpha-boyfriend" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/my-royal-alpha-boyfriend" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/my-royal-alpha-boyfriend" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/my-royal-alpha-boyfriend" />
   </url>
   <url>
@@ -293,10 +293,10 @@
     <lastmod>2026-01-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/dark-secrets?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/drama/dark-secrets?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/drama/dark-secrets?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/drama/dark-secrets?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/dark-secrets" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/dark-secrets" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/dark-secrets" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/dark-secrets" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/dark-secrets" />
   </url>
   <url>
@@ -304,10 +304,10 @@
     <lastmod>2026-01-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/why-jump-off-the-building?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/drama/why-jump-off-the-building?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/drama/why-jump-off-the-building?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/drama/why-jump-off-the-building?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/why-jump-off-the-building" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/why-jump-off-the-building" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/why-jump-off-the-building" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/why-jump-off-the-building" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/why-jump-off-the-building" />
   </url>
   <url>
@@ -315,10 +315,10 @@
     <lastmod>2026-02-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/crimson-dynasty?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/drama/crimson-dynasty?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/drama/crimson-dynasty?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/drama/crimson-dynasty?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/crimson-dynasty" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/crimson-dynasty" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/crimson-dynasty" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/crimson-dynasty" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/crimson-dynasty" />
   </url>
   <url>
@@ -326,10 +326,10 @@
     <lastmod>2026-02-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/neon-abyss?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/drama/neon-abyss?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/drama/neon-abyss?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/drama/neon-abyss?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/neon-abyss" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/neon-abyss" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/neon-abyss" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/neon-abyss" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/neon-abyss" />
   </url>
   <url>
@@ -337,10 +337,10 @@
     <lastmod>2026-02-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/whispered-love?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/drama/whispered-love?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/drama/whispered-love?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/drama/whispered-love?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/whispered-love" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/whispered-love" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/whispered-love" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/whispered-love" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/whispered-love" />
   </url>
   <url>
@@ -348,10 +348,10 @@
     <lastmod>2026-03-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/the-forgotten?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/drama/the-forgotten?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/drama/the-forgotten?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/drama/the-forgotten?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/the-forgotten" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/the-forgotten" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/the-forgotten" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/the-forgotten" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/the-forgotten" />
   </url>
   <url>
@@ -359,10 +359,10 @@
     <lastmod>2026-03-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/iron-will?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/drama/iron-will?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/drama/iron-will?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/drama/iron-will?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/iron-will" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/iron-will" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/iron-will" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/iron-will" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/iron-will" />
   </url>
   <url>
@@ -370,10 +370,10 @@
     <lastmod>2026-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/cloud-atlas?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/drama/cloud-atlas?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/drama/cloud-atlas?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/drama/cloud-atlas?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/drama/cloud-atlas" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/cloud-atlas" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/cloud-atlas" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/cloud-atlas" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/cloud-atlas" />
   </url>
 
@@ -383,10 +383,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/region/us?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/region/us?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/region/us?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/region/us?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/region/us" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/region/us" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/region/us" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/region/us" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/region/us" />
   </url>
   <url>
@@ -394,10 +394,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/region/uk?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/region/uk?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/region/uk?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/region/uk?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/region/uk" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/region/uk" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/region/uk" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/region/uk" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/region/uk" />
   </url>
   <url>
@@ -405,10 +405,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/region/ca?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/region/ca?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/region/ca?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/region/ca?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/region/ca" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/region/ca" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/region/ca" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/region/ca" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/region/ca" />
   </url>
   <url>
@@ -416,10 +416,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/region/au?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/region/au?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/region/au?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/region/au?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/region/au" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/region/au" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/region/au" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/region/au" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/region/au" />
   </url>
   <url>
@@ -427,10 +427,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/region/sg?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/region/sg?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/region/sg?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/region/sg?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/region/sg" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/region/sg" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/region/sg" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/region/sg" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/region/sg" />
   </url>
   <url>
@@ -438,10 +438,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/region/my?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/region/my?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/region/my?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/region/my?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/region/my" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/region/my" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/region/my" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/region/my" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/region/my" />
   </url>
   <url>
@@ -449,10 +449,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/region/ph?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/region/ph?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/region/ph?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/region/ph?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/region/ph" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/region/ph" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/region/ph" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/region/ph" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/region/ph" />
   </url>
   <url>
@@ -460,10 +460,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/region/id?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/region/id?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/region/id?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/region/id?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/region/id" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/region/id" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/region/id" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/region/id" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/region/id" />
   </url>
 
@@ -473,10 +473,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/privacy?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/privacy?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/privacy?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/privacy?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/privacy" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/privacy" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/privacy" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/privacy" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/privacy" />
   </url>
   <url>
@@ -484,10 +484,10 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/terms?lang=en" />
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/terms?lang=zh-CN" />
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/terms?lang=zh-TW" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/terms?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lollipop.im/terms" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/terms" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/terms" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/terms" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/terms" />
   </url>
 

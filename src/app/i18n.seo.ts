@@ -8,6 +8,8 @@
  * - 移除 meta keywords（Google 已废弃）
  * - 英文 title 控制在 55 字符以内
  */
+import { getDeployBasename, localizedHref, matchLocalePath } from "./localePath";
+
 /** 与 i18n.tsx 的 Locale 对齐（避免循环 import） */
 export type SeoLocale = "zh-TW" | "zh-CN" | "en" | "pt";
 
@@ -208,11 +210,14 @@ export function applySeoMeta(seo: SeoMessages, page: PageType = "home"): void {
 /**
  * 为动态页面（genre/drama/blog/region/creator 等）设置 SEO meta。
  * 与 applySeoMeta 功能相同，但接受自定义 canonical 路径而非 PageType。
+ * canonicalPath 为无语言前缀的业务路径（如 /about）；最终 canonical 会按当前语言补前缀。
  */
 export function applyCustomSeoMeta(seo: SeoMessages, canonicalPath: string): void {
   if (typeof document === "undefined") return;
 
-  const canonicalUrl = SITE_URL + canonicalPath;
+  const locale = resolveSeoLocale();
+  const localizedPath = localizedHref(locale, canonicalPath);
+  const canonicalUrl = SITE_URL + localizedPath;
 
   document.title = seo.title;
 
@@ -220,7 +225,7 @@ export function applyCustomSeoMeta(seo: SeoMessages, canonicalPath: string): voi
   setMetaByName("author", "Lollipop AI");
   setMetaByName("robots", "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1");
 
-  // 动态更新 hreflang（查询参数版）
+  // 动态更新 hreflang（路径前缀版）
   updateHreflang(canonicalPath);
 
   // Open Graph
@@ -251,21 +256,21 @@ export function applyCustomSeoMeta(seo: SeoMessages, canonicalPath: string): voi
 }
 
 /**
- * 动态更新 hreflang 链接标签（查询参数版）。
- * 各语言版本通过 ?lang=xx 区分，让搜索引擎识别多语言内容。
+ * 动态更新 hreflang 链接标签（路径前缀版）。
+ * 与 Nginx 语言路由一致：/zh/ /zh-TW/ /en/ /pt/，英文默认无前缀。
  */
 function updateHreflang(pagePath: string): void {
   if (typeof document === "undefined") return;
 
-  const langs: { hreflang: string; lang: string }[] = [
-    { hreflang: "en", lang: "en" },
-    { hreflang: "zh-CN", lang: "zh-CN" },
-    { hreflang: "zh-TW", lang: "zh-TW" },
-    { hreflang: "pt", lang: "pt" },
+  const langs: { hreflang: string; locale: SeoLocale }[] = [
+    { hreflang: "en", locale: "en" },
+    { hreflang: "zh-CN", locale: "zh-CN" },
+    { hreflang: "zh-TW", locale: "zh-TW" },
+    { hreflang: "pt", locale: "pt" },
   ];
 
-  langs.forEach(({ hreflang, lang }) => {
-    const url = `${SITE_URL}${pagePath}?lang=${lang}`;
+  langs.forEach(({ hreflang, locale }) => {
+    const url = `${SITE_URL}${localizedHref(locale, pagePath)}`;
     let el = document.querySelector(`link[rel="alternate"][hreflang="${hreflang}"]`) as HTMLLinkElement | null;
     if (!el) {
       el = document.createElement("link");
@@ -276,7 +281,7 @@ function updateHreflang(pagePath: string): void {
     el.setAttribute("href", url);
   });
 
-  // x-default 指向无参数的干净 URL
+  // x-default 指向无语言前缀的干净 URL（默认英文）
   let defaultEl = document.querySelector('link[rel="alternate"][hreflang="x-default"]') as HTMLLinkElement | null;
   if (!defaultEl) {
     defaultEl = document.createElement("link");
@@ -284,7 +289,22 @@ function updateHreflang(pagePath: string): void {
     defaultEl.setAttribute("hreflang", "x-default");
     document.head.appendChild(defaultEl);
   }
-  defaultEl.setAttribute("href", `${SITE_URL}${pagePath}`);
+  defaultEl.setAttribute("href", `${SITE_URL}${localizedHref("en", pagePath)}`);
+}
+
+/** 从 URL 语言前缀（优先）或 <html lang> 解析当前 SEO 语言 */
+function resolveSeoLocale(): SeoLocale {
+  try {
+    const matched = matchLocalePath(window.location.pathname, getDeployBasename());
+    if (matched) return matched.locale;
+  } catch {
+    // ignore
+  }
+  const htmlLang = document.documentElement.lang;
+  if (htmlLang === "zh-CN" || htmlLang === "zh-TW" || htmlLang === "en" || htmlLang === "pt") {
+    return htmlLang;
+  }
+  return "en";
 }
 
 /**

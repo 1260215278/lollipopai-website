@@ -1,7 +1,13 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { distributionMessages } from "./distribution/i18n.distribution";
 import { loginMessages } from "./i18n.login";
 import { applySeoMeta, getPageSeo } from "./i18n.seo";
+import {
+  buildLocalizedPath,
+  getDeployBasename,
+  matchLocalePath,
+  stripLocalePrefix,
+} from "./localePath";
 
 import type { Locale } from "./i18n-types";
 export type { Locale };
@@ -1592,12 +1598,24 @@ function normalizeLocale(value?: string | null): Locale {
   return "en";
 }
 
-function getInitialLocale(): Locale {
+function getInitialLocale(ssrLocale?: Locale): Locale {
   if (typeof window === "undefined") {
-    return "en";
+    return ssrLocale ?? "en";
   }
 
-  // 1. 优先读取 URL ?lang= 参数（GEO: 让搜索引擎爬虫通过 hreflang 链接进入对应语言版本）
+  const deployBase = getDeployBasename();
+
+  // 1. 路径前缀优先（与 Nginx /zh/ /en/ /pt/ /zh-TW/ 对齐，SEO 真源）
+  try {
+    const matched = matchLocalePath(window.location.pathname, deployBase);
+    if (matched) {
+      return matched.locale;
+    }
+  } catch {
+    // Ignore path parse failures
+  }
+
+  // 2. 兼容旧链接 ?lang=xx（后续 effect 会规范化为路径前缀）
   try {
     const params = new URLSearchParams(window.location.search);
     const urlLang = params.get("lang");
@@ -1608,7 +1626,7 @@ function getInitialLocale(): Locale {
     // Ignore URL parse failures
   }
 
-  // 2. 读取 localStorage
+  // 3. 读取 localStorage
   try {
     const savedLocale = window.localStorage.getItem(STORAGE_KEY);
     if (savedLocale && isLocale(savedLocale)) {
@@ -1618,16 +1636,69 @@ function getInitialLocale(): Locale {
     // Ignore storage failures and fall back to browser language.
   }
 
-  // 3. 浏览器语言
+  // 4. 浏览器语言
   return normalizeLocale(window.navigator.languages?.[0] ?? window.navigator.language);
 }
 
-export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocale] = useState<Locale>(getInitialLocale);
+/**
+ * 将当前 URL 切换到目标语言的路径前缀（去掉 ?lang=）。
+ * basename 含语言段时必须整页跳转，以便 Router 以新 basename 重新挂载。
+ * @returns true 表示已发起跳转；false 表示路径已对齐，仅需更新 state
+ */
+function navigateToLocale(next: Locale): boolean {
+  if (typeof window === "undefined") return false;
+
+  const deployBase = getDeployBasename();
+  const appPath = stripLocalePrefix(window.location.pathname, deployBase);
+  const nextPath = buildLocalizedPath(next, appPath, deployBase);
+
+  const url = new URL(window.location.href);
+  const hadLangQuery = url.searchParams.has("lang");
+  url.searchParams.delete("lang");
+  url.pathname = nextPath;
+
+  const nextHref = url.pathname + url.search + url.hash;
+  const currentHref =
+    window.location.pathname + window.location.search + window.location.hash;
+
+  if (nextHref !== currentHref) {
+    // 路径或 query 变化：完整导航以重置 BrowserRouter basename
+    window.location.assign(nextHref);
+    return true;
+  }
+
+  if (hadLangQuery) {
+    window.history.replaceState(null, "", nextHref);
+  }
+  return false;
+}
+
+export function I18nProvider({
+  children,
+  initialLocale,
+}: {
+  children: React.ReactNode;
+  /** SSR / 预渲染时由入口注入，避免 window 缺失时落到 en */
+  initialLocale?: Locale;
+}) {
+  const [locale, setLocaleState] = useState<Locale>(() => getInitialLocale(initialLocale));
 
   // 同步非 hook 的文案桥接，供 services 层读取当前语言
   activeMessages = translations[locale];
   activeLocale = locale;
+
+  const setLocale = useCallback((next: Locale) => {
+    if (next === activeLocale) {
+      // 仍尝试规范化 URL（例如旧 ?lang= 链到路径式）
+      navigateToLocale(next);
+      return;
+    }
+    const navigated = navigateToLocale(next);
+    if (!navigated) {
+      setLocaleState(next);
+    }
+    // navigated=true 时页面即将卸载，不必 setState
+  }, []);
 
   useEffect(() => {
     try {
@@ -1638,15 +1709,9 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
 
     document.documentElement.lang = locale;
 
-    // 同步 URL ?lang= 参数（replaceState 避免历史栈污染）
+    // 规范化：?lang= 旧链 → 路径前缀；去掉残留 query
     try {
-      const url = new URL(window.location.href);
-      if (locale === "en" && !url.searchParams.has("lang")) {
-        // 默认语言不添加参数，保持干净 URL
-      } else {
-        url.searchParams.set("lang", locale);
-      }
-      window.history.replaceState(null, "", url.toString());
+      navigateToLocale(locale);
     } catch {
       // Ignore URL update failures
     }

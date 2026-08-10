@@ -519,10 +519,24 @@ function injectSeoIntoHtml(html: string, data: RouteSeoData): string {
     `<link rel="canonical" href="${canonicalUrl}" />`,
   ];
 
-  // hreflang
-  const langs = ["en", "zh-CN", "zh-TW", "pt"];
-  for (const lang of langs) {
-    metaTags.push(`<link rel="alternate" hreflang="${lang}" href="${canonicalUrl}?lang=${lang}" />`);
+  // hreflang（路径前缀版，与 Nginx /zh/ /zh-TW/ /en/ /pt/ 对齐；en 默认无前缀）
+  const hreflangPaths: { hreflang: string; prefix: string }[] = [
+    { hreflang: "en", prefix: "" },
+    { hreflang: "zh-CN", prefix: "/zh" },
+    { hreflang: "zh-TW", prefix: "/zh-TW" },
+    { hreflang: "pt", prefix: "/pt" },
+  ];
+  const appPath = data.path === "/" ? "" : data.path;
+  for (const { hreflang, prefix } of hreflangPaths) {
+    const hrefPath =
+      !prefix && !appPath
+        ? "/"
+        : prefix && !appPath
+          ? `${prefix}/`
+          : `${prefix}${appPath || "/"}`;
+    metaTags.push(
+      `<link rel="alternate" hreflang="${hreflang}" href="${SITE_URL}${hrefPath}" />`,
+    );
   }
   metaTags.push(`<link rel="alternate" hreflang="x-default" href="${canonicalUrl}" />`);
 

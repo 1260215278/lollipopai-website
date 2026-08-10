@@ -16,6 +16,7 @@ const LegalDocumentPage = lazy(() => import("./app/pages/LegalDocumentPage").the
 const LegalTosPage = lazy(() => import("./app/pages/LegalDocumentPage").then(m => ({ default: m.TermsOfServicePage })));
 const NotFoundPage = lazy(() => import("./app/components/NotFoundPage").then(m => ({ default: m.NotFoundPage })));
 import { I18nProvider } from "./app/i18n.tsx";
+import { getRouterBasename } from "./app/localePath";
 import { Toaster } from "./app/components/ui/sonner";
 import "./styles/index.css";
 
@@ -29,32 +30,18 @@ function PageFallback() {
 }
 
 /**
- * 从 import.meta.url 自动推导 BrowserRouter basename。
- * 部署到根路径 → basename = "/"
- * 部署到子路径 /lollipop/ → basename = "/lollipop"
- * 部署到任意子路径 /foo/bar/ → basename = "/foo/bar"
+ * BrowserRouter basename = 部署根 + 语言路径前缀。
+ * - /about              → basename "/"
+ * - /zh/about           → basename "/zh"
+ * - /lollipop/pt/blog   → basename "/lollipop/pt"
  *
- * 原理：import.meta.url 是当前 JS 模块的完整 URL，
- * 例如 "https://example.com/lollipop/assets/index-xxx.js"，
- * 提取 /assets/ 之前的部分即为部署根路径。
+ * 语言段进入 basename 后，业务路由仍写 /distribution/*、/about，
+ * Link/navigate 会自动带上 /zh 等前缀，无需改各页面。
  */
-function getBasename(): string {
-  try {
-    const url = new URL(import.meta.url);
-    const match = url.pathname.match(/^(.*)\/assets\//);
-    if (match) {
-      return match[1] || "/";
-    }
-  } catch {
-    // fallback
-  }
-  return "/";
-}
-
 createRoot(document.getElementById("root")!).render(
   <I18nProvider>
     <Toaster position="top-center" richColors />
-    <BrowserRouter basename={getBasename()}>
+    <BrowserRouter basename={getRouterBasename()}>
       <Suspense fallback={<PageFallback />}>
       <Routes>
         {/* 发行中心后台子应用 — 懒加载，登录后才使用 */}

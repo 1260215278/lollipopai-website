@@ -28,15 +28,30 @@ function AnimatedCounter({ target, suffix, label }: { target: number; suffix: st
     return () => clearInterval(timer);
   }, [inView, target]);
 
+  const numStyle = {
+    fontFamily: "'Orbitron', monospace",
+    // "15,000+" 在三列栅格里偏长，字号压到列宽内避免互相叠压
+    fontSize: "clamp(1.1rem, 3vw, 3.25rem)",
+    fontWeight: 900 as const,
+    lineHeight: 1.3,
+  };
+
   return (
     <div ref={ref} className="text-center overflow-visible">
-      <div className="bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent whitespace-nowrap" style={{
-        fontFamily: "'Orbitron', monospace",
-        fontSize: "clamp(2rem, 5vw, 3.5rem)",
-        fontWeight: 900,
-        lineHeight: 1.2,
-      }} suppressHydrationWarning>
-        {count.toLocaleString()}{suffix}
+      {/*
+        根因：text-transparent + bg-clip-text 只在元素 content-box 内上色，
+        栅格把盒子压窄后溢出的 "+" 会完全透明（看起来像被切掉）。
+        数字走渐变；后缀用渐变终点实色（不用 bg-clip），保证 "+" 完整可见。
+      */}
+      <div
+        className="inline-flex items-baseline justify-center whitespace-nowrap"
+        style={numStyle}
+        suppressHydrationWarning
+      >
+        <span className="bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
+          {count.toLocaleString("en-US")}
+        </span>
+        <span style={{ color: "#fb923c", paddingLeft: "0.02em" }}>{suffix}</span>
       </div>
       <p className="text-gray-400 mt-1" style={{ fontSize: "0.85rem" }}>{label}</p>
       <div className="mt-4 mx-auto w-16 h-px bg-white/10 rounded-full" />
@@ -177,7 +192,7 @@ export function StatsSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="grid grid-cols-3 gap-4 md:gap-16 py-10 px-6 overflow-visible"
+          className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-16 py-10 px-2 sm:px-6 overflow-visible"
         >
           <AnimatedCounter target={15000} suffix="+" label={messages.hero.stats[0].label} />
           <AnimatedCounter target={1} suffix="M+" label={messages.hero.stats[1].label} />

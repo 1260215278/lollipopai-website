@@ -179,9 +179,9 @@ export function StatsSection() {
           transition={{ duration: 0.8 }}
           className="grid grid-cols-3 gap-4 md:gap-16 py-10 px-6 overflow-visible"
         >
-          <AnimatedCounter target={5000} suffix="+" label={messages.hero.stats[0].label} />
-          <AnimatedCounter target={10} suffix="M+" label={messages.hero.stats[1].label} />
-          <AnimatedCounter target={50} suffix="+" label={messages.hero.stats[2].label} />
+          <AnimatedCounter target={15000} suffix="+" label={messages.hero.stats[0].label} />
+          <AnimatedCounter target={1} suffix="M+" label={messages.hero.stats[1].label} />
+          <AnimatedCounter target={100} suffix="+" label={messages.hero.stats[2].label} />
         </motion.div>
       </div>
     </section>

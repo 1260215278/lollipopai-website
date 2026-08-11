@@ -45,39 +45,39 @@ export const pageSeoMessages: Record<PageType, Record<SeoLocale, SeoMessages>> =
     "zh-CN": {
       title: "Lollipop AI — AI短剧创作与创作者经济平台",
       description:
-        "Lollipop AI是全球AI短剧平台，拥有5000+精品短剧、AI创作工具（文生视频、图生视频）及70%创作者收益分成，支持iOS和Android。",
+        "Lollipop AI是全球AI短剧平台，拥有15000+精品短剧、AI创作工具（文生视频、图生视频）及80%创作者收益分成，支持iOS和Android。",
     },
     "zh-TW": {
       title: "Lollipop AI — AI短劇創作與創作者經濟平台",
       description:
-        "Lollipop AI是全球AI短劇平台，擁有5000+精品短劇、AI創作工具（文生影片、圖生影片）及70%創作者收益分成，支援iOS和Android。",
+        "Lollipop AI是全球AI短劇平台，擁有15000+精品短劇、AI創作工具（文生影片、圖生影片）及80%創作者收益分成，支援iOS和Android。",
     },
     en: {
       title: "Lollipop AI — AI Short Drama & Creator Platform",
       description:
-        "Lollipop AI is a global AI-powered short drama platform with 5,000+ premium shows, AI creation tools (text-to-video, image-to-video), and 70% creator revenue share.",
+        "Lollipop AI is a global AI-powered short drama platform with 15,000+ premium shows, AI creation tools (text-to-video, image-to-video), and 80% creator revenue share.",
     },
     pt: {
       title: "Lollipop AI — Plataforma de Drama Curto com IA",
       description:
-        "Lollipop AI e a plataforma global de drama curto com IA: 5.000+ series premium, ferramentas de criacao com IA e 70% de participacao na receita para criadores.",
+        "Lollipop AI e a plataforma global de drama curto com IA: 15.000+ series premium, ferramentas de criacao com IA e 80% de participacao na receita para criadores.",
     },
   },
   about: {
     "zh-CN": {
       title: "关于 Lollipop AI — 全球AI短剧娱乐平台",
       description:
-        "Lollipop AI由香港Nyx Entertainment Group与韩国文化投资基金联合打造，致力于通过AI技术革新短剧娱乐，已覆盖50M+全球用户和30+国家。",
+        "Lollipop AI由香港Nyx Entertainment Group与韩国文化投资基金联合打造，致力于通过AI技术革新短剧娱乐，已覆盖100万+全球用户和100+国家。",
     },
     "zh-TW": {
       title: "關於 Lollipop AI — 全球AI短劇娛樂平台",
       description:
-        "Lollipop AI由香港Nyx Entertainment Group與韓國文化投資基金聯合打造，致力於透過AI技術革新短劇娛樂，已覆蓋50M+全球用戶和30+國家。",
+        "Lollipop AI由香港Nyx Entertainment Group與韓國文化投資基金聯合打造，致力於透過AI技術革新短劇娛樂，已覆蓋100萬+全球用戶和100+國家。",
     },
     en: {
       title: "About Lollipop AI — AI Short Drama Platform",
       description:
-        "Lollipop AI is a joint venture by Nyx Entertainment Group and Korean Cultural Investment Fund, revolutionizing short drama entertainment with AI. 50M+ users across 30+ countries.",
+        "Lollipop AI is a joint venture by Nyx Entertainment Group and Korean Cultural Investment Fund, revolutionizing short drama entertainment with AI. 1M+ users across 100+ countries.",
     },
     pt: {
       title: "Sobre a Lollipop AI — Plataforma de Drama com IA",
@@ -89,44 +89,44 @@ export const pageSeoMessages: Record<PageType, Record<SeoLocale, SeoMessages>> =
     "zh-CN": {
       title: "AI创作工具 — Lollipop AI短剧创作平台",
       description:
-        "使用Lollipop AI创作工具制作短剧：AI图片生成、AI换脸、AI视频创作、风格迁移。70%收益分成，完整AI创作工具包，面向全球50+国家分发。",
+        "使用Lollipop AI创作工具制作短剧：AI图片生成、AI换脸、AI视频创作、风格迁移。80%收益分成，完整AI创作工具包，面向全球100+国家分发。",
     },
     "zh-TW": {
       title: "AI創作工具 — Lollipop AI短劇創作平台",
       description:
-        "使用Lollipop AI創作工具製作短劇：AI圖像生成、AI換臉、AI影片創作、風格遷移。70%收益分成，完整AI創作工具包，面向全球50+國家分發。",
+        "使用Lollipop AI創作工具製作短劇：AI圖像生成、AI換臉、AI影片創作、風格遷移。80%收益分成，完整AI創作工具包，面向全球100+國家分發。",
     },
     en: {
       title: "Create AI Short Dramas — Lollipop AI Tools",
       description:
-        "Create short dramas with Lollipop AI tools: AI image generation, face swap, video creation, and style transfer. 70% revenue share, full AI toolkit, global distribution in 50+ countries.",
+        "Create short dramas with Lollipop AI tools: AI image generation, face swap, video creation, and style transfer. 80% revenue share, full AI toolkit, global distribution in 100+ countries.",
     },
     pt: {
       title: "Crie Dramas com IA — Ferramentas Lollipop AI",
       description:
-        "Crie dramas curtos com as ferramentas Lollipop AI: geracao de imagens, troca de rosto, criacao de video e transferencia de estilo. 70% de participacao na receita.",
+        "Crie dramas curtos com as ferramentas Lollipop AI: geracao de imagens, troca de rosto, criacao de video e transferencia de estilo. 80% de participacao na receita.",
     },
   },
   download: {
     "zh-CN": {
       title: "下载 Lollipop AI — iOS & Android",
       description:
-        "免费下载Lollipop AI，支持iOS和Android。5000+精品短剧、4K播放、离线缓存、AI创作工具。2M+下载量，150+国家，App Store评分4.9星。",
+        "免费下载Lollipop AI，支持iOS和Android。15000+精品短剧、4K播放、离线缓存、AI创作工具。2M+下载量，100+国家，App Store评分4.9星。",
     },
     "zh-TW": {
       title: "下載 Lollipop AI — iOS & Android",
       description:
-        "免費下載Lollipop AI，支援iOS和Android。5000+精品短劇、4K播放、離線快取、AI創作工具。2M+下載量，150+國家，App Store評分4.9星。",
+        "免費下載Lollipop AI，支援iOS和Android。15000+精品短劇、4K播放、離線快取、AI創作工具。2M+下載量，100+國家，App Store評分4.9星。",
     },
     en: {
       title: "Download Lollipop AI — iOS & Android",
       description:
-        "Download Lollipop AI free on iOS and Android. 5,000+ premium short dramas, 4K streaming, offline downloads, AI creation tools. 2M+ downloads, 150+ countries, 4.9-star rating.",
+        "Download Lollipop AI free on iOS and Android. 15,000+ premium short dramas, 4K streaming, offline downloads, AI creation tools. 2M+ downloads, 100+ countries, 4.9-star rating.",
     },
     pt: {
       title: "Baixar Lollipop AI — iOS & Android",
       description:
-        "Baixe a Lollipop AI gratis no iOS e Android. 5.000+ dramas premium, streaming 4K, downloads offline, ferramentas de IA. 2M+ downloads, 150+ paises, nota 4.9.",
+        "Baixe a Lollipop AI gratis no iOS e Android. 15.000+ dramas premium, streaming 4K, downloads offline, ferramentas de IA. 2M+ downloads, 100+ paises, nota 4.9.",
     },
   },
   contact: {

@@ -22,8 +22,8 @@ function Counter({ target, suffix }: { target: number; suffix: string }) {
 }
 
 const statAssets = [
-  { icon: DollarSign, value: 70, suffix: "%" },
-  { icon: Users, value: 12000, suffix: "+" },
+  { icon: DollarSign, value: 80, suffix: "%" },
+  { icon: Users, value: 100, suffix: "K+" },
   { icon: TrendingUp, value: 5000, suffix: "$" },
   { icon: Award, value: 500, suffix: "+" },
 ];

@@ -165,26 +165,26 @@ function getRouteData(): RouteSeoData[] {
       path: "/",
       title: "Lollipop AI — AI Short Drama & Creator Platform",
       description:
-        "Lollipop AI: 5,000+ AI short dramas, AI creation tools (text-to-video, face swap), 70% creator revenue share. Free on iOS & Android in 50+ countries.",
+        "Lollipop AI: 15,000+ AI short dramas, AI creation tools (text-to-video, face swap), 80% creator revenue share. Free on iOS & Android in 100+ countries.",
       // 首页结构化数据交由 index.html 的全局 site-schema（含 WebSite/Organization/FAQPage 等）提供，避免重复
     },
     {
       path: "/about",
       title: "About Lollipop AI — AI Short Drama Platform",
       description:
-        "Lollipop AI is a joint venture by Nyx Entertainment Group and Korean Cultural Investment Fund, revolutionizing short drama entertainment with AI. 50M+ users across 30+ countries.",
+        "Lollipop AI is a joint venture by Nyx Entertainment Group and Korean Cultural Investment Fund, revolutionizing short drama entertainment with AI. 1M+ users across 100+ countries.",
     },
     {
       path: "/creating",
       title: "Create AI Short Dramas — Lollipop AI Tools",
       description:
-        "Create short dramas with Lollipop AI tools: AI image generation, face swap, video creation, and style transfer. 70% revenue share, full AI toolkit, global distribution in 50+ countries.",
+        "Create short dramas with Lollipop AI tools: AI image generation, face swap, video creation, and style transfer. 80% revenue share, full AI toolkit, global distribution in 100+ countries.",
     },
     {
       path: "/download",
       title: "Download Lollipop AI — iOS & Android",
       description:
-        "Download Lollipop AI free on iOS and Android. 5,000+ premium short dramas, 4K streaming, offline downloads, AI creation tools. 2M+ downloads, 150+ countries, 4.9-star rating.",
+        "Download Lollipop AI free on iOS and Android. 15,000+ premium short dramas, 4K streaming, offline downloads, AI creation tools. 2M+ downloads, 100+ countries, 4.9-star rating.",
     },
     {
       path: "/contact",
@@ -396,14 +396,14 @@ function getRouteData(): RouteSeoData[] {
 
   // --- 区域落地页 (8 regions) ---
   const regions = [
-    { code: "us", country: "United States", title: "Best Short Drama Platform in USA | Watch AI Series — Lollipop", desc: "Watch the best short dramas in the USA on Lollipop AI. Stream 5,000+ AI and live-action series. 70% creator revenue share. Download free on iOS & Android." },
-    { code: "uk", country: "United Kingdom", title: "Best Short Drama Platform in UK | Watch AI Series — Lollipop", desc: "Watch the best short dramas in the UK on Lollipop AI. Stream 5,000+ AI and live-action series with English subtitles. Download free on iOS & Android." },
-    { code: "ca", country: "Canada", title: "Best Short Drama Platform in Canada | Watch AI Series", desc: "Watch the best short dramas in Canada on Lollipop AI. Stream 5,000+ AI and live-action series. Available in English and French. Download free on iOS & Android." },
-    { code: "au", country: "Australia", title: "Best Short Drama Platform in Australia | Watch AI Series", desc: "Watch the best short dramas in Australia on Lollipop AI. Stream 5,000+ AI and live-action series. Download free on iOS & Android. 4K streaming available." },
-    { code: "sg", country: "Singapore", title: "Best Short Drama Platform in Singapore | Watch AI Series", desc: "Watch the best short dramas in Singapore on Lollipop AI. Stream 5,000+ AI and live-action series. Local payment methods supported. Download free on iOS & Android." },
-    { code: "my", country: "Malaysia", title: "Best Short Drama Platform in Malaysia | Watch AI Series", desc: "Watch the best short dramas in Malaysia on Lollipop AI. Stream 5,000+ AI and live-action series with multilingual subtitles. Local payment supported." },
-    { code: "ph", country: "Philippines", title: "Best Short Drama Platform in Philippines | Watch AI Series", desc: "Watch the best short dramas in the Philippines on Lollipop AI. Stream 5,000+ AI and live-action series. GCash and local payment supported. Download free." },
-    { code: "id", country: "Indonesia", title: "Best Short Drama Platform in Indonesia | Watch AI Series", desc: "Watch the best short dramas in Indonesia on Lollipop AI. Stream 5,000+ AI and live-action series. GoPay and local payment supported. Download free on iOS & Android." },
+    { code: "us", country: "United States", title: "Best Short Drama Platform in USA | Watch AI Series — Lollipop", desc: "Watch the best short dramas in the USA on Lollipop AI. Stream 15,000+ AI and live-action series. 80% creator revenue share. Download free on iOS & Android." },
+    { code: "uk", country: "United Kingdom", title: "Best Short Drama Platform in UK | Watch AI Series — Lollipop", desc: "Watch the best short dramas in the UK on Lollipop AI. Stream 15,000+ AI and live-action series with English subtitles. Download free on iOS & Android." },
+    { code: "ca", country: "Canada", title: "Best Short Drama Platform in Canada | Watch AI Series", desc: "Watch the best short dramas in Canada on Lollipop AI. Stream 15,000+ AI and live-action series. Available in English and French. Download free on iOS & Android." },
+    { code: "au", country: "Australia", title: "Best Short Drama Platform in Australia | Watch AI Series", desc: "Watch the best short dramas in Australia on Lollipop AI. Stream 15,000+ AI and live-action series. Download free on iOS & Android. 4K streaming available." },
+    { code: "sg", country: "Singapore", title: "Best Short Drama Platform in Singapore | Watch AI Series", desc: "Watch the best short dramas in Singapore on Lollipop AI. Stream 15,000+ AI and live-action series. Local payment methods supported. Download free on iOS & Android." },
+    { code: "my", country: "Malaysia", title: "Best Short Drama Platform in Malaysia | Watch AI Series", desc: "Watch the best short dramas in Malaysia on Lollipop AI. Stream 15,000+ AI and live-action series with multilingual subtitles. Local payment supported." },
+    { code: "ph", country: "Philippines", title: "Best Short Drama Platform in Philippines | Watch AI Series", desc: "Watch the best short dramas in the Philippines on Lollipop AI. Stream 15,000+ AI and live-action series. GCash and local payment supported. Download free." },
+    { code: "id", country: "Indonesia", title: "Best Short Drama Platform in Indonesia | Watch AI Series", desc: "Watch the best short dramas in Indonesia on Lollipop AI. Stream 15,000+ AI and live-action series. GoPay and local payment supported. Download free on iOS & Android." },
   ];
   for (const r of regions) {
     const regionSchema = {
@@ -576,18 +576,18 @@ function injectSeoIntoHtml(html: string, data: RouteSeoData): string {
 function injectHomepageContent(html: string): string {
   const content = `
 <h1>Lollipop AI — The World's First AI Creator Ecosystem Entertainment Platform</h1>
-<h2>AI Short Dramas, AI Creator Tools, 70% Revenue Share</h2>
+<h2>AI Short Dramas, AI Creator Tools, 80% Revenue Share</h2>
 <p>
   Lollipop AI is a global AI-powered short drama platform combining premium streaming content with cutting-edge AI creation tools.
-  Watch 5,000+ short dramas across 10 genres including Romance, Revenge, Thriller, CEO Drama, Fantasy, Action, Horror, Sci-Fi, Family, and Historical.
+  Watch 15,000+ short dramas across 10 genres including Romance, Revenge, Thriller, CEO Drama, Fantasy, Action, Horror, Sci-Fi, Family, and Historical.
   Create your own AI-generated short dramas with text-to-video, image-to-video, face swap, and style transfer — no editing experience required.
-  Creators earn <strong>70% revenue share</strong>, the highest in the industry. Available on iOS and Android with 10M+ users across 50+ countries.
+  Creators earn <strong>80% revenue share</strong>, the highest in the industry. Available on iOS and Android with 1M+ users across 100+ countries.
 </p>
 <ul>
-  <li><strong>5,000+ Premium Short Dramas</strong> — Bite-sized episodes across 10 genres</li>
-  <li><strong>10M+ Global Users</strong> — Available in 50+ countries with multilingual subtitles</li>
+  <li><strong>15,000+ Premium Short Dramas</strong> — Bite-sized episodes across 10 genres</li>
+  <li><strong>1M+ Global Users</strong> — Available in 100+ countries with multilingual subtitles</li>
   <li><strong>AI Creation Tools</strong> — LunoTV 1.5: text-to-video, image-to-video, face swap, style transfer</li>
-  <li><strong>70% Creator Revenue Share</strong> — Industry-leading monetization for independent creators</li>
+  <li><strong>80% Creator Revenue Share</strong> — Industry-leading monetization for independent creators</li>
   <li><strong>4K Streaming & Offline Downloads</strong> — Premium viewing experience on iOS and Android</li>
 </ul>
 <p>

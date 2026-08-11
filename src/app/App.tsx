@@ -81,11 +81,11 @@ const pageSchemas: Partial<Record<MarketingPage, (locale: string) => object>> = 
         // policy. Re-add only when a real user review system is in place.
         "downloadUrl": "https://play.google.com/store/apps/details?id=com.StargetVenturesLLC.hks",
         "featureList": [
-          "5,000+ premium short dramas across 10+ genres",
+          "15,000+ premium short dramas across 10+ genres",
           "AI creation tools (Text-to-Image, Image-to-Image, Text-to-Video, Video-to-Video)",
-          "70% creator revenue share",
+          "80% creator revenue share",
           "4K streaming and offline downloads",
-          "Available in 50+ countries with multilingual subtitles",
+          "Available in 100+ countries with multilingual subtitles",
         ],
         "url": "https://www.lollipop.im/download",
       },

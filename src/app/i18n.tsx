@@ -241,15 +241,15 @@ const enMessages = {
     title: "Become the Next Million-View Creator",
     description: "Lollipop offers the industry's highest revenue share and comprehensive creative support for quality creators. Let great content receive the rewards it deserves.",
     benefits: [
-      "70% revenue share — highest in the industry",
+      "80% revenue share — highest in the industry",
       "Full AI creation toolkit access",
       "Dedicated creator success manager",
-      "Global distribution across 50+ countries",
+      "Global distribution across 100+ countries",
       "Monthly bonus rewards for top performers",
     ],
     stats: [
       { label: "Revenue Share", desc: "Industry-leading creator earnings" },
-      { label: "Active Creators", desc: "Growing community worldwide" },
+      { label: "Quality Creators", desc: "Growing community worldwide" },
       { label: "Avg. Monthly Earnings", desc: "For top-performing creators" },
       { label: "Success Stories", desc: "Creators reaching 1M+ plays" },
     ],
@@ -259,7 +259,7 @@ const enMessages = {
     title: "Your Next Obsession is One Tap Away",
     description: "Join millions of viewers worldwide. Download free and get 7 days of Premium access — no commitment.",
     featuredTitle: "Download Lollipop",
-    featuredDescription: "Available on iOS & Android. 4K streaming, offline downloads, and 5,000+ premium short dramas.",
+    featuredDescription: "Available on iOS & Android. 4K streaming, offline downloads, and 15,000+ premium short dramas.",
     featuredShowTitle: "Obsessed With My Boss · Pt.2",
     featuredTimer: "0:42",
     notification: "New Episode!",
@@ -267,7 +267,7 @@ const enMessages = {
     stats: [
       { value: "2M+", label: "Downloads" },
       { value: "4.9★", label: "App Rating" },
-      { value: "150+", label: "Countries" },
+      { value: "100+", label: "Countries" },
       { value: "99.9%", label: "Uptime" },
     ],
   },
@@ -282,9 +282,9 @@ const enMessages = {
       "It is actively expanding into diversified global markets including China, Japan, North America, Europe, Southeast Asia and the Middle East, while accelerating localization strategies.",
     ],
     companyStats: [
-      { num: "50M+", label: "Global Users" },
-      { num: "100K+", label: "Creators" },
-      { num: "30+", label: "Countries" },
+      { num: "1M+", label: "Global Users" },
+      { num: "100K+", label: "Quality Creators" },
+      { num: "100+", label: "Countries" },
     ],
     teamTitle: "Outstanding Team",
     teamSub: "A world-class leadership team driving innovation in entertainment",
@@ -380,7 +380,7 @@ const enMessages = {
     updated: "Updated:",
     previous: "Previous",
     next: "Next",
-    downloadAppDesc: "Download Lollipop AI and enjoy 5,000+ premium short dramas. Free to download, no subscription required to start.",
+    downloadAppDesc: "Download Lollipop AI and enjoy 15,000+ premium short dramas. Free to download, no subscription required to start.",
     organizationName: "Lollipop AI",
     howToSteps: [
       { name: "Write Your Script", text: "Write a compelling story with 1-3 minute episodes. Focus on a single dramatic question per episode with cliffhanger endings." },
@@ -622,15 +622,15 @@ const translations: Record<Locale, TranslationMessages> = {
       title: "成为下一个百万播放创作者",
       description: "Lollipop 提供行业领先的分成机制与全流程创作支持，让优质创作者真正获得持续回报。",
       benefits: [
-        "70% 收益分成，行业领先",
+        "80% 收益分成，行业领先",
         "完整开放 AI 创作工具包",
         "专属创作者成长支持",
-        "覆盖 50+ 国家和地区的全球分发",
+        "覆盖 100+ 国家和地区的全球分发",
         "头部创作者每月额外奖励",
       ],
       stats: [
         { label: "收益分成", desc: "行业领先的创作者收入" },
-        { label: "活跃创作者", desc: "持续扩大的全球创作社区" },
+        { label: "优质创作者", desc: "持续扩大的全球创作社区" },
         { label: "月均收益", desc: "面向头部创作者" },
         { label: "成功案例", desc: "已有创作者突破 100 万播放" },
       ],
@@ -640,7 +640,7 @@ const translations: Record<Locale, TranslationMessages> = {
       title: "你的下一部上头短剧，只差一次点击",
       description: "加入全球数百万观众，免费下载并立即获得 7 天 Premium 体验，无需承诺。",
       featuredTitle: "下载 Lollipop",
-      featuredDescription: "支持 iOS 与 Android，提供 4K 播放、离线缓存与 5000+ 精品短剧。",
+      featuredDescription: "支持 iOS 与 Android，提供 4K 播放、离线缓存与 15000+ 精品短剧。",
       featuredShowTitle: "Obsessed With My Boss · 第 2 部",
       featuredTimer: "0:42",
       notification: "新剧更新！",
@@ -648,7 +648,7 @@ const translations: Record<Locale, TranslationMessages> = {
       stats: [
         { value: "2M+", label: "下载量" },
         { value: "4.9★", label: "应用评分" },
-        { value: "150+", label: "覆盖国家" },
+        { value: "100+", label: "覆盖国家" },
         { value: "99.9%", label: "服务可用率" },
       ],
     },
@@ -663,9 +663,9 @@ const translations: Record<Locale, TranslationMessages> = {
         "平台正积极拓展中国、日本、北美、欧洲、东南亚及中东等多元市场，并加速本地化运营布局。",
       ],
       companyStats: [
-        { num: "50M+", label: "全球用户" },
-        { num: "100K+", label: "创作者" },
-        { num: "30+", label: "国家" },
+        { num: "100万+", label: "全球用户" },
+        { num: "10万+", label: "优质创作者" },
+        { num: "100+", label: "国家" },
       ],
       teamTitle: "核心团队",
       teamSub: "驱动娱乐创新的世界级领导团队",
@@ -761,7 +761,7 @@ const translations: Record<Locale, TranslationMessages> = {
       updated: "更新于：",
       previous: "上一篇",
       next: "下一篇",
-      downloadAppDesc: "下载 Lollipop AI，畅享 5,000+ 精品短剧。免费下载，无需订阅即可开始观看。",
+      downloadAppDesc: "下载 Lollipop AI，畅享 15000+ 精品短剧。免费下载，无需订阅即可开始观看。",
       organizationName: "Lollipop AI",
       howToSteps: [
         { name: "编写剧本", text: "创作一个 1-3 分钟每集的引人入胜的故事。每集聚焦一个戏剧性疑问，结尾留下悬念。" },
@@ -998,15 +998,15 @@ const translations: Record<Locale, TranslationMessages> = {
       title: "成為下一個百萬播放創作者",
       description: "Lollipop 提供行業領先的分成機制與全流程創作支持，讓優質創作者真正獲得持續回報。",
       benefits: [
-        "70% 收益分成，行業領先",
+        "80% 收益分成，行業領先",
         "完整開放 AI 創作工具包",
         "專屬創作者成長支持",
-        "覆蓋 50+ 國家與地區的全球分發",
+        "覆蓋 100+ 國家與地區的全球分發",
         "頭部創作者每月額外獎勵",
       ],
       stats: [
         { label: "收益分成", desc: "行業領先的創作者收入" },
-        { label: "活躍創作者", desc: "持續擴大的全球創作社群" },
+        { label: "優質創作者", desc: "持續擴大的全球創作社群" },
         { label: "月均收益", desc: "面向頭部創作者" },
         { label: "成功案例", desc: "已有創作者突破 100 萬播放" },
       ],
@@ -1016,7 +1016,7 @@ const translations: Record<Locale, TranslationMessages> = {
       title: "你的下一部上頭短劇，只差一次點擊",
       description: "加入全球數百萬觀眾，免費下載並立即獲得 7 天 Premium 體驗，無需承諾。",
       featuredTitle: "下載 Lollipop",
-      featuredDescription: "支援 iOS 與 Android，提供 4K 播放、離線快取與 5000+ 精品短劇。",
+      featuredDescription: "支援 iOS 與 Android，提供 4K 播放、離線快取與 15000+ 精品短劇。",
       featuredShowTitle: "Obsessed With My Boss · 第 2 部",
       featuredTimer: "0:42",
       notification: "新劇更新！",
@@ -1024,7 +1024,7 @@ const translations: Record<Locale, TranslationMessages> = {
       stats: [
         { value: "2M+", label: "下載量" },
         { value: "4.9★", label: "應用評分" },
-        { value: "150+", label: "覆蓋國家" },
+        { value: "100+", label: "覆蓋國家" },
         { value: "99.9%", label: "服務可用率" },
       ],
     },
@@ -1039,9 +1039,9 @@ const translations: Record<Locale, TranslationMessages> = {
         "平台正積極拓展中國、日本、北美、歐洲、東南亞及中東等多元市場，並加速本地化營運布局。",
       ],
       companyStats: [
-        { num: "50M+", label: "全球用戶" },
-        { num: "100K+", label: "創作者" },
-        { num: "30+", label: "國家" },
+        { num: "100萬+", label: "全球用戶" },
+        { num: "10萬+", label: "優質創作者" },
+        { num: "100+", label: "國家" },
       ],
       teamTitle: "核心團隊",
       teamSub: "驅動娛樂創新的世界級領導團隊",
@@ -1137,7 +1137,7 @@ const translations: Record<Locale, TranslationMessages> = {
       updated: "更新於：",
       previous: "上一篇",
       next: "下一篇",
-      downloadAppDesc: "下載 Lollipop AI，暢享 5,000+ 精品短劇。免費下載，無需訂閱即可開始觀看。",
+      downloadAppDesc: "下載 Lollipop AI，暢享 15000+ 精品短劇。免費下載，無需訂閱即可開始觀看。",
       organizationName: "Lollipop AI",
       howToSteps: [
         { name: "編寫劇本", text: "創作一個 1-3 分鐘每集的引人入勝的故事。每集聚焦一個戲劇性疑問，結尾留下懸念。" },
@@ -1374,15 +1374,15 @@ const translations: Record<Locale, TranslationMessages> = {
       title: "Torne-se o Próximo Criador de Milhões de Views",
       description: "A Lollipop oferece participação na receita de ponta e suporte criativo para que grandes criadores construam carreiras sustentáveis.",
       benefits: [
-        "70% de participação na receita, entre as maiores do mercado",
+        "80% de participação na receita, entre as maiores do mercado",
         "Acesso total ao kit de criação com IA",
         "Suporte dedicado para sucesso do criador",
-        "Distribuição global em mais de 50 países",
+        "Distribuição global em mais de 100 países",
         "Bônus mensais para os melhores desempenhos",
       ],
       stats: [
         { label: "participação na receita", desc: "Ganhos de criadores em nível líder de mercado" },
-        { label: "Criadores Ativos", desc: "Comunidade global em crescimento" },
+        { label: "Criadores de Qualidade", desc: "Comunidade global em crescimento" },
         { label: "Ganho Médio Mensal", desc: "Para criadores de melhor desempenho" },
         { label: "Casos de Sucesso", desc: "Criadores que já chegaram a 1M+ reproduções" },
       ],
@@ -1392,7 +1392,7 @@ const translations: Record<Locale, TranslationMessages> = {
       title: "Seu Próximo Vício Está a Um Toque",
       description: "Junte-se a milhões de espectadores. Baixe grátis e ganhe 7 dias de acesso Premium sem compromisso.",
       featuredTitle: "Baixe a Lollipop",
-      featuredDescription: "Disponível em iOS e Android com streaming 4K, downloads offline e mais de 5.000 dramas premium.",
+      featuredDescription: "Disponível em iOS e Android com streaming 4K, downloads offline e mais de 15.000 dramas premium.",
       featuredShowTitle: "Obsessed With My Boss · Pt.2",
       featuredTimer: "0:42",
       notification: "Novo episódio!",
@@ -1400,7 +1400,7 @@ const translations: Record<Locale, TranslationMessages> = {
       stats: [
         { value: "2M+", label: "Downloads" },
         { value: "4.9★", label: "Nota do App" },
-        { value: "150+", label: "Países" },
+        { value: "100+", label: "Países" },
         { value: "99.9%", label: "Disponibilidade" },
       ],
     },
@@ -1415,9 +1415,9 @@ const translations: Record<Locale, TranslationMessages> = {
         "A plataforma está se expandindo pela China, Japão, América do Norte, Europa, Sudeste Asiático e Oriente Médio, acelerando estratégias localizadas de crescimento.",
       ],
       companyStats: [
-        { num: "50M+", label: "Usuários Globais" },
-        { num: "100K+", label: "Criadores" },
-        { num: "30+", label: "Países" },
+        { num: "1M+", label: "Usuários Globais" },
+        { num: "100K+", label: "Criadores de Qualidade" },
+        { num: "100+", label: "Países" },
       ],
       teamTitle: "Equipe de Destaque",
       teamSub: "Uma liderança de classe mundial impulsionando inovação no entretenimento",
@@ -1513,7 +1513,7 @@ const translations: Record<Locale, TranslationMessages> = {
       updated: "Atualizado:",
       previous: "Anterior",
       next: "Próximo",
-      downloadAppDesc: "Baixe o Lollipop AI e desfrute de 5.000+ dramas curtos premium. Download gratuito, sem assinatura necessária para começar.",
+      downloadAppDesc: "Baixe o Lollipop AI e desfrute de 15.000+ dramas curtos premium. Download gratuito, sem assinatura necessária para começar.",
       organizationName: "Lollipop AI",
       howToSteps: [
         { name: "Escreva seu Roteiro", text: "Crie uma história envolvente com episódios de 1-3 minutos. Concentre-se em uma única questão dramática por episódio com finais de suspense." },
@@ -1640,6 +1640,16 @@ function getInitialLocale(ssrLocale?: Locale): Locale {
   return normalizeLocale(window.navigator.languages?.[0] ?? window.navigator.language);
 }
 
+/** 在整页跳转前必须写入，否则 en（无路径前缀）会回落到旧 localStorage 语言 */
+function persistLocale(next: Locale): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(STORAGE_KEY, next);
+  } catch {
+    // Ignore storage failures
+  }
+}
+
 /**
  * 将当前 URL 切换到目标语言的路径前缀（去掉 ?lang=）。
  * basename 含语言段时必须整页跳转，以便 Router 以新 basename 重新挂载。
@@ -1647,6 +1657,10 @@ function getInitialLocale(ssrLocale?: Locale): Locale {
  */
 function navigateToLocale(next: Locale): boolean {
   if (typeof window === "undefined") return false;
+
+  // 关键：en 默认无 /en 前缀，刷新后 getInitialLocale 会读 localStorage。
+  // 若 assign 前未写入目标语言，会从 zh 等旧值再次 navigate 回去，表现为「切不了英语」。
+  persistLocale(next);
 
   const deployBase = getDeployBasename();
   const appPath = stripLocalePrefix(window.location.pathname, deployBase);
@@ -1688,6 +1702,9 @@ export function I18nProvider({
   activeLocale = locale;
 
   const setLocale = useCallback((next: Locale) => {
+    // 先于可能发生的整页跳转持久化，避免仅依赖下方 useEffect（navigated 时不会 setState）
+    persistLocale(next);
+
     if (next === activeLocale) {
       // 仍尝试规范化 URL（例如旧 ?lang= 链到路径式）
       navigateToLocale(next);
@@ -1701,11 +1718,7 @@ export function I18nProvider({
   }, []);
 
   useEffect(() => {
-    try {
-      window.localStorage.setItem(STORAGE_KEY, locale);
-    } catch {
-      // Ignore storage failures and still update the document language.
-    }
+    persistLocale(locale);
 
     document.documentElement.lang = locale;
 

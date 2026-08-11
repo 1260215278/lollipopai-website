@@ -48,11 +48,11 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       eyebrow: "Key Takeaways",
       title: "Lollipop AI at a Glance",
       items: [
-        { icon: "video", text: "5,000+ premium short dramas across 10+ genres, updated weekly with new exclusives" },
+        { icon: "video", text: "15,000+ premium short dramas across 10+ genres, updated weekly with new exclusives" },
         { icon: "ai", text: "4 AI creation tools (Text-to-Image, Image-to-Image, Text-to-Video, Video-to-Video) via LunoTV 1.5" },
-        { icon: "revenue", text: "70% creator revenue share — highest in the short drama industry" },
-        { icon: "global", text: "Available in 50+ countries on iOS & Android with 4K streaming and offline downloads" },
-        { icon: "users", text: "10M+ global users and 100K+ active creators worldwide" },
+        { icon: "revenue", text: "80% creator revenue share — highest in the short drama industry" },
+        { icon: "global", text: "Available in 100+ countries on iOS & Android with 4K streaming and offline downloads" },
+        { icon: "users", text: "1M+ global users and 100K+ quality creators worldwide" },
         { icon: "free", text: "Free to download with 7-day Premium trial — no commitment required" },
       ],
     },
@@ -73,7 +73,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       items: [
         {
           question: "What is Lollipop AI?",
-          answer: "Lollipop AI is a global AI-powered short drama and creator economy platform. It combines AI creation tools, 5,000+ premium short dramas, and a creator revenue share system (up to 70%). The platform is available on iOS and Android in 50+ countries, offering 4K streaming, offline downloads, and multilingual subtitles.",
+          answer: "Lollipop AI is a global AI-powered short drama and creator economy platform. It combines AI creation tools, 15,000+ premium short dramas, and a creator revenue share system (up to 80%). The platform is available on iOS and Android in 100+ countries, offering 4K streaming, offline downloads, and multilingual subtitles.",
         },
         {
           question: "What AI creation tools does Lollipop AI offer?",
@@ -81,7 +81,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "How many short dramas are available on Lollipop AI?",
-          answer: "Lollipop AI offers 5,000+ premium short dramas and AI original videos across all genres, including Romance (320+), Revenge (180+), Thriller (150+), CEO Drama (260+), Fantasy (120+), Action (90+), Horror (85+), Sci-Fi (75+), Family (110+), and Historical (95+). New exclusive content premieres every week.",
+          answer: "Lollipop AI offers 15,000+ premium short dramas and AI original videos across all genres, including Romance (320+), Revenge (180+), Thriller (150+), CEO Drama (260+), Fantasy (120+), Action (90+), Horror (85+), Sci-Fi (75+), Family (110+), and Historical (95+). New exclusive content premieres every week.",
         },
         {
           question: "Is Lollipop AI free to use?",
@@ -89,7 +89,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "What is the creator revenue share on Lollipop AI?",
-          answer: "Lollipop AI offers an industry-leading 70% revenue share for creators — the highest in the short drama industry. Creators also get full access to AI creation tools, a dedicated success manager, global distribution across 50+ countries, and monthly bonus rewards for top performers. Some creators have already surpassed 1M+ views.",
+          answer: "Lollipop AI offers an industry-leading 80% revenue share for creators — the highest in the short drama industry. Creators also get full access to AI creation tools, a dedicated success manager, global distribution across 100+ countries, and monthly bonus rewards for top performers. Some creators have already surpassed 1M+ views.",
         },
         {
           question: "What is LunoTV?",
@@ -97,11 +97,11 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "Which countries and regions does Lollipop AI support?",
-          answer: "Lollipop AI is available in 50+ countries and regions including the United States, United Kingdom, Canada, Australia, Singapore, Japan, Brazil, Germany, and more. The platform supports English, Simplified Chinese, Traditional Chinese, and Portuguese with multilingual subtitles for a global audience.",
+          answer: "Lollipop AI is available in 100+ countries and regions including the United States, United Kingdom, Canada, Australia, Singapore, Japan, Brazil, Germany, and more. The platform supports English, Simplified Chinese, Traditional Chinese, and Portuguese with multilingual subtitles for a global audience.",
         },
         {
           question: "How can I become a creator on Lollipop AI?",
-          answer: "To become a creator: download the Lollipop AI app, sign up for an account, and access the Creator Program through the distribution center. Creators receive 70% revenue share, full AI creation tools (LunoTV 1.5), dedicated support, and global distribution. Top creators can earn monthly bonuses and reach 1M+ views. Visit the Creating page for more details.",
+          answer: "To become a creator: download the Lollipop AI app, sign up for an account, and access the Creator Program through the distribution center. Creators receive 80% revenue share, full AI creation tools (LunoTV 1.5), dedicated support, and global distribution. Top creators can earn monthly bonuses and reach 1M+ views. Visit the Creating page for more details.",
         },
       ],
     },
@@ -110,10 +110,10 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       title: "Key Terms Explained",
       items: [
         { term: "LunoTV 1.5", definition: "The AI creation toolkit within Lollipop AI, offering text-to-image, image-to-image, text-to-video, and video-to-video generation tools." },
-        { term: "Creator Economy", definition: "An economic model where content creators earn revenue from their work. On Lollipop AI, creators receive 70% revenue share — the highest in the short drama industry." },
-        { term: "Short Drama", definition: "Episodic video content with 1-3 minute episodes, designed for mobile viewing. Lollipop AI hosts 5,000+ titles across 10+ genres." },
+        { term: "Creator Economy", definition: "An economic model where content creators earn revenue from their work. On Lollipop AI, creators receive 80% revenue share — the highest in the short drama industry." },
+        { term: "Short Drama", definition: "Episodic video content with 1-3 minute episodes, designed for mobile viewing. Lollipop AI hosts 15,000+ titles across 10+ genres." },
         { term: "Text-to-Video (T2V)", definition: "AI technology that converts text descriptions into video content. On Lollipop AI, users describe a storyline and the system generates a professional short video." },
-        { term: "Revenue Share", definition: "The percentage of revenue that creators receive from their content. Lollipop AI offers 70%, meaning creators keep 70% of earnings from their short dramas." },
+        { term: "Revenue Share", definition: "The percentage of revenue that creators receive from their content. Lollipop AI offers 80%, meaning creators keep 80% of earnings from their short dramas." },
         { term: "Premium Membership", definition: "A paid subscription that provides unlimited access to all content, ad-free viewing, 4K streaming, and offline downloads. New users get 7 days free." },
       ],
     },
@@ -122,7 +122,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       items: [
         { icon: "shield", label: "Privacy Protected", value: "GDPR & CCPA Compliant" },
         { icon: "award", label: "App Rating", value: "4.9 Stars" },
-        { icon: "globe", label: "Global Coverage", value: "50+ Countries" },
+        { icon: "globe", label: "Global Coverage", value: "100+ Countries" },
         { icon: "sparkles", label: "Uptime", value: "99.9% Availability" },
       ],
     },
@@ -143,11 +143,11 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       eyebrow: "核心要点",
       title: "Lollipop AI 一览",
       items: [
-        { icon: "video", text: "5,000+ 精品短剧，覆盖 10+ 题材，每周持续上线独家新作" },
+        { icon: "video", text: "15000+ 精品短剧，覆盖 10+ 题材，每周持续上线独家新作" },
         { icon: "ai", text: "4 大 AI 创作工具（文生图、图生图、文生视频、视频生视频）通过 LunoTV 1.5 提供" },
-        { icon: "revenue", text: "70% 创作者收益分成 — 短剧行业最高水平" },
-        { icon: "global", text: "覆盖 50+ 国家和地区，支持 iOS & Android，4K 流媒体与离线下载" },
-        { icon: "users", text: "全球 1000 万+ 用户，10 万+ 活跃创作者" },
+        { icon: "revenue", text: "80% 创作者收益分成 — 短剧行业最高水平" },
+        { icon: "global", text: "覆盖 100+ 国家和地区，支持 iOS & Android，4K 流媒体与离线下载" },
+        { icon: "users", text: "全球 100 万+ 用户，10 万+ 优质创作者" },
         { icon: "free", text: "免费下载，新用户享 7 天 Premium 体验，无需承诺" },
       ],
     },
@@ -168,7 +168,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       items: [
         {
           question: "Lollipop AI 是什么？",
-          answer: "Lollipop AI 是全球 AI 驱动的短剧与创作者经济平台。平台结合 AI 创作工具、5,000+ 精品短剧和创作者收益分成体系（高达 70%）。支持 iOS 和 Android，覆盖 50+ 国家和地区，提供 4K 流媒体、离线下载和多语言字幕。",
+          answer: "Lollipop AI 是全球 AI 驱动的短剧与创作者经济平台。平台结合 AI 创作工具、15000+ 精品短剧和创作者收益分成体系（高达 80%）。支持 iOS 和 Android，覆盖 100+ 国家和地区，提供 4K 流媒体、离线下载和多语言字幕。",
         },
         {
           question: "Lollipop AI 提供哪些 AI 创作工具？",
@@ -176,7 +176,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "Lollipop AI 有多少部短剧？",
-          answer: "Lollipop AI 拥有 5,000+ 精品短剧和 AI 原创视频，覆盖全品类题材：爱情（320+）、复仇（180+）、惊悚（150+）、霸总（260+）、奇幻（120+）、动作（90+）、恐怖（85+）、科幻（75+）、家庭（110+）、古装（95+）。每周持续上线独家新作。",
+          answer: "Lollipop AI 拥有 15000+ 精品短剧和 AI 原创视频，覆盖全品类题材：爱情（320+）、复仇（180+）、惊悚（150+）、霸总（260+）、奇幻（120+）、动作（90+）、恐怖（85+）、科幻（75+）、家庭（110+）、古装（95+）。每周持续上线独家新作。",
         },
         {
           question: "Lollipop AI 是免费的吗？",
@@ -184,7 +184,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "Lollipop AI 的创作者收益分成是多少？",
-          answer: "Lollipop AI 提供行业领先的 70% 收益分成 — 短剧行业最高水平。创作者还可使用全部 AI 创作工具、获得专属成长支持、覆盖 50+ 国家的全球分发，以及头部创作者每月额外奖励。部分创作者已突破 100 万播放。",
+          answer: "Lollipop AI 提供行业领先的 80% 收益分成 — 短剧行业最高水平。创作者还可使用全部 AI 创作工具、获得专属成长支持、覆盖 100+ 国家的全球分发，以及头部创作者每月额外奖励。部分创作者已突破 100 万播放。",
         },
         {
           question: "LunoTV 是什么？",
@@ -192,11 +192,11 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "Lollipop AI 支持哪些国家和地区？",
-          answer: "Lollipop AI 覆盖 50+ 国家和地区，包括美国、英国、加拿大、澳大利亚、新加坡、日本、巴西、德国等。平台支持简体中文、繁体中文、英文和葡萄牙文，配备多语言字幕服务全球用户。",
+          answer: "Lollipop AI 覆盖 100+ 国家和地区，包括美国、英国、加拿大、澳大利亚、新加坡、日本、巴西、德国等。平台支持简体中文、繁体中文、英文和葡萄牙文，配备多语言字幕服务全球用户。",
         },
         {
           question: "如何成为 Lollipop AI 的创作者？",
-          answer: "成为创作者的步骤：下载 Lollipop AI App，注册账号，通过发行中心进入创作者计划。创作者可获得 70% 收益分成、完整 AI 创作工具（LunoTV 1.5）、专属支持和全球分发。头部创作者可获得每月额外奖励，部分已突破 100 万播放。详情请访问创作页面。",
+          answer: "成为创作者的步骤：下载 Lollipop AI App，注册账号，通过发行中心进入创作者计划。创作者可获得 80% 收益分成、完整 AI 创作工具（LunoTV 1.5）、专属支持和全球分发。头部创作者可获得每月额外奖励，部分已突破 100 万播放。详情请访问创作页面。",
         },
       ],
     },
@@ -205,10 +205,10 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       title: "关键术语解释",
       items: [
         { term: "LunoTV 1.5", definition: "Lollipop AI 平台内的 AI 创作工具包，提供文生图、图生图、文生视频和视频生视频四项生成工具。" },
-        { term: "创作者经济", definition: "创作者从内容中获得收入的经济模式。在 Lollipop AI 平台，创作者获得 70% 收益分成 — 短剧行业最高。" },
-        { term: "短剧", definition: "每集 1-3 分钟的剧集内容，专为移动端设计。Lollipop AI 拥有 5,000+ 部作品，覆盖 10+ 题材。" },
+        { term: "创作者经济", definition: "创作者从内容中获得收入的经济模式。在 Lollipop AI 平台，创作者获得 80% 收益分成 — 短剧行业最高。" },
+        { term: "短剧", definition: "每集 1-3 分钟的剧集内容，专为移动端设计。Lollipop AI 拥有 15000+ 部作品，覆盖 10+ 题材。" },
         { term: "文生视频 (T2V)", definition: "将文字描述转化为视频内容的 AI 技术。在 Lollipop AI 上，用户描述剧情即可生成专业短视频。" },
-        { term: "收益分成", definition: "创作者从内容收入中获得的百分比。Lollipop AI 提供 70%，即创作者保留短剧收入的 70%。" },
+        { term: "收益分成", definition: "创作者从内容收入中获得的百分比。Lollipop AI 提供 80%，即创作者保留短剧收入的 80%。" },
         { term: "Premium 会员", definition: "付费订阅服务，提供全部内容无限观看、无广告、4K 流媒体和离线下载。新用户可享 7 天免费体验。" },
       ],
     },
@@ -217,7 +217,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       items: [
         { icon: "shield", label: "隐私保护", value: "符合 GDPR & CCPA" },
         { icon: "award", label: "应用评分", value: "4.9 星" },
-        { icon: "globe", label: "全球覆盖", value: "50+ 国家" },
+        { icon: "globe", label: "全球覆盖", value: "100+ 国家" },
         { icon: "sparkles", label: "服务可用率", value: "99.9%" },
       ],
     },
@@ -238,11 +238,11 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       eyebrow: "核心要點",
       title: "Lollipop AI 一覽",
       items: [
-        { icon: "video", text: "5,000+ 精品短劇，覆蓋 10+ 題材，每週持續上線獨家新作" },
+        { icon: "video", text: "15000+ 精品短劇，覆蓋 10+ 題材，每週持續上線獨家新作" },
         { icon: "ai", text: "4 大 AI 創作工具（文生圖、圖生圖、文生影片、影片生影片）通過 LunoTV 1.5 提供" },
-        { icon: "revenue", text: "70% 創作者收益分成 — 短劇行業最高水平" },
-        { icon: "global", text: "覆蓋 50+ 國家和地區，支援 iOS & Android，4K 串流與離線下載" },
-        { icon: "users", text: "全球 1000 萬+ 用戶，10 萬+ 活躍創作者" },
+        { icon: "revenue", text: "80% 創作者收益分成 — 短劇行業最高水平" },
+        { icon: "global", text: "覆蓋 100+ 國家和地區，支援 iOS & Android，4K 串流與離線下載" },
+        { icon: "users", text: "全球 100 萬+ 用戶，10 萬+ 優質創作者" },
         { icon: "free", text: "免費下載，新用戶享 7 天 Premium 體驗，無需承諾" },
       ],
     },
@@ -263,7 +263,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       items: [
         {
           question: "Lollipop AI 是什麼？",
-          answer: "Lollipop AI 是全球 AI 驅動的短劇與創作者經濟平台。平台結合 AI 創作工具、5,000+ 精品短劇和創作者收益分成體系（高達 70%）。支援 iOS 和 Android，覆蓋 50+ 國家和地區，提供 4K 串流、離線下載和多語言字幕。",
+          answer: "Lollipop AI 是全球 AI 驅動的短劇與創作者經濟平台。平台結合 AI 創作工具、15000+ 精品短劇和創作者收益分成體系（高達 80%）。支援 iOS 和 Android，覆蓋 100+ 國家和地區，提供 4K 串流、離線下載和多語言字幕。",
         },
         {
           question: "Lollipop AI 提供哪些 AI 創作工具？",
@@ -271,7 +271,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "Lollipop AI 有多少部短劇？",
-          answer: "Lollipop AI 擁有 5,000+ 精品短劇和 AI 原創影片，覆蓋全品類題材：愛情（320+）、復仇（180+）、驚悚（150+）、霸總（260+）、奇幻（120+）、動作（90+）、恐怖（85+）、科幻（75+）、家庭（110+）、古裝（95+）。每週持續上線獨家新作。",
+          answer: "Lollipop AI 擁有 15000+ 精品短劇和 AI 原創影片，覆蓋全品類題材：愛情（320+）、復仇（180+）、驚悚（150+）、霸總（260+）、奇幻（120+）、動作（90+）、恐怖（85+）、科幻（75+）、家庭（110+）、古裝（95+）。每週持續上線獨家新作。",
         },
         {
           question: "Lollipop AI 是免費的嗎？",
@@ -279,7 +279,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "Lollipop AI 的創作者收益分成是多少？",
-          answer: "Lollipop AI 提供行業領先的 70% 收益分成 — 短劇行業最高水平。創作者還可使用全部 AI 創作工具、獲得專屬成長支持、覆蓋 50+ 國家的全球分發，以及頭部創作者每月額外獎勵。部分創作者已突破 100 萬播放。",
+          answer: "Lollipop AI 提供行業領先的 80% 收益分成 — 短劇行業最高水平。創作者還可使用全部 AI 創作工具、獲得專屬成長支持、覆蓋 100+ 國家的全球分發，以及頭部創作者每月額外獎勵。部分創作者已突破 100 萬播放。",
         },
         {
           question: "LunoTV 是什麼？",
@@ -287,11 +287,11 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "Lollipop AI 支援哪些國家和地區？",
-          answer: "Lollipop AI 覆蓋 50+ 國家和地區，包括美國、英國、加拿大、澳洲、新加坡、日本、巴西、德國等。平台支援簡體中文、繁體中文、英文和葡萄牙文，配備多語言字幕服務全球用戶。",
+          answer: "Lollipop AI 覆蓋 100+ 國家和地區，包括美國、英國、加拿大、澳洲、新加坡、日本、巴西、德國等。平台支援簡體中文、繁體中文、英文和葡萄牙文，配備多語言字幕服務全球用戶。",
         },
         {
           question: "如何成為 Lollipop AI 的創作者？",
-          answer: "成為創作者的步驟：下載 Lollipop AI App，註冊帳號，通過發行中心進入創作者計畫。創作者可獲得 70% 收益分成、完整 AI 創作工具（LunoTV 1.5）、專屬支持和全球分發。頭部創作者可獲得每月額外獎勵，部分已突破 100 萬播放。詳情請訪問創作頁面。",
+          answer: "成為創作者的步驟：下載 Lollipop AI App，註冊帳號，通過發行中心進入創作者計畫。創作者可獲得 80% 收益分成、完整 AI 創作工具（LunoTV 1.5）、專屬支持和全球分發。頭部創作者可獲得每月額外獎勵，部分已突破 100 萬播放。詳情請訪問創作頁面。",
         },
       ],
     },
@@ -300,10 +300,10 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       title: "關鍵術語解釋",
       items: [
         { term: "LunoTV 1.5", definition: "Lollipop AI 平台內的 AI 創作工具包，提供文生圖、圖生圖、文生影片和影片生影片四項生成工具。" },
-        { term: "創作者經濟", definition: "創作者從內容中獲得收入的經濟模式。在 Lollipop AI 平台，創作者獲得 70% 收益分成 — 短劇行業最高。" },
-        { term: "短劇", definition: "每集 1-3 分鐘的劇集內容，專為行動端設計。Lollipop AI 擁有 5,000+ 部作品，覆蓋 10+ 題材。" },
+        { term: "創作者經濟", definition: "創作者從內容中獲得收入的經濟模式。在 Lollipop AI 平台，創作者獲得 80% 收益分成 — 短劇行業最高。" },
+        { term: "短劇", definition: "每集 1-3 分鐘的劇集內容，專為行動端設計。Lollipop AI 擁有 15000+ 部作品，覆蓋 10+ 題材。" },
         { term: "文生影片 (T2V)", definition: "將文字描述轉化為影片內容的 AI 技術。在 Lollipop AI 上，用戶描述劇情即可生成專業短影片。" },
-        { term: "收益分成", definition: "創作者從內容收入中獲得的百分比。Lollipop AI 提供 70%，即創作者保留短劇收入的 70%。" },
+        { term: "收益分成", definition: "創作者從內容收入中獲得的百分比。Lollipop AI 提供 80%，即創作者保留短劇收入的 80%。" },
         { term: "Premium 會員", definition: "付費訂閱服務，提供全部內容無限觀看、無廣告、4K 串流和離線下載。新用戶可享 7 天免費體驗。" },
       ],
     },
@@ -312,7 +312,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       items: [
         { icon: "shield", label: "隱私保護", value: "符合 GDPR & CCPA" },
         { icon: "award", label: "應用評分", value: "4.9 星" },
-        { icon: "globe", label: "全球覆蓋", value: "50+ 國家" },
+        { icon: "globe", label: "全球覆蓋", value: "100+ 國家" },
         { icon: "sparkles", label: "服務可用率", value: "99.9%" },
       ],
     },
@@ -333,11 +333,11 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       eyebrow: "Pontos Principais",
       title: "Lollipop AI em Resumo",
       items: [
-        { icon: "video", text: "5.000+ dramas curtos premium em 10+ generos, com novos exclusivos toda semana" },
+        { icon: "video", text: "15.000+ dramas curtos premium em 10+ generos, com novos exclusivos toda semana" },
         { icon: "ai", text: "4 ferramentas de criacao com IA (Texto-para-Imagem, Imagem-para-Imagem, Texto-para-Video, Video-para-Video) via LunoTV 1.5" },
-        { icon: "revenue", text: "70% de participacao na receita para criadores — a maior do setor de drama curto" },
-        { icon: "global", text: "Disponivel em 50+ paises no iOS e Android com streaming 4K e downloads offline" },
-        { icon: "users", text: "10M+ usuarios globais e 100K+ criadores ativos no mundo todo" },
+        { icon: "revenue", text: "80% de participacao na receita para criadores — a maior do setor de drama curto" },
+        { icon: "global", text: "Disponivel em 100+ paises no iOS e Android com streaming 4K e downloads offline" },
+        { icon: "users", text: "1M+ usuarios globais e 100K+ criadores de qualidade no mundo todo" },
         { icon: "free", text: "Download gratuito com 7 dias de Premium gratis — sem compromisso" },
       ],
     },
@@ -358,7 +358,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       items: [
         {
           question: "O que e Lollipop AI?",
-          answer: "Lollipop AI e uma plataforma global de drama curto e economia de criadores com IA. Combina ferramentas de criacao com IA, 5.000+ dramas curtos premium e um sistema de participacao na receita para criadores (ate 70%). Disponivel no iOS e Android em 50+ paises, com streaming 4K, downloads offline e legendas multilingues.",
+          answer: "Lollipop AI e uma plataforma global de drama curto e economia de criadores com IA. Combina ferramentas de criacao com IA, 15.000+ dramas curtos premium e um sistema de participacao na receita para criadores (ate 80%). Disponivel no iOS e Android em 100+ paises, com streaming 4K, downloads offline e legendas multilingues.",
         },
         {
           question: "Quais ferramentas de criacao com IA a Lollipop AI oferece?",
@@ -366,7 +366,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "Quantos dramas curtos estao disponiveis na Lollipop AI?",
-          answer: "A Lollipop AI oferece 5.000+ dramas curtos premium e videos originais com IA em todos os generos: Romance (320+), Vinganca (180+), Suspense (150+), Dramas de Bilionarios (260+), Fantasia (120+), Acao (90+), Terror (85+), Ficcao Cientifica (75+), Familia (110+) e Historico (95+). Novos exclusivos estreiam toda semana.",
+          answer: "A Lollipop AI oferece 15.000+ dramas curtos premium e videos originais com IA em todos os generos: Romance (320+), Vinganca (180+), Suspense (150+), Dramas de Bilionarios (260+), Fantasia (120+), Acao (90+), Terror (85+), Ficcao Cientifica (75+), Familia (110+) e Historico (95+). Novos exclusivos estreiam toda semana.",
         },
         {
           question: "A Lollipop AI e gratuita?",
@@ -374,7 +374,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "Qual e a participacao na receita para criadores na Lollipop AI?",
-          answer: "A Lollipop AI oferece 70% de participacao na receita para criadores — a maior do setor de drama curto. Os criadores tambem tem acesso completo as ferramentas de IA, gerente de sucesso dedicado, distribuicao global em 50+ paises e bonus mensais para os melhores desempenhos. Alguns criadores ja superaram 1M+ de visualizacoes.",
+          answer: "A Lollipop AI oferece 80% de participacao na receita para criadores — a maior do setor de drama curto. Os criadores tambem tem acesso completo as ferramentas de IA, gerente de sucesso dedicado, distribuicao global em 100+ paises e bonus mensais para os melhores desempenhos. Alguns criadores ja superaram 1M+ de visualizacoes.",
         },
         {
           question: "O que e LunoTV?",
@@ -382,11 +382,11 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "Quais paises e regioes a Lollipop AI suporta?",
-          answer: "A Lollipop AI esta disponivel em 50+ paises e regioes, incluindo EUA, Reino Unido, Canada, Australia, Singapura, Japao, Brasil, Alemanha e mais. A plataforma suporta portugues, ingles, chines simplificado e chines tradicional com legendas multilingues.",
+          answer: "A Lollipop AI esta disponivel em 100+ paises e regioes, incluindo EUA, Reino Unido, Canada, Australia, Singapura, Japao, Brasil, Alemanha e mais. A plataforma suporta portugues, ingles, chines simplificado e chines tradicional com legendas multilingues.",
         },
         {
           question: "Como me tornar um criador na Lollipop AI?",
-          answer: "Para se tornar um criador: baixe o app Lollipop AI, cadastre-se e acesse o Programa de Criadores pelo centro de distribuicao. Os criadores recebem 70% de participacao na receita, ferramentas completas de IA (LunoTV 1.5), suporte dedicado e distribuicao global. Os melhores criadores podem ganhar bonus mensais e alcancar 1M+ de views.",
+          answer: "Para se tornar um criador: baixe o app Lollipop AI, cadastre-se e acesse o Programa de Criadores pelo centro de distribuicao. Os criadores recebem 80% de participacao na receita, ferramentas completas de IA (LunoTV 1.5), suporte dedicado e distribuicao global. Os melhores criadores podem ganhar bonus mensais e alcancar 1M+ de views.",
         },
       ],
     },
@@ -395,10 +395,10 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       title: "Termos-Chave Explicados",
       items: [
         { term: "LunoTV 1.5", definition: "O kit de ferramentas de IA dentro da Lollipop AI, oferecendo geracao de texto-para-imagem, imagem-para-imagem, texto-para-video e video-para-video." },
-        { term: "Economia de Criadores", definition: "Um modelo economico onde criadores de conteudo ganham receita com seu trabalho. Na Lollipop AI, os criadores recebem 70% de participacao na receita." },
-        { term: "Drama Curto", definition: "Conteudo de video episodico com episodios de 1-3 minutos, projetado para visualizacao no celular. A Lollipop AI tem 5.000+ titulos em 10+ generos." },
+        { term: "Economia de Criadores", definition: "Um modelo economico onde criadores de conteudo ganham receita com seu trabalho. Na Lollipop AI, os criadores recebem 80% de participacao na receita." },
+        { term: "Drama Curto", definition: "Conteudo de video episodico com episodios de 1-3 minutos, projetado para visualizacao no celular. A Lollipop AI tem 15.000+ titulos em 10+ generos." },
         { term: "Texto-para-Video (T2V)", definition: "Tecnologia de IA que converte descricoes de texto em conteudo de video. Na Lollipop AI, os usuarios descrevem um enredo e o sistema gera um video curto profissional." },
-        { term: "Participacao na Receita", definition: "A porcentagem da receita que os criadores recebem do seu conteudo. A Lollipop AI oferece 70%, significando que os criadores ficam com 70% dos ganhos." },
+        { term: "Participacao na Receita", definition: "A porcentagem da receita que os criadores recebem do seu conteudo. A Lollipop AI oferece 80%, significando que os criadores ficam com 80% dos ganhos." },
         { term: "Assinatura Premium", definition: "Uma assinatura paga que fornece acesso ilimitado a todo o conteudo, visualizacao sem anuncios, streaming 4K e downloads offline. Novos usuarios recebem 7 dias gratis." },
       ],
     },
@@ -407,7 +407,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       items: [
         { icon: "shield", label: "Privacidade Protegida", value: "Conforme GDPR & CCPA" },
         { icon: "award", label: "Nota do App", value: "4.9 Estrelas" },
-        { icon: "globe", label: "Cobertura Global", value: "50+ Paises" },
+        { icon: "globe", label: "Cobertura Global", value: "100+ Paises" },
         { icon: "sparkles", label: "Disponibilidade", value: "99.9%" },
       ],
     },

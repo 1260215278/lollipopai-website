@@ -10,6 +10,7 @@ import {
   Eye,
   Pin,
   PinOff,
+  Pencil,
   AlertCircle,
   Loader2,
   CheckCircle2,
@@ -43,6 +44,8 @@ interface DramaListViewProps {
   onUpload: () => void;
   onViewDetail: (d: PublisherCourseRow) => void;
   onManageEpisodes: (d: PublisherCourseRow) => void;
+  /** 驳回后修改并重新提交（COURSE_VIEW_ASSIGNED + canEdit + canResubmit） */
+  onResubmit: (d: PublisherCourseRow) => void;
   /** 上架/下架（仅 auditStatus=2 可点）；下架的确认弹窗由上层处理 */
   onToggleShelf: (d: PublisherCourseRow) => void;
   /** 置顶/取消置顶 */
@@ -79,6 +82,7 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
   onUpload,
   onViewDetail,
   onManageEpisodes,
+  onResubmit,
   onToggleShelf,
   onTogglePin,
   page,
@@ -391,6 +395,19 @@ export const DramaListView: React.FC<DramaListViewProps> = ({
                                 <Video className="w-3.5 h-3.5" />
                                 {t.actionEpisodes}
                               </button>
+                              {canUploadCourse && drama.canEdit === true && drama.canResubmit === true && (
+                                <button
+                                  onClick={() => {
+                                    onResubmit(drama);
+                                    setMenu(null);
+                                  }}
+                                  className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-left text-gray-700 hover:bg-gray-50"
+                                  style={{ fontWeight: 500 }}
+                                >
+                                  <Pencil className="w-3.5 h-3.5" />
+                                  {t.actionResubmit}
+                                </button>
+                              )}
                               {canManageCourse && (
                                 <button
                                   onClick={() => {

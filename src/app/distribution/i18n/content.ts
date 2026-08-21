@@ -102,6 +102,8 @@ export interface ContentMessages {
   actionReviewLocked: string;
   actionPin: string;
   actionUnpin: string;
+  /** 驳回行：修改并重新提交 */
+  actionResubmit: string;
 
   // ── 下架确认弹窗 ──
   offlineConfirmTitle: string;
@@ -110,6 +112,10 @@ export interface ContentMessages {
 
   // ── 上剧流程通用 ──
   uploadTitle: string;
+  /** 驳回后进入三步表单的标题 */
+  resubmitTitle: string;
+  /** 驳回编辑页说明 */
+  rejectEditHint: string;
   draftRestored: string;
   /** 草稿恢复后本地 File 已丢失时的补充说明 */
   draftRestoredReselect: string;
@@ -140,6 +146,11 @@ export interface ContentMessages {
   descLangHint: string;
   episodesLabel: string;
   episodesLockHint: string;
+  /** 驳回态可改计划集数 */
+  episodesUnlockHint: string;
+  /** 缩减计划集数二次确认：{from} {to} {next} */
+  episodesReduceConfirm: string;
+  episodesReduceConfirmOk: string;
   episodesPlaceholder: string;
   channelLabel: string;
   tagsLabel: string;
@@ -191,7 +202,9 @@ export interface ContentMessages {
   publishNowOption: string;
   publishLaterOption: string;
   submitPublish: string;
+  submitResubmit: string;
   submitSuccess: string;
+  resubmitSuccess: string;
 
   // 手机预览底部标签
   phoneHome: string;
@@ -392,12 +405,15 @@ export const content: Record<Locale, ContentMessages> = {
     actionReviewLocked: "审核中，暂不可操作",
     actionPin: "置顶",
     actionUnpin: "取消置顶",
+    actionResubmit: "修改并重新提交",
 
     offlineConfirmTitle: "确认下架此短剧？",
     offlineConfirmDesc: "下架后该剧集将对用户不可见，收益将暂停结算。您可以随时重新上架。",
     offlineConfirmOk: "确认下架",
 
     uploadTitle: "上传短剧",
+    resubmitTitle: "修改并重新提交",
+    rejectEditHint: "请在原记录上修改全部发行参数后重新提交，不会创建新短剧。",
     draftRestored: "已恢复上次未完成的草稿内容。",
     draftRestoredReselect: "本地未上传的视频文件不会保留，请重新选择后再上传。",
     draftStartFresh: "清空重填",
@@ -423,6 +439,10 @@ export const content: Record<Locale, ContentMessages> = {
     descLangHint: "输入对应语言剧情简介",
     episodesLabel: "集数",
     episodesLockHint: "根据实际集数填写，须准确无误，填后不可修改",
+    episodesUnlockHint: "驳回后可修改计划集数",
+    episodesReduceConfirm:
+      "计划集数将从 {from} 集减少为 {to} 集，第 {next} 集及之后已上传的数据会被删除且无法恢复，是否继续？",
+    episodesReduceConfirmOk: "确认减少",
     episodesPlaceholder: "请输入集数",
     channelLabel: "频道",
     tagsLabel: "标签",
@@ -469,7 +489,9 @@ export const content: Record<Locale, ContentMessages> = {
     publishNowOption: "立即上架",
     publishLaterOption: "暂不上架",
     submitPublish: "提交发布",
+    submitResubmit: "重新提交审核",
     submitSuccess: "提交成功，短剧已进入审核",
+    resubmitSuccess: "已重新提交，短剧已进入审核",
 
     phoneHome: "首页",
     phoneForYou: "For You",
@@ -657,12 +679,15 @@ export const content: Record<Locale, ContentMessages> = {
     actionReviewLocked: "審核中，暫不可操作",
     actionPin: "置頂",
     actionUnpin: "取消置頂",
+    actionResubmit: "修改並重新提交",
 
     offlineConfirmTitle: "確認下架此短劇？",
     offlineConfirmDesc: "下架後該劇集將對使用者不可見，收益將暫停結算。您可以隨時重新上架。",
     offlineConfirmOk: "確認下架",
 
     uploadTitle: "上傳短劇",
+    resubmitTitle: "修改並重新提交",
+    rejectEditHint: "請在原紀錄上修改全部發行參數後重新提交，不會建立新短劇。",
     draftRestored: "已還原上次未完成的草稿內容。",
     draftRestoredReselect: "本機未上傳的影片檔案不會保留，請重新選擇後再上傳。",
     draftStartFresh: "清空重填",
@@ -688,6 +713,10 @@ export const content: Record<Locale, ContentMessages> = {
     descLangHint: "輸入對應語言劇情簡介",
     episodesLabel: "集數",
     episodesLockHint: "根據實際集數填寫，須準確無誤，填後不可修改",
+    episodesUnlockHint: "駁回後可修改計劃集數",
+    episodesReduceConfirm:
+      "計劃集數將從 {from} 集減少為 {to} 集，第 {next} 集及之後已上傳的資料會被刪除且無法恢復，是否繼續？",
+    episodesReduceConfirmOk: "確認減少",
     episodesPlaceholder: "請輸入集數",
     channelLabel: "頻道",
     tagsLabel: "標籤",
@@ -734,7 +763,9 @@ export const content: Record<Locale, ContentMessages> = {
     publishNowOption: "立即上架",
     publishLaterOption: "暫不上架",
     submitPublish: "提交發佈",
+    submitResubmit: "重新提交審核",
     submitSuccess: "提交成功，短劇已進入審核",
+    resubmitSuccess: "已重新提交，短劇已進入審核",
 
     phoneHome: "首頁",
     phoneForYou: "For You",
@@ -922,6 +953,7 @@ export const content: Record<Locale, ContentMessages> = {
     actionReviewLocked: "Under review, locked",
     actionPin: "Pin to Top",
     actionUnpin: "Unpin",
+    actionResubmit: "Edit & Resubmit",
 
     offlineConfirmTitle: "Take this drama offline?",
     offlineConfirmDesc:
@@ -929,6 +961,8 @@ export const content: Record<Locale, ContentMessages> = {
     offlineConfirmOk: "Confirm Offline",
 
     uploadTitle: "Upload Drama",
+    resubmitTitle: "Edit & Resubmit",
+    rejectEditHint: "Edit all publishing fields on the original title and resubmit. A new title will not be created.",
     draftRestored: "Draft restored from your last session.",
     draftRestoredReselect: "Local video files are not kept after refresh. Please re-select them before uploading.",
     draftStartFresh: "Start fresh",
@@ -954,6 +988,10 @@ export const content: Record<Locale, ContentMessages> = {
     descLangHint: "Enter the synopsis in the selected language",
     episodesLabel: "Episodes",
     episodesLockHint: "Enter the actual episode count accurately; cannot be changed after filling in",
+    episodesUnlockHint: "Planned episode count can be changed after rejection",
+    episodesReduceConfirm:
+      "Planned episode count will change from {from} to {to}. Episodes {next} and after will be deleted and cannot be recovered. Continue?",
+    episodesReduceConfirmOk: "Confirm Reduce",
     episodesPlaceholder: "e.g. 30",
     channelLabel: "Channel",
     tagsLabel: "Tags",
@@ -1000,7 +1038,9 @@ export const content: Record<Locale, ContentMessages> = {
     publishNowOption: "Publish Now",
     publishLaterOption: "Do Not Publish Now",
     submitPublish: "Submit & Publish",
+    submitResubmit: "Resubmit for Review",
     submitSuccess: "Submitted. Your drama is now under review.",
+    resubmitSuccess: "Resubmitted. Your drama is now under review.",
 
     phoneHome: "Home",
     phoneForYou: "For You",
@@ -1188,6 +1228,7 @@ export const content: Record<Locale, ContentMessages> = {
     actionReviewLocked: "Em análise, bloqueado",
     actionPin: "Fixar no topo",
     actionUnpin: "Desafixar",
+    actionResubmit: "Editar e reenviar",
 
     offlineConfirmTitle: "Despublicar este drama?",
     offlineConfirmDesc:
@@ -1195,6 +1236,8 @@ export const content: Record<Locale, ContentMessages> = {
     offlineConfirmOk: "Confirmar",
 
     uploadTitle: "Enviar drama",
+    resubmitTitle: "Editar e reenviar",
+    rejectEditHint: "Edite todos os parâmetros na obra original e reenvie. Uma nova obra não será criada.",
     draftRestored: "Rascunho restaurado da sua última sessão.",
     draftRestoredReselect: "Os arquivos de vídeo locais não são mantidos após atualizar. Selecione-os novamente antes de enviar.",
     draftStartFresh: "Começar do zero",
@@ -1220,6 +1263,10 @@ export const content: Record<Locale, ContentMessages> = {
     descLangHint: "Digite a sinopse no idioma selecionado",
     episodesLabel: "Episódios",
     episodesLockHint: "Preencha com o número real de episódios, com precisão; não pode ser alterado depois",
+    episodesUnlockHint: "Após a rejeição, o número planejado de episódios pode ser alterado",
+    episodesReduceConfirm:
+      "O número planejado mudará de {from} para {to} episódios. Os episódios {next} em diante serão excluídos e não poderão ser recuperados. Continuar?",
+    episodesReduceConfirmOk: "Confirmar redução",
     episodesPlaceholder: "ex.: 30",
     channelLabel: "Canal",
     tagsLabel: "Tags",
@@ -1266,7 +1313,9 @@ export const content: Record<Locale, ContentMessages> = {
     publishNowOption: "Publicar agora",
     publishLaterOption: "Não publicar agora",
     submitPublish: "Enviar e publicar",
+    submitResubmit: "Reenviar para análise",
     submitSuccess: "Enviado. Seu drama está em análise.",
+    resubmitSuccess: "Reenviado. Seu drama está em análise.",
 
     phoneHome: "Início",
     phoneForYou: "For You",

@@ -10,6 +10,7 @@ import {
   Calendar,
   ChevronRight,
   PlusCircle,
+  Pencil,
   User,
   Home,
   Sparkles,
@@ -18,7 +19,6 @@ import {
 import type { ContentMessages } from "../../i18n/content";
 import type { LanguageOption } from "../../../services/language";
 import type { CourseDetail } from "./types";
-import { AuditStatus } from "../../../services/content";
 import {
   auditStatusStyle,
   auditStatusLabel,
@@ -42,6 +42,7 @@ interface DramaDetailViewProps {
   canUploadCourse: boolean;
   onBack: () => void;
   onManageEpisodes: () => void;
+  onResubmit: () => void;
 }
 
 /** 短剧详情（img_11）。数据来自 GET /publisher/course/detail。 */
@@ -52,6 +53,7 @@ export const DramaDetailView: React.FC<DramaDetailViewProps> = ({
   canUploadCourse,
   onBack,
   onManageEpisodes,
+  onResubmit,
 }) => {
   const { basic, progress, publish, priceRule, revenue } = detail;
   const auStyle = auditStatusStyle[detail.auditStatus] ?? { bg: "#F3F4F6", color: "#6B7280" };
@@ -67,7 +69,8 @@ export const DramaDetailView: React.FC<DramaDetailViewProps> = ({
   const distLabelBg = publish.publishScope === 2 ? "#FFF1F2" : "#F3F4F6";
 
   const phoneLabels = { home: t.phoneHome, forYou: t.phoneForYou, me: t.phoneMe };
-  const canContinueUpload = canUploadCourse && (detail.auditStatus === AuditStatus.DRAFT || detail.auditStatus === AuditStatus.REJECTED);
+  const canContinueUpload = canUploadCourse && detail.canEdit === true;
+  const canResubmit = canUploadCourse && detail.canEdit === true && detail.canResubmit === true;
 
   return (
     <div className="p-8">
@@ -90,6 +93,16 @@ export const DramaDetailView: React.FC<DramaDetailViewProps> = ({
             <span className="text-xs text-gray-400 font-mono">{detail.dramaNo}</span>
           </div>
         </div>
+        {canResubmit && (
+          <button
+            onClick={onResubmit}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 text-xs text-gray-700 hover:bg-gray-50 transition-colors"
+            style={{ fontWeight: 600 }}
+          >
+            <Pencil className="w-3.5 h-3.5" />
+            {t.actionResubmit}
+          </button>
+        )}
         <button
           onClick={onManageEpisodes}
           className="flex items-center gap-2 px-4 py-2 rounded-xl text-white text-xs hover:opacity-90 transition-opacity"

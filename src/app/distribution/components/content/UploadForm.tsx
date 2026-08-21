@@ -25,8 +25,9 @@ import type { ContentMessages } from "../../i18n/content";
 import type { CommonMessages } from "../../i18n/common";
 import { uploadFile, PUBLISHER_UPLOAD_PATH } from "../../../services/upload";
 import { getOssHeicJpgUrl } from "../../../services/heic";
-import { ApiError } from "../../../services/http";
+import { ApiError, getApiBizCode } from "../../../services/http";
 import {
+  AuditStatus,
   saveBasic,
   saveEpisode,
   publishCourse,
@@ -42,6 +43,7 @@ import {
   type RevenueOption,
   type PriceRuleCountry,
   type CourseClassification,
+  type DraftResponse,
 } from "../../../services/content";
 import { getLanguageTypeList, type LanguageOption } from "../../../services/language";
 import { CHANNEL_VALUES, channelToGender, genderToChannel, type ChannelValue } from "../../mock/content";
@@ -150,6 +152,10 @@ function inferSelfProofKind(proof: string): SelfProofKind {
   return splitProofUrls(proof).length > 1 ? SELF_PROOF.AI : SELF_PROOF.REGISTRATION;
 }
 
+function isPublisherBiz(err: unknown, key: string): boolean {
+  return getApiBizCode(err) === key;
+}
+
 interface BasicInfo {
   cover: string;
   name: string;
@@ -184,6 +190,23 @@ interface VideoRow {
   /** 原始文件名（后端 20260703 新增；老数据为空时从 URL 退化显示） */
   fileName: string;
   fileRef: React.RefObject<HTMLInputElement | null>;
+}
+
+function emptyVideoRow(episodeNo: number): VideoRow {
+  return {
+    episodeNo,
+    title: "",
+    file: null,
+    duration: "",
+    fileError: "",
+    uploadStatus: 0,
+    uploadProgress: null,
+    videoSize: 0,
+    videoDuration: 0,
+    videoUrl: "",
+    fileName: "",
+    fileRef: React.createRef<HTMLInputElement>(),
+  };
 }
 
 interface HighlightState {
@@ -700,8 +723,8 @@ const PRICE_RULE_PAGE_SIZE = 5;
  * 上剧流程（三步，分步草稿暂存）：
  *  Step1 基本信息 → POST saveBasic（含语言/标签，返回 courseId）
  *  Step2 上传剧集 → 每个视频切片上传 → POST saveEpisode（同 episodeNo 覆盖）
- *  Step3 发布配置 → POST publish（高光 + 发布范围 + 各国收费规则；上架固定立即上架）
- * 进入时自动恢复服务端草稿（GET draft）。
+ *  Step3 发布配置 → POST publish（高光 + 发布范围 + 上架意向 + 各国收费规则）
+ * 进入时自动恢复服务端草稿或已驳回短剧（GET draft）。
  */
 export const UploadForm: React.FC<UploadFormProps> = ({
   t,
@@ -740,6 +763,11 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   const [coverError, setCoverError] = useState("");
   const [coverUploading, setCoverUploading] = useState(false);
   const [draftRestored, setDraftRestored] = useState(false);
+  const [auditStatus, setAuditStatus] = useState<number | null>(resumeCourseId === null ? AuditStatus.DRAFT : null);
+  const [auditRemark, setAuditRemark] = useState<string | null>(null);
+  const [savedPlanned, setSavedPlanned] = useState(0);
+  const [nameError, setNameError] = useState(false);
+  const [reduceConfirm, setReduceConfirm] = useState<{ from: number; to: number } | null>(null);
   const [priceRows, setPriceRows] = useState<PriceRuleCountry[]>([]);
   const [priceLoading, setPriceLoading] = useState(false);
   const [pricePage, setPricePage] = useState(1);
@@ -751,6 +779,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   const [submitting, setSubmitting] = useState(false);
 
   const coverRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
   const templateInputRef = useRef<HTMLInputElement>(null);
   const batchVideoInputRef = useRef<HTMLInputElement>(null);
   const folderInputRef = useRef<HTMLInputElement>(null);
@@ -764,8 +793,9 @@ export const UploadForm: React.FC<UploadFormProps> = ({
 
   const bi = (field: Partial<BasicInfo>) => setBasicInfo((p) => ({ ...p, ...field }));
 
-  /** 计划集数（一旦草稿已建则锁定） */
-  const plannedLocked = courseId !== null;
+  const isRejected = auditStatus === AuditStatus.REJECTED;
+  /** 草稿选定计划集数后锁定；驳回态可改 */
+  const plannedLocked = auditStatus === AuditStatus.DRAFT && courseId !== null;
 
   useEffect(() => {
     mountedRef.current = true;
@@ -929,6 +959,17 @@ export const UploadForm: React.FC<UploadFormProps> = ({
       .then((draft) => {
         if (!active || !draft) return;
         const c = draft.course;
+        const rejected = draft.auditStatus === AuditStatus.REJECTED;
+        setAuditStatus(draft.auditStatus);
+        setAuditRemark(draft.auditRemark);
+        setSavedPlanned(c.plannedEpisodes || 0);
+        if (rejected && draft.publish) {
+          restoredPubConfigCourse.current = c.courseId;
+          setPubConfig({
+            publishScope: draft.publish.publishScope,
+            onShelfNow: draft.publish.onShelfNow === true,
+          });
+        }
         const existingTask = getUploadTask(taskId);
         // 以 store 实时快照为准（勿用 remount 前的过期 Map 副本）
         const storedFiles = getPendingUploadFiles(taskId);
@@ -1048,7 +1089,9 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             : totalEpisodes > 0
               ? Math.round((uploadedEpisodes / totalEpisodes) * 100)
               : 0,
-          step: existingTask?.step ?? (uploadedEpisodes >= totalEpisodes && totalEpisodes > 0 ? 3 : 2),
+          step:
+            existingTask?.step ??
+            (rejected ? 1 : uploadedEpisodes >= totalEpisodes && totalEpisodes > 0 ? 3 : 2),
           status: isUploading
             ? "uploading"
             : existingTask?.status === "failed"
@@ -1058,8 +1101,17 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                 : "paused",
         });
         setDraftRestored(true);
+        if (rejected && existingTask?.step == null) setStep(1);
+        else if (existingTask?.step) setStep(existingTask.step);
       })
-      .catch(() => undefined);
+      .catch((err) => {
+        if (
+          isPublisherBiz(err, "publisher_course_no_auth") ||
+          isPublisherBiz(err, "publisher_course_not_editable")
+        ) {
+          onSubmitted();
+        }
+      });
     return () => {
       active = false;
     };
@@ -1106,6 +1158,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   }, [basicInfo.languageType]);
 
   const discardDraft = async () => {
+    if (isRejected) return;
     if (courseId !== null) {
       await clearDraft(courseId).catch(() => undefined);
       removeCachedPubConfig(courseId);
@@ -1135,6 +1188,10 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     setPubConfig({ publishScope: 1, onShelfNow: true });
     setHighlight({ videoUrl: "", fileName: "", fileSize: null, uploadTime: "", file: null, uploading: false, error: "" });
     setDraftRestored(false);
+    setAuditStatus(AuditStatus.DRAFT);
+    setAuditRemark(null);
+    setSavedPlanned(0);
+    setNameError(false);
   };
 
   const onPickCover = async (file: File | undefined) => {
@@ -1177,7 +1234,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     proofValid;
 
   /** Step1 → saveBasic → Step2 */
-  const goStep2 = async () => {
+  const persistBasicAndGoStep2 = async () => {
     if (!step1Valid || savingBasic) return;
     const planned = parseInt(basicInfo.totalEpisodes) || 0;
     setSavingBasic(true);
@@ -1196,7 +1253,21 @@ export const UploadForm: React.FC<UploadFormProps> = ({
         copyrightProof: basicInfo.copyrightProof,
       });
       setCourseId(res.courseId);
-      const uploadedEpisodes = videos.filter((video) => video.uploadStatus === 1).length;
+      setSavedPlanned(planned);
+      if (auditStatus == null) setAuditStatus(AuditStatus.DRAFT);
+      const keptVideos = videos.filter((video) => video.episodeNo <= planned);
+      for (const video of videos) {
+        if (video.episodeNo > planned) {
+          pendingFilesRef.current.delete(video.episodeNo);
+          removePendingUploadFile(taskId, video.episodeNo);
+        }
+      }
+      const nextRows = Array.from({ length: planned }, (_, i) => {
+        const no = i + 1;
+        return keptVideos.find((v) => v.episodeNo === no) ?? emptyVideoRow(no);
+      });
+      setVideos(nextRows);
+      const uploadedEpisodes = nextRows.filter((video) => video.uploadStatus === 1).length;
       updateUploadTask(taskId, {
         courseId: res.courseId,
         title: basicInfo.name,
@@ -1209,35 +1280,56 @@ export const UploadForm: React.FC<UploadFormProps> = ({
         status: "paused",
         error: "",
       });
-      // 构建/保留剧集行
-      setVideos((prev) =>
-        Array.from({ length: planned }, (_, i) => {
-          const no = i + 1;
-          const found = prev.find((v) => v.episodeNo === no);
-          return (
-            found ?? {
-              episodeNo: no,
-              title: "",
-              file: null,
-              duration: "",
-              fileError: "",
-              uploadStatus: 0,
-              uploadProgress: null,
-              videoSize: 0,
-              videoDuration: 0,
-              videoUrl: "",
-              fileName: "",
-              fileRef: React.createRef<HTMLInputElement>(),
-            }
-          );
-        }),
-      );
       setStep(2);
-    } catch {
-      /* http 已 toast */
+    } catch (err) {
+      if (
+        isPublisherBiz(err, "publisher_course_no_auth") ||
+        isPublisherBiz(err, "publisher_course_not_editable")
+      ) {
+        onSubmitted();
+        return;
+      }
+      if (isPublisherBiz(err, "publisher_course_episodes_locked") && savedPlanned > 0) {
+        bi({ totalEpisodes: String(savedPlanned) });
+        return;
+      }
+      if (isPublisherBiz(err, "publisher_course_title_duplicate")) {
+        setNameError(true);
+        nameRef.current?.focus();
+        return;
+      }
+      if (isPublisherBiz(err, "publisher_course_classification_invalid")) {
+        bi({ classificationId: null });
+        if (basicInfo.languageType) {
+          fetchClassifications(basicInfo.languageType)
+            .then(setClassificationOptions)
+            .catch(() => setClassificationOptions([]));
+        }
+        return;
+      }
+      if (isPublisherBiz(err, "publisher_course_episode_no_range")) {
+        const id = courseId ?? resumeCourseId;
+        if (id != null) {
+          void fetchDraft(id).then((draft: DraftResponse | null) => {
+            if (!draft) return;
+            setSavedPlanned(draft.course.plannedEpisodes || 0);
+            bi({ totalEpisodes: draft.course.plannedEpisodes ? String(draft.course.plannedEpisodes) : "" });
+          });
+        }
+      }
     } finally {
       setSavingBasic(false);
     }
+  };
+
+  const goStep2 = async () => {
+    if (!step1Valid || savingBasic) return;
+    const planned = parseInt(basicInfo.totalEpisodes) || 0;
+    if (isRejected && savedPlanned > 0 && planned < savedPlanned) {
+      setReduceConfirm({ from: savedPlanned, to: planned });
+      return;
+    }
+    await persistBasicAndGoStep2();
   };
 
   const updateVideo = (ep: number, field: Partial<VideoRow>) => {
@@ -1400,8 +1492,13 @@ export const UploadForm: React.FC<UploadFormProps> = ({
         status: "paused",
         step: 2,
       });
-    } catch {
-      // http 已 toast
+    } catch (err) {
+      if (
+        isPublisherBiz(err, "publisher_course_not_editable") ||
+        isPublisherBiz(err, "publisher_course_no_auth")
+      ) {
+        onSubmitted();
+      }
     }
   };
 
@@ -1474,7 +1571,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     }
   };
 
-  /** Step3 → publish 送审（上架固定立即上架，不再暴露上架设置） */
+  /** Step3 → publish 送审（含上架意向；驳回重提 resubmitted=true） */
   const handleSubmit = async () => {
     if (courseId === null || submitting) return;
     if (!highlight.videoUrl) {
@@ -1484,22 +1581,27 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     }
     setSubmitting(true);
     try {
-      await publishCourse({
+      const res = await publishCourse({
         courseId,
         publishScope: pubConfig.publishScope,
-        onShelfNow: true,
+        onShelfNow: pubConfig.onShelfNow,
       });
       removeCachedPubConfig(courseId);
-      toast.success(t.submitSuccess);
+      toast.success(res.resubmitted ? t.resubmitSuccess : t.submitSuccess);
       onSubmitted();
     } catch (err) {
-      if (isPublishError(err, "publisher_course_basic_incomplete")) {
+      if (isPublisherBiz(err, "publisher_course_basic_incomplete")) {
         setStep(1);
-      } else if (isPublishError(err, "publisher_course_upload_all_first")) {
+      } else if (isPublisherBiz(err, "publisher_course_upload_all_first")) {
         setStep(2);
-      } else if (isPublishError(err, "publisher_course_highlight_required")) {
+      } else if (isPublisherBiz(err, "publisher_course_highlight_required")) {
         setHighlight((p) => ({ ...p, error: t.highlightRequired }));
-      } else if (isPublishError(err, "publisher_course_not_submittable")) {
+        highlightRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      } else if (
+        isPublisherBiz(err, "publisher_course_not_submittable") ||
+        isPublisherBiz(err, "publisher_course_not_editable") ||
+        isPublisherBiz(err, "publisher_course_no_auth")
+      ) {
         onSubmitted();
       }
     } finally {
@@ -1531,7 +1633,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
           <ArrowLeft className="w-4 h-4 text-gray-600" />
         </button>
         <h2 className="text-gray-900" style={{ fontWeight: 700, fontSize: "1.0625rem" }}>
-          {t.uploadTitle}
+          {isRejected ? t.resubmitTitle : t.uploadTitle}
         </h2>
         {courseId !== null && (
           <button
@@ -1562,7 +1664,22 @@ export const UploadForm: React.FC<UploadFormProps> = ({
         )}
       </div>
 
-      {draftRestored && (
+      {isRejected && (
+        <div className="flex items-start gap-3 px-4 py-3 rounded-xl bg-red-50 border border-red-100 mb-5">
+          <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
+          <div className="flex-1 min-w-0">
+            <p className="text-xs text-red-600 mb-0.5" style={{ fontWeight: 600 }}>
+              {t.rejectReasonTitle}
+            </p>
+            {auditRemark ? (
+              <p className="text-sm text-red-700 leading-relaxed">{auditRemark}</p>
+            ) : null}
+            <p className="text-xs text-red-600/80 mt-1">{t.rejectEditHint}</p>
+          </div>
+        </div>
+      )}
+
+      {draftRestored && !isRejected && (
         <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-amber-50 border border-amber-100 mb-5">
           <RotateCcw className="w-4 h-4 text-amber-500 flex-shrink-0" />
           <div className="flex-1 min-w-0">
@@ -1658,11 +1775,15 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             <div className="flex-1 p-5 overflow-y-auto space-y-4">
               <Field label={t.nameLabel} required hint={t.nameLangHint} hintClassName="text-red-500">
                 <input
+                  ref={nameRef}
                   type="text"
                   value={basicInfo.name}
-                  onChange={(e) => bi({ name: e.target.value })}
+                  onChange={(e) => {
+                    if (nameError) setNameError(false);
+                    bi({ name: e.target.value });
+                  }}
                   placeholder={t.namePlaceholder}
-                  className={inputClass(false)}
+                  className={inputClass(nameError)}
                   maxLength={NAME_LIMIT}
                 />
               </Field>
@@ -1685,7 +1806,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
               </Field>
 
               <div className="grid grid-cols-2 gap-4">
-                <Field label={t.episodesLabel} required hint={t.episodesLockHint}>
+                <Field label={t.episodesLabel} required hint={isRejected ? t.episodesUnlockHint : t.episodesLockHint}>
                   <input
                     type="number"
                     min="1"
@@ -2374,6 +2495,45 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             </div>
           </div>
 
+          {/* 上架意向（送审后审核通过即按此执行；驳回重提可改） */}
+          <div className="bg-white rounded-2xl border border-gray-100 p-6">
+            <h3 className="text-sm text-gray-900 mb-1" style={{ fontWeight: 700 }}>
+              {t.publishSettingsTitle}
+            </h3>
+            <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+              {[
+                { value: true, label: t.publishNowOption },
+                { value: false, label: t.publishLaterOption },
+              ].map((opt) => {
+                const active = pubConfig.onShelfNow === opt.value;
+                return (
+                  <button
+                    key={String(opt.value)}
+                    type="button"
+                    onClick={() => setPubConfig((p) => ({ ...p, onShelfNow: opt.value }))}
+                    className="flex-1 rounded-xl border-2 px-4 py-3 text-left transition-all"
+                    style={{
+                      borderColor: active ? "#111111" : "#E5E7EB",
+                      background: active ? "#FAFAFA" : "white",
+                    }}
+                  >
+                    <span className="flex items-center gap-2">
+                      <span
+                        className="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0"
+                        style={{ borderColor: active ? "#111111" : "#D1D5DB" }}
+                      >
+                        {active && <div className="w-2 h-2 rounded-full bg-[#111111]" />}
+                      </span>
+                      <span className="text-sm text-gray-900" style={{ fontWeight: active ? 700 : 500 }}>
+                        {opt.label}
+                      </span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           {/* 各国收费规则：默认展开，每页 5 条 */}
           <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
             <div className="p-6 border-b border-gray-100">
@@ -2491,7 +2651,50 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                   style={{ background: "#111111", fontWeight: 600 }}
                 >
                   {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                  {t.submitPublish}
+                  {isRejected ? t.submitResubmit : t.submitPublish}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {reduceConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: "rgba(0,0,0,0.4)" }}>
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden">
+            <div className="p-6">
+              <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center mb-4">
+                <AlertCircle className="w-5 h-5 text-amber-500" />
+              </div>
+              <h3 className="text-gray-900 mb-2" style={{ fontWeight: 700, fontSize: "1rem" }}>
+                {t.episodesLabel}
+              </h3>
+              <p className="text-sm text-gray-500 leading-relaxed mb-5">
+                {fmt(t.episodesReduceConfirm, {
+                  from: reduceConfirm.from,
+                  to: reduceConfirm.to,
+                  next: reduceConfirm.to + 1,
+                })}
+              </p>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setReduceConfirm(null)}
+                  className="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  style={{ fontWeight: 500 }}
+                >
+                  {t.cancel}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setReduceConfirm(null);
+                    void persistBasicAndGoStep2();
+                  }}
+                  className="flex-1 py-2.5 rounded-xl text-sm text-white transition-colors hover:opacity-90"
+                  style={{ background: "#111111", fontWeight: 600 }}
+                >
+                  {t.episodesReduceConfirmOk}
                 </button>
               </div>
             </div>
@@ -2501,7 +2704,3 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     </div>
   );
 };
-
-function isPublishError(err: unknown, key: string): boolean {
-  return err instanceof ApiError && err.message.includes(key);
-}

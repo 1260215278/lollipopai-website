@@ -31,16 +31,26 @@ export interface ApiResponse<T> {
   data: T;
   /** 分页接口的列表载荷（`{ totalCount, pageSize, totalPage, currPage, list }`） */
   page?: T;
+  /** 业务细分码（如 publisher_course_not_editable）；展示用 msg，分支判断用本字段 */
+  bizCode?: string;
 }
 
 /** 业务/传输错误。code 为后端业务码（如 401923）或 -1（传输层失败） */
 export class ApiError extends Error {
   code: number;
-  constructor(code: number, msg: string) {
+  /** 业务细分码；与展示文案 msg 分离，禁止用翻译后的 msg 做分支 */
+  bizCode?: string;
+  constructor(code: number, msg: string, bizCode?: string) {
     super(msg);
     this.code = code;
     this.name = "ApiError";
+    this.bizCode = bizCode;
   }
+}
+
+/** 从 ApiError 取 bizCode；非业务错误返回 undefined。 */
+export function getApiBizCode(err: unknown): string | undefined {
+  return err instanceof ApiError && err.bizCode ? err.bizCode : undefined;
 }
 
 /** 注入哪种 token。默认按路径自动判定（/publisher/** → publisher，其余 → app） */
@@ -126,7 +136,7 @@ export async function request<T>(path: string, options: RequestOptions = {}): Pr
   if (json.code === 401 || json.code === 403328 || res.status === 401) {
     if (toastOnError) toast.error(json.msg);
     handleUnauthorized();
-    throw new ApiError(json.code, json.msg);
+    throw new ApiError(json.code, json.msg, json.bizCode);
   }
 
   if (json.code === 0) {
@@ -134,9 +144,9 @@ export async function request<T>(path: string, options: RequestOptions = {}): Pr
     return (pick === "page" ? (json.page as T) : json.data);
   }
 
-  // 业务失败：msg 已由后端按当前语言翻译，可直接展示
+  // 业务失败：msg 已由后端按当前语言翻译，可直接展示；分支判断用 bizCode
   if (toastOnError) toast.error(json.msg);
-  throw new ApiError(json.code, json.msg);
+  throw new ApiError(json.code, json.msg, json.bizCode);
 }
 
 export const http = {

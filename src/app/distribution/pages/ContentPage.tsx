@@ -18,7 +18,7 @@ import { DramaListView } from "../components/content/DramaListView";
 import { DramaDetailView } from "../components/content/DramaDetailView";
 import { EpisodesView } from "../components/content/EpisodesView";
 import { UploadForm } from "../components/content/UploadForm";
-import { createUploadTask, getUploadTask, removeUploadTask } from "../uploadTaskStore";
+import { createUploadTask, getUploadTask, getUploadTaskByCourseId, removeUploadTask } from "../uploadTaskStore";
 
 type View = "list" | "form" | "detail" | "episodes";
 
@@ -29,7 +29,7 @@ interface EpisodesCtx {
   courseId: number;
   title: string;
   plannedEpisodes: number;
-  auditStatus: number;
+  canEdit: boolean;
   backTo: "list" | "detail";
 }
 
@@ -149,7 +149,7 @@ export function ContentPage() {
       courseId: d.courseId,
       title: d.title,
       plannedEpisodes: d.plannedEpisodes,
-      auditStatus: d.auditStatus,
+      canEdit: d.canEdit === true,
       backTo: "list",
     });
     setView("episodes");
@@ -160,10 +160,26 @@ export function ContentPage() {
       courseId: cd.courseId,
       title: cd.title,
       plannedEpisodes: cd.progress.plannedEpisodes,
-      auditStatus: cd.auditStatus,
+      canEdit: cd.canEdit === true,
       backTo: "detail",
     });
     setView("episodes");
+  };
+
+  const openResubmit = (courseId: number, title: string, plannedEpisodes: number) => {
+    if (!canUploadCourse) return;
+    const existing = getUploadTaskByCourseId(courseId);
+    const task =
+      existing ??
+      createUploadTask({
+        courseId,
+        title,
+        totalEpisodes: plannedEpisodes,
+        step: 1,
+      });
+    setActiveTaskId(task.id);
+    setSearchParams({ uploadTask: task.id });
+    setView("form");
   };
 
   const handleToggleShelf = (d: PublisherCourseRow) => {
@@ -255,6 +271,7 @@ export function ContentPage() {
         canUploadCourse={canUploadCourse}
         onBack={() => setView("list")}
         onManageEpisodes={() => openEpisodesFromDetail(detail)}
+        onResubmit={() => openResubmit(detail.courseId, detail.title, detail.progress.plannedEpisodes)}
       />
     );
   }
@@ -266,7 +283,7 @@ export function ContentPage() {
         courseId={episodesCtx.courseId}
         title={episodesCtx.title}
         plannedEpisodes={episodesCtx.plannedEpisodes}
-        auditStatus={episodesCtx.auditStatus}
+        canEdit={episodesCtx.canEdit}
         canUploadCourse={canUploadCourse}
         onBack={() => setView(episodesCtx.backTo)}
         onChanged={() => {
@@ -293,6 +310,7 @@ export function ContentPage() {
         onUpload={openNewUpload}
         onViewDetail={(d) => void openDetail(d)}
         onManageEpisodes={(d) => openEpisodes(d)}
+        onResubmit={(d) => openResubmit(d.courseId, d.title, d.plannedEpisodes)}
         onToggleShelf={handleToggleShelf}
         onTogglePin={handleTogglePin}
         page={page}

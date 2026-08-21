@@ -15,8 +15,8 @@ import {
 import { toast } from "sonner";
 import type { ContentMessages } from "../../i18n/content";
 import { uploadFile, PUBLISHER_UPLOAD_PATH } from "../../../services/upload";
-import { AuditStatus, deleteEpisode, downloadUploadTemplate, fetchEpisodes, saveEpisode, type EpisodesResponse } from "../../../services/content";
-import { ApiError } from "../../../services/http";
+import { deleteEpisode, downloadUploadTemplate, fetchEpisodes, saveEpisode, type EpisodesResponse } from "../../../services/content";
+import { ApiError, getApiBizCode } from "../../../services/http";
 import {
   uploadStatusStyle,
   uploadStatusLabel,
@@ -36,7 +36,7 @@ interface EpisodesViewProps {
   courseId: number;
   title: string;
   plannedEpisodes: number;
-  auditStatus: number;
+  canEdit?: boolean;
   canUploadCourse?: boolean;
   onBack: () => void;
   /** 保存成功后通知上层刷新列表计数 */
@@ -80,7 +80,7 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
   courseId,
   title,
   plannedEpisodes,
-  auditStatus,
+  canEdit,
   canUploadCourse = true,
   onBack,
   onChanged,
@@ -181,7 +181,8 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
 
   const stat = data?.stat ?? { uploaded: 0, failed: 0, pending: plannedEpisodes };
   const pendingLocal = rows.filter((e) => e.newFile).length;
-  const canEditEpisodes = canUploadCourse && (auditStatus === AuditStatus.DRAFT || auditStatus === AuditStatus.REJECTED);
+  const canEditEpisodes =
+    canUploadCourse && (data?.canEdit === true || (data == null && canEdit === true));
 
   const handleFileSelect = (ep: number, file: File) => {
     if (!canEditEpisodes || saving) return;
@@ -212,8 +213,14 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({
       await deleteEpisode(courseId, ep);
       await load();
       onChanged?.();
-    } catch {
-      // http 已 toast
+    } catch (err) {
+      if (
+        getApiBizCode(err) === "publisher_course_not_editable" ||
+        getApiBizCode(err) === "publisher_course_no_auth"
+      ) {
+        await load();
+        onChanged?.();
+      }
     }
   };
 

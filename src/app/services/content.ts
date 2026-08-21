@@ -63,6 +63,10 @@ export interface PublisherCourseRow {
   auditStatus: number;
   /** 审核驳回原因：仅 auditStatus=3 有值，其余为 null */
   auditRemark: string | null;
+  /** 当前是否允许修改基本信息、单集和高光素材（草稿/驳回） */
+  canEdit: boolean;
+  /** 是否为驳回态，可显示「修改并重新提交」 */
+  canResubmit: boolean;
   /** 上架状态 0未上架/1已上架/2已下架；未过审为 null */
   shelfStatus: number | null;
   /** 版权类型 1自制/2授权 */
@@ -167,7 +171,7 @@ export interface SaveBasicBody {
   title: string;
   /** 剧情简介 ≤200 */
   details: string;
-  /** 计划集数（草稿已建且>0 时不可改） */
+  /** 计划集数（草稿选定后不可改；驳回态可改，缩减会删除超范围单集） */
   plannedEpisodes: number;
   /** 频道 1男/2女/3通用 */
   genderType: number;
@@ -188,9 +192,15 @@ export interface SaveBasicBody {
   copyrightProof?: string;
 }
 
+export interface SaveBasicResult {
+  courseId: number;
+  /** 驳回态缩减计划集数时，后端删除的超范围单集数；其余为 0 */
+  removedEpisodeCount: number;
+}
+
 /** 暂存基本信息，返回 courseId（courseId 为空时始终新建独立草稿）。 */
-export function saveBasic(body: SaveBasicBody): Promise<{ courseId: number }> {
-  return http.post<{ courseId: number }>("/publisher/course/saveBasic", body);
+export function saveBasic(body: SaveBasicBody): Promise<SaveBasicResult> {
+  return http.post<SaveBasicResult>("/publisher/course/saveBasic", body);
 }
 
 /** 标签集（后端按语言写死的固定集，§3.1.1） */
@@ -255,9 +265,16 @@ export interface PublishBody {
   onShelfNow: boolean;
 }
 
+export interface PublishResult {
+  courseId: number;
+  auditStatus: number;
+  /** true=驳回后重提；false=首次送审 */
+  resubmitted: boolean;
+}
+
 /** 提交送审（需全部剧集已上传）。返回新审核态。 */
-export function publishCourse(body: PublishBody): Promise<{ courseId: number; auditStatus: number }> {
-  return http.post<{ courseId: number; auditStatus: number }>("/publisher/course/publish", body);
+export function publishCourse(body: PublishBody): Promise<PublishResult> {
+  return http.post<PublishResult>("/publisher/course/publish", body);
 }
 
 export interface RevenueOption {
@@ -315,16 +332,29 @@ export interface DraftCourse {
   copyrightProof?: string;
   /** 本剧高光时刻宣传视频 URL（20260703 起送审必填） */
   highlightVideoUrl?: string | null;
+  highlightPlayUrl?: string | null;
+  highlightVodStatus?: number | null;
+  highlightGifUrl?: string | null;
   highlightFileName?: string | null;
   highlightFileSize?: number | null;
   highlightUploadTime?: string | null;
   createTime?: string;
 }
 
+export interface DraftPublish {
+  publishScope: number;
+  onShelfNow: boolean;
+}
+
 export interface DraftResponse {
+  auditStatus: number;
+  auditRemark: string | null;
+  canEdit: boolean;
+  canResubmit: boolean;
   course: DraftCourse;
   /** 仅已上传的集（含 videoUrl 供回显） */
   episodes: EpisodeItem[];
+  publish: DraftPublish;
 }
 
 /** 上传任务中心使用的服务端草稿摘要。 */
@@ -343,7 +373,7 @@ export function fetchDraftTasks(): Promise<DraftTaskSummary[]> {
 }
 
 /**
- * 取进行中的草稿；传 courseId 时按指定短剧恢复，省略时兼容返回最近创建的一部草稿。
+ * 取进行中的草稿或已驳回短剧；传 courseId 时按指定短剧恢复，省略时兼容返回最近创建的一部草稿。
  * 多任务上传必须传 courseId，避免多个草稿互相覆盖。
  */
 export function fetchDraft(courseId?: number): Promise<DraftResponse | null> {
@@ -396,6 +426,8 @@ export interface CourseDetailPublish {
   publishScope: number;
   /** 上架状态 0未上架/1已上架/2已下架（仅 auditStatus=2 有意义） */
   shelfStatus: number;
+  /** 送审时的上架意向 */
+  onShelfNow: boolean;
 }
 
 export type CourseDetailRevenue = CourseRevenue;
@@ -407,6 +439,8 @@ export interface CourseDetail {
   auditStatus: number;
   /** 审核驳回原因：仅 auditStatus=3 有值，其余为 null */
   auditRemark: string | null;
+  canEdit: boolean;
+  canResubmit: boolean;
   basic: CourseDetailBasic;
   progress: CourseDetailProgress;
   publish: CourseDetailPublish;
@@ -477,6 +511,8 @@ export interface EpisodesResponse {
   title: string;
   plannedEpisodes: number;
   uploadedEpisodes: number;
+  canEdit: boolean;
+  canResubmit: boolean;
   stat: EpisodesStat;
   /** 仅返回已建行的集；未建行的集号由前端按 plannedEpisodes 补"待提交" */
   episodes: EpisodeItem[];

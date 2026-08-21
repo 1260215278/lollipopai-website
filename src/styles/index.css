@@ -19,3 +19,14 @@
   border: 0 !important;
   pointer-events: none !important;
 }
+
+/*
+ * toast 容器不拦截点击，避免挡住顶栏菜单；关闭按钮仍可点。
+ */
+[data-sonner-toaster] {
+  pointer-events: none;
+}
+[data-sonner-toaster] [data-close-button] {
+  pointer-events: auto;
+  z-index: 2;
+}

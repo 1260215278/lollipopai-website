@@ -53,6 +53,6 @@ test("enrollment page keeps its active distribution item on the current page", (
 });
 
 test("blocked entry messages have one global toaster", () => {
-  assert.match(mainSource, /<Toaster position="top-center" richColors \/>/);
+  assert.match(mainSource, /<Toaster position="top-center" richColors closeButton offset="80px" mobileOffset="72px" \/>/);
   assert.equal((mainSource.match(/<Toaster /g) ?? []).length, 1);
 });

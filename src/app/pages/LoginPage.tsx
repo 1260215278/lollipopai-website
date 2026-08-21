@@ -205,8 +205,12 @@ export function LoginPage() {
         await loginByEmailPassword({ email: acc, password: pwd });
       }
       setLoginName(phoneMode ? `${areaCode}${acc}` : acc);
-      // 2s 消失：默认 4s 会挡住顶栏「发行中心」入口，登录后点不着
-      toast.success(isRegister ? t.registerSuccess : t.loginSuccess, { duration: 2000 });
+      // 2s 关闭；sonner 悬停会暂停计时，到期再 dismiss 一次。closeButton 可提前关掉
+      const toastId = toast.success(isRegister ? t.registerSuccess : t.loginSuccess, {
+        duration: 2000,
+        closeButton: true,
+      });
+      window.setTimeout(() => toast.dismiss(toastId), 2000);
       navigate("/");
     } catch (err) {
       if (err instanceof ApiError) toast.error(err.message);

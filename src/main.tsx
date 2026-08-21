@@ -40,7 +40,7 @@ function PageFallback() {
  */
 createRoot(document.getElementById("root")!).render(
   <I18nProvider>
-    <Toaster position="top-center" richColors />
+    <Toaster position="top-center" richColors closeButton offset="80px" mobileOffset="72px" />
     <BrowserRouter basename={getRouterBasename()}>
       <Suspense fallback={<PageFallback />}>
       <Routes>

@@ -22,11 +22,22 @@
 
 /*
  * toast 容器不拦截点击，避免挡住顶栏菜单；关闭按钮仍可点。
+ * sonner 默认把关闭钮钉在左上角，这里改到右上角（与 RTL 默认同款外凸）。
  */
-[data-sonner-toaster] {
+[data-sonner-toaster],
+[data-sonner-toaster][dir='ltr'],
+[data-sonner-toaster][dir='rtl'] {
   pointer-events: none;
+  --toast-close-button-start: unset;
+  --toast-close-button-end: 0;
+  --toast-close-button-transform: translate(35%, -35%);
 }
 [data-sonner-toaster] [data-close-button] {
   pointer-events: auto;
   z-index: 2;
+}
+[data-sonner-toaster] [data-sonner-toast][data-styled='true'] [data-close-button] {
+  left: unset;
+  right: 0;
+  transform: translate(35%, -35%);
 }

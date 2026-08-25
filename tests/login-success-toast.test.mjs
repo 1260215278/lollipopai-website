@@ -20,7 +20,18 @@ test("toaster lets nav clicks pass through except the close icon", () => {
   assert.match(toasterSource, /closeButton/);
   assert.match(toasterSource, /pointer-events-none/);
   assert.match(toasterSource, /closeButton:\s*"pointer-events-auto"/);
-  assert.match(cssSource, /\[data-sonner-toaster\]\s*\{\s*pointer-events:\s*none;/);
+  assert.match(cssSource, /\[data-sonner-toaster\][\s\S]*pointer-events:\s*none;/);
   assert.match(cssSource, /\[data-close-button\]\s*\{\s*pointer-events:\s*auto;/);
   assert.match(mainSource, /<Toaster position="top-center" richColors closeButton offset="80px" mobileOffset="72px" \/>/);
+});
+
+test("toast close icon sits at the top-right corner", () => {
+  const cssSource = readSource("src/styles/index.css");
+  assert.match(cssSource, /--toast-close-button-start:\s*unset;/);
+  assert.match(cssSource, /--toast-close-button-end:\s*0;/);
+  assert.match(cssSource, /--toast-close-button-transform:\s*translate\(35%,\s*-35%\);/);
+  assert.match(
+    cssSource,
+    /\[data-close-button\]\s*\{[\s\S]*left:\s*unset;[\s\S]*right:\s*0;[\s\S]*transform:\s*translate\(35%,\s*-35%\);/
+  );
 });

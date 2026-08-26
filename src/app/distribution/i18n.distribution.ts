@@ -59,4 +59,6 @@ export const distributionMessages: Record<Locale, DistributionMessages> = {
   "zh-TW": compose("zh-TW"),
   en: compose("en"),
   pt: compose("pt"),
+  es: compose("es"),
+  ar: compose("ar"),
 };

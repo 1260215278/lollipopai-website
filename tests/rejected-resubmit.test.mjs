@@ -60,13 +60,13 @@ test("rejected upload form reuses courseId, unlocks planned episodes, and confir
 });
 
 test("rejected-resubmit copy exists in every supported locale", () => {
-  assert.equal((i18nSource.match(/actionResubmit:/g) ?? []).length, 5);
-  assert.equal((i18nSource.match(/resubmitTitle:/g) ?? []).length, 5);
-  assert.equal((i18nSource.match(/submitResubmit:/g) ?? []).length, 5);
-  assert.equal((i18nSource.match(/resubmitSuccess:/g) ?? []).length, 5);
-  assert.equal((i18nSource.match(/episodesReduceConfirm:/g) ?? []).length, 5);
-  assert.equal((i18nSource.match(/episodesUnlockHint:/g) ?? []).length, 5);
-  assert.equal((i18nSource.match(/rejectEditHint:/g) ?? []).length, 5);
+  assert.equal((i18nSource.match(/actionResubmit:/g) ?? []).length, 7);
+  assert.equal((i18nSource.match(/resubmitTitle:/g) ?? []).length, 7);
+  assert.equal((i18nSource.match(/submitResubmit:/g) ?? []).length, 7);
+  assert.equal((i18nSource.match(/resubmitSuccess:/g) ?? []).length, 7);
+  assert.equal((i18nSource.match(/episodesReduceConfirm:/g) ?? []).length, 7);
+  assert.equal((i18nSource.match(/episodesUnlockHint:/g) ?? []).length, 7);
+  assert.equal((i18nSource.match(/rejectEditHint:/g) ?? []).length, 7);
   assert.match(i18nSource, /actionResubmit: "修改并重新提交"/);
   assert.match(i18nSource, /计划集数将从 \{from\} 集减少为 \{to\} 集/);
 });

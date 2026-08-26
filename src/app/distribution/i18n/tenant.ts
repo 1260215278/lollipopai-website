@@ -51,4 +51,20 @@ export const tenant: Record<Locale, TenantMessages> = {
     reasonLabel: "Motivo",
     retrySuccess: "Ativação reiniciada. Verifique novamente em breve.",
   },
+  es: {
+    notifyTitle: "Notificaciones",
+    failedTitle: "Error al activar la cuenta Swift",
+    failedDesc:
+      "Falló la activación de tu cuenta de la herramienta de vídeo IA Swift. Puedes reintentar ahora o esperar a que el sistema lo intente automáticamente cada 10 minutos.",
+    reasonLabel: "Motivo",
+    retrySuccess: "Se ha vuelto a lanzar la activación. Vuelve a consultar en breve.",
+  },
+  ar: {
+    notifyTitle: "الإشعارات",
+    failedTitle: "فشل تفعيل حساب Swift",
+    failedDesc:
+      "فشل تفعيل حساب أداة الفيديو بالذكاء الاصطناعي Swift. يمكنك إعادة المحاولة الآن أو انتظار إعادة المحاولة التلقائية كل 10 دقائق.",
+    reasonLabel: "السبب",
+    retrySuccess: "أُعيد تشغيل التفعيل. تحقق مرة أخرى قريبًا.",
+  },
 };

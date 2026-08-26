@@ -96,10 +96,10 @@ test("episode-management batch upload stops on failure and restores every unreso
 });
 
 test("413, timeout, stop-upload and merge messages exist in every supported distribution locale", () => {
-  assert.equal((commonMessagesSource.match(/uploadRequestTooLarge:/g) ?? []).length, 5);
-  assert.equal((commonMessagesSource.match(/uploadTimeout:/g) ?? []).length, 5);
-  assert.equal((contentMessagesSource.match(/stopUpload:/g) ?? []).length, 5);
-  assert.equal((contentMessagesSource.match(/uploadStopped:/g) ?? []).length, 5);
-  assert.equal((contentMessagesSource.match(/epMerging:/g) ?? []).length, 5);
-  assert.equal((contentMessagesSource.match(/draftRestoredReselect:/g) ?? []).length, 5);
+  assert.equal((commonMessagesSource.match(/uploadRequestTooLarge:/g) ?? []).length, 7);
+  assert.equal((commonMessagesSource.match(/uploadTimeout:/g) ?? []).length, 7);
+  assert.equal((contentMessagesSource.match(/stopUpload:/g) ?? []).length, 7);
+  assert.equal((contentMessagesSource.match(/uploadStopped:/g) ?? []).length, 7);
+  assert.equal((contentMessagesSource.match(/epMerging:/g) ?? []).length, 7);
+  assert.equal((contentMessagesSource.match(/draftRestoredReselect:/g) ?? []).length, 7);
 });

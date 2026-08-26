@@ -8,4 +8,4 @@
  * 解决：将 Locale 类型提取到独立文件，所有 i18n 子模块从此处导入。
  * i18n.tsx 仍 re-export Locale 以保持向后兼容。
  */
-export type Locale = "zh-TW" | "zh-CN" | "en" | "pt";
+export type Locale = "zh-TW" | "zh-CN" | "en" | "pt" | "es" | "ar";

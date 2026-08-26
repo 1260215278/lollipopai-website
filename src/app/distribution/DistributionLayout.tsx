@@ -556,7 +556,7 @@ export function DistributionLayout() {
               </button>
             )}
 
-            {/* 语言切换（4 语言） */}
+            {/* 语言切换（6 语言） */}
             <div ref={langRef} className="relative">
               <button
                 onClick={() => setLangOpen((v) => !v)}

@@ -6,7 +6,7 @@
  *
  * 真实响应（已对真实环境 testshort.top 核实）：data 为 MyBatis-Plus 分页对象
  * `{ records: [...], total, size, current, pages }`，每项：
- *   { languageId, language(code 如 en/zh/cht/pt), remark(展示名 如 English/简体中文),
+ *   { languageId, language(code 如 en/zh/cht/pt/es/ar), remark(展示名 如 English/简体中文),
  *     isEnable(1 启用), sort, createTime }
  * 故此处取 data.records，过滤 isEnable=1，按 sort 升序，映射 remark → 展示名。
  */

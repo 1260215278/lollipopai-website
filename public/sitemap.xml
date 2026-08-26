@@ -12,6 +12,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/" />
   </url>
 
@@ -25,6 +27,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/about" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/about" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/about" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/about" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/about" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/about" />
   </url>
   <url>
@@ -36,6 +40,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/creating" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/creating" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/creating" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/creating" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/creating" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/creating" />
   </url>
   <url>
@@ -47,6 +53,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/download" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/download" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/download" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/download" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/download" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/download" />
   </url>
   <url>
@@ -58,6 +66,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/contact" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/contact" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/contact" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/contact" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/contact" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/contact" />
   </url>
 
@@ -71,6 +81,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/blog" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/blog" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/blog" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/blog" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/blog" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/blog" />
   </url>
 
@@ -84,6 +96,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/blog/ai-script-storyboard" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/blog/ai-script-storyboard" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/blog/ai-script-storyboard" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/blog/ai-script-storyboard" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/blog/ai-script-storyboard" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/blog/ai-script-storyboard" />
   </url>
   <url>
@@ -95,6 +109,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/blog/ai-video-quality" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/blog/ai-video-quality" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/blog/ai-video-quality" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/blog/ai-video-quality" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/blog/ai-video-quality" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/blog/ai-video-quality" />
   </url>
   <url>
@@ -106,6 +122,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/blog/ai-editing-tools" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/blog/ai-editing-tools" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/blog/ai-editing-tools" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/blog/ai-editing-tools" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/blog/ai-editing-tools" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/blog/ai-editing-tools" />
   </url>
   <url>
@@ -117,6 +135,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/blog/ai-production-cost" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/blog/ai-production-cost" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/blog/ai-production-cost" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/blog/ai-production-cost" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/blog/ai-production-cost" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/blog/ai-production-cost" />
   </url>
   <url>
@@ -128,6 +148,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/blog/ai-rendering-pipeline" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/blog/ai-rendering-pipeline" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/blog/ai-rendering-pipeline" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/blog/ai-rendering-pipeline" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/blog/ai-rendering-pipeline" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/blog/ai-rendering-pipeline" />
   </url>
 
@@ -141,6 +163,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/genre/romance" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/genre/romance" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/genre/romance" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/genre/romance" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/genre/romance" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/genre/romance" />
   </url>
   <url>
@@ -152,6 +176,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/genre/revenge" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/genre/revenge" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/genre/revenge" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/genre/revenge" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/genre/revenge" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/genre/revenge" />
   </url>
   <url>
@@ -163,6 +189,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/genre/thriller" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/genre/thriller" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/genre/thriller" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/genre/thriller" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/genre/thriller" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/genre/thriller" />
   </url>
   <url>
@@ -174,6 +202,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/genre/ceo-drama" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/genre/ceo-drama" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/genre/ceo-drama" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/genre/ceo-drama" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/genre/ceo-drama" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/genre/ceo-drama" />
   </url>
   <url>
@@ -185,6 +215,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/genre/fantasy" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/genre/fantasy" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/genre/fantasy" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/genre/fantasy" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/genre/fantasy" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/genre/fantasy" />
   </url>
   <url>
@@ -196,6 +228,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/genre/action" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/genre/action" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/genre/action" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/genre/action" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/genre/action" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/genre/action" />
   </url>
   <url>
@@ -207,6 +241,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/genre/horror" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/genre/horror" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/genre/horror" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/genre/horror" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/genre/horror" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/genre/horror" />
   </url>
   <url>
@@ -218,6 +254,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/genre/sci-fi" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/genre/sci-fi" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/genre/sci-fi" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/genre/sci-fi" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/genre/sci-fi" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/genre/sci-fi" />
   </url>
   <url>
@@ -229,6 +267,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/genre/family" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/genre/family" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/genre/family" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/genre/family" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/genre/family" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/genre/family" />
   </url>
   <url>
@@ -240,6 +280,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/genre/historical" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/genre/historical" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/genre/historical" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/genre/historical" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/genre/historical" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/genre/historical" />
   </url>
 
@@ -253,6 +295,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/temptation-ceo" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/temptation-ceo" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/temptation-ceo" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/drama/temptation-ceo" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/drama/temptation-ceo" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/temptation-ceo" />
   </url>
   <url>
@@ -264,6 +308,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/the-bride-who-fell-from-the-sky" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/the-bride-who-fell-from-the-sky" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/the-bride-who-fell-from-the-sky" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/drama/the-bride-who-fell-from-the-sky" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/drama/the-bride-who-fell-from-the-sky" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/the-bride-who-fell-from-the-sky" />
   </url>
   <url>
@@ -275,6 +321,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/the-revenge-of-the-plus-size-wife" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/the-revenge-of-the-plus-size-wife" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/the-revenge-of-the-plus-size-wife" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/drama/the-revenge-of-the-plus-size-wife" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/drama/the-revenge-of-the-plus-size-wife" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/the-revenge-of-the-plus-size-wife" />
   </url>
   <url>
@@ -286,6 +334,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/my-royal-alpha-boyfriend" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/my-royal-alpha-boyfriend" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/my-royal-alpha-boyfriend" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/drama/my-royal-alpha-boyfriend" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/drama/my-royal-alpha-boyfriend" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/my-royal-alpha-boyfriend" />
   </url>
   <url>
@@ -297,6 +347,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/dark-secrets" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/dark-secrets" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/dark-secrets" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/drama/dark-secrets" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/drama/dark-secrets" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/dark-secrets" />
   </url>
   <url>
@@ -308,6 +360,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/why-jump-off-the-building" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/why-jump-off-the-building" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/why-jump-off-the-building" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/drama/why-jump-off-the-building" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/drama/why-jump-off-the-building" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/why-jump-off-the-building" />
   </url>
   <url>
@@ -319,6 +373,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/crimson-dynasty" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/crimson-dynasty" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/crimson-dynasty" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/drama/crimson-dynasty" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/drama/crimson-dynasty" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/crimson-dynasty" />
   </url>
   <url>
@@ -330,6 +386,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/neon-abyss" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/neon-abyss" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/neon-abyss" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/drama/neon-abyss" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/drama/neon-abyss" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/neon-abyss" />
   </url>
   <url>
@@ -341,6 +399,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/whispered-love" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/whispered-love" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/whispered-love" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/drama/whispered-love" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/drama/whispered-love" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/whispered-love" />
   </url>
   <url>
@@ -352,6 +412,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/the-forgotten" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/the-forgotten" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/the-forgotten" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/drama/the-forgotten" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/drama/the-forgotten" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/the-forgotten" />
   </url>
   <url>
@@ -363,6 +425,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/iron-will" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/iron-will" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/iron-will" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/drama/iron-will" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/drama/iron-will" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/iron-will" />
   </url>
   <url>
@@ -374,6 +438,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/drama/cloud-atlas" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/drama/cloud-atlas" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/drama/cloud-atlas" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/drama/cloud-atlas" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/drama/cloud-atlas" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/drama/cloud-atlas" />
   </url>
 
@@ -387,6 +453,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/region/us" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/region/us" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/region/us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/region/us" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/region/us" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/region/us" />
   </url>
   <url>
@@ -398,6 +466,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/region/uk" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/region/uk" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/region/uk" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/region/uk" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/region/uk" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/region/uk" />
   </url>
   <url>
@@ -409,6 +479,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/region/ca" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/region/ca" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/region/ca" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/region/ca" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/region/ca" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/region/ca" />
   </url>
   <url>
@@ -420,6 +492,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/region/au" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/region/au" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/region/au" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/region/au" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/region/au" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/region/au" />
   </url>
   <url>
@@ -431,6 +505,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/region/sg" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/region/sg" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/region/sg" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/region/sg" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/region/sg" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/region/sg" />
   </url>
   <url>
@@ -442,6 +518,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/region/my" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/region/my" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/region/my" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/region/my" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/region/my" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/region/my" />
   </url>
   <url>
@@ -453,6 +531,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/region/ph" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/region/ph" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/region/ph" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/region/ph" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/region/ph" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/region/ph" />
   </url>
   <url>
@@ -464,6 +544,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/region/id" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/region/id" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/region/id" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/region/id" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/region/id" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/region/id" />
   </url>
 
@@ -477,6 +559,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/privacy" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/privacy" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/privacy" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/privacy" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/privacy" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/privacy" />
   </url>
   <url>
@@ -488,6 +572,8 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.lollipop.im/zh/terms" />
     <xhtml:link rel="alternate" hreflang="zh-TW" href="https://www.lollipop.im/zh-TW/terms" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.lollipop.im/pt/terms" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lollipop.im/es/terms" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.lollipop.im/ar/terms" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/terms" />
   </url>
 

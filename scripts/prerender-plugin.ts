@@ -519,12 +519,14 @@ function injectSeoIntoHtml(html: string, data: RouteSeoData): string {
     `<link rel="canonical" href="${canonicalUrl}" />`,
   ];
 
-  // hreflang（路径前缀版，与 Nginx /zh/ /zh-TW/ /en/ /pt/ 对齐；en 默认无前缀）
+  // hreflang（路径前缀版，与 Nginx /zh/ /zh-TW/ /en/ /pt/ /es/ /ar/ 对齐；en 默认无前缀）
   const hreflangPaths: { hreflang: string; prefix: string }[] = [
     { hreflang: "en", prefix: "" },
     { hreflang: "zh-CN", prefix: "/zh" },
     { hreflang: "zh-TW", prefix: "/zh-TW" },
     { hreflang: "pt", prefix: "/pt" },
+    { hreflang: "es", prefix: "/es" },
+    { hreflang: "ar", prefix: "/ar" },
   ];
   const appPath = data.path === "/" ? "" : data.path;
   for (const { hreflang, prefix } of hreflangPaths) {

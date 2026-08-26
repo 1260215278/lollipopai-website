@@ -249,7 +249,7 @@
   <div class="container">
     <span class="badge">服务器配置教程</span>
     <h1>Lollipop.im 多语言路由配置指南</h1>
-    <p>通过服务器 URL 重写实现路径式多语言路由（/zh/、/en/、/pt/）</p>
+    <p>通过服务器 URL 重写实现路径式多语言路由（/zh/、/en/、/pt/、/es/、/ar/）</p>
   </div>
 </div>
 
@@ -378,6 +378,18 @@
             <td>/pt/download → /download?lang=pt</td>
           </tr>
           <tr>
+            <td><code>/es/</code></td>
+            <td>Español</td>
+            <td><code>?lang=es</code></td>
+            <td>/es/download → /download?lang=es</td>
+          </tr>
+          <tr>
+            <td><code>/ar/</code></td>
+            <td>العربية</td>
+            <td><code>?lang=ar</code></td>
+            <td>/ar/download → /download?lang=ar</td>
+          </tr>
+          <tr>
             <td>无前缀</td>
             <td>默认（英文）</td>
             <td>无（不重写）</td>
@@ -447,6 +459,16 @@
 <span class="comment"># 葡萄牙文 /pt/ → ?lang=pt</span>
 <span class="keyword">location</span> <span class="var">~ ^/pt/</span> {
     <span class="keyword">rewrite</span> <span class="string">^/pt/(.*)$</span> <span class="string">/$1?lang=pt</span> <span class="directive">last</span>;
+}
+
+<span class="comment"># 西班牙语 /es/ → ?lang=es</span>
+<span class="keyword">location</span> <span class="var">~ ^/es/</span> {
+    <span class="keyword">rewrite</span> <span class="string">^/es/(.*)$</span> <span class="string">/$1?lang=es</span> <span class="directive">last</span>;
+}
+
+<span class="comment"># 阿拉伯语 /ar/ → ?lang=ar</span>
+<span class="keyword">location</span> <span class="var">~ ^/ar/</span> {
+    <span class="keyword">rewrite</span> <span class="string">^/ar/(.*)$</span> <span class="string">/$1?lang=ar</span> <span class="directive">last</span>;
 }
 
 <span class="comment"># ===== 以下为现有的 SPA 路由配置（保持不变） =====</span>
@@ -526,6 +548,12 @@ systemctl reload nginx</pre>
 
 <span class="comment"># 葡萄牙文 /pt/xxx → /xxx?lang=pt</span>
 <span class="directive">RewriteRule</span> ^pt/(.*)$ /$1?lang=pt [QSA,L]
+
+<span class="comment"># 西班牙语 /es/xxx → /xxx?lang=es</span>
+<span class="directive">RewriteRule</span> ^es/(.*)$ /$1?lang=es [QSA,L]
+
+<span class="comment"># 阿拉伯语 /ar/xxx → /xxx?lang=ar</span>
+<span class="directive">RewriteRule</span> ^ar/(.*)$ /$1?lang=ar [QSA,L]
 
 <span class="comment"># SPA 路由回退（所有非文件请求返回 index.html）</span>
 <span class="directive">RewriteCond</span> %{REQUEST_FILENAME} !-f
@@ -614,6 +642,18 @@ systemctl restart apache2</pre>
           <span class="keyword">&lt;action</span> <span class="var">type</span>=<span class="string">"Rewrite"</span> <span class="var">url</span>=<span class="string">"/{R:1}?lang=pt"</span> <span class="var">appendQueryString</span>=<span class="string">"true"</span> <span class="keyword">/&gt;</span>
         <span class="keyword">&lt;/rule&gt;</span>
 
+        <span class="comment">&lt;!-- 西班牙语 /es/ → ?lang=es --&gt;</span>
+        <span class="keyword">&lt;rule</span> <span class="var">name</span>=<span class="string">"Lang ES"</span> <span class="var">stopProcessing</span>=<span class="string">"true"</span><span class="keyword">&gt;</span>
+          <span class="keyword">&lt;match</span> <span class="var">url</span>=<span class="string">"^es/(.*)$"</span> <span class="var">ignoreCase</span>=<span class="string">"false"</span> <span class="keyword">/&gt;</span>
+          <span class="keyword">&lt;action</span> <span class="var">type</span>=<span class="string">"Rewrite"</span> <span class="var">url</span>=<span class="string">"/{R:1}?lang=es"</span> <span class="var">appendQueryString</span>=<span class="string">"true"</span> <span class="keyword">/&gt;</span>
+        <span class="keyword">&lt;/rule&gt;</span>
+
+        <span class="comment">&lt;!-- 阿拉伯语 /ar/ → ?lang=ar --&gt;</span>
+        <span class="keyword">&lt;rule</span> <span class="var">name</span>=<span class="string">"Lang AR"</span> <span class="var">stopProcessing</span>=<span class="string">"true"</span><span class="keyword">&gt;</span>
+          <span class="keyword">&lt;match</span> <span class="var">url</span>=<span class="string">"^ar/(.*)$"</span> <span class="var">ignoreCase</span>=<span class="string">"false"</span> <span class="keyword">/&gt;</span>
+          <span class="keyword">&lt;action</span> <span class="var">type</span>=<span class="string">"Rewrite"</span> <span class="var">url</span>=<span class="string">"/{R:1}?lang=ar"</span> <span class="var">appendQueryString</span>=<span class="string">"true"</span> <span class="keyword">/&gt;</span>
+        <span class="keyword">&lt;/rule&gt;</span>
+
         <span class="comment">&lt;!-- SPA 路由回退 --&gt;</span>
         <span class="keyword">&lt;rule</span> <span class="var">name</span>=<span class="string">"SPA Fallback"</span> <span class="var">stopProcessing</span>=<span class="string">"true"</span><span class="keyword">&gt;</span>
           <span class="keyword">&lt;match</span> <span class="var">url</span>=<span class="string">".*"</span> <span class="keyword">/&gt;</span>
@@ -658,6 +698,12 @@ systemctl restart apache2</pre>
     <span class="directive">@pt</span> path /pt/*
     <span class="directive">rewrite</span> @pt {http.matchers.path.regexp ^/pt/(.*)$ /{1}?lang=pt}
 
+    <span class="directive">@es</span> path /es/*
+    <span class="directive">rewrite</span> @es {http.matchers.path.regexp ^/es/(.*)$ /{1}?lang=es}
+
+    <span class="directive">@ar</span> path /ar/*
+    <span class="directive">rewrite</span> @ar {http.matchers.path.regexp ^/ar/(.*)$ /{1}?lang=ar}
+
     <span class="comment"># SPA 路由回退</span>
     <span class="directive">try_files</span> {path} {path}/ /index.html
 
@@ -698,6 +744,8 @@ caddy reload --config /etc/caddy/Caddyfile</pre>
       <span class="string">'/zh-TW/'</span>: <span class="string">'zh-TW'</span>,
       <span class="string">'/en/'</span>: <span class="string">'en'</span>,
       <span class="string">'/pt/'</span>: <span class="string">'pt'</span>,
+      <span class="string">'/es/'</span>: <span class="string">'es'</span>,
+      <span class="string">'/ar/'</span>: <span class="string">'ar'</span>,
     };
 
     <span class="keyword">for</span> (<span class="keyword">const</span> [prefix, lang] <span class="keyword">of</span> Object.entries(langMap)) {
@@ -730,6 +778,8 @@ caddy reload --config /etc/caddy/Caddyfile</pre>
     { <span class="var">"source"</span>: <span class="string">"/zh-TW/:path*"</span>, <span class="var">"destination"</span>: <span class="string">"/:path*?lang=zh-TW"</span> },
     { <span class="var">"source"</span>: <span class="string">"/en/:path*"</span>, <span class="var">"destination"</span>: <span class="string">"/:path*?lang=en"</span> },
     { <span class="var">"source"</span>: <span class="string">"/pt/:path*"</span>, <span class="var">"destination"</span>: <span class="string">"/:path*?lang=pt"</span> },
+    { <span class="var">"source"</span>: <span class="string">"/es/:path*"</span>, <span class="var">"destination"</span>: <span class="string">"/:path*?lang=es"</span> },
+    { <span class="var">"source"</span>: <span class="string">"/ar/:path*"</span>, <span class="var">"destination"</span>: <span class="string">"/:path*?lang=ar"</span> },
     { <span class="var">"source"</span>: <span class="string">"/(.*)"</span>, <span class="var">"destination"</span>: <span class="string">"/index.html"</span> }
   ]
 }</pre>

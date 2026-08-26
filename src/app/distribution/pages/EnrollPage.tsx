@@ -42,7 +42,7 @@ function isEmailAccount(v: string): boolean {
   return v.includes("@");
 }
 
-/** 邮件验证码 language 参数（接口文档 §2.2：zh/en/pt） */
+/** 邮件验证码 language 参数（接口文档 §2.2：zh/en/pt/es/ar） */
 function publisherEmailLanguage(locale: Locale): string {
   switch (locale) {
     case "zh-CN":
@@ -50,6 +50,10 @@ function publisherEmailLanguage(locale: Locale): string {
       return "zh";
     case "pt":
       return "pt";
+    case "es":
+      return "es";
+    case "ar":
+      return "ar";
     default:
       return "en";
   }

@@ -6,6 +6,8 @@
  *   /zh-TW/  → zh-TW
  *   /en/     → en
  *   /pt/     → pt
+ *   /es/     → es
+ *   /ar/     → ar
  *   无前缀   → 默认英文（en）
  *
  * 说明：Nginx 内部 rewrite 不会把 ?lang= 暴露给浏览器，
@@ -15,7 +17,7 @@
 import type { Locale } from "./i18n-types";
 
 /** URL 路径段（注意 zh-TW 须排在 zh 前，避免前缀误匹配） */
-export const LOCALE_PATH_SEGMENTS = ["zh-TW", "zh", "en", "pt"] as const;
+export const LOCALE_PATH_SEGMENTS = ["zh-TW", "zh", "en", "pt", "es", "ar"] as const;
 export type LocalePathSegment = (typeof LOCALE_PATH_SEGMENTS)[number];
 
 const SEGMENT_TO_LOCALE: Record<LocalePathSegment, Locale> = {
@@ -23,6 +25,8 @@ const SEGMENT_TO_LOCALE: Record<LocalePathSegment, Locale> = {
   "zh-TW": "zh-TW",
   en: "en",
   pt: "pt",
+  es: "es",
+  ar: "ar",
 };
 
 const LOCALE_TO_SEGMENT: Record<Locale, LocalePathSegment | ""> = {
@@ -31,6 +35,8 @@ const LOCALE_TO_SEGMENT: Record<Locale, LocalePathSegment | ""> = {
   // 默认英文不写前缀，保持干净 URL；/en/* 仍可识别
   en: "",
   pt: "pt",
+  es: "es",
+  ar: "ar",
 };
 
 export function isLocalePathSegment(value: string): value is LocalePathSegment {

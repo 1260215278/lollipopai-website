@@ -16,12 +16,14 @@ import {
   type PublisherProfileCourse,
 } from "../services/publisher";
 
-/** 公开主页文案（4 语言，仿 i18n.login 独立字典；本页为最简公开页，待 figma 后再细化）。 */
+/** 公开主页文案（6 语言，仿 i18n.login 独立字典；本页为最简公开页，待 figma 后再细化）。 */
 const profileMessages: Record<Locale, { dramas: string; plays: string; empty: string; notFound: string; loadMore: string }> = {
   "zh-CN": { dramas: "上架剧目", plays: "累计播放", empty: "暂无上架作品", notFound: "该主页不存在或暂未开放", loadMore: "加载更多" },
   "zh-TW": { dramas: "上架劇目", plays: "累計播放", empty: "暫無上架作品", notFound: "該主頁不存在或暫未開放", loadMore: "載入更多" },
   en: { dramas: "Dramas", plays: "Total plays", empty: "No published dramas yet", notFound: "This profile does not exist or is unavailable", loadMore: "Load more" },
   pt: { dramas: "Dramas", plays: "Reproduções", empty: "Nenhum drama publicado ainda", notFound: "Este perfil não existe ou está indisponível", loadMore: "Carregar mais" },
+  es: { dramas: "Dramas", plays: "Reproducciones", empty: "Aún no hay dramas publicados", notFound: "Este perfil no existe o no está disponible", loadMore: "Cargar más" },
+  ar: { dramas: "الأعمال", plays: "إجمالي المشاهدات", empty: "لا توجد أعمال منشورة بعد", notFound: "هذه الصفحة غير موجودة أو غير متاحة", loadMore: "تحميل المزيد" },
 };
 
 function formatCount(n: number): string {

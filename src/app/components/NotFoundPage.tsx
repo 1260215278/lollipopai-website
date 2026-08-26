@@ -35,7 +35,17 @@ export function NotFoundPage() {
           404
         </div>
         <h1 className="text-white text-2xl font-bold mt-4 mb-2">
-          {locale === "zh-CN" ? "页面未找到" : locale === "zh-TW" ? "頁面未找到" : locale === "pt" ? "Pagina nao encontrada" : "Page Not Found"}
+          {locale === "zh-CN"
+            ? "页面未找到"
+            : locale === "zh-TW"
+              ? "頁面未找到"
+              : locale === "pt"
+                ? "Pagina nao encontrada"
+                : locale === "es"
+                  ? "Página no encontrada"
+                  : locale === "ar"
+                    ? "الصفحة غير موجودة"
+                    : "Page Not Found"}
         </h1>
         <p className="text-gray-400 mb-8" style={{ fontSize: "1rem", lineHeight: 1.6 }}>
           {locale === "zh-CN"
@@ -44,6 +54,10 @@ export function NotFoundPage() {
             ? "您造訪的頁面不存在或已被移除。"
             : locale === "pt"
             ? "A pagina que voce procura nao existe ou foi removida."
+            : locale === "es"
+            ? "La página que buscas no existe o ha sido eliminada."
+            : locale === "ar"
+            ? "الصفحة التي تبحث عنها غير موجودة أو تمت إزالتها."
             : "The page you're looking for doesn't exist or has been removed."}
         </p>
         <button
@@ -53,7 +67,17 @@ export function NotFoundPage() {
           }}
           className="bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-400 hover:to-orange-400 text-white px-8 py-3.5 rounded-full transition-all shadow-lg shadow-red-900/40 hover:scale-105 font-semibold"
         >
-          {locale === "zh-CN" ? "返回首页" : locale === "zh-TW" ? "返回首頁" : locale === "pt" ? "Voltar ao inicio" : "Back to Home"}
+          {locale === "zh-CN"
+            ? "返回首页"
+            : locale === "zh-TW"
+              ? "返回首頁"
+              : locale === "pt"
+                ? "Voltar ao inicio"
+                : locale === "es"
+                  ? "Volver al inicio"
+                  : locale === "ar"
+                    ? "العودة إلى الصفحة الرئيسية"
+                    : "Back to Home"}
         </button>
       </div>
     </div>

@@ -17,6 +17,8 @@ export const localeOptions = [
   { code: "zh-CN", label: "简体中文" },
   { code: "en", label: "English" },
   { code: "pt", label: "Português" },
+  { code: "es", label: "Español" },
+  { code: "ar", label: "العربية" },
 ] as const;
 
 const STORAGE_KEY = "lollipop-locale";
@@ -1530,6 +1532,758 @@ const translations: Record<Locale, TranslationMessages> = {
     distribution: distributionMessages.pt,
     login: loginMessages.pt,
   },
+  es: {
+    common: {
+      brand: "Lollipop",
+      language: "Idioma",
+      contactUs: "Contáctenos",
+      appStore: "App Store",
+      googlePlay: "Google Play",
+      availableNow: "Disponible ahora",
+      freeToDownload: "Descarga gratuita",
+      noAdsInPremium: "Sin anuncios en Premium",
+      scanToDownload: "Escanee para descargar",
+      pointCameraAtQr: "Apunte la cámara al código QR",
+      scanForAppStore: "App Store",
+      scanForGooglePlay: "Google Play",
+      stayUpdated: "Manténgase al día",
+      getReleaseAlerts: "Reciba avisos de estrenos",
+      emailPlaceholder: "su@email.com",
+      go: "Enviar",
+      subscribedSuccess: "¡Suscripción realizada con éxito!",
+      privacyPolicy: "Política de privacidad",
+      termsOfService: "Términos de servicio",
+      allRightsReserved: "Todos los derechos reservados.",
+      previewComingSoon: "Avance próximamente",
+      fullEpisodeInApp: "Episodio completo disponible en la app",
+      downloadOnThe: "Descargar en",
+      getItOn: "DISPONIBLE EN",
+      languageUpdated: "Idioma",
+      loading: "Cargando...",
+      loadFailed: "Error al cargar. Inténtelo de nuevo.",
+      retry: "Reintentar",
+    },
+    navbar: {
+      links: {
+        home: "Inicio",
+        creating: "Creación", // TODO(verify) Creating 西译
+        download: "Descargar",
+        blog: "Blog",
+        contact: "Contacto",
+      },
+      signUp: "Registrarse",
+      logIn: "Iniciar sesión",
+      account: "Cuenta",
+      logOut: "Cerrar sesión",
+    },
+    hero: {
+      bannerAlt: ["Banner Lollipop 1", "Banner Lollipop 2"],
+      taglineLine1: "La primera plataforma de entretenimiento con ecosistema de creadores de IA del mundo.",
+      taglineLine2: "¡Hecha para millones de usuarios!",
+      stats: [
+        { label: "Dramas Premium" },
+        { label: "Usuarios globales" },
+        { label: "Países y regiones" },
+      ],
+      quickLinks: { blog: "Blog", genres: "Géneros", popular: "Popular", aiTools: "IA" },
+    },
+    trending: {
+      eyebrow: "Tendencias ahora",
+      title: "Dramas más vistos · Actualizados en tiempo real",
+      description: "Seleccionados con datos globales de audiencia y calificaciones. Los dramas de mayor éxito te esperan.",
+      shows: [
+        { title: "Temptation CEO", genre: "Romance · Venganza", meta: "80 EP · 52M reproducciones" },
+        { title: "The Bride Who Fell from the Sky", genre: "Romance · Fantasía", meta: "60 EP · 38M reproducciones" },
+        { title: "The Revenge of the Plus-Size Wife", genre: "Romance · Venganza", meta: "100 EP · 67M reproducciones" },
+        { title: "My Royal Alpha Boyfriend", genre: "Romance · Fantasía", meta: "50 EP · 29M reproducciones" },
+        { title: "Dark Secrets", genre: "Suspenso · Drama", meta: "70 EP · 44M reproducciones" },
+        { title: "Why Jump Off the Building", genre: "Suspenso · Misterio", meta: "90 EP · 41M reproducciones" },
+      ],
+    },
+    newReleases: {
+      eyebrow: "Novedades de la semana",
+      title: "Estrenos · Véalos primero",
+      description: "Cada semana hay estrenos exclusivos, así que siempre hay una nueva obsesión esperándole.",
+      badge: "NUEVO",
+      shows: [
+        { title: "Crimson Dynasty", genre: "Histórico · Poder", meta: "45 EP" },
+        { title: "Neon Abyss", genre: "Ciencia ficción · Suspenso", meta: "36 EP" },
+        { title: "Whispered Love", genre: "Romance · Drama", meta: "55 EP" },
+        { title: "The Forgotten", genre: "Misterio · Suspenso", meta: "40 EP" },
+        { title: "Iron Will", genre: "Acción · Artes marciales", meta: "48 EP" },
+        { title: "Cloud Atlas", genre: "Fantasía · Aventura", meta: "60 EP" },
+      ],
+    },
+    aiFeatures: {
+      eyebrow: "Creación con IA",
+      title: "Cree con IA, reproduzca en Luno TV",
+      description: "Luno TV lleva herramientas revolucionarias de creación con IA a cada narrador: genere, edite y publique sus dramas cortos directamente para una audiencia global.",
+      features: [
+        {
+          title: "Generación de imágenes con IA",
+          desc: "Cree visuales de escena impactantes con prompts de texto. Dé vida a su visión al instante.",
+        },
+        {
+          title: "Cambio de rostro con IA",
+          desc: "Intercambie rostros de personajes con continuidad natural mediante aprendizaje profundo.",
+        },
+        {
+          title: "Creación de video con IA",
+          desc: "Convierta guiones en clips cinematográficos. Genere transiciones, efectos y locuciones de forma automática.",
+        },
+        {
+          title: "Transferencia de estilo",
+          desc: "Aplique colorización cinematográfica y estilos visuales de sus películas favoritas con un clic.",
+        },
+      ],
+    },
+    genres: {
+      eyebrow: "Explorar por género",
+      title: "Encuentre su favorito",
+      description: "Navegue por decenas de categorías y vaya directo a las historias que coinciden con su estado de ánimo.",
+      items: [
+        { name: "Romance", count: "320+ títulos" },
+        { name: "Venganza", count: "180+ títulos" },
+        { name: "Suspenso", count: "150+ títulos" },
+        { name: "Drama de CEO", count: "260+ títulos" },
+        { name: "Fantasía", count: "120+ títulos" },
+        { name: "Acción", count: "90+ títulos" },
+        { name: "Terror", count: "85+ títulos" },
+        { name: "Ciencia ficción", count: "75+ títulos" },
+        { name: "Familia", count: "110+ títulos" },
+        { name: "Histórico", count: "95+ títulos" },
+      ],
+    },
+    whyChoose: {
+      eyebrow: "Por qué Lollipop",
+      title: "Por qué elegir Lollipop",
+      description: "Redefinimos el entretenimiento de drama corto para que cada segundo sea más inmersivo, pulido y gratificante.",
+      features: [
+        {
+          title: "Episodios breves",
+          desc: "Episodios de 1-3 minutos pensados para el celular, ideales para el trayecto, las pausas y las maratones nocturnas.",
+        },
+        {
+          title: "Visualización sin conexión",
+          desc: "Descargue sus favoritos y siga viendo en cualquier lugar, incluso sin conexión.",
+        },
+        {
+          title: "Subtítulos en varios idiomas",
+          desc: "Disfrute historias de todo el mundo con subtítulos pensados para una audiencia global.",
+        },
+        {
+          title: "Calidad Premium",
+          desc: "Visual cinematográfico, ritmo pulido y actuaciones profesionales en cada serie.",
+        },
+        {
+          title: "Episodios gratis cada día",
+          desc: "Desbloquee nuevos episodios gratuitos a diario, mientras los miembros Premium tienen acceso ilimitado.",
+        },
+        {
+          title: "Experiencia sin anuncios",
+          desc: "Sin interrupciones, solo drama inmersivo desde el primer fotograma hasta el último cliffhanger.",
+        },
+      ],
+    },
+    web3: {
+      eyebrow: "Entretenimiento blockchain",
+      titlePrefix: "WEB2",
+      titleHighlight: "WEB3",
+      floatingTags: ["RWA", "NFT", "DeFi", "Token", "DAO", "Metaverso"],
+      stats: [
+        { label: "Tenedores de token" },
+        { label: "NFT acuñados" },
+        { label: "Socios de cadena" },
+      ],
+      paragraphs: [
+        'Lollipop aprovecha RWA para reconstruir el sistema de valor del cine y la televisión, construyendo un universo paralelo descentralizado que lleva el entretenimiento a una era de valor "cuantificable, circulable y distribuible".',
+        "Aquí el contenido ya no es solo contenido. Se convierte en un activo digital que puede seguir creciendo, y cada visualización se vuelve una acción creadora de valor.",
+        "Lollipop está encendiendo pantallas en todo el mundo y abriendo la puerta a la próxima oportunidad billonaria del entretenimiento.",
+      ],
+    },
+    testimonials: {
+      eyebrow: "Opiniones de usuarios",
+      title: "Amada por millones en todo el mundo",
+      reviews: [
+        {
+          name: "Sarah M.",
+          role: "Premium · EE. UU.",
+          text: "Estoy completamente enganchada. Los cliffhangers son geniales y terminé tres series en un fin de semana.",
+        },
+        {
+          name: "James L.",
+          role: "VIP · Reino Unido",
+          text: "La calidad de producción es brutal para contenido corto. Algunas series parecen originales premium.",
+        },
+        {
+          name: "Emily R.",
+          role: "Premium · Canadá",
+          text: "Por fin una app que encaja con mi horario. Veo en el almuerzo, en el metro y antes de dormir.",
+        },
+        {
+          name: "David K.",
+          role: "VIP · Australia",
+          text: "Empecé en el plan gratuito y actualicé en dos días. Solo los exclusivos ya valen la pena.",
+        },
+        {
+          name: "Mei L.",
+          role: "Premium · Singapur",
+          text: "Las herramientas de IA son increíbles. Hice mi primer drama corto en unas pocas horas.",
+        },
+        {
+          name: "Carlos R.",
+          role: "VIP · Brasil",
+          text: "Los subtítulos en varios idiomas son excelentes y las descargas sin conexión me salvaron en varios vuelos.",
+        },
+        {
+          name: "Yuki T.",
+          role: "Premium · Japón",
+          text: "Como creadora, la participación en ingresos es imbatible. Gané aquí en meses más que en otras plataformas en un año.",
+        },
+        {
+          name: "Anna P.",
+          role: "VIP · Alemania",
+          text: "Dudaba del 4K en una app de drama corto, pero el visual es realmente cinematográfico.",
+        },
+      ],
+    },
+    creator: {
+      eyebrow: "Programa de creadores",
+      title: "Sea el próximo creador de un millón de reproducciones",
+      description: "Lollipop ofrece la mayor participación en ingresos del sector y un apoyo creativo integral para creadores de calidad. Que el gran contenido reciba las recompensas que merece.",
+      benefits: [
+        "80% de participación en ingresos — la más alta del sector",
+        "Acceso completo al kit de creación con IA",
+        "Gestor de éxito de creadores dedicado",
+        "Distribución global en más de 100 países",
+        "Bonificaciones mensuales para los de mejor desempeño",
+      ],
+      stats: [
+        { label: "Participación en ingresos", desc: "Ganancias de creadores líderes del sector" },
+        { label: "Creadores de calidad", desc: "Comunidad global en crecimiento" },
+        { label: "Ganancia mensual promedio", desc: "Para creadores de mejor desempeño" },
+        { label: "Historias de éxito", desc: "Creadores que llegan a 1M+ reproducciones" },
+      ],
+    },
+    downloadCta: {
+      eyebrow: "Disponible ahora",
+      title: "Su próxima obsesión está a un toque",
+      description: "Únase a millones de espectadores en el mundo. Descargue gratis y obtenga 7 días de acceso Premium, sin compromiso.",
+      featuredTitle: "Descargue Lollipop",
+      featuredDescription: "Disponible en iOS y Android. Streaming 4K, descargas sin conexión y más de 15.000 dramas cortos premium.",
+      featuredShowTitle: "Obsessed With My Boss · Pt.2",
+      featuredTimer: "0:42",
+      notification: "¡Nuevo episodio!",
+      rating: "4.9",
+      stats: [
+        { value: "2M+", label: "Descargas" },
+        { value: "4.9★", label: "Calificación" },
+        { value: "100+", label: "Países" },
+        { value: "99.9%", label: "Disponibilidad" },
+      ],
+    },
+    about: {
+      heroTitle: "Acerca de",
+      heroHighlight: "Lollipop",
+      heroSubtitle: "Abriendo una nueva era del entretenimiento global de drama corto",
+      companyTitle: "Visión general de la empresa",
+      companySub: "Una plataforma global de drama corto que empodera a creadores y audiencias",
+      companyParagraphs: [
+        "Lollipop es una empresa conjunta entre Nyx Entertainment Group, con sede en Hong Kong, y el Fondo Coreano de Inversión Cultural. El objetivo estratégico del fondo es promover sistemáticamente los K-Contents a nivel global, con un fuerte enfoque en coproducciones con socios internacionales.",
+        "Se está expandiendo activamente a mercados globales diversificados, incluidos China, Japón, Norteamérica, Europa, Sudeste Asiático y Oriente Medio, al tiempo que acelera las estrategias de localización.",
+      ],
+      companyStats: [
+        { num: "1M+", label: "Usuarios globales" },
+        { num: "100K+", label: "Creadores de calidad" },
+        { num: "100+", label: "Países" },
+      ],
+      teamTitle: "Equipo destacado",
+      teamSub: "Un equipo de liderazgo de clase mundial impulsando la innovación en el entretenimiento",
+      team: [
+        { name: "James C.", role: "Cofundador", desc: "Veterano en entretenimiento y tecnología con amplia experiencia en el sector." },
+        { name: "Sarah L.", role: "Operaciones", desc: "Especialista en operaciones globales con experiencia en escalado multimercado." },
+        { name: "David P.", role: "Tecnología", desc: "Experto en IA y sistemas distribuidos con sólida base técnica." },
+        { name: "Emily W.", role: "Finanzas", desc: "Profesional financiera experimentada con trayectoria en inversión estratégica." },
+      ],
+      partnersTitle: "Socios estratégicos",
+      partnersSub: "Colaborando con líderes del sector en todo el mundo",
+      partners: [
+        { name: "TechVentures Capital", desc: "Firma de capital de riesgo líder centrada en tecnología emergente y medios digitales en Asia-Pacífico." },
+        { name: "AsiaMedia Group", desc: "Grupo de medios panasiático que abarca streaming, producción cinematográfica y gestión de talentos." },
+        { name: "GlobalStream Inc.", desc: "Proveedor de infraestructura en la nube y CDN para streaming 4K fluido a audiencias globales." },
+        { name: "Dragon Pictures", desc: "Estudio galardonado especializado en drama corto premium y contenido original." },
+        { name: "PixelForge Studios", desc: "Estudio avanzado de VFX y posproducción que apoya grandes proyectos de entretenimiento en el mundo." },
+        { name: "SilkRoad Entertainment", desc: "Distribuidor intercultural que conecta los mercados narrativos de Oriente y Occidente." },
+        { name: "Horizon Digital", desc: "Plataforma de marketing y adquisición de usuarios impulsada por IA para marcas de entretenimiento." },
+        { name: "StarLight Ventures", desc: "Inversionista estratégico e incubadora que apoya a la próxima generación de startups de la economía de creadores." },
+      ],
+    },
+    contact: {
+      title: "Contáctenos",
+      subtitle: "Escríbanos por cualquiera de los canales siguientes",
+      cards: [
+        { title: "Teléfono", detail: "+65 80742120" },
+        { title: "Correo", detail: "business@lollipop.im" },
+        { title: "Telegram", detail: "Contáctenos" },
+        { title: "WhatsApp", detail: "Contáctenos" },
+        { title: "Comercial", detail: "business@lollipop.im" },
+        { title: "Atención al cliente", detail: "service@lollipop.im" },
+      ],
+    },
+    footer: {
+      titles: {
+        contact: "Contacto",
+        businessContact: "Contacto comercial",
+        customerService: "Atención al cliente",
+        website: "Sitio web",
+        languages: "Servicios",
+      },
+      links: {
+        home: "Inicio",
+        aboutUs: "Acerca de nosotros",
+        creating: "Creación",
+        download: "Descargar",
+        contactUs: "Contáctenos",
+      },
+      address: "3 GAMBAS CRESCENT, #04-01, NORDCOM ONE, SINGAPORE 757088",
+    },
+    videoModal: {
+      title: "Avance próximamente",
+      description: "Episodio completo disponible en la app",
+    },
+    dynamicPages: {
+      backToHome: "Volver al inicio",
+      home: "Inicio",
+      blog: "Blog",
+      genres: "Géneros",
+      backToBlog: "Volver al blog",
+      explore: "Explorar",
+      notFoundGenre: "Género no encontrado.",
+      notFoundDrama: "Drama no encontrado.",
+      notFoundRegion: "Región no encontrada.",
+      notFoundArticle: "Artículo no encontrado.",
+      shortDrames: "Dramas cortos",
+      exploreOtherGenres: "Explorar otros géneros",
+      moreDramasComingSoon: "Más dramas de {0} próximamente. ¡Vuelva cada semana para ver nuevos estrenos!",
+      ep: "EP",
+      synopsis: "Sinopsis",
+      relatedDramas: "Dramas relacionados que le pueden gustar",
+      watchOnLollipop: "Ver en Lollipop AI",
+      downloadApp: "Descargar app",
+      views: "reproducciones",
+      episodes: "episodios",
+      market: "Mercado",
+      shortDramasIn: "Dramas cortos en {0}",
+      popularIn: "Popular en {0}",
+      paymentMethodsIn: "Métodos de pago en {0}",
+      localTips: "Consejos locales",
+      startWatchingIn: "Empiece a ver en {0}",
+      downloadFree: "Descargar gratis",
+      availableInOtherRegions: "Disponible en otras regiones",
+      lollipopBlog: "Blog de Lollipop AI",
+      insightsGuidesTrends: "Insights, guías y tendencias",
+      blogDescription: "Análisis profundos sobre dramas cortos con IA, la economía de creadores y el futuro del entretenimiento móvil.",
+      allPosts: "Todas las publicaciones",
+      industryInsights: "Insights de la industria",
+      creatorEconomy: "Economía de creadores",
+      creatorGuides: "Guías para creadores",
+      readMore: "Leer más",
+      updated: "Actualizado:",
+      previous: "Anterior",
+      next: "Siguiente",
+      downloadAppDesc: "Descargue Lollipop AI y disfrute de más de 15.000 dramas cortos premium. Descarga gratuita, sin suscripción para empezar.",
+      organizationName: "Lollipop AI",
+      howToSteps: [
+        { name: "Escriba su guion", text: "Escriba una historia envolvente con episodios de 1-3 minutos. Céntrese en una sola pregunta dramática por episodio, con finales de cliffhanger." },
+        { name: "Diseñe sus personajes", text: "Use la herramienta de texto a imagen LunoTV 1.5 para crear diseños de personajes a partir de descripciones de texto. Mantenga la consistencia entre episodios." },
+        { name: "Genere sus escenas", text: "Use la herramienta de texto a video con prompts detallados que describan escenario, acción y atmósfera para generar clips de video." },
+        { name: "Añada voz y música", text: "Grabe actuación de voz o colabore con actores de voz. Añada música de fondo de la biblioteca libre de royalties de Lollipop AI." },
+        { name: "Edite y pula", text: "Use la herramienta de video a video para estilos visuales consistentes. Añada transiciones, subtítulos y títulos de episodio." },
+        { name: "Publique en Lollipop AI", text: "Suba a través del centro de distribución de creadores. Añada título, miniatura, sinopsis y etiquetas de género." },
+        { name: "Promueva su drama", text: "Comparta en redes sociales, interactúe con espectadores, colabore con otros creadores. Céntrese en el engagement para impulsar la promoción algorítmica." },
+      ],
+      howToTotalTime: "PT2H",
+      relatedPosts: "Publicaciones relacionadas",
+    },
+    distribution: distributionMessages.es,
+    login: loginMessages.es,
+  },
+  ar: {
+    common: {
+      brand: "Lollipop",
+      language: "اللغة",
+      contactUs: "اتصل بنا",
+      appStore: "App Store",
+      googlePlay: "Google Play",
+      availableNow: "متاح الآن",
+      freeToDownload: "تنزيل مجاني",
+      noAdsInPremium: "بدون إعلانات في Premium",
+      scanToDownload: "امسح للتنزيل",
+      pointCameraAtQr: "وجّه الكاميرا نحو رمز QR",
+      scanForAppStore: "App Store",
+      scanForGooglePlay: "Google Play",
+      stayUpdated: "ابقَ على اطلاع",
+      getReleaseAlerts: "احصل على تنبيهات الإصدارات الجديدة",
+      emailPlaceholder: "you@email.com",
+      go: "إرسال",
+      subscribedSuccess: "تم الاشتراك بنجاح!",
+      privacyPolicy: "سياسة الخصوصية",
+      termsOfService: "شروط الخدمة",
+      allRightsReserved: "جميع الحقوق محفوظة.",
+      previewComingSoon: "المعاينة قريبًا",
+      fullEpisodeInApp: "الحلقة الكاملة متاحة في التطبيق",
+      downloadOnThe: "نزّل من",
+      getItOn: "احصل عليه من",
+      languageUpdated: "اللغة",
+      loading: "جارٍ التحميل...",
+      loadFailed: "فشل التحميل. يرجى المحاولة مرة أخرى.",
+      retry: "إعادة المحاولة",
+    },
+    navbar: {
+      links: {
+        home: "الرئيسية",
+        creating: "الإنشاء", // TODO(verify) Creating 阿译
+        download: "تنزيل",
+        blog: "المدونة",
+        contact: "اتصل بنا",
+      },
+      signUp: "إنشاء حساب",
+      logIn: "تسجيل الدخول",
+      account: "الحساب",
+      logOut: "تسجيل الخروج",
+    },
+    hero: {
+      bannerAlt: ["لافتة Lollipop 1", "لافتة Lollipop 2"],
+      taglineLine1: "أول منصة ترفيه في العالم بنظام بيئي للمبدعين بالذكاء الاصطناعي.",
+      taglineLine2: "صُممت لملايين المستخدمين!",
+      stats: [
+        { label: "دراما متميزة" },
+        { label: "مستخدمون عالميون" },
+        { label: "دول ومناطق" },
+      ],
+      quickLinks: { blog: "المدونة", genres: "الأنواع", popular: "الأكثر رواجًا", aiTools: "أدوات الذكاء الاصطناعي" },
+    },
+    trending: {
+      eyebrow: "الرائج الآن",
+      title: "أكثر الدراما سخونة · تُحدَّث في الوقت الفعلي",
+      description: "مختارة من بيانات المشاهدة والتقييمات العالمية. أكثر الأعمال نجاحًا بانتظارك.",
+      shows: [
+        { title: "Temptation CEO", genre: "رومانسية · انتقام", meta: "80 حلقة · 52 مليون مشاهدة" },
+        { title: "The Bride Who Fell from the Sky", genre: "رومانسية · فانتازيا", meta: "60 حلقة · 38 مليون مشاهدة" },
+        { title: "The Revenge of the Plus-Size Wife", genre: "رومانسية · انتقام", meta: "100 حلقة · 67 مليون مشاهدة" },
+        { title: "My Royal Alpha Boyfriend", genre: "رومانسية · فانتازيا", meta: "50 حلقة · 29 مليون مشاهدة" },
+        { title: "Dark Secrets", genre: "إثارة · دراما", meta: "70 حلقة · 44 مليون مشاهدة" },
+        { title: "Why Jump Off the Building", genre: "إثارة · غموض", meta: "90 حلقة · 41 مليون مشاهدة" },
+      ],
+    },
+    newReleases: {
+      eyebrow: "جديد هذا الأسبوع",
+      title: "إصدارات جديدة · شاهد أولًا",
+      description: "تُعرض حصريات جديدة كل أسبوع، لذا هناك دائمًا هوس جديد بانتظارك.",
+      badge: "جديد",
+      shows: [
+        { title: "Crimson Dynasty", genre: "تاريخي · سلطة", meta: "45 حلقة" },
+        { title: "Neon Abyss", genre: "خيال علمي · إثارة", meta: "36 حلقة" },
+        { title: "Whispered Love", genre: "رومانسية · دراما", meta: "55 حلقة" },
+        { title: "The Forgotten", genre: "غموض · تشويق", meta: "40 حلقة" },
+        { title: "Iron Will", genre: "أكشن · فنون قتالية", meta: "48 حلقة" },
+        { title: "Cloud Atlas", genre: "فانتازيا · مغامرة", meta: "60 حلقة" },
+      ],
+    },
+    aiFeatures: {
+      eyebrow: "إنشاء بالذكاء الاصطناعي",
+      title: "أنشئ بالذكاء الاصطناعي، وبث على Luno TV",
+      description: "يجلب Luno TV أدوات إنشاء ثورية بالذكاء الاصطناعي لكل راوٍ — ولِّد وحرّر وانشر دراماك القصيرة مباشرة لجمهور عالمي.",
+      features: [
+        {
+          title: "توليد الصور بالذكاء الاصطناعي",
+          desc: "أنشئ مشاهد بصرية مذهلة بأوامر نصية. حوّل رؤيتك الإبداعية إلى واقع فورًا.",
+        },
+        {
+          title: "تبديل الوجوه بالذكاء الاصطناعي",
+          desc: "بدّل وجوه الشخصيات بسلاسة بتقنية التعلم العميق لضمان الاستمرارية المثالية.",
+        },
+        {
+          title: "إنشاء الفيديو بالذكاء الاصطناعي",
+          desc: "حوّل السيناريوهات إلى مقاطع سينمائية قصيرة. ولِّد الانتقالات والمؤثرات والتعليق الصوتي تلقائيًا.",
+        },
+        {
+          title: "نقل الأسلوب",
+          desc: "طبّق تدرج الألوان السينمائي والأساليب البصرية من أفلامك المفضلة بنقرة واحدة.",
+        },
+      ],
+    },
+    genres: {
+      eyebrow: "استكشف حسب النوع",
+      title: "اعثر على المفضل لديك",
+      description: "تصفح عشرات الفئات وانتقل مباشرة إلى القصص التي تناسب مزاجك.",
+      items: [
+        { name: "رومانسية", count: "320+ عمل" },
+        { name: "انتقام", count: "180+ عمل" },
+        { name: "إثارة", count: "150+ عمل" },
+        { name: "دراما الرؤساء التنفيذيين", count: "260+ عمل" },
+        { name: "فانتازيا", count: "120+ عمل" },
+        { name: "أكشن", count: "90+ عمل" },
+        { name: "رعب", count: "85+ عمل" },
+        { name: "خيال علمي", count: "75+ عمل" },
+        { name: "عائلي", count: "110+ عمل" },
+        { name: "تاريخي", count: "95+ عمل" },
+      ],
+    },
+    whyChoose: {
+      eyebrow: "لماذا Lollipop",
+      title: "لماذا تختار Lollipop",
+      description: "نعيد تعريف ترفيه الدراما القصيرة لنجعل كل ثانية أكثر غمرًا وصقلًا وجدوى.",
+      features: [
+        {
+          title: "حلقات قصيرة",
+          desc: "حلقات من 1-3 دقائق مصممة للمشاهدة على الجوال، مثالية للتنقل والاستراحات والسهر.",
+        },
+        {
+          title: "مشاهدة دون اتصال",
+          desc: "نزّل المفضلات واستمر في المشاهدة في أي مكان حتى دون اتصال.",
+        },
+        {
+          title: "ترجمة متعددة اللغات",
+          desc: "استمتع بقصص من حول العالم مع ترجمة مصممة لجمهور عالمي.",
+        },
+        {
+          title: "جودة متميزة",
+          desc: "صور سينمائية وإيقاع مصقول وأداء احترافي في كل مسلسل.",
+        },
+        {
+          title: "حلقات مجانية يوميًا",
+          desc: "افتح حلقات مجانية جديدة كل يوم، بينما يحصل أعضاء Premium على وصول غير محدود.",
+        },
+        {
+          title: "تجربة بلا إعلانات",
+          desc: "بلا مقاطعات، دراما غامرة فقط من أول إطار حتى آخر تشويق.",
+        },
+      ],
+    },
+    web3: {
+      eyebrow: "ترفيه البلوكتشين",
+      titlePrefix: "WEB2",
+      titleHighlight: "WEB3",
+      floatingTags: ["RWA", "NFT", "DeFi", "Token", "DAO", "ميتافيرس"],
+      stats: [
+        { label: "حاملو التوكن" },
+        { label: "NFT المُصكّة" },
+        { label: "شركاء السلسلة" },
+      ],
+      paragraphs: [
+        "يستفيد Lollipop من RWA لإعادة بناء نظام قيمة السينما والتلفزيون، وبناء كون موازٍ لامركزي يدخل الترفيه عصر قيمة «قابلة للقياس والتداول والتوزيع».",
+        "هنا لم يعد المحتوى مجرد محتوى. يصبح أصلًا رقميًا يمكن أن يستمر في النمو، وتصبح كل مشاهدة فعلًا يخلق قيمة.",
+        "يضيء Lollipop الشاشات حول العالم ويفتح الباب أمام فرصة الترفيه التالية بقيمة تريليون دولار.",
+      ],
+    },
+    testimonials: {
+      eyebrow: "آراء المستخدمين",
+      title: "محبوب من ملايين حول العالم",
+      reviews: [
+        {
+          name: "Sarah M.",
+          role: "Premium · الولايات المتحدة",
+          text: "أنا مدمنة تمامًا. نهايات التشويق عبقرية وأنهيت ثلاثة مسلسلات في عطلة نهاية أسبوع واحدة.",
+        },
+        {
+          name: "James L.",
+          role: "VIP · المملكة المتحدة",
+          text: "جودة الإنتاج مذهلة للمحتوى القصير. بعض الأعمال تبدو فعلًا كأعمال أصلية متميزة.",
+        },
+        {
+          name: "Emily R.",
+          role: "Premium · كندا",
+          text: "أخيرًا تطبيق يناسب جدولي. أشاهد أثناء الغداء وفي المترو وقبل النوم.",
+        },
+        {
+          name: "David K.",
+          role: "VIP · أستراليا",
+          text: "بدأت بالخطة المجانية ورقّيت خلال يومين. الأعمال الحصرية وحدها تستحق ذلك.",
+        },
+        {
+          name: "Mei L.",
+          role: "Premium · سنغافورة",
+          text: "أدوات الذكاء الاصطناعي مذهلة. صنعت أول دراما قصيرة لي في ساعات قليلة.",
+        },
+        {
+          name: "Carlos R.",
+          role: "VIP · البرازيل",
+          text: "الترجمة متعددة اللغات ممتازة، والتنزيلات دون اتصال أنقذتني في عدة رحلات.",
+        },
+        {
+          name: "Yuki T.",
+          role: "Premium · اليابان",
+          text: "كمبدعة، حصة الإيرادات هنا لا تُقهر. ربحت هنا في أشهر أكثر مما في منصات أخرى خلال سنة.",
+        },
+        {
+          name: "Anna P.",
+          role: "VIP · ألمانيا",
+          text: "كنت أشك في جودة 4K على تطبيق دراما قصيرة، لكن الصورة سينمائية بحق.",
+        },
+      ],
+    },
+    creator: {
+      eyebrow: "برنامج المبدعين",
+      title: "كن المبدع التالي بمليون مشاهدة",
+      description: "يقدم Lollipop أعلى حصة إيرادات في القطاع ودعمًا إبداعيًا شاملًا للمبدعين الجيدين. دع المحتوى العظيم ينال المكافأة التي يستحقها.",
+      benefits: [
+        "80% حصة إيرادات — الأعلى في القطاع",
+        "وصول كامل إلى حزمة أدوات الإنشاء بالذكاء الاصطناعي",
+        "مدير نجاح مخصص للمبدعين",
+        "توزيع عالمي عبر أكثر من 100 دولة",
+        "مكافآت شهرية للمتفوقين",
+      ],
+      stats: [
+        { label: "حصة الإيرادات", desc: "أرباح مبدعين رائدة في القطاع" },
+        { label: "مبدعو جودة", desc: "مجتمع عالمي متنامٍ" },
+        { label: "متوسط الأرباح الشهرية", desc: "لأفضل المبدعين أداءً" },
+        { label: "قصص نجاح", desc: "مبدعون يصلون إلى أكثر من مليون مشاهدة" },
+      ],
+    },
+    downloadCta: {
+      eyebrow: "متاح الآن",
+      title: "هوسك القادم على بُعد لمسة",
+      description: "انضم إلى ملايين المشاهدين حول العالم. نزّل مجانًا واحصل على 7 أيام من Premium — دون التزام.",
+      featuredTitle: "نزّل Lollipop",
+      featuredDescription: "متاح على iOS وAndroid. بث 4K وتنزيلات دون اتصال وأكثر من 15000 دراما قصيرة متميزة.",
+      featuredShowTitle: "Obsessed With My Boss · Pt.2",
+      featuredTimer: "0:42",
+      notification: "حلقة جديدة!",
+      rating: "4.9",
+      stats: [
+        { value: "2M+", label: "تنزيلات" },
+        { value: "4.9★", label: "تقييم التطبيق" },
+        { value: "100+", label: "دول" },
+        { value: "99.9%", label: "التوفر" },
+      ],
+    },
+    about: {
+      heroTitle: "عن",
+      heroHighlight: "Lollipop",
+      heroSubtitle: "افتتاح عصر جديد لترفيه الدراما القصيرة عالميًا",
+      companyTitle: "نظرة عامة على الشركة",
+      companySub: "منصة عالمية للدراما القصيرة تمكّن المبدعين والجمهور",
+      companyParagraphs: [
+        "Lollipop مشروع مشترك بين Nyx Entertainment Group في هونغ كونغ وصندوق الاستثمار الثقافي الكوري. الهدف الاستراتيجي للصندوق هو الترويج المنهجي للمحتوى الكوري عالميًا، مع تركيز قوي على الإنتاج المشترك مع شركاء دوليين.",
+        "يتوسع بنشاط في أسواق عالمية متنوعة تشمل الصين واليابان وأمريكا الشمالية وأوروبا وجنوب شرق آسيا والشرق الأوسط، مع تسريع استراتيجيات التوطين.",
+      ],
+      companyStats: [
+        { num: "1M+", label: "مستخدمون عالميون" },
+        { num: "100K+", label: "مبدعو جودة" },
+        { num: "100+", label: "دول" },
+      ],
+      teamTitle: "فريق متميز",
+      teamSub: "فريق قيادة عالمي المستوى يقود الابتكار في الترفيه",
+      team: [
+        { name: "James C.", role: "شريك مؤسس", desc: "محنك في الترفيه والتكنولوجيا بخبرة واسعة في القطاع." },
+        { name: "Sarah L.", role: "العمليات", desc: "متخصصة في العمليات العالمية مع خبرة في التوسع عبر أسواق متعددة." },
+        { name: "David P.", role: "التكنولوجيا", desc: "خبير في الذكاء الاصطناعي والأنظمة الموزعة بخلفية تقنية عميقة." },
+        { name: "Emily W.", role: "المالية", desc: "محترفة مالية مخضرمة بخلفية في الاستثمار الاستراتيجي." },
+      ],
+      partnersTitle: "شركاء استراتيجيون",
+      partnersSub: "نتعاون مع قادة القطاع حول العالم",
+      partners: [
+        { name: "TechVentures Capital", desc: "شركة رأس مال مخاطر رائدة تركز على التقنيات الناشئة والإعلام الرقمي في آسيا والمحيط الهادئ." },
+        { name: "AsiaMedia Group", desc: "مجموعة إعلام آسيوية شاملة تغطي البث وإنتاج الأفلام وإدارة المواهب." },
+        { name: "GlobalStream Inc.", desc: "مزود بنية سحابية وCDN لبث 4K سلس للجمهور العالمي." },
+        { name: "Dragon Pictures", desc: "استوديو سينمائي حائز جوائز متخصص في الدراما القصيرة المتميزة والمحتوى الأصلي." },
+        { name: "PixelForge Studios", desc: "استوديو مؤثرات بصرية وما بعد الإنتاج متقدم يدعم أبرز مشاريع الترفيه عالميًا." },
+        { name: "SilkRoad Entertainment", desc: "موزع عابر للثقافات يربط أسواق السرد بين الشرق والغرب." },
+        { name: "Horizon Digital", desc: "منصة تسويق واكتساب مستخدمين بالذكاء الاصطناعي للعلامات الترفيهية." },
+        { name: "StarLight Ventures", desc: "مستثمر استراتيجي وحاضنة تدعم الجيل القادم من شركات اقتصاد المبدعين." },
+      ],
+    },
+    contact: {
+      title: "اتصل بنا",
+      subtitle: "تواصل عبر أي من القنوات أدناه",
+      cards: [
+        { title: "الهاتف", detail: "+65 80742120" },
+        { title: "البريد الإلكتروني", detail: "business@lollipop.im" },
+        { title: "Telegram", detail: "اتصل بنا" },
+        { title: "WhatsApp", detail: "اتصل بنا" },
+        { title: "الأعمال", detail: "business@lollipop.im" },
+        { title: "خدمة العملاء", detail: "service@lollipop.im" },
+      ],
+    },
+    footer: {
+      titles: {
+        contact: "اتصل بنا",
+        businessContact: "التواصل التجاري",
+        customerService: "خدمة العملاء",
+        website: "الموقع",
+        languages: "الخدمات",
+      },
+      links: {
+        home: "الرئيسية",
+        aboutUs: "من نحن",
+        creating: "الإنشاء",
+        download: "تنزيل",
+        contactUs: "اتصل بنا",
+      },
+      address: "3 GAMBAS CRESCENT, #04-01, NORDCOM ONE, SINGAPORE 757088",
+    },
+    videoModal: {
+      title: "المعاينة قريبًا",
+      description: "الحلقة الكاملة متاحة في التطبيق",
+    },
+    dynamicPages: {
+      backToHome: "العودة إلى الرئيسية",
+      home: "الرئيسية",
+      blog: "المدونة",
+      genres: "الأنواع",
+      backToBlog: "العودة إلى المدونة",
+      explore: "استكشف",
+      notFoundGenre: "النوع غير موجود.",
+      notFoundDrama: "الدراما غير موجودة.",
+      notFoundRegion: "المنطقة غير موجودة.",
+      notFoundArticle: "المقال غير موجود.",
+      shortDrames: "دراما قصيرة",
+      exploreOtherGenres: "استكشف أنواعًا أخرى",
+      moreDramasComingSoon: "المزيد من دراما {0} قريبًا. عد أسبوعيًا للإصدارات الجديدة!",
+      ep: "حلقة",
+      synopsis: "الملخص",
+      relatedDramas: "دراما ذات صلة قد تعجبك",
+      watchOnLollipop: "شاهد على Lollipop AI",
+      downloadApp: "تنزيل التطبيق",
+      views: "مشاهدات",
+      episodes: "حلقات",
+      market: "السوق",
+      shortDramasIn: "دراما قصيرة في {0}",
+      popularIn: "الأكثر رواجًا في {0}",
+      paymentMethodsIn: "طرق الدفع في {0}",
+      localTips: "نصائح محلية",
+      startWatchingIn: "ابدأ المشاهدة في {0}",
+      downloadFree: "تنزيل مجاني",
+      availableInOtherRegions: "متاح في مناطق أخرى",
+      lollipopBlog: "مدونة Lollipop AI",
+      insightsGuidesTrends: "رؤى وأدلة واتجاهات",
+      blogDescription: "تحليلات معمقة عن الدراما القصيرة بالذكاء الاصطناعي واقتصاد المبدعين ومستقبل الترفيه عبر الجوال.",
+      allPosts: "كل المقالات",
+      industryInsights: "رؤى الصناعة",
+      creatorEconomy: "اقتصاد المبدعين",
+      creatorGuides: "أدلة المبدعين",
+      readMore: "اقرأ المزيد",
+      updated: "محدَّث:",
+      previous: "السابق",
+      next: "التالي",
+      downloadAppDesc: "نزّل Lollipop AI واستمتع بأكثر من 15000 دراما قصيرة متميزة. تنزيل مجاني، دون اشتراك للبدء.",
+      organizationName: "Lollipop AI",
+      howToSteps: [
+        { name: "اكتب السيناريو", text: "اكتب قصة مشوّقة بحلقات من 1-3 دقائق. ركّز على سؤال درامي واحد لكل حلقة مع نهايات تشويق." },
+        { name: "صمّم شخصياتك", text: "استخدم أداة النص إلى صورة LunoTV 1.5 لإنشاء تصاميم الشخصيات من أوصاف نصية. حافظ على الاتساق عبر الحلقات." },
+        { name: "ولّد مشاهدك", text: "استخدم أداة النص إلى فيديو مع أوامر مفصلة تصف المكان والحركة والمزاج لتوليد مقاطع فيديو." },
+        { name: "أضف الصوت والموسيقى", text: "سجّل التمثيل الصوتي أو تعاون مع ممثلي صوت. أضف موسيقى خلفية من مكتبة Lollipop AI الخالية من حقوق الملكية." },
+        { name: "حرّر وصقل", text: "استخدم أداة الفيديو إلى فيديو لأساليب بصرية متسقة. أضف انتقالات وترجمة وعناوين الحلقات." },
+        { name: "انشر على Lollipop AI", text: "ارفع عبر مركز توزيع المبدعين. أضف العنوان والصورة المصغرة والملخص ووسوم النوع." },
+        { name: "روّج لدراماك", text: "شارك على وسائل التواصل، وتفاعل مع المشاهدين، وتعاون مع مبدعين آخرين. ركّز على التفاعل لتعزيز الترويج الخوارزمي." },
+      ],
+      howToTotalTime: "PT2H",
+      relatedPosts: "مقالات ذات صلة",
+    },
+    distribution: distributionMessages.ar,
+    login: loginMessages.ar,
+  },
 };
 
 type I18nContextValue = {
@@ -1559,7 +2313,7 @@ export function getLocale(): Locale {
 }
 
 /**
- * locale → Accept-Language 头取值。取值与短剧 H5 后端约定一致：en/zh/cht/pt
+ * locale → Accept-Language 头取值。取值与短剧 H5 后端约定一致：en/zh/cht/pt/es/ar
  * （见 short-play common/http.interceptor.js、bind.vue zoneLanguageMap）。后端据此返回
  * 对应语言的短信/邮件/错误文案。
  */
@@ -1571,6 +2325,10 @@ export function getAcceptLanguage(): string {
       return "cht";
     case "pt":
       return "pt";
+    case "es":
+      return "es";
+    case "ar":
+      return "ar";
     default:
       return "en";
   }
@@ -1595,6 +2353,14 @@ function normalizeLocale(value?: string | null): Locale {
     return "pt";
   }
 
+  if (locale.startsWith("es")) {
+    return "es";
+  }
+
+  if (locale.startsWith("ar")) {
+    return "ar";
+  }
+
   return "en";
 }
 
@@ -1605,7 +2371,7 @@ function getInitialLocale(ssrLocale?: Locale): Locale {
 
   const deployBase = getDeployBasename();
 
-  // 1. 路径前缀优先（与 Nginx /zh/ /en/ /pt/ /zh-TW/ 对齐，SEO 真源）
+  // 1. 路径前缀优先（与 Nginx /zh/ /en/ /pt/ /es/ /ar/ /zh-TW/ 对齐，SEO 真源）
   try {
     const matched = matchLocalePath(window.location.pathname, deployBase);
     if (matched) {
@@ -1721,6 +2487,7 @@ export function I18nProvider({
     persistLocale(locale);
 
     document.documentElement.lang = locale;
+    document.documentElement.dir = locale === "ar" ? "rtl" : "ltr";
 
     // 规范化：?lang= 旧链 → 路径前缀；去掉残留 query
     try {

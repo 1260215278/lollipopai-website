@@ -1,6 +1,6 @@
 /**
  * 官网 SEO 文案（title / description / Open Graph / canonical）。
- * 语言集与 i18n.tsx Locale 一致：zh-CN / zh-TW / en / pt。
+ * 语言集与 i18n.tsx Locale 一致：zh-CN / zh-TW / en / pt / es / ar。
  *
  * 2026-08-03 二次审计修复：
  * - 按页面（home/about/creating/download/contact/privacy/terms）独立设置 title/description
@@ -11,7 +11,7 @@
 import { getDeployBasename, localizedHref, matchLocalePath } from "./localePath";
 
 /** 与 i18n.tsx 的 Locale 对齐（避免循环 import） */
-export type SeoLocale = "zh-TW" | "zh-CN" | "en" | "pt";
+export type SeoLocale = "zh-TW" | "zh-CN" | "en" | "pt" | "es" | "ar";
 
 /** 可索引的页面类型 */
 export type PageType = "home" | "about" | "creating" | "download" | "contact" | "privacy" | "terms";
@@ -62,6 +62,16 @@ export const pageSeoMessages: Record<PageType, Record<SeoLocale, SeoMessages>> =
       description:
         "Lollipop AI e a plataforma global de drama curto com IA: 15.000+ series premium, ferramentas de criacao com IA e 80% de participacao na receita para criadores.",
     },
+    es: {
+      title: "Lollipop AI — Plataforma de dramas cortos con IA",
+      description:
+        "Lollipop AI es la plataforma global de dramas cortos con IA: más de 15.000 series premium, herramientas de creación con IA y 80% de ingresos para creadores.",
+    },
+    ar: {
+      title: "Lollipop AI — منصة الدراما القصيرة بالذكاء الاصطناعي",
+      description:
+        "Lollipop AI منصة عالمية للدراما القصيرة بالذكاء الاصطناعي: أكثر من 15000 عمل متميز وأدوات إنشاء بالذكاء الاصطناعي و80% حصة إيرادات للمبدعين.",
+    },
   },
   about: {
     "zh-CN": {
@@ -83,6 +93,16 @@ export const pageSeoMessages: Record<PageType, Record<SeoLocale, SeoMessages>> =
       title: "Sobre a Lollipop AI — Plataforma de Drama com IA",
       description:
         "A Lollipop AI e uma joint venture da Nyx Entertainment Group com o Fundo Coreano de Investimento Cultural, revolucionando o entretenimento de dramas curtos com IA.",
+    },
+    es: {
+      title: "Acerca de Lollipop AI — Plataforma de dramas con IA",
+      description:
+        "Lollipop AI es una joint venture de Nyx Entertainment Group y el Fondo Coreano de Inversión Cultural, que transforma el entretenimiento de dramas cortos con IA. Más de 1M de usuarios en 100+ países.",
+    },
+    ar: {
+      title: "حول Lollipop AI — منصة الدراما القصيرة بالذكاء الاصطناعي",
+      description:
+        "Lollipop AI مشروع مشترك بين Nyx Entertainment Group وصندوق الاستثمار الثقافي الكوري، يجدد ترفيه الدراما القصيرة بالذكاء الاصطناعي. أكثر من مليون مستخدم في 100+ دولة.",
     },
   },
   creating: {
@@ -106,6 +126,16 @@ export const pageSeoMessages: Record<PageType, Record<SeoLocale, SeoMessages>> =
       description:
         "Crie dramas curtos com as ferramentas Lollipop AI: geracao de imagens, troca de rosto, criacao de video e transferencia de estilo. 80% de participacao na receita.",
     },
+    es: {
+      title: "Crea dramas con IA — Herramientas Lollipop AI",
+      description:
+        "Crea dramas cortos con las herramientas Lollipop AI: generación de imágenes, intercambio de rostros, creación de vídeo y transferencia de estilo. 80% de ingresos, kit completo de IA, distribución en 100+ países.",
+    },
+    ar: {
+      title: "أنشئ دراما بالذكاء الاصطناعي — أدوات Lollipop AI",
+      description:
+        "أنشئ دراما قصيرة بأدوات Lollipop AI: توليد الصور وتبديل الوجوه وإنشاء الفيديو ونقل الأسلوب. حصة إيرادات 80% وأدوات كاملة وتوزيع عالمي في 100+ دولة.",
+    },
   },
   download: {
     "zh-CN": {
@@ -127,6 +157,16 @@ export const pageSeoMessages: Record<PageType, Record<SeoLocale, SeoMessages>> =
       title: "Baixar Lollipop AI — iOS & Android",
       description:
         "Baixe a Lollipop AI gratis no iOS e Android. 15.000+ dramas premium, streaming 4K, downloads offline, ferramentas de IA. 2M+ downloads, 100+ paises, nota 4.9.",
+    },
+    es: {
+      title: "Descargar Lollipop AI — iOS y Android",
+      description:
+        "Descarga Lollipop AI gratis en iOS y Android. Más de 15.000 dramas premium, streaming 4K, descargas sin conexión y herramientas de IA. 2M+ descargas, 100+ países, 4.9 estrellas.",
+    },
+    ar: {
+      title: "حمّل Lollipop AI — iOS و Android",
+      description:
+        "حمّل Lollipop AI مجانًا على iOS وAndroid. أكثر من 15000 دراما متميزة وبث 4K وتنزيل دون اتصال وأدوات ذكاء اصطناعي. أكثر من 2 مليون تنزيل في 100+ دولة وتقييم 4.9.",
     },
   },
   contact: {
@@ -150,6 +190,16 @@ export const pageSeoMessages: Record<PageType, Record<SeoLocale, SeoMessages>> =
       description:
         "Contate a Lollipop AI: business@lollipop.im para parcerias, service@lollipop.im para suporte, +65 80742120. Endereco: 3 Gambas Crescent, Nordcom One, Singapura 757088.",
     },
+    es: {
+      title: "Contacto Lollipop AI — Soporte y negocios",
+      description:
+        "Contacta a Lollipop AI: business@lollipop.im para alianzas, service@lollipop.im para soporte, +65 80742120. Dirección: 3 Gambas Crescent, Nordcom One, Singapore 757088.",
+    },
+    ar: {
+      title: "تواصل مع Lollipop AI — الدعم والأعمال",
+      description:
+        "تواصل مع Lollipop AI: business@lollipop.im للشراكات، service@lollipop.im للدعم، +65 80742120. العنوان: 3 Gambas Crescent, Nordcom One, Singapore 757088.",
+    },
   },
   privacy: {
     "zh-CN": {
@@ -172,6 +222,16 @@ export const pageSeoMessages: Record<PageType, Record<SeoLocale, SeoMessages>> =
       description:
         "Politica de Privacidade da Lollipop AI: saiba como coletamos, usamos e protegemos suas informacoes pessoais, incluindo tipos de dados e seus direitos de privacidade.",
     },
+    es: {
+      title: "Política de privacidad — Lollipop AI",
+      description:
+        "Política de privacidad de Lollipop AI: cómo recopilamos, usamos y protegemos tu información personal, incluidos los tipos de datos, finalidades, cesión a terceros y tus derechos de privacidad.",
+    },
+    ar: {
+      title: "سياسة الخصوصية — Lollipop AI",
+      description:
+        "سياسة خصوصية Lollipop AI: تعرّف كيف نجمع معلوماتك الشخصية ونستخدمها ونحميها، بما في ذلك أنواع البيانات والأغراض والمشاركة مع أطراف ثالثة وحقوق الخصوصية.",
+    },
   },
   terms: {
     "zh-CN": {
@@ -193,6 +253,16 @@ export const pageSeoMessages: Record<PageType, Record<SeoLocale, SeoMessages>> =
       title: "Termos de Servico — Lollipop AI",
       description:
         "Termos de Servico da Lollipop AI: termos e condicoes para uso da plataforma, incluindo obrigacoes do usuario, politica de conteudo e propriedade intelectual.",
+    },
+    es: {
+      title: "Términos de servicio — Lollipop AI",
+      description:
+        "Términos de servicio de Lollipop AI: condiciones de uso de la plataforma, incluidas las obligaciones del usuario, la política de contenido, la propiedad intelectual, las exclusiones de responsabilidad y la resolución de disputas.",
+    },
+    ar: {
+      title: "شروط الخدمة — Lollipop AI",
+      description:
+        "شروط خدمة Lollipop AI: شروط وأحكام استخدام المنصة، بما في ذلك التزامات المستخدم وسياسة المحتوى والملكية الفكرية وإخلاء المسؤولية وتسوية النزاعات.",
     },
   },
 };
@@ -257,7 +327,7 @@ export function applyCustomSeoMeta(seo: SeoMessages, canonicalPath: string): voi
 
 /**
  * 动态更新 hreflang 链接标签（路径前缀版）。
- * 与 Nginx 语言路由一致：/zh/ /zh-TW/ /en/ /pt/，英文默认无前缀。
+ * 与 Nginx 语言路由一致：/zh/ /zh-TW/ /en/ /pt/ /es/ /ar/，英文默认无前缀。
  */
 function updateHreflang(pagePath: string): void {
   if (typeof document === "undefined") return;
@@ -267,6 +337,8 @@ function updateHreflang(pagePath: string): void {
     { hreflang: "zh-CN", locale: "zh-CN" },
     { hreflang: "zh-TW", locale: "zh-TW" },
     { hreflang: "pt", locale: "pt" },
+    { hreflang: "es", locale: "es" },
+    { hreflang: "ar", locale: "ar" },
   ];
 
   langs.forEach(({ hreflang, locale }) => {
@@ -301,7 +373,14 @@ function resolveSeoLocale(): SeoLocale {
     // ignore
   }
   const htmlLang = document.documentElement.lang;
-  if (htmlLang === "zh-CN" || htmlLang === "zh-TW" || htmlLang === "en" || htmlLang === "pt") {
+  if (
+    htmlLang === "zh-CN" ||
+    htmlLang === "zh-TW" ||
+    htmlLang === "en" ||
+    htmlLang === "pt" ||
+    htmlLang === "es" ||
+    htmlLang === "ar"
+  ) {
     return htmlLang;
   }
   return "en";
@@ -463,24 +542,71 @@ export function getLocalizedDynamicSeo(
     return templates[pageType];
   }
 
-  // pt (Português)
-  const templates: Record<typeof pageType, { title: string; desc: string }> = {
-    genre: {
-      title: `Dramas Curtos de ${name} — Assistir Online | ${brand}`,
-      desc: `Assista a dramas curtos de ${name} no ${brand}. Grandes producoes de ${name}, criadas por IA e humanos. Gratis para assistir online.`,
-    },
-    drama: {
-      title: `${name} — Assistir Drama Curto Gratis | ${brand}`,
-      desc: `Assista a "${name}" no ${brand}. Dramas curtos emocionantes disponiveis online gratis, com legendas multilinguas e streaming 4K.`,
-    },
-    blog: {
-      title: `${name} | Blog ${brand}`,
-      desc: `Leia o artigo "${name}" no blog do ${brand}. Descubra tendencias da industria de dramas curtos com IA, economia de criadores e tutoriais.`,
-    },
-    region: {
-      title: `Dramas Curtos em ${name} — Populares Localmente | ${brand}`,
-      desc: `Dramas curtos populares para usuarios em ${name}, com metodos de pagamento locais. Desfrute do melhor do ${brand}.`,
-    },
-  };
-  return templates[pageType];
+  if (locale === "es") {
+    const templates: Record<typeof pageType, { title: string; desc: string }> = {
+      genre: {
+        title: `Dramas cortos de ${name} — Ver online | ${brand}`,
+        desc: `Mira dramas cortos de ${name} en ${brand}. Producciones destacadas de ${name}, creadas con IA y por humanos. Gratis para ver online.`,
+      },
+      drama: {
+        title: `${name} — Ver drama corto gratis | ${brand}`,
+        desc: `Mira "${name}" en ${brand}. Dramas cortos disponibles online gratis, con subtítulos en varios idiomas y streaming 4K.`,
+      },
+      blog: {
+        title: `${name} | Blog de ${brand}`,
+        desc: `Lee el artículo "${name}" en el blog de ${brand}. Tendencias de dramas cortos con IA, economía de creadores y tutoriales.`,
+      },
+      region: {
+        title: `Dramas cortos en ${name} — Populares en tu zona | ${brand}`,
+        desc: `Dramas cortos populares para usuarios en ${name}, con métodos de pago locales. Disfruta lo mejor de ${brand}.`,
+      },
+    };
+    return templates[pageType];
+  }
+
+  if (locale === "ar") {
+    const templates: Record<typeof pageType, { title: string; desc: string }> = {
+      genre: {
+        title: `دراما قصيرة من نوع ${name} — مشاهدة عبر الإنترنت | ${brand}`,
+        desc: `شاهد دراما قصيرة من نوع ${name} على ${brand}. أعمال ${name} مميزة من صنع الذكاء الاصطناعي والبشر. مجانًا عبر الإنترنت.`,
+      },
+      drama: {
+        title: `${name} — شاهد دراما قصيرة مجانًا | ${brand}`,
+        desc: `شاهد "${name}" على ${brand}. دراما قصيرة متاحة مجانًا عبر الإنترنت، مع ترجمة متعددة اللغات وبث 4K.`,
+      },
+      blog: {
+        title: `${name} | مدونة ${brand}`,
+        desc: `اقرأ مقال "${name}" في مدونة ${brand}. اتجاهات الدراما القصيرة بالذكاء الاصطناعي واقتصاد المبدعين ودروس الإنتاج.`,
+      },
+      region: {
+        title: `دراما قصيرة في ${name} — الأكثر رواجًا محليًا | ${brand}`,
+        desc: `دراما قصيرة رائجة لمستخدمي ${name} مع طرق دفع محلية. استمتع بأفضل محتوى ${brand}.`,
+      },
+    };
+    return templates[pageType];
+  }
+
+  if (locale === "pt") {
+    const templates: Record<typeof pageType, { title: string; desc: string }> = {
+      genre: {
+        title: `Dramas Curtos de ${name} — Assistir Online | ${brand}`,
+        desc: `Assista a dramas curtos de ${name} no ${brand}. Grandes producoes de ${name}, criadas por IA e humanos. Gratis para assistir online.`,
+      },
+      drama: {
+        title: `${name} — Assistir Drama Curto Gratis | ${brand}`,
+        desc: `Assista a "${name}" no ${brand}. Dramas curtos emocionantes disponiveis online gratis, com legendas multilinguas e streaming 4K.`,
+      },
+      blog: {
+        title: `${name} | Blog ${brand}`,
+        desc: `Leia o artigo "${name}" no blog do ${brand}. Descubra tendencias da industria de dramas curtos com IA, economia de criadores e tutoriais.`,
+      },
+      region: {
+        title: `Dramas Curtos em ${name} — Populares Localmente | ${brand}`,
+        desc: `Dramas curtos populares para usuarios em ${name}, com metodos de pagamento locais. Desfrute do melhor do ${brand}.`,
+      },
+    };
+    return templates[pageType];
+  }
+
+  return { title: enTitle, description: enDescription };
 }

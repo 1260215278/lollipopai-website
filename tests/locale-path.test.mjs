@@ -6,18 +6,22 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 /** 与 localePath.ts 对齐的纯函数复刻（避免 ESM/TS 加载器依赖） */
-const LOCALE_PATH_SEGMENTS = ["zh-TW", "zh", "en", "pt"];
+const LOCALE_PATH_SEGMENTS = ["zh-TW", "zh", "en", "pt", "es", "ar"];
 const SEGMENT_TO_LOCALE = {
   zh: "zh-CN",
   "zh-TW": "zh-TW",
   en: "en",
   pt: "pt",
+  es: "es",
+  ar: "ar",
 };
 const LOCALE_TO_SEGMENT = {
   "zh-CN": "zh",
   "zh-TW": "zh-TW",
   en: "",
   pt: "pt",
+  es: "es",
+  ar: "ar",
 };
 
 function matchLocalePath(pathname, deployBase = "") {
@@ -103,6 +107,17 @@ test("buildLocalizedPath: 中文首页带尾斜杠（兼容 Nginx ^/zh/）", () 
   assert.equal(buildLocalizedPath("zh-CN", "/about"), "/zh/about");
   assert.equal(buildLocalizedPath("en", "/about"), "/about");
   assert.equal(buildLocalizedPath("pt", "/blog/x"), "/pt/blog/x");
+  assert.equal(buildLocalizedPath("es", "/about"), "/es/about");
+  assert.equal(buildLocalizedPath("ar", "/"), "/ar/");
+});
+
+test("matchLocalePath: es / ar 前缀", () => {
+  const es = matchLocalePath("/es/download");
+  assert.equal(es.locale, "es");
+  assert.equal(es.appPath, "/download");
+  const ar = matchLocalePath("/ar/distribution/enroll");
+  assert.equal(ar.locale, "ar");
+  assert.equal(ar.appPath, "/distribution/enroll");
 });
 
 test("stripLocalePrefix + getRouterBasename", () => {

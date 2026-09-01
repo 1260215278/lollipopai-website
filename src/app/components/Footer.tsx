@@ -5,7 +5,7 @@ import logoImg from "../../imports/Lollipop1.webp";
 import { useI18n } from "../i18n";
 
 export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) {
-  const { messages, languages, currentLanguage, setLocale } = useI18n();
+  const { messages, languages, setLocale } = useI18n();
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
   const websiteLinks = [
@@ -132,7 +132,7 @@ export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) 
                   <button
                     type="button"
                     onClick={() => setLocale(item.code)}
-                    className={`transition-colors ${currentLanguage.code === item.code ? "text-white" : "text-gray-400 hover:text-white"}`}
+                    className="text-gray-400 hover:text-white transition-colors"
                     style={{ fontSize: "0.85rem" }}
                   >
                     {item.label}

@@ -1,6 +1,10 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { motion, useInView } from "motion/react";
 import bannerBg from "../../imports/about-banner-bg.webp";
+import teamJames from "../../imports/figma/contact-team-james.webp";
+import teamSarah from "../../imports/figma/contact-team-sarah.webp";
+import teamDavid from "../../imports/figma/contact-team-david.webp";
+import teamEmily from "../../imports/figma/contact-team-emily.webp";
 import emailIcon from "../../imports/figma/contact-email-icon.svg";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { Footer } from "./Footer";
@@ -34,10 +38,10 @@ function SectionTitle({ title, sub }: { title: string; sub?: string }) {
 }
 
 const team = [
-  { name: "James C.", role: "Co-Founder", desc: "Veteran in entertainment & technology with extensive industry experience.", photo: "https://images.unsplash.com/photo-1605980776566-0486c3ac7617?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=256" },
-  { name: "Sarah L.", role: "Operations", desc: "Global operations specialist with multi-market scaling expertise.", photo: "https://images.unsplash.com/photo-1585240975858-7264fd020798?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=256" },
-  { name: "David P.", role: "Technology", desc: "Expert in AI and distributed systems with deep technical background.", photo: "https://images.unsplash.com/photo-1787647560650-3d6c82618cea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=256" },
-  { name: "Emily W.", role: "Finance", desc: "Seasoned finance professional with strategic investment background.", photo: "https://images.unsplash.com/photo-1573497019418-b400bb3ab074?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=256" },
+  { name: "James C.", role: "Co-Founder", desc: "Veteran in entertainment & technology with extensive industry experience.", photo: teamJames },
+  { name: "Sarah L.", role: "Operations", desc: "Global operations specialist with multi-market scaling expertise.", photo: teamSarah },
+  { name: "David P.", role: "Technology", desc: "Expert in AI and distributed systems with deep technical background.", photo: teamDavid },
+  { name: "Emily W.", role: "Finance", desc: "Seasoned finance professional with strategic investment background.", photo: teamEmily },
 ];
 
 const teamHeading = {

@@ -10,7 +10,6 @@ export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) 
   useEffect(() => { setMounted(true); }, []);
   const websiteLinks = [
     { key: "home", page: "home", to: "/" },
-    { key: "aboutUs", page: "about", to: "/about" },
     { key: "creating", page: "creating", to: "/creating" },
     { key: "download", page: "download", to: "/download" },
     { key: "contactUs", page: "contact", to: "/contact" },

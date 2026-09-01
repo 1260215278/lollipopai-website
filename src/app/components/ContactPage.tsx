@@ -1,11 +1,7 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { motion, useInView } from "motion/react";
-import { Phone, Mail } from "lucide-react";
 import bannerBg from "../../imports/about-banner-bg.webp";
-import teamJames from "../../imports/figma/team-james.webp";
-import teamSarah from "../../imports/figma/team-sarah.webp";
-import teamDavid from "../../imports/figma/team-david.webp";
-import teamEmily from "../../imports/figma/team-emily.webp";
+import emailIcon from "../../imports/figma/contact-email-icon.svg";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { Footer } from "./Footer";
 import { ProductOverview } from "./ProductOverview";
@@ -37,70 +33,36 @@ function SectionTitle({ title, sub }: { title: string; sub?: string }) {
   );
 }
 
-const teamPhotos = [teamJames, teamSarah, teamDavid, teamEmily];
+const team = [
+  { name: "James C.", role: "Co-Founder", desc: "Veteran in entertainment & technology with extensive industry experience.", photo: "https://images.unsplash.com/photo-1605980776566-0486c3ac7617?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=256" },
+  { name: "Sarah L.", role: "Operations", desc: "Global operations specialist with multi-market scaling expertise.", photo: "https://images.unsplash.com/photo-1585240975858-7264fd020798?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=256" },
+  { name: "David P.", role: "Technology", desc: "Expert in AI and distributed systems with deep technical background.", photo: "https://images.unsplash.com/photo-1787647560650-3d6c82618cea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=256" },
+  { name: "Emily W.", role: "Finance", desc: "Seasoned finance professional with strategic investment background.", photo: "https://images.unsplash.com/photo-1573497019418-b400bb3ab074?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=256" },
+];
 
-function TelegramIcon() {
-  return (
-    <div className="w-16 h-16 rounded-full bg-[#29a9eb] flex items-center justify-center mx-auto mb-5">
-      <svg viewBox="0 0 24 24" className="w-8 h-8 text-white fill-current">
-        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
-      </svg>
-    </div>
-  );
-}
-
-function WhatsAppIcon() {
-  return (
-    <div className="w-16 h-16 rounded-full bg-[#25d366] flex items-center justify-center mx-auto mb-5">
-      <svg viewBox="0 0 24 24" className="w-8 h-8 text-white fill-current">
-        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
-      </svg>
-    </div>
-  );
-}
+const teamHeading = {
+  zh: { title: "核心团队", sub: "引领娱乐行业创新的世界级领导团队" },
+  en: { title: "Outstanding Team", sub: "A world-class leadership team driving innovation in entertainment" },
+};
 
 export function ContactPage({ onNavigate }: { onNavigate: (page: string) => void }) {
-  const { messages } = useI18n();
+  const { messages, locale } = useI18n();
+  const heading = locale === "zh-CN" || locale === "zh-TW" ? teamHeading.zh : teamHeading.en;
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: "smooth" }); }, []);
 
-  const team = messages.about.team.map((member, index) => ({
-    ...member,
-    photo: teamPhotos[index],
-  }));
-
   const contactCards = [
     {
-      icon: (
-        <div className="w-16 h-16 rounded-full bg-red-500 flex items-center justify-center mx-auto mb-5">
-          <Phone className="w-8 h-8 text-white" />
-        </div>
-      ),
-      title: messages.contact.cards[0].title,
-      detail: messages.contact.cards[0].detail,
-      isLink: false,
+      icon: emailIcon,
+      title: messages.contact.cards[5].title,
+      detail: messages.contact.cards[5].detail,
+      bg: "linear-gradient(135deg, #fb2c36 0%, #fdc700 50%, #00c950 100%)",
     },
     {
-      icon: (
-        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-500 via-yellow-400 to-green-500 flex items-center justify-center mx-auto mb-5">
-          <Mail className="w-8 h-8 text-white" />
-        </div>
-      ),
-      title: messages.contact.cards[1].title,
-      detail: messages.contact.cards[1].detail,
-      isLink: false,
-    },
-    {
-      icon: <TelegramIcon />,
-      title: messages.contact.cards[2].title,
-      detail: messages.contact.cards[2].detail,
-      isLink: true,
-    },
-    {
-      icon: <WhatsAppIcon />,
-      title: messages.contact.cards[3].title,
-      detail: messages.contact.cards[3].detail,
-      isLink: true,
+      icon: emailIcon,
+      title: messages.contact.cards[4].title,
+      detail: messages.contact.cards[4].detail,
+      bg: "linear-gradient(135deg, #fb2c36 0%, #fdc700 50%, #00c950 100%)",
     },
   ];
 
@@ -133,7 +95,7 @@ export function ContactPage({ onNavigate }: { onNavigate: (page: string) => void
       <ProductOverview />
 
       <Section>
-        <SectionTitle title={messages.about.teamTitle} sub={messages.about.teamSub} />
+        <SectionTitle title={heading.title} sub={heading.sub} />
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {team.map((member, i) => (
             <motion.div
@@ -158,7 +120,7 @@ export function ContactPage({ onNavigate }: { onNavigate: (page: string) => void
       <section className="pb-20">
         <div className="max-w-6xl mx-auto px-6">
           <SectionTitle title={messages.contact.title} sub={messages.contact.subtitle} />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="mx-auto grid max-w-[640px] sm:grid-cols-2 gap-5 justify-items-center">
             {contactCards.map((card, i) => (
               <motion.div
                 key={card.title}
@@ -166,17 +128,22 @@ export function ContactPage({ onNavigate }: { onNavigate: (page: string) => void
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.1 * i }}
-                className="bg-white/[0.03] border border-white/8 rounded-2xl p-8 text-center hover:bg-white/[0.06] hover:border-red-500/30 transition-all duration-300"
+                className="w-full max-w-[261px] min-h-[208px] bg-white/[0.03] border border-white/[0.08] rounded-2xl p-8 text-center hover:bg-white/[0.06] hover:border-red-500/30 transition-all duration-300"
               >
-                {card.icon}
-                <h3 className="text-white mb-2" style={{ fontSize: "1.1rem", fontWeight: 700 }}>{card.title}</h3>
-                {card.isLink ? (
-                  <a href="#" className="text-gray-300 underline underline-offset-4 hover:text-white transition-colors" style={{ fontSize: "0.9rem" }}>
-                    {card.detail}
-                  </a>
-                ) : (
-                  <p className="text-gray-300" style={{ fontSize: "0.9rem" }}>{card.detail}</p>
-                )}
+                <div
+                  className="w-16 h-16 mx-auto rounded-full flex items-center justify-center"
+                  style={{ background: card.bg }}
+                >
+                  <img src={card.icon} alt="" className="w-8 h-8" loading="lazy" />
+                </div>
+                <h3 className="text-white mt-5" style={{ fontSize: "1.1rem", fontWeight: 700, lineHeight: "26.4px" }}>{card.title}</h3>
+                <a
+                  href={`mailto:${card.detail}`}
+                  className="inline-block text-gray-300 underline underline-offset-2 mt-2"
+                  style={{ fontSize: "0.9rem", lineHeight: "21.6px" }}
+                >
+                  {card.detail}
+                </a>
               </motion.div>
             ))}
           </div>

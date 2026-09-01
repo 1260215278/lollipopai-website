@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
 import App from "./app/App.tsx";
 // ── 路由级懒加载：非首页路由全部按需加载，首屏只下载首页 bundle ──
@@ -19,6 +19,18 @@ import { I18nProvider } from "./app/i18n.tsx";
 import { getRouterBasename } from "./app/localePath";
 import { Toaster } from "./app/components/ui/sonner";
 import "./styles/index.css";
+
+/**
+ * 预渲染会在 <head> 注入 #prerender-anti-hidden：把 motion 的
+ * inline opacity:0 / transform 强制成可见，方便无 JS 爬虫读正文。
+ * 这段 CSS 的 !important 会盖掉打包后的入场动画，首屏提交后再撤掉。
+ */
+function ReleaseMotionLock() {
+  useEffect(() => {
+    document.getElementById("prerender-anti-hidden")?.remove();
+  }, []);
+  return null;
+}
 
 /** 路由切换时的轻量骨架屏，避免白屏闪烁 */
 function PageFallback() {
@@ -40,6 +52,7 @@ function PageFallback() {
  */
 createRoot(document.getElementById("root")!).render(
   <I18nProvider>
+    <ReleaseMotionLock />
     <Toaster position="top-center" richColors closeButton offset="80px" mobileOffset="72px" />
     <BrowserRouter basename={getRouterBasename()}>
       <Suspense fallback={<PageFallback />}>

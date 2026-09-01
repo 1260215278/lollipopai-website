@@ -549,9 +549,9 @@ function injectSeoIntoHtml(html: string, data: RouteSeoData): string {
     );
   }
 
-  // 3.5 全量 SSR 覆盖：framer-motion 的 initial={{opacity:0}} 会把内容渲染成
-  // 隐形态（opacity:0），静态快照下对纯 HTML 爬虫/无 JS 环境不可见。
-  // 用 !important 强制显示，确保预渲染内容对所有抓取器可见。
+  // 3.5 无 JS 爬虫可见性：framer-motion 的 initial={{opacity:0}} 会把 SSR HTML
+  // 渲染成隐形态。用 !important 强制显示给纯 HTML 抓取器。
+  // 客户端首屏提交后由 main.tsx ReleaseMotionLock 移除，否则会盖掉入场动画。
   metaTags.push(
     `<style id="prerender-anti-hidden">[style*="opacity:0"],[style*="opacity: 0"]{opacity:1!important;transform:none!important}</style>`,
   );

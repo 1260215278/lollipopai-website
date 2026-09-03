@@ -1,0 +1,59 @@
+# Lollipop Drama - robots.txt
+# https://www.lollipop.im
+
+# Allow all search engines and AI crawlers
+User-agent: *
+Allow: /
+Allow: /lollipop/sitemap.xml
+Disallow: /lollipop/distribution/
+Disallow: /lollipop/login
+Disallow: /lollipop/forgot-password
+Crawl-delay: 1
+# /creator/ pages are public profiles — allow indexing for creator name searches
+
+# Explicitly allow AI crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# 传统 + AI 概览爬虫（审计点名需显式放行）
+User-agent: Googlebot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# Sitemap
+Sitemap: https://www.lollipop.im/lollipop/sitemap.xml

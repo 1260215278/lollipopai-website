@@ -47,3 +47,21 @@ coverage/
 
 # Claude Code 会话/worktree 状态
 .claude/
+
+# 部署包
+packages/
+*.tar.gz
+*.zip
+
+# SSH 密钥
+*.pem
+*_ed25519*
+
+# 临时脚本产物
+scripts/__pycache__/
+
+# SEO 审计报告产物
+seo-audit-report/
+
+# 附件/临时下载
+*.html.bak

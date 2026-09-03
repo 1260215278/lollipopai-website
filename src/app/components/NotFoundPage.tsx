@@ -13,7 +13,7 @@ export function NotFoundPage() {
 
   useEffect(() => {
     // 404 页面使用 noindex，防止搜索引擎索引
-    document.title = "404 — Page Not Found | Lollipop AI";
+    document.title = "404 — Page Not Found | Lollipop Drama";
     const meta = document.querySelector('meta[name="robots"]');
     if (meta) {
       meta.setAttribute("content", "noindex, nofollow");

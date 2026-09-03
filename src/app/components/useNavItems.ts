@@ -41,6 +41,7 @@ export function useNavItems(options: UseNavItemsOptions = {}): SiteNavItem[] {
     { key: "creating", label: links.creating, active: activePage === "creating", to: "/creating", onClick: () => go("creating", "/creating") },
     { key: "distribution", label: messages.distribution.nav.entry, to: "/distribution", onClick: enterDistribution },
     { key: "download", label: links.download, active: activePage === "download", to: "/download", onClick: () => go("download", "/download") },
+    // /guides 已于 2026-09-01 整体迁入 /blog 的「操作指南」分类，导航不再单列
     { key: "blog", label: links.blog, active: activePage === "blog", to: "/blog" },
     { key: "contact", label: links.contact, active: activePage === "contact", to: "/contact", onClick: () => go("contact", "/contact") },
   ];

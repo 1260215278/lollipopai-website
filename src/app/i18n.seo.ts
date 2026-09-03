@@ -23,7 +23,7 @@ export interface SeoMessages {
   description: string;
 }
 
-const SITE_URL = "https://www.lollipop.im";
+const SITE_URL = "https://www.lollipop.im/lollipop";
 
 /** 页面路径映射 */
 const pagePaths: Record<PageType, string> = {
@@ -43,226 +43,226 @@ const pagePaths: Record<PageType, string> = {
 export const pageSeoMessages: Record<PageType, Record<SeoLocale, SeoMessages>> = {
   home: {
     "zh-CN": {
-      title: "Lollipop AI — AI短剧创作与创作者经济平台",
+      title: "Lollipop Drama — 精品短剧在线观看平台与创作者订阅服务",
       description:
-        "Lollipop AI是全球AI短剧平台，拥有15000+精品短剧、AI创作工具（文生视频、图生视频）及80%创作者收益分成，支持iOS和Android。",
+        "Lollipop Drama面向全球用户提供精品短剧消费与创作者内容订阅服务，打造「人人可创作、创作可变现、消费即激励」的下一代海外内容生态平台。",
     },
     "zh-TW": {
-      title: "Lollipop AI — AI短劇創作與創作者經濟平台",
+      title: "Lollipop Drama — 精品短劇線上看首選平台與創作者訂閱服務",
       description:
-        "Lollipop AI是全球AI短劇平台，擁有15000+精品短劇、AI創作工具（文生影片、圖生影片）及80%創作者收益分成，支援iOS和Android。",
+        "Lollipop Drama面向全球用戶提供精品短劇消費與創作者內容訂閱服務，打造「人人可創作、創作可變現、消費即激勵」的下一代海外內容生態平台。",
     },
     en: {
-      title: "Lollipop AI — AI Short Drama & Creator Platform",
+      title: "Lollipop Drama — Stream Short Dramas & AI Creator Platform",
       description:
-        "Lollipop AI is a global AI-powered short drama platform with 15,000+ premium shows, AI creation tools (text-to-video, image-to-video), and 80% creator revenue share.",
+        "Lollipop Drama: premium short dramas and creator subscriptions worldwide. Everyone can create, creation can be monetized, consumption is an incentive.",
     },
     pt: {
-      title: "Lollipop AI — Plataforma de Drama Curto com IA",
+      title: "Lollipop Drama — Dramas Curtos Premium & Assinatura de Criadores",
       description:
-        "Lollipop AI e a plataforma global de drama curto com IA: 15.000+ series premium, ferramentas de criacao com IA e 80% de participacao na receita para criadores.",
+        "Lollipop Drama: dramas curtos premium e assinaturas de criadores para o mundo. Todos podem criar, a criação pode ser monetizada, o consumo é um incentivo.",
     },
     es: {
-      title: "Lollipop AI — Plataforma de dramas cortos con IA",
+      title: "Lollipop Drama — Dramas Cortos Premium y Suscripción de Creadores",
       description:
-        "Lollipop AI es la plataforma global de dramas cortos con IA: más de 15.000 series premium, herramientas de creación con IA y 80% de ingresos para creadores.",
+        "Lollipop Drama: dramas cortos premium y suscripciones de creadores para todo el mundo. Todos pueden crear, la creación puede monetizarse, el consumo es un incentivo.",
     },
     ar: {
-      title: "Lollipop AI — منصة الدراما القصيرة بالذكاء الاصطناعي",
+      title: "Lollipop Drama — دراما قصيرة مميزة واشتراكات المبدعين",
       description:
-        "Lollipop AI منصة عالمية للدراما القصيرة بالذكاء الاصطناعي: أكثر من 15000 عمل متميز وأدوات إنشاء بالذكاء الاصطناعي و80% حصة إيرادات للمبدعين.",
+        "Lollipop Drama: دراما قصيرة مميزة واشتراكات المبدعين حول العالم. الجميع يمكنه الإبداع، والإبداع يمكن تحويله إلى دخل، والاستهلاك هو حافز.",
     },
   },
   about: {
     "zh-CN": {
-      title: "关于 Lollipop AI — 全球AI短剧娱乐平台",
+      title: "关于 Lollipop Drama — 全球领先的AI短剧娱乐平台",
       description:
-        "Lollipop AI由香港Nyx Entertainment Group与韩国文化投资基金联合打造，致力于通过AI技术革新短剧娱乐，已覆盖100万+全球用户和100+国家。",
+        "Lollipop Drama由香港Nyx Entertainment Group与韩国文化投资基金联合打造，致力于通过AI技术革新短剧娱乐，已覆盖100万+全球用户和100+国家。",
     },
     "zh-TW": {
-      title: "關於 Lollipop AI — 全球AI短劇娛樂平台",
+      title: "關於 Lollipop Drama — 全球領先的AI短劇娛樂平台",
       description:
-        "Lollipop AI由香港Nyx Entertainment Group與韓國文化投資基金聯合打造，致力於透過AI技術革新短劇娛樂，已覆蓋100萬+全球用戶和100+國家。",
+        "Lollipop Drama由香港Nyx Entertainment Group與韓國文化投資基金聯合打造，致力於透過AI技術革新短劇娛樂，已覆蓋100萬+全球用戶和100+國家。",
     },
     en: {
-      title: "About Lollipop AI — AI Short Drama Platform",
+      title: "About Lollipop Drama — AI Short Drama Platform",
       description:
-        "Lollipop AI is a joint venture by Nyx Entertainment Group and Korean Cultural Investment Fund, revolutionizing short drama entertainment with AI. 1M+ users across 100+ countries.",
+        "Lollipop Drama is a joint venture by Nyx Entertainment Group and Korean Cultural Investment Fund, revolutionizing short drama entertainment with AI. 1M+ users across 100+ countries.",
     },
     pt: {
-      title: "Sobre a Lollipop AI — Plataforma de Drama com IA",
+      title: "Sobre a Lollipop Drama — Plataforma de Drama com IA",
       description:
-        "A Lollipop AI e uma joint venture da Nyx Entertainment Group com o Fundo Coreano de Investimento Cultural, revolucionando o entretenimento de dramas curtos com IA.",
+        "A Lollipop Drama e uma joint venture da Nyx Entertainment Group com o Fundo Coreano de Investimento Cultural, revolucionando o entretenimento de dramas curtos com IA.",
     },
     es: {
-      title: "Acerca de Lollipop AI — Plataforma de dramas con IA",
+      title: "Acerca de Lollipop Drama — Plataforma de dramas con IA",
       description:
-        "Lollipop AI es una joint venture de Nyx Entertainment Group y el Fondo Coreano de Inversión Cultural, que transforma el entretenimiento de dramas cortos con IA. Más de 1M de usuarios en 100+ países.",
+        "Lollipop Drama es una joint venture de Nyx Entertainment Group y el Fondo Coreano de Inversión Cultural, que transforma el entretenimiento de dramas cortos con IA. Más de 1M de usuarios en 100+ países.",
     },
     ar: {
-      title: "حول Lollipop AI — منصة الدراما القصيرة بالذكاء الاصطناعي",
+      title: "حول Lollipop Drama — دراما قصيرة مميزة واشتراكات المبدعين",
       description:
-        "Lollipop AI مشروع مشترك بين Nyx Entertainment Group وصندوق الاستثمار الثقافي الكوري، يجدد ترفيه الدراما القصيرة بالذكاء الاصطناعي. أكثر من مليون مستخدم في 100+ دولة.",
+        "Lollipop Drama مشروع مشترك بين Nyx Entertainment Group وصندوق الاستثمار الثقافي الكوري، يجدد ترفيه الدراما القصيرة بالذكاء الاصطناعي. أكثر من مليون مستخدم في 100+ دولة.",
     },
   },
   creating: {
     "zh-CN": {
-      title: "AI创作工具 — Lollipop AI短剧创作平台",
+      title: "AI短剧创作工具 — Lollipop Drama 一站式创作与变现平台",
       description:
-        "使用Lollipop AI创作工具制作短剧：AI图片生成、AI换脸、AI视频创作、风格迁移。80%收益分成，完整AI创作工具包，面向全球100+国家分发。",
+        "使用Lollipop Drama创作工具制作短剧：AI图片生成、AI换脸、AI视频创作、风格迁移。80%收益分成，完整AI创作工具包，面向全球100+国家分发。",
     },
     "zh-TW": {
-      title: "AI創作工具 — Lollipop AI短劇創作平台",
+      title: "AI短劇創作工具 — Lollipop Drama 一站式創作與變現平台",
       description:
-        "使用Lollipop AI創作工具製作短劇：AI圖像生成、AI換臉、AI影片創作、風格遷移。80%收益分成，完整AI創作工具包，面向全球100+國家分發。",
+        "使用Lollipop Drama創作工具製作短劇：AI圖像生成、AI換臉、AI影片創作、風格遷移。80%收益分成，完整AI創作工具包，面向全球100+國家分發。",
     },
     en: {
-      title: "Create AI Short Dramas — Lollipop AI Tools",
+      title: "Create AI Short Dramas — Lollipop Drama Tools",
       description:
-        "Create short dramas with Lollipop AI tools: AI image generation, face swap, video creation, and style transfer. 80% revenue share, full AI toolkit, global distribution in 100+ countries.",
+        "Create short dramas with Lollipop Drama tools: AI image generation, face swap, video creation, and style transfer. 80% revenue share, full AI toolkit, global distribution in 100+ countries.",
     },
     pt: {
-      title: "Crie Dramas com IA — Ferramentas Lollipop AI",
+      title: "Crie Dramas com IA — Ferramentas Lollipop Drama",
       description:
-        "Crie dramas curtos com as ferramentas Lollipop AI: geracao de imagens, troca de rosto, criacao de video e transferencia de estilo. 80% de participacao na receita.",
+        "Crie dramas curtos com as ferramentas Lollipop Drama: geracao de imagens, troca de rosto, criacao de video e transferencia de estilo. 80% de participacao na receita.",
     },
     es: {
-      title: "Crea dramas con IA — Herramientas Lollipop AI",
+      title: "Crea dramas con IA — Herramientas Lollipop Drama",
       description:
-        "Crea dramas cortos con las herramientas Lollipop AI: generación de imágenes, intercambio de rostros, creación de vídeo y transferencia de estilo. 80% de ingresos, kit completo de IA, distribución en 100+ países.",
+        "Crea dramas cortos con las herramientas Lollipop Drama: generación de imágenes, intercambio de rostros, creación de vídeo y transferencia de estilo. 80% de ingresos, kit completo de IA, distribución en 100+ países.",
     },
     ar: {
-      title: "أنشئ دراما بالذكاء الاصطناعي — أدوات Lollipop AI",
+      title: "أنشئ دراما بالذكاء الاصطناعي — أدوات Lollipop Drama",
       description:
-        "أنشئ دراما قصيرة بأدوات Lollipop AI: توليد الصور وتبديل الوجوه وإنشاء الفيديو ونقل الأسلوب. حصة إيرادات 80% وأدوات كاملة وتوزيع عالمي في 100+ دولة.",
+        "أنشئ دراما قصيرة بأدوات Lollipop Drama: توليد الصور وتبديل الوجوه وإنشاء الفيديو ونقل الأسلوب. حصة إيرادات 80% وأدوات كاملة وتوزيع عالمي في 100+ دولة.",
     },
   },
   download: {
     "zh-CN": {
-      title: "下载 Lollipop AI — iOS & Android",
+      title: "下载 Lollipop Drama — iOS & Android",
       description:
-        "免费下载Lollipop AI，支持iOS和Android。15000+精品短剧、4K播放、离线缓存、AI创作工具。2M+下载量，100+国家，App Store评分4.9星。",
+        "免费下载Lollipop Drama，支持iOS和Android。15000+精品短剧、4K播放、离线缓存、AI创作工具。2M+下载量，100+国家，App Store评分4.9星。",
     },
     "zh-TW": {
-      title: "下載 Lollipop AI — iOS & Android",
+      title: "下載 Lollipop Drama — iOS & Android",
       description:
-        "免費下載Lollipop AI，支援iOS和Android。15000+精品短劇、4K播放、離線快取、AI創作工具。2M+下載量，100+國家，App Store評分4.9星。",
+        "免費下載Lollipop Drama，支援iOS和Android。15000+精品短劇、4K播放、離線快取、AI創作工具。2M+下載量，100+國家，App Store評分4.9星。",
     },
     en: {
-      title: "Download Lollipop AI — iOS & Android",
+      title: "Download Lollipop Drama — iOS & Android",
       description:
-        "Download Lollipop AI free on iOS and Android. 15,000+ premium short dramas, 4K streaming, offline downloads, AI creation tools. 2M+ downloads, 100+ countries, 4.9-star rating.",
+        "Download Lollipop Drama free on iOS and Android. 15,000+ premium short dramas, 4K streaming, offline downloads, AI creation tools. 2M+ downloads, 100+ countries, 4.9-star rating.",
     },
     pt: {
-      title: "Baixar Lollipop AI — iOS & Android",
+      title: "Baixar Lollipop Drama — iOS & Android",
       description:
-        "Baixe a Lollipop AI gratis no iOS e Android. 15.000+ dramas premium, streaming 4K, downloads offline, ferramentas de IA. 2M+ downloads, 100+ paises, nota 4.9.",
+        "Baixe a Lollipop Drama gratis no iOS e Android. 15.000+ dramas premium, streaming 4K, downloads offline, ferramentas de IA. 2M+ downloads, 100+ paises, nota 4.9.",
     },
     es: {
-      title: "Descargar Lollipop AI — iOS y Android",
+      title: "Descargar Lollipop Drama — iOS y Android",
       description:
-        "Descarga Lollipop AI gratis en iOS y Android. Más de 15.000 dramas premium, streaming 4K, descargas sin conexión y herramientas de IA. 2M+ descargas, 100+ países, 4.9 estrellas.",
+        "Descarga Lollipop Drama gratis en iOS y Android. Más de 15.000 dramas premium, streaming 4K, descargas sin conexión y herramientas de IA. 2M+ descargas, 100+ países, 4.9 estrellas.",
     },
     ar: {
-      title: "حمّل Lollipop AI — iOS و Android",
+      title: "حمّل Lollipop Drama — iOS و Android",
       description:
-        "حمّل Lollipop AI مجانًا على iOS وAndroid. أكثر من 15000 دراما متميزة وبث 4K وتنزيل دون اتصال وأدوات ذكاء اصطناعي. أكثر من 2 مليون تنزيل في 100+ دولة وتقييم 4.9.",
+        "حمّل Lollipop Drama مجانًا على iOS وAndroid. أكثر من 15000 دراما متميزة وبث 4K وتنزيل دون اتصال وأدوات ذكاء اصطناعي. أكثر من 2 مليون تنزيل في 100+ دولة وتقييم 4.9.",
     },
   },
   contact: {
     "zh-CN": {
-      title: "联系 Lollipop AI — 商务合作与客服支持",
+      title: "联系 Lollipop Drama — 商务合作、客服支持与产品意见反馈",
       description:
-        "联系Lollipop AI团队：商务合作business@lollipop.im，客服service@lollipop.im，电话+65 80742120。地址：3 Gambas Crescent, Nordcom One, Singapore 757088。",
+        "联系Lollipop Drama团队：商务合作business@lollipop.im，客服service@lollipop.im，电话+65 80742120。地址：3 Gambas Crescent, Nordcom One, Singapore 757088。",
     },
     "zh-TW": {
-      title: "聯絡 Lollipop AI — 商務合作與客服支援",
+      title: "聯絡 Lollipop Drama — 商務合作、客服支援與產品意見反饋",
       description:
-        "聯絡Lollipop AI團隊：商務合作business@lollipop.im，客服service@lollipop.im，電話+65 80742120。地址：3 Gambas Crescent, Nordcom One, Singapore 757088。",
+        "聯絡Lollipop Drama團隊：商務合作business@lollipop.im，客服service@lollipop.im，電話+65 80742120。地址：3 Gambas Crescent, Nordcom One, Singapore 757088。",
     },
     en: {
-      title: "Contact Lollipop AI — Support & Business",
+      title: "Contact Lollipop Drama — Support & Business",
       description:
-        "Contact Lollipop AI: business@lollipop.im for partnerships, service@lollipop.im for support, +65 80742120. Address: 3 Gambas Crescent, Nordcom One, Singapore 757088.",
+        "Contact Lollipop Drama: business@lollipop.im for partnerships, service@lollipop.im for support, +65 80742120. Address: 3 Gambas Crescent, Nordcom One, Singapore 757088.",
     },
     pt: {
-      title: "Contato Lollipop AI — Suporte & Comercial",
+      title: "Contato Lollipop Drama — Suporte & Comercial",
       description:
-        "Contate a Lollipop AI: business@lollipop.im para parcerias, service@lollipop.im para suporte, +65 80742120. Endereco: 3 Gambas Crescent, Nordcom One, Singapura 757088.",
+        "Contate a Lollipop Drama: business@lollipop.im para parcerias, service@lollipop.im para suporte, +65 80742120. Endereco: 3 Gambas Crescent, Nordcom One, Singapura 757088.",
     },
     es: {
-      title: "Contacto Lollipop AI — Soporte y negocios",
+      title: "Contacto Lollipop Drama — Soporte y negocios",
       description:
-        "Contacta a Lollipop AI: business@lollipop.im para alianzas, service@lollipop.im para soporte, +65 80742120. Dirección: 3 Gambas Crescent, Nordcom One, Singapore 757088.",
+        "Contacta a Lollipop Drama: business@lollipop.im para alianzas, service@lollipop.im para soporte, +65 80742120. Dirección: 3 Gambas Crescent, Nordcom One, Singapore 757088.",
     },
     ar: {
-      title: "تواصل مع Lollipop AI — الدعم والأعمال",
+      title: "تواصل مع Lollipop Drama — الدعم والأعمال",
       description:
-        "تواصل مع Lollipop AI: business@lollipop.im للشراكات، service@lollipop.im للدعم، +65 80742120. العنوان: 3 Gambas Crescent, Nordcom One, Singapore 757088.",
+        "تواصل مع Lollipop Drama: business@lollipop.im للشراكات، service@lollipop.im للدعم، +65 80742120. العنوان: 3 Gambas Crescent, Nordcom One, Singapore 757088.",
     },
   },
   privacy: {
     "zh-CN": {
-      title: "隐私政策 — Lollipop AI",
+      title: "隐私政策 — Lollipop Drama",
       description:
-        "Lollipop AI隐私政策：了解我们如何收集、使用和保护您的个人信息，包括数据类型、使用目的、第三方共享和您的隐私权利。",
+        "Lollipop Drama隐私政策：了解我们如何收集、使用和保护您的个人信息，包括数据类型、使用目的、第三方共享和您的隐私权利。",
     },
     "zh-TW": {
-      title: "隱私政策 — Lollipop AI",
+      title: "隱私政策 — Lollipop Drama",
       description:
-        "Lollipop AI隱私政策：了解我們如何收集、使用和保護您的個人資料，包括資料類型、使用目的、第三方共享和您的隱私權利。",
+        "Lollipop Drama隱私政策：了解我們如何收集、使用和保護您的個人資料，包括資料類型、使用目的、第三方共享和您的隱私權利。",
     },
     en: {
-      title: "Privacy Policy — Lollipop AI",
+      title: "Privacy Policy — Lollipop Drama",
       description:
-        "Lollipop AI Privacy Policy: Learn how we collect, use, and protect your personal information, including data types, purposes, third-party sharing, and your privacy rights.",
+        "Lollipop Drama Privacy Policy: Learn how we collect, use, and protect your personal information, including data types, purposes, third-party sharing, and your privacy rights.",
     },
     pt: {
-      title: "Politica de Privacidade — Lollipop AI",
+      title: "Politica de Privacidade — Lollipop Drama",
       description:
-        "Politica de Privacidade da Lollipop AI: saiba como coletamos, usamos e protegemos suas informacoes pessoais, incluindo tipos de dados e seus direitos de privacidade.",
+        "Politica de Privacidade da Lollipop Drama: saiba como coletamos, usamos e protegemos suas informacoes pessoais, incluindo tipos de dados e seus direitos de privacidade.",
     },
     es: {
-      title: "Política de privacidad — Lollipop AI",
+      title: "Política de privacidad — Lollipop Drama",
       description:
-        "Política de privacidad de Lollipop AI: cómo recopilamos, usamos y protegemos tu información personal, incluidos los tipos de datos, finalidades, cesión a terceros y tus derechos de privacidad.",
+        "Política de privacidad de Lollipop Drama: cómo recopilamos, usamos y protegemos tu información personal, incluidos los tipos de datos, finalidades, cesión a terceros y tus derechos de privacidad.",
     },
     ar: {
-      title: "سياسة الخصوصية — Lollipop AI",
+      title: "سياسة الخصوصية — Lollipop Drama",
       description:
-        "سياسة خصوصية Lollipop AI: تعرّف كيف نجمع معلوماتك الشخصية ونستخدمها ونحميها، بما في ذلك أنواع البيانات والأغراض والمشاركة مع أطراف ثالثة وحقوق الخصوصية.",
+        "سياسة خصوصية Lollipop Drama: تعرّف كيف نجمع معلوماتك الشخصية ونستخدمها ونحميها، بما في ذلك أنواع البيانات والأغراض والمشاركة مع أطراف ثالثة وحقوق الخصوصية.",
     },
   },
   terms: {
     "zh-CN": {
-      title: "服务条款 — Lollipop AI",
+      title: "服务条款 — Lollipop Drama",
       description:
-        "Lollipop AI服务条款：使用平台的服务条款与条件，包括用户义务、内容政策、知识产权、免责声明和争议解决。",
+        "Lollipop Drama服务条款：使用平台的服务条款与条件，包括用户义务、内容政策、知识产权、免责声明和争议解决。",
     },
     "zh-TW": {
-      title: "服務條款 — Lollipop AI",
+      title: "服務條款 — Lollipop Drama",
       description:
-        "Lollipop AI服務條款：使用平台的服務條款與條件，包括用戶義務、內容政策、知識產權、免責聲明和爭議解決。",
+        "Lollipop Drama服務條款：使用平台的服務條款與條件，包括用戶義務、內容政策、知識產權、免責聲明和爭議解決。",
     },
     en: {
-      title: "Terms of Service — Lollipop AI",
+      title: "Terms of Service — Lollipop Drama",
       description:
-        "Lollipop AI Terms of Service: Terms and conditions for using the platform, including user obligations, content policy, intellectual property, disclaimers, and dispute resolution.",
+        "Lollipop Drama Terms of Service: Terms and conditions for using the platform, including user obligations, content policy, intellectual property, disclaimers, and dispute resolution.",
     },
     pt: {
-      title: "Termos de Servico — Lollipop AI",
+      title: "Termos de Servico — Lollipop Drama",
       description:
-        "Termos de Servico da Lollipop AI: termos e condicoes para uso da plataforma, incluindo obrigacoes do usuario, politica de conteudo e propriedade intelectual.",
+        "Termos de Servico da Lollipop Drama: termos e condicoes para uso da plataforma, incluindo obrigacoes do usuario, politica de conteudo e propriedade intelectual.",
     },
     es: {
-      title: "Términos de servicio — Lollipop AI",
+      title: "Términos de servicio — Lollipop Drama",
       description:
-        "Términos de servicio de Lollipop AI: condiciones de uso de la plataforma, incluidas las obligaciones del usuario, la política de contenido, la propiedad intelectual, las exclusiones de responsabilidad y la resolución de disputas.",
+        "Términos de servicio de Lollipop Drama: condiciones de uso de la plataforma, incluidas las obligaciones del usuario, la política de contenido, la propiedad intelectual, las exclusiones de responsabilidad y la resolución de disputas.",
     },
     ar: {
-      title: "شروط الخدمة — Lollipop AI",
+      title: "شروط الخدمة — Lollipop Drama",
       description:
-        "شروط خدمة Lollipop AI: شروط وأحكام استخدام المنصة، بما في ذلك التزامات المستخدم وسياسة المحتوى والملكية الفكرية وإخلاء المسؤولية وتسوية النزاعات.",
+        "شروط خدمة Lollipop Drama: شروط وأحكام استخدام المنصة، بما في ذلك التزامات المستخدم وسياسة المحتوى والملكية الفكرية وإخلاء المسؤولية وتسوية النزاعات.",
     },
   },
 };
@@ -292,7 +292,7 @@ export function applyCustomSeoMeta(seo: SeoMessages, canonicalPath: string): voi
   document.title = seo.title;
 
   setMetaByName("description", seo.description);
-  setMetaByName("author", "Lollipop AI");
+  setMetaByName("author", "Lollipop Drama");
   setMetaByName("robots", "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1");
 
   // 动态更新 hreflang（路径前缀版）
@@ -300,7 +300,7 @@ export function applyCustomSeoMeta(seo: SeoMessages, canonicalPath: string): voi
 
   // Open Graph
   setMetaByProperty("og:type", "website");
-  setMetaByProperty("og:site_name", "Lollipop AI");
+  setMetaByProperty("og:site_name", "Lollipop Drama");
   setMetaByProperty("og:title", seo.title);
   setMetaByProperty("og:description", seo.description);
   setMetaByProperty("og:url", canonicalUrl);
@@ -327,18 +327,29 @@ export function applyCustomSeoMeta(seo: SeoMessages, canonicalPath: string): voi
 
 /**
  * 动态更新 hreflang 链接标签（路径前缀版）。
- * 与 Nginx 语言路由一致：/zh/ /zh-TW/ /en/ /pt/ /es/ /ar/，英文默认无前缀。
+ *
+ * ⚠️ 2026-09-01 止血：这里原本声明 6 个语言（en + /zh /zh-TW /pt /es /ar），
+ *    但预渲染**只生成英文路径**，dist 里没有 /zh/… 等目录。Caddy 的
+ *    `try_files … /index.html` 会把这些 URL 全部 fallback 到英文首页。
+ *
+ *    客户端路由虽然能把 `/zh/about` 渲染成中文（basename + ?lang），
+ *    但**首屏静态 HTML 永远是英文的** —— GPTBot / PerplexityBot / ClaudeBot
+ *    这些不执行 JS 的爬虫只能拿到英文骨架，而 hreflang 却在告诉它们
+ *    「还有 5 个语言版本」，于是这 340 个 URL 全被判为重复内容。
+ *
+ *    **声明 hreflang 的前提是对应 URL 首屏就有该语言的内容。**
+ *    在生成多语言预渲染 HTML 之前，这里只保留自指的 `en` + `x-default`。
+ *
+ *    将来接入多语言时：把下面数组补回 5 个语言，并同步给
+ *    `scripts/prerender-plugin.ts` 的 `getRouteData()` 加 × 6 语言的路由生成
+ *    （另需补阿拉伯语 `<html dir="rtl">`）。
+ *    详见 `docs/multilingual-hreflang-gap-2026-09-01.md`。
  */
 function updateHreflang(pagePath: string): void {
   if (typeof document === "undefined") return;
 
   const langs: { hreflang: string; locale: SeoLocale }[] = [
     { hreflang: "en", locale: "en" },
-    { hreflang: "zh-CN", locale: "zh-CN" },
-    { hreflang: "zh-TW", locale: "zh-TW" },
-    { hreflang: "pt", locale: "pt" },
-    { hreflang: "es", locale: "es" },
-    { hreflang: "ar", locale: "ar" },
   ];
 
   langs.forEach(({ hreflang, locale }) => {
@@ -496,7 +507,7 @@ export function getLocalizedDynamicSeo(
     return { title: enTitle, description: enDescription };
   }
 
-  const brand = "Lollipop AI";
+  const brand = "Lollipop Drama";
 
   if (locale === "zh-CN") {
     const templates: Record<typeof pageType, { title: string; desc: string }> = {

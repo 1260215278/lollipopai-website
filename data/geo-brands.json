@@ -1,0 +1,48 @@
+{
+  "_comment": "GEO 采集/分析的品牌配置。口径经 2026-09-01 反推校准，可精确复现 data/outputs/lollipop_drama_20260901 下的 CSV。",
+  "_calibration": {
+    "citation_field": "citations[].url（不是 domain 字段）",
+    "match": "子串匹配，不去重",
+    "domain_normalize": "取 hostname 并去掉开头的 www.",
+    "verified_against": "data/outputs/lollipop_drama_20260901/{summary,citation_domains}.csv 完全一致"
+  },
+  "site": {
+    "name": "LollipopDrama",
+    "domains": ["lollipop.im"]
+  },
+  "brands": [
+    {
+      "name": "LollipopDrama",
+      "citePatterns": ["lollipop.im"],
+      "mentionAliases": ["lollipop drama", "lollipopdrama", "lollipop.im"],
+      "legacyAliases": ["lollipop ai", "lollipop"],
+      "_legacy_note": "品牌 2026-08 由 Lollipop AI 改名为 Lollipop Drama。AI 引擎仍在用旧名（记录 17 写作 'Lollipop AI'），不加 legacy 会把真实曝光算成 0。"
+    },
+    {
+      "name": "Fanvue",
+      "citePatterns": ["fanvue.com"],
+      "mentionAliases": ["fanvue"],
+      "legacyAliases": []
+    },
+    {
+      "name": "StoReel",
+      "citePatterns": ["storeel.com"],
+      "mentionAliases": ["storeel", "sto reel"],
+      "legacyAliases": []
+    },
+    {
+      "name": "Runway",
+      "citePatterns": ["runwayml.com"],
+      "mentionAliases": ["runway"],
+      "legacyAliases": []
+    }
+  ],
+  "_runway_caveat": "基线把 Runway 的 citePatterns 只写了 runwayml.com，漏了 runway.com（15 次）与 docs.dev.runwayml.com（2 次）。为保持与基线可比，这里沿用原口径；若要更真实地衡量 Runway，应改成 [\"runwayml.com\", \"runway.com\"]，其引用数会从 18 升到 35。",
+  "collection": {
+    "provider": "openai-responses",
+    "model": "gpt-4o-mini",
+    "country": "US",
+    "promptSuffix": " Please provide relevant web links or sources for your answer.",
+    "_promptSuffix_note": "原采集在每条 query 后拼了这句英文，用来触发联网检索并让模型附上来源。重跑时必须保持一致，否则结果不可比。"
+  }
+}

@@ -22,6 +22,18 @@ export function GenrePage() {
   const genre = getGenreBySlug(slug);
   const dramas = genre ? getDramasBySlugs(genre.dramaIds) : [];
 
+  /** 用品类名替换模板占位符，生成品类专属文案（避免 10 品类 × 6 语言 = 60 段硬编码） */
+  const fill = (tpl: string) => (genre ? tpl.split("{0}").join(genre.name) : tpl);
+
+  /** 品类 FAQ（可见问答 + FAQPage Schema 同源，GEO 友好且补足页面正文长度） */
+  const faq = genre
+    ? [
+        { q: fill(dp.genreFaq1Q), a: fill(dp.genreFaq1A) },
+        { q: fill(dp.genreFaq2Q), a: fill(dp.genreFaq2A) },
+        { q: fill(dp.genreFaq3Q), a: fill(dp.genreFaq3A) },
+      ]
+    : [];
+
   useEffect(() => {
     if (!genre) {
       clearPageSchema();
@@ -37,23 +49,22 @@ export function GenrePage() {
     );
     applyCustomSeoMeta(seo, `/genre/${genre.slug}`);
 
-    setPageSchema({
-      "@context": "https://schema.org",
+    const collectionSchema = {
       "@type": "CollectionPage",
       name: `${genre.name} Short Dramas`,
       description: genre.seoDescription,
-      url: `https://www.lollipop.im/genre/${genre.slug}`,
+      url: `https://www.lollipop.im/lollipop/genre/${genre.slug}`,
       isPartOf: {
         "@type": "WebSite",
-        name: "Lollipop AI",
-        url: "https://www.lollipop.im",
+        name: "Lollipop Drama",
+        url: "https://www.lollipop.im/lollipop/",
       },
       breadcrumb: {
         "@type": "BreadcrumbList",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: "https://www.lollipop.im/" },
-          { "@type": "ListItem", position: 2, name: "Genres", item: "https://www.lollipop.im/#genres" },
-          { "@type": "ListItem", position: 3, name: genre.name, item: `https://www.lollipop.im/genre/${genre.slug}` },
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://www.lollipop.im/lollipop/" },
+          { "@type": "ListItem", position: 2, name: "Genres", item: "https://www.lollipop.im/lollipop/#genres" },
+          { "@type": "ListItem", position: 3, name: genre.name, item: `https://www.lollipop.im/lollipop/genre/${genre.slug}` },
         ],
       },
       mainEntity: {
@@ -62,10 +73,25 @@ export function GenrePage() {
         itemListElement: dramas.slice(0, 10).map((d, i) => ({
           "@type": "ListItem",
           position: i + 1,
-          url: `https://www.lollipop.im/drama/${d.slug}`,
+          url: `https://www.lollipop.im/lollipop/drama/${d.slug}`,
           name: d.title,
         })),
       },
+    };
+
+    // GEO: FAQPage Schema（与页面可见 FAQ 区块逐字对应）
+    const faqSchema = {
+      "@type": "FAQPage",
+      mainEntity: faq.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    };
+
+    setPageSchema({
+      "@context": "https://schema.org",
+      "@graph": [collectionSchema, faqSchema],
     });
 
     return () => clearPageSchema();
@@ -107,6 +133,16 @@ export function GenrePage() {
             {genre.intro}
           </p>
         </motion.div>
+
+        {/* 为什么选择 Lollipop Drama —— 本地化正文，补足品类页内容深度 */}
+        <section className="mb-14">
+          <h2 className="text-white mb-4" style={{ fontSize: "1.3rem", fontWeight: 700 }}>
+            {fill(dp.genreWhyTitle)}
+          </h2>
+          <p className="text-gray-400 max-w-3xl" style={{ fontSize: "0.95rem", lineHeight: 1.9 }}>
+            {fill(dp.genreWhyBody)}
+          </p>
+        </section>
 
         {/* Drama Grid */}
         {dramas.length > 0 ? (
@@ -151,6 +187,25 @@ export function GenrePage() {
             <p>{dp.moreDramasComingSoon.replace("{0}", genre.name)}</p>
           </div>
         )}
+
+        {/* FAQ —— 可见问答区块（GEO：与 FAQPage Schema 逐字对应） */}
+        <section className="mt-16 pt-8 border-t border-white/5">
+          <h2 className="text-white mb-6" style={{ fontSize: "1.3rem", fontWeight: 700 }}>
+            {fill(dp.genreFaqTitle)}
+          </h2>
+          <div className="space-y-6 max-w-3xl">
+            {faq.map((f) => (
+              <div key={f.q}>
+                <h3 className="text-white/90" style={{ fontSize: "1rem", fontWeight: 600 }}>
+                  {f.q}
+                </h3>
+                <p className="text-gray-400 mt-2" style={{ fontSize: "0.95rem", lineHeight: 1.9 }}>
+                  {f.a}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
 
         {/* Other Genres */}
         <div className="mt-16 pt-8 border-t border-white/5">

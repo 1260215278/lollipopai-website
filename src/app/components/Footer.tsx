@@ -8,20 +8,36 @@ export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) 
   const { messages, languages, setLocale } = useI18n();
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
+  // ⚠️ `key` 必须是 `messages.footer.links` 里存在的键 —— 下面第 107 行用
+  //    `messages.footer.links[item.key]` **动态取键**，写错不会报错，只会渲染成空白。
+  //    （2026-09-01 补 `aboutUs`：/about 此前只有首页 FAQ 区块一条内链，
+  //     其余 60+ 页面无入口；放进 Footer 后全站可达，About 页也是信任/EEAT 信号。）
   const websiteLinks = [
     { key: "home", page: "home", to: "/" },
     { key: "creating", page: "creating", to: "/creating" },
     { key: "download", page: "download", to: "/download" },
+    { key: "aboutUs", page: "about", to: "/about" },
     { key: "contactUs", page: "contact", to: "/contact" },
   ] as const;
 
   // Explore links — internal links to genre/blog pages for SEO crawling
+  //
+  // ⚠️ 品类名（Romance / Thriller …）来自 `src/app/data/genres.ts` 的 `name` 字段，
+  //    是**未经 i18n 的数据**，全站（含 GenrePage 的 h1、breadcrumb、JSON-LD）都直接渲染它。
+  //    把 Footer 单独本地化反而会与站内其余位置不一致，因此保持原样 ——
+  //    要彻底解决需要给 genres.ts 加多语言字段，属独立改造。
+  //
+  //    Blog / How-To Guides 是纯 UI 标签，走 i18n（`dynamicPages.blog` / `dynamicPages.howToGuides`）。
   const exploreLinks = [
     { label: "Romance Dramas", to: "/genre/romance" },
     { label: "Thriller Dramas", to: "/genre/thriller" },
     { label: "CEO Dramas", to: "/genre/ceo-drama" },
     { label: "Fantasy Dramas", to: "/genre/fantasy" },
-    { label: "Blog", to: "/blog" },
+    { label: messages.dynamicPages.blog, to: "/blog" },
+    // 操作型 HowTo 指南（2026-09-01 由 /guides 整体迁入 /blog 的「操作指南」分类）。
+    // 这里直接链到代表性 HowTo 页面而非列表：爬虫拿到的是带步骤的实体页，
+    // 且该页的「相关阅读」会把爬虫继续导向其余 15 篇操作指南。
+    { label: messages.dynamicPages.howToGuides, to: "/blog/character-consistency-workflow" },
   ] as const;
 
   return (

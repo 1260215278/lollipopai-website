@@ -13,6 +13,7 @@ import { Footer } from "../components/Footer";
 import { SiteHeader } from "../components/SiteHeader";
 import { useNavItems } from "../components/useNavItems";
 import { getLegalDocument, type LegalDocKind } from "../services/legal";
+import { legalFallback } from "../data/legalContent";
 
 /** 允许渲染的协议 HTML 标签（与发行入驻协议弹窗一致，防 XSS） */
 const AGREEMENT_HTML_TAGS = new Set([
@@ -86,8 +87,13 @@ const richHtmlClassName =
 function LegalDocumentPage({ kind }: { kind: LegalDocKind }) {
   const { messages, locale } = useI18n();
   const navigate = useNavigate();
-  const [content, setContent] = useState("");
-  const [loading, setLoading] = useState(true);
+  // 构建期已净化（scripts/fetch-legal.py）的正文作为初始值：
+  // SSR / 预渲染 HTML 直接包含完整条款，搜索引擎首屏即可抓到内容。
+  // 此前初始值为空 → 预渲染 HTML 只有 Loading 占位（SEO「内容不足」）。
+  const [content, setContent] = useState(() => legalFallback[kind] ?? "");
+  /** true = 内容来自构建期净化结果，可直出；false = 运行时拉取，需再净化 */
+  const [preSanitized, setPreSanitized] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
 
   const title =
@@ -98,11 +104,11 @@ function LegalDocumentPage({ kind }: { kind: LegalDocKind }) {
     setFailed(false);
     void getLegalDocument(kind)
       .then((value) => {
-        setContent(value);
+        setContent(value ?? "");
+        setPreSanitized(false);
         setFailed(false);
       })
       .catch(() => {
-        setContent("");
         setFailed(true);
       })
       .finally(() => {
@@ -129,13 +135,13 @@ function LegalDocumentPage({ kind }: { kind: LegalDocKind }) {
       "@type": "WebPage",
       name: title,
       description: kind === "privacy"
-        ? "Lollipop AI Privacy Policy — how we collect, use, and protect your personal information."
-        : "Lollipop AI Terms of Service — terms and conditions for using the platform.",
-      url: `https://www.lollipop.im/${kind === "privacy" ? "privacy" : "terms"}`,
+        ? "Lollipop Drama Privacy Policy — how we collect, use, and protect your personal information."
+        : "Lollipop Drama Terms of Service — terms and conditions for using the platform.",
+      url: `https://www.lollipop.im/lollipop/${kind === "privacy" ? "privacy" : "terms"}`,
       publisher: {
         "@type": "Organization",
-        name: "Lollipop AI",
-        url: "https://www.lollipop.im",
+        name: "Lollipop Drama",
+        url: "https://www.lollipop.im/lollipop/",
       },
     });
 
@@ -144,7 +150,8 @@ function LegalDocumentPage({ kind }: { kind: LegalDocKind }) {
 
   const navItems = useNavItems();
 
-  const richHtml = sanitizeAgreementHtml(content);
+  // 构建期已净化的内容直接直出（SSR 无 DOMParser）；运行时拉取的内容须再净化防 XSS
+  const richHtml = preSanitized ? content : sanitizeAgreementHtml(content);
 
   return (
     <div className="relative bg-[#0a0000] min-h-screen flex flex-col" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -157,14 +164,16 @@ function LegalDocumentPage({ kind }: { kind: LegalDocKind }) {
           </h1>
 
           <div className="rounded-2xl bg-[#1c1c1c] border border-white/10 px-6 py-8 sm:px-8 sm:py-10 min-h-[320px]">
-            {loading && (
+            {/* 首次加载且无预置正文时才转圈；有 fallback 时直接呈现内容 */}
+            {loading && !content && (
               <div className="flex flex-col items-center justify-center gap-3 py-20 text-gray-400">
                 <Loader2 className="w-7 h-7 animate-spin" />
                 <span style={{ fontSize: "0.9rem" }}>{messages.common.loading}</span>
               </div>
             )}
 
-            {!loading && failed && (
+            {/* 拉取失败且无内容可展示时才报错；有 fallback 时静默保留旧内容 */}
+            {!loading && failed && !content && (
               <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
                 <p className="text-gray-400" style={{ fontSize: "0.95rem" }}>
                   {messages.common.loadFailed}
@@ -180,17 +189,17 @@ function LegalDocumentPage({ kind }: { kind: LegalDocKind }) {
               </div>
             )}
 
-            {!loading && !failed && richHtml && (
+            {content && richHtml && (
               <div className={richHtmlClassName} dangerouslySetInnerHTML={{ __html: richHtml }} />
             )}
 
-            {!loading && !failed && !richHtml && content && (
+            {content && !richHtml && (
               <div className="text-[#d1d5dc] leading-relaxed whitespace-pre-wrap break-words text-sm sm:text-[0.95rem]">
                 {content}
               </div>
             )}
 
-            {!loading && !failed && !content && (
+            {!content && !loading && !failed && (
               <p className="text-gray-500 text-center py-16" style={{ fontSize: "0.9rem" }}>
                 {messages.common.loadFailed}
               </p>

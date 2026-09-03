@@ -98,8 +98,8 @@ export function CreatorProfilePage() {
     const canonicalPath = `/creator/${userId}`;
     applyCustomSeoMeta(
       {
-        title: `${profile.userName} — Short Drama Creator | Lollipop AI`,
-        description: `Explore ${profile.userName}'s short dramas on Lollipop AI. ${profile.totalDramas} published dramas with ${formatCount(profile.totalPlays)} total plays. Watch premium AI and live-action short dramas.`,
+        title: `${profile.userName} — Short Drama Creator | Lollipop Drama`,
+        description: `Explore ${profile.userName}'s short dramas on Lollipop Drama. ${profile.totalDramas} published dramas with ${formatCount(profile.totalPlays)} total plays. Watch premium AI and live-action short dramas.`,
       },
       canonicalPath,
     );
@@ -108,15 +108,15 @@ export function CreatorProfilePage() {
       "@context": "https://schema.org",
       "@type": "Person",
       name: profile.userName,
-      url: `https://www.lollipop.im/creator/${userId}`,
+      url: `https://www.lollipop.im/lollipop/creator/${userId}`,
       image: profile.avatar,
       jobTitle: "Short Drama Creator",
       worksFor: {
         "@type": "Organization",
-        name: "Lollipop AI",
-        url: "https://www.lollipop.im",
+        name: "Lollipop Drama",
+        url: "https://www.lollipop.im/lollipop/",
       },
-      description: `Short drama creator on Lollipop AI with ${profile.totalDramas} published dramas and ${formatCount(profile.totalPlays)} total plays.`,
+      description: `Short drama creator on Lollipop Drama with ${profile.totalDramas} published dramas and ${formatCount(profile.totalPlays)} total plays.`,
       knowsAbout: ["Short Drama", "AI Content Creation", "Video Production"],
     });
 

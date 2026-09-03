@@ -11,17 +11,26 @@
  *  - I18nProvider 已内置 typeof window 守卫，SSR 下默认 locale = "en"，无副作用。
  *
  * 导出 renderRoute(path) → 返回该路由完整渲染后的 HTML 字符串（不含外层 <html>）。
+ *
+ * ⚠️ 路由同步铁律：本文件的 <Routes> 是**第二份**路由表，必须与 src/main.tsx 保持一致。
+ * 这里的 <Route path="*"> 兜底会渲染首页，且**不会报错** —— 只要某个路由忘了在这里注册，
+ * prerender 仍会生成 HTML，title/description 也正确（来自 getRouteData），
+ * 只有正文被静默替换成首页内容。这类缺陷在 dist 里肉眼几乎看不出来，
+ * 新增路由时务必同时改两处，并在构建后 grep dist 校验正文关键词。
  */
 import { renderToString } from "react-dom/server";
 import { StaticRouter, Routes, Route } from "react-router";
 import { I18nProvider } from "./app/i18n";
 import { getRouterBasename, matchLocalePath } from "./app/localePath";
+import { MultilangSubsetGuard } from "./app/components/MultilangSubsetGuard";
 import App from "./app/App";
 import { BlogListPage } from "./app/pages/BlogListPage";
 import { BlogPostPage } from "./app/pages/BlogPostPage";
 import { GenrePage } from "./app/pages/GenrePage";
 import { DramaPage } from "./app/pages/DramaPage";
 import { RegionPage } from "./app/pages/RegionPage";
+import { LoginPage } from "./app/pages/LoginPage";
+import { ForgotPasswordPage } from "./app/pages/ForgotPasswordPage";
 import {
   PrivacyPolicyPage,
   TermsOfServicePage,
@@ -42,6 +51,7 @@ export function renderRoute(path: string): string {
   return renderToString(
     <I18nProvider initialLocale={localeMatch?.locale ?? "en"}>
       <StaticRouter basename={routerBasename} location={path}>
+        <MultilangSubsetGuard />
         <Routes>
           {/* 营销站首页（完全同步，无 lazy） */}
           <Route path="/" element={<App initialPage="home" />} />
@@ -53,6 +63,8 @@ export function renderRoute(path: string): string {
           {/* 博客系统 */}
           <Route path="/blog" element={<BlogListPage />} />
           <Route path="/blog/:slug" element={<BlogPostPage />} />
+          {/* 结构化知识区 — HowTo 工作流（GEO 重点）
+              ⚠️ 分类静态段必须与 src/main.tsx 一致，且排在 :slug 之前 */}
           {/* 品类 / 剧集 / 区域落地页 */}
           <Route path="/genre/:slug" element={<GenrePage />} />
           <Route path="/drama/:slug" element={<DramaPage />} />
@@ -60,6 +72,9 @@ export function renderRoute(path: string): string {
           {/* 法律文档 */}
           <Route path="/privacy" element={<PrivacyPolicyPage />} />
           <Route path="/terms" element={<TermsOfServicePage />} />
+          {/* 登录 / 找回密码（noindex，但仍需正确正文——否则会被 * 兜底成首页） */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           {/* 兜底：未知路径渲染首页内容（与 SPA fallback 一致） */}
           <Route path="*" element={<App initialPage="home" />} />
         </Routes>

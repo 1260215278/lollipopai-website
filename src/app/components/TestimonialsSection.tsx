@@ -76,7 +76,7 @@ export function TestimonialsSection() {
     setPageSchema({
       "@context": "https://schema.org",
       "@type": "Product",
-      name: "Lollipop AI — Short Drama Platform",
+      name: "Lollipop Drama — Short Drama Platform",
       description: "AI-powered short drama platform with 15,000+ premium shows, AI creation tools, and 80% creator revenue share.",
       review: reviewItems,
     });

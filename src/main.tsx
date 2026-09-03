@@ -17,6 +17,7 @@ const LegalTosPage = lazy(() => import("./app/pages/LegalDocumentPage").then(m =
 const NotFoundPage = lazy(() => import("./app/components/NotFoundPage").then(m => ({ default: m.NotFoundPage })));
 import { I18nProvider } from "./app/i18n.tsx";
 import { getRouterBasename } from "./app/localePath";
+import { MultilangSubsetGuard } from "./app/components/MultilangSubsetGuard";
 import { Toaster } from "./app/components/ui/sonner";
 import "./styles/index.css";
 
@@ -55,6 +56,7 @@ createRoot(document.getElementById("root")!).render(
     <ReleaseMotionLock />
     <Toaster position="top-center" richColors closeButton offset="80px" mobileOffset="72px" />
     <BrowserRouter basename={getRouterBasename()}>
+      <MultilangSubsetGuard />
       <Suspense fallback={<PageFallback />}>
       <Routes>
         {/* 发行中心后台子应用 — 懒加载，登录后才使用 */}
@@ -72,6 +74,8 @@ createRoot(document.getElementById("root")!).render(
         {/* 博客系统 — 长尾内容引流，懒加载 */}
         <Route path="/blog" element={<BlogListPage />} />
         <Route path="/blog/:slug" element={<BlogPostPage />} />
+        {/* ⚠️ 原「结构化知识区 /guides」已于 2026-09-01 整体迁入 /blog 的「操作指南」分类，
+            路由与页面组件均已删除，旧路径由 Caddyfile 301 到 /blog。勿再新增该路由。 */}
         {/* 区域落地页 — GEO 地理定位，懒加载 */}
         <Route path="/region/:code" element={<RegionPage />} />
         {/* 用户协议 / 隐私政策（与 H5 me/setting/xieyi、mimi 同源配置）— 懒加载 */}

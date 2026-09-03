@@ -11,7 +11,9 @@ import { useNavItems } from "./useNavItems";
 export function MarketingPageShell({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const navItems = useNavItems({ activePage: pathname.startsWith("/blog") ? "blog" : undefined });
+  const navItems = useNavItems({
+    activePage: pathname.startsWith("/blog") ? "blog" : undefined,
+  });
 
   return (
     <div className="w-full bg-[#0a0000] min-h-screen flex flex-col" style={{ fontFamily: "Inter, system-ui, sans-serif" }}>

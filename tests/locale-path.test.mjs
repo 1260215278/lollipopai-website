@@ -24,6 +24,31 @@ const LOCALE_TO_SEGMENT = {
   ar: "ar",
 };
 
+/**
+ * 多语言子集快照（与 src/app/multilangSubset.ts 对齐）。
+ * 若子集变更（新增/移除语言产物页面），需同步更新此清单。
+ */
+const SUBSET_STATIC = new Set(["/", "/about", "/creating", "/download", "/contact", "/blog"]);
+const SUBSET_GENRES = new Set([
+  "romance", "revenge", "thriller", "ceo-drama", "fantasy",
+  "action", "horror", "sci-fi", "family", "historical",
+]);
+const SUBSET_HOWTOS = new Set([
+  "how-to-create-ai-short-drama", "script-to-screen-pipeline", "ten-episodes-two-weeks",
+  "first-vertical-drama-zero-experience", "fix-ai-video-artifacts",
+  "character-consistency-workflow", "multilingual-localization-workflow",
+  "publish-and-monetize-vertical-drama", "ai-drama-budget-under-1000",
+  "ai-drama-legal-checklist", "ai-video-storytelling", "ai-short-drama-complete-guide",
+]);
+
+function isMultilangSubsetPath(appPath) {
+  const p = appPath.startsWith("/") ? appPath : `/${appPath}`;
+  if (SUBSET_STATIC.has(p)) return true;
+  if (p.startsWith("/genre/")) return SUBSET_GENRES.has(p.slice("/genre/".length));
+  if (p.startsWith("/blog/")) return SUBSET_HOWTOS.has(p.slice("/blog/".length));
+  return false;
+}
+
 function matchLocalePath(pathname, deployBase = "") {
   let path = pathname || "/";
   if (deployBase && (path === deployBase || path.startsWith(`${deployBase}/`))) {
@@ -60,6 +85,13 @@ function buildLocalizedPath(locale, appPath, deployBase = "") {
   const segment = LOCALE_TO_SEGMENT[locale];
   let app = appPath || "/";
   if (!app.startsWith("/")) app = `/${app}`;
+
+  // 方案 B：非 en 语言 + 非子集路径 → 回退英文路径（保留部署根）
+  if (segment && !isMultilangSubsetPath(app)) {
+    const base = deployBase.replace(/\/$/, "");
+    return app === "/" ? (base ? `${base}/` : "/") : `${base}${app}`;
+  }
+
   const isHome = app === "/";
   const base = deployBase.replace(/\/$/, "");
 
@@ -106,9 +138,23 @@ test("buildLocalizedPath: 中文首页带尾斜杠（兼容 Nginx ^/zh/）", () 
   assert.equal(buildLocalizedPath("en", "/"), "/");
   assert.equal(buildLocalizedPath("zh-CN", "/about"), "/zh/about");
   assert.equal(buildLocalizedPath("en", "/about"), "/about");
-  assert.equal(buildLocalizedPath("pt", "/blog/x"), "/pt/blog/x");
+  assert.equal(buildLocalizedPath("pt", "/blog/how-to-create-ai-short-drama"), "/pt/blog/how-to-create-ai-short-drama");
   assert.equal(buildLocalizedPath("es", "/about"), "/es/about");
   assert.equal(buildLocalizedPath("ar", "/"), "/ar/");
+});
+
+test("buildLocalizedPath: 方案 B 非子集路径回退英文（语言版本无产物）", () => {
+  // 非子集：普通博客 / 剧集 / 地域 / 账户页 → 回退无前缀英文 URL
+  assert.equal(buildLocalizedPath("ar", "/blog/what-is-micro-drama"), "/blog/what-is-micro-drama");
+  assert.equal(buildLocalizedPath("zh-CN", "/drama/temptation-ceo"), "/drama/temptation-ceo");
+  assert.equal(buildLocalizedPath("pt", "/region/north-america"), "/region/north-america");
+  assert.equal(buildLocalizedPath("es", "/terms"), "/terms");
+  assert.equal(buildLocalizedPath("zh-TW", "/distribution/enroll"), "/distribution/enroll");
+  // 子集路径保持语言前缀
+  assert.equal(buildLocalizedPath("zh-CN", "/genre/romance"), "/zh/genre/romance");
+  assert.equal(buildLocalizedPath("pt", "/blog/ten-episodes-two-weeks"), "/pt/blog/ten-episodes-two-weeks");
+  // 部署子路径下同样回退
+  assert.equal(buildLocalizedPath("ar", "/blog/what-is-micro-drama", "/lollipop"), "/lollipop/blog/what-is-micro-drama");
 });
 
 test("matchLocalePath: es / ar 前缀", () => {

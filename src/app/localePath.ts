@@ -15,6 +15,7 @@
  * 现有 /distribution/*、/about 等绝对路径 Link/navigate 无需逐处改写。
  */
 import type { Locale } from "./i18n-types";
+import { isMultilangSubsetPath } from "./multilangSubset";
 
 /** URL 路径段（注意 zh-TW 须排在 zh 前，避免前缀误匹配） */
 export const LOCALE_PATH_SEGMENTS = ["zh-TW", "zh", "en", "pt", "es", "ar"] as const;
@@ -136,6 +137,10 @@ export function stripLocalePrefix(pathname: string, deployBase = ""): string {
  * - en（无前缀）+ "/" → "/" 或 deployBase + "/"
  * - zh-CN + "/" → "/zh/"（带尾斜杠，兼容 Nginx `^/zh/`）
  * - zh-CN + "/about" → "/zh/about"
+ *
+ * 方案 B 回退：非 en 语言下，若 appPath 不在多语言子集（没有语言版本产物，
+ * 见 multilangSubset.ts），则回退到英文 URL（无语言前缀）—— 避免语言版本
+ * 页面产生死链（check-dist-links.py 校验）。
  */
 export function buildLocalizedPath(
   locale: Locale,
@@ -145,6 +150,12 @@ export function buildLocalizedPath(
   const segment = localeToPathSegment(locale);
   let app = appPath || "/";
   if (!app.startsWith("/")) app = `/${app}`;
+
+  // 方案 B：非 en 语言 + 非子集路径 → 回退英文路径（保留部署根）
+  if (segment && !isMultilangSubsetPath(app)) {
+    const base = deployBase.replace(/\/$/, "");
+    return app === "/" ? (base ? `${base}/` : "/") : `${base}${app}`;
+  }
 
   const isHome = app === "/";
   const base = deployBase.replace(/\/$/, "");

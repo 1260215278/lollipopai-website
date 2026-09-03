@@ -12,6 +12,7 @@ import { applyCustomSeoMeta, setPageSchema, clearPageSchema, getLocalizedDynamic
 import { useI18n } from "../i18n";
 import { getDramaBySlug, getDramaPoster } from "../data/dramas";
 import { dramas as allDramas } from "../data/dramas";
+import { resolveGenre } from "../data/genres";
 
 const H5_URL = "https://play.google.com/store/apps/details?id=com.StargetVenturesLLC.hks";
 
@@ -48,7 +49,7 @@ export function DramaPage() {
       "@type": "VideoObject",
       name: drama.title,
       description: drama.seoDescription,
-      thumbnailUrl: getDramaPoster(drama.slug) ? `https://www.lollipop.im${getDramaPoster(drama.slug)}` : `https://www.lollipop.im/og-image.png`,
+      thumbnailUrl: getDramaPoster(drama.slug) ? `https://www.lollipop.im/lollipop${getDramaPoster(drama.slug)}` : `https://www.lollipop.im/lollipop/og-image.png`,
       uploadDate: drama.uploadDate,
       duration: `PT${drama.durationMin}M`,
       genre: drama.genre,
@@ -62,15 +63,17 @@ export function DramaPage() {
       // review snippet spam policy and risks manual action penalty.
       publisher: {
         "@type": "Organization",
-        name: "Lollipop AI",
-        url: "https://www.lollipop.im",
+        name: "Lollipop Drama",
+        url: "https://www.lollipop.im/lollipop/",
       },
       breadcrumb: {
         "@type": "BreadcrumbList",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: "https://www.lollipop.im/" },
-          { "@type": "ListItem", position: 2, name: drama.genre.split(" · ")[0], item: `https://www.lollipop.im/genre/${drama.genre.split(" · ")[0].toLowerCase().replace(/\s+/g, "-")}` },
-          { "@type": "ListItem", position: 3, name: drama.title, item: `https://www.lollipop.im/drama/${drama.slug}` },
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://www.lollipop.im/lollipop/" },
+          // ⚠️ 必须走 resolveGenre：drama.genre 是自由文本（如 "Mystery · Suspense"），
+          // 直接拿首段拼 URL 会生成 /genre/mystery 这类死链（线上 404）。
+          { "@type": "ListItem", position: 2, name: resolveGenre(drama.genre).name, item: `https://www.lollipop.im/lollipop/genre/${resolveGenre(drama.genre).slug}` },
+          { "@type": "ListItem", position: 3, name: drama.title, item: `https://www.lollipop.im/lollipop/drama/${drama.slug}` },
         ],
       },
     });
@@ -97,7 +100,7 @@ export function DramaPage() {
         <div className="flex items-center gap-2 text-sm text-gray-500 mb-6">
           <Link to="/" className="hover:text-white">{dp.home}</Link>
           <span>/</span>
-          <Link to={`/genre/${drama.genre.split(" · ")[0].toLowerCase().replace(/\s+/g, "-")}`} className="hover:text-white">{drama.genre.split(" · ")[0]}</Link>
+          <Link to={`/genre/${resolveGenre(drama.genre).slug}`} className="hover:text-white">{resolveGenre(drama.genre).name}</Link>
           <span>/</span>
           <span className="text-white/80 truncate max-w-[200px]">{drama.title}</span>
         </div>

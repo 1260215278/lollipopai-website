@@ -1,240 +1,83 @@
 /**
  * 博客文章详情页 —— /blog/:slug
- * 展示完整文章内容。
- * SEO: Article + BreadcrumbList Schema
+ *
+ * 2026-09-01 起 /guides 的操作型指南已整体迁入本站（见 docs/），本页同时承载两类文章：
+ *  - 常规文章（无 steps）→ Article Schema
+ *  - 操作型指南（有 steps）→ TechArticle + HowTo Schema，并渲染可见的步骤概览区块
+ *
+ * ⚠️ GEO 硬要求：HowTo 的 step 必须与页面可见文本完全一致。
+ *    因此步骤概览区块直接渲染同一份 steps 数据，不做二次改写。
  */
-import { useEffect, type ReactNode } from "react";
+import { useEffect } from "react";
 import { useParams, Link } from "react-router";
 import { motion } from "motion/react";
-import { Calendar, User, ArrowLeft, ArrowRight, Tag } from "lucide-react";
+import { Calendar, User, ArrowLeft, ArrowRight, Tag, Clock, BarChart } from "lucide-react";
 import { MarketingPageShell } from "../components/MarketingPageShell";
 import { applyCustomSeoMeta, setPageSchema, clearPageSchema, getLocalizedDynamicSeo } from "../i18n.seo";
 import { useI18n } from "../i18n";
-import { getBlogPostBySlug } from "../data/blog";
-import { blogPosts } from "../data/blog";
+// 详情页需要完整正文 —— 元数据 + 正文两个模块都在这里同步引入
+import { blogMeta, isGuideCategory } from "../data/blog";
+import { getFullPost } from "../data/blogContent";
 import { blogFaq } from "../data/blogFaq";
+import { renderMarkdown, stripMarkdown } from "../lib/markdown";
+import { blogCategoryLabel } from "../lib/blogCategory";
 
-/** 轻量 Markdown 渲染（无第三方依赖）：支持标题/加粗/斜体/行内代码/链接/引用/有序无序列表/表格/分隔线 */
-function renderInline(text: string): ReactNode[] {
-  const nodes: ReactNode[] = [];
-  const regex = /(\*\*([^*]+)\*\*|\*([^*]+)\*|`([^`]+)`|\[([^\]]+)\]\(([^)]+)\))/g;
-  let last = 0;
-  let m: RegExpExecArray | null;
-  let key = 0;
-  while ((m = regex.exec(text)) !== null) {
-    if (m.index > last) nodes.push(text.slice(last, m.index));
-    if (m[2] !== undefined) {
-      nodes.push(<strong key={key++}>{m[2]}</strong>);
-    } else if (m[3] !== undefined) {
-      nodes.push(<em key={key++}>{m[3]}</em>);
-    } else if (m[4] !== undefined) {
-      nodes.push(
-        <code key={key++} className="px-1.5 py-0.5 rounded bg-white/10 text-[#FF4D00] text-[0.9em]">
-          {m[4]}
-        </code>,
-      );
-    } else if (m[5] !== undefined) {
-      nodes.push(
-        <a key={key++} href={m[6]} target="_blank" rel="noopener noreferrer" className="text-[#FF4D00] hover:underline">
-          {m[5]}
-        </a>,
-      );
-    }
-    last = regex.lastIndex;
-  }
-  if (last < text.length) nodes.push(text.slice(last));
-  return nodes;
+/** ISO 8601 时长 → 本地化可读文本（P14D → "14 天"，PT3H → "3 小时"） */
+function formatIsoDuration(iso: string, unit: { d: string; h: string; m: string }): string {
+  const m = /^P(?:(\d+(?:\.\d+)?)D)?(?:T(?:(\d+(?:\.\d+)?)H)?(?:(\d+(?:\.\d+)?)M)?)?$/.exec(iso.trim());
+  if (!m) return iso;
+  const [, d, h, mi] = m;
+  if (d) return `${d} ${unit.d}`;
+  if (h) return `${h} ${unit.h}`;
+  if (mi) return `${mi} ${unit.m}`;
+  return iso;
 }
 
-function renderMarkdown(md: string): ReactNode[] {
-  const lines = md.split("\n");
-  const blocks: ReactNode[] = [];
-  let i = 0;
-  let key = 0;
-  const isList = (l: string) => /^\s*[-*]\s+/.test(l);
-  const isOrdered = (l: string) => /^\s*\d+\.\s+/.test(l);
-  const isHeading = (l: string) => /^(#{1,6})\s+/.test(l);
-  const isTableRow = (l: string) => l.trim().startsWith("|");
-  const isSep = (l: string) => l.trim() === "---" || l.trim() === "***";
+const DIFFICULTY_STYLE: Record<string, string> = {
+  Beginner: "text-emerald-400 bg-emerald-500/10",
+  Intermediate: "text-amber-400 bg-amber-500/10",
+  Advanced: "text-red-400 bg-red-500/10",
+};
 
-  while (i < lines.length) {
-    const line = lines[i];
-    if (line.trim() === "") {
-      i++;
-      continue;
-    }
-    if (isSep(line)) {
-      i++;
-      continue;
-    }
-    // Heading
-    const h = /^(#{1,6})\s+(.*)$/.exec(line);
-    if (h) {
-      const level = h[1].length;
-      const txt = h[2];
-      const cls =
-        level <= 2
-          ? "text-2xl font-bold text-white mt-10 mb-4"
-          : "text-xl font-semibold text-white mt-8 mb-3";
-      blocks.push(level === 2 ? (
-        <h2 key={key++} className={cls}>{renderInline(txt)}</h2>
-      ) : (
-        <h3 key={key++} className={cls}>{renderInline(txt)}</h3>
-      ));
-      i++;
-      continue;
-    }
-    // Blockquote
-    if (line.startsWith(">")) {
-      const buf: string[] = [];
-      while (i < lines.length && lines[i].startsWith(">")) {
-        buf.push(lines[i].replace(/^>\s?/, ""));
-        i++;
-      }
-      blocks.push(
-        <blockquote key={key++} className="border-l-4 border-[#FF4D00] pl-4 my-6 text-gray-300 italic">
-          {buf.map((b, bi) => (
-            <p key={bi} className="mb-1">{renderInline(b)}</p>
-          ))}
-        </blockquote>,
-      );
-      continue;
-    }
-    // Table
-    if (isTableRow(line)) {
-      const rows: string[] = [];
-      while (i < lines.length && isTableRow(lines[i])) {
-        rows.push(lines[i].trim());
-        i++;
-      }
-      const parsed = rows
-        .filter((r) => !/^\|[\s:|-]+\|$/.test(r))
-        .map((r) => r.replace(/^\||\|$/g, "").split("|").map((c) => c.trim()));
-      if (parsed.length) {
-        const [head, ...bodyRows] = parsed;
-        blocks.push(
-          <div key={key++} className="my-6 overflow-x-auto">
-            <table className="w-full border-collapse text-sm">
-              <thead>
-                <tr>
-                  {head.map((c, ci) => (
-                    <th key={ci} className="border border-white/10 bg-white/5 px-3 py-2 text-left text-white font-semibold">
-                      {renderInline(c)}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {bodyRows.map((r, ri) => (
-                  <tr key={ri}>
-                    {r.map((c, ci) => (
-                      <td key={ci} className="border border-white/10 px-3 py-2 text-gray-300">
-                        {renderInline(c)}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>,
-        );
-      }
-      continue;
-    }
-    // Unordered list
-    if (isList(line)) {
-      const items: string[] = [];
-      while (i < lines.length && isList(lines[i])) {
-        items.push(lines[i].replace(/^\s*[-*]\s+/, ""));
-        i++;
-      }
-      blocks.push(
-        <ul key={key++} className="list-disc pl-6 my-4 space-y-2 text-gray-300">
-          {items.map((it, ii) => (
-            <li key={ii}>{renderInline(it)}</li>
-          ))}
-        </ul>,
-      );
-      continue;
-    }
-    // Ordered list
-    if (isOrdered(line)) {
-      const items: string[] = [];
-      while (i < lines.length && isOrdered(lines[i])) {
-        items.push(lines[i].replace(/^\s*\d+\.\s+/, ""));
-        i++;
-      }
-      blocks.push(
-        <ol key={key++} className="list-decimal pl-6 my-4 space-y-2 text-gray-300">
-          {items.map((it, ii) => (
-            <li key={ii}>{renderInline(it)}</li>
-          ))}
-        </ol>,
-      );
-      continue;
-    }
-    // Paragraph: collect consecutive plain lines
-    const para: string[] = [];
-    while (
-      i < lines.length &&
-      lines[i].trim() !== "" &&
-      !isHeading(lines[i]) &&
-      !lines[i].startsWith(">") &&
-      !isTableRow(lines[i]) &&
-      !isList(lines[i]) &&
-      !isOrdered(lines[i]) &&
-      !isSep(lines[i])
-    ) {
-      para.push(lines[i]);
-      i++;
-    }
-    blocks.push(
-      <p key={key++} className="mb-5 text-gray-300" style={{ lineHeight: 1.9 }}>
-        {renderInline(para.join(" "))}
-      </p>,
-    );
-  }
-  return blocks;
-}
 
-/** 将 Markdown 正文转为纯文本（供 Article Schema 的 articleBody / wordCount 使用）。 */
-function stripMarkdown(md: string): string {
-  return md
-    .replace(/```[\s\S]*?```/g, " ")
-    .replace(/^\s*>\s?/gm, "")
-    .replace(/^\s{0,3}#{1,6}\s+/gm, "")
-    .replace(/^\s*\|.*\|\s*$/gm, " ")
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
-    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
-    .replace(/[*_`~]/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
-}
+
 
 export function BlogPostPage() {
   const { slug = "" } = useParams();
   const { locale, messages } = useI18n();
   const useZh = locale === "zh-CN" || locale === "zh-TW";
   const dp = messages.dynamicPages;
-  const post = getBlogPostBySlug(slug);
+  const post = getFullPost(slug);
 
   // 按 locale 选择中/英字段（与 BlogListPage 保持一致）
   const postTitle = useZh ? post?.titleZh : post?.title;
   const postExcerpt = useZh ? post?.excerptZh : post?.excerpt;
   const postContent = useZh ? post?.contentZh : post?.content;
+  const postTakeaways = useZh ? post?.keyTakeawaysZh : post?.keyTakeaways;
+  /** HowTo 步骤同样按 locale 取（仅操作型指南有值） */
+  const postSteps = useZh ? post?.stepsZh : post?.steps;
+  /**
+   * ⚠️ 必须在组件顶层定义：这个变量同时被 useEffect（HowTo schema）和
+   * JSX（步骤概览区块）使用。若只在 useEffect 内部声明，JSX 里会 ReferenceError，
+   * SSR 预渲染整页失败（表现为「所有 blog 页 SSR render failed」）。
+   */
+  const steps = postSteps ?? post?.steps ?? [];
 
   // 当前文章的 FAQ（中文，与 contentZh 同语言）；独立于 blog.ts，重生成不会被覆盖
   const faq = post ? blogFaq[post.slug] ?? [] : [];
 
+  const difficultyLabels: Record<string, string> = {
+    Beginner: dp.beginner,
+    Intermediate: dp.intermediate,
+    Advanced: dp.advanced,
+  };
+  const durationUnit = { d: dp.unitDays, h: dp.unitHours, m: dp.unitMinutes };
+
   // Localized category label from i18n (not hardcoded blog.ts data)
-  const localizedCategoryLabel =
-    post?.category === "industry" ? dp.industryInsights :
-    post?.category === "creator" ? dp.creatorEconomy :
-    post?.category === "guide" ? dp.creatorGuides :
-    post?.categoryLabel ?? "";
+  const localizedCategoryLabel = post ? blogCategoryLabel(post.category, post.categoryLabel, dp) : "";
 
   // 按发布日期降序排序（与列表页一致，最新的排最前面）
-  const sortedPosts = [...blogPosts].sort(
+  const sortedPosts = [...blogMeta].sort(
     (a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()
   );
   const currentIndex = post ? sortedPosts.findIndex((p) => p.slug === post.slug) : -1;
@@ -261,78 +104,134 @@ export function BlogPostPage() {
       "@type": "Person",
       name: post.author,
       jobTitle: post.authorRole,
+      description: post.authorBio,
       worksFor: {
         "@type": "Organization",
         name: dp.organizationName,
-        url: "https://www.lollipop.im",
+        url: "https://www.lollipop.im/lollipop/",
       },
-      url: "https://www.lollipop.im/about",
+      url: "https://www.lollipop.im/lollipop/about",
+      sameAs: ["https://www.lollipop.im/lollipop/about"],
     };
 
+    const bodyText = stripMarkdown(postContent ?? post.contentZh);
+    /** 是否有文章自带的真实步骤（2026-09-01 由 /guides 迁入的 9 篇） */
+    const hasRealSteps = steps.length > 0;
+
+    // GEO: 按文章分类生成主题实体与提及实体
+    const CATEGORY_ABOUT: Record<string, string> = {
+      industry: "Artificial Intelligence in Entertainment",
+      creator: "AI Content Creation",
+      guide: "AI Video Production",
+      workflow: "AI Drama Production Workflow",
+      production: "AI Drama Production",
+      distribution: "Digital Content Distribution",
+    };
+    const aboutEntity = {
+      "@type": "Thing",
+      name: CATEGORY_ABOUT[post.category] ?? "AI Short Drama",
+      description: `${post.categoryLabel} content from Lollipop Drama`,
+    };
+    const mentionsEntities = [
+      { "@type": "Thing", name: "AI Short Drama" },
+      { "@type": "Thing", name: "Lollipop Drama" },
+    ];
+
     const articleSchema = {
-      "@type": "Article",
+      // 有真实步骤的操作型指南用 TechArticle（Article 子类型），可承载 proficiencyLevel
+      "@type": hasRealSteps ? "TechArticle" : "Article",
       headline: postTitle ?? post.title,
       description: useZh ? post.excerptZh : post.seoDescription,
       datePublished: post.publishDate,
       dateModified: post.updateDate,
+      ...(hasRealSteps && post.difficulty ? { proficiencyLevel: post.difficulty } : {}),
       author: authorPerson,
       publisher: {
         "@type": "Organization",
         name: dp.organizationName,
-        url: "https://www.lollipop.im",
+        url: "https://www.lollipop.im/lollipop/",
         logo: {
           "@type": "ImageObject",
-          url: "https://www.lollipop.im/src/imports/logo.webp",
+          url: "https://www.lollipop.im/lollipop/src/imports/logo.webp",
         },
       },
       mainEntityOfPage: {
         "@type": "WebPage",
-        "@id": `https://www.lollipop.im/blog/${post.slug}`,
+        "@id": `https://www.lollipop.im/lollipop/blog/${post.slug}`,
       },
       articleSection: localizedCategoryLabel,
       image: {
         "@type": "ImageObject",
-        url: `https://www.lollipop.im${post.coverImage ?? "/blog-images/guide.webp"}`,
+        url: `https://www.lollipop.im/lollipop${post.coverImage ?? "/blog-images/guide.webp"}`,
       },
-      keywords: `${localizedCategoryLabel}, AI short drama, Lollipop AI, ${post.title}`,
-      articleBody: stripMarkdown(postContent ?? post.contentZh).slice(0, 500),
-      wordCount: stripMarkdown(postContent ?? post.contentZh).replace(/\s/g, "").length,
+      thumbnailUrl: `https://www.lollipop.im/lollipop${post.coverImage ?? "/blog-images/guide.webp"}`,
+      keywords: `${localizedCategoryLabel}, AI short drama, Lollipop Drama, ${post.title}`,
+      articleBody: bodyText.slice(0, 500),
+      wordCount: useZh ? bodyText.replace(/\s/g, "").length : bodyText.split(/\s+/).filter(Boolean).length,
       encodingFormat: "text/html",
-      citation: {
-        "@type": "CreativeWork",
-        name: dp.organizationName,
-        url: "https://www.lollipop.im",
-      },
+      inLanguage: useZh ? "zh" : "en",
+      isPartOf: { "@type": "Blog", name: "Lollipop Drama Blog", url: "https://www.lollipop.im/lollipop/blog" },
+      about: aboutEntity,
+      mentions: mentionsEntities,
+      accessMode: ["textual", "visual"],
+      accessibilitySummary: "Text-based article with images. Screen reader compatible.",
+      license: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      ...(hasRealSteps ? { teaches: [post.categoryLabel] } : {}),
+      speakable: { "@type": "SpeakableSpecification", cssSelector: ["h1", ".key-takeaways li", ".faq p"] },
       breadcrumb: {
         "@type": "BreadcrumbList",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: dp.home, item: "https://www.lollipop.im/" },
-          { "@type": "ListItem", position: 2, name: dp.blog, item: "https://www.lollipop.im/blog" },
-          { "@type": "ListItem", position: 3, name: post.title, item: `https://www.lollipop.im/blog/${post.slug}` },
+          { "@type": "ListItem", position: 1, name: dp.home, item: "https://www.lollipop.im/lollipop/" },
+          { "@type": "ListItem", position: 2, name: dp.blog, item: "https://www.lollipop.im/lollipop/blog" },
+          { "@type": "ListItem", position: 3, name: post.title, item: `https://www.lollipop.im/lollipop/blog/${post.slug}` },
         ],
       },
     };
 
-    // P1#4: 教程类文章额外添加 HowTo Schema（多语言）
-    const isGuide = post.category === "guide";
-    const howToSchema = isGuide ? {
-      "@type": "HowTo",
-      name: post.title,
-      description: post.seoDescription,
-      step: dp.howToSteps.map((s, i) => ({
-        "@type": "HowToStep",
-        position: i + 1,
-        name: s.name,
-        text: s.text,
-      })),
-      totalTime: dp.howToTotalTime,
-      author: authorPerson,
-      publisher: {
-        "@type": "Organization",
-        name: dp.organizationName,
-        url: "https://www.lollipop.im",
-      },
-    } : null;
+    // HowTo Schema（GEO 核心）
+    // 只有文章自带 steps 时才输出 HowTo，并带上 totalTime / supply / tool。
+    // 步骤与页面可见的「步骤概览」区块同源，满足「结构化数据 = 可见文本」硬要求。
+    //
+    // ⚠️ 2026-09-01 移除了原先 `category === "guide"` 的通用模板分支：
+    //    那份 i18n 模板（`dp.howToSteps`）对多篇共用同一步骤，且步骤在页面上完全不可见，
+    //    违反 Google「结构化数据必须与可见文本一致」的要求，属合规隐患。
+    //    对比 / 盘点 / 风险清单型的文章本就没有有序步骤，不该发 HowTo —— 发 Article 即可。
+    const howToSchema = hasRealSteps
+      ? {
+          "@type": "HowTo",
+          name: postTitle ?? post.title,
+          description: useZh ? post.excerptZh : post.seoDescription,
+          step: steps.map((s, i) => ({
+            "@type": "HowToStep",
+            position: i + 1,
+            name: s.name,
+            text: s.text,
+            url: `https://www.lollipop.im/lollipop/blog/${post.slug}#step-${i + 1}`,
+          })),
+          totalTime: post.totalTime,
+          estimatedCost: { "@type": "MonetaryAmount", currency: "USD", value: "0" },
+          supply: [{ "@type": "HowToSupply", name: dp.organizationName }],
+          tool: [{ "@type": "HowToTool", name: dp.organizationName }],
+          author: authorPerson,
+          publisher: {
+            "@type": "Organization",
+            name: dp.organizationName,
+            url: "https://www.lollipop.im/lollipop/",
+            logo: {
+              "@type": "ImageObject",
+              url: "https://www.lollipop.im/lollipop/src/imports/logo.webp",
+            },
+          },
+          datePublished: post.publishDate,
+          dateModified: post.updateDate,
+          inLanguage: locale,
+          isPartOf: { "@type": "Blog", name: "Lollipop Drama Blog", url: "https://www.lollipop.im/lollipop/blog" },
+          mainEntityOfPage: {
+            "@type": "WebPage",
+            "@id": `https://www.lollipop.im/lollipop/blog/${post.slug}`,
+          },
+        }
+      : null;
 
     // GEO: FAQPage Schema（审计重点——显著提升 AI 回答引用率）
     const faqSchema = faq.length
@@ -383,10 +282,21 @@ export function BlogPostPage() {
 
         {/* Article Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <div className="flex items-center gap-3 mb-4 text-xs">
+          <div className="flex items-center gap-3 mb-4 text-xs flex-wrap">
             <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-red-500/10 text-red-400" style={{ fontWeight: 600 }}>
               <Tag className="w-3 h-3" /> {localizedCategoryLabel}
             </span>
+            {/* 难度 / 总时长 —— 仅操作型指南有（与 HowTo Schema 同源） */}
+            {post.difficulty && (
+              <span className={`flex items-center gap-1 px-2.5 py-0.5 rounded-full ${DIFFICULTY_STYLE[post.difficulty] ?? "text-gray-400 bg-white/5"}`} style={{ fontWeight: 600 }}>
+                <BarChart className="w-3 h-3" /> {difficultyLabels[post.difficulty] ?? post.difficulty}
+              </span>
+            )}
+            {post.totalTime && (
+              <span className="flex items-center gap-1 text-gray-500">
+                <Clock className="w-3 h-3" /> {formatIsoDuration(post.totalTime, durationUnit)}
+              </span>
+            )}
             <span className="flex items-center gap-1 text-gray-500">
               <Calendar className="w-3 h-3" /> {post.publishDate}
             </span>
@@ -396,7 +306,7 @@ export function BlogPostPage() {
               </span>
             )}
             <span className="flex items-center gap-1 text-gray-500">
-              <User className="w-3 h-3" /> {post.author}
+              <User className="w-3 h-3" /> {post.author} · {post.authorRole}
             </span>
           </div>
           <h1 className="text-white" style={{ fontFamily: "Playfair Display", fontSize: "clamp(1.8rem, 3.5vw, 2.5rem)", fontWeight: 700, lineHeight: 1.2 }}>
@@ -407,6 +317,58 @@ export function BlogPostPage() {
           </p>
         </motion.div>
 
+        {/* 关键要点 —— GEO/AEO 引擎提取用，可见文本与结构化数据同源 */}
+        {postTakeaways && postTakeaways.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.03 }}
+            className="mb-10 rounded-2xl border border-[#FF4D00]/20 bg-[#FF4D00]/[0.03] p-6"
+          >
+            <h2 className="text-white font-bold mb-4" style={{ fontSize: "1.05rem" }}>
+              {useZh ? "关键要点" : "Key Takeaways"}
+            </h2>
+            <ul className="key-takeaways space-y-2.5">
+              {postTakeaways.map((t, i) => (
+                <li key={i} className="flex gap-2.5">
+                  <span className="shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full" style={{ background: "#FF4D00" }} />
+                  <p className="text-gray-300" style={{ fontSize: "0.95rem", lineHeight: 1.7 }}>{t}</p>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+
+        {/* 步骤概览 —— 与 HowTo Schema 同源，保证结构化数据与可见文本一致（GEO 硬要求） */}
+        {steps.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+            className="mb-10 rounded-2xl border border-white/10 bg-white/[0.02] p-6"
+          >
+            <h2 className="text-white font-bold mb-4" style={{ fontSize: "1.05rem" }}>
+              {dp.stepsCount.replace("{0}", String(steps.length))}
+            </h2>
+            <ol className="space-y-3">
+              {steps.map((s, i) => (
+                <li key={i} id={`step-${i + 1}`} className="flex gap-3">
+                  <span
+                    className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white mt-0.5"
+                    style={{ background: "#FF4D00" }}
+                  >
+                    {i + 1}
+                  </span>
+                  <div>
+                    <p className="text-white font-semibold" style={{ fontSize: "0.95rem", lineHeight: 1.5 }}>{s.name}</p>
+                    <p className="text-gray-400 mt-0.5" style={{ fontSize: "0.9rem", lineHeight: 1.7 }}>{s.text}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </motion.div>
+        )}
+
         {/* Article Body */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
           <div className="text-gray-300" style={{ fontSize: "1rem", lineHeight: 1.9 }}>
@@ -416,7 +378,7 @@ export function BlogPostPage() {
 
         {/* FAQ — 可见问答区块（GEO：与 FAQPage Schema 对应，提升 AI 引用概率） */}
         {faq.length > 0 && (
-          <div className="mt-12 pt-8 border-t border-white/5">
+          <div className="faq mt-12 pt-8 border-t border-white/5">
             <h2 className="text-white font-bold mb-6" style={{ fontSize: "1.25rem" }}>{useZh ? "常见问题（FAQ）" : "Frequently Asked Questions (FAQ)"}</h2>
             <div className="space-y-4">
               {faq.map((f, i) => (
@@ -447,7 +409,15 @@ export function BlogPostPage() {
 
         {/* Related Posts — 内部链接网络（修复审计 P0-2：原 Markdown Related 链接全部指向首页） */}
         {(() => {
-          const related = sortedPosts.filter((p) => p.slug !== post.slug && p.category === post.category).slice(0, 6);
+          // 操作型内容按「组」匹配相关阅读，否则 distribution 只有 2 篇、相关阅读会剩 1 条
+          const related = sortedPosts
+            .filter((p) => {
+              if (p.slug === post.slug) return false;
+              return isGuideCategory(post.category)
+                ? isGuideCategory(p.category)
+                : p.category === post.category;
+            })
+            .slice(0, 6);
           return (
             <div className="mt-14 pt-8 border-t border-white/5">
               <h2 className="text-white font-bold mb-6" style={{ fontSize: "1.25rem" }}>{dp.relatedPosts}</h2>
@@ -458,7 +428,7 @@ export function BlogPostPage() {
                     to={`/blog/${rp.slug}`}
                     className="group block rounded-xl border border-white/5 hover:border-red-500/30 bg-white/[0.02] p-4 transition-all"
                   >
-                    <span className="text-xs text-red-400 font-semibold">{rp.category === "industry" ? dp.industryInsights : rp.category === "creator" ? dp.creatorEconomy : rp.category === "guide" ? dp.creatorGuides : rp.categoryLabel}</span>
+                    <span className="text-xs text-red-400 font-semibold">{blogCategoryLabel(rp.category, rp.categoryLabel, dp)}</span>
                     <p className="text-white/90 group-hover:text-red-400 transition-colors mt-1.5" style={{ fontSize: "0.95rem", fontWeight: 600, lineHeight: 1.4 }}>
                       {useZh ? rp.titleZh : rp.title}
                     </p>

@@ -52,7 +52,7 @@ function PhoneMockup({ src, rotate, delay, glowColor }: { src: string; rotate: n
         {/* Screen image */}
         <img
           src={src}
-          alt={`${messages.common.brand} AI`}
+          alt={messages.common.brand}
           className="w-full h-full object-cover"
           loading="lazy"
           decoding="async"

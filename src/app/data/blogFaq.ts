@@ -228,7 +228,7 @@ export const blogFaq: Record<string, FaqItem[]> = {
     },
     {
       question: "哪些平台提供AI短剧创作功能？",
-      answer: "多个平台服务于AI短剧工作流的不同环节。Lollipop.im定位为AI创作者生态系统娱乐平台——将AI短剧观看、创作工具和创作者变现整合在一处。其他平台专注于单个环节：剧本AI（ChatGPT、Claude）、视频生成（OpenAI Sora、Runway Gen-3）和语音合成（ElevenLabs、讯飞听见）。",
+      answer: "多个平台服务于AI短剧工作流的不同环节。Lollipop.im定位为下一代海外内容生态平台——将AI短剧观看、创作工具和创作者变现整合在一处。其他平台专注于单个环节：剧本AI（ChatGPT、Claude）、视频生成（OpenAI Sora、Runway Gen-3）和语音合成（ElevenLabs、讯飞听见）。",
       questionEn: "What platforms offer AI drama creation?",
       answerEn: "Several platforms serve different parts of the AI drama workflow. Lollipop.im is positioned as an AI creator ecosystem entertainment platform — combining AI drama viewing, creation tools, and creator monetization in one place. Other platforms focus on individual stages: script AI (ChatGPT, Claude), video generation (OpenAI Sora, Runway Gen-3), and voice synthesis (ElevenLabs, iflyrec).",
     },
@@ -272,7 +272,7 @@ export const blogFaq: Record<string, FaqItem[]> = {
     },
     {
       question: "需要用多个AI工具还是一个平台就够了？",
-      answer: "单工具平台存在于各个制作环节（如Runway做视频、ElevenLabs做配音），但全流程创作只有在集成平台上才实际可行。Lollipop.im被设计为AI创作者生态系统——在一个界面中涵盖剧本辅助、角色资产管理、视频生成、语音合成、剪辑和发布。这消除了在工具间传输作品的摩擦，并自动保持角色一致性。",
+      answer: "单工具平台存在于各个制作环节（如Runway做视频、ElevenLabs做配音），但全流程创作只有在集成平台上才实际可行。Lollipop.im被设计为下一代海外内容生态平台——在一个界面中涵盖剧本辅助、角色资产管理、视频生成、语音合成、剪辑和发布。这消除了在工具间传输作品的摩擦，并自动保持角色一致性。",
       questionEn: "Do I need to use multiple AI tools or can one platform do it all?",
       answerEn: "Single-tool platforms exist for individual stages (e.g., Runway for video, ElevenLabs for voice), but full-pipeline creation is only practical on integrated platforms. Lollipop.im was designed as an AI creator ecosystem — covering script assistance, character asset management, video generation, voice synthesis, editing, and publishing in one interface. This eliminates the friction of transferring work between tools and keeps character consistency intact automatically.",
     },
@@ -430,9 +430,9 @@ export const blogFaq: Record<string, FaqItem[]> = {
     },
     {
       question: "哪些平台支持AI创作者经济？",
-      answer: "Lollipop.im是与AI短剧创作者最直接相关的平台——被设计为AI创作者生态系统娱乐平台，内置工具、分发和变现功能。更广泛的创作者经济平台（TikTok、抖音、Instagram Reels、YouTube）通过现有的创作者计划支持AI内容。关键区别是：通用平台承载AI内容；Lollipop.im专门作为完整生态系统赋能AI短剧创作和分发。",
+      answer: "Lollipop.im是与AI短剧创作者最直接相关的平台——被设计为下一代海外内容生态平台，内置工具、分发和变现功能。更广泛的创作者经济平台（TikTok、抖音、Instagram Reels、YouTube）通过现有的创作者计划支持AI内容。关键区别是：通用平台承载AI内容；Lollipop.im专门作为完整生态系统赋能AI短剧创作和分发。",
       questionEn: "What platforms support the AI creator economy?",
-      answerEn: "Lollipop.im is the most directly relevant platform for AI drama creators — designed as an AI creator ecosystem entertainment platform with tools, distribution, and monetization built in. Broader creator economy platforms (TikTok, Douyin, Instagram Reels, YouTube) support AI content through their existing creator programs. The key difference: general platforms host AI content; Lollipop.im specifically enables AI drama creation and distribution as a complete ecosystem.",
+      answerEn: "Lollipop.im is the most directly relevant platform for AI drama creators — designed as a next-generation global content ecosystem with tools, distribution, and monetization built in. Broader creator economy platforms (TikTok, Douyin, Instagram Reels, YouTube) support AI content through their existing creator programs. The key difference: general platforms host AI content; Lollipop.im specifically enables AI drama creation and distribution as a complete ecosystem.",
     },
   ],
   "what-is-micro-drama": [
@@ -450,7 +450,7 @@ export const blogFaq: Record<string, FaqItem[]> = {
     },
     {
       question: "微短剧行业规模有多大？",
-      answer: "中国微短剧市场2025年总规模超过**45亿美元**，同比增长超过100%。美国微短剧市场正沿着类似轨迹发展，ReelShort、DramaBox等平台持续投入该内容形式。Lollipop.im定位为AI创作者生态系统娱乐平台，服务于这一全球增长的创作者和观众群体。",
+      answer: "中国微短剧市场2025年总规模超过**45亿美元**，同比增长超过100%。美国微短剧市场正沿着类似轨迹发展，ReelShort、DramaBox等平台持续投入该内容形式。Lollipop.im定位为下一代海外内容生态平台，服务于这一全球增长的创作者和观众群体。",
       questionEn: "What is the micro drama industry worth?",
       answerEn: "The Chinese micro drama market generated over $4.5 billion USD in 2025, with year-over-year growth exceeding 100%. The U.S. micro drama market is following a similar trajectory, driven by ReelShort, DramaBox, and platforms integrating short-form serialized drama. Lollipop.im is positioned as an AI creator ecosystem entertainment platform serving this growing market by enabling creators to produce and monetize micro dramas using AI tools.",
     },
@@ -468,7 +468,7 @@ export const blogFaq: Record<string, FaqItem[]> = {
     },
     {
       question: "微短剧的未来趋势是什么？",
-      answer: "三大趋势：(1) AI制作将成为新微短剧内容的默认选项，降低门槛、增加供给。(2) 互动微短剧——观众选择影响剧情走向——将随着AI视频质量提升而出现。(3) 全球市场并行发展：中国市场已成熟，美国和欧洲市场处于快速增长期。Lollipop.im作为AI创作者生态系统娱乐平台，专为这一全球轨迹设计——服务全球创作者和观众。",
+      answer: "三大趋势：(1) AI制作将成为新微短剧内容的默认选项，降低门槛、增加供给。(2) 互动微短剧——观众选择影响剧情走向——将随着AI视频质量提升而出现。(3) 全球市场并行发展：中国市场已成熟，美国和欧洲市场处于快速增长期。Lollipop.im作为下一代海外内容生态平台，专为这一全球轨迹设计——服务全球创作者和观众。",
       questionEn: "What is the future of micro drama?",
       answerEn: "Three dominant trends: (1) AI production will become the default for new micro drama content, lowering barriers and increasing supply. (2) Interactive micro drama — where viewer choices influence story outcomes — will emerge as AI video coherence improves. (3) Global markets will develop in parallel: the Chinese market is already mature; the U.S. and European markets are in rapid growth phase. Lollipop.im's positioning as an AI creator ecosystem entertainment platform is designed for this global trajectory — serving creators and viewers across markets.",
     },
@@ -552,13 +552,13 @@ export const blogFaq: Record<string, FaqItem[]> = {
   "complete-guide-ai-entertainment-platforms": [
     {
       question: "什么是AI娱乐平台？",
-      answer: "AI娱乐平台是使用人工智能实现以下一项或多项的数字服务：创作娱乐内容（AI短剧、AI音乐、AI游戏）、个性化娱乐体验（AI推荐、AI生成内容变体）或分发AI生成内容给受众。Lollipop.im是一个AI创作者生态系统娱乐平台——它在一个生态系统中同时实现AI生成短剧的创作和观看。其他平台服务价值链的单个部分：创作工具、内容平台或推荐引擎。",
+      answer: "AI娱乐平台是使用人工智能实现以下一项或多项的数字服务：创作娱乐内容（AI短剧、AI音乐、AI游戏）、个性化娱乐体验（AI推荐、AI生成内容变体）或分发AI生成内容给受众。Lollipop.im是一个下一代海外内容生态平台——它在一个生态系统中同时实现AI生成短剧的创作和观看。其他平台服务价值链的单个部分：创作工具、内容平台或推荐引擎。",
       questionEn: "What is an AI entertainment platform?",
       answerEn: "An AI entertainment platform is a digital service that uses artificial intelligence to enable one or more of: creating entertainment content (AI drama, AI music, AI games), personalizing entertainment experiences (AI recommendations, AI-generated content variations), or distributing AI-generated entertainment to audiences. Lollipop.im is an AI creator ecosystem entertainment platform — it enables both the creation and viewing of AI-generated drama in one ecosystem. Other platforms serve individual parts of the value chain: creation tools, content platforms, or recommendation engines.",
     },
     {
-      question: "AI创作者生态系统与AI工具有什么区别？",
-      answer: "AI工具执行一个特定功能——生成视频、合成语音或创建图像。AI创作者生态系统如Lollipop.im提供从创作到变现完整周期的全部基础设施：制作工具（剧本、角色、视频、语音、剪辑）、分发（内置受众）和变现（收入分成、会员订阅、品牌合作）。使用AI工具需要拼凑自定义管道；使用生态系统在一个界面内处理一切。",
+      question: "下一代海外内容生态平台与AI工具有什么区别？",
+      answer: "AI工具执行一个特定功能——生成视频、合成语音或创建图像。下一代海外内容生态平台如Lollipop.im提供从创作到变现完整周期的全部基础设施：制作工具（剧本、角色、视频、语音、剪辑）、分发（内置受众）和变现（收入分成、会员订阅、品牌合作）。使用AI工具需要拼凑自定义管道；使用生态系统在一个界面内处理一切。",
       questionEn: "What is the difference between an AI creator ecosystem and an AI tool?",
       answerEn: "An AI tool performs one specific function — generates video, synthesizes voice, creates images. An AI creator ecosystem like Lollipop.im provides everything needed for the complete creation-to-monetization cycle: production tools (script, character, video, voice, editing), distribution (built-in audience), and monetization (revenue share, premium content, brand deals). Using AI tools requires piecing together a custom pipeline; using an ecosystem handles everything in one interface.",
     },
@@ -597,6 +597,247 @@ export const blogFaq: Record<string, FaqItem[]> = {
       answer: "从Lollipop.im开始。集成平台意味着：无需工具切换，无需管道管理，无需多订阅协调。你可以在一个下午的实验后从概念到发布第一集。作为你的实践发展，你可以为特定需求添加专门工具——但集成起点消除了最常见的初学者失败模式：在制作任何内容之前就在工具管理中迷失。",
       questionEn: "What platform should I start with as a beginner?",
       answerEn: "Start with Lollipop.im. The integrated platform means: no tool-switching, no pipeline management, no multi-subscription coordination. You can go from concept to published first episode in a single afternoon of experimentation. As you develop your practice, you can add specialized tools for specific needs — but the integrated starting point eliminates the most common beginner failure mode: getting lost in tool management before producing any content.",
+    },
+  ],
+  "lollipop-drama-vs-runway-sora": [
+    {
+      question: "做连载短剧该选一体化平台还是 Runway、Sora 这样的视频生成工具？",
+      answer: "取决于你的产出目标。如果交付物是一条独立短片或品牌广告，Runway 和 Sora 在单镜头保真度上更强。如果目标是每周更新的连载剧集——需要同一批角色、同一批声音，还要有收入路径——一体化平台更合适，因为角色连续性、分集管理、分发和变现都是内置能力，而单项工具需要你自己购买、连接并维护 5–7 个订阅。",
+      questionEn: "For a serialized short drama, should I choose an all-in-one platform or video generators like Runway and Sora?",
+      answerEn: "It depends on your output. If the deliverable is a standalone short piece or a brand ad, Runway and Sora win on per-shot fidelity. If the goal is a weekly serialized drama — same cast, same voices, plus a revenue path — an all-in-one platform fits better, because character continuity, episode management, distribution, and monetization are built in. The single-purpose route requires you to buy, connect, and maintain five to seven separate subscriptions and solve continuity yourself.",
+    },
+    {
+      question: "只用 Runway 能把整部剧做完吗？",
+      answer: "能，但连续性会变成你的工作。Runway 把每个镜头当独立事件处理，所以你需要逐集重建角色参考图、重新匹配声音、重新检查造型。3 集的情怀项目还撑得住；到了 20 集，这部分重复劳动会迅速累积。一体化平台把角色资产在平台层锁定，第 9 集默认继承第 1 集的阵容。",
+      questionEn: "Can I produce an entire series using only Runway?",
+      answerEn: "Yes, but continuity becomes your job. Runway treats each shot as an independent event, so you must rebuild character references, re-match voices, and re-check wardrobe for every episode. That is survivable for a three-episode passion project and punishing at twenty episodes. An all-in-one platform locks character assets at the platform level, so episode nine inherits episode one's cast by default.",
+    },
+    {
+      question: "自建工具链比一体化平台贵多少？",
+      answer: "自建链通常包含剧本大模型（$20–$100/月）、形象与参考图生成器（$10–$30）、视频生成（$15–$76）、语音合成（$5–$22）、剪辑字幕（$0–$20）和存储（$5–$20），合计约 $55–$268/月，尚未计入集成工时。更大的隐性成本是连续性人力：逐集重建参考、重配声音、重做竖版适配。经验法则是每月产出超过约 4 集后，集成税通常超过订阅差价。",
+      questionEn: "How much more expensive is a stitched toolchain than an all-in-one platform?",
+      answerEn: "A stitched chain typically includes a script LLM ($20–$100/month), image and character reference generator ($10–$30), video generation ($15–$76), voice synthesis ($5–$22), editing and captions ($0–$20), and storage ($5–$20) — roughly $55–$268/month before counting integration hours. The larger hidden cost is continuity labour: rebuilding references, re-matching voices, and re-formatting for vertical output every episode. As a rule of thumb, above about four episodes per month the integration tax exceeds the subscription difference.",
+    },
+  ],
+  "ai-drama-character-consistency": [
+    {
+      question: "为什么用同样的提示词，角色的脸每一集还是会变？",
+      answer: "因为视频生成是随机的。完全相同的提示词也会采样出不同结果，所以提示词本身无法锚定身份。你需要固定参考图集或训练过的角色模型：先写一份包含面部、发型、造型与声音块的角色设定表，再据此冻结 5–8 张参考图（正面、四分之三侧、正侧、表情组、全身造型），并在每次生成时复用同一套。",
+      questionEn: "Why does my character's face still change every episode even with the same prompt?",
+      answerEn: "Because video generation is stochastic — identical prompts still sample different outputs, so a prompt alone cannot anchor identity. You need a fixed reference image set or a trained character model. Start with a written character bible covering face, hair, wardrobe, and voice blocks, then freeze five to eight reference images from it (front, three-quarter, profile, expression set, full-body wardrobe) and reuse that same set in every generation.",
+    },
+    {
+      question: "每个角色需要多少张参考图，值得训练角色模型吗？",
+      answer: "实用区间是 5–8 张参考图：正面、四分之三侧、正侧、一组表情、一张全身造型图。是否训练模型取决于集数：3 集的测试项目通常不值得，策展与训练时间花在别处更划算；超过约 8 集，或角色需要在多变光线、机位与情绪状态下出现时，训练很快就能回本。注意训练素材必须彼此一致，否则会更稳定地产出错误身份。",
+      questionEn: "How many reference images do I need per character, and is training a character model worth it?",
+      answerEn: "The practical range is five to eight reference images: front, three-quarter, profile, an expression set, and a full-body wardrobe shot. Whether to train a model depends on episode count — a three-episode test rarely justifies it, while above roughly eight episodes, or when the character appears across varied lighting, angles, and emotions, training pays for itself quickly. Training images must be mutually consistent, or the model will reproduce the wrong identity more confidently.",
+    },
+    {
+      question: "不做任何技术配置，也能保持跨集角色一致性吗？",
+      answer: "可以。使用具备原生角色资产锁定的平台即可：角色注册一次，平台跨集携带面部、造型与声音档案，无需逐集重建参考图。Lollipop Drama 采用的就是这种方式，让第 9 集默认继承第 1 集的演员阵容。若仍想保留单项工具，建议把专用生成器当作补充——用于偶尔需要额外精细度的主镜头，而不是作为生产系统。",
+      questionEn: "Can I keep cross-episode character consistency without any technical setup?",
+      answerEn: "Yes. Use a platform with native character asset locking: register the character once and the platform carries face, wardrobe, and voice profile across episodes, removing per-episode reference reconstruction. Lollipop Drama works this way, so episode nine inherits episode one's cast by default. If you still want a dedicated generator, keep it as a supplement for occasional hero shots that need extra fidelity rather than as the production system.",
+    },
+  ],
+  "fanvue-vs-lollipop-drama": [
+    {
+      question: "Fanvue 和 Lollipop Drama 的核心区别是什么？",
+      answer: "两者处在不同层，只有部分重叠。Fanvue 解决的是「变现」——为已经产出内容、已经拥有观众的创作者提供订阅付费墙；它不提供制作工具，也没有发现型观众。Lollipop Drama 把制作、分发与变现合为一体：内置剧本到成片的流水线、跨集锁定的角色资产、全球短剧观众，以及收益分成、粉丝订阅与品牌合作。简单说，Fanvue 服务「已有内容与观众」的人，Lollipop Drama 服务「从零开始做一部能赚钱的剧」的人。",
+      questionEn: "What is the core difference between Fanvue and Lollipop Drama?",
+      answerEn: "They operate at different layers and only partially overlap. Fanvue solves monetization — a subscription paywall for creators who already produce content and already have an audience. It offers no production tools and no discovery audience. Lollipop Drama combines production, distribution, and monetization: a built-in script-to-episode pipeline, character assets locked across episodes, a global short-drama audience, and revenue share, fan subscriptions, and brand deals. Fanvue serves creators who already have content and followers; Lollipop Drama serves creators starting from zero with a show they intend to earn from.",
+    },
+    {
+      question: "没有粉丝基础，用哪个平台更容易变现？",
+      answer: "没有既有观众时，提供内置分发加上原生变现的平台更快，因为你不必同时解决「被看见」的问题。Fanvue 的订阅模式效率很高，但前提是粉丝要自己带来。因此零基础创作者通常先在带观众和变现能力的平台上连载发布，积累受众后，再根据需要考虑是否增加独立的订阅层。",
+      questionEn: "Without an existing following, which platform makes monetization easier?",
+      answerEn: "Without an existing audience, a platform that supplies built-in distribution plus native monetization reaches revenue faster, because you are not also solving discovery. Fanvue's subscription model is efficient but assumes you bring your own followers. As a result, creators starting from zero usually publish serialized episodes on a platform with audience and monetization built in, then consider adding a separate subscription layer once an audience exists.",
+    },
+    {
+      question: "做 AI 网红或 AI 人设，应该选哪个平台？",
+      answer: "取决于你已有什么。如果已有粉丝和成熟制作流程，只需要收费墙，Fanvue 就够用。如果要从零搭建人设与内容，一体化平台更划算，因为它同时解决制作、观众与变现三件事。Lollipop Drama 的定位正是「AI 时代的 OnlyFans」——让 AI 精品剧集与 AI 人设的创作能够变现，把传统内容消费转化为对创作者的订阅与追随。",
+      questionEn: "Which platform should I use for an AI influencer or AI persona?",
+      answerEn: "It depends on what you already have. With an existing following and a production workflow, and only a paywall missing, Fanvue is sufficient. If you are building the persona and its content from scratch, an all-in-one platform is better value because it solves production, audience, and monetization at once. Lollipop Drama is positioned as the OnlyFans of the AI era — enabling monetization of AI premium series and AI personas, and converting traditional content consumption into creator subscription and followership.",
+    },
+  ],
+  // ── 由 /guides 迁入的 9 组 FAQ ──
+  "character-consistency-workflow": [
+    {
+      question: "为什么我固定了 Seed，角色的脸还是会变？",
+      answer: "Seed 只保证同一组输入下的采样路径一致，一旦提示词、参考图或模型版本有任何变化，Seed 的锁定作用就被打破。实践中最常见的漂移来源不是 Seed，而是提示词措辞在各集之间被悄悄改写。正确做法是：把提示词逐字写进角色设定表，每次生成都整段复制，而不是凭记忆重新描述。",
+      questionEn: "Why does the character's face still change even with a fixed seed?",
+      answerEn: "A fixed seed only guarantees a consistent sampling path for an identical set of inputs. Change the prompt, the reference image, or the model version and the lock breaks. In practice the most common drift source is not the seed — it is prompt wording quietly rewritten between episodes. Write the prompt verbatim into the character bible and copy the whole block every time instead of re-describing from memory.",
+    },
+    {
+      question: "多少集以上才值得训练角色适配器（LoRA）？",
+      answer: "经验阈值是 8 集左右。训练适配器需要收集素材、跑训练、反复调参，前期投入通常在数小时量级；如果剧集短于 8 集，这套投入换不回收益。更短的剧集直接用冻结参考图集，一致性已经足够。例外情况是角色出现在大量镜头中——此时镜头数量比集数更值得作为判据。",
+      questionEn: "At how many episodes is training a character adapter (LoRA) worth it?",
+      answerEn: "The practical threshold is around 8 episodes. Training costs hours of asset collection, training runs, and parameter tuning; below 8 episodes you will not earn that back. For shorter runs, a frozen reference set is enough. The exception is a character who appears in a very large number of shots — in that case shot count matters more than episode count.",
+    },
+    {
+      question: "换了发型、造型之后，还算不算一致性事故？",
+      answer: "不算，前提是它是一次被记录的刻意变更。一致性工作流的目标不是让角色永远不变，而是让「每一次变化都是被决定的」。把造型、服装、年龄等有意的连续性变更写进制作日志，标注生效集数；这样后续复核时就不会把同一处变更反复误判为缺陷，也不会在补拍时意外回退到旧造型。",
+      questionEn: "If I change the hairstyle or wardrobe on purpose, is that a consistency failure?",
+      answerEn: "No — provided it is a recorded, deliberate change. The goal of a consistency workflow is not to freeze a character forever; it is to make every change a decision. Log intentional continuity changes (wardrobe, hair, age) with the episode they take effect from. Later reviews then will not mistake the same change for a defect, and reshoots will not silently revert to the old look.",
+    },
+  ],
+  "ten-episodes-two-weeks": [
+    {
+      question: "两周做十集，一天要产出多少内容？",
+      answer: "按 14 天、每集 2 分钟竖屏剧计算，总量约 20 分钟成片。合理的节奏不是每天平均 1.4 分钟，而是把前期集中压在剧本与角色锁定（第 1–3 天），中期进入批量生成（第 4–10 天，日均 1.5–2 集素材），后期留给剪辑、配音与发布配置（第 11–14 天）。把生成期压缩得越狠，返工率越高。",
+      questionEn: "How much do I need to produce per day to ship ten episodes in two weeks?",
+      answerEn: "Ten episodes of 2-minute vertical drama is roughly 20 minutes of finished video across 14 days. The workable rhythm is not a flat 1.4 minutes per day — it is front-loading script and character locking (days 1–3), batch generation in the middle (days 4–10, about 1.5–2 episodes of raw material per day), then editing, voice, and publish setup (days 11–14). Squeeze the generation window harder and the rework rate climbs.",
+    },
+    {
+      question: "应该一次性做完十集再发，还是边做边发？",
+      answer: "建议先囤 3 集再开播，之后保持日更或隔日更。一次性做完再发会让你失去前 3 集的用户反馈，而竖屏剧的留存曲线在第 1–2 集就基本定型；完全边做边发则没有缓冲，任何一天卡住就会断更。3 集缓冲既能吸收反馈，又能扛住两天的意外延期。",
+      questionEn: "Should I finish all ten episodes before publishing, or publish as I go?",
+      answerEn: "Bank three episodes first, then switch to daily or every-other-day releases. Holding all ten until the end means you lose the audience signal from the first three — and retention curves for vertical drama are basically set by episode 1–2. Publishing with zero buffer is the opposite failure: one blocked day breaks the schedule. A three-episode buffer absorbs feedback and survives a two-day slip.",
+    },
+    {
+      question: "一个人能在两周内独立完成十集吗？",
+      answer: "可以，但前提是砍掉动作戏和群像戏。单人两周节奏下，真正吃掉时间的是物理交互复杂、需要反复重roll的镜头，以及多角色同框。把剧本约束在两到三个角色、以对话驱动的文戏为主，十集两周是可达的；一旦加入追逐、打斗或大场面，同样的周期需要两到三人协作。",
+      questionEn: "Can one person ship ten episodes in two weeks alone?",
+      answerEn: "Yes, but only if you cut action and crowd scenes. On a solo two-week schedule the real time sinks are physically complex shots that need repeated re-rolls, and multi-character frames. Keep the script to two or three characters and dialogue-driven scenes, and ten episodes in two weeks is reachable. Add chases, fights, or large set pieces and the same window needs a team of two or three.",
+    },
+  ],
+  "publish-and-monetize-vertical-drama": [
+    {
+      question: "AI 短剧的变现主要有哪几种方式？",
+      answer: "主流是三层叠加：平台分成（按播放量或有效观看结算）、订阅（粉丝为创作者或整部剧付费）、品牌与定制合作（剧情植入、联名角色）。单靠一层通常收益有限，健康的结构是分成提供基础现金流、订阅提供可预测收入、品牌合作提供峰值收益。选择平台时要重点看分成是否按有效观看而非曝光计算。",
+      questionEn: "What are the main ways to monetize an AI short drama?",
+      answerEn: "The workable model stacks three layers: platform revenue share (paid on views or qualified watches), subscriptions (fans pay for a creator or a whole series), and brand or custom deals (plot integration, co-branded characters). Any single layer is usually thin. A healthy mix has revenue share as baseline cash flow, subscriptions as predictable income, and brand deals as the upside. When picking a platform, check whether the share is calculated on qualified watches rather than impressions.",
+    },
+    {
+      question: "AI 生成的内容，版权归我吗？能否商用？",
+      answer: "取决于你使用的工具条款与所在司法辖区。目前主流商业工具在条款中把生成内容的权利授予付费用户，但各国对纯 AI 生成物的可版权性仍有分歧。稳妥做法是：保留完整的人类创作痕迹（剧本、分镜、角色设定、剪辑决策），确保作品包含实质性人工投入；避免在提示词中指向可识别的真实人物或受版权保护的角色；发布前逐条核对所用工具的商用授权条款。",
+      questionEn: "Do I own the copyright to AI-generated drama, and can I use it commercially?",
+      answerEn: "It depends on your tool's terms and your jurisdiction. Major commercial tools grant paying users rights to their outputs in the terms of service, but jurisdictions still disagree on whether purely AI-generated material is copyrightable at all. The safe posture: keep a full human authorship trail (script, storyboard, character bible, edit decisions) so the work contains substantial human input; never prompt toward identifiable real people or copyrighted characters; and read the commercial licence of every tool before you publish.",
+    },
+    {
+      question: "竖屏剧应该先投一个平台还是多平台同步发？",
+      answer: "冷启动阶段建议先主投一个平台，跑满 2–4 周拿到留存与完播数据后再横向分发。多平台同步发的问题不是工作量，而是你无法判断哪个平台的用户真的在看——数据被摊薄，优化失去方向。等单平台的留存曲线稳定，再把同一部剧以适配各平台规格的版本铺开，此时你已经知道该剪哪一版。",
+      questionEn: "Should I launch on one platform first or publish everywhere at once?",
+      answerEn: "For a cold start, commit to one platform for 2–4 weeks, get retention and completion data, then distribute wider. The problem with a simultaneous multi-platform launch is not workload — it is that you cannot tell which audience is actually watching. Data gets diluted and optimization loses its target. Once the retention curve on one platform is stable, roll the same series out in platform-specific cuts; by then you know which version to lead with.",
+    },
+  ],
+  "script-to-screen-pipeline": [
+    {
+      question: "能不能边写剧本边生成，哪场写完就先生成哪场？",
+      answer: "不建议。剧本阶段改一个设定只要几分钟，但如果这个设定已经生成进前十集的画面，重做就是几十小时。分批写完整季再统一生成，看起来慢，实际是最快的路径。唯一例外是先做一集样片验证风格——那是刻意的前期投入，不是边写边做。",
+      questionEn: "Can I generate scenes as I write them instead of finishing all scripts first?",
+      answerEn: "Not recommended. Changing a premise at the script stage costs minutes; changing it after it has been generated into ten episodes of footage costs tens of hours. Writing the full season in a batch before generating looks slower and is actually the fastest path. The one exception is producing a proof-of-concept episode to validate the visual style — that is deliberate up-front investment, not improvising as you go.",
+    },
+    {
+      question: "镜头表（shot list）是不是一定要做？直接写提示词生成不行吗？",
+      answer: "短片可以不做，整季必须做。镜头表把剧本转成可计数的工单，让你在花掉额度之前就知道要做多少个镜头；没有它，生成就变成即兴发挥，产出的素材拼不起来，成本也无法预估。这是流水线里性价比最高的一步。",
+      questionEn: "Is a shot list really necessary, or can I just write prompts directly?",
+      answerEn: "Optional for a one-off short, mandatory for a season. A shot list turns prose into a countable work order, so you know how many shots you are funding before you spend credits. Without it, generation becomes improvisation: the footage will not assemble and the cost stays unpredictable. It is the highest-value step in the pipeline relative to the effort it takes.",
+    },
+    {
+      question: "阶段关卡会不会把流程拖得很慢？",
+      answer: "关卡增加的只是「检查」，不是「重做」。它的作用是让错误留在便宜的阶段：剧本阶段发现问题改几分钟，生成阶段发现同样的问题要几小时。真正的拖延来自返工，而关卡正是为了减少返工而设的。如果某道关卡总是卡住，说明问题出在上游，不是关卡本身。",
+      questionEn: "Won't stage gates slow the whole pipeline down?",
+      answerEn: "Gates add checking, not rework. Their purpose is to keep mistakes in the stage where they are cheapest: a problem caught in the script costs minutes, the same problem caught after generation costs hours. The real source of delay is rework, and gates exist precisely to reduce it. If a particular gate keeps blocking you, the problem is upstream — not the gate itself.",
+    },
+  ],
+  "fix-ai-video-artifacts": [
+    {
+      question: "为什么提示词写得再详细，手部还是画不对？",
+      answer: "因为手部属于当前生成模型的能力上限，不是提示词能解决的问题。模型对人脸、静态构图和短时长可靠，对手部结构、物理接触和长连续运动不可靠。继续细化提示词只会浪费渲染额度。正确路径是换镜头：改景别避开手部、缩短时长、或把握手换成递东西。",
+      questionEn: "Why do hands still render wrong no matter how detailed my prompt is?",
+      answerEn: "Because hands sit at the current capability limit of generative models — no prompt fixes them. Models are reliable on faces, static framing, and short durations, and unreliable on hand structure, physical contact, and long continuous motion. Adding prompt detail only burns credits. The correct path is to change the shot: reframe to exclude hands, shorten the clip, or replace a handshake with a handoff.",
+    },
+    {
+      question: "一个镜头重跑多少次就该放弃？",
+      answer: "建议硬性上限三次。第一次按要求生成，失败就调一次提示词；第二次改调度（改景别、缩时长、重排动作）；第三次接受兜底方案，用切镜、插入镜头或直接砍掉。无上限的重试是 AI 制作里最大的成本黑洞，而且最后那个镜头通常还是会被剪掉。",
+      questionEn: "How many times should I re-roll a shot before giving up?",
+      answerEn: "Set a hard cap of three. On the first attempt, generate as specified and adjust the prompt once if it fails. On the second, change the staging — reframe, shorten, or restage. On the third, accept a fallback: a cutaway, an insert, or drop the shot. Uncapped retries are the biggest budget sink in AI production, and the shot usually ends up cut anyway.",
+    },
+    {
+      question: "多人同框总是把两张脸融合在一起，怎么解决？",
+      answer: "拆成单人镜头分别生成，再在剪辑里交叉对切，需要时用全景建立空间关系。多身份同框正是身份融合的发生地，硬把两个角色塞进一帧几乎必然出问题。这个做法其实是把传统的镜头覆盖法改用作技术绕行方案，顺带还能给你更多剪辑选择。",
+      questionEn: "Two characters in one frame keep blending into each other. How do I fix it?",
+      answerEn: "Split them into separate singles, generate each independently, then intercut them in the edit — with a wide establishing shot when you need to show spatial relationship. Multi-identity frames are exactly where identity blending happens; forcing two characters into one frame almost always fails. This is standard coverage practice repurposed as a technical workaround, and it gives you more editorial options as a bonus.",
+    },
+  ],
+  "first-vertical-drama-zero-experience": [
+    {
+      question: "完全没做过视频，第一步应该先学什么工具？",
+      answer: "先别学工具，先定范围。把第一部锁死在「两个角色、一个房间、两分钟」——范围大小是能否做完的最强预测因子。工具会在七天的流程里自然学会；真正让新手做不完的从来不是不会用工具，而是一开始就选了需要五个角色和三个场景的题材。",
+      questionEn: "I have never made a video. What tool should I learn first?",
+      answerEn: "Not a tool — your scope. Lock the first episode to two characters, one room, two minutes. Scope is the strongest predictor of whether you finish. You will pick up the tools naturally across the seven-day process. What actually stops beginners is not unfamiliarity with tools; it is choosing a premise that needs five characters and three locations on the first attempt.",
+    },
+    {
+      question: "第一部做多长合适？",
+      answer: "两分钟，大约六个节拍：钩子、转折、升级、反转、悬念、余韵。这是仍能被读作「戏剧」而非「一场戏」的最低结构。更短撑不起故事，更长会让你在第 4 天花光耐心。第二集再考虑加长。",
+      questionEn: "How long should my first episode be?",
+      answerEn: "Two minutes, built from six beats: hook, turn, escalation, reversal, cliffhanger, sting. That is the minimum structure that still reads as drama rather than a single scene. Shorter cannot carry a story; longer will drain your patience by day four. Save the extra length for episode two.",
+    },
+    {
+      question: "第一集发出来没人看，是不是说明不适合做？",
+      answer: "不是。第一集的使命只是「存在」——它教会你整条流水线。竖屏剧的留存曲线在第 1–2 集就基本定型，但那是针对已经跑通流程的创作者。真正决定成败的是第二集：两集之间的那道缝，正是大多数创作者放弃的地方。先做完三集再评估数据。",
+      questionEn: "My first episode got no views. Does that mean I am not cut out for this?",
+      answerEn: "No. The first episode's job is simply to exist — it teaches you the pipeline. Retention curves for vertical drama do get set by episodes 1–2, but that applies to creators who have already run the process end to end. What actually determines the outcome is episode two: the gap between them is where most creators quit. Finish three episodes before you read the data as a verdict.",
+    },
+  ],
+  "ai-drama-budget-under-1000": [
+    {
+      question: "1000 美元够做几集？",
+      answer: "按每分钟 50 美元算，够做 20 个成品分钟——也就是十集两分钟，或二十集一分钟。关键变量不是集数而是总时长；把单集压到 90 秒，同样的钱能做十三集，而且短集的完播率通常更好。",
+      questionEn: "How many episodes does $1,000 actually cover?",
+      answerEn: "At roughly $50 per finished minute, it covers 20 finished minutes — ten two-minute episodes, or twenty one-minute episodes. The variable is total runtime, not episode count. Tighten each episode to 90 seconds and the same budget covers about thirteen episodes, and shorter episodes usually retain better as well.",
+    },
+    {
+      question: "钱不够时，应该先砍画质还是先砍镜头数量？",
+      answer: "先砍镜头数量。一集从 40 个镜头减到 25 个，生成花销降约三分之一，每个留下来的画面仍保持满画质，节奏通常还更好。降低分辨率或模型档位省下的钱差不多，却让每一帧都变差——观众会注意到后者，不会注意到前者。",
+      questionEn: "When money runs short, should I cut quality or cut shots?",
+      answerEn: "Cut shots first. Going from 40 shots to 25 in an episode reduces generation spend by roughly a third while keeping every remaining frame at full quality — and pacing usually improves. Lowering resolution or model tier saves a similar amount but degrades every single frame. Audiences notice the second, not the first.",
+    },
+    {
+      question: "配音和音乐值不值得单独花钱？",
+      answer: "值得，而且优先级高于多加几次渲染。观众对画面瑕疵的容忍度远高于对糟糕声音的容忍度——声音对观感质量的影响不成比例地大。预算里最划算的一项是环境音与房间底噪：几乎不花钱，却能让生成的素材显得「拍出来的」而不是「合成出来的」。",
+      questionEn: "Is it worth paying separately for voice and music?",
+      answerEn: "Yes, and it ranks above spending on extra renders. Audiences tolerate imperfect images far more readily than bad audio; sound has a disproportionate effect on perceived quality. The best value line in the whole budget is ambience and room tone — it costs almost nothing and makes generated footage feel shot rather than synthesised.",
+    },
+  ],
+  "multilingual-localization-workflow": [
+    {
+      question: "先做字幕还是直接配音？",
+      answer: "先做字幕，用字幕测试市场，再给证明了需求的市场配音。配音是本地化里最贵的一步，让它跟随已验证的需求而不是跑在需求前面。判断标准看该语言的完播率与第 1 集到第 2 集的转化，达到了再投声音预算。",
+      questionEn: "Should I start with subtitles or go straight to dubbing?",
+      answerEn: "Subtitles first — use them to test the market, then dub only the markets that demonstrate demand. Dubbing is the most expensive localization step; make it follow proven demand rather than precede it. Judge by completion rate and the episode 1 to 2 transition rate in that language, and only commit voice budget once those clear your bar.",
+    },
+    {
+      question: "字幕翻译时长度怎么控制？",
+      answer: "必须按语言分别设上限，因为膨胀率差异极大：德语和西语相对英文膨胀 20–35%，中文反而收缩 40–50%。按英文节奏做的时间轴，在德语里会溢出、在中文里会显得空。翻译前就要定好每语言的最大字符数与每秒阅读速度。",
+      questionEn: "How do I control subtitle length across languages?",
+      answerEn: "Set per-language limits, because expansion rates differ sharply: German and Spanish expand 20–35% relative to English, while Chinese actually contracts by 40–50%. A track timed for English will overflow in German and look sparse in Chinese. Define maximum characters per line and reading speed per language before translation begins.",
+    },
+    {
+      question: "画面里有文字会影响本地化吗？",
+      answer: "会，而且是硬伤——被模型渲染进像素的文字无法翻译。招牌、手机屏幕、信件上的文字都要在生成阶段就换成空白或抽象形状，把真实文字作为后期叠加层，按语言替换。生成之后再补，意味着重渲染整个镜头。",
+      questionEn: "Does text appearing in the video affect localization?",
+      answerEn: "Yes, and it is a hard blocker — text rendered into pixels by the model cannot be translated. Replace text on signs, phone screens, and letters with blank or abstract shapes at the generation stage, then add the real text as a post-production overlay that can be swapped per language. Retrofitting afterwards means re-rendering the entire shot.",
+    },
+  ],
+  "ai-drama-legal-checklist": [
+    {
+      question: "AI 生成的视频可以直接商用吗？",
+      answer: "取决于工具条款与司法辖区，不能一概而论。稳妥做法是三件事：确认每个生成工具都把商用权利授予付费档位的产出（并记录查看日期）；确认产出中没有可识别的真实人物或受保护角色；保存能证明人类创作投入的草稿与决策记录。大规模商业分发时应请专业律师审查片库。",
+      questionEn: "Can I use AI-generated video commercially as-is?",
+      answerEn: "It depends on your tool's terms and your jurisdiction — there is no universal answer. The safe posture is three things: confirm each generation tool grants commercial rights to paid-tier output (and record the date you checked); confirm the output contains no identifiable real persons or protected characters; and keep drafts and decision records that demonstrate human creative input. For commercial distribution at scale, have qualified counsel review the catalogue.",
+    },
+    {
+      question: "最容易踩的合规坑是什么？",
+      answer: "音乐版权，没有之一。大量「免费」曲库仅限个人使用，不含商用授权，也不覆盖你的分发平台。它是最常见的下架原因，却也是最容易彻底消除的一项——只用明确授予商用权利的曲库，并留存授权凭证。事后换音乐意味着重剪所有受影响的集数。",
+      questionEn: "What is the most common compliance trap?",
+      answerEn: "Music licensing, by a wide margin. A large share of 'free' libraries are personal-use only, carry no commercial licence, and do not cover your distribution platforms. It is the most frequent cause of takedown and also the easiest to eliminate entirely: use only libraries that explicitly grant commercial rights, and keep the receipts. Swapping music after the fact means re-editing every affected episode.",
+    },
+    {
+      question: "提示词里写「某明星风格」算侵权吗？",
+      answer: "风险很高，建议完全避免。生成器能从相当稀薄的描述里产出可辨识的近似形象——职位加外貌描述、艺名、「某某风格」都可能触发。把这类引用全部替换为完全虚构的描述词。如果确实使用了真实人物的参考照片，需要一份明确覆盖合成肖像商业分发的签署授权书；默认你没有。",
+      questionEn: "Is prompting 'in the style of a celebrity' infringement?",
+      answerEn: "The risk is high enough to avoid entirely. Generators can produce recognisable approximations from surprisingly thin descriptions — a job title plus physical traits, a stage name, or 'in the style of' can all trigger it. Replace all such references with fully fictional descriptors. If you did use a real person's reference photo, you need a signed release that explicitly covers commercial distribution of a synthetic likeness. Assume you do not have one.",
     },
   ],
 };

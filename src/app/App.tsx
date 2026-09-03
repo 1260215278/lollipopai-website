@@ -36,17 +36,17 @@ const pageSchemas: Partial<Record<MarketingPage, (locale: string) => object>> = 
     "@type": "AboutPage",
     "mainEntity": {
       "@type": "Organization",
-      "name": "Lollipop AI",
-      "url": "https://www.lollipop.im",
+      "name": "Lollipop Drama",
+      "url": "https://www.lollipop.im/lollipop/",
       "founder": {
         "@type": "Person",
         "name": "James C.",
         "jobTitle": "Co-Founder",
-        "url": "https://www.lollipop.im/about#team",
+        "url": "https://www.lollipop.im/lollipop/about#team",
         "worksFor": {
           "@type": "Organization",
-          "name": "Lollipop AI",
-          "url": "https://www.lollipop.im",
+          "name": "Lollipop Drama",
+          "url": "https://www.lollipop.im/lollipop/",
         },
       },
       "foundingLocation": {
@@ -68,7 +68,7 @@ const pageSchemas: Partial<Record<MarketingPage, (locale: string) => object>> = 
     "@graph": [
       {
         "@type": "SoftwareApplication",
-        "name": "Lollipop AI",
+        "name": "Lollipop Drama",
         "operatingSystem": "iOS, Android",
         "applicationCategory": "EntertainmentApplication",
         "offers": {
@@ -87,19 +87,19 @@ const pageSchemas: Partial<Record<MarketingPage, (locale: string) => object>> = 
           "4K streaming and offline downloads",
           "Available in 100+ countries with multilingual subtitles",
         ],
-        "url": "https://www.lollipop.im/download",
+        "url": "https://www.lollipop.im/lollipop/download",
       },
       {
         "@type": "Product",
-        "name": "Lollipop AI Premium Subscription",
+        "name": "Lollipop Drama Premium Subscription",
         "description": "Premium subscription for ad-free 4K streaming, exclusive dramas, and unlimited offline downloads.",
-        "brand": { "@type": "Brand", "name": "Lollipop AI" },
+        "brand": { "@type": "Brand", "name": "Lollipop Drama" },
         "offers": {
           "@type": "Offer",
           "price": "12.99",
           "priceCurrency": "USD",
           "availability": "https://schema.org/InStock",
-          "url": "https://www.lollipop.im/download",
+          "url": "https://www.lollipop.im/lollipop/download",
         },
         // aggregateRating removed from Product — same reason as above
       },
@@ -108,14 +108,14 @@ const pageSchemas: Partial<Record<MarketingPage, (locale: string) => object>> = 
   creating: () => ({
     "@context": "https://schema.org",
     "@type": "CreativeWork",
-    "name": "Lollipop AI Creation Tools",
+    "name": "Lollipop Drama Creation Tools",
     "description": "AI-powered short drama creation tools including text-to-video, image-to-video, face swap, and style transfer.",
     "creator": {
       "@type": "Organization",
-      "name": "Lollipop AI",
-      "url": "https://www.lollipop.im",
+      "name": "Lollipop Drama",
+      "url": "https://www.lollipop.im/lollipop/",
     },
-    "url": "https://www.lollipop.im/creating",
+    "url": "https://www.lollipop.im/lollipop/creating",
     "hasPart": [
       {
         "@type": "SoftwareApplication",
@@ -148,7 +148,7 @@ const pageSchemas: Partial<Record<MarketingPage, (locale: string) => object>> = 
     "@type": "ContactPage",
     "mainEntity": {
       "@type": "Organization",
-      "name": "Lollipop AI",
+      "name": "Lollipop Drama",
       "telephone": "+65 80742120",
       "email": "business@lollipop.im",
       "address": {

@@ -119,14 +119,14 @@ const AI_PROOF_MAX = 20;
  * 预览保留源分辨率（AI 3222×1842），不再压到 1200 以免弹层发糊。
  */
 const SELF_PROOF_THUMBS: Record<SelfProofKind, string> = {
-  1: "/distribution/copyright-templates/work-registration-thumb.jpg",
-  2: "/distribution/copyright-templates/timestamp-thumb.jpg",
-  3: "/distribution/copyright-templates/ai-engineering-thumb.jpg",
+  1: "/distribution/copyright-templates/work-registration-thumb.webp",
+  2: "/distribution/copyright-templates/timestamp-thumb.webp",
+  3: "/distribution/copyright-templates/ai-engineering-thumb.webp",
 };
 const SELF_PROOF_PREVIEWS: Record<SelfProofKind, string> = {
-  1: "/distribution/copyright-templates/work-registration.jpg",
-  2: "/distribution/copyright-templates/timestamp.jpg",
-  3: "/distribution/copyright-templates/ai-engineering.jpg",
+  1: "/distribution/copyright-templates/work-registration.webp",
+  2: "/distribution/copyright-templates/timestamp.webp",
+  3: "/distribution/copyright-templates/ai-engineering.webp",
 };
 
 /** 作品登记：截图/PDF；时间戳：PDF；AI：仅图片 */

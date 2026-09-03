@@ -1,0 +1,355 @@
+import { useCallback, useEffect, useState } from "react";
+import { AlertCircle, Loader2 } from "lucide-react";
+import { useOutletContext, useSearchParams } from "react-router";
+import { useI18n } from "../../i18n";
+import type { DistributionOutletContext } from "../DistributionLayout";
+import {
+  fetchCourseList,
+  fetchCourseStats,
+  fetchCourseDetail,
+  setShelf,
+  setCoursePin,
+  type PublisherCourseRow,
+  type CourseDetail,
+  type CourseStats,
+} from "../../services/content";
+import { getLanguageTypeList, type LanguageOption } from "../../services/language";
+import { DramaListView } from "../components/content/DramaListView";
+import { DramaDetailView } from "../components/content/DramaDetailView";
+import { EpisodesView } from "../components/content/EpisodesView";
+import { UploadForm } from "../components/content/UploadForm";
+import { createUploadTask, getUploadTask, getUploadTaskByCourseId, removeUploadTask } from "../uploadTaskStore";
+
+type View = "list" | "form" | "detail" | "episodes";
+
+/** 上剧列表每页条数（bug20） */
+const PAGE_SIZE = 12;
+
+interface EpisodesCtx {
+  courseId: number;
+  title: string;
+  plannedEpisodes: number;
+  canEdit: boolean;
+  backTo: "list" | "detail";
+}
+
+/**
+ * 上剧中心。单页内切换：列表 → 详情 → 上剧流程 → 剧集视频。
+ * 全量对接 /publisher/course/**（services/content）。
+ */
+export function ContentPage() {
+  const { messages } = useI18n();
+  const { currentMember } = useOutletContext<DistributionOutletContext>();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const t = messages.distribution.content;
+  const dramaUnit = messages.distribution.overview.unitDrama;
+  const canManageCourse = currentMember?.permissions?.includes("COURSE_MANAGE") === true;
+  const canViewAssignedCourse = currentMember?.permissions?.includes("COURSE_VIEW_ASSIGNED") === true;
+  const canUploadCourse = canManageCourse || canViewAssignedCourse;
+
+  const [view, setView] = useState<View>("list");
+  const [dramas, setDramas] = useState<PublisherCourseRow[]>([]);
+  const [stats, setStats] = useState<CourseStats | null>(null);
+  const [languages, setLanguages] = useState<LanguageOption[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  // 分页（bug20）：每页 12 条，与产品「上传 12 个后需翻页」一致
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
+
+  const [detail, setDetail] = useState<CourseDetail | null>(null);
+  const [detailLoading, setDetailLoading] = useState(false);
+  const [episodesCtx, setEpisodesCtx] = useState<EpisodesCtx | null>(null);
+  const [confirmOffline, setConfirmOffline] = useState<PublisherCourseRow | null>(null);
+  const [activeTaskId, setActiveTaskId] = useState<string | null>(null);
+
+  const loadStats = useCallback(async () => {
+    try {
+      setStats(await fetchCourseStats());
+    } catch {
+      setStats(null);
+    }
+  }, []);
+
+  const loadList = useCallback(async (keyword: string, pageNum: number) => {
+    setLoading(true);
+    try {
+      const res = await fetchCourseList({
+        keyword,
+        page: pageNum,
+        limit: PAGE_SIZE,
+      });
+      setDramas(res.list);
+      setTotalPage(res.totalPage > 0 ? res.totalPage : 1);
+    } catch {
+      // service 已 toast
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // 搜索词变化回到第 1 页
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    void loadStats();
+  }, [loadStats]);
+
+  useEffect(() => {
+    void getLanguageTypeList()
+      .then(setLanguages)
+      .catch(() => setLanguages([]));
+  }, []);
+
+  useEffect(() => {
+    if (!canUploadCourse && view === "form") setView("list");
+  }, [canUploadCourse, view]);
+
+  useEffect(() => {
+    if (!canUploadCourse) return;
+    const requestedTaskId = searchParams.get("uploadTask");
+    if (!requestedTaskId) return;
+    const task = getUploadTask(requestedTaskId);
+    if (!task) {
+      const next = new URLSearchParams(searchParams);
+      next.delete("uploadTask");
+      setSearchParams(next, { replace: true });
+      return;
+    }
+    setActiveTaskId(task.id);
+    setView("form");
+  }, [canUploadCourse, searchParams, setSearchParams]);
+
+  // 按当前页 + 搜索词加载（搜索防抖 300ms）
+  useEffect(() => {
+    const id = setTimeout(() => {
+      void loadList(searchQuery, page);
+    }, 300);
+    return () => clearTimeout(id);
+  }, [searchQuery, page, loadList]);
+
+  const openDetail = async (d: PublisherCourseRow) => {
+    setView("detail");
+    setDetail(null);
+    setDetailLoading(true);
+    try {
+      const data = await fetchCourseDetail(d.courseId);
+      setDetail(data);
+    } catch {
+      setView("list");
+    } finally {
+      setDetailLoading(false);
+    }
+  };
+
+  const openEpisodes = (d: PublisherCourseRow) => {
+    setEpisodesCtx({
+      courseId: d.courseId,
+      title: d.title,
+      plannedEpisodes: d.plannedEpisodes,
+      canEdit: d.canEdit === true,
+      backTo: "list",
+    });
+    setView("episodes");
+  };
+
+  const openEpisodesFromDetail = (cd: CourseDetail) => {
+    setEpisodesCtx({
+      courseId: cd.courseId,
+      title: cd.title,
+      plannedEpisodes: cd.progress.plannedEpisodes,
+      canEdit: cd.canEdit === true,
+      backTo: "detail",
+    });
+    setView("episodes");
+  };
+
+  const openResubmit = (courseId: number, title: string, plannedEpisodes: number) => {
+    if (!canUploadCourse) return;
+    const existing = getUploadTaskByCourseId(courseId);
+    const task =
+      existing ??
+      createUploadTask({
+        courseId,
+        title,
+        totalEpisodes: plannedEpisodes,
+        step: 1,
+      });
+    setActiveTaskId(task.id);
+    setSearchParams({ uploadTask: task.id });
+    setView("form");
+  };
+
+  const handleToggleShelf = (d: PublisherCourseRow) => {
+    if (!canManageCourse) return;
+    if (d.shelfStatus === 1) {
+      setConfirmOffline(d);
+    } else {
+      void setShelf(d.courseId, true).then(() => {
+        void loadStats();
+        void loadList(searchQuery, page);
+      });
+    }
+  };
+
+  const handleTogglePin = (d: PublisherCourseRow) => {
+    if (!canManageCourse) return;
+    const nextPinned = d.publisherPin !== 1;
+    void setCoursePin(d.courseId, nextPinned).then(() => {
+      void loadList(searchQuery, page);
+    });
+  };
+
+  const doConfirmOffline = async () => {
+    if (!confirmOffline || !canManageCourse) return;
+    await setShelf(confirmOffline.courseId, false).catch(() => undefined);
+    setConfirmOffline(null);
+    void loadStats();
+    void loadList(searchQuery, page);
+  };
+
+  const openNewUpload = () => {
+    const task = createUploadTask();
+    setActiveTaskId(task.id);
+    setSearchParams({ uploadTask: task.id });
+    setView("form");
+  };
+
+  const closeUpload = () => {
+    const task = activeTaskId ? getUploadTask(activeTaskId) : null;
+    if (task?.courseId === null) removeUploadTask(task.id);
+    setView("list");
+    setActiveTaskId(null);
+    const next = new URLSearchParams(searchParams);
+    next.delete("uploadTask");
+    setSearchParams(next, { replace: true });
+  };
+
+  /* ── 视图分发 ── */
+  if (view === "form" && canUploadCourse) {
+    const task = activeTaskId ? getUploadTask(activeTaskId) : null;
+    if (!task) {
+      return (
+        <div className="p-8 flex items-center justify-center py-32 text-gray-400">
+          <Loader2 className="w-6 h-6 animate-spin" />
+        </div>
+      );
+    }
+    return (
+      <UploadForm
+        key={task.id}
+        t={t}
+        common={messages.distribution.common}
+        taskId={task.id}
+        resumeCourseId={task.courseId}
+        onCancel={closeUpload}
+        onSubmitted={() => {
+          removeUploadTask(task.id);
+          closeUpload();
+          void loadStats();
+          void loadList(searchQuery, page);
+        }}
+      />
+    );
+  }
+
+  if (view === "detail") {
+    if (detailLoading || !detail) {
+      return (
+        <div className="p-8 flex items-center justify-center py-32 text-gray-400">
+          <Loader2 className="w-6 h-6 animate-spin" />
+        </div>
+      );
+    }
+    return (
+      <DramaDetailView
+        t={t}
+        detail={detail}
+        languages={languages}
+        canUploadCourse={canUploadCourse}
+        onBack={() => setView("list")}
+        onManageEpisodes={() => openEpisodesFromDetail(detail)}
+        onResubmit={() => openResubmit(detail.courseId, detail.title, detail.progress.plannedEpisodes)}
+      />
+    );
+  }
+
+  if (view === "episodes" && episodesCtx) {
+    return (
+      <EpisodesView
+        t={t}
+        courseId={episodesCtx.courseId}
+        title={episodesCtx.title}
+        plannedEpisodes={episodesCtx.plannedEpisodes}
+        canEdit={episodesCtx.canEdit}
+        canUploadCourse={canUploadCourse}
+        onBack={() => setView(episodesCtx.backTo)}
+        onChanged={() => {
+          void loadStats();
+          void loadList(searchQuery, page);
+        }}
+      />
+    );
+  }
+
+  return (
+    <>
+      <DramaListView
+        t={t}
+        dramas={dramas}
+        stats={stats}
+        dramaUnit={dramaUnit}
+        languages={languages}
+        loading={loading}
+        searchQuery={searchQuery}
+        onSearch={setSearchQuery}
+        canUploadCourse={canUploadCourse}
+        canManageCourse={canManageCourse}
+        onUpload={openNewUpload}
+        onViewDetail={(d) => void openDetail(d)}
+        onManageEpisodes={(d) => openEpisodes(d)}
+        onResubmit={(d) => openResubmit(d.courseId, d.title, d.plannedEpisodes)}
+        onToggleShelf={handleToggleShelf}
+        onTogglePin={handleTogglePin}
+        page={page}
+        totalPage={totalPage}
+        onPageChange={setPage}
+      />
+
+      {/* 下架确认弹窗（img_16） */}
+      {confirmOffline && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: "rgba(0,0,0,0.4)" }}>
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden">
+            <div className="p-6">
+              <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center mb-4">
+                <AlertCircle className="w-5 h-5 text-amber-500" />
+              </div>
+              <h3 className="text-gray-900 mb-2" style={{ fontWeight: 700, fontSize: "1rem" }}>
+                {t.offlineConfirmTitle}
+              </h3>
+              <p className="text-sm text-gray-500 leading-relaxed mb-5">{t.offlineConfirmDesc}</p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setConfirmOffline(null)}
+                  className="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  style={{ fontWeight: 500 }}
+                >
+                  {t.cancel}
+                </button>
+                <button
+                  onClick={() => void doConfirmOffline()}
+                  className="flex-1 py-2.5 rounded-xl text-sm text-white transition-colors hover:opacity-90"
+                  style={{ background: "#111111", fontWeight: 600 }}
+                >
+                  {t.offlineConfirmOk}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}

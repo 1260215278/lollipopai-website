@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- tab/favicon 用正方形 App 图标；og-image.png 是 1200×630 分享图，缩到 tab 只剩黑块 -->
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
+
+        <!-- Preconnect to external image CDN for faster image loading -->
+        <link rel="preconnect" href="https://images.unsplash.com" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+
+        <!-- 全局默认 SEO（静态写入；dev 与构建模板共用，无需 JS 即可被爬虫读取）。
+             运行时若路由有专属文案，由 i18n.seo 覆盖；构建时由 prerender-plugin 按路由覆盖。 -->
+        <title>Lollipop Drama — Stream Short Dramas & AI Creator Platform</title>
+        <meta
+            name="description"
+            content="Lollipop Drama: premium short dramas and creator subscriptions worldwide. Everyone can create, creation can be monetized, consumption is an incentive."
+        />
+
+        <!-- Open Graph -->
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Lollipop Drama" />
+        <meta property="og:title" content="Lollipop Drama — Stream Short Dramas & AI Creator Platform" />
+        <meta
+            property="og:description"
+            content="Lollipop Drama: premium short dramas and creator subscriptions worldwide. Everyone can create, creation can be monetized, consumption is an incentive."
+        />
+        <meta property="og:url" content="https://www.lollipop.im/" />
+        <meta property="og:image" content="https://www.lollipop.im/og-image.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@lollipopai" />
+        <meta name="twitter:title" content="Lollipop Drama — Stream Short Dramas & AI Creator Platform" />
+        <meta
+            name="twitter:description"
+            content="Lollipop Drama: premium short dramas and creator subscriptions worldwide. Everyone can create, creation can be monetized, consumption is an incentive."
+        />
+        <meta name="twitter:image" content="https://www.lollipop.im/og-image.png" />
+
+        <!-- Canonical / Robots / hreflang -->
+        <link rel="canonical" href="https://www.lollipop.im/" />
+        <meta
+            name="robots"
+            content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+        />
+        <!--
+            ⚠️ 2026-09-01 止血：原先这里声明了 6 个语言（en + /zh /zh-TW /pt /es /ar），
+            但预渲染只生成英文路径，dist 里没有 /zh/… 等目录 —— Caddy 的
+            `try_files … /index.html` 会把这些 URL 全部 fallback 到英文首页，
+            导致 hreflang 互指链断裂 + 340 个 URL 被判为重复内容。
+            **声明 hreflang 的前提是对应 URL 首屏就有该语言的内容。**
+            生成多语言预渲染 HTML 之后再把 5 个语言加回来。
+            详见 `docs/multilingual-hreflang-gap-2026-09-01.md`。
+        -->
+        <link rel="alternate" hreflang="en" href="https://www.lollipop.im/" />
+        <link rel="alternate" hreflang="x-default" href="https://www.lollipop.im/" />
+
+        <!-- 全局结构化数据（site-schema）：所有页面共用，预渲染不会被覆盖 -->
+        <script type="application/ld+json" id="site-schema">
+            {
+                "@context": "https://schema.org",
+                "@graph": [
+                    {
+                        "@type": "Organization",
+                        "name": "Lollipop Drama",
+                        "url": "https://www.lollipop.im",
+                        "logo": "https://www.lollipop.im/og-image.png",
+                        "slogan": "Everyone Can Create · Creation Can Be Monetized · Consumption Is an Incentive",
+                        "sameAs": [
+                            "https://twitter.com/lollipopai",
+                            "https://www.instagram.com/lollipopai",
+                            "https://www.youtube.com/@lollipopai",
+                            "https://www.tiktok.com/@lollipopai",
+                            "https://www.facebook.com/lollipopai",
+                            "https://play.google.com/store/apps/details?id=com.StargetVenturesLLC.hks"
+                        ],
+                        "contactPoint": {
+                            "@type": "ContactPoint",
+                            "email": "business@lollipop.im",
+                            "contactType": "sales",
+                            "areaServed": "Worldwide"
+                        }
+                    },
+                    {
+                        "@type": "MobileApplication",
+                        "name": "Lollipop Drama",
+                        "operatingSystem": "iOS, Android",
+                        "applicationCategory": "EntertainmentApplication",
+                        "downloadUrl": "https://www.lollipop.im/download",
+                        "offers": {
+                            "@type": "Offer",
+                            "price": "0",
+                            "priceCurrency": "USD"
+                        }
+                    },
+                    {
+                        "@type": "WebSite",
+                        "name": "Lollipop Drama",
+                        "url": "https://www.lollipop.im",
+                        "potentialAction": {
+                            "@type": "SearchAction",
+                            "target": "https://www.lollipop.im/?q={search_term_string}",
+                            "query-input": "required name=search_term_string"
+                        }
+                    },
+                    {
+                        "@type": "BreadcrumbList",
+                        "itemListElement": [
+                            {
+                                "@type": "ListItem",
+                                "position": 1,
+                                "name": "Home",
+                                "item": "https://www.lollipop.im/"
+                            }
+                        ]
+                    },
+                    {
+                        "@type": "FAQPage",
+                        "mainEntity": [
+                            {
+                                "@type": "Question",
+                                "name": "What is Lollipop Drama?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Lollipop Drama is a next-generation global content ecosystem platform offering premium short-drama consumption and creator content subscription services. Built on the belief that everyone can create, creation can be monetized, and consumption is an incentive, Lollipop is committed to becoming 'the OnlyFans of the AI era' — monetizing AI premium series and AI influencers."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "Is Lollipop Drama free to download?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Yes. Lollipop Drama is free to download on the App Store and Google Play. Premium short dramas and advanced AI creation features are available through optional in-app purchases and creator subscriptions."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "How do creators make money on Lollipop Drama?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Creators earn an 80% revenue share - the highest in the industry - from ad revenue, premium subscriptions, tips, and brand sponsorships. AI tools let you produce short dramas in under an hour with no editing experience."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "What AI tools does Lollipop Drama offer?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Lollipop Drama offers four core AI creation tools via its LunoTV 1.5 toolkit: text-to-image, image-to-image, text-to-video, and image/video-to-video, supporting 4K output across 100+ countries."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "Which devices and countries support Lollipop Drama?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Lollipop Drama runs on iOS and Android in 100+ countries with multilingual subtitles (English, Chinese, Portuguese and more), 4K streaming, and offline downloads."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "Can I watch short dramas offline?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Yes. Lollipop Drama supports offline downloads on both iOS and Android. Download any short drama over Wi-Fi and watch it anywhere without an internet connection."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "How many episodes does each short drama have?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Most short dramas on Lollipop Drama have 20-100 episodes, with each episode lasting 1-3 minutes. New episodes are released daily, so you can binge-watch or follow along as the story unfolds."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "What video quality does Lollipop Drama support?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Lollipop Drama supports up to 4K Ultra HD streaming. Video quality automatically adjusts to your network speed to ensure smooth playback on any device."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "Is my personal data safe on Lollipop Drama?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Yes. Lollipop Drama follows strict data protection protocols in compliance with international privacy standards. We never sell user data to third parties. See our Privacy Policy for full details on data collection and usage."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "Can I cancel my subscription anytime?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Yes. Subscriptions can be cancelled at any time through your App Store or Google Play account settings. You will continue to have access to premium content until the end of your current billing period."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "How long does it take to create an AI short drama?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "With Lollipop Drama's AI tools, you can create a complete short drama episode in under an hour. The LunoTV 1.5 toolkit handles scriptwriting, image generation, and video creation, requiring no prior editing experience."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "Do I need editing experience to use AI creation tools?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "No. Lollipop Drama's AI tools are designed for beginners. The LunoTV 1.5 toolkit provides guided workflows for text-to-image, image-to-video, and style transfer, so anyone can create professional-quality short dramas without technical skills."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "What languages are supported on Lollipop Drama?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Lollipop Drama supports English, Chinese (Simplified and Traditional), Portuguese, Spanish, and Arabic subtitles. The app interface is also available in these languages, with more languages being added regularly."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "How do creators withdraw their earnings?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Creators can withdraw their earnings through multiple payment methods including bank transfer, PayPal, and regional payment platforms. The 80% revenue share is calculated from ad revenue, premium subscriptions, tips, and brand sponsorships."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "Can I share my AI-created dramas on social media?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Yes. Creators on Lollipop Drama retain full rights to their AI-generated content and can share it on social media platforms. However, content must comply with our community guidelines and applicable copyright laws."
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        </script>
+
+        <style>
+            html,
+            body {
+                height: 100%;
+                margin: 0;
+            }
+            #root {
+                height: 100%;
+            }
+            /*
+             * FOUC 防护：仅锁背景与基础排版，避免白底闪烁。
+             * 禁止在此写 body/a/h* 的 color —— 这段 <style> 是 unlayered，
+             * 在 CSS Cascade Layers 下会压过 Tailwind @layer utilities
+             *（如 text-white、text-foreground），导致：
+             *   - 橙底按钮白字被 a{color:#ff7e5f} 冲成淡橙
+             *   - 发行中心浅色表单 input 继承 body 浅灰字色变淡
+             * 字色交给 theme.css / 组件 class。
+             */
+            body {
+                background-color: #0a0a0a;
+                font-family: 'Inter', system-ui, -apple-system, sans-serif;
+                line-height: 1.5;
+            }
+            h1, h2, h3, h4, h5, h6 {
+                font-weight: 700;
+                margin: 0;
+            }
+            p {
+                margin: 0;
+            }
+            a {
+                text-decoration: none;
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- 加载遮罩：CSS/JS 未就绪前纯黑屏，彻底杜绝 FOUC 半成品暴露 -->
+        <div id="app-loader" style="position:fixed;inset:0;background:#0a0a0a;z-index:99999;display:flex;align-items:center;justify-content:center;transition:opacity 0.35s ease;">
+            <div style="width:36px;height:36px;border:3px solid rgba(255,126,95,0.15);border-top-color:#ff7e5f;border-radius:50%;animation:app-loader-spin 0.8s linear infinite;"></div>
+        </div>
+        <style>
+            @keyframes app-loader-spin { to { transform:rotate(360deg); } }
+            #app-loader.hidden { opacity:0; pointer-events:none; }
+        </style>
+
+        <div id="root"></div>
+
+        <script>
+            /* 遮罩隐藏策略：CSS 加载完成后即隐藏。
+               logo 的 img 标签已从 SSR 中移除（客户端挂载后渲染），不再需要等待图片下载。
+               Dev 模式无预渲染内容，由 main.tsx 的 hideLoader() 兜底。
+               2 秒超时兜底防止卡死。 */
+            (function() {
+                var loader = document.getElementById('app-loader');
+                function hide() {
+                    if (!loader || loader.classList.contains('hidden')) return;
+                    loader.classList.add('hidden');
+                    setTimeout(function() { loader && loader.remove(); }, 350);
+                }
+                function checkReady() {
+                    var stylesheets = document.querySelectorAll('link[rel="stylesheet"]');
+                    if (stylesheets.length === 0) return; /* CSS 尚未注入 */
+                    /* 检查所有样式表是否已加载 */
+                    var allLoaded = true;
+                    stylesheets.forEach(function(link) {
+                        if (link.sheet) return; /* 已加载 */
+                        allLoaded = false;
+                    });
+                    if (allLoaded) {
+                        hide();
+                    } else {
+                        /* 等待 CSS 加载完成 */
+                        stylesheets.forEach(function(link) {
+                            link.addEventListener('load', hide);
+                            link.addEventListener('error', hide);
+                        });
+                    }
+                }
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', checkReady);
+                } else {
+                    checkReady();
+                }
+                setTimeout(hide, 2000);
+            })();
+        </script>
+
+        <script type="module" src="/src/main.tsx"></script>
+    </body>
+</html>

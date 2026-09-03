@@ -1,0 +1,64 @@
+/**
+ * 发行中心 i18n 命名空间组装
+ * ------------------------------------------------------------------
+ * 各功能模块的文案分文件维护在 ./i18n/*（便于并行开发，各功能各自拥有自己的文件），
+ * 这里组装为单一 distribution 命名空间，再由 ../i18n.tsx 顶层注入到每个语言。
+ * 仍是官网同一套 useI18n() 体系，组件统一 messages.distribution.* 访问。
+ */
+import type { Locale } from "../i18n-types";
+import { common, type CommonMessages } from "./i18n/common";
+import { nav, type NavMessages } from "./i18n/nav";
+import { enroll, type EnrollMessages } from "./i18n/enroll";
+import { overview, type OverviewMessages } from "./i18n/overview";
+import { content, type ContentMessages } from "./i18n/content";
+import { payment, type PaymentMessages } from "./i18n/payment";
+import { earnings, type EarningsMessages } from "./i18n/earnings";
+import { withdraw, type WithdrawMessages } from "./i18n/withdraw";
+import { tenant, type TenantMessages } from "./i18n/tenant";
+import { twoFactor, type TwoFactorMessages } from "./i18n/twoFactor";
+import { members, type MembersMessages } from "./i18n/members";
+import { account, type AccountMessages } from "./i18n/account";
+import { profileSetup, type ProfileSetupMessages } from "./i18n/profileSetup";
+
+export interface DistributionMessages {
+  common: CommonMessages;
+  nav: NavMessages;
+  enroll: EnrollMessages;
+  overview: OverviewMessages;
+  content: ContentMessages;
+  payment: PaymentMessages;
+  earnings: EarningsMessages;
+  withdraw: WithdrawMessages;
+  tenant: TenantMessages;
+  twoFactor: TwoFactorMessages;
+  members: MembersMessages;
+  account: AccountMessages;
+  profileSetup: ProfileSetupMessages;
+}
+
+function compose(locale: Locale): DistributionMessages {
+  return {
+    common: common[locale],
+    nav: nav[locale],
+    enroll: enroll[locale],
+    overview: overview[locale],
+    content: content[locale],
+    payment: payment[locale],
+    earnings: earnings[locale],
+    withdraw: withdraw[locale],
+    tenant: tenant[locale],
+    twoFactor: twoFactor[locale],
+    members: members[locale],
+    account: account[locale],
+    profileSetup: profileSetup[locale],
+  };
+}
+
+export const distributionMessages: Record<Locale, DistributionMessages> = {
+  "zh-CN": compose("zh-CN"),
+  "zh-TW": compose("zh-TW"),
+  en: compose("en"),
+  pt: compose("pt"),
+  es: compose("es"),
+  ar: compose("ar"),
+};

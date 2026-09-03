@@ -1,0 +1,85 @@
+# Lollipop Drama — Caddy Server Configuration
+#
+# Deploy: copy to /etc/caddy/Caddyfile (or import via caddy reload)
+# This config assumes the built dist/ is served from /var/www/lollipop
+# Adjust paths as needed for your deployment.
+
+{$SITE_DOMAIN:www.lollipop.im} {
+	root * /var/www/lollipop
+
+	# Security HTTP headers
+	header {
+		# Force HTTPS (6 months = 15768000 seconds)
+		Strict-Transport-Security "max-age=15768000; includeSubDomains; preload"
+		# Prevent MIME-type sniffing
+		X-Content-Type-Options "nosniff"
+		# Prevent clickjacking (deny all framing)
+		X-Frame-Options "DENY"
+		# Control referrer information sent to external sites
+		Referrer-Policy "strict-origin-when-cross-origin"
+		# Content Security Policy — allow inline (React SPA) + self assets + Unsplash images
+		Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:; media-src 'self' https:; frame-ancestors 'none'"
+		# Permissions Policy — disable unnecessary browser features
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		# Remove server version header
+		-Server
+	}
+
+	# ── /guides → /blog 301 重定向（2026-09-01 内容合并）──
+	# 结构化知识区 /guides 的 9 篇指南已整体迁入 /blog 的「操作指南」分类，
+	# 原 URL 全部永久重定向到新地址，保住已积累的外部链接与索引。
+	# slug 保持不变，因此 /guides/<slug> → /blog/<slug> 是一一对应的。
+	# 列表页与三个分类聚合页统一落到 /blog（新站已无对应聚合页）。
+	#
+	# ⚠️ Caddy 的指令按「最长路径优先」之外还有固定优先级：redir 属于
+	#    rewrite 之前的阶段，放在这里不会被下面的 try_files / file_server 抢先。
+	redir /guides/workflow /blog 301
+	redir /guides/production /blog 301
+	redir /guides/distribution /blog 301
+	redir /guides/character-consistency-workflow /blog/character-consistency-workflow 301
+	redir /guides/ten-episodes-two-weeks /blog/ten-episodes-two-weeks 301
+	redir /guides/publish-and-monetize-vertical-drama /blog/publish-and-monetize-vertical-drama 301
+	redir /guides/script-to-screen-pipeline /blog/script-to-screen-pipeline 301
+	redir /guides/fix-ai-video-artifacts /blog/fix-ai-video-artifacts 301
+	redir /guides/first-vertical-drama-zero-experience /blog/first-vertical-drama-zero-experience 301
+	redir /guides/ai-drama-budget-under-1000 /blog/ai-drama-budget-under-1000 301
+	redir /guides/multilingual-localization-workflow /blog/multilingual-localization-workflow 301
+	redir /guides/ai-drama-legal-checklist /blog/ai-drama-legal-checklist 301
+	# 兜底：/guides 本身及其余路径 → /blog
+	redir /guides* /blog 301
+
+	# Compression: Brotli (preferred) + Gzip fallback
+	# Brotli 压缩率比 gzip 高 15-25%，对 HTML/JS/CSS 效果显著。
+	# 配合 build 阶段生成的 .br / .gz 预压缩文件，Caddy 直接返回无需实时压缩。
+	encode zstd gzip
+
+	# SPA + prerendered static files:
+	# 1. Try exact file (e.g. /about/index.html)
+	# 2. Try directory index (e.g. /about/ -> /about/index.html)
+	# 3. Fall back to index.html (SPA client-side routing)
+	#
+	# IMPORTANT: 子路径部署（如 /lollipop/）下，Caddy 的 try_files {path}/ 不会自动
+	# 追加 index.html，必须显式列出 /index.html 到 try_files，并在 file_server 中
+	# 配置 index 指令，才能正确匹配预渲染的目录索引文件。
+	# 否则 /about、/genre/romance 等无斜杠路径会 fallback 到首页 index.html，
+	# 导致所有子页面返回首页的 SEO 标签（重复内容风险）。
+	try_files {path} {path}/index.html /index.html
+
+	# Serve pre-compressed .br/.gz files when available (build 阶段预生成)
+	file_server {
+		index index.html
+		precompressed zstd gzip
+	}
+
+	# Cache static assets aggressively (hashed filenames are immutable)
+	@assets path /assets/*
+	header @assets Cache-Control "public, max-age=31536000, immutable"
+
+	# HTML files — revalidate to pick up new deploys
+	@html path *.html /
+	header @html Cache-Control "public, max-age=0, must-revalidate"
+
+	# robots.txt and sitemap.xml — serve from root
+	@seo path /robots.txt /sitemap.xml
+	header @seo Cache-Control "public, max-age=3600"
+}

@@ -1,0 +1,67 @@
+# 依赖
+node_modules/
+.pnpm-store/
+.pnpm-cache/
+_node_modules_old/
+
+# 工具/会话状态
+.workbuddy/
+
+# 构建产物
+dist/
+build/
+.cache/
+.parcel-cache/
+.vite/
+
+# 环境变量
+.env
+.env.local
+.env.*.local
+
+# 编辑器/系统
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+Thumbs.db
+
+# 日志
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 测试/覆盖率
+coverage/
+.nyc_output/
+
+# 临时
+*.tmp
+*.bak
+
+# 测试工具产物
+.playwright-mcp/
+
+# Claude Code 会话/worktree 状态
+.claude/
+
+# 部署包
+packages/
+*.tar.gz
+*.zip
+
+# SSH 密钥
+*.pem
+*_ed25519*
+
+# 临时脚本产物
+scripts/__pycache__/
+
+# SEO 审计报告产物
+seo-audit-report/
+
+# 附件/临时下载
+*.html.bak

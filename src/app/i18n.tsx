@@ -70,6 +70,7 @@ const enMessages = {
       { label: "Global Users" },
       { label: "Countries & Regions" },
     ],
+    aiSummary: "Lollipop Drama is an AI-powered short drama creation and streaming platform. Create professional videos from text with LunoTV 1.5, earn 80% revenue share, and reach 1M+ users across 100+ countries worldwide.",
     quickLinks: { blog: "Blog", genres: "Genres", popular: "Popular", aiTools: "AI Tools" },
   },
   trending: {
@@ -484,6 +485,7 @@ const translations: Record<Locale, TranslationMessages> = {
         { label: "全球用户" },
         { label: "国家和地区" },
       ],
+      aiSummary: "Lollipop Drama是AI驱动的短剧创作与消费平台。通过LunoTV 1.5实现文生视频，创作者享受80%收益分成，覆盖全球100+国家和100万+用户。",
       quickLinks: { blog: "博客", genres: "分类", popular: "热门", aiTools: "AI 工具" },
     },
     trending: {
@@ -893,6 +895,7 @@ const translations: Record<Locale, TranslationMessages> = {
         { label: "全球用戶" },
         { label: "國家與地區" },
       ],
+      aiSummary: "Lollipop Drama是AI驅動的短劇創作與消費平台。透過LunoTV 1.5實現文生影片，創作者享受80%收益分成，覆蓋全球100+國家和100萬+用戶。",
       quickLinks: { blog: "部落格", genres: "分類", popular: "熱門", aiTools: "AI 工具" },
     },
     trending: {
@@ -1302,6 +1305,7 @@ const translations: Record<Locale, TranslationMessages> = {
         { label: "Usuários Globais" },
         { label: "Países e Regiões" },
       ],
+      aiSummary: "Lollipop Drama e uma plataforma de criacao e streaming de dramas curtos com IA. Crie videos profissionais a partir de texto com LunoTV 1.5, ganhe 80% da receita e alcance mais de 1 milhao de usuarios em 100+ paises.",
       quickLinks: { blog: "Blog", genres: "Categorias", popular: "Populares", aiTools: "IA" },
     },
     trending: {
@@ -1711,6 +1715,7 @@ const translations: Record<Locale, TranslationMessages> = {
         { label: "Usuarios globales" },
         { label: "Países y regiones" },
       ],
+      aiSummary: "Lollipop Drama es una plataforma de creación y streaming de dramas cortos con IA. Crea videos profesionales desde texto con LunoTV 1.5, gana 80% de los ingresos y llega a más de 1M de usuarios en 100+ países.",
       quickLinks: { blog: "Blog", genres: "Géneros", popular: "Popular", aiTools: "IA" },
     },
     trending: {
@@ -2120,6 +2125,7 @@ const translations: Record<Locale, TranslationMessages> = {
         { label: "مستخدمون عالميون" },
         { label: "دول ومناطق" },
       ],
+      aiSummary: "Lollipop Drama هي منصة إنشاء وبث دراما قصيرة مدعومة بالذكاء الاصطناعي. أنشئ مقاطع فيديو احترافية من النص باستخدام LunoTV 1.5، واحصل على 80% من الإيرادات، ووصل إلى أكثر من مليون مستخدم في 100+ دولة.",
       quickLinks: { blog: "المدونة", genres: "الأنواع", popular: "الأكثر رواجًا", aiTools: "أدوات الذكاء الاصطناعي" },
     },
     trending: {

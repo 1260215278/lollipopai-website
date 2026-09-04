@@ -266,16 +266,16 @@ function getRouteData(): RouteSeoData[] {
   const staticPages: RouteSeoData[] = [
     {
       path: "/",
-      title: "Lollipop Drama — Stream Short Dramas & AI Creator Platform",
+      title: "Lollipop Drama — AI Short Drama Creation & Streaming Platform",
       description:
-        "Lollipop Drama: premium short dramas and creator subscriptions worldwide. Everyone can create, creation can be monetized, consumption is an incentive.",
+        "Lollipop Drama: AI-powered short drama creation and streaming platform. Create videos from text with LunoTV 1.5, earn 80% revenue share. 15,000+ premium dramas, 100+ countries worldwide.",
       // 首页结构化数据交由 index.html 的全局 site-schema（含 WebSite/Organization/FAQPage 等）提供，避免重复
     },
     {
       path: "/about",
-      title: "About Lollipop Drama — AI Short Drama Platform",
+      title: "About Lollipop Drama — AI-Powered Short Drama Platform",
       description:
-        "Lollipop Drama is a joint venture by Nyx Entertainment Group and Korean Cultural Investment Fund, revolutionizing short drama entertainment with AI. 1M+ users across 100+ countries.",
+        "Lollipop Drama is a joint venture by Nyx Entertainment Group and Korean Cultural Investment Fund, revolutionizing short drama entertainment with LunoTV 1.5 AI video generation. 1M+ users across 100+ countries.",
     },
     {
       path: "/creating",
@@ -1214,19 +1214,19 @@ function injectSeoIntoHtml(html: string, data: RouteSeoData): string {
  */
 function injectHomepageContent(html: string): string {
   const content = `
-<h1>Watch & Stream Premium Short Dramas | Lollipop Drama</h1>
-<h2>Everyone Can Create. Creation Can Be Monetized. — Premium Short Dramas & Creator Content Subscriptions</h2>
+<h1>Lollipop Drama — AI Short Drama Creation & Streaming Platform</h1>
+<h2>Create Professional Videos from Text with LunoTV 1.5 · 80% Creator Revenue Share · 15,000+ Premium Dramas</h2>
 <p>
-  Lollipop Drama is a next-generation global content ecosystem platform offering premium short-drama consumption and creator content subscription services — everyone can create, creation can be monetized, and consumption is an incentive.
-  Watch 15,000+ short dramas across 10 genres including Romance, Revenge, Thriller, CEO Drama, Fantasy, Action, Horror, Sci-Fi, Family, and Historical.
-  Create your own AI-generated short dramas with text-to-video, image-to-video, face swap, and style transfer — no editing experience required.
-  Creators earn <strong>80% revenue share</strong>, the highest in the industry. Available on iOS and Android with 1M+ users across 100+ countries.
+  <strong>Lollipop Drama is an AI-powered short drama creation and streaming platform.</strong>
+  Create professional short dramas from text using the LunoTV 1.5 AI toolkit — featuring text-to-video generation, AI image generation, face swap, and style transfer.
+  Watch 15,000+ premium short dramas across 10 genres including Romance, Revenge, Thriller, CEO Drama, Fantasy, Action, Horror, Sci-Fi, Family, and Historical.
+  Creators earn <strong>80% revenue share</strong>, the highest in the industry. Available on iOS and Android with 1M+ users across 100+ countries worldwide.
 </p>
 <ul>
-  <li><strong>15,000+ Premium Short Dramas</strong> — Bite-sized episodes across 10 genres</li>
-  <li><strong>1M+ Global Users</strong> — Available in 100+ countries with multilingual subtitles</li>
-  <li><strong>AI Creation Tools</strong> — LunoTV 1.5: text-to-video, image-to-video, face swap, style transfer</li>
+  <li><strong>AI-Powered Creation</strong> — LunoTV 1.5: text-to-video, image generation, face swap, style transfer</li>
+  <li><strong>15,000+ Premium Short Dramas</strong> — Bite-sized episodes across 10 genres, updated daily</li>
   <li><strong>80% Creator Revenue Share</strong> — Industry-leading monetization for independent creators</li>
+  <li><strong>1M+ Global Users</strong> — Available in 100+ countries with multilingual subtitles</li>
   <li><strong>4K Streaming & Offline Downloads</strong> — Premium viewing experience on iOS and Android</li>
 </ul>
 <p>

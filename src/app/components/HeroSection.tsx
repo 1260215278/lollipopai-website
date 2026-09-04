@@ -146,6 +146,18 @@ export function HeroSection() {
           </p>
         </motion.div>
 
+        {/* AI Summary — TL;DR for GEO（生成式引擎优化：为AI搜索引擎提供清晰的平台定义） */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 1.1 }}
+          className="text-center mt-5 px-6 z-10 relative max-w-3xl mx-auto"
+        >
+          <p className="text-gray-300" style={{ fontSize: "clamp(0.9rem, 1.8vw, 1.05rem)", lineHeight: 1.7, fontWeight: 400, textShadow: "0 1px 10px rgba(0,0,0,0.6)" }}>
+            {messages.hero.aiSummary}
+          </p>
+        </motion.div>
+
         {/* Quick Links — 首页快捷入口（Blog / Genres / Popular / Tools） */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

@@ -249,6 +249,100 @@ export function getEarningsCoursesDropdown(): Promise<EarningsCourseOption[]> {
 }
 
 // ────────────────────────────────────────────────────────────────
+// 会员相关（订阅池分账，看剧会员 P4）—— 真实接口
+// 契约：后端设计稿《2026-09-04 看剧会员/自动续费/订阅池分账》§4.4，字段以下方 interface 注释为准。
+// 后端未上线前接口 404/异常：本层吞掉 toast、返回空，由页面展示空态。
+// ────────────────────────────────────────────────────────────────
+
+/** 会员分账月度行（/publisher/vipPool/months）。金额 USD。 */
+export interface VipPoolMonthRow {
+  /** 月份 yyyy-MM */
+  periodMonth: string;
+  /** 本月在本账户剧上有有效播放的去重会员数 */
+  memberCount: number;
+  /** 当月本账户订阅池分账合计（status=0 为预估、1 为入账定值） */
+  creatorUsd: number;
+  /** 环比百分比（正数为增长），首月无对比为 null */
+  momRate: number | null;
+  /** 0 预估 / 1 已入账 */
+  status: 0 | 1;
+  /** 本账户当月有效播放秒数 */
+  effectiveSeconds: number;
+}
+
+/** 某月每剧明细行（/publisher/vipPool/courses）。 */
+export interface VipPoolCourseRow {
+  courseId: number;
+  courseName: string;
+  courseImg?: string | null;
+  /** 1 账号主页 / 2 全量推荐（与收益明细 publishScope 同口径） */
+  publishScope: 1 | 2;
+  /** 剧方分成档位，0–1 小数或 0–100 百分数（页面两种都兼容） */
+  creatorRatio: number;
+  effectiveSeconds: number;
+  /** 该剧有效时长占全平台百分比 */
+  sharePct: number;
+  memberCount: number;
+  creatorUsd: number;
+  status: 0 | 1;
+}
+
+/** 本月至今实时汇总（/publisher/vipPool/current）。 */
+export interface VipPoolCurrent {
+  periodMonth: string;
+  effectiveSeconds: number;
+  /** 本账户有效时长占全平台百分比 */
+  platformSharePct: number;
+  /** 预估分账 USD */
+  estimatedUsd: number;
+  /** 刷新时间 yyyy-MM-dd HH:mm:ss */
+  refreshTime: string;
+}
+
+export interface VipPoolMonthsQuery {
+  page?: number;
+  limit?: number;
+}
+
+const EMPTY_PAGE = { totalCount: 0, pageSize: 10, totalPage: 0, currPage: 1, list: [] };
+
+/** 会员相关月度列表（倒序）。接口不可用时返回空页。 */
+export async function getVipPoolMonths(query: VipPoolMonthsQuery = {}): Promise<PageResult<VipPoolMonthRow>> {
+  try {
+    const res = await http.get<PageResult<VipPoolMonthRow>>("/publisher/vipPool/months", {
+      params: { page: query.page ?? 1, limit: query.limit ?? 10 },
+      toastOnError: false,
+    });
+    return res && Array.isArray(res.list) ? res : { ...EMPTY_PAGE, list: [] };
+  } catch {
+    return { ...EMPTY_PAGE, list: [] };
+  }
+}
+
+/** 某月每剧明细。接口不可用时返回空数组。 */
+export async function getVipPoolCourses(month: string): Promise<VipPoolCourseRow[]> {
+  try {
+    const res = await http.get<VipPoolCourseRow[]>("/publisher/vipPool/courses", {
+      params: { month },
+      toastOnError: false,
+    });
+    return Array.isArray(res) ? res : [];
+  } catch {
+    return [];
+  }
+}
+
+/** 本月至今实时汇总。接口不可用或无数据返回 null。 */
+export async function getVipPoolCurrent(): Promise<VipPoolCurrent | null> {
+  try {
+    const res = await http.get<VipPoolCurrent | null>("/publisher/vipPool/current", { toastOnError: false });
+    return res && typeof res === "object" && res.periodMonth ? res : null;
+  } catch {
+    return null;
+  }
+}
+
+// ────────────────────────────────────────────────────────────────
 // 结算记录（列表 + 申请结算，bug22）—— 真实接口
 // ────────────────────────────────────────────────────────────────
 

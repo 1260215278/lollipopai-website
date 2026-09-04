@@ -51,6 +51,38 @@ export interface EarningsMessages {
   emptyMonth: string;
   emptyTitle: string;
   emptyDesc: string;
+  /** 收益详情 tab：剧相关 / 会员相关（看剧会员 P4 订阅池分账） */
+  tabDrama: string;
+  tabVip: string;
+  vipHint: string;
+  vipCurrentTitle: string;
+  vipCurrentEffective: string;
+  vipCurrentShare: string;
+  vipCurrentEstimate: string;
+  /** "刷新于 {time}" */
+  vipCurrentRefreshed: string;
+  colMonth: string;
+  colMemberCount: string;
+  colEffectiveDuration: string;
+  colVipIncome: string;
+  colMom: string;
+  colPoolStatus: string;
+  colAction: string;
+  statusEstimated: string;
+  statusPosted: string;
+  actionDetail: string;
+  actionCollapse: string;
+  /** "{month} 每剧明细" */
+  vipDetailTitle: string;
+  colCourse: string;
+  colTier: string;
+  colPlatformShare: string;
+  /** "{h}小时{m}分" / "{h}h {m}m" */
+  durationHm: string;
+  vipEmpty: string;
+  vipDetailEmpty: string;
+  /** 每剧明细：分账金额 */
+  colPayout: string;
 }
 
 export const earnings: Record<Locale, EarningsMessages> = {
@@ -94,6 +126,33 @@ export const earnings: Record<Locale, EarningsMessages> = {
     emptyMonth: "当月暂无收益记录",
     emptyTitle: "暂无收益明细",
     emptyDesc: "请先在「收款管理」中添加收款账户，平台结算后将自动生成收益明细。",
+    tabDrama: "剧相关",
+    tabVip: "会员相关",
+    vipHint: "当月数据每小时刷新，确认入账后固定",
+    vipCurrentTitle: "本月至今",
+    vipCurrentEffective: "有效播放时长",
+    vipCurrentShare: "全平台占比",
+    vipCurrentEstimate: "预估分账",
+    vipCurrentRefreshed: "刷新于 {time}",
+    colMonth: "月份",
+    colMemberCount: "参与会员数",
+    colEffectiveDuration: "有效时长",
+    colVipIncome: "当月会员总收益",
+    colMom: "环比",
+    colPoolStatus: "状态",
+    colAction: "操作",
+    statusEstimated: "预估",
+    statusPosted: "已入账",
+    actionDetail: "查看明细",
+    actionCollapse: "收起",
+    vipDetailTitle: "{month} 每剧明细",
+    colCourse: "剧集",
+    colTier: "档位",
+    colPlatformShare: "全平台占比",
+    durationHm: "{h}小时{m}分",
+    vipEmpty: "暂无会员分账记录",
+    vipDetailEmpty: "该月暂无每剧明细",
+    colPayout: "分账金额",
   },
   "zh-TW": {
     title: "收益明細",
@@ -135,6 +194,33 @@ export const earnings: Record<Locale, EarningsMessages> = {
     emptyMonth: "當月暫無收益記錄",
     emptyTitle: "暫無收益明細",
     emptyDesc: "請先在「收款管理」中新增收款帳戶，平台結算後將自動生成收益明細。",
+    tabDrama: "劇相關",
+    tabVip: "會員相關",
+    vipHint: "當月資料每小時刷新，確認入帳後固定",
+    vipCurrentTitle: "本月至今",
+    vipCurrentEffective: "有效播放時長",
+    vipCurrentShare: "全平台佔比",
+    vipCurrentEstimate: "預估分帳",
+    vipCurrentRefreshed: "刷新於 {time}",
+    colMonth: "月份",
+    colMemberCount: "參與會員數",
+    colEffectiveDuration: "有效時長",
+    colVipIncome: "當月會員總收益",
+    colMom: "環比",
+    colPoolStatus: "狀態",
+    colAction: "操作",
+    statusEstimated: "預估",
+    statusPosted: "已入帳",
+    actionDetail: "查看明細",
+    actionCollapse: "收起",
+    vipDetailTitle: "{month} 每劇明細",
+    colCourse: "劇集",
+    colTier: "檔位",
+    colPlatformShare: "全平台佔比",
+    durationHm: "{h}小時{m}分",
+    vipEmpty: "暫無會員分帳記錄",
+    vipDetailEmpty: "該月暫無每劇明細",
+    colPayout: "分帳金額",
   },
   en: {
     title: "Earnings",
@@ -176,6 +262,33 @@ export const earnings: Record<Locale, EarningsMessages> = {
     emptyMonth: "No records for this month",
     emptyTitle: "No earnings yet",
     emptyDesc: "Add a payment account in Payment Management; earnings details are generated automatically after settlement.",
+    tabDrama: "Drama",
+    tabVip: "Membership",
+    vipHint: "Current month refreshes hourly and is fixed once posted",
+    vipCurrentTitle: "Month to Date",
+    vipCurrentEffective: "Effective Watch Time",
+    vipCurrentShare: "Platform Share",
+    vipCurrentEstimate: "Est. Payout",
+    vipCurrentRefreshed: "Refreshed {time}",
+    colMonth: "Month",
+    colMemberCount: "Members",
+    colEffectiveDuration: "Effective Time",
+    colVipIncome: "Membership Earnings",
+    colMom: "MoM",
+    colPoolStatus: "Status",
+    colAction: "Action",
+    statusEstimated: "Estimated",
+    statusPosted: "Posted",
+    actionDetail: "Details",
+    actionCollapse: "Collapse",
+    vipDetailTitle: "{month} by drama",
+    colCourse: "Drama",
+    colTier: "Tier",
+    colPlatformShare: "Platform Share",
+    durationHm: "{h}h {m}m",
+    vipEmpty: "No membership payouts yet",
+    vipDetailEmpty: "No per-drama details for this month",
+    colPayout: "Payout",
   },
   pt: {
     title: "Receitas",
@@ -217,6 +330,33 @@ export const earnings: Record<Locale, EarningsMessages> = {
     emptyMonth: "Sem registros neste mês",
     emptyTitle: "Ainda sem receitas",
     emptyDesc: "Adicione uma conta de recebimento em Gestão de Recebimento; os detalhes são gerados automaticamente após a liquidação.",
+    tabDrama: "Dramas",
+    tabVip: "Assinatura",
+    vipHint: "O mês atual é atualizado a cada hora e fica fixo após o lançamento",
+    vipCurrentTitle: "Mês até hoje",
+    vipCurrentEffective: "Tempo efetivo assistido",
+    vipCurrentShare: "Participação na plataforma",
+    vipCurrentEstimate: "Repasse estimado",
+    vipCurrentRefreshed: "Atualizado {time}",
+    colMonth: "Mês",
+    colMemberCount: "Membros",
+    colEffectiveDuration: "Tempo efetivo",
+    colVipIncome: "Receita de assinatura",
+    colMom: "Var. mensal",
+    colPoolStatus: "Status",
+    colAction: "Ação",
+    statusEstimated: "Estimado",
+    statusPosted: "Lançado",
+    actionDetail: "Detalhes",
+    actionCollapse: "Recolher",
+    vipDetailTitle: "{month} por drama",
+    colCourse: "Drama",
+    colTier: "Faixa",
+    colPlatformShare: "Participação na plataforma",
+    durationHm: "{h}h {m}min",
+    vipEmpty: "Ainda não há repasses de assinatura",
+    vipDetailEmpty: "Sem detalhes por drama neste mês",
+    colPayout: "Repasse",
   },
   es: {
     title: "Ingresos",
@@ -258,6 +398,33 @@ export const earnings: Record<Locale, EarningsMessages> = {
     emptyMonth: "No hay registros este mes",
     emptyTitle: "Aún no hay ingresos",
     emptyDesc: "Añada una cuenta de cobro en Gestión de cobros; el detalle se genera automáticamente después de la liquidación.",
+    tabDrama: "Dramas",
+    tabVip: "Membresía",
+    vipHint: "El mes actual se actualiza cada hora y queda fijo al contabilizarse",
+    vipCurrentTitle: "Mes en curso",
+    vipCurrentEffective: "Tiempo efectivo de visualización",
+    vipCurrentShare: "Cuota en la plataforma",
+    vipCurrentEstimate: "Reparto estimado",
+    vipCurrentRefreshed: "Actualizado {time}",
+    colMonth: "Mes",
+    colMemberCount: "Miembros",
+    colEffectiveDuration: "Tiempo efectivo",
+    colVipIncome: "Ingresos por membresía",
+    colMom: "Var. mensual",
+    colPoolStatus: "Estado",
+    colAction: "Acción",
+    statusEstimated: "Estimado",
+    statusPosted: "Contabilizado",
+    actionDetail: "Detalles",
+    actionCollapse: "Contraer",
+    vipDetailTitle: "{month} por drama",
+    colCourse: "Drama",
+    colTier: "Nivel",
+    colPlatformShare: "Cuota en la plataforma",
+    durationHm: "{h}h {m}min",
+    vipEmpty: "Aún no hay repartos de membresía",
+    vipDetailEmpty: "Sin detalle por drama este mes",
+    colPayout: "Reparto",
   },
   ar: {
     title: "الأرباح",
@@ -299,5 +466,32 @@ export const earnings: Record<Locale, EarningsMessages> = {
     emptyMonth: "لا توجد سجلات لهذا الشهر",
     emptyTitle: "لا توجد أرباح بعد",
     emptyDesc: "أضف حساب تحصيل في إدارة التحصيل؛ تُنشأ تفاصيل الأرباح تلقائيًا بعد التسوية.",
+    tabDrama: "الدراما",
+    tabVip: "العضوية",
+    vipHint: "يُحدَّث الشهر الحالي كل ساعة ويُثبَّت بعد الترحيل",
+    vipCurrentTitle: "الشهر حتى الآن",
+    vipCurrentEffective: "مدة المشاهدة الفعلية",
+    vipCurrentShare: "الحصة من المنصة",
+    vipCurrentEstimate: "العائد المقدّر",
+    vipCurrentRefreshed: "آخر تحديث {time}",
+    colMonth: "الشهر",
+    colMemberCount: "الأعضاء",
+    colEffectiveDuration: "المدة الفعلية",
+    colVipIncome: "أرباح العضوية",
+    colMom: "التغير الشهري",
+    colPoolStatus: "الحالة",
+    colAction: "إجراء",
+    statusEstimated: "مقدّر",
+    statusPosted: "مُرحَّل",
+    actionDetail: "التفاصيل",
+    actionCollapse: "طيّ",
+    vipDetailTitle: "{month} حسب الدراما",
+    colCourse: "الدراما",
+    colTier: "الفئة",
+    colPlatformShare: "الحصة من المنصة",
+    durationHm: "{h}س {m}د",
+    vipEmpty: "لا توجد عوائد عضوية بعد",
+    vipDetailEmpty: "لا توجد تفاصيل لهذا الشهر",
+    colPayout: "العائد",
   },
 };

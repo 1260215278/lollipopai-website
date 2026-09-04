@@ -268,7 +268,7 @@ function getRouteData(): RouteSeoData[] {
       path: "/",
       title: "Lollipop Drama — AI Short Drama Creation & Streaming Platform",
       description:
-        "Lollipop Drama: AI-powered short drama creation and streaming platform. Create videos from text with LunoTV 1.5, earn 80% revenue share. 15,000+ premium dramas, 100+ countries worldwide.",
+        "Lollipop Drama: AI-powered short drama creation and streaming platform. Create videos from text using built-in AI tools, earn 80% revenue share. 15,000+ premium dramas, 100+ countries worldwide.",
       // 首页 Product + Review Schema（SSR 静态输出，AI 爬虫不执行 JS 也能看到）
       // 全局 site-schema（Organization/WebSite/FAQPage 等）仍由 index.html 提供，两者为独立 script 标签
       schema: {
@@ -306,7 +306,7 @@ function getRouteData(): RouteSeoData[] {
             "@type": "Review",
             author: { "@type": "Person", name: "Carlos M." },
             reviewBody:
-              "LunoTV's AI tools saved me weeks of production time. The face swap feature alone is worth it.",
+              "The AI tools saved me weeks of production time. The face swap feature alone is worth it.",
           },
           {
             "@type": "Review",
@@ -333,7 +333,7 @@ function getRouteData(): RouteSeoData[] {
       path: "/about",
       title: "About Lollipop Drama — AI-Powered Short Drama Platform",
       description:
-        "Lollipop Drama is a joint venture by Nyx Entertainment Group and Korean Cultural Investment Fund, revolutionizing short drama entertainment with LunoTV 1.5 AI video generation. 1M+ users across 100+ countries.",
+        "Lollipop Drama is a joint venture by Nyx Entertainment Group and Korean Cultural Investment Fund, revolutionizing short drama entertainment with built-in AI video generation tools. 1M+ users across 100+ countries.",
     },
     {
       path: "/creating",
@@ -1058,7 +1058,7 @@ function generateLlmsFiles(routes: RouteSeoData[]): void {
     { q: "What is Lollipop Drama?", a: "A next-generation global content ecosystem platform offering premium short-drama consumption and creator content subscription services. Built on the belief that everyone can create, creation can be monetized, and consumption is an incentive, Lollipop Drama is committed to becoming 'the OnlyFans of the AI era'." },
     { q: "Is Lollipop Drama free to download?", a: "Yes. Free on App Store and Google Play; premium dramas and advanced AI features via optional in-app purchases." },
     { q: "How do creators make money on Lollipop Drama?", a: "80% revenue share (industry-highest) from ads, premium subscriptions, tips, and brand sponsorships." },
-    { q: "What AI tools does Lollipop Drama offer?", a: "Four core tools via the LunoTV 1.5 toolkit: text-to-image, image-to-image, text-to-video, and image/video-to-video, supporting 4K output." },
+    { q: "What AI tools does Lollipop Drama offer?", a: "Four core built-in AI creation tools: text-to-image, image-to-image, text-to-video, and image/video-to-video, supporting 4K output." },
     { q: "Which devices and countries support Lollipop Drama?", a: "iOS and Android in 100+ countries, with multilingual subtitles, 4K streaming, and offline downloads." },
     { q: "Can I watch short dramas offline?", a: "Yes. Lollipop Drama supports offline downloads on both iOS and Android for watching anywhere without an internet connection." },
     { q: "How many episodes does each short drama have?", a: "Most short dramas have 20-100 episodes, each lasting 1-3 minutes. New episodes are released daily." },
@@ -1066,7 +1066,7 @@ function generateLlmsFiles(routes: RouteSeoData[]): void {
     { q: "Is my personal data safe on Lollipop Drama?", a: "Yes. We follow strict data protection protocols in compliance with international privacy standards and never sell user data to third parties." },
     { q: "Can I cancel my subscription anytime?", a: "Yes. Subscriptions can be cancelled anytime through App Store or Google Play settings, with access continuing until the end of the billing period." },
     { q: "How long does it take to create an AI short drama?", a: "With Lollipop Drama's AI tools, you can create a complete short drama episode in under an hour, no editing experience required." },
-    { q: "Do I need editing experience to use AI creation tools?", a: "No. The LunoTV 1.5 toolkit provides guided workflows for text-to-image, image-to-video, and style transfer, designed for beginners." },
+    { q: "Do I need editing experience to use AI creation tools?", a: "No. The built-in AI toolkit provides guided workflows for text-to-image, image-to-video, and style transfer, designed for beginners." },
     { q: "What languages are supported on Lollipop Drama?", a: "English, Chinese (Simplified and Traditional), Portuguese, Spanish, and Arabic subtitles and app interface, with more languages being added." },
     { q: "How do creators withdraw their earnings?", a: "Multiple payment methods including bank transfer, PayPal, and regional payment platforms. The 80% revenue share covers ad revenue, subscriptions, tips, and sponsorships." },
     { q: "Can I share my AI-created dramas on social media?", a: "Yes. Creators retain full rights to their AI-generated content and can share it on social media, subject to community guidelines and copyright laws." },
@@ -1273,15 +1273,15 @@ function injectSeoIntoHtml(html: string, data: RouteSeoData): string {
 function injectHomepageContent(html: string): string {
   const content = `
 <h1>Lollipop Drama — AI Short Drama Creation & Streaming Platform</h1>
-<h2>Create Professional Videos from Text with LunoTV 1.5 · 80% Creator Revenue Share · 15,000+ Premium Dramas</h2>
+<h2>Create Professional Videos from Text with AI · 80% Creator Revenue Share · 15,000+ Premium Dramas</h2>
 <p>
   <strong>Lollipop Drama is an AI-powered short drama creation and streaming platform.</strong>
-  Create professional short dramas from text using the LunoTV 1.5 AI toolkit — featuring text-to-video generation, AI image generation, face swap, and style transfer.
+  Create professional short dramas from text using built-in AI tools — featuring text-to-video generation, AI image generation, face swap, and style transfer.
   Watch 15,000+ premium short dramas across 10 genres including Romance, Revenge, Thriller, CEO Drama, Fantasy, Action, Horror, Sci-Fi, Family, and Historical.
   Creators earn <strong>80% revenue share</strong>, the highest in the industry. Available on iOS and Android with 1M+ users across 100+ countries worldwide.
 </p>
 <ul>
-  <li><strong>AI-Powered Creation</strong> — LunoTV 1.5: text-to-video, image generation, face swap, style transfer</li>
+  <li><strong>AI-Powered Creation</strong> — Built-in AI tools: text-to-video, image generation, face swap, style transfer</li>
   <li><strong>15,000+ Premium Short Dramas</strong> — Bite-sized episodes across 10 genres, updated daily</li>
   <li><strong>80% Creator Revenue Share</strong> — Industry-leading monetization for independent creators</li>
   <li><strong>1M+ Global Users</strong> — Available in 100+ countries with multilingual subtitles</li>

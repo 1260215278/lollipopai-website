@@ -46,32 +46,32 @@ export const pageSeoMessages: Record<PageType, Record<SeoLocale, SeoMessages>> =
     "zh-CN": {
       title: "Lollipop Drama — AI短剧创作工具与精品短剧平台 | AI视频生成",
       description:
-        "Lollipop Drama是AI驱动的短剧创作与消费平台，通过LunoTV 1.5提供文生视频等AI创作工具，支持80%收益分成，帮助创作者变现。15000+精品短剧，覆盖100+国家。",
+        "Lollipop Drama是AI驱动的短剧创作与消费平台，内置AI文生视频等创作工具，支持80%收益分成，帮助创作者变现。15000+精品短剧，覆盖100+国家。",
     },
     "zh-TW": {
       title: "Lollipop Drama — AI短劇創作工具與精品短劇平台 | AI影片生成",
       description:
-        "Lollipop Drama是AI驅動的短劇創作與消費平台，透過LunoTV 1.5提供文生影片等AI創作工具，支持80%收益分成，幫助創作者變現。15000+精品短劇，覆蓋100+國家。",
+        "Lollipop Drama是AI驅動的短劇創作與消費平台，內建AI文生影片等創作工具，支持80%收益分成，幫助創作者變現。15000+精品短劇，覆蓋100+國家。",
     },
     en: {
       title: "Lollipop Drama — AI Short Drama Creation & Streaming Platform",
       description:
-        "Lollipop Drama: AI-powered short drama creation and streaming platform. Create videos from text with LunoTV 1.5, earn 80% revenue share. 15,000+ premium dramas, 100+ countries worldwide.",
+        "Lollipop Drama: AI-powered short drama creation and streaming platform. Create videos from text using built-in AI tools, earn 80% revenue share. 15,000+ premium dramas, 100+ countries worldwide.",
     },
     pt: {
       title: "Lollipop Drama — Criação e Streaming de Dramas Curtos com IA",
       description:
-        "Lollipop Drama: plataforma de criação e streaming de dramas curtos com IA. Crie vídeos a partir de texto com LunoTV 1.5, ganhe 80% da receita. 15.000+ dramas premium, 100+ países.",
+        "Lollipop Drama: plataforma de criação e streaming de dramas curtos com IA. Crie vídeos a partir de texto usando ferramentas de IA integradas, ganhe 80% da receita. 15.000+ dramas premium, 100+ países.",
     },
     es: {
       title: "Lollipop Drama — Creación y Streaming de Dramas Cortos con IA",
       description:
-        "Lollipop Drama: plataforma de creación y streaming de dramas cortos con IA. Crea videos desde texto con LunoTV 1.5, gana 80% de los ingresos. 15.000+ dramas premium, 100+ países.",
+        "Lollipop Drama: plataforma de creación y streaming de dramas cortos con IA. Crea videos desde texto usando herramientas de IA integradas, gana 80% de los ingresos. 15.000+ dramas premium, 100+ países.",
     },
     ar: {
       title: "Lollipop Drama — منصة إنشاء وبث دراما قصيرة بالذكاء الاصطناعي",
       description:
-        "Lollipop Drama: منصة إنشاء وبث دراما قصيرة مدعومة بالذكاء الاصطناعي. أنشئ مقاطع فيديو من النص باستخدام LunoTV 1.5، واحصل على 80% من الإيرادات. 15000+ دراما مميزة، 100+ دولة.",
+        "Lollipop Drama: منصة إنشاء وبث دراما قصيرة مدعومة بالذكاء الاصطناعي. أنشئ مقاطع فيديو من النص باستخدام أدوات الذكاء الاصطناعي المدمجة، واحصل على 80% من الإيرادات. 15000+ دراما مميزة، 100+ دولة.",
     },
   },
   about: {

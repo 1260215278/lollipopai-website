@@ -49,7 +49,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       title: "Lollipop Drama at a Glance",
       items: [
         { icon: "video", text: "15,000+ premium short dramas across 10+ genres, updated weekly with new exclusives" },
-        { icon: "ai", text: "4 AI creation tools (Text-to-Image, Image-to-Image, Text-to-Video, Video-to-Video) via LunoTV 1.5" },
+        { icon: "ai", text: "4 AI creation tools (Text-to-Image, Image-to-Image, Text-to-Video, Video-to-Video) built into the platform" },
         { icon: "revenue", text: "80% creator revenue share — highest in the short drama industry" },
         { icon: "global", text: "Available in 100+ countries on iOS & Android with 4K streaming and offline downloads" },
         { icon: "users", text: "1M+ global users and 100K+ quality creators worldwide" },
@@ -58,7 +58,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
     },
     comparison: {
       eyebrow: "AI Tool Comparison",
-      title: "LunoTV 1.5 — Built-in AI Tools of Lollipop Drama",
+      title: "AI Creation Tools — Built into Lollipop Drama",
       headers: ["Tool", "Input", "Output", "Best For"],
       rows: [
         { tool: "Text-to-Image", input: "Text prompt", output: "HD image", bestFor: "Scene visualization, concept art" },
@@ -77,7 +77,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "What AI creation tools does Lollipop Drama offer?",
-          answer: "Lollipop Drama provides four core AI creation tools through LunoTV 1.5: (1) Text-to-Image — generate high-definition images from text prompts; (2) Image-to-Image — edit and personalize existing images with AI styles; (3) Text-to-Video — generate professional videos or short dramas from storyline descriptions; (4) Image/Video-to-Video — create visually striking viral content without editing skills. All tools are beginner-friendly with fast output.",
+          answer: "Lollipop Drama provides four core built-in AI creation tools: (1) Text-to-Image — generate high-definition images from text prompts; (2) Image-to-Image — edit and personalize existing images with AI styles; (3) Text-to-Video — generate professional videos or short dramas from storyline descriptions; (4) Image/Video-to-Video — create visually striking viral content without editing skills. All tools are beginner-friendly with fast output.",
         },
         {
           question: "How many short dramas are available on Lollipop Drama?",
@@ -92,8 +92,8 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
           answer: "Lollipop Drama offers an industry-leading 80% revenue share for creators — the highest in the short drama industry. Creators also get full access to AI creation tools, a dedicated success manager, global distribution across 100+ countries, and monthly bonus rewards for top performers. Some creators have already surpassed 1M+ views.",
         },
         {
-          question: "What is LunoTV?",
-          answer: "LunoTV is the AI creation toolkit integrated into the Lollipop Drama platform (currently version 1.5). It includes text-to-image, image-to-image, text-to-video, and image/video-to-video generation tools. LunoTV is designed to help creators produce professional short dramas and video content with minimal effort — no editing experience required.",
+          question: "What AI tools does Lollipop Drama include?",
+          answer: "Lollipop Drama includes a built-in AI creation toolkit (currently version 1.5) with text-to-image, image-to-image, text-to-video, and image/video-to-video generation tools. The toolkit is designed to help creators produce professional short dramas and video content with minimal effort — no editing experience required.",
         },
         {
           question: "Which countries and regions does Lollipop Drama support?",
@@ -101,7 +101,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "How can I become a creator on Lollipop Drama?",
-          answer: "To become a creator: download the Lollipop Drama app, sign up for an account, and access the Creator Program through the distribution center. Creators receive 80% revenue share, full AI creation tools (LunoTV 1.5), dedicated support, and global distribution. Top creators can earn monthly bonuses and reach 1M+ views. Visit the Creating page for more details.",
+          answer: "To become a creator: download the Lollipop Drama app, sign up for an account, and access the Creator Program through the distribution center. Creators receive 80% revenue share, full built-in AI creation tools, dedicated support, and global distribution. Top creators can earn monthly bonuses and reach 1M+ views. Visit the Creating page for more details.",
         },
       ],
     },
@@ -109,7 +109,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       eyebrow: "Glossary",
       title: "Key Terms Explained",
       items: [
-        { term: "LunoTV 1.5", definition: "The AI creation toolkit within Lollipop Drama, offering text-to-image, image-to-image, text-to-video, and video-to-video generation tools." },
+        { term: "AI Creation Tools", definition: "Built-in AI creation tools within Lollipop Drama, featuring text-to-image, image-to-image, text-to-video, and video-to-video generation capabilities." },
         { term: "Creator Economy", definition: "An economic model where content creators earn revenue from their work. On Lollipop Drama, creators receive 80% revenue share — the highest in the short drama industry." },
         { term: "Short Drama", definition: "Episodic video content with 1-3 minute episodes, designed for mobile viewing. Lollipop Drama hosts 15,000+ titles across 10+ genres." },
         { term: "Text-to-Video (T2V)", definition: "AI technology that converts text descriptions into video content. On Lollipop Drama, users describe a storyline and the system generates a professional short video." },

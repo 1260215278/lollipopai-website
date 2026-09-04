@@ -334,6 +334,49 @@ function getRouteData(): RouteSeoData[] {
       title: "About Lollipop Drama — AI-Powered Short Drama Platform",
       description:
         "Lollipop Drama is a joint venture by Nyx Entertainment Group and Korean Cultural Investment Fund, revolutionizing short drama entertainment with built-in AI video generation tools. 1M+ users across 100+ countries.",
+      schema: withBreadcrumb(
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "Lollipop Drama",
+          "alternateName": "Lollipop",
+          "url": "https://www.lollipop.im",
+          "logo": "https://www.lollipop.im/og-image.png",
+          "foundingDate": "2024",
+          "founder": {
+            "@type": "Person",
+            "name": "Nyx Entertainment Group"
+          },
+          "description": "Lollipop Drama is an AI-powered short drama creation and streaming platform. Built-in AI tools for text-to-video, image generation, face swap, and style transfer. 15,000+ premium dramas, 80% creator revenue share, 1M+ users across 100+ countries.",
+          "slogan": "Everyone Can Create · Creation Can Be Monetized · Consumption Is an Incentive",
+          "sameAs": [
+            "https://twitter.com/lollipopai",
+            "https://www.instagram.com/lollipopai",
+            "https://www.youtube.com/@lollipopai",
+            "https://www.tiktok.com/@lollipopai",
+            "https://www.facebook.com/lollipopai",
+            "https://play.google.com/store/apps/details?id=com.StargetVenturesLLC.hks"
+          ],
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "business@lollipop.im",
+            "telephone": "+65-8074-2120",
+            "contactType": "customer service",
+            "areaServed": "Worldwide"
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "3 Gambas Crescent, Nordcom One",
+            "addressLocality": "Singapore",
+            "postalCode": "757088",
+            "addressCountry": "SG"
+          }
+        },
+        [
+          { name: "Home", url: SITE_URL },
+          { name: "About Lollipop Drama", url: `${SITE_URL}/about` },
+        ],
+      ),
     },
     {
       path: "/creating",
@@ -352,6 +395,61 @@ function getRouteData(): RouteSeoData[] {
       title: "Contact Lollipop Drama — Support & Business",
       description:
         "Contact Lollipop Drama: business@lollipop.im for partnerships, service@lollipop.im for support, +65 80742120. Address: 3 Gambas Crescent, Nordcom One, Singapore 757088.",
+    },
+    {
+      path: "/press",
+      title: "Press & Media — Lollipop Drama AI Short Drama Platform",
+      description:
+        "Lollipop Drama press kit: company overview, media assets, news, and press contact. AI-powered short drama platform with 1M+ users, 15,000+ dramas, 80% creator revenue share across 100+ countries.",
+      schema: withBreadcrumb(
+        {
+          "@context": "https://schema.org",
+          "@type": "MediaGallery",
+          name: "Lollipop Drama Press & Media",
+          description:
+            "Press kit for Lollipop Drama — AI-powered short drama creation and streaming platform. Company overview, news, media assets, and press contact information.",
+          url: `${SITE_URL}/press`,
+          about: {
+            "@type": "Organization",
+            name: "Lollipop Drama",
+            url: "https://www.lollipop.im",
+          },
+        },
+        [
+          { name: "Home", url: SITE_URL },
+          { name: "Press & Media", url: `${SITE_URL}/press` },
+        ],
+      ),
+    },
+    {
+      path: "/glossary",
+      title: "Glossary — AI Short Drama & Creator Economy Terms | Lollipop Drama",
+      description:
+        "Complete glossary of AI short drama, creator economy, and Lollipop Drama platform terms. Definitions for text-to-video, revenue share, micro drama, vertical drama, and more.",
+      schema: withBreadcrumb(
+        {
+          "@context": "https://schema.org",
+          "@type": "DefinedTermSet",
+          name: "Lollipop Drama Glossary",
+          description:
+            "Comprehensive glossary of key terms for AI short drama, creator economy, and Lollipop Drama platform concepts.",
+          url: `${SITE_URL}/glossary`,
+          inLanguage: "en",
+          hasDefinedTerm: [
+            { "@type": "DefinedTerm", name: "AI Creation Tools", description: "Built-in AI creation tools within Lollipop Drama, featuring text-to-image, image-to-image, text-to-video, and video-to-video generation capabilities." },
+            { "@type": "DefinedTerm", name: "Creator Economy", description: "An economic model where content creators earn revenue from their work. On Lollipop Drama, creators receive 80% revenue share." },
+            { "@type": "DefinedTerm", name: "Short Drama", description: "Episodic video content with 1-3 minute episodes, designed for mobile viewing. Lollipop Drama hosts 15,000+ titles across 10+ genres." },
+            { "@type": "DefinedTerm", name: "Text-to-Video (T2V)", description: "AI technology that converts text descriptions into video content." },
+            { "@type": "DefinedTerm", name: "Revenue Share", description: "The percentage of revenue that creators receive from their content. Lollipop Drama offers 80%." },
+            { "@type": "DefinedTerm", name: "Micro Drama", description: "Ultra-short-form episodic content, typically 1-3 minutes per episode, designed for mobile-first consumption." },
+            { "@type": "DefinedTerm", name: "Vertical Drama", description: "Short-form video content shot in vertical (portrait) format, optimized for mobile phone viewing." },
+          ],
+        },
+        [
+          { name: "Home", url: SITE_URL },
+          { name: "Glossary", url: `${SITE_URL}/glossary` },
+        ],
+      ),
     },
     {
       path: "/blog",

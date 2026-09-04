@@ -144,7 +144,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       title: "Lollipop Drama 一览",
       items: [
         { icon: "video", text: "15000+ 精品短剧，覆盖 10+ 题材，每周持续上线独家新作" },
-        { icon: "ai", text: "4 大 AI 创作工具（文生图、图生图、文生视频、视频生视频）通过 LunoTV 1.5 提供" },
+        { icon: "ai", text: "4 大平台内置 AI 创作工具（文生图、图生图、文生视频、视频生视频）" },
         { icon: "revenue", text: "80% 创作者收益分成 — 短剧行业最高水平" },
         { icon: "global", text: "覆盖 100+ 国家和地区，支持 iOS & Android，4K 流媒体与离线下载" },
         { icon: "users", text: "全球 100 万+ 用户，10 万+ 优质创作者" },
@@ -153,7 +153,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
     },
     comparison: {
       eyebrow: "AI 工具对比",
-      title: "LunoTV 1.5 AI 创作工具",
+      title: "AI 创作工具 — Lollipop Drama 内置",
       headers: ["工具", "输入", "输出", "适用场景"],
       rows: [
         { tool: "文生图", input: "文字描述", output: "高清图片", bestFor: "场景可视化、概念图" },
@@ -172,7 +172,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "Lollipop Drama 提供哪些 AI 创作工具？",
-          answer: "通过 LunoTV 1.5 提供四大核心 AI 创作工具：（1）文生图 — 输入文字即可生成高清图片；（2）图生图 — 用 AI 风格编辑和个性化现有图片；（3）文生视频 — 描述剧情即可生成专业视频或短剧；（4）图/视频生视频 — 无需剪辑基础也能制作视觉冲击力强的爆款内容。所有工具操作简单，出片速度快。",
+          answer: "平台内置四大核心 AI 创作工具：（1）文生图 — 输入文字即可生成高清图片；（2）图生图 — 用 AI 风格编辑和个性化现有图片；（3）文生视频 — 描述剧情即可生成专业视频或短剧；（4）图/视频生视频 — 无需剪辑基础也能制作视觉冲击力强的爆款内容。所有工具操作简单，出片速度快。",
         },
         {
           question: "Lollipop Drama 有多少部短剧？",
@@ -187,8 +187,8 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
           answer: "Lollipop Drama 提供行业领先的 80% 收益分成 — 短剧行业最高水平。创作者还可使用全部 AI 创作工具、获得专属成长支持、覆盖 100+ 国家的全球分发，以及头部创作者每月额外奖励。部分创作者已突破 100 万播放。",
         },
         {
-          question: "LunoTV 是什么？",
-          answer: "LunoTV 是集成在 Lollipop Drama 平台中的 AI 创作工具包（当前版本 1.5），包含文生图、图生图、文生视频和图/视频生视频四项生成工具。LunoTV 旨在帮助创作者以最低门槛制作专业短剧和视频内容 — 无需剪辑经验。",
+          question: "AI 创作工具是什么？",
+          answer: "AI 创作工具是 Lollipop Drama 平台内置的工具包（当前版本 1.5），包含文生图、图生图、文生视频和图/视频生视频四项生成工具。旨在帮助创作者以最低门槛制作专业短剧和视频内容 — 无需剪辑经验。",
         },
         {
           question: "Lollipop Drama 支持哪些国家和地区？",
@@ -196,7 +196,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "如何成为 Lollipop Drama 的创作者？",
-          answer: "成为创作者的步骤：下载 Lollipop Drama App，注册账号，通过发行中心进入创作者计划。创作者可获得 80% 收益分成、完整 AI 创作工具（LunoTV 1.5）、专属支持和全球分发。头部创作者可获得每月额外奖励，部分已突破 100 万播放。详情请访问创作页面。",
+          answer: "成为创作者的步骤：下载 Lollipop Drama App，注册账号，通过发行中心进入创作者计划。创作者可获得 80% 收益分成、完整平台内置 AI 创作工具、专属支持和全球分发。头部创作者可获得每月额外奖励，部分已突破 100 万播放。详情请访问创作页面。",
         },
       ],
     },
@@ -204,7 +204,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       eyebrow: "术语表",
       title: "关键术语解释",
       items: [
-        { term: "LunoTV 1.5", definition: "Lollipop Drama 平台内的 AI 创作工具包，提供文生图、图生图、文生视频和视频生视频四项生成工具。" },
+        { term: "AI 创作工具", definition: "Lollipop Drama 平台内置的 AI 创作工具包，提供文生图、图生图、文生视频和视频生视频四项生成工具。" },
         { term: "创作者经济", definition: "创作者从内容中获得收入的经济模式。在 Lollipop Drama 平台，创作者获得 80% 收益分成 — 短剧行业最高。" },
         { term: "短剧", definition: "每集 1-3 分钟的剧集内容，专为移动端设计。Lollipop Drama 拥有 15000+ 部作品，覆盖 10+ 题材。" },
         { term: "文生视频 (T2V)", definition: "将文字描述转化为视频内容的 AI 技术。在 Lollipop Drama 上，用户描述剧情即可生成专业短视频。" },
@@ -239,7 +239,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       title: "Lollipop Drama 一覽",
       items: [
         { icon: "video", text: "15000+ 精品短劇，覆蓋 10+ 題材，每週持續上線獨家新作" },
-        { icon: "ai", text: "4 大 AI 創作工具（文生圖、圖生圖、文生影片、影片生影片）通過 LunoTV 1.5 提供" },
+        { icon: "ai", text: "4 大平台內建 AI 創作工具（文生圖、圖生圖、文生影片、影片生影片）" },
         { icon: "revenue", text: "80% 創作者收益分成 — 短劇行業最高水平" },
         { icon: "global", text: "覆蓋 100+ 國家和地區，支援 iOS & Android，4K 串流與離線下載" },
         { icon: "users", text: "全球 100 萬+ 用戶，10 萬+ 優質創作者" },
@@ -248,7 +248,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
     },
     comparison: {
       eyebrow: "AI 工具對比",
-      title: "LunoTV 1.5 AI 創作工具",
+      title: "AI 創作工具 — Lollipop Drama 內建",
       headers: ["工具", "輸入", "輸出", "適用場景"],
       rows: [
         { tool: "文生圖", input: "文字描述", output: "高清圖片", bestFor: "場景視覺化、概念圖" },
@@ -267,7 +267,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "Lollipop Drama 提供哪些 AI 創作工具？",
-          answer: "通過 LunoTV 1.5 提供四大核心 AI 創作工具：（1）文生圖 — 輸入文字即可生成高清圖片；（2）圖生圖 — 用 AI 風格編輯和個性化現有圖片；（3）文生影片 — 描述劇情即可生成專業影片或短劇；（4）圖/影片生影片 — 無需剪輯基礎也能製作視覺衝擊力強的爆款內容。所有工具操作簡單，出片速度快。",
+          answer: "平台內建四大核心 AI 創作工具：（1）文生圖 — 輸入文字即可生成高清圖片；（2）圖生圖 — 用 AI 風格編輯和個性化現有圖片；（3）文生影片 — 描述劇情即可生成專業影片或短劇；（4）圖/影片生影片 — 無需剪輯基礎也能製作視覺衝擊力強的爆款內容。所有工具操作簡單，出片速度快。",
         },
         {
           question: "Lollipop Drama 有多少部短劇？",
@@ -282,8 +282,8 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
           answer: "Lollipop Drama 提供行業領先的 80% 收益分成 — 短劇行業最高水平。創作者還可使用全部 AI 創作工具、獲得專屬成長支持、覆蓋 100+ 國家的全球分發，以及頭部創作者每月額外獎勵。部分創作者已突破 100 萬播放。",
         },
         {
-          question: "LunoTV 是什麼？",
-          answer: "LunoTV 是集成在 Lollipop Drama 平台中的 AI 創作工具包（當前版本 1.5），包含文生圖、圖生圖、文生影片和圖/影片生影片四項生成工具。LunoTV 旨在幫助創作者以最低門檻製作專業短劇和影片內容 — 無需剪輯經驗。",
+          question: "AI 創作工具是什麼？",
+          answer: "AI 創作工具是 Lollipop Drama 平台內建的工具包（當前版本 1.5），包含文生圖、圖生圖、文生影片和圖/影片生影片四項生成工具。旨在幫助創作者以最低門檻製作專業短劇和影片內容 — 無需剪輯經驗。",
         },
         {
           question: "Lollipop Drama 支援哪些國家和地區？",
@@ -291,7 +291,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "如何成為 Lollipop Drama 的創作者？",
-          answer: "成為創作者的步驟：下載 Lollipop Drama App，註冊帳號，通過發行中心進入創作者計畫。創作者可獲得 80% 收益分成、完整 AI 創作工具（LunoTV 1.5）、專屬支持和全球分發。頭部創作者可獲得每月額外獎勵，部分已突破 100 萬播放。詳情請訪問創作頁面。",
+          answer: "成為創作者的步驟：下載 Lollipop Drama App，註冊帳號，通過發行中心進入創作者計畫。創作者可獲得 80% 收益分成、完整平台內建 AI 創作工具、專屬支持和全球分發。頭部創作者可獲得每月額外獎勵，部分已突破 100 萬播放。詳情請訪問創作頁面。",
         },
       ],
     },
@@ -299,7 +299,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       eyebrow: "術語表",
       title: "關鍵術語解釋",
       items: [
-        { term: "LunoTV 1.5", definition: "Lollipop Drama 平台內的 AI 創作工具包，提供文生圖、圖生圖、文生影片和影片生影片四項生成工具。" },
+        { term: "AI 創作工具", definition: "Lollipop Drama 平台內建的 AI 創作工具包，提供文生圖、圖生圖、文生影片和影片生影片四項生成工具。" },
         { term: "創作者經濟", definition: "創作者從內容中獲得收入的經濟模式。在 Lollipop Drama 平台，創作者獲得 80% 收益分成 — 短劇行業最高。" },
         { term: "短劇", definition: "每集 1-3 分鐘的劇集內容，專為行動端設計。Lollipop Drama 擁有 15000+ 部作品，覆蓋 10+ 題材。" },
         { term: "文生影片 (T2V)", definition: "將文字描述轉化為影片內容的 AI 技術。在 Lollipop Drama 上，用戶描述劇情即可生成專業短影片。" },
@@ -334,7 +334,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       title: "Lollipop Drama em Resumo",
       items: [
         { icon: "video", text: "15.000+ dramas curtos premium em 10+ generos, com novos exclusivos toda semana" },
-        { icon: "ai", text: "4 ferramentas de criacao com IA (Texto-para-Imagem, Imagem-para-Imagem, Texto-para-Video, Video-para-Video) via LunoTV 1.5" },
+        { icon: "ai", text: "4 ferramentas de criacao com IA integradas (Texto-para-Imagem, Imagem-para-Imagem, Texto-para-Video, Video-para-Video)" },
         { icon: "revenue", text: "80% de participacao na receita para criadores — a maior do setor de drama curto" },
         { icon: "global", text: "Disponivel em 100+ paises no iOS e Android com streaming 4K e downloads offline" },
         { icon: "users", text: "1M+ usuarios globais e 100K+ criadores de qualidade no mundo todo" },
@@ -343,7 +343,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
     },
     comparison: {
       eyebrow: "Comparacao de Ferramentas IA",
-      title: "Ferramentas de Criacao LunoTV 1.5",
+      title: "Ferramentas de Criacao com IA — Integradas na Lollipop Drama",
       headers: ["Ferramenta", "Entrada", "Saida", "Ideal Para"],
       rows: [
         { tool: "Texto-para-Imagem", input: "Prompt de texto", output: "Imagem HD", bestFor: "Visualizacao de cenas, arte conceitual" },
@@ -362,7 +362,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "Quais ferramentas de criacao com IA a Lollipop Drama oferece?",
-          answer: "A Lollipop Drama oferece quatro ferramentas principais atraves do LunoTV 1.5: (1) Texto-para-Imagem — gere imagens em alta definicao a partir de prompts; (2) Imagem-para-Imagem — edite e personalize imagens com estilos de IA; (3) Texto-para-Video — gere videos profissionais ou dramas curtos a partir de descricoes de enredo; (4) Imagem/Video-para-Video — crie conteudo viral impactante sem habilidades de edicao.",
+          answer: "A Lollipop Drama oferece quatro ferramentas principais integradas: (1) Texto-para-Imagem — gere imagens em alta definicao a partir de prompts; (2) Imagem-para-Imagem — edite e personalize imagens com estilos de IA; (3) Texto-para-Video — gere videos profissionais ou dramas curtos a partir de descricoes de enredo; (4) Imagem/Video-para-Video — crie conteudo viral impactante sem habilidades de edicao.",
         },
         {
           question: "Quantos dramas curtos estao disponiveis na Lollipop Drama?",
@@ -377,8 +377,8 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
           answer: "A Lollipop Drama oferece 80% de participacao na receita para criadores — a maior do setor de drama curto. Os criadores tambem tem acesso completo as ferramentas de IA, gerente de sucesso dedicado, distribuicao global em 100+ paises e bonus mensais para os melhores desempenhos. Alguns criadores ja superaram 1M+ de visualizacoes.",
         },
         {
-          question: "O que e LunoTV?",
-          answer: "LunoTV e o kit de ferramentas de criacao com IA integrado na plataforma Lollipop Drama (versao atual 1.5). Inclui geracao de texto-para-imagem, imagem-para-imagem, texto-para-video e imagem/video-para-video. O LunoTV foi projetado para ajudar criadores a produzir dramas curtos profissionais com minimo esforco — sem experiencia em edicao.",
+          question: "Quais ferramentas de IA estao incluidas?",
+          answer: "A Lollipop Drama inclui um kit de ferramentas de criacao com IA integrado (versao atual 1.5), com geracao de texto-para-imagem, imagem-para-imagem, texto-para-video e imagem/video-para-video. Foi projetado para ajudar criadores a produzir dramas curtos profissionais com minimo esforco — sem experiencia em edicao.",
         },
         {
           question: "Quais paises e regioes a Lollipop Drama suporta?",
@@ -386,7 +386,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "Como me tornar um criador na Lollipop Drama?",
-          answer: "Para se tornar um criador: baixe o app Lollipop Drama, cadastre-se e acesse o Programa de Criadores pelo centro de distribuicao. Os criadores recebem 80% de participacao na receita, ferramentas completas de IA (LunoTV 1.5), suporte dedicado e distribuicao global. Os melhores criadores podem ganhar bonus mensais e alcancar 1M+ de views.",
+          answer: "Para se tornar um criador: baixe o app Lollipop Drama, cadastre-se e acesse o Programa de Criadores pelo centro de distribuicao. Os criadores recebem 80% de participacao na receita, ferramentas completas de IA integradas, suporte dedicado e distribuicao global. Os melhores criadores podem ganhar bonus mensais e alcancar 1M+ de views.",
         },
       ],
     },
@@ -394,7 +394,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       eyebrow: "Glossario",
       title: "Termos-Chave Explicados",
       items: [
-        { term: "LunoTV 1.5", definition: "O kit de ferramentas de IA dentro da Lollipop Drama, oferecendo geracao de texto-para-imagem, imagem-para-imagem, texto-para-video e video-para-video." },
+        { term: "Ferramentas de IA", definition: "Ferramentas de criacao com IA integradas na Lollipop Drama, oferecendo geracao de texto-para-imagem, imagem-para-imagem, texto-para-video e video-para-video." },
         { term: "Economia de Criadores", definition: "Um modelo economico onde criadores de conteudo ganham receita com seu trabalho. Na Lollipop Drama, os criadores recebem 80% de participacao na receita." },
         { term: "Drama Curto", definition: "Conteudo de video episodico com episodios de 1-3 minutos, projetado para visualizacao no celular. A Lollipop Drama tem 15.000+ titulos em 10+ generos." },
         { term: "Texto-para-Video (T2V)", definition: "Tecnologia de IA que converte descricoes de texto em conteudo de video. Na Lollipop Drama, os usuarios descrevem um enredo e o sistema gera um video curto profissional." },
@@ -429,7 +429,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       title: "Lollipop Drama de un vistazo",
       items: [
         { icon: "video", text: "Más de 15.000 dramas cortos premium en 10+ géneros, actualizados cada semana con exclusivos nuevos" },
-        { icon: "ai", text: "4 herramientas de creación con IA (Texto a imagen, Imagen a imagen, Texto a video, Video a video) vía LunoTV 1.5" },
+        { icon: "ai", text: "4 herramientas de creación con IA integradas (Texto a imagen, Imagen a imagen, Texto a video, Video a video)" },
         { icon: "revenue", text: "80% de participación en ingresos para creadores — la más alta del sector de drama corto" },
         { icon: "global", text: "Disponible en más de 100 países en iOS y Android, con streaming 4K y descargas sin conexión" },
         { icon: "users", text: "Más de 1 millón de usuarios globales y 100.000+ creadores de calidad en el mundo" },
@@ -438,7 +438,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
     },
     comparison: {
       eyebrow: "Comparación de herramientas de IA",
-      title: "Herramientas de creación LunoTV 1.5",
+      title: "Herramientas de Creación con IA — Integradas en Lollipop Drama",
       headers: ["Herramienta", "Entrada", "Salida", "Ideal para"],
       rows: [
         { tool: "Texto a imagen", input: "Prompt de texto", output: "Imagen HD", bestFor: "Visualización de escenas, arte conceptual" },
@@ -457,7 +457,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "¿Qué herramientas de creación con IA ofrece Lollipop Drama?",
-          answer: "Lollipop Drama ofrece cuatro herramientas principales a través de LunoTV 1.5: (1) Texto a imagen — genere imágenes de alta definición a partir de prompts de texto; (2) Imagen a imagen — edite y personalice imágenes existentes con estilos de IA; (3) Texto a video — genere videos profesionales o dramas cortos a partir de descripciones de trama; (4) Imagen/Video a video — cree contenido viral impactante sin habilidades de edición. Todas las herramientas son fáciles de usar y de salida rápida.",
+          answer: "Lollipop Drama ofrece cuatro herramientas principales integradas: (1) Texto a imagen — genere imágenes de alta definición a partir de prompts de texto; (2) Imagen a imagen — edite y personalice imágenes existentes con estilos de IA; (3) Texto a video — genere videos profesionales o dramas cortos a partir de descripciones de trama; (4) Imagen/Video a video — cree contenido viral impactante sin habilidades de edición. Todas las herramientas son fáciles de usar y de salida rápida.",
         },
         {
           question: "¿Cuántos dramas cortos hay en Lollipop Drama?",
@@ -472,8 +472,8 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
           answer: "Lollipop Drama ofrece un 80% de participación en ingresos para creadores — la más alta del sector de drama corto. Los creadores también tienen acceso completo a las herramientas de IA, un gestor de éxito dedicado, distribución global en más de 100 países y bonificaciones mensuales para los de mejor desempeño. Algunos creadores ya superaron 1 millón de reproducciones.",
         },
         {
-          question: "¿Qué es LunoTV?",
-          answer: "LunoTV es el kit de herramientas de creación con IA integrado en la plataforma Lollipop Drama (versión actual 1.5). Incluye generación de texto a imagen, imagen a imagen, texto a video e imagen/video a video. LunoTV está diseñado para ayudar a los creadores a producir dramas cortos y videos profesionales con el mínimo esfuerzo, sin experiencia de edición.",
+          question: "¿Qué herramientas de IA incluye Lollipop Drama?",
+          answer: "Lollipop Drama incluye un kit de herramientas de creación con IA integrado (versión actual 1.5), con generación de texto a imagen, imagen a imagen, texto a video e imagen/video a video. Está diseñado para ayudar a los creadores a producir dramas cortos y videos profesionales con el mínimo esfuerzo, sin experiencia de edición.",
         },
         {
           question: "¿Qué países y regiones admite Lollipop Drama?",
@@ -481,7 +481,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "¿Cómo puedo ser creador en Lollipop Drama?",
-          answer: "Para ser creador: descargue la app Lollipop Drama, cree una cuenta y acceda al Programa de creadores a través del centro de distribución. Los creadores reciben 80% de participación en ingresos, herramientas completas de IA (LunoTV 1.5), soporte dedicado y distribución global. Los mejores creadores pueden ganar bonificaciones mensuales y alcanzar más de 1 millón de reproducciones. Visite la página de Creación para más detalles.",
+          answer: "Para ser creador: descargue la app Lollipop Drama, cree una cuenta y acceda al Programa de creadores a través del centro de distribución. Los creadores reciben 80% de participación en ingresos, herramientas completas de IA integradas, soporte dedicado y distribución global. Los mejores creadores pueden ganar bonificaciones mensuales y alcanzar más de 1 millón de reproducciones. Visite la página de Creación para más detalles.",
         },
       ],
     },
@@ -489,7 +489,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       eyebrow: "Glosario",
       title: "Términos clave explicados",
       items: [
-        { term: "LunoTV 1.5", definition: "El kit de herramientas de IA dentro de Lollipop Drama, con generación de texto a imagen, imagen a imagen, texto a video y video a video." },
+        { term: "Herramientas de IA", definition: "Herramientas de creación con IA integradas en Lollipop Drama, con generación de texto a imagen, imagen a imagen, texto a video y video a video." },
         { term: "Economía de creadores", definition: "Un modelo económico en el que los creadores de contenido ganan ingresos con su trabajo. En Lollipop Drama, los creadores reciben 80% de participación en ingresos — la más alta del sector de drama corto." },
         { term: "Drama corto", definition: "Contenido de video por episodios de 1-3 minutos, diseñado para verse en el celular. Lollipop Drama tiene más de 15.000 títulos en 10+ géneros." },
         { term: "Texto a video (T2V)", definition: "Tecnología de IA que convierte descripciones de texto en contenido de video. En Lollipop Drama, el usuario describe una trama y el sistema genera un video corto profesional." },
@@ -524,7 +524,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       title: "Lollipop Drama في لمحة",
       items: [
         { icon: "video", text: "أكثر من 15000 دراما قصيرة متميزة عبر أكثر من 10 أنواع، تُحدَّث أسبوعيًا بأعمال حصرية جديدة" },
-        { icon: "ai", text: "4 أدوات إنشاء بالذكاء الاصطناعي (نص إلى صورة، صورة إلى صورة، نص إلى فيديو، فيديو إلى فيديو) عبر LunoTV 1.5" },
+        { icon: "ai", text: "4 أدوات إنشاء مدمجة بالذكاء الاصطناعي (نص إلى صورة، صورة إلى صورة، نص إلى فيديو، فيديو إلى فيديو)" },
         { icon: "revenue", text: "80% حصة إيرادات للمبدعين — الأعلى في قطاع الدراما القصيرة" },
         { icon: "global", text: "متاح في أكثر من 100 دولة على iOS وAndroid مع بث 4K وتنزيلات دون اتصال" },
         { icon: "users", text: "أكثر من مليون مستخدم عالمي و100 ألف+ مبدع جودة حول العالم" },
@@ -533,7 +533,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
     },
     comparison: {
       eyebrow: "مقارنة أدوات الذكاء الاصطناعي",
-      title: "أدوات إنشاء LunoTV 1.5",
+      title: "أدوات الإنشاء بالذكاء الاصطناعي — مدمجة في Lollipop Drama",
       headers: ["الأداة", "المدخل", "المخرج", "الأنسب لـ"],
       rows: [
         { tool: "نص إلى صورة", input: "أمر نصي", output: "صورة عالية الدقة", bestFor: "تصور المشاهد، الفن المفاهيمي" },
@@ -552,7 +552,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "ما أدوات الإنشاء بالذكاء الاصطناعي التي يقدمها Lollipop Drama؟",
-          answer: "يقدم Lollipop Drama أربع أدوات أساسية عبر LunoTV 1.5: (1) نص إلى صورة — توليد صور عالية الدقة من أوامر نصية؛ (2) صورة إلى صورة — تحرير الصور الحالية وتخصيصها بأساليب الذكاء الاصطناعي؛ (3) نص إلى فيديو — توليد فيديوهات احترافية أو دراما قصيرة من وصف القصة؛ (4) صورة/فيديو إلى فيديو — إنشاء محتوى فيروسي بصري دون مهارات مونتاج. جميع الأدوات سهلة للمبتدئين وسريعة الإخراج.",
+          answer: "يقدم Lollipop Drama أربع أدوات أساسية مدمجة: (1) نص إلى صورة — توليد صور عالية الدقة من أوامر نصية؛ (2) صورة إلى صورة — تحرير الصور الحالية وتخصيصها بأساليب الذكاء الاصطناعي؛ (3) نص إلى فيديو — توليد فيديوهات احترافية أو دراما قصيرة من وصف القصة؛ (4) صورة/فيديو إلى فيديو — إنشاء محتوى فيروسي بصري دون مهارات مونتاج. جميع الأدوات سهلة للمبتدئين وسريعة الإخراج.",
         },
         {
           question: "كم عدد الدراما القصيرة المتاحة على Lollipop Drama؟",
@@ -567,8 +567,8 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
           answer: "يقدم Lollipop Drama حصة إيرادات رائدة في القطاع بنسبة 80% للمبدعين — الأعلى في قطاع الدراما القصيرة. يحصل المبدعون أيضًا على وصول كامل لأدوات الذكاء الاصطناعي ومدير نجاح مخصص وتوزيع عالمي في أكثر من 100 دولة ومكافآت شهرية للمتفوقين. تجاوز بعض المبدعين بالفعل مليون مشاهدة.",
         },
         {
-          question: "ما هو LunoTV؟",
-          answer: "LunoTV هو حزمة أدوات الإنشاء بالذكاء الاصطناعي المدمجة في منصة Lollipop Drama (الإصدار الحالي 1.5). يشمل توليد النص إلى صورة والصورة إلى صورة والنص إلى فيديو والصورة/الفيديو إلى فيديو. صُمم LunoTV لمساعدة المبدعين على إنتاج دراما قصيرة ومحتوى فيديو احترافي بأقل جهد — دون خبرة في المونتاج.",
+          question: "ما الأدوات الذكية التي تتضمنها Lollipop Drama؟",
+          answer: "تتضمن Lollipop Drama حزمة أدوات إنشاء بالذكاء الاصطناعي مدمجة (الإصدار الحالي 1.5)، وتشمل توليد النص إلى صورة والصورة إلى صورة والنص إلى فيديو والصورة/الفيديو إلى فيديو. صُممت لمساعدة المبدعين على إنتاج دراما قصيرة ومحتوى فيديو احترافي بأقل جهد — دون خبرة في المونتاج.",
         },
         {
           question: "ما الدول والمناطق التي يدعمها Lollipop Drama؟",
@@ -576,7 +576,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         },
         {
           question: "كيف أصبح مبدعًا على Lollipop Drama؟",
-          answer: "لتصبح مبدعًا: نزّل تطبيق Lollipop Drama، وأنشئ حسابًا، وادخل برنامج المبدعين عبر مركز التوزيع. يحصل المبدعون على 80% حصة إيرادات وأدوات إنشاء كاملة بالذكاء الاصطناعي (LunoTV 1.5) ودعم مخصص وتوزيع عالمي. يمكن لكبار المبدعين كسب مكافآت شهرية والوصول إلى أكثر من مليون مشاهدة. زر صفحة الإنشاء لمزيد من التفاصيل.",
+          answer: "لتصبح مبدعًا: نزّل تطبيق Lollipop Drama، وأنشئ حسابًا، وادخل برنامج المبدعين عبر مركز التوزيع. يحصل المبدعون على 80% حصة إيرادات وأدوات إنشاء كاملة مدمجة بالذكاء الاصطناعي ودعم مخصص وتوزيع عالمي. يمكن لكبار المبدعين كسب مكافآت شهرية والوصول إلى أكثر من مليون مشاهدة. زر صفحة الإنشاء لمزيد من التفاصيل.",
         },
       ],
     },
@@ -584,7 +584,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       eyebrow: "مسرد المصطلحات",
       title: "شرح المصطلحات الأساسية",
       items: [
-        { term: "LunoTV 1.5", definition: "حزمة أدوات الذكاء الاصطناعي داخل Lollipop Drama، وتوفر توليد النص إلى صورة والصورة إلى صورة والنص إلى فيديو والفيديو إلى فيديو." },
+        { term: "أدوات الذكاء الاصطناعي", definition: "أدوات إنشاء بالذكاء الاصطناعي مدمجة في Lollipop Drama، وتوفر توليد النص إلى صورة والصورة إلى صورة والنص إلى فيديو والفيديو إلى فيديو." },
         { term: "اقتصاد المبدعين", definition: "نموذج اقتصادي يكسب فيه منشئو المحتوى إيرادات من أعمالهم. على Lollipop Drama يحصل المبدعون على 80% حصة إيرادات — الأعلى في قطاع الدراما القصيرة." },
         { term: "الدراما القصيرة", definition: "محتوى فيديو حلقات مدتها 1-3 دقائق، مصمم للمشاهدة على الجوال. يستضيف Lollipop Drama أكثر من 15000 عنوان عبر أكثر من 10 أنواع." },
         { term: "نص إلى فيديو (T2V)", definition: "تقنية ذكاء اصطناعي تحول الأوصاف النصية إلى محتوى فيديو. على Lollipop Drama يصف المستخدم قصة ويولد النظام فيديو قصيرًا احترافيًا." },

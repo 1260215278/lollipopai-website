@@ -35,6 +35,8 @@ import {
   PrivacyPolicyPage,
   TermsOfServicePage,
 } from "./app/pages/LegalDocumentPage";
+import { PressPage } from "./app/components/PressPage";
+import { GlossaryPage } from "./app/components/GlossaryPage";
 
 /**
  * 渲染指定路由为完整 HTML 字符串。
@@ -72,6 +74,10 @@ export function renderRoute(path: string): string {
           {/* 法律文档 */}
           <Route path="/privacy" element={<PrivacyPolicyPage />} />
           <Route path="/terms" element={<TermsOfServicePage />} />
+          {/* Press 媒体页 — GEO 权威信号 */}
+          <Route path="/press" element={<PressPage />} />
+          {/* Glossary 术语表 — GEO 知识节点 */}
+          <Route path="/glossary" element={<GlossaryPage />} />
           {/* 登录 / 找回密码（noindex，但仍需正确正文——否则会被 * 兜底成首页） */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />

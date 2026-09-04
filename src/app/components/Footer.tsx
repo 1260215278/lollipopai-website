@@ -12,12 +12,17 @@ export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) 
   //    `messages.footer.links[item.key]` **动态取键**，写错不会报错，只会渲染成空白。
   //    （2026-09-01 补 `aboutUs`：/about 此前只有首页 FAQ 区块一条内链，
   //     其余 60+ 页面无入口；放进 Footer 后全站可达，About 页也是信任/EEAT 信号。）
+  //    （2026-09-04 补 `press` / `glossary`：GEO 权威信号 + 知识节点，全站可达。）
   const websiteLinks = [
     { key: "home", page: "home", to: "/" },
     { key: "creating", page: "creating", to: "/creating" },
     { key: "download", page: "download", to: "/download" },
     { key: "aboutUs", page: "about", to: "/about" },
     { key: "contactUs", page: "contact", to: "/contact" },
+  ] as const;
+  const extraLinks = [
+    { label: "Press & Media", to: "/press" },
+    { label: "Glossary", to: "/glossary" },
   ] as const;
 
   // Explore links — internal links to genre/blog pages for SEO crawling
@@ -113,6 +118,18 @@ export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) 
                   </Link>
                 </li>
               ))}
+              {extraLinks.map((item) => (
+                <li key={item.to}>
+                  <Link
+                    to={item.to}
+                    className="text-gray-400 hover:text-white transition-colors"
+                    style={{ fontSize: "0.85rem" }}
+                    onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -177,6 +194,22 @@ export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) 
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             >
               {messages.common.termsOfService}
+            </Link>
+            <Link
+              to="/press"
+              className="text-gray-500 hover:text-white transition-colors"
+              style={{ fontSize: "0.8rem" }}
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            >
+              Press
+            </Link>
+            <Link
+              to="/glossary"
+              className="text-gray-500 hover:text-white transition-colors"
+              style={{ fontSize: "0.8rem" }}
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            >
+              Glossary
             </Link>
           </div>
           <p className="text-gray-600" style={{ fontSize: "0.75rem" }}>

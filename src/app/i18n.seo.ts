@@ -78,32 +78,32 @@ export const pageSeoMessages: Record<PageType, Record<SeoLocale, SeoMessages>> =
     "zh-CN": {
       title: "关于 Lollipop Drama — AI驱动的全球短剧娱乐平台",
       description:
-        "Lollipop Drama由香港Nyx Entertainment Group与韩国文化投资基金联合打造，通过LunoTV 1.5 AI视频生成技术革新短剧娱乐，已覆盖100万+全球用户和100+国家。",
+        "Lollipop Drama由香港Nyx Entertainment Group与韩国文化投资基金联合打造，通过内置AI视频生成技术革新短剧娱乐，已覆盖100万+全球用户和100+国家。",
     },
     "zh-TW": {
       title: "關於 Lollipop Drama — AI驅動的全球短劇娛樂平台",
       description:
-        "Lollipop Drama由香港Nyx Entertainment Group與韓國文化投資基金聯合打造，透過LunoTV 1.5 AI影片生成技術革新短劇娛樂，已覆蓋100萬+全球用戶和100+國家。",
+        "Lollipop Drama由香港Nyx Entertainment Group與韓國文化投資基金聯合打造，透過內建AI影片生成技術革新短劇娛樂，已覆蓋100萬+全球用戶和100+國家。",
     },
     en: {
       title: "About Lollipop Drama — AI-Powered Short Drama Platform",
       description:
-        "Lollipop Drama is a joint venture by Nyx Entertainment Group and Korean Cultural Investment Fund, revolutionizing short drama entertainment with LunoTV 1.5 AI video generation. 1M+ users across 100+ countries.",
+        "Lollipop Drama is a joint venture by Nyx Entertainment Group and Korean Cultural Investment Fund, revolutionizing short drama entertainment with built-in AI video generation tools. 1M+ users across 100+ countries.",
     },
     pt: {
       title: "Sobre a Lollipop Drama — Plataforma de Dramas com IA",
       description:
-        "A Lollipop Drama e uma joint venture da Nyx Entertainment Group com o Fundo Coreano de Investimento Cultural, revolucionando dramas com a tecnologia LunoTV 1.5 de geracao de video por IA.",
+        "A Lollipop Drama e uma joint venture da Nyx Entertainment Group com o Fundo Coreano de Investimento Cultural, revolucionando dramas com ferramentas integradas de geracao de video por IA.",
     },
     es: {
       title: "Acerca de Lollipop Drama — Plataforma de dramas con IA",
       description:
-        "Lollipop Drama es una joint venture de Nyx Entertainment Group y el Fondo Coreano de Inversión Cultural, que transforma el entretenimiento con la tecnología LunoTV 1.5 de generación de video por IA. Más de 1M de usuarios en 100+ países.",
+        "Lollipop Drama es una joint venture de Nyx Entertainment Group y el Fondo Coreano de Inversión Cultural, que transforma el entretenimiento con herramientas integradas de generación de video por IA. Más de 1M de usuarios en 100+ países.",
     },
     ar: {
       title: "حول Lollipop Drama — منصة دراما قصيرة مدعومة بالذكاء الاصطناعي",
       description:
-        "Lollipop Drama مشروع مشترك بين Nyx Entertainment Group وصندوق الاستثمار الثقافي الكوري، يحدث ترفيه الدراما القصيرة بتقنية LunoTV 1.5 لتوليد الفيديو بالذكاء الاصطناعي. أكثر من مليون مستخدم في 100+ دولة.",
+        "Lollipop Drama مشروع مشترك بين Nyx Entertainment Group وصندوق الاستثمار الثقافي الكوري، يحدث ترفيه الدراما القصيرة بأدوات مدمجة لتوليد الفيديو بالذكاء الاصطناعي. أكثر من مليون مستخدم في 100+ دولة.",
     },
   },
   creating: {

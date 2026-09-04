@@ -71,7 +71,7 @@ const enMessages = {
       { label: "Countries & Regions" },
     ],
     aiSummary: "Lollipop Drama is an AI-powered short drama creation and streaming platform. Create professional videos from text with LunoTV 1.5, earn 80% revenue share, and reach 1M+ users across 100+ countries worldwide.",
-    quickLinks: { blog: "Blog", genres: "Genres", popular: "Popular", aiTools: "AI Tools" },
+    quickLinks: { blog: "AI Drama Blog", genres: "Browse Genres", popular: "Popular Dramas", aiTools: "AI Creator Tools" },
   },
   trending: {
     eyebrow: "Trending Now",
@@ -102,24 +102,24 @@ const enMessages = {
   },
   aiFeatures: {
     eyebrow: "AI-Powered Creation",
-    title: "Create with AI, Stream on Luno TV",
-    description: "Luno TV brings revolutionary AI creation tools to every storyteller — generate, edit, and publish your short dramas directly to a global audience.",
+    title: "Create with LunoTV 1.5 — Built into Lollipop Drama",
+    description: "LunoTV 1.5 is the AI creation toolkit built into Lollipop Drama. It brings revolutionary AI tools to every storyteller — generate images, swap faces, create videos from text, and publish your short dramas directly to a global audience of 1M+ users.",
     features: [
       {
         title: "AI Image Generation",
-        desc: "Create stunning scene visuals with text prompts. Bring your creative vision to life instantly.",
+        desc: "Create stunning scene visuals and character art with simple text prompts. Bring your creative vision to life instantly.",
       },
       {
         title: "AI Face Swap",
-        desc: "Seamlessly swap character faces with advanced deep-learning technology for perfect continuity.",
+        desc: "Seamlessly swap character faces with advanced deep-learning technology for perfect continuity across episodes.",
       },
       {
-        title: "AI Video Creation",
-        desc: "Transform scripts into cinematic short clips. Auto-generate transitions, effects and voiceovers.",
+        title: "Text-to-Video Creation",
+        desc: "Transform scripts into cinematic short clips automatically. Generate transitions, effects and voiceovers with one click.",
       },
       {
         title: "Style Transfer",
-        desc: "Apply cinematic color grading and visual styles from your favorite films with one click.",
+        desc: "Apply cinematic color grading and visual styles from your favorite films and anime with a single click.",
       },
     ],
   },
@@ -235,11 +235,11 @@ const enMessages = {
   },
   creator: {
     eyebrow: "Creator Program",
-    title: "Become the Next Million-View Creator",
-    description: "Lollipop offers the industry's highest revenue share and comprehensive creative support for quality creators. Let great content receive the rewards it deserves.",
+    title: "Earn 80% Revenue Share — Highest in the Industry",
+    description: "Lollipop Drama offers the highest creator revenue share in the short drama industry — 80%, powered by LunoTV 1.5 AI tools. We provide comprehensive creative support so great content receives the rewards it deserves.",
     benefits: [
-      "80% revenue share — highest in the industry",
-      "Full AI creation toolkit access",
+      "80% revenue share — highest in the short drama industry",
+      "Full LunoTV 1.5 AI creation toolkit access",
       "Dedicated creator success manager",
       "Global distribution across 100+ countries",
       "Monthly bonus rewards for top performers",

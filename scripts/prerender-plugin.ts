@@ -269,7 +269,65 @@ function getRouteData(): RouteSeoData[] {
       title: "Lollipop Drama — AI Short Drama Creation & Streaming Platform",
       description:
         "Lollipop Drama: AI-powered short drama creation and streaming platform. Create videos from text with LunoTV 1.5, earn 80% revenue share. 15,000+ premium dramas, 100+ countries worldwide.",
-      // 首页结构化数据交由 index.html 的全局 site-schema（含 WebSite/Organization/FAQPage 等）提供，避免重复
+      // 首页 Product + Review Schema（SSR 静态输出，AI 爬虫不执行 JS 也能看到）
+      // 全局 site-schema（Organization/WebSite/FAQPage 等）仍由 index.html 提供，两者为独立 script 标签
+      schema: {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        name: "Lollipop Drama — Short Drama Platform",
+        description:
+          "AI-powered short drama platform with 15,000+ premium shows, AI creation tools, and 80% creator revenue share.",
+        review: [
+          {
+            "@type": "Review",
+            author: { "@type": "Person", name: "Sarah M." },
+            reviewBody:
+              "The AI tools are incredible. I made my first drama in a weekend and it already has 50k views. The 80% revenue share is unreal.",
+          },
+          {
+            "@type": "Review",
+            author: { "@type": "Person", name: "James K." },
+            reviewBody:
+              "As a creator, the revenue share is unbeatable. I earned more here in months than elsewhere in a year.",
+          },
+          {
+            "@type": "Review",
+            author: { "@type": "Person", name: "Elena R." },
+            reviewBody:
+              "Best short drama app I've ever used. 4K quality is amazing and the AI recommendations are spot on.",
+          },
+          {
+            "@type": "Review",
+            author: { "@type": "Person", name: "Yuki T." },
+            reviewBody:
+              "The variety of genres is incredible. I watch at least one drama every day during my commute.",
+          },
+          {
+            "@type": "Review",
+            author: { "@type": "Person", name: "Carlos M." },
+            reviewBody:
+              "LunoTV's AI tools saved me weeks of production time. The face swap feature alone is worth it.",
+          },
+          {
+            "@type": "Review",
+            author: { "@type": "Person", name: "Amira H." },
+            reviewBody:
+              "Beautiful interface and great content. Love the Arabic subtitles and offline download feature.",
+          },
+          {
+            "@type": "Review",
+            author: { "@type": "Person", name: "Mike D." },
+            reviewBody:
+              "Way better than ReelShort. More original content and the AI-generated shows are actually good.",
+          },
+          {
+            "@type": "Review",
+            author: { "@type": "Person", name: "Lisa W." },
+            reviewBody:
+              "The creator support team is amazing. They helped me optimize my drama for maximum earnings.",
+          },
+        ],
+      },
     },
     {
       path: "/about",

@@ -58,7 +58,7 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
     },
     comparison: {
       eyebrow: "AI Tool Comparison",
-      title: "LunoTV 1.5 AI Creation Tools",
+      title: "LunoTV 1.5 — Built-in AI Tools of Lollipop Drama",
       headers: ["Tool", "Input", "Output", "Best For"],
       rows: [
         { tool: "Text-to-Image", input: "Text prompt", output: "HD image", bestFor: "Scene visualization, concept art" },

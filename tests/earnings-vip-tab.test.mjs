@@ -7,6 +7,8 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
 const read = (rel) => readFileSync(new URL("../" + rel, import.meta.url), "utf8");
+const flagsSource = read("src/app/distribution/featureFlags.ts");
+const VIP_ENABLED = /VIP_POOL_EARNINGS_ENABLED\s*=\s*true/.test(flagsSource);
 
 test("service: vipPool 三接口走 /publisher/vipPool/*，接口未上线时静默降级", () => {
   const src = read("src/app/services/settlement.ts");
@@ -19,9 +21,17 @@ test("service: vipPool 三接口走 /publisher/vipPool/*，接口未上线时静
   assert.ok(/status: 0 \| 1;/.test(vipSection), "status must be typed 0 预估 / 1 已入账");
 });
 
-test("page: 收益详情有 剧相关/会员相关 切换，会员相关消费三接口并支持每剧明细展开", () => {
+test("page: 收益详情的 会员相关 Tab 在开关下呈现：开关开=完整呈现；关=被隐藏且代码被特性开关包裹", () => {
   const src = read("src/app/distribution/pages/EarningsPage.tsx");
   assert.ok(/useState<"drama" \| "vip">\("drama"\)/.test(src), "default tab must stay 剧相关");
+  if (!VIP_ENABLED) {
+    // 关闭时：分段开关与 vipSection 必须被特性开关包裹且默认仅展示「剧相关」
+    assert.ok(/VIP_POOL_EARNINGS_ENABLED && \(/.test(src), "segment switch must be gated by VIP_POOL_EARNINGS_ENABLED");
+    assert.ok(/VIP_POOL_EARNINGS_ENABLED \? \(detailTab === "drama" \? t\.updatedDaily : t\.vipHint\) : t\.updatedDaily/.test(src), "hint text must be gated by flag");
+    assert.ok(/VIP_POOL_EARNINGS_ENABLED && detailTab === "vip" \?/.test(src), "vip section render must be gated by flag");
+    return;
+  }
+  // 开启时：完整功能可见且调用三接口
   for (const fn of ["getVipPoolMonths", "getVipPoolCourses", "getVipPoolCurrent"]) {
     assert.ok(new RegExp(`\\b${fn}\\(`).test(src), `EarningsPage should call ${fn}`);
   }

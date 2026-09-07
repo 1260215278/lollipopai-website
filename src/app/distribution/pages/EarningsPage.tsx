@@ -38,9 +38,6 @@ function formatDuration(seconds: number | null | undefined, template: string): s
   return template.replace("{h}", String(h)).replace("{m}", String(m));
 }
 
-/** 百分比（后端已是百分数），空值 "--"。 */
-const formatPct = (n: number | null | undefined) => (n == null ? "--" : `${Number(n).toFixed(2)}%`);
-
 /** 环比：带正号，首月无对比为 "--"。 */
 const formatMom = (n: number | null | undefined) => (n == null ? "--" : `${Number(n) > 0 ? "+" : ""}${Number(n).toFixed(1)}%`);
 
@@ -395,8 +392,8 @@ export function EarningsPage() {
 
   const vipCols = [t.colMonth, t.colMemberCount, t.colEffectiveDuration, t.colVipIncome, t.colMom, t.colPoolStatus, t.colAction];
   const vipGrid = "grid-cols-[120px_130px_170px_180px_110px_110px_minmax(120px,1fr)]";
-  const courseCols = [t.colCourse, t.colType, t.colShare, t.colEffectiveDuration, t.colPlatformShare, t.colMemberCount, t.colPayout, t.colPoolStatus];
-  const courseGrid = "grid-cols-[minmax(220px,1fr)_140px_80px_150px_110px_110px_120px_100px]";
+  const courseCols = [t.colCourse, t.colType, t.colShare, t.colEffectiveDuration, t.colMemberCount, t.colPayout, t.colPoolStatus];
+  const courseGrid = "grid-cols-[minmax(220px,1fr)_140px_80px_150px_110px_120px_100px]";
   const poolStatusLabel = (status: 0 | 1) => (status === 1 ? t.statusPosted : t.statusEstimated);
 
   /** 会员相关：本月至今汇总 + 按月列表（点开一个月 → 每剧明细） */
@@ -409,7 +406,6 @@ export function EarningsPage() {
           </span>
           {[
             { label: t.vipCurrentEffective, val: formatDuration(vipCurrent.effectiveSeconds, t.durationHm), accent: false },
-            { label: t.vipCurrentShare, val: formatPct(vipCurrent.platformSharePct), accent: false },
             { label: t.vipCurrentEstimate, val: usd(vipCurrent.estimatedUsd), accent: true },
           ].map((item, i) => (
             <div key={i} className="flex items-baseline gap-1.5">
@@ -524,7 +520,6 @@ export function EarningsPage() {
                                     <span className="text-xs text-gray-600 whitespace-nowrap tabular-nums">
                                       {formatDuration(c.effectiveSeconds, t.durationHm)}
                                     </span>
-                                    <span className="text-xs text-gray-600 whitespace-nowrap tabular-nums">{formatPct(c.sharePct)}</span>
                                     <span className="text-xs text-gray-600 whitespace-nowrap tabular-nums">{c.memberCount}</span>
                                     <span className="text-sm text-[#101828] whitespace-nowrap tabular-nums" style={{ fontWeight: 700 }}>
                                       {usd(c.creatorUsd)}

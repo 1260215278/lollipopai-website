@@ -34,10 +34,10 @@ test("page: 收益详情有 剧相关/会员相关 切换，会员相关消费�
 test("i18n: 会员相关文案 6 语言齐全", () => {
   const src = read("src/app/distribution/i18n/earnings.ts");
   const keys = [
-    "tabDrama", "tabVip", "vipHint", "vipCurrentTitle", "vipCurrentEffective", "vipCurrentShare", "vipCurrentEstimate",
+    "tabDrama", "tabVip", "vipHint", "vipCurrentTitle", "vipCurrentEffective", "vipCurrentEstimate",
     "vipCurrentRefreshed", "colMonth", "colMemberCount", "colEffectiveDuration", "colVipIncome", "colMom", "colPoolStatus",
     "colAction", "statusEstimated", "statusPosted", "actionDetail", "actionCollapse", "vipDetailTitle", "colCourse", "colShare",
-    "colPlatformShare", "durationHm", "vipEmpty", "vipDetailEmpty", "colPayout",
+    "durationHm", "vipEmpty", "vipDetailEmpty", "colPayout",
   ];
   for (const key of keys) {
     const declared = new RegExp(`^  ${key}: string;`, "m").test(src);
@@ -81,6 +81,7 @@ test("format: 时长/环比/分成比例", () => {
   assert.ok(/label=\{`\$\{typeLabel\(c\.publishScope\)\} \$\{platformCreatorLabel\(c\.creatorRatio\)\}`\.trim\(\)\}/.test(page), "type badge must carry platform:creator ratio");
   assert.ok(/\{shareRatioLabel\(c\.creatorRatio\)\}/.test(page), "ratio column must render shareRatioLabel");
   assert.ok(!/colTier|tierLabel|档位/.test(page), "no leftover 档位 naming");
+  assert.ok(!/colPlatformShare|vipCurrentShare|platformSharePct|sharePct/.test(page), "全平台占比 is hidden from the vip tab (card + per-drama column)");
   assert.equal(formatDuration(3661, "{h}小时{m}分"), "1小时1分");
   assert.equal(formatDuration(null, "{h}h {m}m"), "0h 0m");
   assert.equal(formatMom(12.34), "+12.3%");

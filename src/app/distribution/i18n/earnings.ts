@@ -57,7 +57,6 @@ export interface EarningsMessages {
   vipHint: string;
   vipCurrentTitle: string;
   vipCurrentEffective: string;
-  vipCurrentShare: string;
   vipCurrentEstimate: string;
   /** "刷新于 {time}" */
   vipCurrentRefreshed: string;
@@ -75,7 +74,6 @@ export interface EarningsMessages {
   /** "{month} 每剧明细" */
   vipDetailTitle: string;
   colCourse: string;
-  colPlatformShare: string;
   /** "{h}小时{m}分" / "{h}h {m}m" */
   durationHm: string;
   vipEmpty: string;
@@ -130,7 +128,6 @@ export const earnings: Record<Locale, EarningsMessages> = {
     vipHint: "当月数据每小时刷新，确认入账后固定",
     vipCurrentTitle: "本月至今",
     vipCurrentEffective: "有效播放时长",
-    vipCurrentShare: "全平台占比",
     vipCurrentEstimate: "预估分账",
     vipCurrentRefreshed: "刷新于 {time}",
     colMonth: "月份",
@@ -146,7 +143,6 @@ export const earnings: Record<Locale, EarningsMessages> = {
     actionCollapse: "收起",
     vipDetailTitle: "{month} 每剧明细",
     colCourse: "剧集",
-    colPlatformShare: "全平台占比",
     durationHm: "{h}小时{m}分",
     vipEmpty: "暂无会员分账记录",
     vipDetailEmpty: "该月暂无每剧明细",
@@ -197,7 +193,6 @@ export const earnings: Record<Locale, EarningsMessages> = {
     vipHint: "當月資料每小時刷新，確認入帳後固定",
     vipCurrentTitle: "本月至今",
     vipCurrentEffective: "有效播放時長",
-    vipCurrentShare: "全平台佔比",
     vipCurrentEstimate: "預估分帳",
     vipCurrentRefreshed: "刷新於 {time}",
     colMonth: "月份",
@@ -213,7 +208,6 @@ export const earnings: Record<Locale, EarningsMessages> = {
     actionCollapse: "收起",
     vipDetailTitle: "{month} 每劇明細",
     colCourse: "劇集",
-    colPlatformShare: "全平台佔比",
     durationHm: "{h}小時{m}分",
     vipEmpty: "暫無會員分帳記錄",
     vipDetailEmpty: "該月暫無每劇明細",
@@ -264,7 +258,6 @@ export const earnings: Record<Locale, EarningsMessages> = {
     vipHint: "Current month refreshes hourly and is fixed once posted",
     vipCurrentTitle: "Month to Date",
     vipCurrentEffective: "Effective Watch Time",
-    vipCurrentShare: "Platform Share",
     vipCurrentEstimate: "Est. Payout",
     vipCurrentRefreshed: "Refreshed {time}",
     colMonth: "Month",
@@ -280,7 +273,6 @@ export const earnings: Record<Locale, EarningsMessages> = {
     actionCollapse: "Collapse",
     vipDetailTitle: "{month} by drama",
     colCourse: "Drama",
-    colPlatformShare: "Platform Share",
     durationHm: "{h}h {m}m",
     vipEmpty: "No membership payouts yet",
     vipDetailEmpty: "No per-drama details for this month",
@@ -331,7 +323,6 @@ export const earnings: Record<Locale, EarningsMessages> = {
     vipHint: "O mês atual é atualizado a cada hora e fica fixo após o lançamento",
     vipCurrentTitle: "Mês até hoje",
     vipCurrentEffective: "Tempo efetivo assistido",
-    vipCurrentShare: "Participação na plataforma",
     vipCurrentEstimate: "Repasse estimado",
     vipCurrentRefreshed: "Atualizado {time}",
     colMonth: "Mês",
@@ -347,7 +338,6 @@ export const earnings: Record<Locale, EarningsMessages> = {
     actionCollapse: "Recolher",
     vipDetailTitle: "{month} por drama",
     colCourse: "Drama",
-    colPlatformShare: "Participação na plataforma",
     durationHm: "{h}h {m}min",
     vipEmpty: "Ainda não há repasses de assinatura",
     vipDetailEmpty: "Sem detalhes por drama neste mês",
@@ -398,7 +388,6 @@ export const earnings: Record<Locale, EarningsMessages> = {
     vipHint: "El mes actual se actualiza cada hora y queda fijo al contabilizarse",
     vipCurrentTitle: "Mes en curso",
     vipCurrentEffective: "Tiempo efectivo de visualización",
-    vipCurrentShare: "Cuota en la plataforma",
     vipCurrentEstimate: "Reparto estimado",
     vipCurrentRefreshed: "Actualizado {time}",
     colMonth: "Mes",
@@ -414,7 +403,6 @@ export const earnings: Record<Locale, EarningsMessages> = {
     actionCollapse: "Contraer",
     vipDetailTitle: "{month} por drama",
     colCourse: "Drama",
-    colPlatformShare: "Cuota en la plataforma",
     durationHm: "{h}h {m}min",
     vipEmpty: "Aún no hay repartos de membresía",
     vipDetailEmpty: "Sin detalle por drama este mes",
@@ -465,7 +453,6 @@ export const earnings: Record<Locale, EarningsMessages> = {
     vipHint: "يُحدَّث الشهر الحالي كل ساعة ويُثبَّت بعد الترحيل",
     vipCurrentTitle: "الشهر حتى الآن",
     vipCurrentEffective: "مدة المشاهدة الفعلية",
-    vipCurrentShare: "الحصة من المنصة",
     vipCurrentEstimate: "العائد المقدّر",
     vipCurrentRefreshed: "آخر تحديث {time}",
     colMonth: "الشهر",
@@ -481,7 +468,6 @@ export const earnings: Record<Locale, EarningsMessages> = {
     actionCollapse: "طيّ",
     vipDetailTitle: "{month} حسب الدراما",
     colCourse: "الدراما",
-    colPlatformShare: "الحصة من المنصة",
     durationHm: "{h}س {m}د",
     vipEmpty: "لا توجد عوائد عضوية بعد",
     vipDetailEmpty: "لا توجد تفاصيل لهذا الشهر",

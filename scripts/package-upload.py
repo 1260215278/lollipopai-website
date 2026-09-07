@@ -16,12 +16,14 @@ os.makedirs(OUT, exist_ok=True)
 
 # 预压缩副本（Caddy precompressed 用；Cloudflare/面板直传场景可省）
 PRECOMPRESSED = re.compile(r"\.(br|gz)$", re.I)
+# 不该上线的目录：.vite = Vite build manifest（服务端无需，暴露无益）
+SKIP_DIRS = {".ssr", ".vite"}
 
 
 def collect(skip_precompressed: bool):
     files = []
     for dirpath, dirnames, filenames in os.walk(DIST):
-        dirnames[:] = [d for d in dirnames if d != ".ssr"]
+        dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS]
         for fn in filenames:
             full = os.path.join(dirpath, fn)
             rel = os.path.relpath(full, DIST).replace("\\", "/")
@@ -67,6 +69,11 @@ with zipfile.ZipFile(full) as z:
     print(f"  首页 canonical: {m.group(1) if m else 'NOT FOUND'}")
     prefixed = sum(1 for n in names if n.startswith("lollipop/"))
     print(f"  根目录 lollipop/ 子目录: {prefixed} (应为 0)")
+    leaked = [n for n in names if "seo-audit" in n or n.startswith(".vite/")]
+    print(f"  不该上线的残留 (.vite/ 或 seo-audit): {len(leaked)} (应为 0)")
+    if leaked:
+        for n in leaked[:5]:
+            print(f"    ! {n}")
 
 print()
 print("==> 产物")

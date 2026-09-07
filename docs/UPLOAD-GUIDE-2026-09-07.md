@@ -1,20 +1,23 @@
 # 生产上传指引（人工部署）
 
-> 生成时间：2026-09-07
+> 生成时间：2026-09-07  
 > 目标：把根部署新构建传到生产，修复 GSC 729 个页面未编入索引
+
+
 
 ---
 
 ## 一、产物（已备好）
 
-| 文件 | 体积 | 文件数 | 适用 |
-|---|---|---|---|
-| `packages/lollipop-upload-20260907-1202-full.zip` | 24.14 MB | 1087 | **推荐**。含 `.br`/`.gz` 预压缩副本，适合 Caddy/Nginx 源站（`precompressed` 直接命中） |
-| `packages/lollipop-upload-20260907-1202-slim.zip` | 14.09 MB | 419 | 空间受限 / Cloudflare Pages（CF 自动压缩，预压缩副本无用） |
+| 文件                                                | 体积       | 文件数  | 适用                                                                 |
+| ------------------------------------------------- | -------- | ---- | ------------------------------------------------------------------ |
+| `packages/lollipop-upload-20260907-1222-full.zip` | 24.12 MB | 1081 | **推荐**。含 `.br`/`.gz` 预压缩副本，适合 Caddy/Nginx 源站（`precompressed` 直接命中） |
+| `packages/lollipop-upload-20260907-1222-slim.zip` | 14.09 MB | 417  | 空间受限 / Cloudflare Pages（CF 自动压缩，预压缩副本无用）                           |
 
 **包内已是网站根目录结构**（`index.html` 在 zip 根层），解压即用。
 
 已内置自检通过：
+
 - 首页 `canonical = https://www.lollipop.im/`（无 `/lollipop/` 前缀）
 - `sitemap.xml` 300 条，无一含前缀
 - 含 `_redirects`（`/lollipop/* → /:splat 301`）
@@ -43,11 +46,11 @@
 
 ```bash
 # 本地先传上去（把 zip 放 /tmp）
-scp packages/lollipop-upload-20260907-1202-full.zip user@源站IP:/tmp/
+scp packages/lollipop-upload-20260907-1222-full.zip user@源站IP:/tmp/
 
 # 服务器上执行
 ssh user@源站IP
-sudo unzip -o /tmp/lollipop-upload-20260907-1202-full.zip -d /你的网站根目录/
+sudo unzip -o /tmp/lollipop-upload-20260907-1222-full.zip -d /你的网站根目录/
 sudo chown -R www-data:www-data /你的网站根目录/   # 按实际用户改
 ```
 
@@ -102,6 +105,7 @@ python scripts/verify-live.py
 ```
 
 **当前（旧构建）预期输出**：`11 PASS / 4 FAIL`，FAIL 项是：
+
 - 首页 canonical 为根路径
 - sitemap 无 `/lollipop/` 前缀
 - `/lollipop` 未返回兜底壳
@@ -122,6 +126,7 @@ python scripts/indexnow-submit.py                        # 全量 300 条
 ```
 
 然后在 Google Search Console：
+
 1. **Sitemap** → 移除旧的 `.../lollipop/sitemap.xml`，提交新的 `https://www.lollipop.im/sitemap.xml`
 2. **网页索引** → 对「自动重定向」「备用网页」点 **验证修复**
 3. 对重点页面用 **URL 检查** → **请求编入索引**
@@ -130,12 +135,12 @@ python scripts/indexnow-submit.py                        # 全量 300 条
 
 ## 六、预期时间线（别急）
 
-| 阶段 | 时间 |
-|---|---|
+| 阶段                       | 时间    |
+| ------------------------ | ----- |
 | IndexNow 生效（Bing/Yandex） | 1~3 天 |
-| Google 重新抓取全部 300 条 | 1~2 周 |
-| 「自动重定向」计数消退 | 2~4 周 |
-| 已编入索引数回升 | 3~6 周 |
+| Google 重新抓取全部 300 条      | 1~2 周 |
+| 「自动重定向」计数消退              | 2~4 周 |
+| 已编入索引数回升                 | 3~6 周 |
 
 **关键**：部署后不再有新错误 URL 进入索引池，剩下的 729 个是历史存量，靠 Google 自然消化，无法人工加速。
 

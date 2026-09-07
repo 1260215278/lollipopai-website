@@ -15,6 +15,8 @@ const RegionPage = lazy(() => import("./app/pages/RegionPage").then(m => ({ defa
 const LegalDocumentPage = lazy(() => import("./app/pages/LegalDocumentPage").then(m => ({ default: m.PrivacyPolicyPage })));
 const LegalTosPage = lazy(() => import("./app/pages/LegalDocumentPage").then(m => ({ default: m.TermsOfServicePage })));
 const NotFoundPage = lazy(() => import("./app/components/NotFoundPage").then(m => ({ default: m.NotFoundPage })));
+const PressPage = lazy(() => import("./app/components/PressPage").then(m => ({ default: m.PressPage })));
+const GlossaryPage = lazy(() => import("./app/components/GlossaryPage").then(m => ({ default: m.GlossaryPage })));
 import { I18nProvider } from "./app/i18n.tsx";
 import { getRouterBasename } from "./app/localePath";
 import { MultilangSubsetGuard } from "./app/components/MultilangSubsetGuard";
@@ -81,6 +83,10 @@ createRoot(document.getElementById("root")!).render(
         {/* 用户协议 / 隐私政策（与 H5 me/setting/xieyi、mimi 同源配置）— 懒加载 */}
         <Route path="/terms" element={<LegalTosPage />} />
         <Route path="/privacy" element={<LegalDocumentPage />} />
+        {/* Press 媒体页 — GEO 权威信号 */}
+        <Route path="/press" element={<PressPage />} />
+        {/* Glossary 术语表 — GEO 知识节点 */}
+        <Route path="/glossary" element={<GlossaryPage />} />
         {/* 营销站 — 首页保持同步加载（首屏关键路径） */}
         <Route path="/" element={<App initialPage="home" />} />
         <Route path="/creating" element={<App initialPage="creating" />} />

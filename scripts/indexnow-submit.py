@@ -10,9 +10,10 @@ IndexNow 成员搜索引擎（Bing / Yandex / Seznam / Naver），让新页面�
     python scripts/indexnow-submit.py --file urls.txt    # 提交自定义 URL 列表
     python scripts/indexnow-submit.py --endpoint bing    # 只提交到 Bing
 
-⚠️ 部署前缀铁律：站点部署在 /lollipop/ 子路径下，key 文件实际地址是
-   https://www.lollipop.im/lollipop/{key}.txt，因此 keyLocation **必须显式指定**，
-   不能依赖 IndexNow 默认的 https://{host}/{key}.txt（那个地址 301/404）。
+⚠️ keyLocation 必须显式指定：IndexNow 默认按 https://{host}/{key}.txt 回源校验，
+   一旦站点部署在子路径下（历史上是 /lollipop/）就会 404 导致提交无效。
+   2026-09-05 起站点改为根部署，DEPLOY_PREFIX 为空串，keyLocation 恰好等于默认地址，
+   但保留显式声明以免将来再改部署路径时静默失效。
 """
 import argparse
 import io
@@ -26,8 +27,9 @@ import urllib.request
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 HOST = "www.lollipop.im"
-# 部署前缀（与 SITE_URL 常量保持一致，无尾斜杠）
-DEPLOY_PREFIX = "/lollipop"
+# 部署前缀（与 SITE_URL 常量保持一致，无尾斜杠）。2026-09-05 起根部署 = ""
+# （此前是 "/lollipop"，与生产实际的根目录部署不符，导致全站 canonical 失效）
+DEPLOY_PREFIX = ""
 
 ENDPOINTS = {
     "indexnow": "https://api.indexnow.org/IndexNow",

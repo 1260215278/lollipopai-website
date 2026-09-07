@@ -21,7 +21,7 @@
 import { renderToString } from "react-dom/server";
 import { StaticRouter, Routes, Route } from "react-router";
 import { I18nProvider } from "./app/i18n";
-import { getRouterBasename, matchLocalePath } from "./app/localePath";
+import { getRouterBasename, matchLocalePath, getDeployBasename } from "./app/localePath";
 import { MultilangSubsetGuard } from "./app/components/MultilangSubsetGuard";
 import App from "./app/App";
 import { BlogListPage } from "./app/pages/BlogListPage";
@@ -35,6 +35,8 @@ import {
   PrivacyPolicyPage,
   TermsOfServicePage,
 } from "./app/pages/LegalDocumentPage";
+import { PressPage } from "./app/components/PressPage";
+import { GlossaryPage } from "./app/components/GlossaryPage";
 
 /**
  * 渲染指定路由为完整 HTML 字符串。
@@ -44,13 +46,15 @@ import {
  * 与客户端 BrowserRouter 行为一致。
  */
 export function renderRoute(path: string): string {
-  const localeMatch = matchLocalePath(path, "");
-  const basename = getRouterBasename(path);
+  const deployBase = getDeployBasename();
+  const fullPath = path === "/" ? `${deployBase}/` : `${deployBase}${path}`;
+  const localeMatch = matchLocalePath(fullPath, deployBase);
+  const basename = getRouterBasename(fullPath);
   const routerBasename = basename === "/" ? undefined : basename;
 
   return renderToString(
     <I18nProvider initialLocale={localeMatch?.locale ?? "en"}>
-      <StaticRouter basename={routerBasename} location={path}>
+      <StaticRouter basename={routerBasename} location={fullPath}>
         <MultilangSubsetGuard />
         <Routes>
           {/* 营销站首页（完全同步，无 lazy） */}
@@ -72,6 +76,10 @@ export function renderRoute(path: string): string {
           {/* 法律文档 */}
           <Route path="/privacy" element={<PrivacyPolicyPage />} />
           <Route path="/terms" element={<TermsOfServicePage />} />
+          {/* Press 媒体页 — GEO 权威信号 */}
+          <Route path="/press" element={<PressPage />} />
+          {/* Glossary 术语表 — GEO 知识节点 */}
+          <Route path="/glossary" element={<GlossaryPage />} />
           {/* 登录 / 找回密码（noindex，但仍需正确正文——否则会被 * 兜底成首页） */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />

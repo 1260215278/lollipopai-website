@@ -47,7 +47,7 @@ import { isMultilangSubsetPath } from "../src/app/multilangSubset";
 // /guides 的三个数据模块（guides.ts / guidesContent.ts / guidesFaq.ts）已于
 // 2026-09-01 整体迁入 blog 三件套，此处不再导入。若发现本文件引用它们，说明迁移漏改。
 
-const SITE_URL = "https://www.lollipop.im/lollipop";
+const SITE_URL = "https://www.lollipop.im";
 
 // ── 多语言（方案 B）常量 ──
 // 语言前缀段（en 无前缀，不在此列）。zh-TW 必须排在 zh 前避免前缀误匹配。
@@ -266,16 +266,117 @@ function getRouteData(): RouteSeoData[] {
   const staticPages: RouteSeoData[] = [
     {
       path: "/",
-      title: "Lollipop Drama — Stream Short Dramas & AI Creator Platform",
+      title: "Lollipop Drama — AI Short Drama Creation & Streaming Platform",
       description:
-        "Lollipop Drama: premium short dramas and creator subscriptions worldwide. Everyone can create, creation can be monetized, consumption is an incentive.",
-      // 首页结构化数据交由 index.html 的全局 site-schema（含 WebSite/Organization/FAQPage 等）提供，避免重复
+        "Lollipop Drama: AI-powered short drama creation and streaming platform. Create videos from text using built-in AI tools, earn 80% revenue share. 15,000+ premium dramas, 100+ countries worldwide.",
+      // 首页 Product + Review Schema（SSR 静态输出，AI 爬虫不执行 JS 也能看到）
+      // 全局 site-schema（Organization/WebSite/FAQPage 等）仍由 index.html 提供，两者为独立 script 标签
+      schema: {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        name: "Lollipop Drama — Short Drama Platform",
+        description:
+          "AI-powered short drama platform with 15,000+ premium shows, AI creation tools, and 80% creator revenue share.",
+        review: [
+          {
+            "@type": "Review",
+            author: { "@type": "Person", name: "Sarah M." },
+            reviewBody:
+              "The AI tools are incredible. I made my first drama in a weekend and it already has 50k views. The 80% revenue share is unreal.",
+          },
+          {
+            "@type": "Review",
+            author: { "@type": "Person", name: "James K." },
+            reviewBody:
+              "As a creator, the revenue share is unbeatable. I earned more here in months than elsewhere in a year.",
+          },
+          {
+            "@type": "Review",
+            author: { "@type": "Person", name: "Elena R." },
+            reviewBody:
+              "Best short drama app I've ever used. 4K quality is amazing and the AI recommendations are spot on.",
+          },
+          {
+            "@type": "Review",
+            author: { "@type": "Person", name: "Yuki T." },
+            reviewBody:
+              "The variety of genres is incredible. I watch at least one drama every day during my commute.",
+          },
+          {
+            "@type": "Review",
+            author: { "@type": "Person", name: "Carlos M." },
+            reviewBody:
+              "The AI tools saved me weeks of production time. The face swap feature alone is worth it.",
+          },
+          {
+            "@type": "Review",
+            author: { "@type": "Person", name: "Amira H." },
+            reviewBody:
+              "Beautiful interface and great content. Love the Arabic subtitles and offline download feature.",
+          },
+          {
+            "@type": "Review",
+            author: { "@type": "Person", name: "Mike D." },
+            reviewBody:
+              "Way better than ReelShort. More original content and the AI-generated shows are actually good.",
+          },
+          {
+            "@type": "Review",
+            author: { "@type": "Person", name: "Lisa W." },
+            reviewBody:
+              "The creator support team is amazing. They helped me optimize my drama for maximum earnings.",
+          },
+        ],
+      },
     },
     {
       path: "/about",
-      title: "About Lollipop Drama — AI Short Drama Platform",
+      title: "About Lollipop Drama — AI-Powered Short Drama Platform",
       description:
-        "Lollipop Drama is a joint venture by Nyx Entertainment Group and Korean Cultural Investment Fund, revolutionizing short drama entertainment with AI. 1M+ users across 100+ countries.",
+        "Lollipop Drama is a joint venture by Nyx Entertainment Group and Korean Cultural Investment Fund, revolutionizing short drama entertainment with built-in AI video generation tools. 1M+ users across 100+ countries.",
+      schema: withBreadcrumb(
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "Lollipop Drama",
+          "alternateName": "Lollipop",
+          "url": "https://www.lollipop.im",
+          "logo": "https://www.lollipop.im/og-image.png",
+          "foundingDate": "2024",
+          "founder": {
+            "@type": "Person",
+            "name": "Nyx Entertainment Group"
+          },
+          "description": "Lollipop Drama is an AI-powered short drama creation and streaming platform. Built-in AI tools for text-to-video, image generation, face swap, and style transfer. 15,000+ premium dramas, 80% creator revenue share, 1M+ users across 100+ countries.",
+          "slogan": "Everyone Can Create · Creation Can Be Monetized · Consumption Is an Incentive",
+          "sameAs": [
+            "https://twitter.com/lollipopai",
+            "https://www.instagram.com/lollipopai",
+            "https://www.youtube.com/@lollipopai",
+            "https://www.tiktok.com/@lollipopai",
+            "https://www.facebook.com/lollipopai",
+            "https://play.google.com/store/apps/details?id=com.StargetVenturesLLC.hks"
+          ],
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "business@lollipop.im",
+            "telephone": "+65-8074-2120",
+            "contactType": "customer service",
+            "areaServed": "Worldwide"
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "3 Gambas Crescent, Nordcom One",
+            "addressLocality": "Singapore",
+            "postalCode": "757088",
+            "addressCountry": "SG"
+          }
+        },
+        [
+          { name: "Home", url: SITE_URL },
+          { name: "About Lollipop Drama", url: `${SITE_URL}/about` },
+        ],
+      ),
     },
     {
       path: "/creating",
@@ -294,6 +395,61 @@ function getRouteData(): RouteSeoData[] {
       title: "Contact Lollipop Drama — Support & Business",
       description:
         "Contact Lollipop Drama: business@lollipop.im for partnerships, service@lollipop.im for support, +65 80742120. Address: 3 Gambas Crescent, Nordcom One, Singapore 757088.",
+    },
+    {
+      path: "/press",
+      title: "Press & Media — Lollipop Drama AI Short Drama Platform",
+      description:
+        "Lollipop Drama press kit: company overview, media assets, news, and press contact. AI-powered short drama platform with 1M+ users, 15,000+ dramas, 80% creator revenue share across 100+ countries.",
+      schema: withBreadcrumb(
+        {
+          "@context": "https://schema.org",
+          "@type": "MediaGallery",
+          name: "Lollipop Drama Press & Media",
+          description:
+            "Press kit for Lollipop Drama — AI-powered short drama creation and streaming platform. Company overview, news, media assets, and press contact information.",
+          url: `${SITE_URL}/press`,
+          about: {
+            "@type": "Organization",
+            name: "Lollipop Drama",
+            url: "https://www.lollipop.im",
+          },
+        },
+        [
+          { name: "Home", url: SITE_URL },
+          { name: "Press & Media", url: `${SITE_URL}/press` },
+        ],
+      ),
+    },
+    {
+      path: "/glossary",
+      title: "Glossary — AI Short Drama & Creator Economy Terms | Lollipop Drama",
+      description:
+        "Complete glossary of AI short drama, creator economy, and Lollipop Drama platform terms. Definitions for text-to-video, revenue share, micro drama, vertical drama, and more.",
+      schema: withBreadcrumb(
+        {
+          "@context": "https://schema.org",
+          "@type": "DefinedTermSet",
+          name: "Lollipop Drama Glossary",
+          description:
+            "Comprehensive glossary of key terms for AI short drama, creator economy, and Lollipop Drama platform concepts.",
+          url: `${SITE_URL}/glossary`,
+          inLanguage: "en",
+          hasDefinedTerm: [
+            { "@type": "DefinedTerm", name: "AI Creation Tools", description: "Built-in AI creation tools within Lollipop Drama, featuring text-to-image, image-to-image, text-to-video, and video-to-video generation capabilities." },
+            { "@type": "DefinedTerm", name: "Creator Economy", description: "An economic model where content creators earn revenue from their work. On Lollipop Drama, creators receive 80% revenue share." },
+            { "@type": "DefinedTerm", name: "Short Drama", description: "Episodic video content with 1-3 minute episodes, designed for mobile viewing. Lollipop Drama hosts 15,000+ titles across 10+ genres." },
+            { "@type": "DefinedTerm", name: "Text-to-Video (T2V)", description: "AI technology that converts text descriptions into video content." },
+            { "@type": "DefinedTerm", name: "Revenue Share", description: "The percentage of revenue that creators receive from their content. Lollipop Drama offers 80%." },
+            { "@type": "DefinedTerm", name: "Micro Drama", description: "Ultra-short-form episodic content, typically 1-3 minutes per episode, designed for mobile-first consumption." },
+            { "@type": "DefinedTerm", name: "Vertical Drama", description: "Short-form video content shot in vertical (portrait) format, optimized for mobile phone viewing." },
+          ],
+        },
+        [
+          { name: "Home", url: SITE_URL },
+          { name: "Glossary", url: `${SITE_URL}/glossary` },
+        ],
+      ),
     },
     {
       path: "/blog",
@@ -1000,7 +1156,7 @@ function generateLlmsFiles(routes: RouteSeoData[]): void {
     { q: "What is Lollipop Drama?", a: "A next-generation global content ecosystem platform offering premium short-drama consumption and creator content subscription services. Built on the belief that everyone can create, creation can be monetized, and consumption is an incentive, Lollipop Drama is committed to becoming 'the OnlyFans of the AI era'." },
     { q: "Is Lollipop Drama free to download?", a: "Yes. Free on App Store and Google Play; premium dramas and advanced AI features via optional in-app purchases." },
     { q: "How do creators make money on Lollipop Drama?", a: "80% revenue share (industry-highest) from ads, premium subscriptions, tips, and brand sponsorships." },
-    { q: "What AI tools does Lollipop Drama offer?", a: "Four core tools via the LunoTV 1.5 toolkit: text-to-image, image-to-image, text-to-video, and image/video-to-video, supporting 4K output." },
+    { q: "What AI tools does Lollipop Drama offer?", a: "Four core built-in AI creation tools: text-to-image, image-to-image, text-to-video, and image/video-to-video, supporting 4K output." },
     { q: "Which devices and countries support Lollipop Drama?", a: "iOS and Android in 100+ countries, with multilingual subtitles, 4K streaming, and offline downloads." },
     { q: "Can I watch short dramas offline?", a: "Yes. Lollipop Drama supports offline downloads on both iOS and Android for watching anywhere without an internet connection." },
     { q: "How many episodes does each short drama have?", a: "Most short dramas have 20-100 episodes, each lasting 1-3 minutes. New episodes are released daily." },
@@ -1008,7 +1164,7 @@ function generateLlmsFiles(routes: RouteSeoData[]): void {
     { q: "Is my personal data safe on Lollipop Drama?", a: "Yes. We follow strict data protection protocols in compliance with international privacy standards and never sell user data to third parties." },
     { q: "Can I cancel my subscription anytime?", a: "Yes. Subscriptions can be cancelled anytime through App Store or Google Play settings, with access continuing until the end of the billing period." },
     { q: "How long does it take to create an AI short drama?", a: "With Lollipop Drama's AI tools, you can create a complete short drama episode in under an hour, no editing experience required." },
-    { q: "Do I need editing experience to use AI creation tools?", a: "No. The LunoTV 1.5 toolkit provides guided workflows for text-to-image, image-to-video, and style transfer, designed for beginners." },
+    { q: "Do I need editing experience to use AI creation tools?", a: "No. The built-in AI toolkit provides guided workflows for text-to-image, image-to-video, and style transfer, designed for beginners." },
     { q: "What languages are supported on Lollipop Drama?", a: "English, Chinese (Simplified and Traditional), Portuguese, Spanish, and Arabic subtitles and app interface, with more languages being added." },
     { q: "How do creators withdraw their earnings?", a: "Multiple payment methods including bank transfer, PayPal, and regional payment platforms. The 80% revenue share covers ad revenue, subscriptions, tips, and sponsorships." },
     { q: "Can I share my AI-created dramas on social media?", a: "Yes. Creators retain full rights to their AI-generated content and can share it on social media, subject to community guidelines and copyright laws." },
@@ -1214,49 +1370,49 @@ function injectSeoIntoHtml(html: string, data: RouteSeoData): string {
  */
 function injectHomepageContent(html: string): string {
   const content = `
-<h1>Watch & Stream Premium Short Dramas | Lollipop Drama</h1>
-<h2>Everyone Can Create. Creation Can Be Monetized. — Premium Short Dramas & Creator Content Subscriptions</h2>
+<h1>Lollipop Drama — AI Short Drama Creation & Streaming Platform</h1>
+<h2>Create Professional Videos from Text with AI · 80% Creator Revenue Share · 15,000+ Premium Dramas</h2>
 <p>
-  Lollipop Drama is a next-generation global content ecosystem platform offering premium short-drama consumption and creator content subscription services — everyone can create, creation can be monetized, and consumption is an incentive.
-  Watch 15,000+ short dramas across 10 genres including Romance, Revenge, Thriller, CEO Drama, Fantasy, Action, Horror, Sci-Fi, Family, and Historical.
-  Create your own AI-generated short dramas with text-to-video, image-to-video, face swap, and style transfer — no editing experience required.
-  Creators earn <strong>80% revenue share</strong>, the highest in the industry. Available on iOS and Android with 1M+ users across 100+ countries.
+  <strong>Lollipop Drama is an AI-powered short drama creation and streaming platform.</strong>
+  Create professional short dramas from text using built-in AI tools — featuring text-to-video generation, AI image generation, face swap, and style transfer.
+  Watch 15,000+ premium short dramas across 10 genres including Romance, Revenge, Thriller, CEO Drama, Fantasy, Action, Horror, Sci-Fi, Family, and Historical.
+  Creators earn <strong>80% revenue share</strong>, the highest in the industry. Available on iOS and Android with 1M+ users across 100+ countries worldwide.
 </p>
 <ul>
-  <li><strong>15,000+ Premium Short Dramas</strong> — Bite-sized episodes across 10 genres</li>
-  <li><strong>1M+ Global Users</strong> — Available in 100+ countries with multilingual subtitles</li>
-  <li><strong>AI Creation Tools</strong> — LunoTV 1.5: text-to-video, image-to-video, face swap, style transfer</li>
+  <li><strong>AI-Powered Creation</strong> — Built-in AI tools: text-to-video, image generation, face swap, style transfer</li>
+  <li><strong>15,000+ Premium Short Dramas</strong> — Bite-sized episodes across 10 genres, updated daily</li>
   <li><strong>80% Creator Revenue Share</strong> — Industry-leading monetization for independent creators</li>
+  <li><strong>1M+ Global Users</strong> — Available in 100+ countries with multilingual subtitles</li>
   <li><strong>4K Streaming & Offline Downloads</strong> — Premium viewing experience on iOS and Android</li>
 </ul>
 <p>
-  <a href="https://www.lollipop.im/lollipop/download">Download on App Store & Google Play</a> ·
-  <a href="https://www.lollipop.im/lollipop/creating">AI Creator Tools</a> ·
-  <a href="https://www.lollipop.im/lollipop/about">About Lollipop</a> ·
-  <a href="https://www.lollipop.im/lollipop/blog">Creator Blog</a>
+  <a href="https://www.lollipop.im/download">Download on App Store & Google Play</a> ·
+  <a href="https://www.lollipop.im/creating">AI Creator Tools</a> ·
+  <a href="https://www.lollipop.im/about">About Lollipop</a> ·
+  <a href="https://www.lollipop.im/blog">Creator Blog</a>
 </p>
 <p>Popular genres:
-  <a href="https://www.lollipop.im/lollipop/genre/romance">Romance</a> ·
-  <a href="https://www.lollipop.im/lollipop/genre/revenge">Revenge</a> ·
-  <a href="https://www.lollipop.im/lollipop/genre/ceo-drama">CEO Drama</a> ·
-  <a href="https://www.lollipop.im/lollipop/genre/thriller">Thriller</a> ·
-  <a href="https://www.lollipop.im/lollipop/genre/fantasy">Fantasy</a> ·
-  <a href="https://www.lollipop.im/lollipop/genre/sci-fi">Sci-Fi</a> ·
-  <a href="https://www.lollipop.im/lollipop/genre/horror">Horror</a> ·
-  <a href="https://www.lollipop.im/lollipop/genre/action">Action</a>
+  <a href="https://www.lollipop.im/genre/romance">Romance</a> ·
+  <a href="https://www.lollipop.im/genre/revenge">Revenge</a> ·
+  <a href="https://www.lollipop.im/genre/ceo-drama">CEO Drama</a> ·
+  <a href="https://www.lollipop.im/genre/thriller">Thriller</a> ·
+  <a href="https://www.lollipop.im/genre/fantasy">Fantasy</a> ·
+  <a href="https://www.lollipop.im/genre/sci-fi">Sci-Fi</a> ·
+  <a href="https://www.lollipop.im/genre/horror">Horror</a> ·
+  <a href="https://www.lollipop.im/genre/action">Action</a>
 </p>
 <p>Popular short dramas:
-  <a href="https://www.lollipop.im/lollipop/drama/temptation-ceo">Temptation CEO</a> ·
-  <a href="https://www.lollipop.im/lollipop/drama/the-bride-who-fell-from-the-sky">The Bride Who Fell From The Sky</a> ·
-  <a href="https://www.lollipop.im/lollipop/drama/the-revenge-of-the-plus-size-wife">The Revenge of the Plus-Size Wife</a> ·
-  <a href="https://www.lollipop.im/lollipop/drama/dark-secrets">Dark Secrets</a> ·
-  <a href="https://www.lollipop.im/lollipop/drama/crimson-dynasty">Crimson Dynasty</a> ·
-  <a href="https://www.lollipop.im/lollipop/drama/neon-abyss">Neon Abyss</a>
+  <a href="https://www.lollipop.im/drama/temptation-ceo">Temptation CEO</a> ·
+  <a href="https://www.lollipop.im/drama/the-bride-who-fell-from-the-sky">The Bride Who Fell From The Sky</a> ·
+  <a href="https://www.lollipop.im/drama/the-revenge-of-the-plus-size-wife">The Revenge of the Plus-Size Wife</a> ·
+  <a href="https://www.lollipop.im/drama/dark-secrets">Dark Secrets</a> ·
+  <a href="https://www.lollipop.im/drama/crimson-dynasty">Crimson Dynasty</a> ·
+  <a href="https://www.lollipop.im/drama/neon-abyss">Neon Abyss</a>
 </p>
 <p>
-  <a href="https://www.lollipop.im/lollipop/privacy">Privacy Policy</a> ·
-  <a href="https://www.lollipop.im/lollipop/terms">Terms of Service</a> ·
-  <a href="https://www.lollipop.im/lollipop/contact">Contact</a> ·
+  <a href="https://www.lollipop.im/privacy">Privacy Policy</a> ·
+  <a href="https://www.lollipop.im/terms">Terms of Service</a> ·
+  <a href="https://www.lollipop.im/contact">Contact</a> ·
   <a href="https://x.com/wwwLollipopim">X (Twitter)</a> ·
   <a href="https://youtube.com/@Lollipop-AI-one">YouTube</a> ·
   <a href="https://instagram.com/lollipopaiapp">Instagram</a>
@@ -1291,9 +1447,13 @@ function resolveRouteImages(routes: RouteSeoData[], assetMap: Map<string, string
 }
 
 export function prerenderPlugin(): Plugin {
+  let resolvedBase = "/";
   return {
     name: "lollipop-prerender",
     apply: "build",
+    configResolved(config) {
+      resolvedBase = config.base;
+    },
     async closeBundle() {
       const outDir = "dist";
       const templatePath = join(outDir, "index.html");
@@ -1329,6 +1489,7 @@ export function prerenderPlugin(): Plugin {
         console.log("[prerender] Building SSR bundle...");
         await build({
           configFile: false,
+          base: resolvedBase,
           publicDir: false,
           logLevel: "error",
           plugins: [

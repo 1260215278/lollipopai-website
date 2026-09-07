@@ -12,6 +12,8 @@ export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) 
   //    `messages.footer.links[item.key]` **动态取键**，写错不会报错，只会渲染成空白。
   //    （2026-09-01 补 `aboutUs`：/about 此前只有首页 FAQ 区块一条内链，
   //     其余 60+ 页面无入口；放进 Footer 后全站可达，About 页也是信任/EEAT 信号。）
+  //    （2026-09-04 `press` / `glossary` 改为 AI-only，不在 Footer 暴露链接，
+  //     仅通过 sitemap.xml + 服务器 Caddy UA 检测对 AI 爬虫可见。）
   const websiteLinks = [
     { key: "home", page: "home", to: "/" },
     { key: "creating", page: "creating", to: "/creating" },

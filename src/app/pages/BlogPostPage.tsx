@@ -108,10 +108,10 @@ export function BlogPostPage() {
       worksFor: {
         "@type": "Organization",
         name: dp.organizationName,
-        url: "https://www.lollipop.im/lollipop/",
+        url: "https://www.lollipop.im/",
       },
-      url: "https://www.lollipop.im/lollipop/about",
-      sameAs: ["https://www.lollipop.im/lollipop/about"],
+      url: "https://www.lollipop.im/about",
+      sameAs: ["https://www.lollipop.im/about"],
     };
 
     const bodyText = stripMarkdown(postContent ?? post.contentZh);
@@ -149,28 +149,28 @@ export function BlogPostPage() {
       publisher: {
         "@type": "Organization",
         name: dp.organizationName,
-        url: "https://www.lollipop.im/lollipop/",
+        url: "https://www.lollipop.im/",
         logo: {
           "@type": "ImageObject",
-          url: "https://www.lollipop.im/lollipop/src/imports/logo.webp",
+          url: "https://www.lollipop.im/src/imports/logo.webp",
         },
       },
       mainEntityOfPage: {
         "@type": "WebPage",
-        "@id": `https://www.lollipop.im/lollipop/blog/${post.slug}`,
+        "@id": `https://www.lollipop.im/blog/${post.slug}`,
       },
       articleSection: localizedCategoryLabel,
       image: {
         "@type": "ImageObject",
-        url: `https://www.lollipop.im/lollipop${post.coverImage ?? "/blog-images/guide.webp"}`,
+        url: `https://www.lollipop.im${post.coverImage ?? "/blog-images/guide.webp"}`,
       },
-      thumbnailUrl: `https://www.lollipop.im/lollipop${post.coverImage ?? "/blog-images/guide.webp"}`,
+      thumbnailUrl: `https://www.lollipop.im${post.coverImage ?? "/blog-images/guide.webp"}`,
       keywords: `${localizedCategoryLabel}, AI short drama, Lollipop Drama, ${post.title}`,
       articleBody: bodyText.slice(0, 500),
       wordCount: useZh ? bodyText.replace(/\s/g, "").length : bodyText.split(/\s+/).filter(Boolean).length,
       encodingFormat: "text/html",
       inLanguage: useZh ? "zh" : "en",
-      isPartOf: { "@type": "Blog", name: "Lollipop Drama Blog", url: "https://www.lollipop.im/lollipop/blog" },
+      isPartOf: { "@type": "Blog", name: "Lollipop Drama Blog", url: "https://www.lollipop.im/blog" },
       about: aboutEntity,
       mentions: mentionsEntities,
       accessMode: ["textual", "visual"],
@@ -181,9 +181,9 @@ export function BlogPostPage() {
       breadcrumb: {
         "@type": "BreadcrumbList",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: dp.home, item: "https://www.lollipop.im/lollipop/" },
-          { "@type": "ListItem", position: 2, name: dp.blog, item: "https://www.lollipop.im/lollipop/blog" },
-          { "@type": "ListItem", position: 3, name: post.title, item: `https://www.lollipop.im/lollipop/blog/${post.slug}` },
+          { "@type": "ListItem", position: 1, name: dp.home, item: "https://www.lollipop.im/" },
+          { "@type": "ListItem", position: 2, name: dp.blog, item: "https://www.lollipop.im/blog" },
+          { "@type": "ListItem", position: 3, name: post.title, item: `https://www.lollipop.im/blog/${post.slug}` },
         ],
       },
     };
@@ -206,7 +206,7 @@ export function BlogPostPage() {
             position: i + 1,
             name: s.name,
             text: s.text,
-            url: `https://www.lollipop.im/lollipop/blog/${post.slug}#step-${i + 1}`,
+            url: `https://www.lollipop.im/blog/${post.slug}#step-${i + 1}`,
           })),
           totalTime: post.totalTime,
           estimatedCost: { "@type": "MonetaryAmount", currency: "USD", value: "0" },
@@ -216,19 +216,19 @@ export function BlogPostPage() {
           publisher: {
             "@type": "Organization",
             name: dp.organizationName,
-            url: "https://www.lollipop.im/lollipop/",
+            url: "https://www.lollipop.im/",
             logo: {
               "@type": "ImageObject",
-              url: "https://www.lollipop.im/lollipop/src/imports/logo.webp",
+              url: "https://www.lollipop.im/src/imports/logo.webp",
             },
           },
           datePublished: post.publishDate,
           dateModified: post.updateDate,
           inLanguage: locale,
-          isPartOf: { "@type": "Blog", name: "Lollipop Drama Blog", url: "https://www.lollipop.im/lollipop/blog" },
+          isPartOf: { "@type": "Blog", name: "Lollipop Drama Blog", url: "https://www.lollipop.im/blog" },
           mainEntityOfPage: {
             "@type": "WebPage",
-            "@id": `https://www.lollipop.im/lollipop/blog/${post.slug}`,
+            "@id": `https://www.lollipop.im/blog/${post.slug}`,
           },
         }
       : null;

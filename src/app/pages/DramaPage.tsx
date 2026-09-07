@@ -49,7 +49,7 @@ export function DramaPage() {
       "@type": "VideoObject",
       name: drama.title,
       description: drama.seoDescription,
-      thumbnailUrl: getDramaPoster(drama.slug) ? `https://www.lollipop.im/lollipop${getDramaPoster(drama.slug)}` : `https://www.lollipop.im/lollipop/og-image.png`,
+      thumbnailUrl: getDramaPoster(drama.slug) ? `https://www.lollipop.im${getDramaPoster(drama.slug)}` : `https://www.lollipop.im/og-image.png`,
       uploadDate: drama.uploadDate,
       duration: `PT${drama.durationMin}M`,
       genre: drama.genre,
@@ -64,16 +64,16 @@ export function DramaPage() {
       publisher: {
         "@type": "Organization",
         name: "Lollipop Drama",
-        url: "https://www.lollipop.im/lollipop/",
+        url: "https://www.lollipop.im/",
       },
       breadcrumb: {
         "@type": "BreadcrumbList",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: "https://www.lollipop.im/lollipop/" },
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://www.lollipop.im/" },
           // ⚠️ 必须走 resolveGenre：drama.genre 是自由文本（如 "Mystery · Suspense"），
           // 直接拿首段拼 URL 会生成 /genre/mystery 这类死链（线上 404）。
-          { "@type": "ListItem", position: 2, name: resolveGenre(drama.genre).name, item: `https://www.lollipop.im/lollipop/genre/${resolveGenre(drama.genre).slug}` },
-          { "@type": "ListItem", position: 3, name: drama.title, item: `https://www.lollipop.im/lollipop/drama/${drama.slug}` },
+          { "@type": "ListItem", position: 2, name: resolveGenre(drama.genre).name, item: `https://www.lollipop.im/genre/${resolveGenre(drama.genre).slug}` },
+          { "@type": "ListItem", position: 3, name: drama.title, item: `https://www.lollipop.im/drama/${drama.slug}` },
         ],
       },
     });

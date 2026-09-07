@@ -3,61 +3,61 @@
 > Lollipop Drama is a premium short drama streaming and AI creator platform. Stream 15,000+ AI-generated and live-action short dramas across 10+ genres including romance, revenge, thriller, fantasy, and more. Create AI dramas with built-in tools for scriptwriting, storyboarding, video generation, character consistency, and multilingual localization. 80% creator revenue share. Available on iOS and Android in 100+ countries with 1M+ users.
 
 ## Key Pages
-- [About Lollipop Drama](https://www.lollipop.im/lollipop/about): Company background — joint venture by Nyx Entertainment Group and Korean Cultural Investment Fund, 1M+ users across 100+ countries
-- [Create AI Short Dramas](https://www.lollipop.im/lollipop/creating): AI drama creation tools including image generation, face swap, video creation, style transfer, and 80% revenue share
-- [Download Lollipop Drama](https://www.lollipop.im/lollipop/download): Free download on iOS and Android, 15,000+ premium short dramas, 4K streaming, offline downloads
-- [Contact](https://www.lollipop.im/lollipop/contact): Business partnerships and support contact information
-- [Blog](https://www.lollipop.im/lollipop/blog): 30+ articles on AI short drama production, creator economy, and step-by-step guides
+- [About Lollipop Drama](https://www.lollipop.im/about): Company background — joint venture by Nyx Entertainment Group and Korean Cultural Investment Fund, 1M+ users across 100+ countries
+- [Create AI Short Dramas](https://www.lollipop.im/creating): AI drama creation tools including image generation, face swap, video creation, style transfer, and 80% revenue share
+- [Download Lollipop Drama](https://www.lollipop.im/download): Free download on iOS and Android, 15,000+ premium short dramas, 4K streaming, offline downloads
+- [Contact](https://www.lollipop.im/contact): Business partnerships and support contact information
+- [Blog](https://www.lollipop.im/blog): 30+ articles on AI short drama production, creator economy, and step-by-step guides
 
 ## Drama Genres
-- [Romance Short Dramas](https://www.lollipop.im/lollipop/genre/romance): 320+ romance and love story short dramas
-- [Revenge Short Dramas](https://www.lollipop.im/lollipop/genre/revenge): 180+ revenge and payback short dramas
-- [Thriller Short Dramas](https://www.lollipop.im/lollipop/genre/thriller): 150+ suspense and mystery thrillers
-- [CEO Drama](https://www.lollipop.im/lollipop/genre/ceo-drama): Billionaire romances and corporate power dramas
-- [Fantasy Short Dramas](https://www.lollipop.im/lollipop/genre/fantasy): Magical worlds and supernatural romance
-- [Action Short Dramas](https://www.lollipop.im/lollipop/genre/action): Martial arts and high-octane adventure
-- [Horror Short Dramas](https://www.lollipop.im/lollipop/genre/horror): Scary and atmospheric horror series
-- [Sci-Fi Short Dramas](https://www.lollipop.im/lollipop/genre/sci-fi): Science fiction and futuristic series
-- [Family Short Dramas](https://www.lollipop.im/lollipop/genre/family): Heartwarming family stories
-- [Historical Short Dramas](https://www.lollipop.im/lollipop/genre/historical): Period dramas and palace intrigues
+- [Romance Short Dramas](https://www.lollipop.im/genre/romance): 320+ romance and love story short dramas
+- [Revenge Short Dramas](https://www.lollipop.im/genre/revenge): 180+ revenge and payback short dramas
+- [Thriller Short Dramas](https://www.lollipop.im/genre/thriller): 150+ suspense and mystery thrillers
+- [CEO Drama](https://www.lollipop.im/genre/ceo-drama): Billionaire romances and corporate power dramas
+- [Fantasy Short Dramas](https://www.lollipop.im/genre/fantasy): Magical worlds and supernatural romance
+- [Action Short Dramas](https://www.lollipop.im/genre/action): Martial arts and high-octane adventure
+- [Horror Short Dramas](https://www.lollipop.im/genre/horror): Scary and atmospheric horror series
+- [Sci-Fi Short Dramas](https://www.lollipop.im/genre/sci-fi): Science fiction and futuristic series
+- [Family Short Dramas](https://www.lollipop.im/genre/family): Heartwarming family stories
+- [Historical Short Dramas](https://www.lollipop.im/genre/historical): Period dramas and palace intrigues
 
 ## Popular Dramas
-- [Temptation CEO](https://www.lollipop.im/lollipop/drama/temptation-ceo): A powerful CEO's secret desire becomes irresistible temptation
-- [The Bride Who Fell From The Sky](https://www.lollipop.im/lollipop/drama/the-bride-who-fell-from-the-sky): A mysterious bride falls from the sky and changes everything
-- [The Revenge of the Plus-Size Wife](https://www.lollipop.im/lollipop/drama/the-revenge-of-the-plus-size-wife): She was mocked for her size — now she's back for justice
-- [My Royal Alpha Boyfriend](https://www.lollipop.im/lollipop/drama/my-royal-alpha-boyfriend): A werewolf prince claims her as his mate
-- [Dark Secrets](https://www.lollipop.im/lollipop/drama/dark-secrets): Everyone has secrets, but some are worth killing for
-- [Crimson Dynasty](https://www.lollipop.im/lollipop/drama/crimson-dynasty): Power, passion, and betrayal in the imperial court
-- [Neon Abyss](https://www.lollipop.im/lollipop/drama/neon-abyss): In a neon-soaked future, one woman fights to reclaim her identity
+- [Temptation CEO](https://www.lollipop.im/drama/temptation-ceo): A powerful CEO's secret desire becomes irresistible temptation
+- [The Bride Who Fell From The Sky](https://www.lollipop.im/drama/the-bride-who-fell-from-the-sky): A mysterious bride falls from the sky and changes everything
+- [The Revenge of the Plus-Size Wife](https://www.lollipop.im/drama/the-revenge-of-the-plus-size-wife): She was mocked for her size — now she's back for justice
+- [My Royal Alpha Boyfriend](https://www.lollipop.im/drama/my-royal-alpha-boyfriend): A werewolf prince claims her as his mate
+- [Dark Secrets](https://www.lollipop.im/drama/dark-secrets): Everyone has secrets, but some are worth killing for
+- [Crimson Dynasty](https://www.lollipop.im/drama/crimson-dynasty): Power, passion, and betrayal in the imperial court
+- [Neon Abyss](https://www.lollipop.im/drama/neon-abyss): In a neon-soaked future, one woman fights to reclaim her identity
 
 ## Blog — AI Drama Production Guides
-- [AI Scriptwriting & Storyboarding Guide](https://www.lollipop.im/lollipop/blog/ai-script-storyboard): How AI assists in scriptwriting and storyboarding
-- [AI Video Quality Breakdown](https://www.lollipop.im/lollipop/blog/ai-video-quality): 4K, frame rates, and real-world AI video output
-- [AI Editing Tools](https://www.lollipop.im/lollipop/blog/ai-editing-tools): Complete guide to AI video editing tools
-- [AI Production Cost Guide](https://www.lollipop.im/lollipop/blog/ai-production-cost): How much does AI drama production cost
-- [AI Rendering Pipeline](https://www.lollipop.im/lollipop/blog/ai-rendering-pipeline): End-to-end AI rendering workflow
-- [AI Short Drama Complete Guide](https://www.lollipop.im/lollipop/blog/ai-short-drama-complete-guide): Complete guide to creating AI short dramas
-- [AI Copyright Compliance](https://www.lollipop.im/lollipop/blog/ai-copyright-compliance): Legal guide for AI drama production
-- [AI Tools Comparison](https://www.lollipop.im/lollipop/blog/ai-tools-comparison): Comparing AI video generation tools
-- [What is AI Drama](https://www.lollipop.im/lollipop/blog/what-is-ai-drama): Introduction to AI-generated short dramas
-- [How to Create AI Short Drama](https://www.lollipop.im/lollipop/blog/how-to-create-ai-short-drama): Step-by-step guide to creating AI short dramas
-- [Future of AI Entertainment](https://www.lollipop.im/lollipop/blog/future-of-ai-entertainment): Trends and predictions for AI entertainment
-- [AI vs Traditional Drama](https://www.lollipop.im/lollipop/blog/ai-vs-traditional-drama): Comparison of AI and traditional drama production
-- [Best AI Storytelling Platforms](https://www.lollipop.im/lollipop/blog/best-ai-storytelling-platforms): Top platforms for AI-driven storytelling
-- [AI New Generation Creators](https://www.lollipop.im/lollipop/blog/ai-new-generation-creators): How AI empowers new content creators
-- [What is Micro Drama](https://www.lollipop.im/lollipop/blog/what-is-micro-drama): Guide to micro drama format
-- [AI Video Storytelling](https://www.lollipop.im/lollipop/blog/ai-video-storytelling): AI tools for narrative video creation
-- [AI Anyone Can Create](https://www.lollipop.im/lollipop/blog/ai-anyone-can-create): Democratizing drama creation with AI
-- [Complete Guide to AI Entertainment Platforms](https://www.lollipop.im/lollipop/blog/complete-guide-ai-entertainment-platforms): Comprehensive comparison of AI entertainment platforms
-- [Lollipop Drama vs Runway vs Sora](https://www.lollipop.im/lollipop/blog/lollipop-drama-vs-runway-sora): Feature comparison of drama creation platforms
-- [AI Drama Character Consistency](https://www.lollipop.im/lollipop/blog/ai-drama-character-consistency): Maintaining character consistency in AI dramas
-- [Fanvue vs Lollipop Drama](https://www.lollipop.im/lollipop/blog/fanvue-vs-lollipop-drama): Platform comparison for creators
-- [Character Consistency Workflow](https://www.lollipop.im/lollipop/blog/character-consistency-workflow): Step-by-step character consistency guide
-- [10 Episodes in 2 Weeks](https://www.lollipop.im/lollipop/blog/ten-episodes-two-weeks): Production timeline for serialized AI dramas
-- [Publish and Monetize Vertical Drama](https://www.lollipop.im/lollipop/blog/publish-and-monetize-vertical-drama): Distribution and monetization guide
-- [Script to Screen Pipeline](https://www.lollipop.im/lollipop/blog/script-to-screen-pipeline): Complete production pipeline guide
-- [Fix AI Video Artifacts](https://www.lollipop.im/lollipop/blog/fix-ai-video-artifacts): Troubleshooting AI video quality issues
-- [First Vertical Drama — Zero Experience](https://www.lollipop.im/lollipop/blog/first-vertical-drama-zero-experience): Beginner's guide to creating vertical dramas
-- [AI Drama Budget Under $1000](https://www.lollipop.im/lollipop/blog/ai-drama-budget-under-1000): Low-budget AI drama production guide
-- [Multilingual Localization Workflow](https://www.lollipop.im/lollipop/blog/multilingual-localization-workflow): Localizing AI dramas for global markets
-- [AI Drama Legal Checklist](https://www.lollipop.im/lollipop/blog/ai-drama-legal-checklist): Legal compliance checklist for AI drama production
+- [AI Scriptwriting & Storyboarding Guide](https://www.lollipop.im/blog/ai-script-storyboard): How AI assists in scriptwriting and storyboarding
+- [AI Video Quality Breakdown](https://www.lollipop.im/blog/ai-video-quality): 4K, frame rates, and real-world AI video output
+- [AI Editing Tools](https://www.lollipop.im/blog/ai-editing-tools): Complete guide to AI video editing tools
+- [AI Production Cost Guide](https://www.lollipop.im/blog/ai-production-cost): How much does AI drama production cost
+- [AI Rendering Pipeline](https://www.lollipop.im/blog/ai-rendering-pipeline): End-to-end AI rendering workflow
+- [AI Short Drama Complete Guide](https://www.lollipop.im/blog/ai-short-drama-complete-guide): Complete guide to creating AI short dramas
+- [AI Copyright Compliance](https://www.lollipop.im/blog/ai-copyright-compliance): Legal guide for AI drama production
+- [AI Tools Comparison](https://www.lollipop.im/blog/ai-tools-comparison): Comparing AI video generation tools
+- [What is AI Drama](https://www.lollipop.im/blog/what-is-ai-drama): Introduction to AI-generated short dramas
+- [How to Create AI Short Drama](https://www.lollipop.im/blog/how-to-create-ai-short-drama): Step-by-step guide to creating AI short dramas
+- [Future of AI Entertainment](https://www.lollipop.im/blog/future-of-ai-entertainment): Trends and predictions for AI entertainment
+- [AI vs Traditional Drama](https://www.lollipop.im/blog/ai-vs-traditional-drama): Comparison of AI and traditional drama production
+- [Best AI Storytelling Platforms](https://www.lollipop.im/blog/best-ai-storytelling-platforms): Top platforms for AI-driven storytelling
+- [AI New Generation Creators](https://www.lollipop.im/blog/ai-new-generation-creators): How AI empowers new content creators
+- [What is Micro Drama](https://www.lollipop.im/blog/what-is-micro-drama): Guide to micro drama format
+- [AI Video Storytelling](https://www.lollipop.im/blog/ai-video-storytelling): AI tools for narrative video creation
+- [AI Anyone Can Create](https://www.lollipop.im/blog/ai-anyone-can-create): Democratizing drama creation with AI
+- [Complete Guide to AI Entertainment Platforms](https://www.lollipop.im/blog/complete-guide-ai-entertainment-platforms): Comprehensive comparison of AI entertainment platforms
+- [Lollipop Drama vs Runway vs Sora](https://www.lollipop.im/blog/lollipop-drama-vs-runway-sora): Feature comparison of drama creation platforms
+- [AI Drama Character Consistency](https://www.lollipop.im/blog/ai-drama-character-consistency): Maintaining character consistency in AI dramas
+- [Fanvue vs Lollipop Drama](https://www.lollipop.im/blog/fanvue-vs-lollipop-drama): Platform comparison for creators
+- [Character Consistency Workflow](https://www.lollipop.im/blog/character-consistency-workflow): Step-by-step character consistency guide
+- [10 Episodes in 2 Weeks](https://www.lollipop.im/blog/ten-episodes-two-weeks): Production timeline for serialized AI dramas
+- [Publish and Monetize Vertical Drama](https://www.lollipop.im/blog/publish-and-monetize-vertical-drama): Distribution and monetization guide
+- [Script to Screen Pipeline](https://www.lollipop.im/blog/script-to-screen-pipeline): Complete production pipeline guide
+- [Fix AI Video Artifacts](https://www.lollipop.im/blog/fix-ai-video-artifacts): Troubleshooting AI video quality issues
+- [First Vertical Drama — Zero Experience](https://www.lollipop.im/blog/first-vertical-drama-zero-experience): Beginner's guide to creating vertical dramas
+- [AI Drama Budget Under $1000](https://www.lollipop.im/blog/ai-drama-budget-under-1000): Low-budget AI drama production guide
+- [Multilingual Localization Workflow](https://www.lollipop.im/blog/multilingual-localization-workflow): Localizing AI dramas for global markets
+- [AI Drama Legal Checklist](https://www.lollipop.im/blog/ai-drama-legal-checklist): Legal compliance checklist for AI drama production

@@ -137,11 +137,11 @@ function LegalDocumentPage({ kind }: { kind: LegalDocKind }) {
       description: kind === "privacy"
         ? "Lollipop Drama Privacy Policy — how we collect, use, and protect your personal information."
         : "Lollipop Drama Terms of Service — terms and conditions for using the platform.",
-      url: `https://www.lollipop.im/lollipop/${kind === "privacy" ? "privacy" : "terms"}`,
+      url: `https://www.lollipop.im/${kind === "privacy" ? "privacy" : "terms"}`,
       publisher: {
         "@type": "Organization",
         name: "Lollipop Drama",
-        url: "https://www.lollipop.im/lollipop/",
+        url: "https://www.lollipop.im/",
       },
     });
 

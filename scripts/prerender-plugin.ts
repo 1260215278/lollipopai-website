@@ -47,7 +47,7 @@ import { isMultilangSubsetPath } from "../src/app/multilangSubset";
 // /guides 的三个数据模块（guides.ts / guidesContent.ts / guidesFaq.ts）已于
 // 2026-09-01 整体迁入 blog 三件套，此处不再导入。若发现本文件引用它们，说明迁移漏改。
 
-const SITE_URL = "https://www.lollipop.im/lollipop";
+const SITE_URL = "https://www.lollipop.im";
 
 // ── 多语言（方案 B）常量 ──
 // 语言前缀段（en 无前缀，不在此列）。zh-TW 必须排在 zh 前避免前缀误匹配。
@@ -1386,33 +1386,33 @@ function injectHomepageContent(html: string): string {
   <li><strong>4K Streaming & Offline Downloads</strong> — Premium viewing experience on iOS and Android</li>
 </ul>
 <p>
-  <a href="https://www.lollipop.im/lollipop/download">Download on App Store & Google Play</a> ·
-  <a href="https://www.lollipop.im/lollipop/creating">AI Creator Tools</a> ·
-  <a href="https://www.lollipop.im/lollipop/about">About Lollipop</a> ·
-  <a href="https://www.lollipop.im/lollipop/blog">Creator Blog</a>
+  <a href="https://www.lollipop.im/download">Download on App Store & Google Play</a> ·
+  <a href="https://www.lollipop.im/creating">AI Creator Tools</a> ·
+  <a href="https://www.lollipop.im/about">About Lollipop</a> ·
+  <a href="https://www.lollipop.im/blog">Creator Blog</a>
 </p>
 <p>Popular genres:
-  <a href="https://www.lollipop.im/lollipop/genre/romance">Romance</a> ·
-  <a href="https://www.lollipop.im/lollipop/genre/revenge">Revenge</a> ·
-  <a href="https://www.lollipop.im/lollipop/genre/ceo-drama">CEO Drama</a> ·
-  <a href="https://www.lollipop.im/lollipop/genre/thriller">Thriller</a> ·
-  <a href="https://www.lollipop.im/lollipop/genre/fantasy">Fantasy</a> ·
-  <a href="https://www.lollipop.im/lollipop/genre/sci-fi">Sci-Fi</a> ·
-  <a href="https://www.lollipop.im/lollipop/genre/horror">Horror</a> ·
-  <a href="https://www.lollipop.im/lollipop/genre/action">Action</a>
+  <a href="https://www.lollipop.im/genre/romance">Romance</a> ·
+  <a href="https://www.lollipop.im/genre/revenge">Revenge</a> ·
+  <a href="https://www.lollipop.im/genre/ceo-drama">CEO Drama</a> ·
+  <a href="https://www.lollipop.im/genre/thriller">Thriller</a> ·
+  <a href="https://www.lollipop.im/genre/fantasy">Fantasy</a> ·
+  <a href="https://www.lollipop.im/genre/sci-fi">Sci-Fi</a> ·
+  <a href="https://www.lollipop.im/genre/horror">Horror</a> ·
+  <a href="https://www.lollipop.im/genre/action">Action</a>
 </p>
 <p>Popular short dramas:
-  <a href="https://www.lollipop.im/lollipop/drama/temptation-ceo">Temptation CEO</a> ·
-  <a href="https://www.lollipop.im/lollipop/drama/the-bride-who-fell-from-the-sky">The Bride Who Fell From The Sky</a> ·
-  <a href="https://www.lollipop.im/lollipop/drama/the-revenge-of-the-plus-size-wife">The Revenge of the Plus-Size Wife</a> ·
-  <a href="https://www.lollipop.im/lollipop/drama/dark-secrets">Dark Secrets</a> ·
-  <a href="https://www.lollipop.im/lollipop/drama/crimson-dynasty">Crimson Dynasty</a> ·
-  <a href="https://www.lollipop.im/lollipop/drama/neon-abyss">Neon Abyss</a>
+  <a href="https://www.lollipop.im/drama/temptation-ceo">Temptation CEO</a> ·
+  <a href="https://www.lollipop.im/drama/the-bride-who-fell-from-the-sky">The Bride Who Fell From The Sky</a> ·
+  <a href="https://www.lollipop.im/drama/the-revenge-of-the-plus-size-wife">The Revenge of the Plus-Size Wife</a> ·
+  <a href="https://www.lollipop.im/drama/dark-secrets">Dark Secrets</a> ·
+  <a href="https://www.lollipop.im/drama/crimson-dynasty">Crimson Dynasty</a> ·
+  <a href="https://www.lollipop.im/drama/neon-abyss">Neon Abyss</a>
 </p>
 <p>
-  <a href="https://www.lollipop.im/lollipop/privacy">Privacy Policy</a> ·
-  <a href="https://www.lollipop.im/lollipop/terms">Terms of Service</a> ·
-  <a href="https://www.lollipop.im/lollipop/contact">Contact</a> ·
+  <a href="https://www.lollipop.im/privacy">Privacy Policy</a> ·
+  <a href="https://www.lollipop.im/terms">Terms of Service</a> ·
+  <a href="https://www.lollipop.im/contact">Contact</a> ·
   <a href="https://x.com/wwwLollipopim">X (Twitter)</a> ·
   <a href="https://youtube.com/@Lollipop-AI-one">YouTube</a> ·
   <a href="https://instagram.com/lollipopaiapp">Instagram</a>
@@ -1447,9 +1447,13 @@ function resolveRouteImages(routes: RouteSeoData[], assetMap: Map<string, string
 }
 
 export function prerenderPlugin(): Plugin {
+  let resolvedBase = "/";
   return {
     name: "lollipop-prerender",
     apply: "build",
+    configResolved(config) {
+      resolvedBase = config.base;
+    },
     async closeBundle() {
       const outDir = "dist";
       const templatePath = join(outDir, "index.html");
@@ -1485,6 +1489,7 @@ export function prerenderPlugin(): Plugin {
         console.log("[prerender] Building SSR bundle...");
         await build({
           configFile: false,
+          base: resolvedBase,
           publicDir: false,
           logLevel: "error",
           plugins: [

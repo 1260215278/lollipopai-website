@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { motion, useInView } from "motion/react";
 import { Apple, Smartphone } from "lucide-react";
+import { Link } from "react-router";
 import bannerImg from "../../imports/banner6.webp";
 import bannerImg2 from "../../imports/hero-banner2.webp";
 import { ParticleBackground } from "./ParticleBackground";
@@ -165,18 +166,18 @@ export function HeroSection() {
           transition={{ duration: 0.7, delay: 1.0 }}
           className="flex flex-wrap items-center justify-center gap-3 mt-5 px-6 z-10 relative"
         >
-          <a href="/blog" className="px-4 py-2 rounded-full border border-white/20 text-gray-300 hover:text-white hover:border-red-500/50 hover:bg-red-500/10 transition-all text-sm font-medium">
+          <Link to="/blog" className="px-4 py-2 rounded-full border border-white/20 text-gray-300 hover:text-white hover:border-red-500/50 hover:bg-red-500/10 transition-all text-sm font-medium">
             {messages.hero.quickLinks?.blog ?? "Blog"}
-          </a>
-          <a href="/genre/romance" className="px-4 py-2 rounded-full border border-white/20 text-gray-300 hover:text-white hover:border-red-500/50 hover:bg-red-500/10 transition-all text-sm font-medium">
+          </Link>
+          <Link to="/genre/romance" className="px-4 py-2 rounded-full border border-white/20 text-gray-300 hover:text-white hover:border-red-500/50 hover:bg-red-500/10 transition-all text-sm font-medium">
             {messages.hero.quickLinks?.genres ?? "Genres"}
-          </a>
-          <a href="/drama/temptation-ceo" className="px-4 py-2 rounded-full border border-white/20 text-gray-300 hover:text-white hover:border-red-500/50 hover:bg-red-500/10 transition-all text-sm font-medium">
+          </Link>
+          <Link to="/drama/temptation-ceo" className="px-4 py-2 rounded-full border border-white/20 text-gray-300 hover:text-white hover:border-red-500/50 hover:bg-red-500/10 transition-all text-sm font-medium">
             {messages.hero.quickLinks?.popular ?? "Popular"}
-          </a>
-          <a href="/creating" className="px-4 py-2 rounded-full bg-gradient-to-r from-red-500/20 to-orange-500/20 border border-red-500/30 text-white hover:border-red-400 hover:bg-red-500/30 transition-all text-sm font-medium">
+          </Link>
+          <Link to="/creating" className="px-4 py-2 rounded-full bg-gradient-to-r from-red-500/20 to-orange-500/20 border border-red-500/30 text-white hover:border-red-400 hover:bg-red-500/30 transition-all text-sm font-medium">
             {messages.hero.quickLinks?.aiTools ?? "AI Tools"}
-          </a>
+          </Link>
         </motion.div>
 
       </section>

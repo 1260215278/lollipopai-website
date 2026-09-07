@@ -24,7 +24,7 @@ export interface SeoMessages {
   description: string;
 }
 
-const SITE_URL = "https://www.lollipop.im/lollipop";
+const SITE_URL = "https://www.lollipop.im";
 
 /** 页面路径映射 */
 const pagePaths: Record<PageType, string> = {

@@ -4,10 +4,10 @@
 # Allow all search engines and AI crawlers
 User-agent: *
 Allow: /
-Allow: /lollipop/sitemap.xml
-Disallow: /lollipop/distribution/
-Disallow: /lollipop/login
-Disallow: /lollipop/forgot-password
+Allow: /sitemap.xml
+Disallow: /distribution/
+Disallow: /login
+Disallow: /forgot-password
 Crawl-delay: 1
 # /creator/ pages are public profiles — allow indexing for creator name searches
 
@@ -56,4 +56,4 @@ User-agent: CCBot
 Allow: /
 
 # Sitemap
-Sitemap: https://www.lollipop.im/lollipop/sitemap.xml
+Sitemap: https://www.lollipop.im/sitemap.xml

@@ -24,7 +24,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SITEMAP = ROOT / "public" / "sitemap.xml"
 BLOG_TS = ROOT / "src" / "app" / "data" / "blog.ts"
-SITE = "https://www.lollipop.im/lollipop"
+SITE = "https://www.lollipop.im"
 
 # ── 语言 → URL 前缀段（与 src/app/localePath.ts 对齐；en 无前缀）──
 # 顺序注意 zh-TW 在 zh 前（前缀误匹配）

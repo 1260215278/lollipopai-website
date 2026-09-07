@@ -4,7 +4,7 @@ HOST = "43.160.226.253"
 USER = "ubuntu"
 KEY_PATH = os.path.expanduser("~/.ssh/id_ed25519_hermes")
 LOCAL = "packages/lollipop-press-glossary.tar.gz"
-REMOTE = "/tmp/lollipop-press-glossary.tar.gz"
+REMOTE = "/tmp/lollipop-press-glossary-v4.tar.gz"
 DEPLOY_DIR = "/srv/www/lollipop/current"
 
 def main():

@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
@@ -21,11 +21,16 @@ function figmaAssetResolver() {
 // 可用环境变量 VITE_DEV_PROXY_TARGET 覆盖；生产构建走相对 /sqx_fast（同域）或由 VITE_API_BASE 指定。
 const DEV_API_TARGET = process.env.VITE_DEV_PROXY_TARGET || 'https://www.testshort.top'
 
-export default defineConfig({
+export default defineConfig(({ mode }) => {
+  // 加载 .env / .env.production 等环境变量，使 VITE_BASE 在配置阶段可用
+  const env = loadEnv(mode, process.cwd(), '')
+  const base = env.VITE_BASE || process.env.VITE_BASE || '/'
+
+  return {
   // 部署路径。默认根路径 '/'(绝对)，可保证任意深层路由(如 /distribution/enroll)
   // 刷新直访时，/assets/*.js 始终指向站点根，不会被相对路径 ./assets 误解析成
   // /distribution/assets/ 而 404 导致黑屏。子路径部署(如 /lollipop/)请设 VITE_BASE=/lollipop/。
-  base: process.env.VITE_BASE || '/',
+  base,
   plugins: [
     figmaAssetResolver(),
     // The React and Tailwind plugins are both required for Make, even if
@@ -122,4 +127,5 @@ export default defineConfig({
       },
     },
   },
+  }
 })

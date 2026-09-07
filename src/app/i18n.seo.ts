@@ -8,7 +8,8 @@
  * - 移除 meta keywords（Google 已废弃）
  * - 英文 title 控制在 55 字符以内
  */
-import { getDeployBasename, localizedHref, matchLocalePath } from "./localePath";
+import { getDeployBasename, localizedHref, matchLocalePath, stripLocalePrefix } from "./localePath";
+import { isMultilangSubsetPath } from "./multilangSubset";
 
 /** 与 i18n.tsx 的 Locale 对齐（避免循环 import） */
 export type SeoLocale = "zh-TW" | "zh-CN" | "en" | "pt" | "es" | "ar";
@@ -23,7 +24,7 @@ export interface SeoMessages {
   description: string;
 }
 
-const SITE_URL = "https://www.lollipop.im/lollipop";
+const SITE_URL = "https://www.lollipop.im";
 
 /** 页面路径映射 */
 const pagePaths: Record<PageType, string> = {
@@ -43,66 +44,66 @@ const pagePaths: Record<PageType, string> = {
 export const pageSeoMessages: Record<PageType, Record<SeoLocale, SeoMessages>> = {
   home: {
     "zh-CN": {
-      title: "Lollipop Drama — 精品短剧在线观看平台与创作者订阅服务",
+      title: "Lollipop Drama — AI短剧创作工具与精品短剧平台 | AI视频生成",
       description:
-        "Lollipop Drama面向全球用户提供精品短剧消费与创作者内容订阅服务，打造「人人可创作、创作可变现、消费即激励」的下一代海外内容生态平台。",
+        "Lollipop Drama是AI驱动的短剧创作与消费平台，内置AI文生视频等创作工具，支持80%收益分成，帮助创作者变现。15000+精品短剧，覆盖100+国家。",
     },
     "zh-TW": {
-      title: "Lollipop Drama — 精品短劇線上看首選平台與創作者訂閱服務",
+      title: "Lollipop Drama — AI短劇創作工具與精品短劇平台 | AI影片生成",
       description:
-        "Lollipop Drama面向全球用戶提供精品短劇消費與創作者內容訂閱服務，打造「人人可創作、創作可變現、消費即激勵」的下一代海外內容生態平台。",
+        "Lollipop Drama是AI驅動的短劇創作與消費平台，內建AI文生影片等創作工具，支持80%收益分成，幫助創作者變現。15000+精品短劇，覆蓋100+國家。",
     },
     en: {
-      title: "Lollipop Drama — Stream Short Dramas & AI Creator Platform",
+      title: "Lollipop Drama — AI Short Drama Creation & Streaming Platform",
       description:
-        "Lollipop Drama: premium short dramas and creator subscriptions worldwide. Everyone can create, creation can be monetized, consumption is an incentive.",
+        "Lollipop Drama: AI-powered short drama creation and streaming platform. Create videos from text using built-in AI tools, earn 80% revenue share. 15,000+ premium dramas, 100+ countries worldwide.",
     },
     pt: {
-      title: "Lollipop Drama — Dramas Curtos Premium & Assinatura de Criadores",
+      title: "Lollipop Drama — Criação e Streaming de Dramas Curtos com IA",
       description:
-        "Lollipop Drama: dramas curtos premium e assinaturas de criadores para o mundo. Todos podem criar, a criação pode ser monetizada, o consumo é um incentivo.",
+        "Lollipop Drama: plataforma de criação e streaming de dramas curtos com IA. Crie vídeos a partir de texto usando ferramentas de IA integradas, ganhe 80% da receita. 15.000+ dramas premium, 100+ países.",
     },
     es: {
-      title: "Lollipop Drama — Dramas Cortos Premium y Suscripción de Creadores",
+      title: "Lollipop Drama — Creación y Streaming de Dramas Cortos con IA",
       description:
-        "Lollipop Drama: dramas cortos premium y suscripciones de creadores para todo el mundo. Todos pueden crear, la creación puede monetizarse, el consumo es un incentivo.",
+        "Lollipop Drama: plataforma de creación y streaming de dramas cortos con IA. Crea videos desde texto usando herramientas de IA integradas, gana 80% de los ingresos. 15.000+ dramas premium, 100+ países.",
     },
     ar: {
-      title: "Lollipop Drama — دراما قصيرة مميزة واشتراكات المبدعين",
+      title: "Lollipop Drama — منصة إنشاء وبث دراما قصيرة بالذكاء الاصطناعي",
       description:
-        "Lollipop Drama: دراما قصيرة مميزة واشتراكات المبدعين حول العالم. الجميع يمكنه الإبداع، والإبداع يمكن تحويله إلى دخل، والاستهلاك هو حافز.",
+        "Lollipop Drama: منصة إنشاء وبث دراما قصيرة مدعومة بالذكاء الاصطناعي. أنشئ مقاطع فيديو من النص باستخدام أدوات الذكاء الاصطناعي المدمجة، واحصل على 80% من الإيرادات. 15000+ دراما مميزة، 100+ دولة.",
     },
   },
   about: {
     "zh-CN": {
-      title: "关于 Lollipop Drama — 全球领先的AI短剧娱乐平台",
+      title: "关于 Lollipop Drama — AI驱动的全球短剧娱乐平台",
       description:
-        "Lollipop Drama由香港Nyx Entertainment Group与韩国文化投资基金联合打造，致力于通过AI技术革新短剧娱乐，已覆盖100万+全球用户和100+国家。",
+        "Lollipop Drama由香港Nyx Entertainment Group与韩国文化投资基金联合打造，通过内置AI视频生成技术革新短剧娱乐，已覆盖100万+全球用户和100+国家。",
     },
     "zh-TW": {
-      title: "關於 Lollipop Drama — 全球領先的AI短劇娛樂平台",
+      title: "關於 Lollipop Drama — AI驅動的全球短劇娛樂平台",
       description:
-        "Lollipop Drama由香港Nyx Entertainment Group與韓國文化投資基金聯合打造，致力於透過AI技術革新短劇娛樂，已覆蓋100萬+全球用戶和100+國家。",
+        "Lollipop Drama由香港Nyx Entertainment Group與韓國文化投資基金聯合打造，透過內建AI影片生成技術革新短劇娛樂，已覆蓋100萬+全球用戶和100+國家。",
     },
     en: {
-      title: "About Lollipop Drama — AI Short Drama Platform",
+      title: "About Lollipop Drama — AI-Powered Short Drama Platform",
       description:
-        "Lollipop Drama is a joint venture by Nyx Entertainment Group and Korean Cultural Investment Fund, revolutionizing short drama entertainment with AI. 1M+ users across 100+ countries.",
+        "Lollipop Drama is a joint venture by Nyx Entertainment Group and Korean Cultural Investment Fund, revolutionizing short drama entertainment with built-in AI video generation tools. 1M+ users across 100+ countries.",
     },
     pt: {
-      title: "Sobre a Lollipop Drama — Plataforma de Drama com IA",
+      title: "Sobre a Lollipop Drama — Plataforma de Dramas com IA",
       description:
-        "A Lollipop Drama e uma joint venture da Nyx Entertainment Group com o Fundo Coreano de Investimento Cultural, revolucionando o entretenimento de dramas curtos com IA.",
+        "A Lollipop Drama e uma joint venture da Nyx Entertainment Group com o Fundo Coreano de Investimento Cultural, revolucionando dramas com ferramentas integradas de geracao de video por IA.",
     },
     es: {
       title: "Acerca de Lollipop Drama — Plataforma de dramas con IA",
       description:
-        "Lollipop Drama es una joint venture de Nyx Entertainment Group y el Fondo Coreano de Inversión Cultural, que transforma el entretenimiento de dramas cortos con IA. Más de 1M de usuarios en 100+ países.",
+        "Lollipop Drama es una joint venture de Nyx Entertainment Group y el Fondo Coreano de Inversión Cultural, que transforma el entretenimiento con herramientas integradas de generación de video por IA. Más de 1M de usuarios en 100+ países.",
     },
     ar: {
-      title: "حول Lollipop Drama — دراما قصيرة مميزة واشتراكات المبدعين",
+      title: "حول Lollipop Drama — منصة دراما قصيرة مدعومة بالذكاء الاصطناعي",
       description:
-        "Lollipop Drama مشروع مشترك بين Nyx Entertainment Group وصندوق الاستثمار الثقافي الكوري، يجدد ترفيه الدراما القصيرة بالذكاء الاصطناعي. أكثر من مليون مستخدم في 100+ دولة.",
+        "Lollipop Drama مشروع مشترك بين Nyx Entertainment Group وصندوق الاستثمار الثقافي الكوري، يحدث ترفيه الدراما القصيرة بأدوات مدمجة لتوليد الفيديو بالذكاء الاصطناعي. أكثر من مليون مستخدم في 100+ دولة.",
     },
   },
   creating: {
@@ -328,51 +329,52 @@ export function applyCustomSeoMeta(seo: SeoMessages, canonicalPath: string): voi
 /**
  * 动态更新 hreflang 链接标签（路径前缀版）。
  *
- * ⚠️ 2026-09-01 止血：这里原本声明 6 个语言（en + /zh /zh-TW /pt /es /ar），
- *    但预渲染**只生成英文路径**，dist 里没有 /zh/… 等目录。Caddy 的
- *    `try_files … /index.html` 会把这些 URL 全部 fallback 到英文首页。
+ * 与预渲染方案 B 对齐：
+ * - 多语言子集页面（首页/about/creating/download/contact/blog + 10 genre + 有中文标题的文章）
+ *   输出完整 6 语言互指 + x-default
+ * - 其余页面只输出自指 en + x-default
  *
- *    客户端路由虽然能把 `/zh/about` 渲染成中文（basename + ?lang），
- *    但**首屏静态 HTML 永远是英文的** —— GPTBot / PerplexityBot / ClaudeBot
- *    这些不执行 JS 的爬虫只能拿到英文骨架，而 hreflang 却在告诉它们
- *    「还有 5 个语言版本」，于是这 340 个 URL 全被判为重复内容。
- *
- *    **声明 hreflang 的前提是对应 URL 首屏就有该语言的内容。**
- *    在生成多语言预渲染 HTML 之前，这里只保留自指的 `en` + `x-default`。
- *
- *    将来接入多语言时：把下面数组补回 5 个语言，并同步给
- *    `scripts/prerender-plugin.ts` 的 `getRouteData()` 加 × 6 语言的路由生成
- *    （另需补阿拉伯语 `<html dir="rtl">`）。
- *    详见 `docs/multilingual-hreflang-gap-2026-09-01.md`。
+ * 声明 hreflang 的前提是对应 URL 真的有产物（预渲染生成了对应语言的静态 HTML）。
+ * 子集规则由 multilangSubset.ts 统一维护，与 prerender-plugin.ts 共享同一套判定逻辑。
  */
 function updateHreflang(pagePath: string): void {
   if (typeof document === "undefined") return;
 
-  const langs: { hreflang: string; locale: SeoLocale }[] = [
-    { hreflang: "en", locale: "en" },
-  ];
+  // 先剥离语言前缀，得到纯应用路径
+  const appPath = stripLocalePrefix(pagePath);
+
+  // 根据页面是否属于多语言子集决定 hreflang 语言组
+  const isSubset = isMultilangSubsetPath(appPath);
+  const langs: { hreflang: string; locale: SeoLocale }[] = isSubset
+    ? [
+        { hreflang: "en", locale: "en" },
+        { hreflang: "zh", locale: "zh-CN" },
+        { hreflang: "zh-TW", locale: "zh-TW" },
+        { hreflang: "pt", locale: "pt" },
+        { hreflang: "es", locale: "es" },
+        { hreflang: "ar", locale: "ar" },
+      ]
+    : [{ hreflang: "en", locale: "en" }];
+
+  // 清理旧的 hreflang 标签（防止子集/非子集切换时残留）
+  const existingHreflangs = document.querySelectorAll('link[rel="alternate"][hreflang]');
+  existingHreflangs.forEach((el) => el.remove());
 
   langs.forEach(({ hreflang, locale }) => {
-    const url = `${SITE_URL}${localizedHref(locale, pagePath)}`;
-    let el = document.querySelector(`link[rel="alternate"][hreflang="${hreflang}"]`) as HTMLLinkElement | null;
-    if (!el) {
-      el = document.createElement("link");
-      el.setAttribute("rel", "alternate");
-      el.setAttribute("hreflang", hreflang);
-      document.head.appendChild(el);
-    }
+    const url = `${SITE_URL}${localizedHref(locale, appPath)}`;
+    const el = document.createElement("link");
+    el.setAttribute("rel", "alternate");
+    el.setAttribute("hreflang", hreflang);
     el.setAttribute("href", url);
+    document.head.appendChild(el);
   });
 
   // x-default 指向无语言前缀的干净 URL（默认英文）
-  let defaultEl = document.querySelector('link[rel="alternate"][hreflang="x-default"]') as HTMLLinkElement | null;
-  if (!defaultEl) {
-    defaultEl = document.createElement("link");
-    defaultEl.setAttribute("rel", "alternate");
-    defaultEl.setAttribute("hreflang", "x-default");
-    document.head.appendChild(defaultEl);
-  }
-  defaultEl.setAttribute("href", `${SITE_URL}${localizedHref("en", pagePath)}`);
+  const defaultEl = document.createElement("link");
+  defaultEl.setAttribute("rel", "alternate");
+  defaultEl.setAttribute("hreflang", "x-default");
+  defaultEl.setAttribute("href", `${SITE_URL}${localizedHref("en", appPath)}`);
+  document.head.appendChild(defaultEl);
 }
 
 /** 从 URL 语言前缀（优先）或 <html lang> 解析当前 SEO 语言 */

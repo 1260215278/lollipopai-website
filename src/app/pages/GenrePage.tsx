@@ -53,18 +53,18 @@ export function GenrePage() {
       "@type": "CollectionPage",
       name: `${genre.name} Short Dramas`,
       description: genre.seoDescription,
-      url: `https://www.lollipop.im/lollipop/genre/${genre.slug}`,
+      url: `https://www.lollipop.im/genre/${genre.slug}`,
       isPartOf: {
         "@type": "WebSite",
         name: "Lollipop Drama",
-        url: "https://www.lollipop.im/lollipop/",
+        url: "https://www.lollipop.im/",
       },
       breadcrumb: {
         "@type": "BreadcrumbList",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: "https://www.lollipop.im/lollipop/" },
-          { "@type": "ListItem", position: 2, name: "Genres", item: "https://www.lollipop.im/lollipop/#genres" },
-          { "@type": "ListItem", position: 3, name: genre.name, item: `https://www.lollipop.im/lollipop/genre/${genre.slug}` },
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://www.lollipop.im/" },
+          { "@type": "ListItem", position: 2, name: "Genres", item: "https://www.lollipop.im/#genres" },
+          { "@type": "ListItem", position: 3, name: genre.name, item: `https://www.lollipop.im/genre/${genre.slug}` },
         ],
       },
       mainEntity: {
@@ -73,7 +73,7 @@ export function GenrePage() {
         itemListElement: dramas.slice(0, 10).map((d, i) => ({
           "@type": "ListItem",
           position: i + 1,
-          url: `https://www.lollipop.im/lollipop/drama/${d.slug}`,
+          url: `https://www.lollipop.im/drama/${d.slug}`,
           name: d.title,
         })),
       },

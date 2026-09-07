@@ -48,10 +48,45 @@
 	# 兜底：/guides 本身及其余路径 → /blog
 	redir /guides* /blog 301
 
+	# ── /lollipop/* → /* 301（2026-09-05 根部署迁移）──
+	# 生产环境（www.lollipop.im）实际把 dist 部署在网站根目录，但历史上构建产物里
+	# canonical / sitemap / hreflang / JSON-LD 全部写死了 /lollipop/ 前缀，导致
+	# sitemap 里 298 条 URL 100% 被 SPA 兜底成首页壳 → GSC 525 个页面未编入索引。
+	# 现已把全站前缀剥离，这里把已被引擎收录的 /lollipop/... 旧 URL 301 到根路径，
+	# 把已积累的权重传给新 URL，同时让 GSC 的「自动重定向」计数自然消化。
+	redir /lollipop / 301
+
+	@oldDeployPrefix path /lollipop/*
+	handle @oldDeployPrefix {
+		uri strip_prefix /lollipop
+		redir * {uri} 301
+	}
+
 	# Compression: Brotli (preferred) + Gzip fallback
 	# Brotli 压缩率比 gzip 高 15-25%，对 HTML/JS/CSS 效果显著。
 	# 配合 build 阶段生成的 .br / .gz 预压缩文件，Caddy 直接返回无需实时压缩。
 	encode zstd gzip
+
+	# ── AI-only pages: /press and /glossary ──
+	# These pages serve structured data (MediaGallery, DefinedTermSet) for AI
+	# crawlers to cite in generative search results. Human users are redirected
+	# to the homepage — the pages exist purely for GEO (Generative Engine
+	# Optimization), not for human navigation.
+	#
+	# Approach: redir is evaluated before handle/file_server in Caddy's
+	# directive order. Humans get 302→home; AI crawlers fall through to
+	# the normal try_files + file_server below.
+	@humanOnPress {
+		path /press /press/*
+		not header_regexp User-Agent (?i)(GPTBot|ClaudeBot|anthropic-ai|Claude-Web|PerplexityBot|CCBot|Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|Applebot|facebookexternalhit|Twitterbot|LinkedInBot|Sogou|SemrushBot|AhrefsBot|Bytespider|PetalBot|Yisouspider|360Spider|DotBot|MJ12bot)
+	}
+	redir @humanOnPress / 302
+
+	@humanOnGlossary {
+		path /glossary /glossary/*
+		not header_regexp User-Agent (?i)(GPTBot|ClaudeBot|anthropic-ai|Claude-Web|PerplexityBot|CCBot|Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|Applebot|facebookexternalhit|Twitterbot|LinkedInBot|Sogou|SemrushBot|AhrefsBot|Bytespider|PetalBot|Yisouspider|360Spider|DotBot|MJ12bot)
+	}
+	redir @humanOnGlossary / 302
 
 	# SPA + prerendered static files:
 	# 1. Try exact file (e.g. /about/index.html)

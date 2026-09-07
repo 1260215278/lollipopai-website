@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Star } from "lucide-react";
 import { motion } from "motion/react";
 import { useI18n } from "../i18n";
@@ -36,18 +36,22 @@ function ReviewCard({ r, ariaHidden }: { r: { name: string; role: string; text: 
 }
 
 function MarqueeRow({ items, direction }: { items: Array<{ name: string; role: string; text: string; avatar: string }>; direction: "left" | "right" }) {
-  const doubled = [...items, ...items, ...items];
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => setIsClient(true), []);
+
+  // SSR 只渲染 1 份，客户端渲染 3 份（无缝滚动用）
+  const displayItems = isClient ? [...items, ...items, ...items] : items;
+
   return (
     <div className="group relative overflow-hidden py-2">
       <div
         className="flex group-hover:[animation-play-state:paused]"
         style={{
-          animation: `${direction === "left" ? "marqueeLeft" : "marqueeRight"} 40s linear infinite`,
+          animation: isClient ? `${direction === "left" ? "marqueeLeft" : "marqueeRight"} 40s linear infinite` : "none",
         }}
       >
-        {doubled.map((r, i) => (
-          // 仅首份评价对无障碍/爬虫可见，复制份（无缝滚动用）标记为 aria-hidden 去重
-          <ReviewCard key={`${r.name}-${i}`} r={r} ariaHidden={i >= items.length} />
+        {displayItems.map((r, i) => (
+          <ReviewCard key={`${r.name}-${i}`} r={r} ariaHidden={isClient && i >= items.length} />
         ))}
       </div>
     </div>

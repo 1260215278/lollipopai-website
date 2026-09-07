@@ -42,18 +42,18 @@ export function RegionPage() {
       "@type": "WebPage",
       name: region.seoTitle,
       description: region.seoDescription,
-      url: `https://www.lollipop.im/lollipop/region/${region.code}`,
+      url: `https://www.lollipop.im/region/${region.code}`,
       isPartOf: {
         "@type": "WebSite",
         name: "Lollipop Drama",
-        url: "https://www.lollipop.im/lollipop/",
+        url: "https://www.lollipop.im/",
       },
       breadcrumb: {
         "@type": "BreadcrumbList",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: "https://www.lollipop.im/lollipop/" },
-          { "@type": "ListItem", position: 2, name: "Regions", item: "https://www.lollipop.im/lollipop/" },
-          { "@type": "ListItem", position: 3, name: region.country, item: `https://www.lollipop.im/lollipop/region/${region.code}` },
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://www.lollipop.im/" },
+          { "@type": "ListItem", position: 2, name: "Regions", item: "https://www.lollipop.im/" },
+          { "@type": "ListItem", position: 3, name: region.country, item: `https://www.lollipop.im/region/${region.code}` },
         ],
       },
       mainEntity: {
@@ -62,7 +62,7 @@ export function RegionPage() {
         itemListElement: dramas.slice(0, 6).map((d, i) => ({
           "@type": "ListItem",
           position: i + 1,
-          url: `https://www.lollipop.im/lollipop/drama/${d.slug}`,
+          url: `https://www.lollipop.im/drama/${d.slug}`,
           name: d.title,
         })),
       },

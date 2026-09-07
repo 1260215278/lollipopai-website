@@ -263,7 +263,7 @@ llms_full = (DIST / "llms-full.txt").read_text(encoding="utf-8")
 check("/guides" not in llms and "/guides" not in llms_full, "llms 文件零 /guides 残留")
 for p in POSTS:
     check(f'/blog/{p["slug"]}' in llms, f'llms.txt 收录 {p["slug"]}')
-    check(f'- URL: https://www.lollipop.im/lollipop/blog/{p["slug"]}' in llms_full, f"llms-full 收录 {p['slug']}")
+    check(f'- URL: https://www.lollipop.im/blog/{p["slug"]}' in llms_full, f"llms-full 收录 {p['slug']}")
 print(f"  INFO  llms.txt {len(llms)} chars / llms-full.txt {len(llms_full)} chars")
 print(f"  INFO  llms-full 步骤首行 {llms_full.count('  1. ')} 篇")
 
@@ -277,13 +277,13 @@ print(f"  INFO  sitemap URL 总数 {sitemap.count('<url>')}")
 check(not re.search(r"<loc>[^<]*/guides", sitemap), "sitemap 零 /guides 条目")
 for p in POSTS:
     s = p["slug"]
-    check(f"<loc>https://www.lollipop.im/lollipop/blog/{s}</loc>" in sitemap, f"sitemap 含 /blog/{s}")
+    check(f"<loc>https://www.lollipop.im/blog/{s}</loc>" in sitemap, f"sitemap 含 /blog/{s}")
     # ⚠️ 2026-09-01 止血后只声明 en + x-default。
     #    原先这里检查 zh-CN / ar —— 那两族 URL 在 dist 里根本没有产物，
     #    「sitemap 里写了」恰恰是当时的问题本身，不是验收标准。
     #    真正的验收在第 11 组：所有声明的 hreflang URL 必须能解析到实际产物。
-    check(f'hreflang="en" href="https://www.lollipop.im/lollipop/blog/{s}"' in sitemap, f"{s} 含 en hreflang")
-    check(f'hreflang="x-default" href="https://www.lollipop.im/lollipop/blog/{s}"' in sitemap, f"{s} 含 x-default")
+    check(f'hreflang="en" href="https://www.lollipop.im/blog/{s}"' in sitemap, f"{s} 含 en hreflang")
+    check(f'hreflang="x-default" href="https://www.lollipop.im/blog/{s}"' in sitemap, f"{s} 含 x-default hreflang")
 
 # ══ 6. HowTo schema ↔ 可见步骤一致 ═══════════════════════════════════════════
 print()
@@ -442,7 +442,7 @@ print("=" * 70)
 print("11. 声明的 URL 必须能解析到实际产物（hreflang + sitemap）")
 print("=" * 70)
 
-SITE_URL = "https://www.lollipop.im/lollipop"
+SITE_URL = "https://www.lollipop.im"
 
 
 def dist_has(path: str) -> bool:
@@ -637,50 +637,51 @@ check(
     + (f"（坏: {non_subset_links[:3]}）" if non_subset_links else ""),
 )
 
-# ══ 13. 无 /lollipop/ 部署前缀的 URL 残留（2026-09-01 Coverage 修复 R1/R2）══
-# GSC Coverage 报告（2026-09-01）：sitemap/canonical/hreflang 曾全部缺 /lollipop/
-# 部署前缀，真实可索引 URL 是 https://www.lollipop.im/lollipop/...，无前缀 URL
-# 实际 301 → Google 记录 398 个「自动重定向」+ 103 个「canonical 备用页」。
-# 本组用负面前瞻正则检测任何「无前缀」URL 残留（sitemap + dist HTML + llms）。
+# ══ 13. 无 /lollipop/ 部署前缀残留（2026-09-05 根部署迁移）══
+# 历史：2026-09-01 站点部署在 /lollipop/ 子路径，本组用于检测「缺前缀」的 URL。
+#      2026-09-05 生产（www.lollipop.im / Cloudflare）实际把 dist 部署在**网站根目录**，
+#      而构建产物里 canonical/sitemap/hreflang/JSON-LD 仍写死 /lollipop/ 前缀 →
+#      sitemap 里 298 条 URL 100% 被 SPA 兜底成首页壳 → GSC 525 个页面未编入索引
+#      （398 自动重定向 + 103 备用网页 + 17 noindex + 3 403 + ...）。
+#      故本组语义**反转**：现在要检测的是「残留的带前缀 URL」，一个都不许有。
 print()
 print("=" * 70)
-print("13. 无 /lollipop/ 部署前缀的 URL 残留（canonical/og:url/hreflang/sitemap/llms）")
+print("13. 无 /lollipop/ 部署前缀残留（canonical/og:url/hreflang/sitemap/llms）")
 print("=" * 70)
 
-BAD_URL_RE = re.compile(r"https://www\.lollipop\.im/(?!lollipop/)")
+# 带前缀的 URL（根部署后一律视为残留）。\b 保证不会误伤 lollipopai 之类的域名。
+BAD_URL_RE = re.compile(r"https://www\.lollipop\.im/lollipop\b")
 
-# 13a. sitemap：loc + hreflang href 必须带前缀
+# 13a. sitemap：loc + hreflang href 不得带前缀
 sm_prefix_bad: list[str] = []
 for m in BAD_URL_RE.finditer(sitemap):
     ctx = sitemap[max(0, m.start() - 40): m.end() + 40].replace("\n", " ")
     sm_prefix_bad.append(ctx)
 check(
     not sm_prefix_bad,
-    "sitemap 的 loc/hreflang 全部带 /lollipop/ 前缀"
+    "sitemap 的 loc/hreflang 均无 /lollipop/ 前缀"
     + (f"（坏: {sm_prefix_bad[:3]}）" if sm_prefix_bad else ""),
 )
 
-# 13b. dist HTML：canonical / og:url / hreflang 必须带前缀（正文自由文本不计）
+# 13b. dist HTML：任何位置都不得出现带前缀的 URL
 html_prefix_bad: list[str] = []
 for f in DIST.rglob("*.html"):
     try:
         t = f.read_text(encoding="utf-8", errors="ignore")
     except Exception:
         continue
-    for m in BAD_URL_RE.finditer(t):
-        seg = t[max(0, m.start() - 80): m.start()]
-        if "canonical" in seg or "og:url" in seg or "hreflang" in seg:
-            html_prefix_bad.append(
-                f"{f.relative_to(DIST)}: ...{t[max(0, m.start() - 40): m.end() + 30]}..."
-            )
-            break
+    m = BAD_URL_RE.search(t)
+    if m:
+        html_prefix_bad.append(
+            f"{f.relative_to(DIST)}: ...{t[max(0, m.start() - 40): m.end() + 30]}..."
+        )
 check(
     not html_prefix_bad,
-    "dist HTML 的 canonical/og:url/hreflang 全部带 /lollipop/ 前缀"
+    "dist HTML 无 /lollipop/ 前缀 URL 残留"
     + (f"（坏: {html_prefix_bad[:3]}）" if html_prefix_bad else ""),
 )
 
-# 13c. llms 文件必须带前缀
+# 13c. llms 文件不得带前缀
 llms_prefix_bad = [
     name
     for name in ("llms.txt", "llms-full.txt")
@@ -688,7 +689,30 @@ llms_prefix_bad = [
 ]
 check(
     not llms_prefix_bad,
-    "llms 文件全部带 /lollipop/ 前缀" + (f"（坏: {llms_prefix_bad}）" if llms_prefix_bad else ""),
+    "llms 文件无 /lollipop/ 前缀残留" + (f"（坏: {llms_prefix_bad}）" if llms_prefix_bad else ""),
+)
+
+# 13d. 兜底：真实可索引 URL 必须能在 dist 里解析到产物，且不能是首页兜底壳。
+#      （2026-09-05 事故的直接判据 —— 前缀错配时所有 sitemap URL 都命中兜底）
+HOME_TITLE = re.search(r"<title[^>]*>(.*?)</title>", (DIST / "index.html").read_text(
+    encoding="utf-8", errors="ignore"), re.S | re.I)
+HOME_TITLE = HOME_TITLE.group(1).strip() if HOME_TITLE else ""
+shell_hits: list[str] = []
+for loc in re.findall(r"<loc>([^<]+)</loc>", sitemap):
+    if not loc.startswith(SITE_URL):
+        continue
+    p = loc[len(SITE_URL):].strip("/")
+    fp = (DIST / p / "index.html") if p else (DIST / "index.html")
+    if not fp.is_file():
+        continue  # 缺失由第 11 组负责
+    mt = re.search(r"<title[^>]*>(.*?)</title>", fp.read_text(
+        encoding="utf-8", errors="ignore"), re.S | re.I)
+    if mt and mt.group(1).strip() == HOME_TITLE and p:
+        shell_hits.append(loc)
+check(
+    not shell_hits,
+    f"sitemap URL 无一命中首页兜底壳（共 {len(re.findall(r'<loc>', sitemap))} 条）"
+    + (f"（坏: {shell_hits[:3]}）" if shell_hits else ""),
 )
 
 # ══ 结果 ════════════════════════════════════════════════════════════════════

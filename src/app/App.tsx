@@ -37,16 +37,16 @@ const pageSchemas: Partial<Record<MarketingPage, (locale: string) => object>> = 
     "mainEntity": {
       "@type": "Organization",
       "name": "Lollipop Drama",
-      "url": "https://www.lollipop.im/lollipop/",
+      "url": "https://www.lollipop.im/",
       "founder": {
         "@type": "Person",
         "name": "James C.",
         "jobTitle": "Co-Founder",
-        "url": "https://www.lollipop.im/lollipop/about#team",
+        "url": "https://www.lollipop.im/about#team",
         "worksFor": {
           "@type": "Organization",
           "name": "Lollipop Drama",
-          "url": "https://www.lollipop.im/lollipop/",
+          "url": "https://www.lollipop.im/",
         },
       },
       "foundingLocation": {
@@ -87,7 +87,7 @@ const pageSchemas: Partial<Record<MarketingPage, (locale: string) => object>> = 
           "4K streaming and offline downloads",
           "Available in 100+ countries with multilingual subtitles",
         ],
-        "url": "https://www.lollipop.im/lollipop/download",
+        "url": "https://www.lollipop.im/download",
       },
       {
         "@type": "Product",
@@ -99,7 +99,7 @@ const pageSchemas: Partial<Record<MarketingPage, (locale: string) => object>> = 
           "price": "12.99",
           "priceCurrency": "USD",
           "availability": "https://schema.org/InStock",
-          "url": "https://www.lollipop.im/lollipop/download",
+          "url": "https://www.lollipop.im/download",
         },
         // aggregateRating removed from Product — same reason as above
       },
@@ -113,9 +113,9 @@ const pageSchemas: Partial<Record<MarketingPage, (locale: string) => object>> = 
     "creator": {
       "@type": "Organization",
       "name": "Lollipop Drama",
-      "url": "https://www.lollipop.im/lollipop/",
+      "url": "https://www.lollipop.im/",
     },
-    "url": "https://www.lollipop.im/lollipop/creating",
+    "url": "https://www.lollipop.im/creating",
     "hasPart": [
       {
         "@type": "SoftwareApplication",

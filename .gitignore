@@ -41,6 +41,10 @@ coverage/
 # 临时
 *.tmp
 *.bak
+%TEMP%/
+
+# 线上排查时抓下来的临时快照
+sitemap-live-tmp.xml
 
 # 测试工具产物
 .playwright-mcp/

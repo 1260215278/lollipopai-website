@@ -94,17 +94,17 @@ export function BlogListPage() {
       "@type": "Blog",
       name: dp.lollipopBlog,
       description: blogListSeo[locale].description,
-      url: "https://www.lollipop.im/lollipop/blog",
+      url: "https://www.lollipop.im/blog",
       publisher: {
         "@type": "Organization",
         name: dp.organizationName,
-        url: "https://www.lollipop.im/lollipop/",
+        url: "https://www.lollipop.im/",
       },
       breadcrumb: {
         "@type": "BreadcrumbList",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: dp.home, item: "https://www.lollipop.im/lollipop/" },
-          { "@type": "ListItem", position: 2, name: dp.blog, item: "https://www.lollipop.im/lollipop/blog" },
+          { "@type": "ListItem", position: 1, name: dp.home, item: "https://www.lollipop.im/" },
+          { "@type": "ListItem", position: 2, name: dp.blog, item: "https://www.lollipop.im/blog" },
         ],
       },
       blogPost: blogMeta.map((p) => ({
@@ -115,10 +115,10 @@ export function BlogListPage() {
         dateModified: p.updateDate,
         image: {
           "@type": "ImageObject",
-          url: `https://www.lollipop.im/lollipop${p.coverImage ?? "/blog-images/guide.webp"}`,
+          url: `https://www.lollipop.im${p.coverImage ?? "/blog-images/guide.webp"}`,
         },
         author: { "@type": "Person", name: p.author, jobTitle: p.authorRole, description: p.authorBio },
-        url: `https://www.lollipop.im/lollipop${localizedHref(locale, `/blog/${p.slug}`)}`,
+        url: `https://www.lollipop.im${localizedHref(locale, `/blog/${p.slug}`)}`,
       })),
     });
 

@@ -36,7 +36,7 @@ test("i18n: 会员相关文案 6 语言齐全", () => {
   const keys = [
     "tabDrama", "tabVip", "vipHint", "vipCurrentTitle", "vipCurrentEffective", "vipCurrentShare", "vipCurrentEstimate",
     "vipCurrentRefreshed", "colMonth", "colMemberCount", "colEffectiveDuration", "colVipIncome", "colMom", "colPoolStatus",
-    "colAction", "statusEstimated", "statusPosted", "actionDetail", "actionCollapse", "vipDetailTitle", "colCourse", "colTier",
+    "colAction", "statusEstimated", "statusPosted", "actionDetail", "actionCollapse", "vipDetailTitle", "colCourse", "colShare",
     "colPlatformShare", "durationHm", "vipEmpty", "vipDetailEmpty", "colPayout",
   ];
   for (const key of keys) {
@@ -56,21 +56,41 @@ function formatDuration(seconds, template) {
   return template.replace("{h}", String(h)).replace("{m}", String(m));
 }
 const formatMom = (n) => (n == null ? "--" : `${Number(n) > 0 ? "+" : ""}${Number(n).toFixed(1)}%`);
-const tierLabel = (ratio) => {
-  if (ratio == null) return "--";
-  const pct = Number(ratio) <= 1 ? Number(ratio) * 100 : Number(ratio);
-  return `${Math.round(pct * 100) / 100}%`;
+const creatorPct = (ratio) => {
+  if (ratio == null) return null;
+  return Number(ratio) <= 1 ? Number(ratio) * 100 : Number(ratio);
+};
+const shareRatioLabel = (ratio) => {
+  const pct = creatorPct(ratio);
+  return pct == null ? "--" : `${Math.round(pct * 100) / 100}%`;
+};
+// 「平台:剧方」比例，与后端 ratioLabelOf 同规则：都是 10 的倍数按十份显示，否则原样
+const platformCreatorLabel = (ratio) => {
+  const pct = creatorPct(ratio);
+  if (pct == null) return "";
+  const creator = Math.round(pct);
+  const platform = 100 - creator;
+  return platform % 10 === 0 && creator % 10 === 0 ? `${platform / 10}:${creator / 10}` : `${platform}:${creator}`;
 };
 
-test("format: 时长/环比/档位", () => {
+test("format: 时长/环比/分成比例", () => {
   const page = read("src/app/distribution/pages/EarningsPage.tsx");
   assert.ok(page.includes('template.replace("{h}", String(h)).replace("{m}", String(m))'), "page formatDuration must match replica");
+  // 每剧明细：列名复用剧相关的「分成比例」，收益类型标签带「平台:剧方」比例，不再有"档位"
+  assert.ok(/const courseCols = \[t\.colCourse, t\.colType, t\.colShare,/.test(page), "per-drama header must use colShare (分成比例)");
+  assert.ok(/label=\{`\$\{typeLabel\(c\.publishScope\)\} \$\{platformCreatorLabel\(c\.creatorRatio\)\}`\.trim\(\)\}/.test(page), "type badge must carry platform:creator ratio");
+  assert.ok(/\{shareRatioLabel\(c\.creatorRatio\)\}/.test(page), "ratio column must render shareRatioLabel");
+  assert.ok(!/colTier|tierLabel|档位/.test(page), "no leftover 档位 naming");
   assert.equal(formatDuration(3661, "{h}小时{m}分"), "1小时1分");
   assert.equal(formatDuration(null, "{h}h {m}m"), "0h 0m");
   assert.equal(formatMom(12.34), "+12.3%");
   assert.equal(formatMom(-5), "-5.0%");
   assert.equal(formatMom(null), "--");
-  assert.equal(tierLabel(0.7), "70%", "0–1 ratio is a fraction");
-  assert.equal(tierLabel(70), "70%", ">1 ratio is already a percentage");
-  assert.equal(tierLabel(null), "--");
+  assert.equal(shareRatioLabel(0.7), "70%", "0–1 ratio is a fraction");
+  assert.equal(shareRatioLabel(70), "70%", ">1 ratio is already a percentage");
+  assert.equal(shareRatioLabel(null), "--");
+  assert.equal(platformCreatorLabel(60), "4:6", "multiples of 10 collapse to tenths, same as backend");
+  assert.equal(platformCreatorLabel(0.8), "2:8", "fraction input");
+  assert.equal(platformCreatorLabel(72), "28:72", "non-multiples stay verbatim");
+  assert.equal(platformCreatorLabel(null), "", "missing ratio adds nothing to the badge");
 });

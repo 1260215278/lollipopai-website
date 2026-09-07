@@ -44,11 +44,28 @@ const formatPct = (n: number | null | undefined) => (n == null ? "--" : `${Numbe
 /** 环比：带正号，首月无对比为 "--"。 */
 const formatMom = (n: number | null | undefined) => (n == null ? "--" : `${Number(n) > 0 ? "+" : ""}${Number(n).toFixed(1)}%`);
 
-/** 剧方分成档位：0–1 小数按百分比展示，≥1 视为已是百分数。 */
-const tierLabel = (ratio: number | null | undefined) => {
-  if (ratio == null) return "--";
-  const pct = Number(ratio) <= 1 ? Number(ratio) * 100 : Number(ratio);
-  return `${Math.round(pct * 100) / 100}%`;
+/** 剧方分成比例（creatorRatio）归一成 0–100 百分数：≤1 视为小数比例，否则已是百分数。 */
+const creatorPct = (ratio: number | null | undefined) => {
+  if (ratio == null) return null;
+  return Number(ratio) <= 1 ? Number(ratio) * 100 : Number(ratio);
+};
+
+/** 分成比例列：剧方所得百分比，如 "72%"。 */
+const shareRatioLabel = (ratio: number | null | undefined) => {
+  const pct = creatorPct(ratio);
+  return pct == null ? "--" : `${Math.round(pct * 100) / 100}%`;
+};
+
+/**
+ * 收益类型标签里的「平台:剧方」比例，与剧相关 tab / 结算单的 ratioLabel 同一规则
+ * （后端 ratioLabelOf）：两边都是 10 的倍数时按十份显示 "4:6"，否则原样 "28:72"。
+ */
+const platformCreatorLabel = (ratio: number | null | undefined) => {
+  const pct = creatorPct(ratio);
+  if (pct == null) return "";
+  const creator = Math.round(pct);
+  const platform = 100 - creator;
+  return platform % 10 === 0 && creator % 10 === 0 ? `${platform / 10}:${creator / 10}` : `${platform}:${creator}`;
 };
 
 /** 当前日历年月（yyyy-MM）。 */
@@ -378,7 +395,7 @@ export function EarningsPage() {
 
   const vipCols = [t.colMonth, t.colMemberCount, t.colEffectiveDuration, t.colVipIncome, t.colMom, t.colPoolStatus, t.colAction];
   const vipGrid = "grid-cols-[120px_130px_170px_180px_110px_110px_minmax(120px,1fr)]";
-  const courseCols = [t.colCourse, t.colType, t.colTier, t.colEffectiveDuration, t.colPlatformShare, t.colMemberCount, t.colPayout, t.colPoolStatus];
+  const courseCols = [t.colCourse, t.colType, t.colShare, t.colEffectiveDuration, t.colPlatformShare, t.colMemberCount, t.colPayout, t.colPoolStatus];
   const courseGrid = "grid-cols-[minmax(220px,1fr)_140px_80px_150px_110px_110px_120px_100px]";
   const poolStatusLabel = (status: 0 | 1) => (status === 1 ? t.statusPosted : t.statusEstimated);
 
@@ -496,10 +513,13 @@ export function EarningsPage() {
                                       </p>
                                     </div>
                                     <div>
-                                      <TypeBadge type={typeValue(c.publishScope)} label={typeLabel(c.publishScope)} />
+                                      <TypeBadge
+                                        type={typeValue(c.publishScope)}
+                                        label={`${typeLabel(c.publishScope)} ${platformCreatorLabel(c.creatorRatio)}`.trim()}
+                                      />
                                     </div>
-                                    <span className="text-xs text-gray-700 whitespace-nowrap tabular-nums" style={{ fontWeight: 600 }}>
-                                      {tierLabel(c.creatorRatio)}
+                                    <span className="text-sm text-gray-700 whitespace-nowrap tabular-nums" style={{ fontWeight: 600 }}>
+                                      {shareRatioLabel(c.creatorRatio)}
                                     </span>
                                     <span className="text-xs text-gray-600 whitespace-nowrap tabular-nums">
                                       {formatDuration(c.effectiveSeconds, t.durationHm)}

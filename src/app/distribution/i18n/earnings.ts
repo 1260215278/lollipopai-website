@@ -75,7 +75,6 @@ export interface EarningsMessages {
   /** "{month} 每剧明细" */
   vipDetailTitle: string;
   colCourse: string;
-  colTier: string;
   colPlatformShare: string;
   /** "{h}小时{m}分" / "{h}h {m}m" */
   durationHm: string;
@@ -147,7 +146,6 @@ export const earnings: Record<Locale, EarningsMessages> = {
     actionCollapse: "收起",
     vipDetailTitle: "{month} 每剧明细",
     colCourse: "剧集",
-    colTier: "档位",
     colPlatformShare: "全平台占比",
     durationHm: "{h}小时{m}分",
     vipEmpty: "暂无会员分账记录",
@@ -215,7 +213,6 @@ export const earnings: Record<Locale, EarningsMessages> = {
     actionCollapse: "收起",
     vipDetailTitle: "{month} 每劇明細",
     colCourse: "劇集",
-    colTier: "檔位",
     colPlatformShare: "全平台佔比",
     durationHm: "{h}小時{m}分",
     vipEmpty: "暫無會員分帳記錄",
@@ -283,7 +280,6 @@ export const earnings: Record<Locale, EarningsMessages> = {
     actionCollapse: "Collapse",
     vipDetailTitle: "{month} by drama",
     colCourse: "Drama",
-    colTier: "Tier",
     colPlatformShare: "Platform Share",
     durationHm: "{h}h {m}m",
     vipEmpty: "No membership payouts yet",
@@ -351,7 +347,6 @@ export const earnings: Record<Locale, EarningsMessages> = {
     actionCollapse: "Recolher",
     vipDetailTitle: "{month} por drama",
     colCourse: "Drama",
-    colTier: "Faixa",
     colPlatformShare: "Participação na plataforma",
     durationHm: "{h}h {m}min",
     vipEmpty: "Ainda não há repasses de assinatura",
@@ -419,7 +414,6 @@ export const earnings: Record<Locale, EarningsMessages> = {
     actionCollapse: "Contraer",
     vipDetailTitle: "{month} por drama",
     colCourse: "Drama",
-    colTier: "Nivel",
     colPlatformShare: "Cuota en la plataforma",
     durationHm: "{h}h {m}min",
     vipEmpty: "Aún no hay repartos de membresía",
@@ -487,7 +481,6 @@ export const earnings: Record<Locale, EarningsMessages> = {
     actionCollapse: "طيّ",
     vipDetailTitle: "{month} حسب الدراما",
     colCourse: "الدراما",
-    colTier: "الفئة",
     colPlatformShare: "الحصة من المنصة",
     durationHm: "{h}س {m}د",
     vipEmpty: "لا توجد عوائد عضوية بعد",

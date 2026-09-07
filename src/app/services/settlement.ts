@@ -277,7 +277,7 @@ export interface VipPoolCourseRow {
   courseImg?: string | null;
   /** 1 账号主页 / 2 全量推荐（与收益明细 publishScope 同口径） */
   publishScope: 1 | 2;
-  /** 剧方分成档位，0–1 小数或 0–100 百分数（页面两种都兼容） */
+  /** 剧方分成比例（剧方所得），0–1 小数或 0–100 百分数（页面两种都兼容） */
   creatorRatio: number;
   effectiveSeconds: number;
   /** 该剧有效时长占全平台百分比 */

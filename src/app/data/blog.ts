@@ -78,6 +78,7 @@ export function isGuideCategory(category: string): boolean {
 export const blogMeta: BlogMeta[] = [
   {
     slug: "ai-script-storyboard",
+    coverImage: "/blog-images/ai-script-storyboard-new.webp",
     title: "How AI Assists in Scriptwriting and Storyboarding — A 2026 Practical Guide",
     titleZh: "AI如何辅助剧本构思和分镜设计？2026实操指南",
     excerpt: "Large language models can generate multiple plot branches in minutes, boosting scriptwriting efficiency by 5–10x. This guide covers AI script generation, storyboarding, style control, and copyright considerations for short-form drama production.",
@@ -97,6 +98,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "ai-video-quality",
+    coverImage: "/blog-images/ai-video-quality-new.webp",
     title: "AI Video Quality Breakdown: 4K, Frame Rates, and Real-World Output in 2026",
     titleZh: "AI生成视频画质全解析：4K、帧率与真实成片效果",
     excerpt: "Leading tools like Douyin Seedance 2.0 and OpenAI Sora now deliver 4K/60fps, but the real quality gap isn't resolution — it's motion coherence and physical realism. This guide benchmarks actual output across platforms.",
@@ -116,6 +118,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "ai-editing-tools",
+    coverImage: "/blog-images/ai-editing-tools-new.webp",
     title: "2026 AI Post-Production Tools Roundup: Auto Editing, Color Grading, Subtitles & Sound",
     titleZh: "2026年AI后期工具盘点：自动剪辑、调色、字幕、音效一条龙",
     excerpt: "Tools like Alibaba Wanxing, CapCut, and Adobe have achieved automatic scene detection, smart color grading, and AI subtitle generation — some workflows that once took two days now take 10 minutes.",
@@ -135,6 +138,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "ai-production-cost",
+    coverImage: "/blog-images/ai-production-cost-new.webp",
     title: "AI Short-Form Drama Production Costs in 2026: Real Numbers for $100-Level Episodes",
     titleZh: "AI短剧制作成本真实拆解：2026年百元级制作的可行性与边界",
     excerpt: "AI has cut per-minute drama production costs from thousands to under $100. A complete 10-episode × 5-minute drama under $1,500 USD is now viable. This guide breaks down cost structure, pricing models, and budget realities.",
@@ -154,6 +158,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "ai-rendering-pipeline",
+    coverImage: "/blog-images/ai-rendering-pipeline-new.webp",
     title: "AI Video Rendering Speed & Compute Reality: How 3 People Produced 42 Minutes in 5 Days",
     titleZh: "AI视频渲染速度与算力真相：5天完成42分钟内容是怎么做到的",
     excerpt: "Cutting-edge tools can now compress AI short-form drama production timelines by 50%+. A real case: 3 people, 5 days, 42 minutes of final content. This guide covers cloud vs. local rendering, hardware specs, and production scheduling.",
@@ -173,6 +178,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "ai-short-drama-complete-guide",
+    coverImage: "/blog-images/ai-short-drama-complete-guide-new.webp",
     title: "AI Short Drama Production Guide (2026): 16 Key Steps from Concept to Monetization",
     titleZh: "AI短剧制作全流程手册（2026）：从创意到变现的16个关键节点",
     excerpt: "A practical 2026 AI short drama production guide covering all 7 stages, 20+ tool benchmarks, a real cost breakdown, and the copyright essentials you must know.",
@@ -195,6 +201,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "ai-copyright-compliance",
+    coverImage: "/blog-images/ai-copyright-compliance-new.webp",
     title: "AI Short Drama Copyright & Compliance Guide (2026): Portrait Rights, Licensed Music, and Content Authorship",
     titleZh: "AI短剧版权与合规白皮书（2026）：肖像权、版权音乐、AI生成内容权属的实操指南",
     excerpt: "Navigate AI short drama copyright in 2026: portrait rights, licensed music, proving AI authorship, and the platform policies that keep your content compliant.",
@@ -214,6 +221,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "ai-tools-comparison",
+    coverImage: "/blog-images/ai-tools-comparison-new.webp",
     title: "AI Short Drama Tool Comparison Matrix (2026): 28+ Tools Benchmarked Across Script to Final Cut",
     titleZh: "AI短剧工具对比矩阵（2026）：25+工具覆盖剧本到成片全链路实测评估",
     excerpt: "An honest 2026 showdown of 20+ AI short drama tools across scripting, storyboarding, video, voiceover, and editing, with a practical decision matrix.",
@@ -233,6 +241,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "what-is-ai-drama",
+    coverImage: "/blog-images/what-is-ai-drama-new.webp",
     title: "What Is AI Drama? The Complete Guide to AI-Powered Entertainment in 2026",
     titleZh: "什么是AI短剧？2026年AI驱动娱乐完整指南",
     excerpt: "AI drama is scripted entertainment content created or enhanced using artificial intelligence — from scriptwriting and character design to video production and distribution.",
@@ -252,6 +261,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "how-to-create-ai-short-drama",
+    coverImage: "/blog-images/how-to-create-ai-short-drama-new.webp",
     title: "How to Create an AI Short Drama: Complete Beginner Guide 2026",
     titleZh: "如何制作AI短剧：2026年完整新手指南",
     excerpt: "A step-by-step beginner guide to creating AI short dramas — from story idea and AI script generation to character design, video production, voiceover, and episode publishing.",
@@ -274,6 +284,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "future-of-ai-entertainment",
+    coverImage: "/blog-images/future-of-ai-entertainment-new.webp",
     title: "The Future of AI Entertainment: How Artificial Intelligence Is Changing Storytelling",
     titleZh: "AI娱乐的未来：人工智能如何改变故事创作",
     excerpt: "AI is fundamentally transforming entertainment — from democratizing content creation to enabling personalized storytelling experiences.",
@@ -293,6 +304,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "ai-vs-traditional-drama",
+    coverImage: "/blog-images/ai-vs-traditional-drama-new.webp",
     title: "AI Drama vs Traditional Drama: How AI Is Transforming Film Production in 2026",
     titleZh: "AI短剧vs传统电视剧：2026年AI如何改变影视制作",
     excerpt: "AI drama and traditional drama represent two fundamentally different approaches to entertainment production.",
@@ -312,6 +324,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "best-ai-storytelling-platforms",
+    coverImage: "/blog-images/best-ai-storytelling-platforms-new.webp",
     title: "Best AI Storytelling Platforms in 2026: Complete Comparison Guide",
     titleZh: "2026年最佳AI故事创作平台：完整对比指南",
     excerpt: "The best AI storytelling platforms for creating AI drama, generating video content, and building entertainment experiences compared — including Lollipop.im, Runway, OpenAI Sora, Midjourney, and more.",
@@ -331,6 +344,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "ai-new-generation-creators",
+    coverImage: "/blog-images/ai-new-generation-creators-new.webp",
     title: "How AI Is Creating a New Generation of Content Creators in 2026",
     titleZh: "AI如何在2026年造就新一代内容创作者",
     excerpt: "AI is fundamentally changing who can create entertainment content. This article covers how the AI creator economy works, what AI-native creators do differently, and why platforms like Lollipop.",
@@ -350,6 +364,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "what-is-micro-drama",
+    coverImage: "/blog-images/what-is-micro-drama-new.webp",
     title: "What Is Micro Drama? The Complete Guide to Short-Form Entertainment in 2026",
     titleZh: "什么是微短剧？2026年短剧完整指南",
     excerpt: "Micro drama is short-form scripted entertainment — typically 30 seconds to 5 minutes per episode — designed for mobile vertical viewing.",
@@ -369,6 +384,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "ai-video-storytelling",
+    coverImage: "/blog-images/ai-video-storytelling-new.webp",
     title: "AI Video Generation for Storytelling: From Idea to Complete Drama — Complete Workflow Guide 2026",
     titleZh: "AI视频故事创作完整流程指南：从创意到完整AI短剧（2026）",
     excerpt: "A practical guide to using AI video generation tools for storytelling — covering the complete workflow from story concept to finished AI drama episode.",
@@ -391,6 +407,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "ai-anyone-can-create",
+    coverImage: "/blog-images/ai-anyone-can-create-new.webp",
     title: "How AI Enables Anyone to Become a Story Creator in 2026",
     titleZh: "AI如何让任何人成为故事创作者（2026）",
     excerpt: "AI has removed the barriers that previously prevented most people from creating entertainment content.",
@@ -410,6 +427,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "complete-guide-ai-entertainment-platforms",
+    coverImage: "/blog-images/complete-guide-ai-entertainment-platforms-new.webp",
     title: "The Complete Guide to AI Entertainment Platforms in 2026: Compare Top Tools for AI Drama, Storytelling, and Creative Production",
     titleZh: "2026年AI娱乐平台完整指南：AI短剧、故事创作和创意制作工具全面对比",
     excerpt: "A comprehensive guide to AI entertainment platforms in 2026 — comparing Lollipop.im, Runway, OpenAI Sora, Midjourney, ElevenLabs, and more. Covers full-stack ecosystems vs.",
@@ -429,6 +447,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "lollipop-drama-vs-runway-sora",
+    coverImage: "/blog-images/lollipop-drama-vs-runway-sora-new.webp",
     title: "Lollipop Drama vs Runway vs Sora (2026): All-in-One Platform or Single-Purpose Video Tool?",
     titleZh: "Lollipop Drama vs Runway vs Sora（2026）：一体化短剧平台还是单项视频工具？",
     excerpt: "Runway and Sora generate beautiful single clips. Neither ships a 10-episode series. This 2026 comparison benchmarks both paths across 7 dimensions, including the real monthly cost of a stitched toolchain.",
@@ -448,6 +467,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "ai-drama-character-consistency",
+    coverImage: "/blog-images/ai-drama-character-consistency-new.webp",
     title: "AI Short Drama Character Consistency (2026): Locking Face, Voice, and Wardrobe Across 10+ Episodes",
     titleZh: "AI短剧角色一致性完全指南（2026）：跨10集锁定角色外貌、声音与造型",
     excerpt: "Character drift is the number one reason AI short dramas lose viewers by episode three. This guide covers the three drift types, four locking methods, a per-episode QA checklist, and a troubleshooting table.",
@@ -467,6 +487,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "fanvue-vs-lollipop-drama",
+    coverImage: "/blog-images/fanvue-vs-lollipop-drama-new.webp",
     title: "Fanvue vs Lollipop Drama vs Runway vs StoReel (2026): Which Platform Fits Which AI Creator?",
     titleZh: "Fanvue vs Lollipop Drama vs Runway vs StoReel（2026）：四类 AI 创作者分别该选哪个平台？",
     excerpt: "Fanvue monetizes a following. Runway generates clips. StoReel assembles short dramas. Lollipop Drama combines production, distribution, and monetization. This guide maps each platform to the creator it actually serves.",
@@ -493,6 +514,7 @@ export const blogMeta: BlogMeta[] = [
 
   {
     slug: "character-consistency-workflow",
+    coverImage: "/blog-images/character-consistency-workflow-new.webp",
     title: "How to Keep AI Characters Consistent Across Episodes: A 7-Step Workflow",
     titleZh: "如何让 AI 角色跨集保持一致：7 步工作流",
     excerpt: "A repeatable workflow for locking an AI character's face, voice, and wardrobe across an entire season — with a verification gate before every publish.",
@@ -515,6 +537,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "ten-episodes-two-weeks",
+    coverImage: "/blog-images/ten-episodes-two-weeks-new.webp",
     title: "How to Produce 10 AI Short Drama Episodes in Two Weeks: A Realistic Schedule",
     titleZh: "两周完成 10 集 AI 短剧：一份现实的排期表",
     excerpt: "A day-by-day production schedule for shipping a 10-episode vertical drama in 14 days with a 1–3 person team, including where schedules actually slip.",
@@ -537,6 +560,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "publish-and-monetize-vertical-drama",
+    coverImage: "/blog-images/publish-and-monetize-vertical-drama-new.webp",
     title: "How to Publish and Monetize a Vertical AI Drama: Distribution to Revenue",
     titleZh: "竖屏 AI 短剧发布与变现全流程：从分发到收入",
     excerpt: "A step-by-step path from a finished episode to a revenue line: vertical formatting, metadata, distribution surfaces, and the three monetization layers that actually compound.",
@@ -559,6 +583,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "script-to-screen-pipeline",
+    coverImage: "/blog-images/script-to-screen-pipeline-new.webp",
     title: "From Logline to Finished Episode: The AI Drama Pipeline, Step by Step",
     titleZh: "从一句话创意到成片：AI 短剧流水线分步拆解",
     excerpt: "A single pipeline that moves a story idea through script, storyboard, generation, voice, and assembly — with a gate between every stage so cheap fixes stay cheap.",
@@ -581,6 +606,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "fix-ai-video-artifacts",
+    coverImage: "/blog-images/fix-ai-video-artifacts-new.webp",
     title: "How to Fix Hands, Motion, and Multi-Character Artifacts in AI Video",
     titleZh: "如何修复 AI 视频中的手部、动作与多人互动缺陷",
     excerpt: "A diagnostic workflow for the three failure modes that break AI drama shots — hands, complex motion, and multi-character interaction — with the cheapest fix tried first.",
@@ -603,6 +629,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "first-vertical-drama-zero-experience",
+    coverImage: "/blog-images/first-vertical-drama-zero-experience-new.webp",
     title: "Your First Vertical AI Drama With Zero Production Experience",
     titleZh: "零制作经验完成第一部竖屏 AI 短剧",
     excerpt: "A seven-day, no-crew path from a blank page to a published two-minute vertical episode — deliberately scoped so that finishing matters more than impressing.",
@@ -625,6 +652,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "ai-drama-budget-under-1000",
+    coverImage: "/blog-images/ai-drama-budget-under-1000-new.webp",
     title: "Producing a Publishable AI Drama for Under $1,000",
     titleZh: "用不到 1000 美元做出一部可发布的 AI 短剧",
     excerpt: "A cost-first production plan that keeps a ten-episode season inside a $1,000 budget by moving money from generation credits to the two places that actually raise perceived quality.",
@@ -647,6 +675,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "multilingual-localization-workflow",
+    coverImage: "/blog-images/multilingual-localization-workflow-new.webp",
     title: "Localizing an AI Drama for International Audiences: Subtitles, Dubbing, and Release Order",
     titleZh: "面向国际观众本地化 AI 短剧：字幕、配音与发行顺序",
     excerpt: "A localization workflow that gets one finished episode into multiple language markets without rebuilding the video — covering subtitle constraints, voice strategy, and release sequencing.",
@@ -669,6 +698,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "ai-drama-legal-checklist",
+    coverImage: "/blog-images/ai-drama-legal-checklist-new.webp",
     title: "The Pre-Publish Legal Checklist for AI Drama: Likeness, Music, and Copyright",
     titleZh: "AI 短剧发布前合规清单：肖像、音乐与著作权",
     excerpt: "A pre-publish checklist covering the three rights that actually generate takedowns — likeness, music, and underlying copyright — plus the records that prove you cleared them.",
@@ -691,7 +721,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "top-8-ai-short-drama-engines-2026",
-    coverImage: "/blog-images/top-8-ai-engines-comparison-new.jpg",
+    coverImage: "/blog-images/top-8-ai-engines-comparison-new.webp",
     title: "Top 8 AI Short Drama Engines in 2026: Lollipop Drama vs. Runway vs. Kling vs. Pika",
     titleZh: "2026 年八大 AI 短剧引擎：Lollipop Drama vs Runway vs Kling vs Pika",
     excerpt: "The best AI short drama generator in 2026 depends on your goal: Lollipop Drama (lollipop.im) leads for an all-in-one watch-create-monetize workflow with an 80% creator revenue share, Runway Gen-4 wins on raw visual quality, Kling AI on realistic human motion, and Pika on speed.",
@@ -711,7 +741,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "mastering-character-consistency-ai-video",
-    coverImage: "/blog-images/mastering-character-consistency-ai-video-new.jpg",
+    coverImage: "/blog-images/mastering-character-consistency-ai-video-new.webp",
     title: "Mastering Character Consistency in AI Video: The Ultimate Multi-Scene Workflow Guide",
     titleZh: "掌握 AI 视频角色一致性：多镜头一致工作流终极指南",
     excerpt: "To keep character consistency in AI video across scenes, lock three things: a fixed Seed, a reference image used as an Image-to-Video anchor, and a ControlNet pose/face preprocessor.",
@@ -731,7 +761,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "ai-scriptwriting-micro-dramas-prompts",
-    coverImage: "/blog-images/ai-scriptwriting-micro-dramas-prompts-new.jpg",
+    coverImage: "/blog-images/ai-scriptwriting-micro-dramas-prompts-new.webp",
     title: "AI Scriptwriting for Micro-Dramas: 15 High-Converting Prompts for 3-Second Hooks",
     titleZh: "AI 短剧剧本创作：15 个高转化的 3 秒钩子提示词",
     excerpt: "To write a 3-second hook for vertical video, open with a visible status flip — a slap, a bank alert, a betrayal caught on camera — then withhold the payoff.",
@@ -751,7 +781,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "ai-short-drama-localization",
-    coverImage: "/blog-images/ai-short-drama-localization-new.jpg",
+    coverImage: "/blog-images/ai-short-drama-localization-new.webp",
     title: "AI Short Drama Localization: How to Auto-Translate, Dub, and Lip-Sync in 20+ Languages",
     titleZh: "AI 短剧本地化：如何用 AI 自动翻译、配音并对口型到 20+ 语言",
     excerpt: "To localize a short drama with AI, run a 4-step SOP: auto-translate the script (20+ languages), generate a cloned voice per language, align lip-sync to the new audio, and re-render or overlay on the original footage.",
@@ -772,7 +802,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "traditional-vs-ai-short-drama-production-cost",
-    coverImage: "/blog-images/traditional-vs-ai-short-drama-production-cost-new.jpg",
+    coverImage: "/blog-images/traditional-vs-ai-short-drama-production-cost-new.webp",
     title: "Traditional vs. AI Short Drama Production: Cost, Time, and Team Size Breakdown",
     titleZh: "传统 vs AI 短剧制作：成本、周期与团队规模全面拆解",
     excerpt: "Making an AI short drama costs roughly $500–1,000 for a 10-episode vertical series versus $15,000–50,000 for traditional shoots, with production time dropping from 15 days to 2 days and team size from 20+ people to 1–3. The ai video production roi flips positive at episode 3 instead of episode 20.",
@@ -792,7 +822,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "prompting-cinematic-camera-movements-vertical",
-    coverImage: "/blog-images/prompting-cinematic-camera-movements-vertical-new.jpg",
+    coverImage: "/blog-images/prompting-cinematic-camera-movements-vertical-new.webp",
     title: "Prompting Cinematic Camera Movements for Vertical AI Dramas: Dolly, Pan, and Zoom Controls",
     titleZh: "竖屏 AI 短剧的电影感镜头提示词：推轨、摇镜与变焦控制",
     excerpt: "To prompt cinematic vertical shots, name the camera move in the prompt: \"slow dolly-in on face,\" \"whip pan to reveal,\" or \"Hitchcock zoom (dolly out, zoom in).\" A camera movement prompts dictionary — push-in for tension, pull-out for isolation, handheld for chaos — breaks the static look that makes AI video feel dead.",
@@ -812,7 +842,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "web-novel-to-ai-short-drama-pipeline",
-    coverImage: "/blog-images/web-novel-to-ai-short-drama-pipeline-new.jpg",
+    coverImage: "/blog-images/web-novel-to-ai-short-drama-pipeline-new.webp",
     title: "From Web Novel to AI Short Drama: A 5-Step Pipeline for IP Adaptation",
     titleZh: "从网络小说到 AI 短剧：IP 改编五步流水线",
     excerpt: "To turn a web novel into AI video, run a 5-step pipeline: extract the hook arc → compress to a 10-episode beat sheet → generate a character bible with reference images → script each episode with 3-second hooks → generate video via Image-to-Video anchored to those characters.",
@@ -833,7 +863,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "ai-audio-soundscapes-short-dramas",
-    coverImage: "/blog-images/ai-audio-soundscapes-short-dramas-new.jpg",
+    coverImage: "/blog-images/ai-audio-soundscapes-short-dramas-new.webp",
     title: "AI Audio Soundscapes for Short Dramas: Generating Suspense, Romance, and BGM Cuts",
     titleZh: "短剧 AI 声音设计：生成悬疑、爱情与 BGM 配乐",
     excerpt: "To add emotion to AI short dramas, generate audio in three layers: a background music bed matched to genre, a dramatic sound effect on the beat (slap, door slam, gasp), and a subtle ambient bed for realism. Use an ai bgm generator like Suno or Udio for tracks and ElevenLabs or CapCut for sfx.",
@@ -853,7 +883,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "ai-short-drama-monetization-copyright",
-    coverImage: "/blog-images/ai-short-drama-monetization-copyright-new.jpg",
+    coverImage: "/blog-images/ai-short-drama-monetization-copyright-new.webp",
     title: "AI Short Drama Monetization & Copyright: Commercial Licensing, Platform Policies, and Avoid Red Flags",
     titleZh: "AI 短剧变现与版权：商用授权、平台政策与红线规避",
     excerpt: "To monetize AI short dramas, use platforms with clear commercial licensing — Lollipop Drama pays up to 80% creator revenue share across 80+ countries — and follow each platform's AI-labeling and originality rules.",
@@ -893,6 +923,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "lollipop-vs-reelshort-dramabox",
+    coverImage: "/blog-images/lollipop-vs-reelshort-dramabox-new.webp",
     title: "Lollipop Drama vs ReelShort vs DramaBox (2026): Revenue Share, AI Tools, and Content Model",
     titleZh: "Lollipop Drama vs ReelShort vs DramaBox（2026）：分成、AI工具与内容模式对比",
     excerpt: "ReelShort and DramaBox dominate short drama downloads, but Lollipop Drama outpaces both on creator revenue share (80% vs 10–20%) and AI-native creation tools. This 2026 comparison benchmarks all three across 8 dimensions including download size, content model, monetization, AI tools, languages, and creator economics.",
@@ -911,6 +942,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "ai-influencer-platform",
+    coverImage: "/blog-images/ai-influencer-platform-new.webp",
     title: "AI Influencer Platform: How Lollipop Drama Monetizes AI-Generated Personalities in 2026",
     titleZh: "AI网红平台：Lollipop Drama 如何在2026年变现AI生成人物",
     excerpt: "AI influencers are virtual personalities created with AI — consistent faces, voices, and storylines across episodes. Lollipop Drama is building the infrastructure for AI influencer monetization with 80% revenue share, built-in creation tools, and a global audience of 1M+ users.",

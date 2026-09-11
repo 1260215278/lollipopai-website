@@ -52,12 +52,23 @@ def load_key():
 
 
 def urls_from_sitemap():
-    p = os.path.join(ROOT, "public", "sitemap.xml")
+    # 2026-09-09 审计 P2-2：只读 dist/sitemap.xml（构建期由 prerender 从路由生成，
+    # 是唯一事实源）。public/sitemap.xml 已删除 —— 旧的手写版本含已下线 URL，
+    # 曾会把死链推进 IndexNow 联盟搜索引擎。
+    p = os.path.join(ROOT, "dist", "sitemap.xml")
     if not os.path.exists(p):
-        p = os.path.join(ROOT, "dist", "sitemap.xml")
+        sys.exit("缺少 dist/sitemap.xml —— 请先完成构建（vite build），再运行本脚本")
     with io.open(p, encoding="utf-8") as f:
         s = f.read()
-    return re.findall(r"<loc>\s*([^<\s]+)\s*</loc>", s)
+    urls = re.findall(r"<loc>\s*([^<\s]+)\s*</loc>", s)
+    # 条目数下限校验：防止半成品/异常构建的 sitemap 被批量提交
+    min_expected = 250
+    if len(urls) < min_expected:
+        sys.exit(
+            f"dist/sitemap.xml 只有 {len(urls)} 条 URL（低于安全下限 {min_expected}），"
+            "疑似构建不完整，已中止提交"
+        )
+    return urls
 
 
 def urls_from_file(path):

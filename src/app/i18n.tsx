@@ -231,6 +231,16 @@ const enMessages = {
         role: "VIP · Germany",
         text: "I was skeptical about 4K on a short drama app, but the visuals are genuinely cinematic.",
       },
+      {
+        name: "Sofia G.",
+        role: "Premium · Mexico",
+        text: "The genre variety is unreal — I jumped from a revenge thriller to a historical romance in one evening. Something new every day.",
+      },
+      {
+        name: "Arjun N.",
+        role: "Creator · India",
+        text: "I published my first AI-generated drama series here and hit 50K views in two weeks. The 80% revenue share actually covers my production costs.",
+      },
     ],
   },
   creator: {
@@ -260,10 +270,7 @@ const enMessages = {
     featuredShowTitle: "Obsessed With My Boss · Pt.2",
     featuredTimer: "0:42",
     notification: "New Episode!",
-    rating: "4.9",
     stats: [
-      { value: "2M+", label: "Downloads" },
-      { value: "4.9★", label: "App Rating" },
       { value: "100+", label: "Countries" },
       { value: "99.9%", label: "Uptime" },
     ],
@@ -287,10 +294,10 @@ const enMessages = {
     teamTitle: "Outstanding Team",
     teamSub: "A world-class leadership team driving innovation in entertainment",
     team: [
-      { name: "James C.", role: "Co-Founder", desc: "Veteran in entertainment & technology with extensive industry experience." },
-      { name: "Sarah L.", role: "Operations", desc: "Global operations specialist with multi-market scaling expertise." },
-      { name: "David P.", role: "Technology", desc: "Expert in AI and distributed systems with deep technical background." },
-      { name: "Emily W.", role: "Finance", desc: "Seasoned finance professional with strategic investment background." },
+      { name: "James C.", role: "Co-Founder", desc: "15+ years in entertainment technology. Previously led content strategy at a top-3 streaming platform in Southeast Asia. Oversees Lollipop Drama's dual human+AI content vision and global partnerships." },
+      { name: "Sarah L.", role: "Head of Operations", desc: "Scaled mobile entertainment products across 20+ markets in APAC and Latin America. Former operations lead at a Tencent-backed short drama platform. Manages creator onboarding and multilingual localization." },
+      { name: "David P.", role: "CTO", desc: "PhD in distributed systems. Built recommendation engines serving 50M+ daily active users. Leads the AI creation toolkit engineering team and 4K streaming infrastructure." },
+      { name: "Emily W.", role: "Head of Finance", desc: "Former investment banker specializing in digital media M&A. Manages creator payout infrastructure across 100+ countries and the 80% revenue share economics model." },
     ],
     partnersTitle: "Strategic Partners",
     partnersSub: "Collaborating with industry leaders across the globe",
@@ -647,6 +654,16 @@ const translations: Record<Locale, TranslationMessages> = {
           role: "VIP · 德国",
           text: "原本不太相信短剧平台也能有 4K 观感，但画面质感真的很电影化。",
         },
+        {
+          name: "Sofia G.",
+          role: "Premium · 墨西哥",
+          text: "类型丰富到难以置信——一个晚上从复仇悬疑跳到古装言情，每天都有新内容。",
+        },
+        {
+          name: "Arjun N.",
+          role: "Creator · 印度",
+          text: "我在这里发布了第一部 AI 生成的短剧系列，两周内就突破了 5 万播放。80% 的分成真正覆盖了我的制作成本。",
+        },
       ],
     },
     creator: {
@@ -676,10 +693,7 @@ const translations: Record<Locale, TranslationMessages> = {
       featuredShowTitle: "Obsessed With My Boss · 第 2 部",
       featuredTimer: "0:42",
       notification: "新剧更新！",
-      rating: "4.9",
       stats: [
-        { value: "2M+", label: "下载量" },
-        { value: "4.9★", label: "应用评分" },
         { value: "100+", label: "覆盖国家" },
         { value: "99.9%", label: "服务可用率" },
       ],
@@ -703,10 +717,10 @@ const translations: Record<Locale, TranslationMessages> = {
       teamTitle: "核心团队",
       teamSub: "驱动娱乐创新的世界级领导团队",
       team: [
-        { name: "James C.", role: "联合创始人", desc: "深耕娱乐与科技领域，拥有丰富行业经验。" },
-        { name: "Sarah L.", role: "运营", desc: "擅长多市场增长与全球化运营。" },
-        { name: "David P.", role: "技术", desc: "专注 AI 与分布式系统，具备深厚工程背景。" },
-        { name: "Emily W.", role: "财务", desc: "拥有丰富战略投资与财务管理经验。" },
+        { name: "James C.", role: "联合创始人", desc: "15年以上娱乐科技行业经验，曾任东南亚前三流媒体平台内容策略负责人。负责 Lollipop Drama 的人+AI双内容愿景与全球合作伙伴关系。" },
+        { name: "Sarah L.", role: "运营总监", desc: "在亚太和拉美 20+ 市场扩展过移动娱乐产品，曾任腾讯系短剧平台运营负责人。管理创作者入驻和多语言本地化。" },
+        { name: "David P.", role: "CTO", desc: "分布式系统博士，构建过服务 5000 万日活用户的推荐引擎。领导 AI 创作工具工程团队和 4K 流媒体基础设施。" },
+        { name: "Emily W.", role: "财务总监", desc: "前投行经理，专注数字媒体并购。管理覆盖 100+ 国家的创作者支付基础设施和 80% 分成经济模型。" },
       ],
       partnersTitle: "战略合作伙伴",
       partnersSub: "与全球行业领先者共同协作",
@@ -1058,6 +1072,16 @@ const translations: Record<Locale, TranslationMessages> = {
           role: "VIP · 德國",
           text: "原本不太相信短劇平台也能有 4K 質感，但畫面真的很電影化。",
         },
+        {
+          name: "Sofia G.",
+          role: "Premium · 墨西哥",
+          text: "類型豐富到難以置信——一個晚上從復仇懸疑跳到古裝言情，每天都有新內容。",
+        },
+        {
+          name: "Arjun N.",
+          role: "Creator · 印度",
+          text: "我在這裡發布了第一部 AI 生成的短劇系列，兩週內就突破了 5 萬播放。80% 的分成真正覆蓋了我的製作成本。",
+        },
       ],
     },
     creator: {
@@ -1087,10 +1111,7 @@ const translations: Record<Locale, TranslationMessages> = {
       featuredShowTitle: "Obsessed With My Boss · 第 2 部",
       featuredTimer: "0:42",
       notification: "新劇更新！",
-      rating: "4.9",
       stats: [
-        { value: "2M+", label: "下載量" },
-        { value: "4.9★", label: "應用評分" },
         { value: "100+", label: "覆蓋國家" },
         { value: "99.9%", label: "服務可用率" },
       ],
@@ -1469,6 +1490,16 @@ const translations: Record<Locale, TranslationMessages> = {
           role: "VIP · Alemanha",
           text: "Eu duvidava de 4K em um app de drama curto, mas o visual é realmente cinematográfico.",
         },
+        {
+          name: "Sofia G.",
+          role: "Premium · México",
+          text: "A variedade de gêneros é absurda — passei de um thriller de vingança para um romance histórico na mesma noite. Sempre há algo novo.",
+        },
+        {
+          name: "Arjun N.",
+          role: "Creator · Índia",
+          text: "Publiquei minha primeira série de drama gerada por IA aqui e alcancei 50K visualizações em duas semanas. A divisão de 80% da receita cobre meus custos de produção.",
+        },
       ],
     },
     creator: {
@@ -1498,10 +1529,7 @@ const translations: Record<Locale, TranslationMessages> = {
       featuredShowTitle: "Obsessed With My Boss · Pt.2",
       featuredTimer: "0:42",
       notification: "Novo episódio!",
-      rating: "4.9",
       stats: [
-        { value: "2M+", label: "Downloads" },
-        { value: "4.9★", label: "Nota do App" },
         { value: "100+", label: "Países" },
         { value: "99.9%", label: "Disponibilidade" },
       ],
@@ -1880,6 +1908,16 @@ const translations: Record<Locale, TranslationMessages> = {
           role: "VIP · Alemania",
           text: "Dudaba del 4K en una app de drama corto, pero el visual es realmente cinematográfico.",
         },
+        {
+          name: "Sofia G.",
+          role: "Premium · México",
+          text: "La variedad de géneros es increíble — pasé de un thriller de venganza a un romance histórico en una sola noche. Hay algo nuevo cada día.",
+        },
+        {
+          name: "Arjun N.",
+          role: "Creator · India",
+          text: "Publiqué mi primera serie de drama generada con IA aquí y alcancé 50K vistas en dos semanas. El 80% de ingresos cubre mis costos de producción.",
+        },
       ],
     },
     creator: {
@@ -1909,10 +1947,7 @@ const translations: Record<Locale, TranslationMessages> = {
       featuredShowTitle: "Obsessed With My Boss · Pt.2",
       featuredTimer: "0:42",
       notification: "¡Nuevo episodio!",
-      rating: "4.9",
       stats: [
-        { value: "2M+", label: "Descargas" },
-        { value: "4.9★", label: "Calificación" },
         { value: "100+", label: "Países" },
         { value: "99.9%", label: "Disponibilidad" },
       ],
@@ -2291,6 +2326,16 @@ const translations: Record<Locale, TranslationMessages> = {
           role: "VIP · ألمانيا",
           text: "كنت أشك في جودة 4K على تطبيق دراما قصيرة، لكن الصورة سينمائية بحق.",
         },
+        {
+          name: "Sofia G.",
+          role: "Premium · المكسيك",
+          text: "تنوع الأنواع لا يصدق — انتقلت من إثارة انتقام إلى رواية تاريخية في ليلة واحدة. هناك جديد كل يوم.",
+        },
+        {
+          name: "Arjun N.",
+          role: "Creator · الهند",
+          text: "نشرت أول مسلسل دراما منشأ بالذكاء الاصطناعي هنا ووصلت إلى 50 ألف مشاهدة في أسبوعين. حصة 80% من الإيرادات تغطي تكاليف الإنتاج فعلاً.",
+        },
       ],
     },
     creator: {
@@ -2320,10 +2365,7 @@ const translations: Record<Locale, TranslationMessages> = {
       featuredShowTitle: "Obsessed With My Boss · Pt.2",
       featuredTimer: "0:42",
       notification: "حلقة جديدة!",
-      rating: "4.9",
       stats: [
-        { value: "2M+", label: "تنزيلات" },
-        { value: "4.9★", label: "تقييم التطبيق" },
         { value: "100+", label: "دول" },
         { value: "99.9%", label: "التوفر" },
       ],

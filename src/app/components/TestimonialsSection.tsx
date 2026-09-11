@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import { Star } from "lucide-react";
 import { motion } from "motion/react";
 import { useI18n } from "../i18n";
-import { setPageSchema, clearPageSchema } from "../i18n.seo";
 
 const reviewAvatars = [
   "https://images.unsplash.com/photo-1608185383614-43fdb19019ad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx5b3VuZyUyMHdoaXRlJTIwd29tYW4lMjBwb3J0cmFpdCUyMGhlYWRzaG90fGVufDF8fHx8MTc3NjY3MzA3Mnww&ixlib=rb-4.1.0&q=80&w=200",
@@ -13,16 +11,17 @@ const reviewAvatars = [
   "https://images.unsplash.com/photo-1564783538911-cd6bb5d6bed2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsYXRpbm8lMjBtYW4lMjBzbWlsaW5nJTIwcG9ydHJhaXR8ZW58MXx8fHwxNzc2NjczMDc1fDA&ixlib=rb-4.1.0&q=80&w=200",
   "https://images.unsplash.com/photo-1520689728498-7dd1a9814607?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxqYXBhbmVzZSUyMHdvbWFuJTIwcG9ydHJhaXQlMjBoZWFkc2hvdHxlbnwxfHx8fDE3NzY2NzMwNzV8MA&ixlib=rb-4.1.0&q=80&w=200",
   "https://images.unsplash.com/photo-1688125287898-ef48c07788e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxldXJvcGVhbiUyMHdvbWFuJTIwYmxvbmRlJTIwcG9ydHJhaXR8ZW58MXx8fHwxNzc2NjczMDc1fDA&ixlib=rb-4.1.0&q=80&w=200",
+  "https://images.unsplash.com/photo-1573496359144-729e8a1a1d23?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=200",
+  "https://images.unsplash.com/photo-1607745116120-4acff4a5d0c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=200",
 ];
 
 function ReviewCard({ r, ariaHidden }: { r: { name: string; role: string; text: string; avatar: string }; ariaHidden?: boolean }) {
   return (
     <div className="flex-shrink-0 w-[340px] p-5 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-red-500/20 transition-all duration-300 mx-2" aria-hidden={ariaHidden}>
-      <div className="flex gap-1 mb-3">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <Star key={i} className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
-        ))}
-      </div>
+      {/* 2026-09-10 审计 X3：去评分化。
+          原硬编码 5 实心星无条件满分，属平台自评（self-serving reviews）。
+          改用引号图标作为视觉占位，不暗示"用户对平台打分"。 */}
+      <div className="mb-3 text-red-400/50" style={{ fontSize: "1.6rem", lineHeight: 1 }}>"</div>
       <p className="text-gray-300 mb-4" style={{ fontSize: "0.85rem", lineHeight: 1.7 }}>"{r.text}"</p>
       <div className="flex items-center gap-3">
         <img src={r.avatar} alt={r.name} className="w-9 h-9 rounded-full object-cover border border-white/10" loading="lazy" />
@@ -67,26 +66,10 @@ export function TestimonialsSection() {
   const row1 = reviews.slice(0, 4);
   const row2 = reviews.slice(4);
 
-  // SEO: 部署 Review Schema（rich snippet 机会）。
-  // 注意：不输出 AggregateRating —— 目前没有真实评分数据来源，硬编码的
-  // ratingValue（4.5/4.9 等）会被 Google 判为欺骗性结构化数据，风险高于收益。
-  useEffect(() => {
-    const reviewItems = reviews.map((r) => ({
-      "@type": "Review",
-      author: { "@type": "Person", name: r.name },
-      reviewBody: r.text,
-    }));
-
-    setPageSchema({
-      "@context": "https://schema.org",
-      "@type": "Product",
-      name: "Lollipop Drama — Short Drama Platform",
-      description: "AI-powered short drama platform with 15,000+ premium shows, AI creation tools, and 80% creator revenue share.",
-      review: reviewItems,
-    });
-
-    return () => clearPageSchema();
-  }, [reviews]);
+  // 2026-09-09 审计 P1-2：移除 Product + Review 结构化数据。
+  // 用户评价属平台自评（self-serving reviews），违反 Google 评价政策，
+  // 且无 offers/brand/aggregateRating 不构成合法 Product 节点。
+  // 待接入真实第三方评价聚合后再考虑恢复结构化标记；可见的滚动卡片保留。
 
   return (
     <section className="py-20 bg-gradient-to-b from-[#0a0000] to-[#0d0000] overflow-hidden">

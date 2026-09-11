@@ -62,10 +62,22 @@ if not POSTS:
 
 # 带步骤的文章 = 需要输出 HowTo 的（GEO 资产）
 HOWTO_POSTS = [p for p in POSTS if p["stepCount"] > 0]
-# 其中真正「由 /guides 迁入」的 9 篇 —— category 是 workflow/production/distribution。
-# ⚠️ 不能用「有 stepCount」判定迁入：2026-09-01 又给 3 篇原生 guide 文章补了真实步骤，
-#    它们从未在 /guides 下存在过，不需要 301。
-MIGRATED_POSTS = [p for p in HOWTO_POSTS if p["category"] != "guide"]
+# 其中真正「由 /guides 迁入」的 9 篇 —— 以 slug 显式列出（与 Caddyfile 的 301 一一对应）。
+# ⚠️ 不能用「有 stepCount 且 category != guide」推断迁入（2026-09-01 曾修正过一次）：
+#    2026-09-09 新增的 GEO 文章同样带真实步骤且落在 workflow/distribution 分类，
+#    但它们从未在 /guides 下存在过，不该要求 301 —— 推断式判定会误报。
+MIGRATED_SLUGS = [
+    "character-consistency-workflow",
+    "ten-episodes-two-weeks",
+    "publish-and-monetize-vertical-drama",
+    "script-to-screen-pipeline",
+    "fix-ai-video-artifacts",
+    "first-vertical-drama-zero-experience",
+    "ai-drama-budget-under-1000",
+    "multilingual-localization-workflow",
+    "ai-drama-legal-checklist",
+]
+MIGRATED_POSTS = [p for p in POSTS if p["slug"] in MIGRATED_SLUGS]
 
 # ── 工具函数 ────────────────────────────────────────────────────────────────
 fails: list[str] = []

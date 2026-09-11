@@ -35,32 +35,26 @@ const pageSchemas: Partial<Record<MarketingPage, (locale: string) => object>> = 
     "@context": "https://schema.org",
     "@type": "AboutPage",
     "mainEntity": {
+      // 2026-09-09 审计 P2-4：引用站点级 Organization（同 @id 自动合并），
+      // 只保留补充字段，避免与 index.html 的站点级 Organization 形成双实体
+      // 2026-09-10 审计修复：补 @type。此前节点只有 @id 无 @type，
+      // 若站点级 schema 未加载会吐出无类型无 name 的悬空节点（解析器不做图合并时更明显）
       "@type": "Organization",
-      "name": "Lollipop Drama",
-      "url": "https://www.lollipop.im/",
+      "@id": "https://www.lollipop.im/#organization",
       "founder": {
         "@type": "Person",
         "name": "James C.",
         "jobTitle": "Co-Founder",
+        "description": "15+ years in entertainment technology. Previously led content strategy at a top-3 streaming platform in Southeast Asia.",
         "url": "https://www.lollipop.im/about#team",
         "worksFor": {
-          "@type": "Organization",
-          "name": "Lollipop Drama",
-          "url": "https://www.lollipop.im/",
+          "@id": "https://www.lollipop.im/#organization",
         },
       },
       "foundingLocation": {
         "@type": "Place",
         "address": "3 Gambas Crescent, #04-01, Nordcom One, Singapore 757088",
       },
-      "sameAs": [
-        "https://play.google.com/store/apps/details?id=com.StargetVenturesLLC.hks",
-        "https://twitter.com/lollipopai",
-        "https://www.instagram.com/lollipopai",
-        "https://www.youtube.com/@lollipopai",
-        "https://www.tiktok.com/@lollipopai",
-        "https://www.facebook.com/lollipopai",
-      ],
     },
   }),
   download: () => ({
@@ -119,25 +113,25 @@ const pageSchemas: Partial<Record<MarketingPage, (locale: string) => object>> = 
     "hasPart": [
       {
         "@type": "SoftwareApplication",
-        "name": "Text-to-Image (LunoTV 1.5)",
+        "name": "Text-to-Image",
         "applicationCategory": "MultimediaApplication",
         "description": "Generate high-definition images from text prompts.",
       },
       {
         "@type": "SoftwareApplication",
-        "name": "Text-to-Video (LunoTV 1.5)",
+        "name": "Text-to-Video",
         "applicationCategory": "MultimediaApplication",
         "description": "Generate professional short videos or dramas from storyline descriptions.",
       },
       {
         "@type": "SoftwareApplication",
-        "name": "Image-to-Image (LunoTV 1.5)",
+        "name": "Image-to-Image",
         "applicationCategory": "MultimediaApplication",
         "description": "Edit and personalize images with AI-powered style transfer.",
       },
       {
         "@type": "SoftwareApplication",
-        "name": "Video-to-Video (LunoTV 1.5)",
+        "name": "Video-to-Video",
         "applicationCategory": "MultimediaApplication",
         "description": "Create visually striking content from images or videos without editing skills.",
       },

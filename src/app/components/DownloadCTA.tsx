@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "motion/react";
-import { Apple, Smartphone, Star, Mail, Check, Play, Download, ArrowRight } from "lucide-react";
+import { Apple, Smartphone, Mail, Check, Play, Download, ArrowRight } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { QRCodeSVG } from "qrcode.react";
 import downloadPoster from "../../imports/figma/download-poster.webp";
@@ -110,12 +110,9 @@ export function DownloadCTA() {
 
                 {/* Download content */}
                 <div className="flex-1 text-center md:text-left">
-                  <div className="flex items-center gap-1.5 justify-center md:justify-start mb-3">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                    ))}
-                    <span className="text-gray-400 ml-1.5" style={{ fontSize: "0.8rem" }}>{messages.downloadCta.rating}</span>
-                  </div>
+                  {/* 2026-09-10 审计 X2：移除硬编码 5 实心星 + 4.9 评分。
+                      真实 Play Store 评级 3.4★ / 108 条（40% 一星），硬编码 4.9 为虚假声明。
+                      待接入 Trustpilot 等真实评价阵地后，按真实值回填。 */}
                   <h3 className="text-white mb-2" style={{ fontSize: "clamp(1.2rem, 2.5vw, 1.6rem)", fontWeight: 700, lineHeight: 1.3 }}>
                     {messages.downloadCta.featuredTitle}
                   </h3>

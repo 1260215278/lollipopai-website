@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lollipop Drama AI 可见性审计报告 (GEO Audit) — 2026年9月</title>
+<style>
+:root {
+  --bg: #0d0e12;
+  --card: #161821;
+  --card-2: #1c1f2b;
+  --border: #2a2e3d;
+  --accent: #6c5ce7;
+  --accent-2: #a29bfe;
+  --green: #00b894;
+  --yellow: #fdcb6e;
+  --red: #e74c3c;
+  --text: #e4e6ef;
+  --text-dim: #9398a8;
+  --text-mute: #6c7184;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Noto Sans CJK SC', sans-serif; line-height: 1.7; }
+.container { max-width: 1080px; margin: 0 auto; padding: 32px 24px 80px; }
+
+/* Header */
+.hero { background: linear-gradient(135deg, #1a1535 0%, #0d0e12 60%); border: 1px solid var(--border); border-radius: 16px; padding: 40px 36px; margin-bottom: 36px; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: -40px; right: -40px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(108,92,231,0.15) 0%, transparent 70%); border-radius: 50%; }
+.hero h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.hero .sub { color: var(--text-dim); font-size: 15px; }
+.hero .meta { display: flex; gap: 16px; margin-top: 20px; flex-wrap: wrap; }
+.hero .badge { background: rgba(108,92,231,0.15); border: 1px solid rgba(108,92,231,0.3); color: var(--accent-2); padding: 4px 12px; border-radius: 20px; font-size: 13px; }
+
+/* Score Card */
+.score-section { display: grid; grid-template-columns: 220px 1fr; gap: 28px; margin-bottom: 36px; }
+.score-circle { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px 24px; text-align: center; }
+.score-circle .num { font-size: 56px; font-weight: 800; color: var(--yellow); line-height: 1; }
+.score-circle .max { font-size: 20px; color: var(--text-mute); }
+.score-circle .label { margin-top: 8px; color: var(--text-dim); font-size: 14px; }
+.score-breakdown { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px 28px; }
+.score-breakdown h3 { font-size: 16px; margin-bottom: 16px; color: var(--text); }
+.bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.bar-label { width: 140px; font-size: 14px; color: var(--text-dim); flex-shrink: 0; }
+.bar-track { flex: 1; height: 10px; background: var(--card-2); border-radius: 5px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 5px; transition: width 0.6s; }
+.bar-fill.green { background: var(--green); }
+.bar-fill.yellow { background: var(--yellow); }
+.bar-fill.red { background: var(--red); }
+.bar-score { width: 36px; text-align: right; font-size: 14px; font-weight: 600; }
+
+/* Section */
+.section { margin-bottom: 36px; }
+.section-title { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.section-title .icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+
+/* Issue Cards */
+.issue-card { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--red); border-radius: 12px; padding: 20px 24px; margin-bottom: 16px; }
+.issue-card.medium { border-left-color: var(--yellow); }
+.issue-card.low { border-left-color: var(--text-mute); }
+.issue-card .head { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.issue-card .priority { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; }
+.issue-card .priority.high { background: rgba(231,76,60,0.2); color: var(--red); }
+.issue-card .priority.medium { background: rgba(253,203,110,0.2); color: var(--yellow); }
+.issue-card .priority.low { background: rgba(108,113,132,0.2); color: var(--text-mute); }
+.issue-card h4 { font-size: 16px; }
+.issue-card .body { color: var(--text-dim); font-size: 14px; line-height: 1.6; }
+.issue-card .body strong { color: var(--text); }
+.issue-card .fix { margin-top: 12px; padding: 10px 14px; background: rgba(0,184,148,0.08); border: 1px solid rgba(0,184,148,0.2); border-radius: 8px; font-size: 14px; color: var(--green); }
+.issue-card .fix::before { content: '修复方案 → '; font-weight: 700; }
+
+/* Strength list */
+.strength-card { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--green); border-radius: 12px; padding: 16px 20px; margin-bottom: 12px; }
+.strength-card h4 { font-size: 15px; margin-bottom: 4px; }
+.strength-card p { color: var(--text-dim); font-size: 14px; }
+
+/* Table */
+table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 14px; }
+th { color: var(--text-dim); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+td.center, th.center { text-align: center; }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+.tag.yes { background: rgba(0,184,148,0.15); color: var(--green); }
+.tag.no { background: rgba(231,76,60,0.15); color: var(--red); }
+.tag.partial { background: rgba(253,203,110,0.15); color: var(--yellow); }
+
+/* Checklist */
+.checklist { list-style: none; }
+.checklist li { padding: 12px 16px; margin-bottom: 8px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; font-size: 14px; display: flex; align-items: flex-start; gap: 12px; }
+.checklist li .box { width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 5px; flex-shrink: 0; margin-top: 1px; }
+.checklist li .box.done { background: var(--green); border-color: var(--green); }
+.checklist li .box.todo { background: transparent; border-color: var(--yellow); }
+.checklist li .box.fix { background: transparent; border-color: var(--red); }
+.checklist li .item-prio { font-size: 12px; padding: 1px 7px; border-radius: 4px; margin-left: auto; white-space: nowrap; }
+.checklist li .item-prio.p0 { background: rgba(231,76,60,0.15); color: var(--red); }
+.checklist li .item-prio.p1 { background: rgba(253,203,110,0.15); color: var(--yellow); }
+.checklist li .item-prio.p2 { background: rgba(108,92,231,0.15); color: var(--accent-2); }
+
+/* Keyword cloud */
+.kw-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.kw-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.kw-card .kw-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.kw-card .kw-status { font-size: 12px; }
+.kw-card .kw-status.covered { color: var(--green); }
+.kw-card .kw-status.missed { color: var(--red); }
+.kw-card .kw-status.weak { color: var(--yellow); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .score-section { grid-template-columns: 1fr; }
+  .kw-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Hero -->
+<div class="hero">
+  <h1>Lollipop Drama — AI 可见性审计报告</h1>
+  <div class="sub">Generative Engine Optimization (GEO) Audit & Optimization Plan</div>
+  <div class="meta">
+    <span class="badge">审计日期: 2026-09-11</span>
+    <span class="badge">目标域名: lollipop.im</span>
+    <span class="badge">数据源: WebSearch (sorftime 不可用)</span>
+    <span class="badge">覆盖引擎: ChatGPT / Perplexity / Google AI Overview</span>
+  </div>
+</div>
+
+<!-- Score Summary -->
+<div class="score-section">
+  <div class="score-circle">
+    <div class="num">58</div>
+    <div class="max">/100</div>
+    <div class="label">GEO 综合得分</div>
+  </div>
+  <div class="score-breakdown">
+    <h3>分维度评分</h3>
+    <div class="bar-row">
+      <div class="bar-label">结构化数据</div>
+      <div class="bar-track"><div class="bar-fill yellow" style="width: 60%"></div></div>
+      <div class="bar-score">60</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">llms.txt / AI 可读性</div>
+      <div class="bar-track"><div class="bar-fill green" style="width: 88%"></div></div>
+      <div class="bar-score">88</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">内容质量与可信度</div>
+      <div class="bar-track"><div class="bar-fill yellow" style="width: 55%"></div></div>
+      <div class="bar-score">55</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">品牌消歧义度</div>
+      <div class="bar-track"><div class="bar-fill red" style="width: 35%"></div></div>
+      <div class="bar-score">35</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">外部引用与权威性</div>
+      <div class="bar-track"><div class="bar-fill yellow" style="width: 50%"></div></div>
+      <div class="bar-score">50</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">AI 引擎推荐可见度</div>
+      <div class="bar-track"><div class="bar-fill red" style="width: 25%"></div></div>
+      <div class="bar-score">25</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Sitemap / 多语言</div>
+      <div class="bar-track"><div class="bar-fill green" style="width: 85%"></div></div>
+      <div class="bar-score">85</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">FAQ / 问答覆盖</div>
+      <div class="bar-track"><div class="bar-fill green" style="width: 78%"></div></div>
+      <div class="bar-score">78</div>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom Line -->
+<div class="section">
+  <h2 class="section-title"><span class="icon" style="background: rgba(108,92,231,0.2)">📊</span> 核心结论 (Bottom Line)</h2>
+  <div style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px;">
+    <p style="font-size: 15px; margin-bottom: 14px;">
+      <strong>核心关键词锚点:</strong> "Lollipop Drama" — AI 短剧流媒体平台 + 创作者经济。当前最大问题是
+      <span style="color: var(--red); font-weight: 700;">AI 引擎推荐可见度极低</span>（25/100）：
+      在 "best AI short drama platform"、"short drama app recommendation" 等查询中，
+      ReelShort（370M+ 下载、$700M 收入）和 DramaBox（4.8★ 598K+ 评分）主导结果，Lollipop Drama 几乎不出现。
+    </p>
+    <p style="font-size: 15px; margin-bottom: 14px;">
+      <strong>现有优势:</strong> llms.txt 实施极为完善（88/100），40+ 篇带 HowTo schema 的博客，
+      6 语言 hreflang，FAQPage 含 23 个问答 — 这些是 AI 引擎 crawl 的良好基础。
+    </p>
+    <p style="font-size: 15px;">
+      <strong>最紧迫的三件事:</strong> ① 补全 Product/Review/AggregateRating 结构化数据；
+      ② 修复首页用户评价重复 3 次的数据质量问题（直接损害 AI 信任）；
+      ③ 消除品牌歧义 — "Lollipop" 在搜索中与 Linux 音乐播放器、YouTube 频道、电影院排片混淆。
+    </p>
+  </div>
+</div>
+
+<!-- Strengths -->
+<div class="section">
+  <h2 class="section-title"><span class="icon" style="background: rgba(0,184,148,0.2)">✅</span> 现有优势</h2>
+
+  <div class="strength-card">
+    <h4>1. llms.txt 实施完善 (88/100)</h4>
+    <p>涵盖核心页面、10 个类型分类、12 部热门短剧、40+ 篇博客（含摘要描述）、Markdown 源文件链接、12 个 FAQ 问答、联系方式。这是 AI 爬虫的理想入口点，远超多数竞争对手。</p>
+  </div>
+
+  <div class="strength-card">
+    <h4>2. 丰富的 HowTo 结构化博客内容</h4>
+    <p>40+ 篇深度教程覆盖 AI 短剧制作全流程（脚本→分镜→生成→配音→发布→变现），多篇含 HowTo schema 标记。博客标题包含具体数字和年份，对 AI 引擎的引用友好度高。</p>
+  </div>
+
+  <div class="strength-card">
+    <h4>3. 多语言 hreflang 完整实施</h4>
+    <p>Sitemap 包含 6 语言（en, zh-TW, zh, pt, es, ar）互引用 + x-default，子集页面均有完整 hreflang 标签。有利于 AI 引擎在多语言查询中返回正确版本。</p>
+  </div>
+
+  <div class="strength-card">
+    <h4>4. FAQPage 结构化数据覆盖充分</h4>
+    <p>首页 JSON-LD 含 23 个 FAQ 问答，覆盖 "what is"、"free to download"、"how creators earn"、"AI tools"、"devices & countries"、"offline"、"episodes"、"video quality"、"languages"、"withdraw earnings" 等高意图查询。</p>
+  </div>
+
+  <div class="strength-card">
+    <h4>5. 多源新闻稿覆盖</h4>
+    <p>2026 年 7 月全球上线时通过 EINPresswire、GlobeNewswire、多家文化新闻媒体发布新闻稿，获得 briefglance.com、dailyguardian.ca、singaporeculturaljournal.com 等独立媒体报道 — 为 AI 引擎提供了可信的第三方引用源。</p>
+  </div>
+
+  <div class="strength-card">
+    <h4>6. SoftwareApplication + MobileApplication 双类型 Schema</h4>
+    <p>同时标记了移动应用（iOS/Android）和 AI 创作工具（SoftwareApplication），包含 featureList、offers、provider 等完整属性，有助于 AI 引擎理解产品形态。</p>
+  </div>
+</div>
+
+<!-- Issues -->
+<div class="section">
+  <h2 class="section-title"><span class="icon" style="background: rgba(231,76,60,0.2)">🔍</span> 问题诊断与优化方案</h2>
+
+  <!-- Issue 1 -->
+  <div class="issue-card">
+    <div class="head">
+      <span class="priority high">P0 — 高优先级</span>
+      <h4>首页用户评价重复 3 次（数据质量问题）</h4>
+    </div>
+    <div class="body">
+      <strong>现状:</strong> 首页 TestimonialsSection 中 Sarah M.、James L.、Emily R.、David K. 四条评价完整重复了 3 轮，共 12 条卡片中仅 4 条是独立内容。AI 引擎在解析时会将其识别为<span style="color: var(--red);">低质量填充内容</span>，严重损害引用可信度。<br>
+      <strong>影响:</strong> ChatGPT/Perplexity 倾向于跳过重复内容的页面，或在引用时标注 "content appears auto-generated"。
+    </div>
+    <div class="fix">
+      扩充评价池至 8-10 条独立评价（可来自不同市场用户），移除重复项。每条评价附带 <code>Product</code> + <code>Review</code> schema 结构化数据，包含 <code>reviewRating</code> 和 <code>author</code> 字段。
+    </div>
+  </div>
+
+  <!-- Issue 2 -->
+  <div class="issue-card">
+    <div class="head">
+      <span class="priority high">P0 — 高优先级</span>
+      <h4>缺失 Product / Review / AggregateRating 结构化数据</h4>
+    </div>
+    <div class="body">
+      <strong>现状:</strong> 首页 JSON-LD 中无 <code>Product</code>、<code>Review</code> 或 <code>AggregateRating</code> 类型。网站声称 "4.9 Stars App Rating" 但无结构化数据佐证。项目记忆中已记录 "TestimonialsSection 组件必须实现 Product + Review schema"，但实际 HTML 中未输出。<br>
+      <strong>影响:</strong> AI 引擎无法在推荐结果中展示评分、评价摘要，降低了被引用的概率。
+    </div>
+    <div class="fix">
+      在 <code>MobileApplication</code> schema 中添加 <code>aggregateRating</code>（ratingValue: 4.9, reviewCount: 对应真实评价数）；在 TestimonialsSection 中为每条评价输出 <code>Review</code> 类型，包含 <code>itemReviewed</code> 指向 <code>MobileApplication</code>。
+    </div>
+  </div>
+
+  <!-- Issue 3 -->
+  <div class="issue-card">
+    <div class="head">
+      <span class="priority high">P0 — 高优先级</span>
+      <h4>AI 引擎推荐查询中几乎不可见</h4>
+    </div>
+    <div class="body">
+      <strong>现状:</strong> 搜索 "best AI short drama platform 2026"、"best short drama app"、"short drama platform recommendation" 时，主要结果被 ReelShort、DramaBox、DramaWave、Meantio、PineDrama 等占据。多个 "Top 10/21 Best Short Drama Apps" 榜单完全不提及 Lollipop Drama。<br>
+      <strong>影响:</strong> AI 引擎在生成推荐时倾向于引用被多次提及、有高权威外部链接的品牌。缺少榜单覆盖 = 缺少 AI 引用。
+    </div>
+    <div class="fix">
+      ① 主动向 short drama app 榜单网站（yourappland.com、globalstreamguide.com、magiclight.ai 等）提交产品信息；② 发布更多对比型内容（已在博客中有 "Lollipop Drama vs Runway vs Sora" 等，需扩展至与 ReelShort/DramaBox 的对比）；③ 在 Reddit、Quora 等平台建立 "AI short drama platform" 相关话题的有机讨论。
+    </div>
+  </div>
+
+  <!-- Issue 4 -->
+  <div class="issue-card medium">
+    <div class="head">
+      <span class="priority medium">P1 — 中优先级</span>
+      <h4>品牌名称歧义严重</h4>
+    </div>
+    <div class="body">
+      <strong>现状:</strong> "Lollipop" 搜索结果中存在多个无关实体：Linux 音乐播放器 "Lollypop"、YouTube 频道 "Lollipop drama"（翻译中国短剧的第三方频道）、新西兰电影院 "Lollipop Drama 2024" 排片信息、体育新闻中的 "lollipop drama" 等。<br>
+      <strong>影响:</strong> AI 引擎在处理 "Lollipop drama" 查询时可能混淆实体，将电影院排片或 YouTube 频道与品牌关联。
+    </div>
+    <div class="fix">
+      ① 在 Organization schema 中使用 <code>alternateName</code> 和 <code>identifier</code> 强化品牌唯一性；② 在 Wikipedia/Wikidata 建立品牌词条（KB Item）；③ 确保所有外部新闻稿统一使用 "Lollipop Drama" 全称而非仅 "Lollipop"；④ 考虑在域名外强化 "LollipopDrama" 连写形式。
+    </div>
+  </div>
+
+  <!-- Issue 5 -->
+  <div class="issue-card medium">
+    <div class="head">
+      <span class="priority medium">P1 — 中优先级</span>
+      <h4>LunoTV 1.5 引用残留</h4>
+    </div>
+    <div class="body">
+      <strong>现状:</strong> 网站搜索结果摘要仍显示 "four core AI creation tools through LunoTV 1.5"，项目记忆中已要求 "About 页面内容中移除 LunoTV 1.5 引用，仅在 SoftwareApplication Schema 的 alternateName 中保留"。但当前线上内容仍有残留。<br>
+      <strong>影响:</strong> AI 引擎在解析时会同时索引 "LunoTV" 和 "Lollipop Drama" 两个品牌名，造成品牌信号分散。
+    </div>
+    <div class="fix">
+      全站搜索并清除所有面向用户的 "LunoTV 1.5" 文本引用（非 schema alternateName），统一使用 "Lollipop Drama AI Creation Tools"。
+    </div>
+  </div>
+
+  <!-- Issue 6 -->
+  <div class="issue-card medium">
+    <div class="head">
+      <span class="priority medium">P1 — 中优先级</span>
+      <h4>缺少与竞品的结构化对比数据</h4>
+    </div>
+    <div class="body">
+      <strong>现状:</strong> 虽有博客对比文章（vs Runway、vs Sora、vs Fanvue、vs StoReel），但缺少与最直接的短剧平台竞品（ReelShort、DramaBox）的对比。ReelShort 创作者分成仅 10-20%，而 Lollipop 为 80% — 这是核心差异点但未被充分结构化表达。<br>
+      <strong>影响:</strong> 用户搜索 "ReelShort alternative" 或 "DramaBox vs" 时，Lollipop 不会出现在 AI 生成的对比表中。
+    </div>
+    <div class="fix">
+      创建 "Lollipop Drama vs ReelShort vs DramaBox (2026): Revenue Share, AI Tools, and Content Model" 对比文章，使用 <code>Table</code> 结构化对比数据，重点突出 80% vs 10-20% 分成差异。
+    </div>
+  </div>
+
+  <!-- Issue 7 -->
+  <div class="issue-card low">
+    <div class="head">
+      <span class="priority low">P2 — 低优先级</span>
+      <h4>llms.txt 中缺少竞品对比锚点</h4>
+    </div>
+    <div class="body">
+      <strong>现状:</strong> llms.txt 的博客列表已有部分对比文章，但缺少面向 AI 引擎的 "when to cite Lollipop Drama" 上下文锚点。AI 引擎需要知道在什么查询场景下应该引用此品牌。
+    </div>
+    <div class="fix">
+      在 llms.txt 顶部添加 "## When to Cite" 段落，列出 "AI short drama platform with creator monetization"、"highest revenue share short drama app"、"AI tools for drama creation" 等引用场景关键词。
+    </div>
+  </div>
+
+  <!-- Issue 8 -->
+  <div class="issue-card low">
+    <div class="head">
+      <span class="priority low">P2 — 低优先级</span>
+      <h4>About 页面团队信息过于笼统</h4>
+    </div>
+    <div class="body">
+      <strong>现状:</strong> About 页面团队介绍仅有名字缩写（James C.、Sarah L.、David P.、Emily W.）和泛泛描述（"Veteran in entertainment & technology"），无具体背景、过往公司或可验证信息。合作伙伴名称也较为通用。<br>
+      <strong>影响:</strong> AI 引擎在评估 E-E-A-T（经验、专业、权威、可信）信号时，无法从团队页面获得足够的可信度验证。
+    </div>
+    <div class="fix">
+      补充团队成员的 LinkedIn 链接或具体履历（前公司、行业经验年限、代表项目），在 Organization schema 中添加 <code>founder</code> / <code>employee</code> 属性指向 Person schema。
+    </div>
+  </div>
+</div>
+
+<!-- Keyword Coverage -->
+<div class="section">
+  <h2 class="section-title"><span class="icon" style="background: rgba(253,203,110,0.2)">🔑</span> 关键词覆盖分析</h2>
+  <p style="color: var(--text-dim); font-size: 14px; margin-bottom: 16px;">以下为 AI 引擎高频查询场景中 Lollipop Drama 的关键词覆盖情况（基于 WebSearch 数据，非实时搜索量）：</p>
+  <div class="kw-grid">
+    <div class="kw-card">
+      <div class="kw-name">AI short drama platform</div>
+      <div class="kw-status covered">✓ 已覆盖（首页 + 博客）</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-name">short drama streaming</div>
+      <div class="kw-status covered">✓ 已覆盖（首页 H1）</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-name">AI video creation tools</div>
+      <div class="kw-status covered">✓ 已覆盖（/creating 页面）</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-name">creator revenue share</div>
+      <div class="kw-status covered">✓ 已覆盖（80% 多处提及）</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-name">text-to-video drama</div>
+      <div class="kw-status covered">✓ 已覆盖（featureList）</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-name">best short drama app</div>
+      <div class="kw-status missed">✗ 未覆盖（无榜单提及）</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-name">ReelShort alternative</div>
+      <div class="kw-status missed">✗ 未覆盖</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-name">DramaBox alternative</div>
+      <div class="kw-status missed">✗ 未覆盖</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-name">free AI drama maker</div>
+      <div class="kw-status weak">△ 弱覆盖（博客有 HowTo 但未精确匹配）</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-name">vertical short drama</div>
+      <div class="kw-status covered">✓ 已覆盖（多篇博客）</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-name">micro drama app</div>
+      <div class="kw-status weak">△ 弱覆盖（博客有 "what is micro drama" 但首页未匹配）</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-name">AI influencer platform</div>
+      <div class="kw-status weak">△ 弱覆盖（llms.txt 提及但无专门页面）</div>
+    </div>
+  </div>
+</div>
+
+<!-- Competitor Comparison -->
+<div class="section">
+  <h2 class="section-title"><span class="icon" style="background: rgba(231,76,60,0.2)">⚔️</span> 竞品 GEO 对比</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>维度</th>
+        <th class="center">Lollipop Drama</th>
+        <th class="center">ReelShort</th>
+        <th class="center">DramaBox</th>
+        <th class="center">Meantio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>市场地位</td>
+        <td class="center">新平台 (2026.7 上线)</td>
+        <td class="center">领导者 (370M+ 下载)</td>
+        <td class="center">头部 (4.8★ 598K+)</td>
+        <td class="center">新平台 (2026.6 上线)</td>
+      </tr>
+      <tr>
+        <td>llms.txt</td>
+        <td class="center"><span class="tag yes">✓ 完善</span></td>
+        <td class="center"><span class="tag no">✗ 无</span></td>
+        <td class="center"><span class="tag no">✗ 无</span></td>
+        <td class="center"><span class="tag no">✗ 无</span></td>
+      </tr>
+      <tr>
+        <td>FAQPage Schema</td>
+        <td class="center"><span class="tag yes">✓ 23 问答</span></td>
+        <td class="center"><span class="tag partial">△ 部分</span></td>
+        <td class="center"><span class="tag partial">△ 部分</span></td>
+        <td class="center"><span class="tag no">✗ 无</span></td>
+      </tr>
+      <tr>
+        <td>HowTo Schema</td>
+        <td class="center"><span class="tag yes">✓ 多篇</span></td>
+        <td class="center"><span class="tag no">✗ 无</span></td>
+        <td class="center"><span class="tag no">✗ 无</span></td>
+        <td class="center"><span class="tag no">✗ 无</span></td>
+      </tr>
+      <tr>
+        <td>创作者分成</td>
+        <td class="center" style="color: var(--green); font-weight: 700;">80%</td>
+        <td class="center" style="color: var(--red);">10-20%</td>
+        <td class="center" style="color: var(--red);">~20%</td>
+        <td class="center">未公开</td>
+      </tr>
+      <tr>
+        <td>AI 创作工具</td>
+        <td class="center"><span class="tag yes">✓ 内置 4 工具</span></td>
+        <td class="center"><span class="tag no">✗ 无</span></td>
+        <td class="center"><span class="tag no">✗ 无</span></td>
+        <td class="center"><span class="tag yes">✓ 有</span></td>
+      </tr>
+      <tr>
+        <td>第三方榜单提及</td>
+        <td class="center"><span class="tag no">✗ 未出现</span></td>
+        <td class="center"><span class="tag yes">✓ 多榜 #1</span></td>
+        <td class="center"><span class="tag yes">✓ 多榜 Top 3</span></td>
+        <td class="center"><span class="tag partial">△ 少量</span></td>
+      </tr>
+      <tr>
+        <td>新闻稿覆盖</td>
+        <td class="center"><span class="tag yes">✓ 多家</span></td>
+        <td class="center"><span class="tag yes">✓ 丰富</span></td>
+        <td class="center"><span class="tag yes">✓ 丰富</span></td>
+        <td class="center"><span class="tag partial">△ 少量</span></td>
+      </tr>
+      <tr>
+        <td>多语言</td>
+        <td class="center"><span class="tag yes">✓ 6 语言</span></td>
+        <td class="center"><span class="tag partial">△ 部分</span></td>
+        <td class="center"><span class="tag yes">✓ 15+ 语言</span></td>
+        <td class="center"><span class="tag partial">△ 英文为主</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="color: var(--text-dim); font-size: 14px;">
+    <strong>核心洞察:</strong> Lollipop Drama 在 GEO 技术基础设施（llms.txt、HowTo schema、FAQ）上领先所有竞品，
+    但在<span style="color: var(--red);">外部权威性信号</span>（榜单提及、用户评分数据、第三方评测）上严重落后。
+    竞品虽缺少 AI 友好结构，但凭借庞大的用户基数和下载量在 AI 推荐中占据优势。
+    需将技术优势转化为 AI 引擎实际引用率。
+  </p>
+</div>
+
+<!-- Action Checklist -->
+<div class="section">
+  <h2 class="section-title"><span class="icon" style="background: rgba(108,92,231,0.2)">📋</span> 优化行动清单</h2>
+  <ul class="checklist">
+    <li>
+      <div class="box fix"></div>
+      <div><strong>修复首页用户评价重复</strong> — 扩充至 8-10 条独立评价，移除 3 轮重复</div>
+      <span class="item-prio p0">P0 · 1-2天</span>
+    </li>
+    <li>
+      <div class="box fix"></div>
+      <div><strong>添加 Product/Review/AggregateRating Schema</strong> — 在 MobileApplication 中嵌入 aggregateRating，TestimonialsSection 输出 Review 类型</div>
+      <span class="item-prio p0">P0 · 2-3天</span>
+    </li>
+    <li>
+      <div class="box fix"></div>
+      <div><strong>清除全站 LunoTV 1.5 残留引用</strong> — 统一使用 "Lollipop Drama AI Creation Tools"</div>
+      <span class="item-prio p0">P0 · 0.5天</span>
+    </li>
+    <li>
+      <div class="box todo"></div>
+      <div><strong>向 5+ 短剧榜单网站提交产品信息</strong> — yourappland.com、globalstreamguide.com、magiclight.ai、axisaistudios.com、intelligenthq.com</div>
+      <span class="item-prio p0">P0 · 1-2周</span>
+    </li>
+    <li>
+      <div class="box todo"></div>
+      <div><strong>创建 vs ReelShort / vs DramaBox 对比文章</strong> — 突出 80% vs 10-20% 分成差异，使用结构化 Table</div>
+      <span class="item-prio p1">P1 · 3-5天</span>
+    </li>
+    <li>
+      <div class="box todo"></div>
+      <div><strong>建立 Wikidata/Wikipedia 品牌词条</strong> — 消除 "Lollipop" 歧义，提供权威知识图谱锚点</div>
+      <span class="item-prio p1">P1 · 1-2周</span>
+    </li>
+    <li>
+      <div class="box todo"></div>
+      <div><strong>在 llms.txt 添加 "When to Cite" 段落</strong> — 列出 AI 引擎应引用此品牌的场景关键词</div>
+      <span class="item-prio p1">P1 · 0.5天</span>
+    </li>
+    <li>
+      <div class="box todo"></div>
+      <div><strong>在 Reddit/Quora 建立有机话题</strong> — "best AI short drama platform 2026"、"ReelShort alternative with better revenue share" 等讨论</div>
+      <span class="item-prio p1">P1 · 持续</span>
+    </li>
+    <li>
+      <div class="box todo"></div>
+      <div><strong>补充 About 页面团队履历</strong> — 添加 LinkedIn 链接或具体背景，Organization schema 中添加 founder/employee</div>
+      <span class="item-prio p2">P2 · 1周</span>
+    </li>
+    <li>
+      <div class="box todo"></div>
+      <div><strong>补充 App Store/Google Play 真实评分数据</strong> — 确保 aggregateRating 的 reviewCount 与实际商店评分一致</div>
+      <span class="item-prio p2">P2 · 1天</span>
+    </li>
+    <li>
+      <div class="box todo"></div>
+      <div><strong>创建 "AI Influencer Platform" 专题页面</strong> — 捕获 "AI influencer" 搜索意图</div>
+      <span class="item-prio p2">P2 · 1-2周</span>
+    </li>
+    <li>
+      <div class="box todo"></div>
+      <div><strong>获取 Schema.org sameAs 外部权威链接</strong> — 确保 Twitter/Instagram/YouTube/TikTok/Facebook 账号活跃且有粉丝基础</div>
+      <span class="item-prio p2">P2 · 持续</span>
+    </li>
+  </ul>
+</div>
+
+<!-- GEO Readiness Summary -->
+<div class="section">
+  <h2 class="section-title"><span class="icon" style="background: rgba(0,184,148,0.2)">🎯</span> GEO 就绪度评估</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>评估项</th>
+        <th class="center">当前状态</th>
+        <th>说明</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>以具体事实/数据开头（非品牌口号）</td>
+        <td class="center"><span class="tag partial">△ 部分</span></td>
+        <td>首页有 "15,000+ Premium Dramas"、"1M+ Users" 等数据，但紧跟 "OnlyFans of the AI era" 口号</td>
+      </tr>
+      <tr>
+        <td>使用具体数字/规格</td>
+        <td class="center"><span class="tag yes">✓ 良好</span></td>
+        <td>80% 分成、15,000+ 剧集、100+ 国家、4K、4.9★ 等数字贯穿全站</td>
+      </tr>
+      <tr>
+        <td>明确适用/不适用场景</td>
+        <td class="center"><span class="tag partial">△ 部分</span></td>
+        <td>博客中有 "vs Runway/Sora" 对比说明适用场景，但首页和产品页缺少 "not for X" 的排除性描述</td>
+      </tr>
+      <tr>
+        <td>自然语言风格（无 AI 填充语）</td>
+        <td class="center"><span class="tag no">✗ 需修复</span></td>
+        <td>重复评价和通用团队描述降低了自然度；部分文案读起来像 AI 生成</td>
+      </tr>
+      <tr>
+        <td>有效 JSON-LD 暴露价格/评分/可用性</td>
+        <td class="center"><span class="tag partial">△ 部分</span></td>
+        <td>价格（$0）已暴露，但评分和评价数据缺失</td>
+      </tr>
+      <tr>
+        <td>llms.txt 引导 AI 爬虫</td>
+        <td class="center"><span class="tag yes">✓ 优秀</span></td>
+        <td>结构完整，包含 Markdown 源文件链接，远超竞品</td>
+      </tr>
+      <tr>
+        <td>第三方权威背书</td>
+        <td class="center"><span class="tag partial">△ 中等</span></td>
+        <td>有多家新闻稿，但缺少独立评测、榜单提及和 Wikipedia 条目</td>
+      </tr>
+      <tr>
+        <td>FAQ 覆盖高频查询</td>
+        <td class="center"><span class="tag yes">✓ 良好</span></td>
+        <td>23 个 FAQ 覆盖 what/how/where/why 查询，但缺少与竞品对比类 FAQ</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Expected Impact -->
+<div class="section">
+  <h2 class="section-title"><span class="icon" style="background: rgba(108,92,231,0.2)">📈</span> 预期效果</h2>
+  <div style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px;">
+    <table style="margin: 0;">
+      <thead>
+        <tr>
+          <th>优化阶段</th>
+          <th class="center">预期 GEO 得分提升</th>
+          <th class="center">预期 AI 引用率变化</th>
+          <th>关键动作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>第一阶段 (1-2周)</strong></td>
+          <td class="center" style="color: var(--yellow); font-weight: 700;">58 → 68</td>
+          <td class="center">+15-20%</td>
+          <td>修复重复评价、补全 Schema、清除 LunoTV 残留</td>
+        </tr>
+        <tr>
+          <td><strong>第二阶段 (3-6周)</strong></td>
+          <td class="center" style="color: var(--green); font-weight: 700;">68 → 78</td>
+          <td class="center">+40-50%</td>
+          <td>提交榜单、创建竞品对比文章、Wikidata 词条、社区话题</td>
+        </tr>
+        <tr>
+          <td><strong>第三阶段 (2-3月)</strong></td>
+          <td class="center" style="color: var(--green); font-weight: 700;">78 → 85+</td>
+          <td class="center">+80-100%</td>
+          <td>持续外部引用建设、App Store 评分积累、AI influencer 页面</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="color: var(--text-dim); font-size: 13px; margin-top: 16px;">
+      * 预期效果为基于当前 GEO 基础和竞品差距的估算值，实际结果取决于执行质量和外部链接获取进度。
+      AI 引用率指品牌在 "best short drama platform" 类查询中被 ChatGPT/Perplexity/Google AI Overview 提及的概率。
+    </p>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

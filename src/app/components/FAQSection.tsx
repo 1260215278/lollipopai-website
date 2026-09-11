@@ -121,7 +121,6 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       title: "Trusted Worldwide",
       items: [
         { icon: "shield", label: "Privacy Protected", value: "GDPR & CCPA Compliant" },
-        { icon: "award", label: "App Rating", value: "4.9 Stars" },
         { icon: "globe", label: "Global Coverage", value: "100+ Countries" },
         { icon: "sparkles", label: "Uptime", value: "99.9% Availability" },
       ],
@@ -216,7 +215,6 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       title: "全球信赖",
       items: [
         { icon: "shield", label: "隐私保护", value: "符合 GDPR & CCPA" },
-        { icon: "award", label: "应用评分", value: "4.9 星" },
         { icon: "globe", label: "全球覆盖", value: "100+ 国家" },
         { icon: "sparkles", label: "服务可用率", value: "99.9%" },
       ],
@@ -311,7 +309,6 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       title: "全球信賴",
       items: [
         { icon: "shield", label: "隱私保護", value: "符合 GDPR & CCPA" },
-        { icon: "award", label: "應用評分", value: "4.9 星" },
         { icon: "globe", label: "全球覆蓋", value: "100+ 國家" },
         { icon: "sparkles", label: "服務可用率", value: "99.9%" },
       ],
@@ -406,7 +403,6 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       title: "Confianca Global",
       items: [
         { icon: "shield", label: "Privacidade Protegida", value: "Conforme GDPR & CCPA" },
-        { icon: "award", label: "Nota do App", value: "4.9 Estrelas" },
         { icon: "globe", label: "Cobertura Global", value: "100+ Paises" },
         { icon: "sparkles", label: "Disponibilidade", value: "99.9%" },
       ],
@@ -501,7 +497,6 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       title: "Confianza mundial",
       items: [
         { icon: "shield", label: "Privacidad protegida", value: "Cumple GDPR y CCPA" },
-        { icon: "award", label: "Calificación de la app", value: "4.9 estrellas" },
         { icon: "globe", label: "Cobertura global", value: "100+ países" },
         { icon: "sparkles", label: "Disponibilidad", value: "99.9%" },
       ],
@@ -596,7 +591,6 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
       title: "موثوق به عالميًا",
       items: [
         { icon: "shield", label: "خصوصية محمية", value: "متوافق مع GDPR وCCPA" },
-        { icon: "award", label: "تقييم التطبيق", value: "4.9 نجوم" },
         { icon: "globe", label: "تغطية عالمية", value: "أكثر من 100 دولة" },
         { icon: "sparkles", label: "التوفر", value: "99.9%" },
       ],

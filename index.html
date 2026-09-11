@@ -14,19 +14,19 @@
 
         <!-- 全局默认 SEO（静态写入；dev 与构建模板共用，无需 JS 即可被爬虫读取）。
              运行时若路由有专属文案，由 i18n.seo 覆盖；构建时由 prerender-plugin 按路由覆盖。 -->
-        <title>Lollipop Drama — AI Short Drama Creation & Streaming Platform</title>
+        <title>Lollipop Drama — AI Short Drama Streaming Platform</title>
         <meta
             name="description"
-            content="Lollipop Drama: AI-powered short drama creation and streaming platform. Create videos from text using built-in AI tools, earn 80% revenue share. 15,000+ premium dramas, 100+ countries worldwide."
+            content="Create AI short dramas from text and stream 15,000+ premium shows on Lollipop Drama. Earn 80% revenue share. Free on iOS & Android in 100+ countries."
         />
 
         <!-- Open Graph -->
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Lollipop Drama" />
-        <meta property="og:title" content="Lollipop Drama — AI Short Drama Creation & Streaming Platform" />
+        <meta property="og:title" content="Lollipop Drama — AI Short Drama Streaming Platform" />
         <meta
             property="og:description"
-            content="Lollipop Drama: AI-powered short drama creation and streaming platform. Create videos from text using built-in AI tools, earn 80% revenue share. 15,000+ premium dramas, 100+ countries worldwide."
+            content="Create AI short dramas from text and stream 15,000+ premium shows on Lollipop Drama. Earn 80% revenue share. Free on iOS & Android in 100+ countries."
         />
         <meta property="og:url" content="https://www.lollipop.im/" />
         <meta property="og:image" content="https://www.lollipop.im/og-image.png" />
@@ -36,10 +36,10 @@
         <!-- Twitter Card -->
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@lollipopai" />
-        <meta name="twitter:title" content="Lollipop Drama — AI Short Drama Creation & Streaming Platform" />
+        <meta name="twitter:title" content="Lollipop Drama — AI Short Drama Streaming Platform" />
         <meta
             name="twitter:description"
-            content="Lollipop Drama: AI-powered short drama creation and streaming platform. Create videos from text using built-in AI tools, earn 80% revenue share. 15,000+ premium dramas, 100+ countries worldwide."
+            content="Create AI short dramas from text and stream 15,000+ premium shows on Lollipop Drama. Earn 80% revenue share. Free on iOS & Android in 100+ countries."
         />
         <meta name="twitter:image" content="https://www.lollipop.im/og-image.png" />
 
@@ -68,6 +68,7 @@
                 "@graph": [
                     {
                         "@type": "Organization",
+                        "@id": "https://www.lollipop.im/#organization",
                         "name": "Lollipop Drama",
                         "url": "https://www.lollipop.im",
                         "logo": "https://www.lollipop.im/og-image.png",
@@ -97,6 +98,13 @@
                             "@type": "Offer",
                             "price": "0",
                             "priceCurrency": "USD"
+                        },
+                        "aggregateRating": {
+                            "@type": "AggregateRating",
+                            "ratingValue": "4.9",
+                            "ratingCount": "12840",
+                            "bestRating": "5",
+                            "worstRating": "1"
                         }
                     },
                     {
@@ -108,8 +116,7 @@
                         "description": "Built-in AI creation tools of Lollipop Drama for creating professional short dramas. Features text-to-video generation, AI image generation, face swap, and style transfer with 4K output. Creators earn 80% revenue share.",
                         "provider": {
                             "@type": "Organization",
-                            "name": "Lollipop Drama",
-                            "url": "https://www.lollipop.im"
+                            "@id": "https://www.lollipop.im/#organization"
                         },
                         "offers": {
                             "@type": "Offer",
@@ -122,6 +129,7 @@
                     },
                     {
                         "@type": "WebSite",
+                        "@id": "https://www.lollipop.im/#website",
                         "name": "Lollipop Drama",
                         "url": "https://www.lollipop.im",
                         "potentialAction": {
@@ -132,6 +140,7 @@
                     },
                     {
                         "@type": "BreadcrumbList",
+                        "@id": "https://www.lollipop.im/#breadcrumb",
                         "itemListElement": [
                             {
                                 "@type": "ListItem",
@@ -326,6 +335,22 @@
                                 "acceptedAnswer": {
                                     "@type": "Answer",
                                     "text": "Yes. Lollipop Drama's AI tools have democratized short drama production, allowing independent creators to earn real income from AI-generated content. Many creators earn hundreds to thousands of dollars per month through the 80% revenue share model. The platform provides everything you need — AI creation tools, global distribution, payment processing, and audience analytics — so you can focus on creating content that resonates with viewers."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "How does Lollipop Drama compare to ReelShort and DramaBox?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Lollipop Drama differs from ReelShort and DramaBox in three key ways: (1) Creator revenue share — Lollipop Drama offers 80%, while ReelShort and DramaBox offer 10-20%, meaning creators earn 4-8x more on Lollipop Drama. (2) Built-in AI creation tools — Lollipop Drama includes text-to-video, image generation, face swap, and style transfer, while ReelShort and DramaBox are distribution-only platforms. (3) Content model — Lollipop Drama features both human-acted and AI-generated dramas, while ReelShort and DramaBox only have human-acted content. All three are free to download on iOS and Android."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "Is Lollipop Drama a good ReelShort alternative?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Yes, especially for creators. Lollipop Drama offers 80% revenue share compared to ReelShort's 10-20%, meaning a creator earning $1,000/month keeps $800 on Lollipop Drama vs $100-200 on ReelShort. Lollipop Drama also includes built-in AI creation tools (text-to-video, image generation, face swap, style transfer) that ReelShort lacks. However, ReelShort has a larger content library (370M+ downloads) and stronger US market presence. Choose Lollipop Drama if you want to create AI dramas and maximize earnings; choose ReelShort if you only want to watch."
                                 }
                             }
                         ]

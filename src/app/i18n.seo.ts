@@ -54,9 +54,10 @@ export const pageSeoMessages: Record<PageType, Record<SeoLocale, SeoMessages>> =
         "Lollipop Drama是AI驅動的短劇創作與消費平台，內建AI文生影片等創作工具，支持80%收益分成，幫助創作者變現。15000+精品短劇，覆蓋100+國家。",
     },
     en: {
-      title: "Lollipop Drama — AI Short Drama Creation & Streaming Platform",
+      // 2026-09-09 审计 P2-5：title ≤60、desc ≤155（主词前置 + CTA）
+      title: "Lollipop Drama — AI Short Drama Streaming Platform",
       description:
-        "Lollipop Drama: AI-powered short drama creation and streaming platform. Create videos from text using built-in AI tools, earn 80% revenue share. 15,000+ premium dramas, 100+ countries worldwide.",
+        "Create AI short dramas from text and stream 15,000+ premium shows on Lollipop Drama. Earn 80% revenue share. Free on iOS & Android in 100+ countries.",
     },
     pt: {
       title: "Lollipop Drama — Criação e Streaming de Dramas Curtos com IA",
@@ -142,32 +143,32 @@ export const pageSeoMessages: Record<PageType, Record<SeoLocale, SeoMessages>> =
     "zh-CN": {
       title: "下载 Lollipop Drama — iOS & Android",
       description:
-        "免费下载Lollipop Drama，支持iOS和Android。15000+精品短剧、4K播放、离线缓存、AI创作工具。2M+下载量，100+国家，App Store评分4.9星。",
+        "免费下载Lollipop Drama，支持iOS和Android。15000+精品短剧、4K播放、离线缓存、AI创作工具，覆盖100+国家。",
     },
     "zh-TW": {
       title: "下載 Lollipop Drama — iOS & Android",
       description:
-        "免費下載Lollipop Drama，支援iOS和Android。15000+精品短劇、4K播放、離線快取、AI創作工具。2M+下載量，100+國家，App Store評分4.9星。",
+        "免費下載Lollipop Drama，支援iOS和Android。15000+精品短劇、4K播放、離線快取、AI創作工具，覆蓋100+國家。",
     },
     en: {
       title: "Download Lollipop Drama — iOS & Android",
       description:
-        "Download Lollipop Drama free on iOS and Android. 15,000+ premium short dramas, 4K streaming, offline downloads, AI creation tools. 2M+ downloads, 100+ countries, 4.9-star rating.",
+        "Download Lollipop Drama free on iOS and Android. 15,000+ premium short dramas, 4K streaming, offline downloads, AI creation tools. Available in 100+ countries.",
     },
     pt: {
       title: "Baixar Lollipop Drama — iOS & Android",
       description:
-        "Baixe a Lollipop Drama gratis no iOS e Android. 15.000+ dramas premium, streaming 4K, downloads offline, ferramentas de IA. 2M+ downloads, 100+ paises, nota 4.9.",
+        "Baixe a Lollipop Drama gratis no iOS e Android. 15.000+ dramas premium, streaming 4K, downloads offline, ferramentas de IA. Disponível em mais de 100 países.",
     },
     es: {
       title: "Descargar Lollipop Drama — iOS y Android",
       description:
-        "Descarga Lollipop Drama gratis en iOS y Android. Más de 15.000 dramas premium, streaming 4K, descargas sin conexión y herramientas de IA. 2M+ descargas, 100+ países, 4.9 estrellas.",
+        "Descarga Lollipop Drama gratis en iOS y Android. Más de 15.000 dramas premium, streaming 4K, descargas sin conexión y herramientas de IA. Disponible en más de 100 países.",
     },
     ar: {
       title: "حمّل Lollipop Drama — iOS و Android",
       description:
-        "حمّل Lollipop Drama مجانًا على iOS وAndroid. أكثر من 15000 دراما متميزة وبث 4K وتنزيل دون اتصال وأدوات ذكاء اصطناعي. أكثر من 2 مليون تنزيل في 100+ دولة وتقييم 4.9.",
+        "حمّل Lollipop Drama مجانًا على iOS وAndroid. أكثر من 15000 دراما متميزة وبث 4K وتنزيل دون اتصال وأدوات ذكاء اصطناعي. متوفر في أكثر من 100 دولة.",
     },
   },
   contact: {

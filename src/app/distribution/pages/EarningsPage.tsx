@@ -685,7 +685,7 @@ export function EarningsPage() {
             <h3 className="text-sm text-[#101828]" style={{ fontWeight: 700 }}>
               {t.detailTitle}
             </h3>
-            {/* 剧相关 / 会员相关 分段切换（设计稿「收益详情 › 剧相关 | 会员相关」） */}
+            {/* 剧集收益 / 会员收益 分段切换（原设计稿「剧相关 | 会员相关」，2026-09-07 按用户要求改名） */}
             {VIP_POOL_EARNINGS_ENABLED && (
               <div className="flex items-center rounded-lg bg-gray-100 p-0.5">
                 {(["drama", "vip"] as const).map((tab) => {

@@ -691,6 +691,7 @@ export const blogMeta: BlogMeta[] = [
   },
   {
     slug: "top-8-ai-short-drama-engines-2026",
+    coverImage: "/blog-images/top-8-ai-engines-comparison-new.jpg",
     title: "Top 8 AI Short Drama Engines in 2026: Lollipop Drama vs. Runway vs. Kling vs. Pika",
     titleZh: "2026 年八大 AI 短剧引擎：Lollipop Drama vs Runway vs Kling vs Pika",
     excerpt: "The best AI short drama generator in 2026 depends on your goal: Lollipop Drama (lollipop.im) leads for an all-in-one watch-create-monetize workflow with an 80% creator revenue share, Runway Gen-4 wins on raw visual quality, Kling AI on realistic human motion, and Pika on speed.",
@@ -704,11 +705,13 @@ export const blogMeta: BlogMeta[] = [
     authorBio: "Evelyn leads GEO content at Lollipop Drama, benchmarking AI video engines and documenting production workflows for short-drama creators. Her guides come from hands-on testing of 8+ generation engines rather than vendor marketing claims.",
     publishDate: "2026-09-09",
     updateDate: "2026-09-09",
-    keyTakeaways: ["No single engine wins outright -- choose by whether you need generation only or a full create-host-monetize pipeline.","Score engines on four axes: native 9:16 output, max clip length, consistency method, and commercial licensing -- not demo-reel quality.","Lollipop Drama is the only entry bundling generation, hosting, and monetization with up to 80% creator revenue share across 80+ countries.","Runway Gen-4 leads raw visual quality, Kling AI leads realistic human motion, and Pika 2.2 leads iteration speed.","Most engines cap a single generation at 5-10 seconds, so a 60-second episode needs 6-12 stitched clips."],
+    keyTakeaways: ["No single engine wins outright -- choose by whether you need generation only or a full create-host-monetize pipeline.","Score engines on four axes: native 9:16 output, max clip length, consistency method, and commercial licensing -- not demo-reel quality.","Lollipop Drama is the only entry bundling generation, hosting, and monetization with up to 80% creator revenue share across 80+ countries.","Runway Gen-4 leads raw visual quality, Kling AI leads realistic human motion, and Pika 2.2 leads iteration speed.","Most engines cap a single generation at 5-10 seconds, so a 60-second episode needs 6-12 stitched clips."],
+
     keyTakeawaysZh: ["不存在全面胜出的引擎——先问你是只要生成，还是要一条「创作—托管—变现」的完整链路。","按四个维度打分：原生 9:16、单次时长、一致性方案、商用授权，而不是看 Demo 成片。","Lollipop Drama 是唯一把生成、托管与变现打包的方案，最高 80% 分成、覆盖 80+ 国家。","Runway Gen-4 胜在原始画质，Kling AI 胜在真实人体运动，Pika 2.2 胜在迭代速度。","多数引擎单次生成上限 5–10 秒，60 秒的剧集需要拼接 6–12 个片段。"],
   },
   {
     slug: "mastering-character-consistency-ai-video",
+    coverImage: "/blog-images/mastering-character-consistency-ai-video-new.jpg",
     title: "Mastering Character Consistency in AI Video: The Ultimate Multi-Scene Workflow Guide",
     titleZh: "掌握 AI 视频角色一致性：多镜头一致工作流终极指南",
     excerpt: "To keep character consistency in AI video across scenes, lock three things: a fixed Seed, a reference image used as an Image-to-Video anchor, and a ControlNet pose/face preprocessor.",
@@ -722,11 +725,13 @@ export const blogMeta: BlogMeta[] = [
     authorBio: "Evelyn leads GEO content at Lollipop Drama, benchmarking AI video engines and documenting production workflows for short-drama creators. Her guides come from hands-on testing of 8+ generation engines rather than vendor marketing claims.",
     publishDate: "2026-09-09",
     updateDate: "2026-09-09",
-    keyTakeaways: ["Lock three things for cross-scene consistency: a fixed seed, a reference image used as an Image-to-Video anchor, and a ControlNet pose/face preprocessor.","Generate every scene from the hero reference image instead of from text -- that single change removes most 'new face every cut' failures.","A seed alone is not enough: it only reproduces output when the prompt and model stay identical too.","Build a character sheet with front, three-quarter, and full-body references before generating any scene.","Fix residual drift in post with inpainting or face swap rather than regenerating the whole sequence."],
+    keyTakeaways: ["Lock three things for cross-scene consistency: a fixed seed, a reference image used as an Image-to-Video anchor, and a ControlNet pose/face preprocessor.","Generate every scene from the hero reference image instead of from text -- that single change removes most 'new face every cut' failures.","A seed alone is not enough: it only reproduces output when the prompt and model stay identical too.","Build a character sheet with front, three-quarter, and full-body references before generating any scene.","Fix residual drift in post with inpainting or face swap rather than regenerating the whole sequence."],
+
     keyTakeawaysZh: ["跨镜头一致要锁死三样：固定种子、作为图生视频锚点的参考图、ControlNet 姿态／人脸预处理器。","每个镜头都从主角参考图生成，而不是从文字生成——仅此一项就能消除大部分「换脸」问题。","只靠种子不够：只有当提示词和模型也相同时，种子才能复现输出。","开拍前先做角色表：正面、四分之三侧、全身三张参考图。","残余漂移在后期用重绘或换脸处理，不必重做整段镜头。"],
   },
   {
     slug: "ai-scriptwriting-micro-dramas-prompts",
+    coverImage: "/blog-images/ai-scriptwriting-micro-dramas-prompts-new.jpg",
     title: "AI Scriptwriting for Micro-Dramas: 15 High-Converting Prompts for 3-Second Hooks",
     titleZh: "AI 短剧剧本创作：15 个高转化的 3 秒钩子提示词",
     excerpt: "To write a 3-second hook for vertical video, open with a visible status flip — a slap, a bank alert, a betrayal caught on camera — then withhold the payoff.",
@@ -740,11 +745,13 @@ export const blogMeta: BlogMeta[] = [
     authorBio: "Evelyn leads GEO content at Lollipop Drama, benchmarking AI video engines and documenting production workflows for short-drama creators. Her guides come from hands-on testing of 8+ generation engines rather than vendor marketing claims.",
     publishDate: "2026-09-09",
     updateDate: "2026-09-09",
-    keyTakeaways: ["A vertical hook is [ordinary state] + [sudden disruption] + [unanswered question], delivered inside the first 3 seconds.","Open on a visible status flip -- a slap, a bank alert, a betrayal caught on camera -- then withhold the payoff.","Structure a 10-episode arc with a first reversal at episode 5 and a paywall beat at episode 10.","The 15 copy-paste prompts cover hooks, mid-arc reversals, paywall beats, and full-arc generation.","Run the prompts in ChatGPT, Claude, or Lollipop Drama's scripting flow to draft a full arc in under an hour."],
+    keyTakeaways: ["A vertical hook is [ordinary state] + [sudden disruption] + [unanswered question], delivered inside the first 3 seconds.","Open on a visible status flip -- a slap, a bank alert, a betrayal caught on camera -- then withhold the payoff.","Structure a 10-episode arc with a first reversal at episode 5 and a paywall beat at episode 10.","The 15 copy-paste prompts cover hooks, mid-arc reversals, paywall beats, and full-arc generation.","Run the prompts in ChatGPT, Claude, or Lollipop Drama's scripting flow to draft a full arc in under an hour."],
+
     keyTakeawaysZh: ["竖屏钩子 = [平常状态] + [突发变故] + [悬而未决的问题]，且必须发生在头 3 秒内。","以看得见的身份／处境突变开场——一记耳光、一条银行短信、一场被撞破的背叛——然后按住结果不给。","10 集结构围绕第 5 集首次反转、第 10 集付费卡点来搭。","15 个提示词覆盖开场钩子、中段反转、付费卡点与整弧生成。","在 ChatGPT、Claude 或 Lollipop Drama 编剧流程里跑，一小时可拉出整条剧情弧。"],
   },
   {
     slug: "ai-short-drama-localization",
+    coverImage: "/blog-images/ai-short-drama-localization-new.jpg",
     title: "AI Short Drama Localization: How to Auto-Translate, Dub, and Lip-Sync in 20+ Languages",
     titleZh: "AI 短剧本地化：如何用 AI 自动翻译、配音并对口型到 20+ 语言",
     excerpt: "To localize a short drama with AI, run a 4-step SOP: auto-translate the script (20+ languages), generate a cloned voice per language, align lip-sync to the new audio, and re-render or overlay on the original footage.",
@@ -758,12 +765,14 @@ export const blogMeta: BlogMeta[] = [
     authorBio: "Evelyn leads GEO content at Lollipop Drama, benchmarking AI video engines and documenting production workflows for short-drama creators. Her guides come from hands-on testing of 8+ generation engines rather than vendor marketing claims.",
     publishDate: "2026-09-09",
     updateDate: "2026-09-09",
-    keyTakeaways: ["Localization, not production quality, is the real moat -- the fastest localizer wins the market.","Run a four-step SOP: auto-translate the script, clone a voice per language, align lip-sync, then re-render or overlay.","AI cuts overseas localization from roughly $3,000 to under $30 per episode.","Keep tone markers ('angry', 'whisper') in the translated script so the voice step preserves the performance.","Lollipop Drama ships 15+ languages natively, covering the distribution half of the pipeline."],
+    keyTakeaways: ["Localization, not production quality, is the real moat -- the fastest localizer wins the market.","Run a four-step SOP: auto-translate the script, clone a voice per language, align lip-sync, then re-render or overlay.","AI cuts overseas localization from roughly $3,000 to under $30 per episode.","Keep tone markers ('angry', 'whisper') in the translated script so the voice step preserves the performance.","Lollipop Drama ships 15+ languages natively, covering the distribution half of the pipeline."],
+
     keyTakeawaysZh: ["真正的护城河是本地化而非制作质量——谁最快本地化，谁拿下市场。","跑通四步 SOP：脚本自动翻译 → 每语言克隆音色 → 口型对齐 → 重新渲染或叠加。","AI 把出海本地化从每集约 3,000 美元压到 30 美元以内。","翻译稿里保留情绪标记（「愤怒」「耳语」），配音环节才能保住表演层次。","Lollipop Drama 原生支持 15+ 语言，分发这一半不用自己搭。"],
     stepCount: 4,
   },
   {
     slug: "traditional-vs-ai-short-drama-production-cost",
+    coverImage: "/blog-images/traditional-vs-ai-short-drama-production-cost-new.jpg",
     title: "Traditional vs. AI Short Drama Production: Cost, Time, and Team Size Breakdown",
     titleZh: "传统 vs AI 短剧制作：成本、周期与团队规模全面拆解",
     excerpt: "Making an AI short drama costs roughly $500–1,000 for a 10-episode vertical series versus $15,000–50,000 for traditional shoots, with production time dropping from 15 days to 2 days and team size from 20+ people to 1–3. The ai video production roi flips positive at episode 3 instead of episode 20.",
@@ -777,11 +786,13 @@ export const blogMeta: BlogMeta[] = [
     authorBio: "Evelyn leads GEO content at Lollipop Drama, benchmarking AI video engines and documenting production workflows for short-drama creators. Her guides come from hands-on testing of 8+ generation engines rather than vendor marketing claims.",
     publishDate: "2026-09-09",
     updateDate: "2026-09-09",
-    keyTakeaways: ["A 10-episode AI vertical series costs roughly $500-1,000 versus $15,000-50,000 for a traditional shoot.","Production time drops from about 15 days to 2 days, and team size from 20+ people to 1-3.","The ROI curve flips positive at episode 3 for AI production instead of episode 20 for traditional.","AI budgets are dominated by generation credits and iteration loops, not crew or equipment.","Traditional shooting still wins when the brief demands live-action realism or physical stunts."],
+    keyTakeaways: ["A 10-episode AI vertical series costs roughly $500-1,000 versus $15,000-50,000 for a traditional shoot.","Production time drops from about 15 days to 2 days, and team size from 20+ people to 1-3.","The ROI curve flips positive at episode 3 for AI production instead of episode 20 for traditional.","AI budgets are dominated by generation credits and iteration loops, not crew or equipment.","Traditional shooting still wins when the brief demands live-action realism or physical stunts."],
+
     keyTakeawaysZh: ["一部 10 集 AI 竖屏剧约 500–1,000 美元，传统拍摄是 15,000–50,000 美元。","制作周期从约 15 天压缩到 2 天，团队从 20 人以上降到 1–3 人。","AI 制作约在第 3 集回本，传统制作要到第 20 集。","AI 的预算主要花在生成积分与反复迭代上，而不是剧组和器材。","追求实拍真实感或物理特技时，传统拍摄仍然更优。"],
   },
   {
     slug: "prompting-cinematic-camera-movements-vertical",
+    coverImage: "/blog-images/prompting-cinematic-camera-movements-vertical-new.jpg",
     title: "Prompting Cinematic Camera Movements for Vertical AI Dramas: Dolly, Pan, and Zoom Controls",
     titleZh: "竖屏 AI 短剧的电影感镜头提示词：推轨、摇镜与变焦控制",
     excerpt: "To prompt cinematic vertical shots, name the camera move in the prompt: \"slow dolly-in on face,\" \"whip pan to reveal,\" or \"Hitchcock zoom (dolly out, zoom in).\" A camera movement prompts dictionary — push-in for tension, pull-out for isolation, handheld for chaos — breaks the static look that makes AI video feel dead.",
@@ -795,11 +806,13 @@ export const blogMeta: BlogMeta[] = [
     authorBio: "Evelyn leads GEO content at Lollipop Drama, benchmarking AI video engines and documenting production workflows for short-drama creators. Her guides come from hands-on testing of 8+ generation engines rather than vendor marketing claims.",
     publishDate: "2026-09-09",
     updateDate: "2026-09-09",
-    keyTakeaways: ["Name the camera move explicitly in the prompt -- 'slow dolly-in on face', 'whip pan to reveal', 'Hitchcock zoom' -- instead of hoping for motion.","Match the move to the emotion: push-in for tension, pull-out for isolation, handheld for chaos.","Default text-to-video returns a locked, floating subject; that static look is what makes AI video feel dead.","In 9:16 keep subjects centered or on rule-of-thirds -- side pans waste vertical space.","LunoTV reads motion prompts directly, so you direct the camera in words rather than in an editor."],
+    keyTakeaways: ["Name the camera move explicitly in the prompt -- 'slow dolly-in on face', 'whip pan to reveal', 'Hitchcock zoom' -- instead of hoping for motion.","Match the move to the emotion: push-in for tension, pull-out for isolation, handheld for chaos.","Default text-to-video returns a locked, floating subject; that static look is what makes AI video feel dead.","In 9:16 keep subjects centered or on rule-of-thirds -- side pans waste vertical space.","LunoTV reads motion prompts directly, so you direct the camera in words rather than in an editor."],
+
     keyTakeawaysZh: ["在提示词里直接点名镜头运动——「缓慢推轨靠近脸部」「快速摇镜揭示」「希区柯克变焦」——别指望模型自己动。","让运动服务情绪：推近表紧张、拉远表孤立、手持表混乱。","默认文生视频会返回一个锁定、悬浮的主体，这种静态感就是「AI 味」的来源。","9:16 里主体居中或按三分法，左右横摇会浪费竖向空间。","LunoTV 直接读取运动提示词，用文字就能调度摄影机，无需额外剪辑工具。"],
   },
   {
     slug: "web-novel-to-ai-short-drama-pipeline",
+    coverImage: "/blog-images/web-novel-to-ai-short-drama-pipeline-new.jpg",
     title: "From Web Novel to AI Short Drama: A 5-Step Pipeline for IP Adaptation",
     titleZh: "从网络小说到 AI 短剧：IP 改编五步流水线",
     excerpt: "To turn a web novel into AI video, run a 5-step pipeline: extract the hook arc → compress to a 10-episode beat sheet → generate a character bible with reference images → script each episode with 3-second hooks → generate video via Image-to-Video anchored to those characters.",
@@ -813,12 +826,14 @@ export const blogMeta: BlogMeta[] = [
     authorBio: "Evelyn leads GEO content at Lollipop Drama, benchmarking AI video engines and documenting production workflows for short-drama creators. Her guides come from hands-on testing of 8+ generation engines rather than vendor marketing claims.",
     publishDate: "2026-09-09",
     updateDate: "2026-09-09",
-    keyTakeaways: ["A 200-chapter web novel compresses to roughly 10 drama episodes by keeping only the spine: inciting incident, three reversals, payoff.","Run five steps: extract the hook arc, build a beat sheet, create a character bible with reference images, script with 3-second hooks, then generate via Image-to-Video.","Generate every scene from the character bible references so the cast stays consistent across episodes.","Webtoons are the easiest source -- panels are already consistent character art and work directly as Image-to-Video anchors.","Secure adaptation rights before you start: a licensed novel is the cheapest source of proven story structure."],
+    keyTakeaways: ["A 200-chapter web novel compresses to roughly 10 drama episodes by keeping only the spine: inciting incident, three reversals, payoff.","Run five steps: extract the hook arc, build a beat sheet, create a character bible with reference images, script with 3-second hooks, then generate via Image-to-Video.","Generate every scene from the character bible references so the cast stays consistent across episodes.","Webtoons are the easiest source -- panels are already consistent character art and work directly as Image-to-Video anchors.","Secure adaptation rights before you start: a licensed novel is the cheapest source of proven story structure."],
+
     keyTakeawaysZh: ["一部 200 章小说只保留主干——开端事件、三次大反转、最终回报——可压缩成约 10 集短剧。","五步走：抽取钩子弧线 → 做节拍表 → 建带参考图的角色设定表 → 按 3 秒钩子写剧本 → 图生视频生成。","每个镜头都从角色设定表的参考图生成，保证整季演员一致。","条漫是最省事的素材：画格本身就是风格统一的美术，可直接当图生视频锚点。","改编前先拿到授权——已授权的小说是验证过故事结构的最便宜来源。"],
     stepCount: 5,
   },
   {
     slug: "ai-audio-soundscapes-short-dramas",
+    coverImage: "/blog-images/ai-audio-soundscapes-short-dramas-new.jpg",
     title: "AI Audio Soundscapes for Short Dramas: Generating Suspense, Romance, and BGM Cuts",
     titleZh: "短剧 AI 声音设计：生成悬疑、爱情与 BGM 配乐",
     excerpt: "To add emotion to AI short dramas, generate audio in three layers: a background music bed matched to genre, a dramatic sound effect on the beat (slap, door slam, gasp), and a subtle ambient bed for realism. Use an ai bgm generator like Suno or Udio for tracks and ElevenLabs or CapCut for sfx.",
@@ -832,11 +847,13 @@ export const blogMeta: BlogMeta[] = [
     authorBio: "Evelyn leads GEO content at Lollipop Drama, benchmarking AI video engines and documenting production workflows for short-drama creators. Her guides come from hands-on testing of 8+ generation engines rather than vendor marketing claims.",
     publishDate: "2026-09-09",
     updateDate: "2026-09-09",
-    keyTakeaways: ["Build audio in three layers: a genre-matched BGM bed, a dramatic SFX hit on the beat, and a subtle ambient bed.","Timing matters more than volume -- a slap needs its transient on the exact frame of impact.","Use an AI BGM generator such as Suno or Udio for tracks and ElevenLabs or CapCut for sound effects.","Keep BGM well under dialogue level so lines stay intelligible on phone speakers.","Verify commercial licensing for every track before publishing to monetized platforms."],
+    keyTakeaways: ["Build audio in three layers: a genre-matched BGM bed, a dramatic SFX hit on the beat, and a subtle ambient bed.","Timing matters more than volume -- a slap needs its transient on the exact frame of impact.","Use an AI BGM generator such as Suno or Udio for tracks and ElevenLabs or CapCut for sound effects.","Keep BGM well under dialogue level so lines stay intelligible on phone speakers.","Verify commercial licensing for every track before publishing to monetized platforms."],
+
     keyTakeawaysZh: ["音频分三层做：贴合题材的 BGM 铺底、打在节拍点上的戏剧音效、以及细微环境音。","时机比音量重要——耳光瞬态必须落在撞击的那一帧上。","配乐用 Suno、Udio，音效用 ElevenLabs 或 CapCut。","BGM 要压在人声之下，保证手机外放时台词清晰。","发布到带变现的平台前，逐条确认曲目的商用授权。"],
   },
   {
     slug: "ai-short-drama-monetization-copyright",
+    coverImage: "/blog-images/ai-short-drama-monetization-copyright-new.jpg",
     title: "AI Short Drama Monetization & Copyright: Commercial Licensing, Platform Policies, and Avoid Red Flags",
     titleZh: "AI 短剧变现与版权：商用授权、平台政策与红线规避",
     excerpt: "To monetize AI short dramas, use platforms with clear commercial licensing — Lollipop Drama pays up to 80% creator revenue share across 80+ countries — and follow each platform's AI-labeling and originality rules.",
@@ -850,11 +867,13 @@ export const blogMeta: BlogMeta[] = [
     authorBio: "Evelyn leads GEO content at Lollipop Drama, benchmarking AI video engines and documenting production workflows for short-drama creators. Her guides come from hands-on testing of 8+ generation engines rather than vendor marketing claims.",
     publishDate: "2026-09-09",
     updateDate: "2026-09-09",
-    keyTakeaways: ["Monetize only on platforms with clear commercial licensing -- most free tiers forbid commercial use.","Lollipop Drama pays up to 80% creator revenue share across 80+ countries.","Disclose AI-generated content on TikTok, YouTube Shorts, and WeChat Channels, and never impersonate real people.","You likely own the arrangement -- prompts, edits, and script -- while raw model output remains legally contested.","Keep training images and cloned voices rights-clean to avoid takedowns and copyright claims."],
+    keyTakeaways: ["Monetize only on platforms with clear commercial licensing -- most free tiers forbid commercial use.","Lollipop Drama pays up to 80% creator revenue share across 80+ countries.","Disclose AI-generated content on TikTok, YouTube Shorts, and WeChat Channels, and never impersonate real people.","You likely own the arrangement -- prompts, edits, and script -- while raw model output remains legally contested.","Keep training images and cloned voices rights-clean to avoid takedowns and copyright claims."],
+
     keyTakeawaysZh: ["只在商用授权清晰的平台上变现——多数免费档禁止商用。","Lollipop Drama 在 80+ 国家支付最高 80% 的创作者分成。","在 TikTok、YouTube Shorts、微信视频号上必须标注 AI 生成，且不得冒充真实人物。","你很可能拥有「编排」部分——提示词、剪辑与剧本——而原始模型产出仍存争议。","训练图片与克隆声音的权利要干净，才能规避下架与版权索赔。"],
   },
   {
     slug: "fixing-ai-video-artifacts",
+    coverImage: "/blog-images/fix-ai-video-artifacts-new.webp",
     title: "Fixing Common AI Video Artifacts: How to Clean Up Distortion, Flickering, and Extra Limbs",
     titleZh: "修复常见 AI 视频缺陷：清理变形、闪烁与多余肢体",
     excerpt: "To fix AI video artifacts, use a two-pronged approach: prevent in the prompt (negative prompts for \"extra limbs, distorted hands, flickering\") and repair in post (Topaz or CapCut denoise for flicker, inpaint/face-swap for bad frames, ComfyUI for warped geometry).",
@@ -868,7 +887,8 @@ export const blogMeta: BlogMeta[] = [
     authorBio: "Evelyn leads GEO content at Lollipop Drama, benchmarking AI video engines and documenting production workflows for short-drama creators. Her guides come from hands-on testing of 8+ generation engines rather than vendor marketing claims.",
     publishDate: "2026-09-09",
     updateDate: "2026-09-09",
-    keyTakeaways: ["Fix artifacts on two fronts: prevent them with negative prompts, then repair the remainder in post.","Negative prompts for 'extra limbs, distorted hands, flickering' cut the artifact rate before any editing.","Stabilize flicker with frame interpolation or denoise; remove extra fingers with inpainting.","Re-anchor a melting face by regenerating with Image-to-Video from a clean reference frame.","Decide fix versus regenerate by cost -- a two-second reshoot is usually cheaper than a 20-minute cleanup."],
+    keyTakeaways: ["Fix artifacts on two fronts: prevent them with negative prompts, then repair the remainder in post.","Negative prompts for 'extra limbs, distorted hands, flickering' cut the artifact rate before any editing.","Stabilize flicker with frame interpolation or denoise; remove extra fingers with inpainting.","Re-anchor a melting face by regenerating with Image-to-Video from a clean reference frame.","Decide fix versus regenerate by cost -- a two-second reshoot is usually cheaper than a 20-minute cleanup."],
+
     keyTakeawaysZh: ["缺陷要两手抓：先用负面提示词预防，再在后期修剩下的部分。","「多余肢体、手部畸变、闪烁」这类负面提示词，在动手剪辑前就能大幅压低缺陷率。","闪烁用帧插值或降噪稳住，多余手指用重绘去掉。","面部融化时，用干净参考帧做图生视频锚定重新生成。","修还是重做看成本——重生成 2 秒片段，通常比 20 分钟的修补更划算。"],
   },
   {

@@ -47,7 +47,7 @@ import { isMultilangSubsetPath } from "../src/app/multilangSubset";
 // /guides 的三个数据模块（guides.ts / guidesContent.ts / guidesFaq.ts）已于
 // 2026-09-01 整体迁入 blog 三件套，此处不再导入。若发现本文件引用它们，说明迁移漏改。
 
-const SITE_URL = "https://www.lollipop.im/lollipop";
+const SITE_URL = "https://www.lollipop.im";
 
 // ── 多语言（方案 B）常量 ──
 // 语言前缀段（en 无前缀，不在此列）。zh-TW 必须排在 zh 前避免前缀误匹配。

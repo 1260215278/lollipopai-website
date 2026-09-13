@@ -47,7 +47,7 @@ import { isMultilangSubsetPath } from "../src/app/multilangSubset";
 // /guides 的三个数据模块（guides.ts / guidesContent.ts / guidesFaq.ts）已于
 // 2026-09-01 整体迁入 blog 三件套，此处不再导入。若发现本文件引用它们，说明迁移漏改。
 
-const SITE_URL = "https://www.lollipop.im";
+const SITE_URL = "https://www.lollipop.im/lollipop";
 
 // ── 多语言（方案 B）常量 ──
 // 语言前缀段（en 无前缀，不在此列）。zh-TW 必须排在 zh 前避免前缀误匹配。
@@ -158,6 +158,8 @@ interface RouteSeoData {
   hreflangLangs?: readonly string[];
   /** 海报图片 basename（构建时通过 assetMap 解析为 /assets/ 路径） */
   imageBasename?: string;
+  /** OG 类型：博客文章用 "article"，其余用 "website"（默认） */
+  ogType?: string;
 }
 
 /** P1-3/P1-4: 剧集 slug → 海报图片 basename 映射（用于 og:image 和 VideoObject thumbnailUrl） */
@@ -278,7 +280,7 @@ function getRouteData(): RouteSeoData[] {
       path: "/about",
       title: "About Lollipop Drama — AI-Powered Short Drama Platform",
       description:
-        "Lollipop Drama is a joint venture by Nyx Entertainment Group and Korean Cultural Investment Fund, revolutionizing short drama entertainment with built-in AI video generation tools. 1M+ users across 100+ countries.",
+        "Lollipop Drama by Nyx Entertainment Group — AI-powered short drama platform with built-in AI video tools. 1M+ users across 100+ countries.",
       schema: withBreadcrumb(
         {
           "@context": "https://schema.org",
@@ -310,25 +312,25 @@ function getRouteData(): RouteSeoData[] {
       path: "/creating",
       title: "Create AI Short Dramas — Lollipop Drama Tools",
       description:
-        "Create short dramas with Lollipop Drama tools: AI image generation, face swap, video creation, and style transfer. 80% revenue share, full AI toolkit, global distribution in 100+ countries.",
+        "Create short dramas with Lollipop Drama AI tools: text-to-video, image generation, face swap, style transfer. 80% revenue share, global distribution.",
     },
     {
       path: "/download",
       title: "Download Lollipop Drama — iOS & Android",
       description:
-        "Download Lollipop Drama free on iOS and Android. 15,000+ premium short dramas, 4K streaming, offline downloads, AI creation tools. Available in 100+ countries.",
+        "Download Lollipop Drama free on iOS and Android. 15,000+ premium short dramas, 4K streaming, offline downloads, and AI creation tools in 100+ countries.",
     },
     {
       path: "/contact",
       title: "Contact Lollipop Drama — Support & Business",
       description:
-        "Contact Lollipop Drama: business@lollipop.im for partnerships, service@lollipop.im for support, +65 80742120. Address: 3 Gambas Crescent, Nordcom One, Singapore 757088.",
+        "Contact Lollipop Drama: business@lollipop.im for partnerships, service@lollipop.im for support. Singapore office: +65 80742120.",
     },
     {
       path: "/press",
       title: "Press & Media — Lollipop Drama AI Short Drama Platform",
       description:
-        "Lollipop Drama press kit: company overview, media assets, news, and press contact. AI-powered short drama platform with 1M+ users, 15,000+ dramas, 80% creator revenue share across 100+ countries.",
+        "Lollipop Drama press kit: company overview, media assets, and press contact. AI short drama platform with 1M+ users and 80% creator revenue share.",
       schema: withBreadcrumb(
         {
           "@context": "https://schema.org",
@@ -353,7 +355,7 @@ function getRouteData(): RouteSeoData[] {
       path: "/glossary",
       title: "Glossary — AI Short Drama & Creator Economy Terms | Lollipop Drama",
       description:
-        "Complete glossary of AI short drama, creator economy, and Lollipop Drama platform terms. Definitions for text-to-video, revenue share, micro drama, vertical drama, and more.",
+        "Glossary of AI short drama and creator economy terms. Definitions for text-to-video, revenue share, micro drama, vertical drama, and more.",
       schema: withBreadcrumb(
         {
           "@context": "https://schema.org",
@@ -455,13 +457,13 @@ function getRouteData(): RouteSeoData[] {
       path: "/privacy",
       title: "Privacy Policy & Data Protection — Lollipop Drama",
       description:
-        "Lollipop Drama Privacy Policy: Learn how we collect, use, and protect your personal information, including data types, purposes, third-party sharing, and your privacy rights.",
+        "Lollipop Drama Privacy Policy: how we collect, use, and protect your personal information, data types, third-party sharing, and your privacy rights.",
     },
     {
       path: "/terms",
       title: "Terms of Service — Lollipop Drama",
       description:
-        "Lollipop Drama Terms of Service: Terms and conditions for using the platform, including user obligations, content policy, intellectual property, disclaimers, and dispute resolution.",
+        "Lollipop Drama Terms of Service: user obligations, content policy, intellectual property, disclaimers, and dispute resolution for the platform.",
     },
   ];
   routes.push(...staticPages);
@@ -671,6 +673,7 @@ function getRouteData(): RouteSeoData[] {
       title: p.seoTitle,
       description: p.seoDescription,
       image: `${SITE_URL}${p.coverImage || "/blog-images/guide.png"}`,
+      ogType: "article",
       // 只有进入多语言子集的文章（= 有中文标题，见 multilangSubset.ts）才生成 6 语言互指。
       // ⚠️ 2026-09-09：此处原为无条件 ALL_SEGMENTS，依赖「所有文章都有中文」这一隐含前提。
       //    新增英文-only 文章后该前提失效 —— 不仅会在 buildLocalizedBlogSchema 里
@@ -859,6 +862,7 @@ function appendMultilangVariants(routes: RouteSeoData[]): void {
         title,
         description,
         image: base.image,
+        ogType: base.ogType,
         schema,
         lang: locale,
         dir: RTL_SEGMENTS.has(seg) ? "rtl" : undefined,
@@ -1353,7 +1357,7 @@ function injectSeoIntoHtml(html: string, data: RouteSeoData): string {
   const metaTags: string[] = [
     `<meta name="description" content="${data.description}" />`,
     `<meta name="robots" content="${data.robots ?? "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"}" />`,
-    `<meta property="og:type" content="website" />`,
+    `<meta property="og:type" content="${data.ogType ?? "website"}" />`,
     `<meta property="og:site_name" content="Lollipop Drama" />`,
     `<meta property="og:title" content="${data.title}" />`,
     `<meta property="og:description" content="${data.description}" />`,
@@ -1473,33 +1477,33 @@ function injectHomepageContent(html: string): string {
   <li><strong>4K Streaming & Offline Downloads</strong> — Premium viewing experience on iOS and Android</li>
 </ul>
 <p>
-  <a href="https://www.lollipop.im/download">Download on App Store & Google Play</a> ·
-  <a href="https://www.lollipop.im/creating">AI Creator Tools</a> ·
-  <a href="https://www.lollipop.im/about">About Lollipop</a> ·
-  <a href="https://www.lollipop.im/blog">Creator Blog</a>
+  <a href="${SITE_URL}/download">Download on App Store & Google Play</a> ·
+  <a href="${SITE_URL}/creating">AI Creator Tools</a> ·
+  <a href="${SITE_URL}/about">About Lollipop</a> ·
+  <a href="${SITE_URL}/blog">Creator Blog</a>
 </p>
 <p>Popular genres:
-  <a href="https://www.lollipop.im/genre/romance">Romance</a> ·
-  <a href="https://www.lollipop.im/genre/revenge">Revenge</a> ·
-  <a href="https://www.lollipop.im/genre/ceo-drama">CEO Drama</a> ·
-  <a href="https://www.lollipop.im/genre/thriller">Thriller</a> ·
-  <a href="https://www.lollipop.im/genre/fantasy">Fantasy</a> ·
-  <a href="https://www.lollipop.im/genre/sci-fi">Sci-Fi</a> ·
-  <a href="https://www.lollipop.im/genre/horror">Horror</a> ·
-  <a href="https://www.lollipop.im/genre/action">Action</a>
+  <a href="${SITE_URL}/genre/romance">Romance</a> ·
+  <a href="${SITE_URL}/genre/revenge">Revenge</a> ·
+  <a href="${SITE_URL}/genre/ceo-drama">CEO Drama</a> ·
+  <a href="${SITE_URL}/genre/thriller">Thriller</a> ·
+  <a href="${SITE_URL}/genre/fantasy">Fantasy</a> ·
+  <a href="${SITE_URL}/genre/sci-fi">Sci-Fi</a> ·
+  <a href="${SITE_URL}/genre/horror">Horror</a> ·
+  <a href="${SITE_URL}/genre/action">Action</a>
 </p>
 <p>Popular short dramas:
-  <a href="https://www.lollipop.im/drama/temptation-ceo">Temptation CEO</a> ·
-  <a href="https://www.lollipop.im/drama/the-bride-who-fell-from-the-sky">The Bride Who Fell From The Sky</a> ·
-  <a href="https://www.lollipop.im/drama/the-revenge-of-the-plus-size-wife">The Revenge of the Plus-Size Wife</a> ·
-  <a href="https://www.lollipop.im/drama/dark-secrets">Dark Secrets</a> ·
-  <a href="https://www.lollipop.im/drama/crimson-dynasty">Crimson Dynasty</a> ·
-  <a href="https://www.lollipop.im/drama/neon-abyss">Neon Abyss</a>
+  <a href="${SITE_URL}/drama/temptation-ceo">Temptation CEO</a> ·
+  <a href="${SITE_URL}/drama/the-bride-who-fell-from-the-sky">The Bride Who Fell From The Sky</a> ·
+  <a href="${SITE_URL}/drama/the-revenge-of-the-plus-size-wife">The Revenge of the Plus-Size Wife</a> ·
+  <a href="${SITE_URL}/drama/dark-secrets">Dark Secrets</a> ·
+  <a href="${SITE_URL}/drama/crimson-dynasty">Crimson Dynasty</a> ·
+  <a href="${SITE_URL}/drama/neon-abyss">Neon Abyss</a>
 </p>
 <p>
-  <a href="https://www.lollipop.im/privacy">Privacy Policy</a> ·
-  <a href="https://www.lollipop.im/terms">Terms of Service</a> ·
-  <a href="https://www.lollipop.im/contact">Contact</a> ·
+  <a href="${SITE_URL}/privacy">Privacy Policy</a> ·
+  <a href="${SITE_URL}/terms">Terms of Service</a> ·
+  <a href="${SITE_URL}/contact">Contact</a> ·
   <a href="https://x.com/wwwLollipopim">X (Twitter)</a> ·
   <a href="https://youtube.com/@Lollipop-AI-one">YouTube</a> ·
   <a href="https://instagram.com/lollipopaiapp">Instagram</a>

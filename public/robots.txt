@@ -1,59 +1,59 @@
 # Lollipop Drama - robots.txt
-# https://www.lollipop.im
+# https://www.lollipop.im/lollipop/
 
 # Allow all search engines and AI crawlers
 User-agent: *
-Allow: /
-Allow: /sitemap.xml
-Disallow: /distribution/
-Disallow: /login
-Disallow: /forgot-password
+Allow: /lollipop/
+Allow: /lollipop/sitemap.xml
+Disallow: /lollipop/distribution/
+Disallow: /lollipop/login
+Disallow: /lollipop/forgot-password
 Crawl-delay: 1
 # /creator/ pages are public profiles — allow indexing for creator name searches
 
 # Explicitly allow AI crawlers
 User-agent: GPTBot
-Allow: /
+Allow: /lollipop/
 
 User-agent: OAI-SearchBot
-Allow: /
+Allow: /lollipop/
 
 User-agent: ChatGPT-User
-Allow: /
+Allow: /lollipop/
 
 User-agent: Claude-Web
-Allow: /
+Allow: /lollipop/
 
 User-agent: ClaudeBot
-Allow: /
+Allow: /lollipop/
 
 User-agent: anthropic-ai
-Allow: /
+Allow: /lollipop/
 
 # 传统 + AI 概览爬虫（审计点名需显式放行）
 User-agent: Googlebot
-Allow: /
+Allow: /lollipop/
 
 User-agent: Google-Extended
-Allow: /
+Allow: /lollipop/
 
 User-agent: Baiduspider
-Allow: /
+Allow: /lollipop/
 
 User-agent: Applebot
-Allow: /
+Allow: /lollipop/
 
 User-agent: PerplexityBot
-Allow: /
+Allow: /lollipop/
 
 User-agent: Amazonbot
-Allow: /
+Allow: /lollipop/
 
 User-agent: Bytespider
-Allow: /
+Allow: /lollipop/
 
 User-agent: CCBot
-Allow: /
+Allow: /lollipop/
 
 # Sitemap
-Sitemap: https://www.lollipop.im/sitemap.xml
+Sitemap: https://www.lollipop.im/lollipop/sitemap.xml

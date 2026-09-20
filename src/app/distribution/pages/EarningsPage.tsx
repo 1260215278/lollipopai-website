@@ -4,7 +4,6 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { useI18n } from "../../i18n";
 import { PageLoading } from "../components/settlement/PageHeader";
 import { TypeBadge } from "../components/settlement/Badge";
-import { VIP_POOL_EARNINGS_ENABLED } from "../featureFlags";
 import {
   getEarningsSummary,
   getEarningsMonths,
@@ -686,40 +685,36 @@ export function EarningsPage() {
               {t.detailTitle}
             </h3>
             {/* 剧集收益 / 会员收益 分段切换（原设计稿「剧相关 | 会员相关」，2026-09-07 按用户要求改名） */}
-            {VIP_POOL_EARNINGS_ENABLED && (
-              <div className="flex items-center rounded-lg bg-gray-100 p-0.5">
-                {(["drama", "vip"] as const).map((tab) => {
-                  const active = detailTab === tab;
-                  return (
-                    <button
-                      key={tab}
-                      type="button"
-                      onClick={() => setDetailTab(tab)}
-                      className="px-3 py-1 text-xs rounded-md transition-colors whitespace-nowrap"
-                      style={{
-                        background: active ? "#FFFFFF" : "transparent",
-                        color: active ? "#101828" : "#6B7280",
-                        fontWeight: active ? 600 : 400,
-                        boxShadow: active ? "0 1px 2px rgba(0,0,0,0.06)" : "none",
-                      }}
-                    >
-                      {tab === "drama" ? t.tabDrama : t.tabVip}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
+            <div className="flex items-center rounded-lg bg-gray-100 p-0.5">
+              {(["drama", "vip"] as const).map((tab) => {
+                const active = detailTab === tab;
+                return (
+                  <button
+                    key={tab}
+                    type="button"
+                    onClick={() => setDetailTab(tab)}
+                    className="px-3 py-1 text-xs rounded-md transition-colors whitespace-nowrap"
+                    style={{
+                      background: active ? "#FFFFFF" : "transparent",
+                      color: active ? "#101828" : "#6B7280",
+                      fontWeight: active ? 600 : 400,
+                      boxShadow: active ? "0 1px 2px rgba(0,0,0,0.06)" : "none",
+                    }}
+                  >
+                    {tab === "drama" ? t.tabDrama : t.tabVip}
+                  </button>
+                );
+              })}
+            </div>
           </div>
           <div className="text-xs text-gray-400 flex items-center gap-1">
             <Info className="w-3.5 h-3.5" />
-            {VIP_POOL_EARNINGS_ENABLED ? (detailTab === "drama" ? t.updatedDaily : t.vipHint) : t.updatedDaily}
+            {detailTab === "drama" ? t.updatedDaily : t.vipHint}
           </div>
         </div>
 
-        {VIP_POOL_EARNINGS_ENABLED && detailTab === "vip" ? (
-          vipSection
-        ) : (
-        <>
+        {detailTab === "drama" ? (
+          <>
             {/* 设计稿：左侧筛选/搜索，右侧年份 + 1–12 月切换 */}
             <div className="flex items-center gap-3 px-5 py-3 border-b border-[#f3f4f6] bg-gray-50/30 flex-wrap">
               <select
@@ -855,7 +850,10 @@ export function EarningsPage() {
                 </button>
               </div>
             )}
-        </>        )}
+          </>
+        ) : (
+          vipSection
+        )}
       </div>
     </div>
   );

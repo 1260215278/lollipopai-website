@@ -69,3 +69,13 @@ seo-audit-report/
 
 # 附件/临时下载
 *.html.bak
+
+# 临时工作目录（内容生成中间稿、抓取快照、一次性分析脚本）
+tmp/
+
+# 脚本数据产物（可由脚本重新生成）
+scripts/out/
+
+# 博客配图原始母图：仓库只保留 public/blog-images/*.webp 成品
+# （压缩后的 WebP 才是站点实际引用与上线的文件，母图仅本地留存）
+public/blog-images/*.jpg

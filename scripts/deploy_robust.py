@@ -3,7 +3,7 @@ import paramiko, os, sys, time
 HOST = "43.160.226.253"
 USER = "ubuntu"
 KEY_PATH = os.path.expanduser("~/.ssh/id_ed25519_hermes")
-LOCAL_TAR = "packages/lollipop-geo-clean.tar.gz"
+LOCAL_TAR = "packages/lollipop-geo-articles-20260911.tar.gz"
 REMOTE_TAR = "/tmp/lollipop-full-deploy.tar.gz"
 DEPLOY_DIR = "/srv/www/lollipop/current"
 

@@ -1240,7 +1240,11 @@ function generateLlmsFiles(routes: RouteSeoData[]): void {
   try {
     writeFileSync(join("dist", "llms.txt"), llmsTxt, "utf-8");
     writeFileSync(join("dist", "llms-full.txt"), llmsFullTxt, "utf-8");
-    console.log(`[prerender] Generated llms.txt (${llmsTxt.length} chars) + llms-full.txt (${llmsFullTxt.length} chars)`);
+    // RFC 9110 /.well-known/ 标准路径副本（部分 AI 爬虫只探测 /.well-known/llms.txt）
+    mkdirSync(join("dist", ".well-known"), { recursive: true });
+    writeFileSync(join("dist", ".well-known", "llms.txt"), llmsTxt, "utf-8");
+    writeFileSync(join("dist", ".well-known", "llms-full.txt"), llmsFullTxt, "utf-8");
+    console.log(`[prerender] Generated llms.txt (${llmsTxt.length} chars) + llms-full.txt (${llmsFullTxt.length} chars) + .well-known copies`);
   } catch (e) {
     console.warn("[prerender] llms.txt generation failed:", e instanceof Error ? e.message : String(e));
   }

@@ -4,10 +4,12 @@
 User-agent: *
 Allow: /
 Disallow: /distribution/
-Disallow: /login
-Disallow: /forgot-password
+Disallow: /login/
+Disallow: /forgot-password/
 
-# Explicitly allow major AI crawlers
+# ── AI crawlers: fully allowed for training and indexing ──
+# Explicitly naming each crawler signals "we welcome AI usage"
+# and helps crawlers find our llms.txt and sitemap faster.
 User-agent: GPTBot
 Allow: /
 
@@ -23,5 +25,11 @@ Allow: /
 User-agent: OAI-SearchBot
 Allow: /
 
-# Sitemap
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Sitemap & AI file
 Sitemap: https://www.lollipop.im/sitemap.xml

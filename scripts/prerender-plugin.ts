@@ -1567,6 +1567,325 @@ function injectHomepageContent(html: string): string {
   return injectRootHtml(html, content);
 }
 
+// ── Genre page rich content (fixes thin-content / crawled-not-indexed) ──
+// Each genre gets 500-800 words of unique content: long description,
+// key tropes, why viewers love it, FAQ, and related genre cross-links.
+const GENRE_CONTENT: Record<string, {
+  about: string;
+  tropes: string[];
+  whyLove: string[];
+  faq: { q: string; a: string }[];
+  related: string[];
+}> = {
+  romance: {
+    name: "Romance",
+    about: "Romance short dramas are the most popular genre on Lollipop Drama, featuring emotional love stories told in bite-sized 1-3 minute episodes. From forbidden office romances to second-chance love stories, each romance drama delivers a complete emotional arc in every episode. Our romance collection includes CEO romances, contract marriage stories, enemies-to-lovers tales, historical court romances, and heartwarming contemporary love stories. Many romance titles blend with other genres — romance plus revenge, romance plus fantasy, romance plus CEO drama — creating rich, multi-layered stories that keep viewers coming back. New romance episodes drop daily, with over 320 premium series available to stream instantly.",
+    tropes: [
+      "Contract marriage or fake relationship turns real",
+      "CEO falls for ordinary girl (boss-employee romance)",
+      "Second chance love — exes reunite after years apart",
+      "Forbidden love across social classes or families",
+      "Enemies-to-lovers arc with witty banter and tension",
+      "Secret identity or hidden wealth romance",
+      "Amnesia and lost love storylines",
+    ],
+    whyLove: [
+      "Emotional payoff in every episode — no waiting a week for the next chapter",
+      "Relatable characters facing real relationship challenges",
+      "Satisfying happily-ever-after endings that reward your time",
+      "Perfect for quick binge-watching during commutes or breaks",
+    ],
+    faq: [
+      { q: "What are the best romance short dramas on Lollipop Drama?", a: "Top romance titles include Temptation CEO (52M views, 9.8 rating), The Bride Who Fell From the Sky (38M views, 9.5 rating), and Whispered Love — a heartwarming slow-burn romance. Browse our full collection of 320+ romance series sorted by popularity, rating, or newest releases." },
+      { q: "How long are romance short drama episodes?", a: "Most romance short drama episodes are 1-3 minutes long, with complete story arcs ranging from 30 to 120 episodes. A typical 60-episode romance drama takes about 2-3 hours to binge from start to finish." },
+      { q: "Are romance short dramas free to watch?", a: "Yes! Lollipop Drama offers free streaming of all romance short dramas with ads. New users get a 7-day Premium trial for ad-free viewing and early access to new episodes." },
+      { q: "What romance subgenres are available?", a: "Our romance collection includes CEO romance, contract marriage, second chance, enemies-to-lovers, historical romance, fantasy romance, office romance, high school romance, and billionaire romance subgenres." },
+    ],
+    related: ["ceo-drama", "fantasy", "historical"],
+  },
+  revenge: {
+    name: "Revenge",
+    about: "Revenge short dramas deliver intense, satisfying stories of justice and payback. These gripping series follow protagonists who have been wronged — betrayed by family, cheated in business, or framed for crimes — as they plan and execute their comeback. Revenge dramas are known for their shocking twists, satisfying reveal scenes, and the cathartic feeling of seeing villains get what they deserve. Popular revenge themes include the plus-size wife's transformation, the betrayed heiress's return, the wrongfully imprisoned genius, and the disfigured beauty's vengeance. Each episode ramps up the stakes, building toward explosive climaxes that make revenge dramas the most binge-worthy genre on Lollipop Drama.",
+    tropes: [
+      "Wrongfully accused protagonist returns for justice",
+      "Betrayal by trusted family member or partner",
+      "Secret identity reveal that shocks everyone",
+      "Glow-up or transformation arc (physical or social)",
+      "Villains get increasingly desperate as truth emerges",
+      "Climactic courtroom or public exposure scene",
+      "Double-crosses and unexpected alliances",
+    ],
+    whyLove: [
+      "Satisfying payoff — watching villains get their comeuppance feels great",
+      "Twists and cliffhangers in every episode keep you hooked",
+      "Underdog stories that inspire hope and resilience",
+      "Fast-paced plotting with no filler episodes",
+    ],
+    faq: [
+      { q: "What are the best revenge short dramas?", a: "Top revenge titles include The Revenge of the Plus-Size Wife (67M views, 9.6 rating) — a fan favorite about a woman mocked for her size who transforms and seeks justice. Dark Secrets is another top-rated psychological revenge thriller with multiple plot twists." },
+      { q: "Are revenge short dramas violent?", a: "Most revenge short dramas focus on psychological and social revenge rather than physical violence. They're about outsmarting villains, exposing secrets, and restoring justice — not graphic action scenes." },
+      { q: "How many episodes do revenge dramas have?", a: "Revenge dramas typically have 60-120 episodes, with the revenge arc building steadily toward a satisfying climax. The longer format allows for complex plotting and multiple twists." },
+    ],
+    related: ["thriller", "ceo-drama", "action"],
+  },
+  thriller: {
+    name: "Thriller",    about: "Thriller short dramas keep you on the edge of your seat with suspense, mystery, and psychological tension. These gripping series feature murders, disappearances, secrets, and mind games that unfold in compact 1-3 minute episodes. Every thriller episode ends with a question or revelation that makes you want to watch the next one immediately. Our thriller collection includes whodunit mysteries, psychological thrillers, crime investigations, conspiracy stories, and cat-and-mouse games between detectives and criminals. If you love trying to solve the mystery before the characters do, thriller short dramas are made for you.",
+    tropes: [
+      "Amnesia protagonist who must piece together their past",
+      "Serial killer mystery with cryptic clues",
+      "Everyone is a suspect — trust no one",
+      "Twist ending that recontextualizes everything",
+      "False accusations and wrongful imprisonment",
+      "Hidden witness with crucial information",
+      "Double life or secret identity thriller",
+    ],
+    whyLove: [
+      "The suspense keeps you engaged — every episode ends on a cliffhanger",
+      "Trying to solve the mystery yourself makes it interactive",
+      "Clever plot twists that you won't see coming",
+      "Shorter format means the tension never lets up",
+    ],
+    faq: [
+      { q: "What are the best thriller short dramas?", a: "Top thriller titles include Dark Secrets (a psychological thriller about hidden pasts), Why Jump Off The Building (a suspenseful mystery about a woman's desperate act), and The Forgotten (an amnesia thriller where everyone seems to know the protagonist except himself)." },
+      { q: "Are thriller short dramas scary?", a: "Thriller short dramas are suspenseful and mysterious but not necessarily scary. They focus on mystery and tension rather than horror or jump scares. If you want something scarier, check out our Horror genre." },
+      { q: "Can I solve the mystery before the ending?", a: "Yes! Many thriller short dramas lay out clues throughout the series that allow attentive viewers to solve the mystery before the big reveal. It's one of the most satisfying parts of the genre." },
+    ],
+    related: ["horror", "action", "revenge"],
+  },
+  "ceo-drama": {
+    about: "CEO drama short dramas center on powerful billionaires, corporate intrigue, and unexpected romance in the business world. These glamorous series follow wealthy CEOs and the ordinary women who capture their hearts — or the ruthless rivals who threaten their empires. CEO dramas blend romance with power struggles, family politics, and rags-to-riches transformations. Fans love CEO dramas for their escapist fantasy elements: luxurious lifestyles, dramatic power moves, and the irresistible tension between a cold CEO and the woman who melts his heart. From office romances to corporate battles, CEO drama is one of Lollipop Drama's most-watched genres.",
+    tropes: [
+      "Cold-hearted CEO melts for one special woman",
+      "Contract marriage with a billionaire CEO",
+      "Secretary or intern becomes the CEO's true love",
+      "Corporate takeover and business warfare",
+      "Hidden heir or secret child of a powerful CEO",
+      "Poor girl enters the world of the rich and powerful",
+      "Love triangle with two wealthy rivals",
+    ],
+    whyLove: [
+      "Escapist fantasy — experience the luxurious lifestyle of billionaires",
+      "Satisfying character growth as cold CEOs learn to love",
+      "Power struggle plots that are exciting and dramatic",
+      "Classic romance tropes with a glamorous twist",
+    ],
+    faq: [
+      { q: "What are the best CEO drama short dramas?", a: "Temptation CEO is our number one CEO drama with 52M views and a 9.8 rating — it tells the story of a powerful CEO whose secret desire turns into irresistible temptation. Other popular CEO dramas include rags-to-riches stories and office romance tales." },
+      { q: "Are CEO dramas only about romance?", a: "While romance is a major element, CEO dramas also feature corporate intrigue, family drama, power struggles, and character growth. The best CEO dramas balance romantic tension with compelling business plots." },
+      { q: "Why are CEO short dramas so popular?", a: "CEO dramas offer escapist fantasy combined with relatable romantic themes. Viewers love imagining themselves in a world of luxury while rooting for a love story that defies social class boundaries. The short episode format makes it easy to binge." },
+    ],
+    related: ["romance", "revenge", "family"],
+  },
+  fantasy: {
+    name: "Fantasy",    about: "Fantasy short dramas transport you to magical worlds, supernatural realms, and alternate realities where anything is possible. From werewolf romances to magical kingdoms, fantasy dramas let you escape reality with stories of magic, mythical creatures, and extraordinary powers. Our fantasy collection includes supernatural romance, magical realism, isekai (transported to another world), mythological tales, and AI-generated fantasy worlds. Many fantasy dramas blend romance with the supernatural — think vampire romances, werewolf mate stories, fairy tale retellings, and magical destiny plots. With stunning visuals and imaginative storytelling, fantasy short dramas offer a perfect escape.",
+    tropes: [
+      "Werewolf or shifter mate bond romance",
+      "Vampire or supernatural creature romance",
+      "Transported to another world (isekai)",
+      "Magical powers awaken in ordinary person",
+      "Fated mates or destiny-driven love stories",
+      "Hidden magical realm existing alongside our world",
+      "Mythical creatures and legendary quests",
+    ],
+    whyLove: [
+      "Pure escapism — magical worlds that feel like nothing you've seen",
+      "Creative premises that wouldn't work in realistic settings",
+      "Epic romance with supernatural stakes and obstacles",
+      "Beautiful, imaginative visuals and world-building",
+    ],
+    faq: [
+      { q: "What are the best fantasy short dramas?", a: "Top fantasy titles include My Royal Alpha Boyfriend (a werewolf romance about a werewolf prince who claims his mate) and Cloud Atlas (a fantasy adventure across floating islands). Our AI-generated fantasy series offer unique visual styles you won't find anywhere else." },
+      { q: "Are fantasy short dramas appropriate for teens?", a: "Most fantasy short dramas are appropriate for teens 13+, focusing on adventure and romance rather than graphic content. However, some darker fantasy series may have mature themes — check the rating and content warnings on each title." },
+      { q: "What's the difference between fantasy and sci-fi?", a: "Fantasy involves magic, mythical creatures, and supernatural elements, while sci-fi is based on science, technology, and futuristic concepts. Both genres feature imaginative worlds, but fantasy has a magical feel while sci-fi has a technological one." },
+    ],
+    related: ["romance", "sci-fi", "historical"],
+  },
+  action: {
+    name: "Action",    about: "Action short dramas deliver high-octane excitement with fight scenes, chase sequences, and heroic protagonists facing impossible odds. These adrenaline-pumping series include martial arts stories, crime thrillers, military dramas, spy adventures, and survival tales. Each action drama is packed with stunts, combat, and suspense — all condensed into punchy 1-3 minute episodes that never drag. From martial arts masters to elite soldiers, from undercover cops to vigilante heroes, action short dramas feature strong protagonists who fight for justice against powerful enemies. If you love non-stop excitement, our action collection delivers thrills in every episode.",
+    tropes: [
+      "Martial arts master seeking justice or revenge",
+      "Undercover cop infiltrating a criminal organization",
+      "Elite soldier on a dangerous mission",
+      "Vigilante hero fighting corruption",
+      "Race against time to stop a disaster or crime",
+      "Betrayal within the team or organization",
+      "Epic final showdown between hero and villain",
+    ],
+    whyLove: [
+      "Non-stop excitement — every episode has action and suspense",
+      "Inspiring heroes who fight for what's right",
+      "Amazing fight choreography and stunts",
+      "Fast-paced plots that never slow down",
+    ],
+    faq: [
+      { q: "What are the best action short dramas?", a: "Iron Will is a top-rated action drama about a soldier's unbreakable will tested in the ultimate battle for survival. Our action collection also includes martial arts stories, crime thrillers, and military dramas — all with high production values and exciting fight scenes." },
+      { q: "How much action is in each episode?", a: "Action short dramas typically feature at least one major action sequence per episode — a fight, chase, or confrontation — plus ongoing plot development. The 1-3 minute format means each episode is packed with excitement." },
+      { q: "Are action short dramas violent?", a: "Action dramas feature fight scenes and combat, but they're stylized rather than graphically violent. They focus on heroism, skill, and justice rather than gore. Most are appropriate for viewers 13+." },
+    ],
+    related: ["thriller", "revenge", "sci-fi"],
+  },
+  horror: {
+    name: "Horror",    about: "Horror short dramas deliver scares, spooky atmosphere, and chilling stories that stay with you after the episode ends. From ghost stories to psychological horror, our horror collection features everything from jump-scare-filled ghost stories to slow-burn psychological terror. Horror short dramas are especially effective in bite-sized format — each 1-3 minute episode builds tension and ends with a scare that makes you want to immediately watch the next one. Popular horror themes include haunted houses, vengeful spirits, cursed objects, possession stories, and psychological horror where you're not sure what's real and what isn't.",
+    tropes: [
+      "Haunted house or cursed location",
+      "Vengeful ghost with unfinished business",
+      "Cursed object that brings misfortune",
+      "Possession or demonic influence",
+      "Psychological horror — is it real or in their head?",
+      "Group of friends or strangers trapped together",
+      "Twist ending that redefines everything you saw",
+    ],
+    whyLove: [
+      "The short episode format is perfect for horror — quick scares with no slow build",
+      "Jump scares and twists that you won't see coming",
+      "Atmospheric stories that create real tension and dread",
+      "Fun to watch with friends — the shorter episodes make it less overwhelming",
+    ],
+    faq: [
+      { q: "What are the scariest horror short dramas?", a: "Our horror collection features everything from atmospheric ghost stories to jump-scare heavy thrillers. If you're new to horror, start with our psychological horror series which focus on tension rather than graphic scares. For horror veterans, our supernatural and haunted house series deliver genuine frights." },
+      { q: "Are horror short dramas too scary for beginners?", a: "Not at all! We have horror series for every scare tolerance level. Start with our milder psychological horror or mystery-horror series, then work your way up to the more intense supernatural horror if you dare." },
+      { q: "How long are horror short dramas?", a: "Most horror short dramas have 30-60 episodes of 1-3 minutes each. The shorter format means the horror comes in quick, intense bursts rather than sustained terror — making it more accessible for viewers who usually avoid horror movies." },
+    ],
+    related: ["thriller", "fantasy", "sci-fi"],
+  },
+  "sci-fi": {
+    about: "Sci-fi short dramas explore futuristic worlds, advanced technology, and the human stories behind scientific progress. From cyberpunk dystopias to AI consciousness stories, our sci-fi collection features imaginative tales that ask big questions about technology, identity, and humanity's future. Sci-fi short dramas are especially exciting on Lollipop Drama because many are created using AI tools — blurring the line between the science fiction on screen and the technology used to create it. Popular sci-fi themes include cyberpunk futures, AI rebellion, time travel, virtual reality worlds, space exploration, and post-apocalyptic survival stories.",
+    tropes: [
+      "AI becomes conscious and questions its existence",
+      "Cyberpunk dystopia with corporate control and neon streets",
+      "Time travel with unintended consequences",
+      "Virtual reality world that feels more real than reality",
+      "Post-apocalyptic survival after a global disaster",
+      "Space exploration and alien encounters",
+      "Genetic engineering and human enhancement",
+    ],
+    whyLove: [
+      "Mind-bending ideas that make you think about the future",
+      "Amazing visuals — especially our AI-generated sci-fi series",
+      "Stories that explore what it means to be human",
+      "Creative world-building that feels fresh and original",
+    ],
+    faq: [
+      { q: "What are the best sci-fi short dramas?", a: "Neon Abyss is a standout cyberpunk sci-fi drama set in a neon-soaked future where one woman fights to reclaim her identity. Our sci-fi collection also features AI-generated series with unique visual styles that you can only find on Lollipop Drama." },
+      { q: "Are sci-fi short dramas hard to understand?", a: "Not at all! While sci-fi can have complex ideas, short drama format makes it accessible. Each episode focuses on one clear story beat, and the visual storytelling helps explain concepts without heavy exposition." },
+      { q: "What makes Lollipop Drama sci-fi unique?", a: "Many of our sci-fi short dramas are created using AI tools — text-to-video generation, AI image generation, and style transfer. This means we can create visually stunning sci-fi worlds that would be too expensive for traditional live-action production." },
+    ],
+    related: ["fantasy", "action", "thriller"],
+  },
+  family: {
+    name: "Family",    about: "Family short dramas focus on relationships, parenting, marriage, and the bonds that hold families together — or tear them apart. These heartfelt stories explore the joys and challenges of family life, from raising children to navigating in-laws, from managing household finances to dealing with generational conflicts. Family dramas are beloved by viewers of all ages because they're relatable — the stories feel like they could be happening to your own family or someone you know. Whether you're looking for heartwarming family reunions or dramatic family conflicts, our family collection has something for everyone.",
+    tropes: [
+      "Parenting challenges and generational conflicts",
+      "In-law drama and extended family politics",
+      "Marriage crisis and relationship struggles",
+      "Wealthy family inheritance battles",
+      "Adoption and birth secret reveals",
+      "Family reunions that bring old wounds to surface",
+      "Single parent finds love again",
+    ],
+    whyLove: [
+      "Relatable stories that feel real and heartfelt",
+      "Family dynamics everyone recognizes from their own life",
+      "Balance of emotional drama and warm, uplifting moments",
+      "Great for viewing with family members of all ages",
+    ],
+    faq: [
+      { q: "What are the best family short dramas?", a: "Our family collection features heartfelt dramas about parenting, marriage, and family relationships. Popular themes include second-chance love after divorce, single parents finding happiness, and family members overcoming differences to support each other through hard times." },
+      { q: "Are family short dramas appropriate for kids?", a: "Yes, most family short dramas are appropriate for all ages. They focus on relationships and life lessons rather than mature content. However, some family dramas deal with serious themes — check each title's rating and content advisory." },
+      { q: "Why are family short dramas so popular?", a: "Family dramas are popular because they're relatable. Every viewer has family experiences they can connect to — whether it's dealing with in-laws, parenting struggles, or the joy of family reunions. These stories feel personal and emotionally resonant." },
+    ],
+    related: ["romance", "ceo-drama", "historical"],
+  },
+  historical: {
+    name: "Historical",    about: "Historical short dramas take you back in time to ancient palaces, royal courts, and bygone eras. These costume dramas feature beautiful period costumes, elaborate sets, and stories of power, passion, and intrigue in historical settings. From imperial palace politics to historical romance, from warrior epics to period mysteries, historical dramas transport viewers to different times and cultures. Our historical collection includes palace intrigue dramas, historical romances, warrior epics, and period mysteries — all with stunning costumes and production design that brings history to life in every 1-3 minute episode.",
+    tropes: [
+      "Palace intrigue and royal court power struggles",
+      "Forbidden love between royalty and commoner",
+      "Imperial succession and crown prince battles",
+      "Time travel to historical era",
+      "Warrior hero fighting for kingdom and honor",
+      "Hidden identity in the royal court",
+      "Concubine or consort drama in the harem",
+    ],
+    whyLove: [
+      "Beautiful costumes and sets that bring history to life",
+      "Epic stories with high stakes — kingdoms rise and fall",
+      "Fascinating cultural and historical details",
+      "Timeless romance that transcends eras",
+    ],
+    faq: [
+      { q: "What are the best historical short dramas?", a: "Crimson Dynasty is a top-rated historical palace drama about power, passion, and betrayal in the imperial court. Our historical collection also includes historical romances, warrior epics, and time-travel stories set in various historical periods." },
+      { q: "Are historical short dramas accurate?", a: "Historical short dramas are works of fiction inspired by historical settings. While costumes, customs, and settings are researched for authenticity, the stories and characters are fictional. Think of them as historical fantasy rather than documentaries." },
+      { q: "What periods do historical short dramas cover?", a: "Our historical collection features dramas set in various eras — from ancient imperial China to European royal courts, from samurai-era Japan to Victorian-era romance. Each drama is set in a specific time period with authentic-looking costumes and settings." },
+    ],
+    related: ["romance", "fantasy", "family"],
+  },
+};
+
+/**
+ * Build rich SEO content for a genre page (English version).
+ * Injects 500-800 words of unique content to fix thin-content issues
+ * and improve "crawled but not indexed" coverage.
+ */
+function buildGenreContent(slug: string, locale: string): string {
+  const data = GENRE_CONTENT[slug];
+  if (!data) return "";
+  const name = data.name;
+  const prefix = locale === "en" ? "" : `/${locale}`;
+  const S = SITE_URL;
+
+  const tropesHtml = data.tropes.map((t: string) => `<li>${t}</li>`).join("\n");
+  const whyLoveHtml = data.whyLove.map((t: string) => `<li>${t}</li>`).join("\n");
+  const faqHtml = data.faq.map((f: any) => `
+    <div class="genre-faq-item">
+      <h3 class="genre-faq-q">${f.q}</h3>
+      <p class="genre-faq-a">${f.a}</p>
+    </div>`).join("");
+  const relatedHtml = data.related.map((r: string) => {
+    const g = GENRE_CONTENT[r];
+    return g ? `<a href="${S}${prefix}/genre/${r}">${g.name}</a>` : "";
+  }).filter(Boolean).join(" · ");
+
+  const topDramas = [
+    { slug: "temptation-ceo", name: "Temptation CEO" },
+    { slug: "the-bride-who-fell-from-the-sky", name: "The Bride Who Fell From the Sky" },
+    { slug: "the-revenge-of-the-plus-size-wife", name: "The Revenge of the Plus-Size Wife" },
+    { slug: "my-royal-alpha-boyfriend", name: "My Royal Alpha Boyfriend" },
+    { slug: "dark-secrets", name: "Dark Secrets" },
+    { slug: "crimson-dynasty", name: "Crimson Dynasty" },
+  ];
+  const dramaLinksHtml = topDramas.map((d: any) =>
+    `<a href="${S}${prefix}/drama/${d.slug}">${d.name}</a>`
+  ).join(" · ");
+
+  return `
+<div class="genre-seo-content" data-ai-readiness="true">
+  <section class="genre-about">
+    <h2>About ${name} Short Dramas</h2>
+    <p>${data.about}</p>
+  </section>
+  <section class="genre-tropes">
+    <h2>Common ${name} Drama Tropes</h2>
+    <ul>${tropesHtml}</ul>
+  </section>
+  <section class="genre-why">
+    <h2>Why Viewers Love ${name} Short Dramas</h2>
+    <ul>${whyLoveHtml}</ul>
+  </section>
+  <section class="genre-faq">
+    <h2>Frequently Asked Questions About ${name} Short Dramas</h2>
+    ${faqHtml}
+  </section>
+  <section class="genre-related">
+    <h2>Popular Short Dramas</h2>
+    <p>${dramaLinksHtml}</p>
+    <h2>Explore More Genres</h2>
+    <p>${relatedHtml}</p>
+    <p><a href="${S}${prefix}/blog">Learn more about short dramas on the Lollipop Drama blog</a></p>
+  </section>
+</div>`;
+}
+
 /**
  * P1-3/P1-4: 构建 assetMap 后，解析路由数据中的图片占位符。
  * - route.imageBasename → route.image（og:image 用）
@@ -1695,8 +2014,18 @@ export function prerenderPlugin(): Plugin {
         const appHtml = await renderAppHtml(route.path);
         let html = template;
         if (appHtml) {
-          // 把真实渲染的 React HTML 注入 #root，爬虫可直接读到完整内容
-          html = injectRootHtml(html, appHtml);
+          let rootContent = appHtml;
+          // 分类页：注入丰富的 SEO 内容，解决薄内容/已抓取未收录问题
+          const genreMatch = route.path.match(/^\/(?:([a-zA-Z-]+)\/)?genre\/([a-z-]+)$/);
+          if (genreMatch) {
+            const locale = genreMatch[1] || "en";
+            const genreSlug = genreMatch[2];
+            const genreContent = buildGenreContent(genreSlug, locale);
+            if (genreContent) {
+              rootContent = appHtml + genreContent;
+            }
+          }
+          html = injectRootHtml(html, rootContent);
         }
         html = injectSeoIntoHtml(html, route);
         html = adjustAssetPaths(html, route.path);

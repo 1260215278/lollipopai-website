@@ -14,6 +14,7 @@ import { motion } from "motion/react";
 import { Calendar, User, ArrowLeft, ArrowRight, Tag, Clock, BarChart } from "lucide-react";
 import { MarketingPageShell } from "../components/MarketingPageShell";
 import { applyCustomSeoMeta, setPageSchema, clearPageSchema, getLocalizedDynamicSeo } from "../i18n.seo";
+import { localizedHref } from "../localePath";
 import { useI18n } from "../i18n";
 // 详情页需要完整正文 —— 元数据 + 正文两个模块都在这里同步引入
 import { blogMeta, isGuideCategory } from "../data/blog";
@@ -90,12 +91,17 @@ export function BlogPostPage() {
       return;
     }
 
+    // GEO：语言本地化的绝对 URL（与 zh/zh-TW canonical 一致，避免 schema 与可见页 URL 错位）
+    const SITE = "https://www.lollipop.im";
+    const locBlog = `${SITE}${localizedHref(locale, "/blog")}`;
+    const locArticle = `${SITE}${localizedHref(locale, `/blog/${post.slug}`)}`;
+
     const seo = getLocalizedDynamicSeo(
       post.seoTitle,
       post.seoDescription,
       locale,
       "blog",
-      post.title,
+      postTitle ?? post.title,
     );
     applyCustomSeoMeta(seo, `/blog/${post.slug}`);
 
@@ -157,7 +163,7 @@ export function BlogPostPage() {
       },
       mainEntityOfPage: {
         "@type": "WebPage",
-        "@id": `https://www.lollipop.im/blog/${post.slug}`,
+        "@id": locArticle,
       },
       articleSection: localizedCategoryLabel,
       image: {
@@ -166,11 +172,11 @@ export function BlogPostPage() {
       },
       thumbnailUrl: `https://www.lollipop.im${post.coverImage ?? "/blog-images/guide.webp"}`,
       keywords: `${localizedCategoryLabel}, AI short drama, Lollipop Drama, ${post.title}`,
-      articleBody: bodyText.slice(0, 500),
+      articleBody: bodyText,
       wordCount: useZh ? bodyText.replace(/\s/g, "").length : bodyText.split(/\s+/).filter(Boolean).length,
       encodingFormat: "text/html",
-      inLanguage: useZh ? "zh" : "en",
-      isPartOf: { "@type": "Blog", name: "Lollipop Drama Blog", url: "https://www.lollipop.im/blog" },
+      inLanguage: locale,
+      isPartOf: { "@type": "Blog", name: "Lollipop Drama Blog", url: locBlog },
       about: aboutEntity,
       mentions: mentionsEntities,
       accessMode: ["textual", "visual"],
@@ -182,8 +188,8 @@ export function BlogPostPage() {
         "@type": "BreadcrumbList",
         itemListElement: [
           { "@type": "ListItem", position: 1, name: dp.home, item: "https://www.lollipop.im/" },
-          { "@type": "ListItem", position: 2, name: dp.blog, item: "https://www.lollipop.im/blog" },
-          { "@type": "ListItem", position: 3, name: post.title, item: `https://www.lollipop.im/blog/${post.slug}` },
+          { "@type": "ListItem", position: 2, name: dp.blog, item: locBlog },
+          { "@type": "ListItem", position: 3, name: postTitle ?? post.title, item: locArticle },
         ],
       },
     };
@@ -206,7 +212,7 @@ export function BlogPostPage() {
             position: i + 1,
             name: s.name,
             text: s.text,
-            url: `https://www.lollipop.im/blog/${post.slug}#step-${i + 1}`,
+            url: `${locArticle}#step-${i + 1}`,
           })),
           totalTime: post.totalTime,
           estimatedCost: { "@type": "MonetaryAmount", currency: "USD", value: "0" },
@@ -225,10 +231,10 @@ export function BlogPostPage() {
           datePublished: post.publishDate,
           dateModified: post.updateDate,
           inLanguage: locale,
-          isPartOf: { "@type": "Blog", name: "Lollipop Drama Blog", url: "https://www.lollipop.im/blog" },
+          isPartOf: { "@type": "Blog", name: "Lollipop Drama Blog", url: locBlog },
           mainEntityOfPage: {
             "@type": "WebPage",
-            "@id": `https://www.lollipop.im/blog/${post.slug}`,
+            "@id": locArticle,
           },
         }
       : null;

@@ -94,7 +94,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-08-04",
     keyTakeaways: ["Large language models generate multiple plot branches in minutes, boosting scriptwriting efficiency 5-10x.","AI storyboarding tools convert scripts to visual frames automatically, reducing storyboard time from days to hours.","Style control requires specifying genre, tone, and target audience in the prompt -- vague prompts produce generic output.","Human review remains essential for dialogue naturalness, plot logic, and emotional pacing.","Always verify AI-generated scripts for copyrighted plot patterns before production."],
     keyTakeawaysZh: ["大语言模型可在几分钟内生成多条剧情分支，剧本创作效率提升5-10倍。","AI分镜工具自动将剧本转为视觉帧，分镜时间从天级降至小时级。","风格控制需要在提示中指定类型、基调和目标受众——模糊提示产生通用输出。","人工审核仍不可少，需检查对话自然度、情节逻辑和情感节奏。","制作前务必检查AI生成的剧本是否包含受版权保护的情节模式。"],
-    coverImage: "/blog-images/ai-script-storyboard-new.webp",
   },
   {
     slug: "ai-video-quality",
@@ -114,7 +113,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-08-04",
     keyTakeaways: ["Leading AI video tools like Seedance 2.0 and Sora now deliver 4K/60fps output.","The real quality gap is not resolution but motion coherence and physical realism.","Motion artifacts (morphing hands, physics violations) remain the top viewer complaint.","Platform benchmarks show 60-80% of shots are usable; 20-40% need rework.","Target 1080p for mobile-first distribution -- 4K only adds file size without viewer-perceivable improvement."],
     keyTakeawaysZh: ["Seedance 2.0和Sora等领先AI视频工具已支持4K/60fps输出。","真正的质量差距不在分辨率，而在动作连贯性和物理真实感。","动作缺陷（手部变形、物理违规）仍是观众投诉的首要问题。","平台基准测试显示60-80%的镜头可用，20-40%需返工。","移动优先分发建议1080p——4K只增加文件体积而无观感提升。"],
-    coverImage: "/blog-images/ai-video-quality-new.webp",
   },
   {
     slug: "ai-editing-tools",
@@ -134,7 +132,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-08-04",
     keyTakeaways: ["AI post-production tools like CapCut and Adobe now offer automatic scene detection and smart color grading.","Workflows that previously took two days can now be completed in 10 minutes.","AI subtitle generation achieves 95%+ accuracy for English and 85%+ for Chinese.","Smart color grading presets match mood automatically -- no manual LUT tweaking needed.","Cloud rendering reduces export time by 70% compared to local processing."],
     keyTakeawaysZh: ["CapCut和Adobe等AI后期工具已支持自动场景检测和智能调色。","此前耗时两天的流程现在可在10分钟内完成。","AI字幕生成英文准确率达95%+，中文达85%+。","智能调色预设自动匹配情绪——无需手动调整LUT。","云渲染相比本地处理可减少70%导出时间。"],
-    coverImage: "/blog-images/ai-editing-tools-new.webp",
   },
   {
     slug: "ai-production-cost",
@@ -154,7 +151,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-08-04",
     keyTakeaways: ["AI has cut per-minute drama production costs from thousands to under $100.","A complete 10-episode x 5-minute drama can be produced for under $1,500 USD.","Cost breakdown: 40% generation credits, 25% voice synthesis, 20% editing, 15% distribution.","Voice cloning costs $0.50-$2 per minute -- the cheapest quality multiplier.","Budget 20% contingency for generation rework and failed shots."],
     keyTakeawaysZh: ["AI已将单分钟短剧制作成本从数千元降至百元级。","10集x5分钟完整短剧可在$1,500以内完成。","成本构成：40%生成额度、25%语音合成、20%剪辑、15%分发。","声音克隆成本$0.50-$2/分钟——性价比最高的质量倍增器。","建议预留20%应急预算用于生成返工和失败镜头。"],
-    coverImage: "/blog-images/ai-production-cost-new.webp",
   },
   {
     slug: "ai-rendering-pipeline",
@@ -174,7 +170,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-08-04",
     keyTakeaways: ["A 3-person team produced 42 minutes of final content in 5 days using cloud rendering.","Cloud rendering reduces total production time by 50%+ compared to local hardware.","Minimum hardware for local rendering: 32GB RAM, RTX 4080 or equivalent, 2TB NVMe storage.","Batch rendering in groups of 5-10 shots maintains visual coherence better than single-shot rendering.","Cost comparison: cloud at $0.10-$0.30 per minute vs. local at $2,000+ hardware depreciation per month."],
     keyTakeawaysZh: ["3人团队使用云渲染在5天内产出了42分钟成片。","云渲染相比本地硬件可将总制作时间缩短50%以上。","本地渲染最低硬件：32GB内存、RTX 4080或同等显卡、2TB NVMe存储。","5-10个镜头批量渲染比逐个渲染保持更好的视觉连贯性。","成本对比：云渲染$0.10-$0.30/分钟 vs 本地$2,000+/月硬件折旧。"],
-    coverImage: "/blog-images/ai-rendering-pipeline-new.webp",
   },
   {
     slug: "ai-short-drama-complete-guide",
@@ -194,7 +189,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-08-04",
     keyTakeaways: ["AI short drama production follows 7 stages: concept, script, storyboard, generation, voice, editing, and distribution.","Per-minute production costs have dropped from thousands to under $100 with AI tools.","A 10-episode x 5-minute series can be produced for $700-$2,800 USD.","Character consistency across episodes requires a reference image set and voice locking from day one.","Copyright compliance requires clearing portrait rights, music licenses, and AI tool commercial terms before publishing."],
     keyTakeawaysZh: ["AI短剧制作分7个阶段：创意、剧本、分镜、生成、配音、剪辑、分发。","单分钟制作成本已从数千元降至百元级。","10集x5分钟短剧的制作预算为$700-$2,800。","角色跨集一致性需要从第一天起建立参考图集和声音锁定。","发布前必须完成肖像权清理、音乐授权和AI工具商用条款确认。"],
-    coverImage: "/blog-images/ai-short-drama-complete-guide-new.webp",
     stepCount: 7,
     totalTime: "P6D",
     difficulty: "Advanced",
@@ -217,7 +211,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-08-04",
     keyTakeaways: ["Three rights generate takedowns in AI drama: character likeness, music copyright, and underlying work copyright.","AI-generated content is copyrightable in the US only with meaningful human creative contribution.","Music licensed for social media may not cover commercial drama distribution -- always check the specific rights granted.","Portrait rights apply even to AI-generated faces resembling real people.","Keep an evidence file for every cleared right: signed releases, license screenshots, and tool terms screenshots."],
     keyTakeawaysZh: ["AI短剧有三类权利会引发下架：角色肖像权、音乐版权、在先作品著作权。","在美国，AI生成内容只有在有人类创造性贡献时才可受版权保护。","社交媒体授权的音乐可能不覆盖商业短剧分发——务必检查具体授予权利。","肖像权甚至适用于与真人相似的AI生成面孔。","每项清理的权利都保留证据文件：签字授权、许可截图、工具条款截图。"],
-    coverImage: "/blog-images/ai-copyright-compliance-new.webp",
   },
   {
     slug: "ai-tools-comparison",
@@ -237,7 +230,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-08-04",
     keyTakeaways: ["No single tool covers the full AI drama pipeline -- most creators use 3-5 tools in combination.","Scripting tools (ChatGPT, Claude) cost $20/month; video generation (Runway, Pika) costs $30-$95/month.","The best tool combination depends on budget, team size, and output quality requirements.","Free-tier tools can produce a first 5-episode series for $0, but quality ceiling is lower.","All-in-one platforms like Lollipop Drama bundle script, generation, voice, and distribution for $0-$50/month."],
     keyTakeawaysZh: ["没有单一工具覆盖完整AI短剧流程——大多数创作者组合使用3-5个工具。","剧本工具(ChatGPT/Claude)月费$20；视频生成(Runway/Pika)月费$30-$95。","最佳工具组合取决于预算、团队规模和输出质量要求。","免费工具可以$0成本制作首部5集短剧，但质量上限较低。","Lollipop Drama等一体化平台打包剧本、生成、配音、分发，月费$0-$50。"],
-    coverImage: "/blog-images/ai-tools-comparison-new.webp",
   },
   {
     slug: "what-is-ai-drama",
@@ -257,7 +249,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-08-05",
     keyTakeaways: ["AI drama is scripted entertainment content created or enhanced using artificial intelligence across production stages.","The production pipeline covers scriptwriting, character design, video generation, voice synthesis, editing, and distribution.","AI drama democratizes content creation -- a single person can now produce what previously required a full crew.","The global AI short drama market is projected to reach $10B+ by 2027.","Key genres include romance, suspense, thriller, and comedy -- each with distinct AI generation strengths."],
     keyTakeawaysZh: ["AI短剧是使用人工智能在制作各阶段创建或增强的剧本化娱乐内容。","制作流程覆盖剧本创作、角色设计、视频生成、语音合成、剪辑、分发。","AI短剧降低了创作门槛——一个人现在可以完成此前需要整个团队的工作。","全球AI短剧市场预计到2027年将达到$100亿+。","主要类型包括爱情、悬疑、惊悚、喜剧——每种类型有不同的AI生成优势。"],
-    coverImage: "/blog-images/what-is-ai-drama-new.webp",
   },
   {
     slug: "how-to-create-ai-short-drama",
@@ -277,7 +268,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-08-05",
     keyTakeaways: ["Start with a 1-3 episode core conflict and a clear emotional tone (romance, suspense, thriller, or comedy).","Use AI script tools to generate a season outline first, then expand episode by episode.","Lock character reference images (face, body, wardrobe) before any video generation.","Generate video shot-by-shot from storyboard, not scene-by-scene, for better control.","Budget 10 days for a beginner's first 5-episode vertical drama with AI tools."],
     keyTakeawaysZh: ["以1-3集核心冲突和明确情感基调（爱情/悬疑/惊悚/喜剧）为起点。","先用AI剧本工具生成整季大纲，再逐集展开。","在任何视频生成之前锁定角色参考图（面部、体型、服装）。","按分镜逐镜头生成视频，而非按场景生成，以获得更好控制。","新手首次制作5集竖屏短剧建议预留10天。"],
-    coverImage: "/blog-images/how-to-create-ai-short-drama-new.webp",
     stepCount: 8,
     totalTime: "P10D",
     difficulty: "Beginner",
@@ -300,7 +290,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-08-05",
     keyTakeaways: ["AI entertainment will shift from tool-based to platform-based ecosystems by 2027.","Personalized storytelling -- where AI adapts plot based on viewer reactions -- is 2-3 years from mainstream viability.","Creator economy revenue from AI-generated content is projected to exceed $5B by 2028.","The key bottleneck is not generation quality but distribution and discoverability.","Regulatory frameworks for AI-generated entertainment are forming in the US, EU, and China simultaneously."],
     keyTakeawaysZh: ["AI娱乐将在2027年前从工具模式转向平台生态模式。","个性化叙事——AI根据观众反应调整剧情——距主流还有2-3年。","AI生成内容的创作者经济收入预计到2028年将超过$50亿。","关键瓶颈不在生成质量，而在分发和发现性。","AI生成娱乐的监管框架在美国、欧盟和中国同步形成中。"],
-    coverImage: "/blog-images/future-of-ai-entertainment-new.webp",
   },
   {
     slug: "ai-vs-traditional-drama",
@@ -320,7 +309,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-08-05",
     keyTakeaways: ["AI drama production costs 90% less than traditional drama per minute of finished content.","AI production time is measured in days; traditional drama takes months for the same episode count.","Traditional drama still leads in acting quality, emotional depth, and visual consistency.","AI drama excels in iteration speed, A/B testing, and rapid genre experimentation.","The hybrid approach -- AI pre-production plus human-directed principal photography -- offers the best of both worlds."],
     keyTakeawaysZh: ["AI短剧每分钟成片成本比传统短剧低90%。","AI制作以天计；同等集数传统短剧需以月计。","传统短剧在表演质量、情感深度和视觉一致性上仍领先。","AI短剧在迭代速度、A/B测试和快速类型实验上占优。","混合模式——AI前期制作加人工执导拍摄——兼采两者优势。"],
-    coverImage: "/blog-images/ai-vs-traditional-drama-new.webp",
   },
   {
     slug: "best-ai-storytelling-platforms",
@@ -340,7 +328,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-08-05",
     keyTakeaways: ["Runway excels at single-clip generation; Sora leads in cinematic quality; Lollipop Drama is the only full-stack serialized drama platform.","Platform choice depends on goal: single clips (Runway/Sora), short dramas (Lollipop Drama), or social content (CapCut/Pika).","Monthly cost comparison: Sora $200+, Runway $95, Lollipop Drama $0-$50, CapCut free-$30.","For serialized storytelling, full-stack platforms save 60%+ vs. stitching individual tools together.","All platforms are improving rapidly -- reassess every 3 months as capabilities shift."],
     keyTakeawaysZh: ["Runway擅长单片段生成；Sora在电影质感上领先；Lollipop Drama是唯一的全栈连载短剧平台。","平台选择取决于目标：单片段(Runway/Sora)、短剧(Lollipop Drama)、社交内容(CapCut/Pika)。","月费对比：Sora $200+，Runway $95，Lollipop Drama $0-$50，CapCut 免费-$30。","对于连载叙事，全栈平台比拼凑独立工具节省60%+成本。","所有平台都在快速进步——建议每3个月重新评估。"],
-    coverImage: "/blog-images/best-ai-storytelling-platforms-new.webp",
   },
   {
     slug: "ai-new-generation-creators",
@@ -360,7 +347,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-08-05",
     keyTakeaways: ["AI-native creators differ from traditional creators: they iterate 10x faster and produce 5x more content volume.","The creator economy is splitting into AI-native (speed, volume, data-driven) and traditional (craft, brand, audience loyalty).","AI tools have lowered the entry barrier to near zero -- the differentiator is now storytelling and audience understanding.","Top AI-native creators earn $5,000-$50,000/month across platform revenue share, subscriptions, and brand deals.","Platforms like Lollipop Drama offer 80% revenue share, significantly higher than traditional streaming platforms."],
     keyTakeawaysZh: ["AI原生创作者与传统创作者不同：迭代速度快10倍，内容产量高5倍。","创作者经济正分化为AI原生（速度、产量、数据驱动）和传统（工艺、品牌、受众忠诚度）。","AI工具将入门门槛降至接近零——差异化现在在于叙事能力和受众理解。","头部AI原生创作者月入$5,000-$50,000，来源包括平台分成、订阅、品牌合作。","Lollipop Drama等平台提供80%收入分成，显著高于传统流媒体平台。"],
-    coverImage: "/blog-images/ai-new-generation-creators-new.webp",
   },
   {
     slug: "what-is-micro-drama",
@@ -380,7 +366,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-08-05",
     keyTakeaways: ["Micro drama is short-form scripted entertainment, typically 30 seconds to 5 minutes per episode, for mobile vertical viewing.","The micro drama market in China exceeded $5B in 2025 and is expanding globally.","Micro dramas average 50-100 episodes per series, with cliffhanger endings driving completion rates of 80%+.","Production cost per episode is $50-$500 with AI tools, vs. $5,000-$50,000 for traditional short-form drama.","Monetization models: ad-supported free, micro-payments per episode ($0.10-$0.50), and subscription bundles."],
     keyTakeawaysZh: ["微短剧是短篇幅剧本化娱乐，每集30秒至5分钟，面向移动竖屏观看。","2025年中国微短剧市场规模超过$50亿，正在全球扩张。","微短剧平均每部50-100集，悬念结尾驱动完播率达80%+。","AI工具下单集制作成本$50-$500，传统短剧为$5,000-$50,000。","变现模式：广告免费、单集微支付($0.10-$0.50)、订阅打包。"],
-    coverImage: "/blog-images/what-is-micro-drama-new.webp",
   },
   {
     slug: "ai-video-storytelling",
@@ -400,7 +385,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-08-05",
     keyTakeaways: ["AI video generation works best with a complete storyboard -- shot-by-shot prompts outperform scene-level descriptions.","Character consistency requires a fixed reference image set reused across all generation calls.","Total production cost for a 5-episode series ranges from $300-$800 with AI tools.","A realistic 5-day schedule: Day 1 script, Day 2 storyboard, Day 3-4 generation, Day 5 voice and edit.","Voice synthesis and lip-sync add 30-50% to perceived quality but cost under $50 per episode."],
     keyTakeawaysZh: ["AI视频生成最好基于完整分镜——逐镜头提示优于按场景描述。","角色一致性需要固定参考图集，在所有生成调用中复用。","5集短剧的总制作成本为$300-$800。","5天排期：第1天剧本，第2天分镜，第3-4天生成，第5天配音和剪辑。","语音合成和口型同步提升30-50%观感质量，单集成本不到$50。"],
-    coverImage: "/blog-images/ai-video-storytelling-new.webp",
     stepCount: 8,
     totalTime: "P10D",
     difficulty: "Intermediate",
@@ -423,7 +407,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-08-05",
     keyTakeaways: ["AI has removed the four traditional barriers to content creation: technical skill, budget, team size, and equipment.","A single person with $0 budget can now produce a complete 5-episode drama using free-tier AI tools.","The new barrier is storytelling quality -- when everyone can produce, story differentiation matters more than ever.","First-time AI creators should target a niche genre and publish within 7 days of starting.","Community feedback cycles (publish, analyze, iterate) are more valuable than perfecting before launch."],
     keyTakeawaysZh: ["AI消除了内容创作的四道传统门槛：技术能力、预算、团队规模、设备。","一个人用$0预算、免费AI工具即可制作完整5集短剧。","新门槛是叙事质量——当人人都能制作时，故事差异化比以往更重要。","首次AI创作者应聚焦细分类型，并在7天内发布。","社区反馈循环（发布、分析、迭代）比上线前追求完美更有价值。"],
-    coverImage: "/blog-images/ai-anyone-can-create-new.webp",
   },
   {
     slug: "complete-guide-ai-entertainment-platforms",
@@ -443,7 +426,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-08-05",
     keyTakeaways: ["AI entertainment platforms fall into three categories: tool-based (Runway/Sora), platform-based (Lollipop Drama), and distribution-based (TikTok/Douyin).","Full-stack platforms that combine creation, distribution, and monetization save 60%+ vs. stitching individual tools.","When choosing a platform, prioritize: target audience, content format (clips vs. series), and monetization model.","Platform lock-in risk: exporting content and migrating data between platforms is still manual and time-consuming.","The platform landscape is consolidating -- expect 2-3 dominant full-stack platforms by 2027."],
     keyTakeawaysZh: ["AI娱乐平台分三类：工具型(Runway/Sora)、平台型(Lollipop Drama)、分发型(TikTok/抖音)。","整合创作、分发、变现的全栈平台比拼凑工具节省60%+成本。","选择平台时优先考虑：目标受众、内容格式（片段vs连载）、变现模式。","平台锁定风险：平台间导出内容和迁移数据仍需手动操作且耗时。","平台格局正在整合——预计到2027年将出现2-3个主导全栈平台。"],
-    coverImage: "/blog-images/complete-guide-ai-entertainment-platforms-new.webp",
   },
   {
     slug: "lollipop-drama-vs-runway-sora",
@@ -463,7 +445,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-09-01",
     keyTakeaways: ["Runway and Sora generate beautiful single clips; neither ships a complete 10-episode serialized drama.","Lollipop Drama combines production, distribution, and monetization in one platform for $0-$50/month.","Stitching Runway + ElevenLabs + CapCut costs $145+/month and requires manual workflow between tools.","For serialized AI drama, Lollipop Drama saves 60%+ in time and 40%+ in cost vs. tool-stitching.","Choose Runway/Sora for single-shot cinematic clips; choose Lollipop Drama for multi-episode serialized content."],
     keyTakeawaysZh: ["Runway和Sora生成精美单片段；两者都无法交付完整10集连载短剧。","Lollipop Drama在一个平台整合制作、分发、变现，月费$0-$50。","拼凑Runway+ElevenLabs+CapCut月费$145+，且需在工具间手动操作。","对于连载AI短剧，Lollipop Drama全栈方式比拼凑工具节省60%+时间和40%+成本。","单片段电影级剪辑选Runway/Sora；多集连载内容选Lollipop Drama。"],
-    coverImage: "/blog-images/lollipop-drama-vs-runway-sora-new.webp",
   },
   {
     slug: "ai-drama-character-consistency",
@@ -483,7 +464,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-09-01",
     keyTakeaways: ["Character drift is the number one reason AI short dramas lose viewers by episode three.","Three drift types: face drift, voice drift, and wardrobe drift -- each requires a different locking method.","Four locking methods: reference image sets, voice cloning, wardrobe standardization, and pre-publish verification gates.","A per-episode QA checklist should verify face, voice, and wardrobe against the character bible before publishing.","Budget 3 hours per episode for character consistency QA -- skipping it costs 40%+ viewer retention."],
     keyTakeawaysZh: ["角色漂移是AI短剧在第三集前流失观众的首要原因。","三类漂移：面部漂移、声音漂移、造型漂移——每类需要不同的锁定方法。","四种锁定方法：参考图集、声音克隆、造型标准化、发布前校验关卡。","每集QA清单应在发布前对照角色圣经验证面部、声音和造型。","每集角色一致性QA建议预留3小时——跳过将损失40%+观众留存。"],
-    coverImage: "/blog-images/ai-drama-character-consistency-new.webp",
   },
   {
     slug: "fanvue-vs-lollipop-drama",
@@ -503,7 +483,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-09-01",
     keyTakeaways: ["Fanvue monetizes an existing following; Lollipop Drama builds content from scratch and distributes it.","Fanvue is for creators with audience; Lollipop Drama is for creators with stories.","StoReel assembles short dramas from templates; Lollipop Drama offers full creative control from script to screen.","Monthly cost: Fanvue $20-$50, StoReel $30-$100, Lollipop Drama $0-$50.","Choose Fanvue for audience monetization, StoReel for template-based assembly, Lollipop Drama for end-to-end production and distribution."],
     keyTakeawaysZh: ["Fanvue变现已有粉丝；Lollipop Drama从零创建内容并分发。","Fanvue面向有受众的创作者；Lollipop Drama面向有故事的创作者。","StoReel用模板组装短剧；Lollipop Drama提供从剧本到成片的完整创意控制。","月费：Fanvue $20-$50，StoReel $30-$100，Lollipop Drama $0-$50。","受众变现选Fanvue，模板组装选StoReel，端到端制作加分发选Lollipop Drama。"],
-    coverImage: "/blog-images/fanvue-vs-lollipop-drama-new.webp",
   },
 
   // ─────────────────────────────────────────────────────────────
@@ -530,7 +509,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-09-01",
     keyTakeaways: ["Character drift has three types: face drift, voice drift, and wardrobe drift -- each requires a different locking method.","Build a character bible with 8-12 reference images covering multiple angles and expressions before generation.","Use voice cloning with a 30-second clean sample to lock audio identity across episodes.","Run a pre-publish verification gate: compare each shot against the reference set before approval.","Budget 3 hours for the full character consistency workflow per episode."],
     keyTakeawaysZh: ["角色漂移分三类：面部漂移、声音漂移、造型漂移——每类需要不同的锁定方法。","在生成之前建立角色圣经，含8-12张参考图覆盖多角度和表情。","用30秒干净样本进行声音克隆，锁定跨集音频身份。","设置发布前校验关卡：逐镜头与参考集对比后再批准。","每集角色一致性工作流建议预留3小时。"],
-    coverImage: "/blog-images/character-consistency-workflow-new.webp",
     stepCount: 7,
     totalTime: "PT3H",
     difficulty: "Intermediate",
@@ -553,7 +531,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-09-01",
     keyTakeaways: ["A 1-3 person team can produce 10 vertical drama episodes in 14 days with AI tools.","Day 1-3: Script and storyboard. Day 4-8: Video generation in batches. Day 9-11: Voice and lip-sync. Day 12-14: Edit, color, and publish.","The most common schedule slip happens at video generation rework -- cap retries at 3 per shot.","Allocate 40% of total time to generation and 30% to editing, not 50/50.","Total budget under $1,500 for a 10-episode x 2-minute series."],
     keyTakeawaysZh: ["1-3人团队可在14天内用AI工具制作10集竖屏短剧。","第1-3天：剧本和分镜。第4-8天：批量视频生成。第9-11天：配音和口型。第12-14天：剪辑、调色、发布。","最容易延期的环节是视频生成返工——每镜头重试上限设为3次。","总时间分配40%给生成、30%给剪辑，而非50/50。","10集x2分钟短剧总预算控制在$1,500以内。"],
-    coverImage: "/blog-images/ten-episodes-two-weeks-new.webp",
     stepCount: 7,
     totalTime: "P14D",
     difficulty: "Intermediate",
@@ -576,7 +553,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-09-01",
     keyTakeaways: ["Vertical formatting (9:16) is mandatory for mobile-first platforms -- horizontal content loses 60%+ of potential viewers.","Metadata (title, tags, description) drives discoverability more than production quality on short drama platforms.","Three monetization layers compound: ad revenue share, fan subscriptions, and brand deals.","Release order matters: publish Episode 1-3 as a free hook, then gate Episode 4+ behind paywalls.","Budget 2 hours for the full publish-and-monetize setup per episode."],
     keyTakeawaysZh: ["竖屏格式（9:16）是移动优先平台的硬性要求——横屏内容流失60%以上潜在观众。","元数据（标题、标签、描述）在短剧平台的发现性影响大于制作质量。","三层变现互相放大：广告分成、粉丝订阅、品牌合作。","发行顺序很重要：第1-3集免费作为钩子，第4集起设付费墙。","每集发布与变现设置建议预留2小时。"],
-    coverImage: "/blog-images/publish-and-monetize-vertical-drama-new.webp",
     stepCount: 7,
     totalTime: "PT2H",
     difficulty: "Beginner",
@@ -599,7 +575,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-09-01",
     keyTakeaways: ["A single pipeline connects logline, script, storyboard, generation, voice, and assembly with a gate between every stage.","Each gate catches problems early: a script fix costs minutes, a generation fix costs hours, an edit fix costs days.","Episode hook maps (5-7 beats per episode) outperform full scripts for AI generation quality.","Batch generation in groups of 5-10 shots maintains visual coherence better than one-by-one.","Budget 4 hours for the full pipeline per episode once the season bible is complete."],
     keyTakeawaysZh: ["一条流水线连接：创意、剧本、分镜、生成、配音、剪辑，每阶段之间设关卡。","每道关卡提前拦截问题：剧本修改耗时分钟级，生成修改耗时小时级，剪辑修改耗时天级。","分集钩子图（每集5-7个节拍）比完整剧本更适合AI生成。","5-10个镜头批量生成比逐个生成保持更好的视觉连贯性。","季bible完成后，每集全流程建议预留4小时。"],
-    coverImage: "/blog-images/script-to-screen-pipeline-new.webp",
     stepCount: 7,
     totalTime: "PT4H",
     difficulty: "Intermediate",
@@ -622,7 +597,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-09-01",
     keyTakeaways: ["Three failure modes break AI drama shots: hands, complex motion, and multi-character interaction.","Cheapest fix first: change framing to hide hands, shorten duration to reduce motion, simplify staging to reduce characters.","If framing fails, use inpainting or regeneration with adjusted prompts -- cost: 2-5 credits per retry.","Multi-character shots should be split into separate generation passes and composited in editing.","Budget 2 hours for artifact fixing per episode -- cap retries at 3 per shot."],
     keyTakeawaysZh: ["三类失效模式会毁掉AI短剧镜头：手部、复杂动作、多人互动。","先试最便宜的修复：调整构图隐藏手部，缩短时长减少动作，简化场景减少人数。","构图修复无效时用inpainting或调参重生——成本：每次2-5个生成额度。","多人镜头应拆分为单独生成再在剪辑中合成。","每集缺陷修复建议预留2小时——每镜头重试上限3次。"],
-    coverImage: "/blog-images/fix-ai-video-artifacts-new.webp",
     stepCount: 7,
     totalTime: "PT2H",
     difficulty: "Advanced",
@@ -645,7 +619,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-09-01",
     keyTakeaways: ["Scope your first project to 1 episode, 2 minutes, 2 characters -- finishing matters more than impressing.","Write a 6-beat episode structure: hook, setup, conflict, twist, climax, resolution.","Use free AI tools (ChatGPT for script, free-tier video generators) for the entire first project.","Publish on one platform first -- do not multi-distribute until you have validated viewer retention.","7-day schedule: Days 1-2 script, Day 3 storyboard, Days 4-5 generate, Day 6 voice+edit, Day 7 publish."],
     keyTakeawaysZh: ["首部作品范围压到最小：1集、2分钟、2个角色——完成比惊艳重要。","写6拍结构：钩子、铺垫、冲突、反转、高潮、收尾。","全程使用免费AI工具（ChatGPT写剧本、免费视频生成器）。","先在一个平台发布——验证观众留存后再考虑多平台分发。","7天排期：第1-2天剧本，第3天分镜，第4-5天生成，第6天配音+剪辑，第7天发布。"],
-    coverImage: "/blog-images/first-vertical-drama-zero-experience-new.webp",
     stepCount: 7,
     totalTime: "P7D",
     difficulty: "Beginner",
@@ -668,7 +641,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-09-01",
     keyTakeaways: ["A 10-episode AI drama can be produced for under $1,000 by cutting shot count before quality and capping generation rework.","Spend on voice and sound -- these raise perceived quality more than visual resolution.","Track burn rate per episode: target $80-$100 per episode including all generation credits.","Cap generation retries at 3 per shot -- diminishing returns kick in fast.","Reserve 20% of budget for post-production: editing, sound design, and color grading."],
     keyTakeawaysZh: ["通过先减镜头数再提质量和限制生成返工，10集AI短剧可在$1,000以内完成。","把钱花在声音上——语音和音效提升观感质量的效果大于视觉分辨率。","按集跟踪燃烧率：每集目标$80-$100（含所有生成额度）。","每镜头生成重试上限3次——边际收益递减很快。","预留20%预算用于后期：剪辑、音效设计、调色。"],
-    coverImage: "/blog-images/ai-drama-budget-under-1000-new.webp",
     stepCount: 7,
     totalTime: "PT3H",
     difficulty: "Beginner",
@@ -691,7 +663,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-09-01",
     keyTakeaways: ["Subtitles are cheaper and faster than dubbing -- start with subtitle localization for 3+ languages.","Caption-safe framing (bottom 20% of frame clear) is required before shooting -- retrofitting is expensive.","Subtitle length limit: 42 characters per line, 2 lines per subtitle, 1.5-7 seconds display time.","Dubbing vs voice cloning: dubbing is 10x more expensive but preserves original performance; cloning is faster but may sound robotic.","Release order: launch in the source language first, then localize 1-2 languages per week to maintain momentum."],
     keyTakeawaysZh: ["字幕比配音更便宜更快——先用字幕本地化3+语言。","字幕安全构图（画面底部20%留空）在拍摄前就要确定——后期补救成本高。","字幕长度限制：每行42字符，每条2行，显示1.5-7秒。","配音vs声音克隆：配音贵10倍但保留原始表演；克隆更快但可能听感机械。","发行顺序：先用源语言上线，再每周本地化1-2种语言以保持势头。"],
-    coverImage: "/blog-images/multilingual-localization-workflow-new.webp",
     stepCount: 7,
     totalTime: "PT3H",
     difficulty: "Intermediate",
@@ -714,7 +685,6 @@ export const blogMeta: BlogMeta[] = [
     updateDate: "2026-09-01",
     keyTakeaways: ["Three rights generate takedowns: character likeness, music copyright, and underlying work copyright.","Keep an evidence file for every cleared right: signed releases, license screenshots, tool terms screenshots.","AI-generated faces resembling real people (even unintentionally) can trigger likeness claims -- verify with reverse image search.","Music licensed for social media may not cover commercial drama distribution -- check the specific rights granted.","Budget 1 hour for the legal checklist per episode once the template is set up."],
     keyTakeawaysZh: ["三类权利会引发下架：角色肖像权、音乐版权、在先作品著作权。","每项清理的权利都保留证据文件：签字授权、许可截图、工具条款截图。","AI生成的面孔如果与真人相似（即使无意）也可能引发肖像权主张——用反向图片搜索验证。","授权为社交媒体的音乐可能不覆盖商业短剧分发——检查具体授予权利。","模板建好后，每集合规清单建议预留1小时。"],
-    coverImage: "/blog-images/ai-drama-legal-checklist-new.webp",
     stepCount: 7,
     totalTime: "PT1H",
     difficulty: "Beginner",

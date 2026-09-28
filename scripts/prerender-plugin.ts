@@ -598,6 +598,7 @@ function getRouteData(): RouteSeoData[] {
       encodingFormat: "text/html",
       inLanguage: "en",
       isPartOf: { "@type": "Blog", name: "Lollipop Drama Blog", url: `${SITE_URL}/blog` },
+      mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}/blog/${p.slug}` },
       about: geoEntities.about,
       mentions: geoEntities.mentions,
       accessMode: ["textual", "visual"],
@@ -887,6 +888,9 @@ function buildLocalizedBlogSchema(
   const p = dataBlogPosts.find((x) => `/blog/${x.slug}` === appPath);
   if (!p) return undefined;
   const hasSteps = Boolean(p.steps && p.steps.length);
+  // 本地化绝对路径（与 zh/zh-TW canonical 一致；en 返回无前缀原路径）
+  const localizedAppPath = buildLocalizedPath(locale, appPath);
+  const locBlogPath = buildLocalizedPath(locale, "/blog");
 
   const geoEntities = buildGeoEntities(p.category, zh ? p.titleZh : p.title, p.categoryLabel);
   const articleSchema = {
@@ -909,15 +913,18 @@ function buildLocalizedBlogSchema(
     thumbnailUrl: `${SITE_URL}${p.coverImage || "/blog-images/guide.png"}`,
     keywords: `${p.categoryLabel}, AI short drama, Lollipop Drama, ${zh ? p.titleZh : p.title}`,
     inLanguage: zh ? "zh" : locale,
-    isPartOf: { "@type": "Blog", name: "Lollipop Drama Blog", url: `${SITE_URL}/blog` },
+    isPartOf: { "@type": "Blog", name: "Lollipop Drama Blog", url: `${SITE_URL}${locBlogPath}` },
     about: geoEntities.about,
     mentions: geoEntities.mentions,
     accessMode: ["textual", "visual"],
     accessibilitySummary: "Text-based article with images. Screen reader compatible.",
     license: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
     ...(hasSteps ? { teaches: [p.categoryLabel] } : {}),
-    mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}${appPath}` },
-    ...(zh && p.keyTakeawaysZh ? { articleBody: "关键要点: " + p.keyTakeawaysZh.join(" ") } : {}),
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}${localizedAppPath}` },
+    // zh articleBody：关键要点 + 中文全文，与英文分支（keyTakeaways + 1500 字符）对齐，提升 GEO/AEO 引擎理解
+    ...(zh && (p.keyTakeawaysZh || p.contentZh) ? {
+      articleBody: (p.keyTakeawaysZh ? "关键要点: " + p.keyTakeawaysZh.join(" ") + " " : "") + stripMd(p.contentZh ?? ""),
+    } : {}),
     speakable: { "@type": "SpeakableSpecification", cssSelector: ["h1", ".key-takeaways li", ".faq p"] },
   };
 
@@ -932,7 +939,7 @@ function buildLocalizedBlogSchema(
           position: i + 1,
           name: s.name,
           text: s.text,
-          url: `${SITE_URL}${appPath}#step-${i + 1}`,
+          url: `${SITE_URL}${localizedAppPath}#step-${i + 1}`,
         })),
         totalTime: p.totalTime,
         author: {
@@ -944,8 +951,8 @@ function buildLocalizedBlogSchema(
           sameAs: [`${SITE_URL}/about`],
         },
         inLanguage: zh ? "zh" : locale,
-        isPartOf: { "@type": "Blog", name: "Lollipop Drama Blog", url: `${SITE_URL}/blog` },
-        mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}${appPath}` },
+        isPartOf: { "@type": "Blog", name: "Lollipop Drama Blog", url: `${SITE_URL}${locBlogPath}` },
+        mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}${localizedAppPath}` },
       }
     : null;
 

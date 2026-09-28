@@ -1797,4 +1797,419 @@ export const blogFaq: Record<string, FaqItem[]> = {
       answerEn: "Lock one front-face final image of the lead, add side/back and 3–5 expressions, then fix the seed. Use the 8-step Character Bible Framework to fill it out, anchor in episode one, and reuse thereafter.",
     },
   ],
+  "pixverse-canvas-vs-higgsfield-vs-ltx-vs-lollipop": [
+    {
+      question: "三款画布工具里到底先选哪个？",
+      answer: "先看你要「多模型对比」还是「角色死锁」。要对比选 PixVerse Canvas，要身份锁定选 Higgsfield 或 LTX Studio。",
+      questionEn: "Which canvas should I pick first among the three?",
+      answerEn: "Start from whether you need multi-model comparison or hard character locking. For comparison, pick PixVerse Canvas; for identity locking, pick Higgsfield or LTX Studio.",
+    },
+    {
+      question: "它们能帮我直接赚钱吗？",
+      answer: "三家都偏创作生产，不含内部分发与分成；想变现要走 Lollipop Drama 这类带分发的平台。",
+      questionEn: "Can these tools make me money directly?",
+      answerEn: "All three lean toward creation and production, with no internal distribution or share. To monetize, use a platform with distribution like Lollipop Drama.",
+    },
+    {
+      question: "Lollipop Drama 的分成和结算怎么算？",
+      answer: "创作者最高 70% 分成，Net-30 结算，免费层即可参与，无最低粉丝门槛。",
+      questionEn: "How do Lollipop Drama's share and settlement work?",
+      answerEn: "Creators get up to 70% revenue share, settled Net-30, available from the free tier with no minimum follower threshold.",
+    },
+    {
+      question: "免费层能用到什么程度？",
+      answer: "Lollipop Drama 免费层含离线下载；PixVerse、Higgsfield、LTX 也都有免费起步档。",
+      questionEn: "How far does the free tier go?",
+      answerEn: "Lollipop Drama's free tier includes offline download; PixVerse, Higgsfield, and LTX also offer free starting tiers.",
+    },
+    {
+      question: "9:16 竖屏三家都支持吗？",
+      answer: "据公开资料，PixVerse、Higgsfield、LTX 均支持竖屏或双格式输出，Lollipop Drama 为原生竖屏短剧。",
+      questionEn: "Do all three support 9:16 vertical?",
+      answerEn: "Per public materials, PixVerse, Higgsfield, and LTX support vertical or dual-format output; Lollipop Drama is native vertical short drama.",
+    },
+    {
+      question: "我的角色版权归谁？",
+      answer: "外部工具多声明用户拥有产出；Lollipop Drama 平台内创作同样归创作者，可正常参与分成。",
+      questionEn: "Who owns the character IP?",
+      answerEn: "External tools mostly state the user owns output; Lollipop Drama in-platform creation also belongs to the creator and qualifies for share.",
+    },
+    {
+      question: "小团队月成本大概多少？",
+      answer: "估算 ¥58–252/月（画布付费档），Lollipop Drama 免费层即可变现，分成可对冲成本。",
+      questionEn: "What is a small team's monthly cost roughly?",
+      answerEn: "Estimate $8–35/month for a canvas paid tier; Lollipop Drama free tier already monetizes, and share can offset cost.",
+    },
+    {
+      question: "画布和平台一定要二选一吗？",
+      answer: "不必。画布负责生产质量，Lollipop Drama 负责分发与分成，二者互补更稳。",
+      questionEn: "Must I choose canvas or platform?",
+      answerEn: "No. The canvas owns production quality; Lollipop Drama owns distribution and share. They complement, not replace, each other.",
+    },
+  ],
+  "ceo-romance-revenge-short-drama-prompt-pack": [
+    {
+      question: "这些提示词是实测参数吗？",
+      answer: "不是。它们是按公开创作方法论整理的模板，可直接复制使用，不代表某模型实测结果。",
+      questionEn: "Are these prompts tested parameters?",
+      answerEn: "No. They are templates organized from public creative methodology, ready to copy, and do not represent tested results of any model.",
+    },
+    {
+      question: "三组一共多少条提示词？",
+      answer: "共 50 组，CEO 言情 18、复仇 16、狼人言情 16，全部可复制无占位符。",
+      questionEn: "How many prompts are in the three groups?",
+      answerEn: "50 total — 18 CEO Romance, 16 Revenge, 16 Werewolf Romance — all copy-ready with no placeholders.",
+    },
+    {
+      question: "能直接用在 LunoTV 吗？",
+      answer: "可以。英文 Prompt 即喂即生成，对应 Lollipop Drama 内置 LunoTV 的文生/视频生视频。",
+      questionEn: "Can I use them directly in LunoTV?",
+      answerEn: "Yes. The English Prompt is paste-and-generate, matching Lollipop Drama's built-in LunoTV Text-to-Video / Video-to-Video.",
+    },
+    {
+      question: "每集大概用几组提示词？",
+      answer: "试水 8–10 组，标准剧集 12–16 组，系列量产 16–20 组（估算口径）。",
+      questionEn: "How many prompts per episode?",
+      answerEn: "8–10 for a test, 12–16 for a standard episode, 16–20 for series at scale (estimate basis).",
+    },
+    {
+      question: "做完片怎么变现？",
+      answer: "上 Lollipop Drama 发布，80+ 国家、15+ 语言分发，创作者最高 70% 分成、Net-30。",
+      questionEn: "How do I monetize after making the clips?",
+      answerEn: "Publish on Lollipop Drama for 80+ country and 15+ language distribution, up to 70% creator share on Net-30.",
+    },
+    {
+      question: "免费层能参与变现吗？",
+      answer: "能。Lollipop Drama 免费层含离线下载，且无最低粉丝门槛即可变现。",
+      questionEn: "Can the free tier monetize?",
+      answerEn: "Yes. Lollipop Drama's free tier includes offline download and has no minimum follower threshold to monetize.",
+    },
+    {
+      question: "三类题材前三秒钩子怎么选？",
+      answer: "霸总用「别发/耳语」特写，复仇用「握拳/监控」，狼人用「金瞳亮起」。",
+      questionEn: "Which first-three-second hook per genre?",
+      answerEn: "CEO uses brush hair / whisper close-up, Revenge uses clench fist / CCTV, Werewolf uses golden eyes glow.",
+    },
+    {
+      question: "提示词要改中文还是英文？",
+      answer: "建议英文为主，模型跟随更准；中文说明仅作理解，不强制喂入。",
+      questionEn: "English or Chinese for the prompt?",
+      answerEn: "Use English as primary; models follow it more closely. The Chinese note is for understanding only.",
+    },
+  ],
+  "multi-character-interaction-physics-in-ai-drama": [
+    {
+      question: "为什么扩散模型处理不了多角色肢体接触？",
+      answer: "扩散模型本质是像素级概率预测器，没有内置3D物理约束。当两角色靠近时，注意力机制混淆特征图，边界区域缺乏不可穿透约束，导致穿模和融合。",
+      questionEn: "Why do diffusion models fail at multi-character physical contact?",
+      answerEn: "Diffusion models are pixel-level probability predictors with no physics constraints. When characters overlap, cross-attention blurs feature maps, boundaries lack impassable constraints, and training data for contact is sparse — resulting in body penetration and fusion.",
+    },
+    {
+      question: "分层生成合成法适合哪些场景？",
+      answer: "适合拥抱、近距离对话、静态依偎等肢体相对静止的接触场景。操作步骤为拆分镜头→分别生成单角色→蒙版控制接触边界→叠加输出。",
+      questionEn: "Which scenarios is layered generation best suited for?",
+      answerEn: "Best for still embraces, close-up dialogue, and static leaning scenes. Workflow: split the shot → generate characters separately → use masks on contact boundaries → composite and export.",
+    },
+    {
+      question: "ControlNet骨骼引导能完全解决穿模吗？",
+      answer: "不能完全解决，但能将穿模率显著降低。建议搭配DW-Pose预处理手部骨骼，并在解法三中进行局部重绘作为兜底方案。",
+      questionEn: "Can ControlNet skeletal guidance completely eliminate body penetration?",
+      answerEn: "No, but it significantly reduces failure rates. Pair with DW-Pose preprocessing for hand poses and use inpainting as a mandatory fallback for remaining artifacts.",
+    },
+    {
+      question: "局部重绘Inpainting的最佳降噪强度是多少？",
+      answer: "Denoise Strength建议设置在0.4–0.6之间，过低修复不足，过高会改变角色外观和身份一致性。",
+      questionEn: "What is the optimal Denoise Strength for inpainting contact artifacts?",
+      answerEn: "Set Denoise Strength between 0.4 and 0.6. Below 0.4 the fix won't take; above 0.6 risks changing the character's visual identity.",
+    },
+    {
+      question: "3人以上同框怎么处理？",
+      answer: "分层合成法最稳定，每人一个图层。ControlNet可叠加多个OpenPose图，但显存成倍增加，建议最多3人，超过则建议拆分镜头。",
+      questionEn: "How do you handle 3+ characters in the same frame?",
+      answerEn: "Layered compositing is most stable (one layer per character). ControlNet can stack multiple OpenPose maps but VRAM multiplies fast — cap at 3 characters or split into separate shots.",
+    },
+    {
+      question: "Lollipop Drama内置工具支持ControlNet吗？",
+      answer: "LunoTV当前版本支持分层生成和局部重绘。ControlNet属于进阶工具，建议在ComfyUI等外部工作流中完成骨骼引导后导入Lollipop Drama使用。",
+      questionEn: "Does Lollipop Drama's LunoTV support ControlNet?",
+      answerEn: "Current LunoTV versions support layered generation and inpainting. ControlNet is an advanced tool — complete skeletal guidance in ComfyUI, then import the result into Lollipop Drama.",
+    },
+    {
+      question: "帧间抖动怎么解决？",
+      answer: "修复相邻帧时使用相同遮罩和提示词参数，并开启帧间平滑功能，确保肢体接触点位置相邻帧偏差不超过2px。",
+      questionEn: "How do you fix frame-to-frame jitter after inpainting?",
+      answerEn: "Use identical mask shapes and identical prompt parameters when fixing neighboring frames. Enable frame smoothing and verify contact point drift stays within 2px between adjacent frames.",
+    },
+    {
+      question: "有没有完全自动化解决穿模的方案？",
+      answer: "目前没有完全自动化零修复的成熟方案。3D物理模拟引导的生成（如PhysicsDreamer等）是前沿方向，尚未达到消费级应用，多角色接触仍需人工检查配合分层修复工作流。",
+      questionEn: "Is there a fully automated body-penetration solution?",
+      answerEn: "Not yet. Physics-simulation-guided generation (PhysicsDreamer etc.) is an active research frontier but has not reached consumer-grade usability. Multi-character contact still requires human inspection plus layered repair workflows.",
+    },
+  ],
+  "ai-drama-lip-sync-and-facial-expressions": [
+    {
+      question: "LivePortrait和SadTalker哪个更适合做微表情？",
+      answer: "LivePortrait更适合微表情，眼睑开合和唇部张力均可独立精细调节。SadTalker优势在头部姿态幅度大，但分辨率封顶512px，微表情细节会被GFPGAN增强抹平。",
+      questionEn: "LivePortrait vs. SadTalker — which is better for micro-expressions?",
+      answerEn: "LivePortrait is better for micro-expressions. Eye openness and lip tension are independently adjustable with fine granularity. SadTalker excels in head pose range but its 512px cap means GFPGAN upscaling smooths away fine micro-expression detail.",
+    },
+    {
+      question: "Runway Gen-3 Alpha唇音同步需要手动调参吗？",
+      answer: "据Runway官网产品页，唇音同步内置于生成管线，用户通过情绪指令（angry/sad/happy）控制，唇形强度自动匹配，无需手动参数调节。",
+      questionEn: "Does Runway Gen-3 Alpha require manual lip-sync parameter tuning?",
+      answerEn: "According to Runway's official product page, lip-sync is built into the generation pipeline. Users control expression via emotion directives (angry/sad/happy) — lip intensity auto-matches, no manual parameter tuning required.",
+    },
+    {
+      question: "SadTalker头部姿态循环重复问题怎么解决？",
+      answer: "SadTalker在长片段中容易出现头部姿态循环重复，建议将片段控制在15秒以内，或使用LivePortrait替代以获得更自然的姿态变化。",
+      questionEn: "How do I fix SadTalker's head-pose looping on long clips?",
+      answerEn: "Cap clips at approximately 15 seconds to avoid head-pose pattern repetition. For longer sequences, switch to LivePortrait which produces more natural pose variation across longer clips.",
+    },
+    {
+      question: "LivePortrait支持中文字符的唇音同步吗？",
+      answer: "LivePortrait唇音同步基于音频特征而非语言音素，中文唇形与英文不同，需针对中文音频专门测试。建议准备中文TTS音频后实际测试唇形匹配效果。",
+      questionEn: "Does LivePortrait handle Chinese-language lip-sync accurately?",
+      answerEn: "LivePortrait derives lip-sync from audio features rather than language-specific phonemes. Mandarin Chinese lip shapes differ from English — prepare Chinese TTS audio and test lip-shape matching before committing to production.",
+    },
+    {
+      question: "完整对话场景制作的标准工作流是什么？",
+      answer: "推荐流程：准备分镜脚本→生成角色一致图像（用LunoTV）→导入SadTalker/LivePortrait生成唇音动画→检查穿帮帧→局部重绘修复口型→后期合成台词音频→输出成片。",
+      questionEn: "What is the standard workflow for a full dialogue scene?",
+      answerEn: "Storyboard → Generate character-consistent images with LunoTV → Import into SadTalker/LivePortrait for lip animation → Check artifact frames → Inpainting for mouth fixes → Composite with final dialogue audio → Export deliverable.",
+    },
+    {
+      question: "商业项目使用SadTalker或LivePortrait需要注意哪些许可证问题？",
+      answer: "SadTalker采用Apache 2.0许可证可免费商用。LivePortrait模型权重采用非商业研究许可证，商业使用前需确认最新许可证状态，建议查阅GitHub仓库LICENSE文件。",
+      questionEn: "What license considerations apply when using SadTalker or LivePortrait commercially?",
+      answerEn: "SadTalker uses Apache 2.0 — free for commercial use. LivePortrait's model weights carry a non-commercial research license; verify the current license on GitHub before any commercial deployment.",
+    },
+    {
+      question: "唇音同步检查为什么建议用24fps而非更高帧率？",
+      answer: "主流短剧输出帧率为24或30fps，在此帧率下检查口型最接近最终成片效果。60fps生成的片段下变换后会掩盖部分口型问题。",
+      questionEn: "Why should lip-sync inspection be done at 24fps rather than higher frame rates?",
+      answerEn: "Mainstream short dramas output at 24 or 30fps. Inspecting at native output framerate catches artifacts that would be masked by frame interpolation or downscaling from higher rates.",
+    },
+    {
+      question: "Lollipop Drama内置工具能直接完成唇音同步和微表情制作吗？",
+      answer: "LunoTV当前版本支持基础表情控制和唇型调整，如需LivePortrait级别的精细唇部重定向和微表情控制，建议使用外部工具生成后导入Lollipop Drama进行后期合成。",
+      questionEn: "Can Lollipop Drama's built-in tools handle lip-sync and micro-expression production directly?",
+      answerEn: "Current LunoTV versions support basic expression control and mouth shape adjustment. For LivePortrait-level fine lip retargeting and micro-expression work, generate with external tools, then import into Lollipop Drama for post-production compositing.",
+    },
+  ],
+  "webtoon-to-ai-micro-drama-workflow": [
+    {
+      question: "条漫和普通漫画转短剧流程有什么区别？",
+      answer: "基本流程相同。条漫天然是竖屏构图，格与格之间已有镜头语言，转竖屏动态短剧时裁剪成本最低，比普通横版漫画少约30%的构图调整步骤。",
+      questionEn: "What's the difference between webtoons and regular comics for micro-drama conversion?",
+      answerEn: "The core workflow is the same. Webtoons are naturally vertical with panel-to-panel shot language already built in, reducing re-cropping costs by approximately 30% compared to horizontal manga.",
+    },
+    {
+      question: "没有AI工具能手工完成条漫转短剧吗？",
+      answer: "能，但成本高10–20倍。如果预算充足且对风格精度要求极高，建议混合方案：关键情绪集手工精修，常规集纯AI生成。",
+      questionEn: "Can I do this without AI tools?",
+      answerEn: "Yes, but costs 10–20× higher. For luxury-grade precision, use a hybrid: manually retouch key emotional episodes, use AI for routine cuts.",
+    },
+    {
+      question: "多角色同框时AI容易出bug怎么处理？",
+      answer: "分开生成再合成：先单独动态化每个角色，再在剪辑软件中合成。优先处理主角镜头，配角可用静态图加景深虚化降低穿帮风险。",
+      questionEn: "AI breaks with multi-character scenes — how to handle?",
+      answerEn: "Separate and composite: animate each character individually, then combine in editing software. Prioritize lead character shots; use static images with depth-of-field blur for background characters.",
+    },
+    {
+      question: "条漫画风太独特，AI生成后风格漂移怎么办？",
+      answer: "Image-to-Image权重调高至0.8–0.9，同时在prompt中明确锁定画风关键词。效果仍不理想时，换用LunoTV风格迁移功能二次处理。",
+      questionEn: "My webtoon's art style is very unique — AI generates style drift. Help.",
+      answerEn: "Raise Image-to-Image weight to 0.8–0.9 and lock style keywords in the prompt. If still unsatisfactory, apply LunoTV style-transfer as a second pass.",
+    },
+    {
+      question: "配音和唇形同步难做，有简化方案吗？",
+      answer: "先做字幕版测试市场反馈，再决定是否做配音。如果做配音，使用Lip-Sync工具时优先处理正面镜头，侧面镜头唇形误差较大。",
+      questionEn: "Voice acting and lip-sync are hard — any shortcuts?",
+      answerEn: "Release a subtitle-only version first to test market response. If adding voice, Lip-Sync tools perform best on frontal shots; side-profile accuracy drops noticeably.",
+    },
+    {
+      question: "20集上线后数据差怎么快速迭代？",
+      answer: "重点优化前三集完播率和集均跳出点。检查集尾钩子是否够强、节奏是否拖沓。Lollipop Drama创作者后台提供集均完播率热力图，可精准定位弃剧点。",
+      questionEn: "My 20 episodes launched with poor metrics — how to iterate fast?",
+      answerEn: "Focus on Episodes 1–3 completion rate and drop-off points. Check if episode hooks are strong enough and first 3 seconds are engaging. Creator dashboard heatmaps pinpoint exact abandonment spots.",
+    },
+    {
+      question: "可以同时做中英文两个版本吗？",
+      answer: "可以。建议先完成中文版验证市场反应，再本地化为英语。中英文字幕排版在竖屏上位置不同，需分别设计safe zone避免遮挡面部。",
+      questionEn: "Can I produce Chinese and English versions simultaneously?",
+      answerEn: "Yes, but validate in Chinese first, then localize to English. Chinese and English subtitle layouts differ in vertical format — design separate safe zones to avoid covering character faces.",
+    },
+    {
+      question: "10话以上的长篇条漫怎么处理？",
+      answer: "按篇分段处理，每10话为一个制作单元。篇与篇之间留2–3集缓冲期，根据上线数据决定是否继续续篇，避免投入沉没成本。",
+      questionEn: "How do I handle a webtoon with more than 10 chapters?",
+      answerEn: "Work in acts: process every 10 chapters as one production unit. Leave a 2–3 episode buffer between acts, and only greenlight the next act if current data justifies it.",
+    },
+  ],
+  "hook-architecture-and-three-second-rule-in-short-dramas": [
+    {
+      question: "3秒留存法则适用于所有题材吗？",
+      answer: "主要适用于出海竖屏短剧（1–3分钟/集）。长剧或剧情电影感短剧节奏不同，但3秒冲突锚点依然有效，只是后续节奏可更从容。",
+      questionEn: "Does the 3-second rule apply to all genres?",
+      answerEn: "Primarily for overseas vertical short dramas (1–3 min/episode). Feature-length or cinematic dramas have different pacing requirements, but the 3-second conflict anchor still applies—just with more breathing room downstream.",
+    },
+    {
+      question: "8种模型可以叠加使用吗？",
+      answer: "可以，但建议单集只用一个核心Hook开场，叠加会让情绪信号混乱。可以在集末用另一个Hook做悬念切换。",
+      questionEn: "Can multiple Hook models be combined in one episode?",
+      answerEn: "Yes, but use one dominant Hook for the opening—combining dilutes emotional signals. You can swap in a second Hook at the episode-end for a suspense switch.",
+    },
+    {
+      question: "Hook 3（羞辱反杀）会引发观众反感吗？",
+      answer: "东亚/东南亚市场接受度高；欧美市场对过度羞辱敏感，建议降低羞辱时长（从3秒缩到1.5秒）并在反杀节点给得更早。",
+      questionEn: "Does Hook 3 (humiliation-to-revenge) alienate viewers?",
+      answerEn: "East/Southeast Asian audiences tolerate it well; Western audiences are more sensitive. For Western localization, compress the humiliation beat from 3 to 1.5 seconds and deliver the reversal earlier.",
+    },
+    {
+      question: "AI生成的剧本节奏卡不准怎么调整？",
+      answer: "用45秒张力波形表逐段标注，不达标段落用标注重新生成该段落，或手动加入SFX（心跳/倒计时音效）补偿情绪强度。",
+      questionEn: "AI-generated scripts have off-beat pacing — how to fix?",
+      answerEn: "Annotate the draft per the 45-second tension waveform table. Flag underperforming beats and regenerate those only. As a shortcut, layer SFX (heartbeat/countdown) manually to compensate.",
+    },
+    {
+      question: "集末悬念怎么做才有追更力？",
+      answer: "核心原则：不要给出答案，要给出更大的问题。好悬念=「他知道了」+「但他不知道她知道」+「下一集揭晓」。",
+      questionEn: "What makes a great episode-end cliffhanger for sequel pull?",
+      answerEn: "Core principle: don't give the answer—give a bigger question. Great cliffhanger = 'He found out' + 'But he doesn't know she knows' + 'Find out next episode.'",
+    },
+    {
+      question: "45秒小高潮和集末悬念有什么区别？",
+      answer: "45秒小高潮回答「这一集发生了什么」给观众满足感；集末悬念提出「下一集会发生什么」的问题，剥夺关闭视频的理由。两者功能不同，缺一不可。",
+      questionEn: "What's the difference between the 45-second mini climax and the episode-end cliffhanger?",
+      answerEn: "45-second mini climax answers 'what happened in this episode' (viewer satisfaction). Episode-end cliffhanger asks 'what will happen next' (removing the reason to close). Both essential.",
+    },
+    {
+      question: "如何在AI工具中控制集末悬念强度？",
+      answer: "在提示词集末段强制加入悬念锚点描述，格式用XML标签包裹，LunoTV AI编剧对标签结构理解最准确。",
+      questionEn: "How do I control episode-end hook intensity in AI tools?",
+      answerEn: "Force-inject a suspense anchor using XML-style tags in the ending beat. LunoTV AI Script interprets XML-tagged instructions with highest accuracy for suspense endpoint control.",
+    },
+    {
+      question: "数据差的新剧怎么用Hook法则快速修复？",
+      answer: "优先重做前三集的开场3秒和集末悬念，这两处对完播率和追更率影响最大。如果改了还没起色，问题可能在选材本身。",
+      questionEn: "A new drama is underperforming — how to use Hook rules to fix it fast?",
+      answerEn: "Prioritize re-cutting Episodes 1–3 first 3 seconds and episode-end cliffhangers—these have the largest impact on completion and sequel return rates. If no improvement, the problem is likely in topic/genre selection.",
+    },
+  ],
+  "vertical-cinematography-9-16-composition-rules": [
+
+  ],
+  "short-drama-foley-sfx-and-sound-design-guide": [
+
+  ],
+  "100-episode-ai-drama-pipeline-and-qc-checklist": [
+    {
+      question: "角色库建立需要多长时间？",
+      answer: "估算：主要角色3–5人，约需1–2天建立完整角色库（包含多表情参考图），这是投入回报比最高的环节（Lollipop Drama internal production benchmark, Q3 2026）。",
+      questionEn: "How long does it take to build a Character Bible?",
+      answerEn: "Estimate: 3–5 main characters take ~1–2 days for a complete Character Bible including multi-expression reference images—this step has the highest ROI of any in the production pipeline (Lollipop Drama internal production benchmark, Q3 2026).",
+    },
+    {
+      question: "三库是否需要在开拍前全部完成？",
+      answer: "不需要。角色库优先，场景道具库和镜头动作库可以随项目推进逐步补充，但核心角色库必须在第1集生成前完成锁定。",
+      questionEn: "Must all three libraries be completed before shooting begins?",
+      answerEn: "No. The Character Bible takes priority. Scene & Prop Library and Shot & Action Library can grow with the project, but the core Character Bible must be locked before Episode 1 generation.",
+    },
+    {
+      question: "质检清单12项必须全部通过才能交付吗？",
+      answer: "是的，建议严格执行。手部、瞳孔、服装一致性是最常见的三大翻车原因，约占返工总量的65%（估算，基于行业制作经验）。",
+      questionEn: "Must all 12 QC checklist items pass before delivery?",
+      answerEn: "Yes, strict enforcement is recommended. Hands, pupils, and costume consistency are the three most common failure modes—accounting for an estimated ~65% of total rework (estimate, based on industry production experience).",
+    },
+    {
+      question: "如果中途更换核心演员/声优，资产如何处理？",
+      answer: "声优更换仅影响音频层，不影响视觉资产，可单独替换；演员更换建议在剧情中做换装/身份转换处理，避免强制替换已建立的角色面孔。",
+      questionEn: "What if a core actor or voice actor changes mid-series?",
+      answerEn: "Voice actor changes affect only the audio layer and can be replaced independently. For actor changes, resolve in-story (memory loss, twin, identity swap tropes) to avoid forced character face replacement.",
+    },
+    {
+      question: "并行生成的批次如何划分最合理？",
+      answer: "估算：以30集为一个批次，3批完成100集。每批次完成后统一质检，通过后再启动下一批次，避免批量漂移。",
+      questionEn: "How should parallel generation batches be divided?",
+      answerEn: "Estimate: 30 episodes per batch, 3 batches to complete 100 episodes. Each batch undergoes QC before the next is launched to prevent batch-level drift.",
+    },
+    {
+      question: "AI生成的镜头是否有版权风险？",
+      answer: "AI生成内容的版权归属因地区而异，建议在制作前查阅Lollipop Drama创作者条款页面中的版权说明。",
+      questionEn: "Are there copyright risks with AI-generated shots?",
+      answerEn: "AI-generated content copyright varies by jurisdiction. Review the copyright section of Lollipop Drama's Creator Terms at https://www.lollipop.im/creator-program before production.",
+    },
+    {
+      question: "LunoTV工具能直接对接角色库吗？",
+      answer: "据LunoTV官方说明，Image-to-Image和Text-to-Image功能支持固定参考图，可将角色库图片作为首要参考输入，从而保持角色一致性。",
+      questionEn: "Can LunoTV tools directly integrate with the Character Bible?",
+      answerEn: "Per LunoTV official documentation, Image-to-Image and Text-to-Image support locking reference images as primary input, allowing Character Bible images to serve as consistent generation anchors.",
+    },
+    {
+      question: "100集长篇的制作成本大约是多少？",
+      answer: "通过Lollipop Drama工业化管线，100集长篇制作成本较传统制作降低约99.9%（Lollipop Drama internal production benchmark, Q3 2026），具体成本因集数、分辨率、定制化程度而异。",
+      questionEn: "What's the approximate production cost for a 100-episode long-form drama?",
+      answerEn: "Through the Lollipop Drama industrial pipeline, 100-episode production costs are reduced by approximately 99.9% versus traditional production (Lollipop Drama internal production benchmark, Q3 2026); exact costs vary by episode count, resolution, and customization level.",
+    },
+  ],
+  "global-ai-short-drama-monetization-roi-model": [
+    {
+      question: "没有粉丝基础，能在Lollipop Drama变现吗？",
+      answer: "可以。Lollipop Drama无最低粉丝门槛即可参与变现（官方口径），适合零基础创作者起步。",
+      questionEn: "Can I monetize on Lollipop Drama with no existing fanbase?",
+      answerEn: "Yes. Lollipop Drama has no minimum fan threshold for monetization eligibility (official), making it ideal for zero-to-start creators.",
+    },
+    {
+      question: "欧美市场获客成本那么高，怎么降低成本？",
+      answer: "估算：自然流量+社交媒体（TikTok/Instagram）导流是低成本获客路径；Lollipop Drama本身有80+国家分发覆盖，可借助平台自然流量降低CAC。",
+      questionEn: "EU/US acquisition costs are high—how do I reduce them?",
+      answerEn: "Estimate: organic traffic + social media (TikTok/Instagram) referrals are low-CAC acquisition paths. Lollipop Drama's own 80+ country distribution reduces your CAC by leveraging platform-level organic traffic.",
+    },
+    {
+      question: "10集短剧是否太短？用户愿意付费吗？",
+      answer: "短剧优势正是短平快——10集完整故事+好钩子已足够驱动付费转化，Lollipop Drama支持15,000+部内容库规模（官方口径），说明市场对不同长度内容均有需求。",
+      questionEn: "Is 10 episodes too short? Will users pay for it?",
+      answerEn: "Short dramas' strength is short and punchy—10 complete episodes with strong hooks (first 3 seconds + cliffhanger endings) are sufficient to drive paid conversions. Lollipop Drama's library spans 15,000+ titles (official), confirming market demand across varied lengths.",
+    },
+    {
+      question: "东南亚多语言本地化成本高吗？",
+      answer: "估算：每增加一个语种约增加¥500–¥1,500成本（字幕+配音），但东南亚英语渗透率高，部分市场无需完整配音，文字字幕即可有效转化。",
+      questionEn: "Is Southeast Asian multi-language localization expensive?",
+      answerEn: "Estimate: each additional language adds ~$70–$210 in costs (subtitles + voiceover), but English penetration is high in the Philippines and other markets—text subtitles alone are effective in some SEA regions.",
+    },
+    {
+      question: "Lollipop Drama的70%分成是税前还是税后？",
+      answer: "具体税务处理请参阅Lollipop Drama创作者条款页面https://www.lollipop.im/creator-program，或咨询专业税务顾问。",
+      questionEn: "Is Lollipop Drama's 70% split before or after tax?",
+      answerEn: "Refer to the creator terms at https://www.lollipop.im/creator-program for tax handling details, or consult a professional tax advisor.",
+    },
+    {
+      question: "一部短剧的LTV（用户生命周期价值）大概有多长？",
+      answer: "估算：欧美市场约1–3个月（用户快速消耗内容后流失）；东南亚广告变现用户LTV更长，估算可达3–6个月。",
+      questionEn: "What is the typical LTV of a short drama viewer?",
+      answerEn: "Estimate: EU/US market ~1–3 months (users churn after bingeing content); Southeast Asia ad-monetized users have longer LTV, estimated at 3–6 months.",
+    },
+    {
+      question: "传统出海App签约和Lollipop Drama平台发布，哪个更适合新人？",
+      answer: "对于零粉丝基础的创作者，Lollipop Drama的无门槛变现+最高70%分成+内置LunoTV工具链对新人是更友好的选择（估算比较）。传统App签约通常有更严格的内容审核和粉丝门槛要求（估算）。",
+      questionEn: "Traditional overseas App contracts vs. Lollipop Drama—which is better for newcomers?",
+      answerEn: "For zero-fanbase creators, Lollipop Drama's no-threshold monetization, up to 70% revenue share, and integrated LunoTV toolchain make it a friendlier entry point (estimated comparison). Traditional App contracts typically carry stricter content review and fanbase requirements (estimate).",
+    },
+    {
+      question: "如何判断自己的短剧适合哪个市场？",
+      answer: "建议A/B测试：用同一内容的不同开头同时投放欧美+东南亚市场，3–5天内看转化率数据，再决定主攻哪个市场（估算策略）。",
+      questionEn: "How do I determine which market suits my drama?",
+      answerEn: "Recommend A/B testing: launch two hook versions of the same content simultaneously in EU/US and Southeast Asia; review conversion rate data within 3–5 days, then commit resources to the winning market (estimated strategy).",
+    },
+  ],
+  "ai-short-drama-pillar-guide": [
+
+  ],
+  "ai-short-drama-industry-data-report-2026": [
+
+  ],
+  "ai-short-drama-faq-2026": [
+
+  ],
 };

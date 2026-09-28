@@ -202,7 +202,12 @@ hub_body = body_text(hub) if hub.exists() else ""
 #   - 第 1 页内链：校验数量 == min(POSTS_PER_PAGE, 总篇数)
 #   - 全量可发现性：改由 sitemap + JSON-LD ItemList 校验（见下方两项）
 HUB_HTML = hub.read_text(encoding="utf-8") if hub.exists() else ""
-page1_links = sorted(set(re.findall(r'href="/blog/([a-z0-9-]+)"', hub_body)))
+# ⚠️ 计数前必须剔除站点公共 chrome（<footer>）：
+#    Footer 刻意链到「代表性 HowTo 文章」而非列表页（见 Footer.tsx 注释），
+#    会给计数凭空加 1 条 /blog/<slug>，让「第 1 页应有 N 张卡片」的断言假失败
+#    （实测实体网格正好 20 张，第 21 条来自 Footer 的 character-consistency-workflow）。
+hub_grid = re.sub(r"<footer.*?</footer>", "", hub_body, flags=re.S)
+page1_links = sorted(set(re.findall(r'href="/blog/([a-z0-9-]+)"', hub_grid)))
 expected_page1 = min(POSTS_PER_PAGE, len(POSTS))
 check(
     len(page1_links) == expected_page1,
@@ -259,7 +264,38 @@ if hub.exists():
     check("CollectionPage" in types, "schema 含 CollectionPage")
     check("ItemList" in types, "schema 含 ItemList")
     check("BreadcrumbList" in types, "schema 含 BreadcrumbList")
-    n = find_node(blocks, "ItemList")
+    # ⚠️ 页面上存在两个 ItemList：
+    #     ① 全局 site-schema 的「10 大题材」列表（index.html，所有页面共用）
+    #     ② 本页 page-schema 的「全部文章」列表（prerender 注入）
+    #    find_node 按文档序返回**第一个** → 命中全局题材列表，断言因此假失败
+    #    （期望 52、实际 10）。必须按「条目 URL 指向 /blog/」挑出文章列表本身。
+
+    def _all_itemlists(blks):
+        out: list = []
+
+        def _walk(node):
+            if isinstance(node, dict):
+                if node.get("@type") == "ItemList":
+                    out.append(node)
+                for v in node.values():
+                    _walk(v)
+            elif isinstance(node, list):
+                for v in node:
+                    _walk(v)
+
+        for b in blks:
+            _walk(b)
+        return out
+
+    _lists = _all_itemlists(blocks)
+    n = next(
+        (
+            x
+            for x in _lists
+            if any("/blog/" in str(e.get("url", "")) for e in (x.get("itemListElement") or []))
+        ),
+        _lists[0] if _lists else None,
+    )
     check(
         bool(n) and n.get("numberOfItems") == len(POSTS),
         f"ItemList numberOfItems == {len(POSTS)}（实际 {n.get('numberOfItems') if n else None}）",

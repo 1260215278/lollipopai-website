@@ -70,59 +70,55 @@ export default defineConfig(({ mode }) => {
     // 预渲染插件据此把 SSR 渲染出的 dev 图片 URL（/src/imports/X.png 或 /@fs/.../X.png）
     // 精确重写为生产可用的 /assets/X-<hash>.png，避免 hash 剥离失败（括号/连字符文件名）。
     manifest: true,
-    // 拆包策略：将大型 vendor 拆成独立 chunk，利用浏览器缓存
+    // 拆包策略（2026-09-26 重构）
+    //
+    // ⚠️ 教训：manualChunks 是「强制归组」，不是「建议归组」。给某个 id 返回组名后，
+    //    Rollup 会 ①把该模块锁进这个 chunk，②把「只被本 chunk 内部引用」的模块**吸收**进来。
+    //    于是只要组内**存在任何一个入口静态可达的模块**，整个 chunk 就变成入口的静态依赖，
+    //    Vite 会在**每一页**注入 <link rel="modulepreload"> —— 首屏被迫下载本来
+    //    「登录后/进文章页才需要」的代码。而且它是静默的：构建成功、页面正常，
+    //    只有抓 index.html 的 modulepreload 列表才看得出来。
+    //
+    //    实测踩坑记录（都是同一个病）：
+    //      · app-distribution 组：吸收 components/ui/** → 785 KB 进首屏
+    //      · app-pages 组：吸收 useNavItems.ts + distribution/entryNavigation.ts
+    //        （因为 LoginPage 登录后要跳分发中心，也 import 了 entryNavigation）
+    //        → 50 KB 进首屏，连带 login 的两张图
+    //      · vendor-common catch-all（node_modules/**）：吸收 recharts + d3-* + lodash
+    //        （只被后台的 ui/chart.tsx 用到）→ 992 KB 进首屏
+    //
+    //    所以：**只给「全站每一页都必然要用、且内容极稳定」的基础库建组**，
+    //    其余一切（业务 src、node_modules）全部交回 Rollup 按「谁真正可达」默认分块。
+    //    判据永远是：抓 dist/index.html 的 modulepreload 列表，逐条问「首屏真的需要吗」。
     rollupOptions: {
       output: {
         manualChunks(id) {
-          // React 核心 — 首屏必需，但拆出后可被 Service Worker / CDN 缓存
+          // React 核心 —— 每页必需，且几乎不随业务改动，独立成块最利于长缓存
           if (id.includes('node_modules/react/') ||
               id.includes('node_modules/react-dom/') ||
               id.includes('node_modules/scheduler/')) {
             return 'vendor-react';
           }
-          // react-router — 所有页面共用
+          // react-router —— 同上，每页必需
           if (id.includes('node_modules/react-router/') ||
               id.includes('node_modules/@remix-run/router/')) {
             return 'vendor-router';
           }
-          // Framer Motion 动画库 — ~150KB，大部分页面用到
+          // Framer Motion —— 首屏 HeroSection 就在用，属于首屏关键路径。
+          // ⚠️ 必须把 motion-dom / motion-utils 一并纳入：它们是 motion 的内部依赖，
+          //    包名不含 "motion/"，漏掉会掉进默认分块并被 "node_modules 兜底" 规则连坐。
           if (id.includes('node_modules/motion/') ||
+              id.includes('node_modules/motion-dom/') ||
+              id.includes('node_modules/motion-utils/') ||
               id.includes('node_modules/framer-motion/')) {
             return 'vendor-motion';
           }
-          // Lucide 图标库 — ~80KB，全站使用
-          if (id.includes('node_modules/lucide-react/')) {
-            return 'vendor-lucide';
-          }
-          // QRCode — 仅 DownloadPage 用到，~30KB
-          if (id.includes('node_modules/qrcode.react/') ||
-              id.includes('node_modules/qr-code-generator/')) {
-            return 'vendor-qrcode';
-          }
-          // Radix UI 组件 — ~60KB，分发后台使用
-          if (id.includes('node_modules/@radix-ui/')) {
-            return 'vendor-radix';
-          }
-          // MUI — 仅在分发后台某些组件中引用
-          if (id.includes('node_modules/@mui/') ||
-              id.includes('node_modules/@emotion/')) {
-            return 'vendor-mui';
-          }
-          // 分发后台子应用 — 登录后才需要，首屏完全不需要
-          if (id.includes('/src/app/distribution/')) {
-            return 'app-distribution';
-          }
-          // 独立页面（非首页）— 登录、创作者主页、法律文档等
-          if (id.includes('/src/app/pages/LoginPage') ||
-              id.includes('/src/app/pages/ForgotPasswordPage') ||
-              id.includes('/src/app/pages/CreatorProfilePage') ||
-              id.includes('/src/app/pages/LegalDocumentPage')) {
-            return 'app-pages';
-          }
-          // 其他 node_modules 归入通用 vendor
-          if (id.includes('node_modules/')) {
-            return 'vendor-common';
-          }
+          // 其余一律返回 undefined —— 交给 Rollup 默认分块（按可达性）。
+          // 不要再加：
+          //   · `if (id.includes('node_modules/')) return 'vendor-common'` 兜底
+          //     → 会把 recharts/d3/lodash/xlsx 等「只有懒加载页才用」的库整体拖进首屏
+          //   · 任何 `src/app/**` 目录级分组 → 见上方 app-distribution / app-pages 的坑
+          return undefined;
         },
       },
     },

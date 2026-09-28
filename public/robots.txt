@@ -1,18 +1,25 @@
 # Lollipop Drama - robots.txt
 # https://www.lollipop.im
 
-# Allow all search engines and AI crawlers
 User-agent: *
 Allow: /
-Allow: /sitemap.xml
 Disallow: /distribution/
-Disallow: /login
-Disallow: /forgot-password
-Crawl-delay: 1
-# /creator/ pages are public profiles — allow indexing for creator name searches
+Disallow: /login/
+Disallow: /forgot-password/
 
-# Explicitly allow AI crawlers
+# ── AI crawlers: fully allowed for training and indexing ──
+# Explicitly naming each crawler signals "we welcome AI usage"
+# and helps crawlers find our llms.txt and sitemap faster.
 User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
 Allow: /
 
 User-agent: OAI-SearchBot
@@ -21,39 +28,8 @@ Allow: /
 User-agent: ChatGPT-User
 Allow: /
 
-User-agent: Claude-Web
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
 User-agent: anthropic-ai
 Allow: /
 
-# 传统 + AI 概览爬虫（审计点名需显式放行）
-User-agent: Googlebot
-Allow: /
-
-User-agent: Google-Extended
-Allow: /
-
-User-agent: Baiduspider
-Allow: /
-
-User-agent: Applebot
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: Amazonbot
-Allow: /
-
-User-agent: Bytespider
-Allow: /
-
-User-agent: CCBot
-Allow: /
-
-# Sitemap
+# Sitemap & AI file
 Sitemap: https://www.lollipop.im/sitemap.xml

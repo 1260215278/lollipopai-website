@@ -1,57 +1,56 @@
 import os, re
 
-dist = r'c:\Users\Administrator\Documents\lollipop\dist'
+dist_dir = r'c:\Users\Administrator\Documents\lollipop\dist'
 
-# 1. Check multilingual directory structure
-print("=== Directory structure ===")
-for d in sorted(os.listdir(dist)):
-    if os.path.isdir(os.path.join(dist, d)):
-        count = sum(1 for root, dirs, files in os.walk(os.path.join(dist, d)) for f in files if f.endswith('.html'))
-        print(f"  {d}/: {count} HTML files")
-
-# 2. Check canonical tags in key pages
-print("\n=== Canonical tags ===")
-check_files = ['index.html', 'zh/index.html', 'zh-TW/index.html', 'es/index.html', 'pt/index.html', 'ar/index.html',
-               'about/index.html', 'zh/about/index.html', 'blog/index.html']
-for f in check_files:
-    fpath = os.path.join(dist, f)
-    if os.path.exists(fpath):
-        with open(fpath, 'r', encoding='utf-8') as fh:
-            content = fh.read()
-        canonical = re.findall(r'rel="canonical"\s+href="([^"]+)"', content)
-        if not canonical:
-            canonical = re.findall(r'href="([^"]+)"\s+rel="canonical"', content)
-        hreflang_links = re.findall(r'rel="alternate"\s+hreflang="([^"]+)"\s+href="([^"]+)"', content)
-        if not hreflang_links:
-            hreflang_links = re.findall(r'hreflang="([^"]+)"\s+href="([^"]+)"', content)
-        print(f"  {f}:")
-        print(f"    canonical: {canonical[0] if canonical else 'NONE'}")
-        print(f"    hreflang: {len(hreflang_links)} links")
-        for lang, url in hreflang_links[:3]:
-            print(f"      {lang} -> {url}")
-        if len(hreflang_links) > 3:
-            print(f"      ... and {len(hreflang_links)-3} more")
-    else:
-        print(f"  {f}: NOT FOUND")
-
-# 3. Check for stray files
-print("\n=== Stray/unexpected files ===")
-expected_prefixes = ('about', 'ar', 'blog', 'contact', 'creating', 'distribution', 'download',
-                     'drama', 'es', 'genre', 'glossary', 'login', 'forgot-password', 'press',
-                     'pt', 'region', 'zh', 'zh-TW', 'terms', 'privacy')
-stray = []
-for root, dirs, files in os.walk(dist):
+# Count all HTML files
+html_files = []
+for root, dirs, files in os.walk(dist_dir):
     for f in files:
         if f.endswith('.html'):
-            rel = os.path.relpath(os.path.join(root, f), dist)
-            if not any(rel.startswith(p) for p in expected_prefixes) and rel != 'index.html':
-                stray.append(rel)
-for f in stray:
-    print(f"  {f}")
+            html_files.append(os.path.join(root, f))
+print(f'Total HTML files: {len(html_files)}')
 
-# 4. Check robots.txt
-print("\n=== robots.txt ===")
-robots_path = os.path.join(dist, 'robots.txt')
-if os.path.exists(robots_path):
-    with open(robots_path, 'r') as fh:
-        print(fh.read())
+# Count noindex pages
+noindex_files = []
+for fp in html_files:
+    with open(fp, 'r', encoding='utf-8') as fh:
+        content = fh.read()
+        if re.search(r'<meta\s+name=["\']robots["\']\s+content=["\'][^"\']*noindex', content, re.I):
+            noindex_files.append(fp)
+print(f'Noindex pages: {len(noindex_files)}')
+for f in noindex_files[:20]:
+    rel = f.replace(dist_dir, '')
+    print(f'  {rel}')
+
+# Check for canonical tags
+no_canonical = []
+for fp in html_files:
+    with open(fp, 'r', encoding='utf-8') as fh:
+        content = fh.read()
+        if 'rel="canonical"' not in content and "rel='canonical'" not in content:
+            no_canonical.append(fp)
+print(f'\nPages without canonical: {len(no_canonical)}')
+for f in no_canonical[:10]:
+    rel = f.replace(dist_dir, '')
+    print(f'  {rel}')
+
+# Check sitemap vs actual pages mismatch
+sitemap_path = os.path.join(dist_dir, 'sitemap.xml')
+with open(sitemap_path, 'r', encoding='utf-8') as f:
+    sitemap = f.read()
+sitemap_urls = re.findall(r'<loc>([^<]+)</loc>', sitemap)
+print(f'\nSitemap URLs: {len(sitemap_urls)}')
+
+# Check sitemap for /login and /forgot-password
+login_in_sitemap = any('/login' in u for u in sitemap_urls)
+forgot_in_sitemap = any('/forgot-password' in u for u in sitemap_urls)
+print(f'Login in sitemap: {login_in_sitemap}')
+print(f'Forgot password in sitemap: {forgot_in_sitemap}')
+
+# Check distribution pages
+dist_count = sum(1 for u in sitemap_urls if '/distribution/' in u)
+print(f'Distribution pages in sitemap: {dist_count}')
+
+# Check zh/ alternate pages
+zh_count = sum(1 for u in sitemap_urls if '/zh/' in u)
+print(f'ZH pages in sitemap: {zh_count}')

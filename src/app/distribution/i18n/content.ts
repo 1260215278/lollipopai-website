@@ -72,8 +72,6 @@ export interface ContentMessages {
   selfProofTimestampTitle: string;
   selfProofTimestampDesc: string;
   /** AI 工程截图 */
-  selfProofAiTitle: string;
-  selfProofAiDesc: string;
   /** 模版参考角标 */
   selfProofTemplateBadge: string;
   /** 模板预览底部说明 */
@@ -81,17 +79,12 @@ export interface ContentMessages {
   /** 自制单文件上传提示 */
   selfProofUploadFile: string;
   /** AI 截图：需上传 4–20 张 */
-  selfProofAiNeedCount: string;
   /** AI 截图：添加截图 */
-  selfProofAiAdd: string;
   /** AI 截图：点击上传截图 */
-  selfProofAiUpload: string;
   /** AI 截图：格式提示 */
-  selfProofAiFormat: string;
   /** 自制底部提示 */
   selfProofNote: string;
   /** AI 截图数量不合法 */
-  selfProofAiCountError: string;
 
   // ── 行内操作菜单 ──
   actionViewDetail: string;
@@ -198,9 +191,6 @@ export interface ContentMessages {
   countriesSectionTitle: string;
   countriesSectionDesc: string;
   viewPricingRules: string;
-  publishSettingsTitle: string;
-  publishNowOption: string;
-  publishLaterOption: string;
   submitPublish: string;
   submitResubmit: string;
   submitSuccess: string;
@@ -331,6 +321,57 @@ export interface ContentMessages {
   /** 草稿已清空 */
   draftCleared: string;
 
+  // ── 20260929 稿件对齐：Step1 新增字段（18033-780） ──
+  /** 竖版封面提示：9:16 */
+  coverPortraitHint: string;
+  /** 横版封面提示：4:3 */
+  coverLandscapeHint: string;
+  /** 横版封面未上传时的送审校验提示 */
+  coverLandscapeRequired: string;
+  titleTranslatedLabel: string;
+  titleTranslatedPlaceholder: string;
+  totalDurationLabel: string;
+  totalDurationPlaceholder: string;
+  /** 剧集语言多选提示：首个选中的为主语言 */
+  /** 语言下拉的「添加」占位项 */
+  /** 题材（一级分类，题材下再挂标签） */
+  genreLabel: string;
+  genreSelectLangFirst: string;
+  genreEmpty: string;
+  /** 标签分组里未归类的历史词条组名 */
+  tagsUngrouped: string;
+  /** 版权与交付资料（①版权证书 ②附加材料 ③源文件网盘链接） */
+  deliveryLabel: string;
+  proofSectionTitle: string;
+  extraMaterialsTitle: string;
+  extraMaterialsOptional: string;
+  extraMaterialsDesc: string;
+  extraMaterialsAdd: string;
+  extraMaterialsUploading: string;
+  sourceFileTitle: string;
+  sourceFilePlaceholder: string;
+  sourceFileCodePlaceholder: string;
+  sourceFileNeedTitle: string;
+  sourceFileNeed1: string;
+  sourceFileNeed2: string;
+  sourceFileNeed3: string;
+  sourceFileNeed4: string;
+
+  // ── 20260929 稿件对齐：Step3（18033-1599） ──
+  /** Lollipop 分组标识 */
+  lollipopGroupLabel: string;
+  /** Lollipop 分组「必选」角标 */
+  lollipopRequiredBadge: string;
+  extPlatformTitle: string;
+  extPlatformDesc: string;
+  /** 比例另行协议时的占位 */
+  extPlatformRatioNA: string;
+  /** 高光时刻「必填」角标 */
+  highlightRequiredBadge: string;
+  highlightDesc: string;
+  highlightUploadPrompt: string;
+  highlightFormatHint: string;
+
   // ── 维度映射 ──
   countries: CountryLabels;
   tags: TagLabels;
@@ -380,22 +421,15 @@ export const content: Record<Locale, ContentMessages> = {
     copyrightProofLabel: "版权证明",
     copyrightProofPrompt: "点击或拖拽上传版权证明",
     copyrightProofFormat: "支持 JPG、PNG、HEIC、PDF、DOC、DOCX 格式（≤20MB）",
-    selfProofPickHint: "请上传以下任意一种确权材料（三选一）：",
+    selfProofPickHint: "请上传以下任意一种确权材料（二选一）：",
     selfProofRegistrationTitle: "作品登记证书",
     selfProofRegistrationDesc: "完整清晰截图 / PDF（1 份）",
     selfProofTimestampTitle: "成片可信时间戳",
     selfProofTimestampDesc: "官方时间戳证书 PDF 文件（1 份）",
-    selfProofAiTitle: "AI 工程截图",
-    selfProofAiDesc: "提供 4–20 张截图，包含提示词、操作及生成结果",
     selfProofTemplateBadge: "模版参考",
     selfProofTemplateCaption: "模版仅供参考，请上传你自己的证书文件",
     selfProofUploadFile: "点击上传文件",
-    selfProofAiNeedCount: "需上传 4–20 张",
-    selfProofAiAdd: "添加截图",
-    selfProofAiUpload: "点击上传截图",
-    selfProofAiFormat: "4–20 张，仅支持图片格式",
     selfProofNote: "注：仅视频截图不作为有效确权材料；附属 .tsa 源文件无需上传，请自行留存备查。",
-    selfProofAiCountError: "AI 工程截图需上传 4–20 张",
 
     actionViewDetail: "查看详情",
     actionEpisodes: "剧集视频",
@@ -419,19 +453,19 @@ export const content: Record<Locale, ContentMessages> = {
     draftStartFresh: "清空重填",
     step1: "短剧基本信息",
     step2: "上传剧集",
-    step3: "发布配置",
+    step3: "发行配置",
     stepFooter1: "步骤 1 / 3：基本信息",
     stepFooter2: "步骤 2 / 3：上传剧集",
     stepFooter3: "步骤 3 / 3：发布配置",
 
     coverLabel: "封面",
-    coverPrompt: "点击上传封面",
-    coverHint: "9:16 · JPG / PNG / HEIC · 300 ~ 500 KB",
+    coverPrompt: "点击上传",
+    coverHint: "JPG / PNG · 小于 10MB",
     coverRatio: "9:16",
     coverReplace: "点击替换",
     coverUploadFailed: "封面上传失败，请重试",
     coverTooLarge: "封面超过 10MB 限制",
-    nameLabel: "短剧名称",
+    nameLabel: "短剧原名",
     namePlaceholder: "请输入短剧名称",
     nameLangHint: "输入对应语言短剧标题",
     descLabel: "剧情简介",
@@ -470,8 +504,8 @@ export const content: Record<Locale, ContentMessages> = {
     uploadStopped: "已停止上传，未完成的视频仍保留待上传",
     epMerging: "合并中…",
 
-    distSectionTitle: "发布范围",
-    distSectionDesc: "选择短剧的展示位置，影响曝光量与收益方式",
+    distSectionTitle: "授权平台",
+    distSectionDesc: "选择短剧授权的发行平台，影响曝光量与收益方式",
     optAccountTitle: "账号主页",
     optAccountDesc: "短剧仅展示在您的账号主页，适合精准粉丝转化。",
     optAccountBadge: "基础曝光",
@@ -484,10 +518,7 @@ export const content: Record<Locale, ContentMessages> = {
     producer: "出品方",
     countriesSectionTitle: "上架国家",
     countriesSectionDesc: "选择短剧上架发行的目标国家（可多选）",
-    viewPricingRules: "查看各国收费规则",
-    publishSettingsTitle: "上架设置",
-    publishNowOption: "立即上架",
-    publishLaterOption: "暂不上架",
+    viewPricingRules: "收费规则",
     submitPublish: "提交发布",
     submitResubmit: "重新提交审核",
     submitSuccess: "提交成功，短剧已进入审核",
@@ -594,6 +625,42 @@ export const content: Record<Locale, ContentMessages> = {
     pricingColWholeGt50: "整剧（>50集）",
     draftCleared: "已清空草稿",
 
+    coverPortraitHint: "9:16 · 竖版封面",
+    coverLandscapeHint: "4:3 · 横版封面",
+    coverLandscapeRequired: "请上传横版封面",
+    titleTranslatedLabel: "翻译中文名",
+    titleTranslatedPlaceholder: "请输入翻译中文名",
+    totalDurationLabel: "总时长（分钟）",
+    totalDurationPlaceholder: "请输入总时长",
+    genreLabel: "题材",
+    genreSelectLangFirst: "请先选择语言",
+    genreEmpty: "暂无可选题材",
+    tagsUngrouped: "未归类",
+    deliveryLabel: "版权与交付资料",
+    proofSectionTitle: "版权证书",
+    extraMaterialsTitle: "附加材料上传",
+    extraMaterialsOptional: "（可选）",
+    extraMaterialsDesc: "可上传 PR 工程文件、人物建模、剧本、AI 工具制作过程的图文、音视频",
+    extraMaterialsAdd: "点击添加附加材料",
+    extraMaterialsUploading: "上传中",
+    sourceFileTitle: "源文件网盘链接",
+    sourceFilePlaceholder: "请填写网盘链接（有效期需设为一年）",
+    sourceFileCodePlaceholder: "提取码（可选，网盘链接无密码可不填）",
+    sourceFileNeedTitle: "源文件需包含以下内容：",
+    sourceFileNeed1: "① 无字幕版（有BGM）成片",
+    sourceFileNeed2: "② 无BGM有字幕成片",
+    sourceFileNeed3: "③ SRT字幕文件（需与无字幕版配套）",
+    sourceFileNeed4: "④ 音轨文件（音乐）",
+    lollipopGroupLabel: "Lollipop",
+    lollipopRequiredBadge: "必选",
+    extPlatformTitle: "可选外部平台",
+    extPlatformDesc: "授权至以下平台可获得额外收益，收益比例为出品方分成",
+    extPlatformRatioNA: "—",
+    highlightRequiredBadge: "必填",
+    highlightDesc: "上传一段本剧精彩视频，用于平台宣传推广",
+    highlightUploadPrompt: "点击上传高光视频",
+    highlightFormatHint: "支持 MP4 / MOV · 不超过 500MB",
+
     countries: { us: "美国", ph: "菲律宾", in: "印度" },
     tags: {
       urban: "都市日常",
@@ -654,22 +721,15 @@ export const content: Record<Locale, ContentMessages> = {
     copyrightProofLabel: "版權證明",
     copyrightProofPrompt: "點擊或拖曳上傳版權證明",
     copyrightProofFormat: "支援 JPG、PNG、HEIC、PDF、DOC、DOCX 格式（≤20MB）",
-    selfProofPickHint: "請上傳以下任意一種確權材料（三選一）：",
+    selfProofPickHint: "請上傳以下任意一種確權材料（二選一）：",
     selfProofRegistrationTitle: "作品登記證書",
     selfProofRegistrationDesc: "完整清晰截圖 / PDF（1 份）",
     selfProofTimestampTitle: "成片可信時間戳",
     selfProofTimestampDesc: "官方時間戳證書 PDF 文件（1 份）",
-    selfProofAiTitle: "AI 工程截圖",
-    selfProofAiDesc: "提供 4–20 張截圖，包含提示詞、操作及生成結果",
     selfProofTemplateBadge: "模版參考",
     selfProofTemplateCaption: "模版僅供參考，請上傳你自己的證書文件",
     selfProofUploadFile: "點擊上傳文件",
-    selfProofAiNeedCount: "需上傳 4–20 張",
-    selfProofAiAdd: "添加截圖",
-    selfProofAiUpload: "點擊上傳截圖",
-    selfProofAiFormat: "4–20 張，僅支援圖片格式",
     selfProofNote: "註：僅視頻截圖不作為有效確權材料；附屬 .tsa 源文件無需上傳，請自行留存備查。",
-    selfProofAiCountError: "AI 工程截圖需上傳 4–20 張",
 
     actionViewDetail: "查看詳情",
     actionEpisodes: "劇集影片",
@@ -693,19 +753,19 @@ export const content: Record<Locale, ContentMessages> = {
     draftStartFresh: "清空重填",
     step1: "短劇基本資訊",
     step2: "上傳劇集",
-    step3: "發佈設定",
+    step3: "發行配置",
     stepFooter1: "步驟 1 / 3：基本資訊",
     stepFooter2: "步驟 2 / 3：上傳劇集",
     stepFooter3: "步驟 3 / 3：發佈設定",
 
     coverLabel: "封面",
-    coverPrompt: "點擊上傳封面",
-    coverHint: "9:16 · JPG / PNG / HEIC · 300 ~ 500 KB",
+    coverPrompt: "點擊上傳",
+    coverHint: "JPG / PNG · 小於 10MB",
     coverRatio: "9:16",
     coverReplace: "點擊替換",
     coverUploadFailed: "封面上傳失敗，請重試",
     coverTooLarge: "封面超過 10MB 限制",
-    nameLabel: "短劇名稱",
+    nameLabel: "短劇原名",
     namePlaceholder: "請輸入短劇名稱",
     nameLangHint: "輸入對應語言短劇標題",
     descLabel: "劇情簡介",
@@ -744,8 +804,8 @@ export const content: Record<Locale, ContentMessages> = {
     uploadStopped: "已停止上傳，未完成的影片仍保留待上傳",
     epMerging: "合併中…",
 
-    distSectionTitle: "發佈範圍",
-    distSectionDesc: "選擇短劇的展示位置，影響曝光量與收益方式",
+    distSectionTitle: "授權平台",
+    distSectionDesc: "選擇短劇授權的發行平台，影響曝光量與收益方式",
     optAccountTitle: "帳號主頁",
     optAccountDesc: "短劇僅展示在您的帳號主頁，適合精準粉絲轉化。",
     optAccountBadge: "基礎曝光",
@@ -758,10 +818,7 @@ export const content: Record<Locale, ContentMessages> = {
     producer: "出品方",
     countriesSectionTitle: "上架國家",
     countriesSectionDesc: "選擇短劇上架發行的目標國家（可多選）",
-    viewPricingRules: "查看各國收費規則",
-    publishSettingsTitle: "上架設定",
-    publishNowOption: "立即上架",
-    publishLaterOption: "暫不上架",
+    viewPricingRules: "收費規則",
     submitPublish: "提交發佈",
     submitResubmit: "重新提交審核",
     submitSuccess: "提交成功，短劇已進入審核",
@@ -868,6 +925,42 @@ export const content: Record<Locale, ContentMessages> = {
     pricingColWholeGt50: "整劇（>50集）",
     draftCleared: "已清空草稿",
 
+    coverPortraitHint: "9:16 · 豎版封面",
+    coverLandscapeHint: "4:3 · 橫版封面",
+    coverLandscapeRequired: "請上傳橫版封面",
+    titleTranslatedLabel: "翻譯中文名",
+    titleTranslatedPlaceholder: "請輸入翻譯中文名",
+    totalDurationLabel: "總時長（分鐘）",
+    totalDurationPlaceholder: "請輸入總時長",
+    genreLabel: "題材",
+    genreSelectLangFirst: "請先選擇語言",
+    genreEmpty: "暫無可選題材",
+    tagsUngrouped: "未歸類",
+    deliveryLabel: "版權與交付資料",
+    proofSectionTitle: "版權證書",
+    extraMaterialsTitle: "附加材料上傳",
+    extraMaterialsOptional: "（可選）",
+    extraMaterialsDesc: "可上傳 PR 工程檔、人物建模、劇本、AI 工具製作過程的圖文、音視訊",
+    extraMaterialsAdd: "點擊新增附加材料",
+    extraMaterialsUploading: "上傳中",
+    sourceFileTitle: "來源檔網盤連結",
+    sourceFilePlaceholder: "請填寫網盤連結（有效期需設為一年）",
+    sourceFileCodePlaceholder: "提取碼（選填，網盤連結無密碼可不填）",
+    sourceFileNeedTitle: "來源檔需包含以下內容：",
+    sourceFileNeed1: "① 無字幕版（有BGM）成片",
+    sourceFileNeed2: "② 無BGM有字幕成片",
+    sourceFileNeed3: "③ SRT字幕檔（需與無字幕版配套）",
+    sourceFileNeed4: "④ 音軌檔（音樂）",
+    lollipopGroupLabel: "Lollipop",
+    lollipopRequiredBadge: "必選",
+    extPlatformTitle: "可選外部平台",
+    extPlatformDesc: "授權至以下平台可獲得額外收益，收益比例為出品方分成",
+    extPlatformRatioNA: "—",
+    highlightRequiredBadge: "必填",
+    highlightDesc: "上傳一段本劇精彩影片，用於平台宣傳推廣",
+    highlightUploadPrompt: "點擊上傳高光影片",
+    highlightFormatHint: "支援 MP4 / MOV · 不超過 500MB",
+
     countries: { us: "美國", ph: "菲律賓", in: "印度" },
     tags: {
       urban: "都市日常",
@@ -928,22 +1021,15 @@ export const content: Record<Locale, ContentMessages> = {
     copyrightProofLabel: "Copyright proof",
     copyrightProofPrompt: "Click or drag to upload copyright proof",
     copyrightProofFormat: "Supports JPG, PNG, HEIC, PDF, DOC, DOCX (≤20MB)",
-    selfProofPickHint: "Upload any one of the following proof materials (choose 1 of 3):",
+    selfProofPickHint: "Upload any one of the following proof materials (choose 1 of 2):",
     selfProofRegistrationTitle: "Work registration certificate",
     selfProofRegistrationDesc: "Clear screenshot / PDF (1 file)",
     selfProofTimestampTitle: "Trusted timestamp for final cut",
     selfProofTimestampDesc: "Official timestamp certificate PDF (1 file)",
-    selfProofAiTitle: "AI production screenshots",
-    selfProofAiDesc: "Provide 4–20 screenshots including prompts, steps, and results",
     selfProofTemplateBadge: "Sample",
     selfProofTemplateCaption: "Sample only — please upload your own certificate",
     selfProofUploadFile: "Click to upload file",
-    selfProofAiNeedCount: "Upload 4–20 images",
-    selfProofAiAdd: "Add screenshots",
-    selfProofAiUpload: "Click to upload screenshots",
-    selfProofAiFormat: "4–20 images, image formats only",
     selfProofNote: "Note: video-only screenshots are not valid proof; keep any .tsa source files yourself — no need to upload them.",
-    selfProofAiCountError: "AI production screenshots require 4–20 images",
 
     actionViewDetail: "View Details",
     actionEpisodes: "Episode Videos",
@@ -975,12 +1061,12 @@ export const content: Record<Locale, ContentMessages> = {
 
     coverLabel: "Cover",
     coverPrompt: "Click to upload",
-    coverHint: "9:16 · JPG / PNG / HEIC · 300 ~ 500 KB",
+    coverHint: "JPG / PNG · under 10MB",
     coverRatio: "9:16",
     coverReplace: "Replace",
     coverUploadFailed: "Cover upload failed, please retry",
     coverTooLarge: "Cover exceeds the 10MB limit",
-    nameLabel: "Drama Name",
+    nameLabel: "Original Title",
     namePlaceholder: "Enter drama name",
     nameLangHint: "Enter the title in the selected language",
     descLabel: "Description",
@@ -1019,8 +1105,8 @@ export const content: Record<Locale, ContentMessages> = {
     uploadStopped: "Upload stopped. Unfinished videos remain ready to upload",
     epMerging: "Merging…",
 
-    distSectionTitle: "Distribution",
-    distSectionDesc: "Choose where your drama appears — affects exposure and revenue method",
+    distSectionTitle: "Authorized platforms",
+    distSectionDesc: "Choose the platforms your drama is licensed to — affects exposure and revenue method",
     optAccountTitle: "Account Homepage",
     optAccountDesc: "Drama appears only on your account homepage.",
     optAccountBadge: "Basic Reach",
@@ -1033,10 +1119,7 @@ export const content: Record<Locale, ContentMessages> = {
     producer: "Producer",
     countriesSectionTitle: "Target Countries",
     countriesSectionDesc: "Select countries where this drama will be available",
-    viewPricingRules: "View pricing rules by country",
-    publishSettingsTitle: "Publishing Settings",
-    publishNowOption: "Publish Now",
-    publishLaterOption: "Do Not Publish Now",
+    viewPricingRules: "Pricing rules",
     submitPublish: "Submit & Publish",
     submitResubmit: "Resubmit for Review",
     submitSuccess: "Submitted. Your drama is now under review.",
@@ -1143,6 +1226,42 @@ export const content: Record<Locale, ContentMessages> = {
     pricingColWholeGt50: "Full (>50 eps)",
     draftCleared: "Draft cleared",
 
+    coverPortraitHint: "9:16 · Portrait cover",
+    coverLandscapeHint: "4:3 · Landscape cover",
+    coverLandscapeRequired: "Please upload the landscape cover",
+    titleTranslatedLabel: "Chinese title",
+    titleTranslatedPlaceholder: "Enter the Chinese title",
+    totalDurationLabel: "Total duration (minutes)",
+    totalDurationPlaceholder: "Enter total duration",
+    genreLabel: "Genre",
+    genreSelectLangFirst: "Select a language first",
+    genreEmpty: "No genres available",
+    tagsUngrouped: "Ungrouped",
+    deliveryLabel: "Copyright & delivery materials",
+    proofSectionTitle: "Copyright certificate",
+    extraMaterialsTitle: "Additional materials",
+    extraMaterialsOptional: "(optional)",
+    extraMaterialsDesc: "PR project files, character models, scripts, or images/audio/video of the AI production process",
+    extraMaterialsAdd: "Click to add materials",
+    extraMaterialsUploading: "Uploading",
+    sourceFileTitle: "Source file cloud link",
+    sourceFilePlaceholder: "Cloud drive link (valid for at least one year)",
+    sourceFileCodePlaceholder: "Access code (optional, leave blank if the link has none)",
+    sourceFileNeedTitle: "The source files must include:",
+    sourceFileNeed1: "1. Final cut without subtitles (with BGM)",
+    sourceFileNeed2: "2. Final cut without BGM, with subtitles",
+    sourceFileNeed3: "3. SRT subtitle file (matching the no-subtitle cut)",
+    sourceFileNeed4: "4. Audio track (music)",
+    lollipopGroupLabel: "Lollipop",
+    lollipopRequiredBadge: "Required",
+    extPlatformTitle: "Optional external platforms",
+    extPlatformDesc: "Licensing to these platforms earns extra revenue; the share shown is the producer's",
+    extPlatformRatioNA: "—",
+    highlightRequiredBadge: "Required",
+    highlightDesc: "Upload a highlight clip used for platform promotion",
+    highlightUploadPrompt: "Click to upload the highlight video",
+    highlightFormatHint: "MP4 / MOV · up to 500MB",
+
     countries: { us: "United States", ph: "Philippines", in: "India" },
     tags: {
       urban: "Urban",
@@ -1203,22 +1322,15 @@ export const content: Record<Locale, ContentMessages> = {
     copyrightProofLabel: "Comprovante de direitos autorais",
     copyrightProofPrompt: "Clique ou arraste para enviar o comprovante",
     copyrightProofFormat: "Suporta JPG, PNG, HEIC, PDF, DOC, DOCX (≤20MB)",
-    selfProofPickHint: "Envie qualquer um dos materiais de prova abaixo (escolha 1 de 3):",
+    selfProofPickHint: "Envie qualquer um dos materiais de prova abaixo (escolha 1 de 2):",
     selfProofRegistrationTitle: "Certificado de registro da obra",
     selfProofRegistrationDesc: "Captura nítida / PDF (1 arquivo)",
     selfProofTimestampTitle: "Carimbo de tempo confiável do filme final",
     selfProofTimestampDesc: "Certificado oficial de carimbo de tempo em PDF (1 arquivo)",
-    selfProofAiTitle: "Capturas do processo de IA",
-    selfProofAiDesc: "Forneça 4–20 capturas com prompts, etapas e resultados",
     selfProofTemplateBadge: "Modelo",
     selfProofTemplateCaption: "Apenas modelo — envie o seu próprio certificado",
     selfProofUploadFile: "Clique para enviar o arquivo",
-    selfProofAiNeedCount: "Envie 4–20 imagens",
-    selfProofAiAdd: "Adicionar capturas",
-    selfProofAiUpload: "Clique para enviar capturas",
-    selfProofAiFormat: "4–20 imagens, apenas formatos de imagem",
     selfProofNote: "Nota: capturas só de vídeo não contam como prova; arquivos .tsa não precisam ser enviados — guarde-os você mesmo.",
-    selfProofAiCountError: "As capturas de IA exigem de 4 a 20 imagens",
 
     actionViewDetail: "Ver detalhes",
     actionEpisodes: "Vídeos dos episódios",
@@ -1243,19 +1355,19 @@ export const content: Record<Locale, ContentMessages> = {
     draftStartFresh: "Começar do zero",
     step1: "Informações básicas",
     step2: "Enviar episódios",
-    step3: "Configuração de publicação",
+    step3: "Configuração",
     stepFooter1: "Etapa 1 / 3: Informações básicas",
     stepFooter2: "Etapa 2 / 3: Enviar episódios",
     stepFooter3: "Etapa 3 / 3: Configuração de publicação",
 
     coverLabel: "Capa",
     coverPrompt: "Clique para enviar",
-    coverHint: "9:16 · JPG / PNG / HEIC · 300 ~ 500 KB",
+    coverHint: "JPG / PNG · menos de 10 MB",
     coverRatio: "9:16",
     coverReplace: "Substituir",
     coverUploadFailed: "Falha no envio da capa, tente novamente",
     coverTooLarge: "A capa excede o limite de 10MB",
-    nameLabel: "Nome do drama",
+    nameLabel: "Título original",
     namePlaceholder: "Digite o nome do drama",
     nameLangHint: "Digite o título no idioma selecionado",
     descLabel: "Descrição",
@@ -1294,8 +1406,8 @@ export const content: Record<Locale, ContentMessages> = {
     uploadStopped: "Envio interrompido. Os vídeos não concluídos continuam prontos para envio",
     epMerging: "Mesclando…",
 
-    distSectionTitle: "Distribuição",
-    distSectionDesc: "Escolha onde seu drama aparece — afeta o alcance e a receita",
+    distSectionTitle: "Plataformas autorizadas",
+    distSectionDesc: "Escolha as plataformas licenciadas para o seu drama — afeta o alcance e a receita",
     optAccountTitle: "Perfil da conta",
     optAccountDesc: "O drama aparece apenas no perfil da sua conta.",
     optAccountBadge: "Alcance básico",
@@ -1308,10 +1420,7 @@ export const content: Record<Locale, ContentMessages> = {
     producer: "Produtor",
     countriesSectionTitle: "Países de destino",
     countriesSectionDesc: "Selecione os países onde este drama ficará disponível",
-    viewPricingRules: "Ver regras de preço por país",
-    publishSettingsTitle: "Configurações de publicação",
-    publishNowOption: "Publicar agora",
-    publishLaterOption: "Não publicar agora",
+    viewPricingRules: "Regras de preços",
     submitPublish: "Enviar e publicar",
     submitResubmit: "Reenviar para análise",
     submitSuccess: "Enviado. Seu drama está em análise.",
@@ -1418,6 +1527,42 @@ export const content: Record<Locale, ContentMessages> = {
     pricingColWholeGt50: "Série (>50 eps)",
     draftCleared: "Rascunho limpo",
 
+    coverPortraitHint: "9:16 · Capa vertical",
+    coverLandscapeHint: "4:3 · Capa horizontal",
+    coverLandscapeRequired: "Envie a capa horizontal",
+    titleTranslatedLabel: "Título em chinês",
+    titleTranslatedPlaceholder: "Digite o título em chinês",
+    totalDurationLabel: "Duração total (minutos)",
+    totalDurationPlaceholder: "Digite a duração total",
+    genreLabel: "Gênero",
+    genreSelectLangFirst: "Selecione um idioma primeiro",
+    genreEmpty: "Nenhum gênero disponível",
+    tagsUngrouped: "Sem categoria",
+    deliveryLabel: "Direitos autorais e materiais de entrega",
+    proofSectionTitle: "Certificado de direitos autorais",
+    extraMaterialsTitle: "Materiais adicionais",
+    extraMaterialsOptional: "(opcional)",
+    extraMaterialsDesc: "Arquivos de projeto PR, modelagem de personagens, roteiro ou imagens/áudio/vídeo do processo com IA",
+    extraMaterialsAdd: "Clique para adicionar materiais",
+    extraMaterialsUploading: "Enviando",
+    sourceFileTitle: "Link do arquivo-fonte na nuvem",
+    sourceFilePlaceholder: "Link da nuvem (validade de pelo menos um ano)",
+    sourceFileCodePlaceholder: "Código de acesso (opcional, deixe em branco se o link não tiver)",
+    sourceFileNeedTitle: "Os arquivos-fonte devem incluir:",
+    sourceFileNeed1: "1. Corte final sem legendas (com BGM)",
+    sourceFileNeed2: "2. Corte final sem BGM, com legendas",
+    sourceFileNeed3: "3. Arquivo de legenda SRT (compatível com o corte sem legendas)",
+    sourceFileNeed4: "4. Faixa de áudio (música)",
+    lollipopGroupLabel: "Lollipop",
+    lollipopRequiredBadge: "Obrigatório",
+    extPlatformTitle: "Plataformas externas opcionais",
+    extPlatformDesc: "O licenciamento nessas plataformas gera receita extra; a porcentagem exibida é a do produtor",
+    extPlatformRatioNA: "—",
+    highlightRequiredBadge: "Obrigatório",
+    highlightDesc: "Envie um trecho de destaque usado na divulgação da plataforma",
+    highlightUploadPrompt: "Clique para enviar o vídeo destaque",
+    highlightFormatHint: "MP4 / MOV · até 500MB",
+
     countries: { us: "Estados Unidos", ph: "Filipinas", in: "Índia" },
     tags: {
       urban: "Urbano",
@@ -1478,22 +1623,15 @@ export const content: Record<Locale, ContentMessages> = {
     copyrightProofLabel: "Comprobante de derechos de autor",
     copyrightProofPrompt: "Haga clic o arrastre para subir el comprobante de derechos de autor",
     copyrightProofFormat: "Admite JPG, PNG, HEIC, PDF, DOC, DOCX (≤20MB)",
-    selfProofPickHint: "Suba cualquiera de los siguientes materiales de prueba (elija 1 de 3):",
+    selfProofPickHint: "Suba cualquiera de los siguientes materiales de prueba (elija 1 de 2):",
     selfProofRegistrationTitle: "Certificado de registro de la obra",
     selfProofRegistrationDesc: "Captura nítida / PDF (1 archivo)",
     selfProofTimestampTitle: "Sello de tiempo confiable del corte final",
     selfProofTimestampDesc: "Certificado oficial de sello de tiempo en PDF (1 archivo)",
-    selfProofAiTitle: "Capturas del proceso de IA",
-    selfProofAiDesc: "Proporcione 4–20 capturas que incluyan prompts, pasos y resultados",
     selfProofTemplateBadge: "Muestra",
     selfProofTemplateCaption: "Solo muestra: suba su propio certificado",
     selfProofUploadFile: "Haga clic para subir el archivo",
-    selfProofAiNeedCount: "Suba 4–20 imágenes",
-    selfProofAiAdd: "Añadir capturas",
-    selfProofAiUpload: "Haga clic para subir capturas",
-    selfProofAiFormat: "4–20 imágenes, solo formatos de imagen",
     selfProofNote: "Nota: las capturas solo de video no son prueba válida; conserve los archivos fuente .tsa usted mismo; no es necesario subirlos.",
-    selfProofAiCountError: "Las capturas de producción con IA requieren 4–20 imágenes",
 
     actionViewDetail: "Ver detalles",
     actionEpisodes: "Videos de episodios",
@@ -1518,19 +1656,19 @@ export const content: Record<Locale, ContentMessages> = {
     draftStartFresh: "Empezar de cero",
     step1: "Información básica",
     step2: "Subir episodios",
-    step3: "Configuración de publicación",
+    step3: "Configuración",
     stepFooter1: "Paso 1 / 3: Información básica",
     stepFooter2: "Paso 2 / 3: Subir episodios",
     stepFooter3: "Paso 3 / 3: Configuración de publicación",
 
     coverLabel: "Portada",
     coverPrompt: "Haga clic para subir",
-    coverHint: "9:16 · JPG / PNG / HEIC · 300 ~ 500 KB",
+    coverHint: "JPG / PNG · menos de 10 MB",
     coverRatio: "9:16",
     coverReplace: "Reemplazar",
     coverUploadFailed: "Error al subir la portada, inténtelo de nuevo",
     coverTooLarge: "La portada supera el límite de 10MB",
-    nameLabel: "Nombre del drama",
+    nameLabel: "Título original",
     namePlaceholder: "Introduzca el nombre del drama",
     nameLangHint: "Introduzca el título en el idioma seleccionado",
     descLabel: "Descripción",
@@ -1569,8 +1707,8 @@ export const content: Record<Locale, ContentMessages> = {
     uploadStopped: "Subida detenida. Los videos no terminados siguen listos para subir",
     epMerging: "Combinando…",
 
-    distSectionTitle: "Distribución",
-    distSectionDesc: "Elija dónde aparece su drama: afecta la exposición y el método de ingresos",
+    distSectionTitle: "Plataformas autorizadas",
+    distSectionDesc: "Elija las plataformas con licencia para su drama: afecta la exposición y el método de ingresos",
     optAccountTitle: "Página de la cuenta",
     optAccountDesc: "El drama aparece solo en la página de su cuenta.",
     optAccountBadge: "Alcance básico",
@@ -1583,10 +1721,7 @@ export const content: Record<Locale, ContentMessages> = {
     producer: "Productor",
     countriesSectionTitle: "Países de destino",
     countriesSectionDesc: "Seleccione los países donde estará disponible este drama",
-    viewPricingRules: "Ver reglas de precio por país",
-    publishSettingsTitle: "Ajustes de publicación",
-    publishNowOption: "Publicar ahora",
-    publishLaterOption: "No publicar ahora",
+    viewPricingRules: "Reglas de precios",
     submitPublish: "Enviar y publicar",
     submitResubmit: "Reenviar a revisión",
     submitSuccess: "Enviado. Su drama está en revisión.",
@@ -1693,6 +1828,42 @@ export const content: Record<Locale, ContentMessages> = {
     pricingColWholeGt50: "Completa (>50 eps)",
     draftCleared: "Borrador borrado",
 
+    coverPortraitHint: "9:16 · Portada vertical",
+    coverLandscapeHint: "4:3 · Portada horizontal",
+    coverLandscapeRequired: "Suba la portada horizontal",
+    titleTranslatedLabel: "Título en chino",
+    titleTranslatedPlaceholder: "Escriba el título en chino",
+    totalDurationLabel: "Duración total (minutos)",
+    totalDurationPlaceholder: "Escriba la duración total",
+    genreLabel: "Género",
+    genreSelectLangFirst: "Seleccione un idioma primero",
+    genreEmpty: "No hay géneros disponibles",
+    tagsUngrouped: "Sin categoría",
+    deliveryLabel: "Derechos de autor y materiales de entrega",
+    proofSectionTitle: "Certificado de derechos de autor",
+    extraMaterialsTitle: "Materiales adicionales",
+    extraMaterialsOptional: "(opcional)",
+    extraMaterialsDesc: "Archivos de proyecto PR, modelado de personajes, guion o imágenes/audio/vídeo del proceso con IA",
+    extraMaterialsAdd: "Haga clic para añadir materiales",
+    extraMaterialsUploading: "Subiendo",
+    sourceFileTitle: "Enlace del archivo fuente en la nube",
+    sourceFilePlaceholder: "Enlace de la nube (vigencia mínima de un año)",
+    sourceFileCodePlaceholder: "Código de acceso (opcional, déjalo vacío si el enlace no lo tiene)",
+    sourceFileNeedTitle: "Los archivos fuente deben incluir:",
+    sourceFileNeed1: "1. Corte final sin subtítulos (con BGM)",
+    sourceFileNeed2: "2. Corte final sin BGM, con subtítulos",
+    sourceFileNeed3: "3. Archivo de subtítulos SRT (compatible con el corte sin subtítulos)",
+    sourceFileNeed4: "4. Pista de audio (música)",
+    lollipopGroupLabel: "Lollipop",
+    lollipopRequiredBadge: "Obligatorio",
+    extPlatformTitle: "Plataformas externas opcionales",
+    extPlatformDesc: "Licenciar en estas plataformas genera ingresos extra; el porcentaje mostrado es el del productor",
+    extPlatformRatioNA: "—",
+    highlightRequiredBadge: "Obligatorio",
+    highlightDesc: "Suba un clip destacado que se usará en la promoción de la plataforma",
+    highlightUploadPrompt: "Haga clic para subir el vídeo destacado",
+    highlightFormatHint: "MP4 / MOV · hasta 500MB",
+
     countries: { us: "Estados Unidos", ph: "Filipinas", in: "India" },
     tags: {
       urban: "Urbano",
@@ -1753,22 +1924,15 @@ export const content: Record<Locale, ContentMessages> = {
     copyrightProofLabel: "إثبات حقوق النشر",
     copyrightProofPrompt: "انقر أو اسحب لرفع إثبات حقوق النشر",
     copyrightProofFormat: "يدعم JPG و PNG و HEIC و PDF و DOC و DOCX (≤20MB)",
-    selfProofPickHint: "ارفع أيًا من مواد الإثبات التالية (اختر 1 من 3):",
+    selfProofPickHint: "ارفع أيًا من مواد الإثبات التالية (اختر 1 من 2):",
     selfProofRegistrationTitle: "شهادة تسجيل العمل",
     selfProofRegistrationDesc: "لقطة واضحة / PDF (ملف واحد)",
     selfProofTimestampTitle: "طابع زمني موثوق للنسخة النهائية",
     selfProofTimestampDesc: "شهادة الطابع الزمني الرسمية PDF (ملف واحد)",
-    selfProofAiTitle: "لقطات إنتاج الذكاء الاصطناعي",
-    selfProofAiDesc: "قدّم 4–20 لقطة تشمل الأوامر والخطوات والنتائج",
     selfProofTemplateBadge: "نموذج",
     selfProofTemplateCaption: "نموذج فقط — يرجى رفع شهادتك الخاصة",
     selfProofUploadFile: "انقر لرفع الملف",
-    selfProofAiNeedCount: "ارفع 4–20 صورة",
-    selfProofAiAdd: "إضافة لقطات",
-    selfProofAiUpload: "انقر لرفع اللقطات",
-    selfProofAiFormat: "4–20 صورة، صيغ الصور فقط",
     selfProofNote: "ملاحظة: لقطات الفيديو وحدها ليست إثباتًا صالحًا؛ احتفظ بملفات المصدر ‎.tsa بنفسك — لا حاجة لرفعها.",
-    selfProofAiCountError: "تتطلب لقطات إنتاج الذكاء الاصطناعي 4–20 صورة",
 
     actionViewDetail: "عرض التفاصيل",
     actionEpisodes: "فيديوهات الحلقات",
@@ -1793,19 +1957,19 @@ export const content: Record<Locale, ContentMessages> = {
     draftStartFresh: "البدء من جديد",
     step1: "المعلومات الأساسية",
     step2: "رفع الحلقات",
-    step3: "إعدادات النشر",
+    step3: "إعداد النشر",
     stepFooter1: "الخطوة 1 / 3: المعلومات الأساسية",
     stepFooter2: "الخطوة 2 / 3: رفع الحلقات",
     stepFooter3: "الخطوة 3 / 3: إعدادات النشر",
 
     coverLabel: "الغلاف",
     coverPrompt: "انقر للرفع",
-    coverHint: "9:16 · JPG / PNG / HEIC · 300 ~ 500 KB",
+    coverHint: "JPG / PNG · أقل من 10 ميغابايت",
     coverRatio: "9:16",
     coverReplace: "استبدال",
     coverUploadFailed: "فشل رفع الغلاف، يرجى المحاولة مرة أخرى",
     coverTooLarge: "يتجاوز الغلاف حد 10MB",
-    nameLabel: "اسم الدراما",
+    nameLabel: "العنوان الأصلي",
     namePlaceholder: "أدخل اسم الدراما",
     nameLangHint: "أدخل العنوان باللغة المحددة",
     descLabel: "الوصف",
@@ -1844,8 +2008,8 @@ export const content: Record<Locale, ContentMessages> = {
     uploadStopped: "تم إيقاف الرفع. تبقى الفيديوهات غير المكتملة جاهزة للرفع",
     epMerging: "جارٍ الدمج…",
 
-    distSectionTitle: "التوزيع",
-    distSectionDesc: "اختر أين يظهر عملك — يؤثر على الانتشار وطريقة الإيرادات",
+    distSectionTitle: "المنصات المرخّصة",
+    distSectionDesc: "اختر المنصات المرخّص لها بعملك — يؤثر على الانتشار وطريقة الإيرادات",
     optAccountTitle: "صفحة الحساب",
     optAccountDesc: "يظهر العمل فقط في صفحة حسابك.",
     optAccountBadge: "وصول أساسي",
@@ -1858,10 +2022,7 @@ export const content: Record<Locale, ContentMessages> = {
     producer: "المنتج",
     countriesSectionTitle: "الدول المستهدفة",
     countriesSectionDesc: "حدد الدول التي سيتوفر فيها هذا العمل",
-    viewPricingRules: "عرض قواعد التسعير حسب الدولة",
-    publishSettingsTitle: "إعدادات النشر",
-    publishNowOption: "نشر الآن",
-    publishLaterOption: "عدم النشر الآن",
+    viewPricingRules: "قواعد التسعير",
     submitPublish: "إرسال ونشر",
     submitResubmit: "إعادة التقديم للمراجعة",
     submitSuccess: "تم الإرسال. عملك قيد المراجعة الآن.",
@@ -1967,6 +2128,42 @@ export const content: Record<Locale, ContentMessages> = {
     pricingColWholeLe50: "كامل (≤50 حلقة)",
     pricingColWholeGt50: "كامل (>50 حلقة)",
     draftCleared: "تم مسح المسودة",
+
+    coverPortraitHint: "9:16 · غلاف عمودي",
+    coverLandscapeHint: "4:3 · غلاف أفقي",
+    coverLandscapeRequired: "يرجى رفع الغلاف الأفقي",
+    titleTranslatedLabel: "العنوان الصيني",
+    titleTranslatedPlaceholder: "أدخل العنوان الصيني",
+    totalDurationLabel: "المدة الإجمالية (بالدقائق)",
+    totalDurationPlaceholder: "أدخل المدة الإجمالية",
+    genreLabel: "النوع",
+    genreSelectLangFirst: "اختر اللغة أولًا",
+    genreEmpty: "لا توجد أنواع متاحة",
+    tagsUngrouped: "غير مصنّف",
+    deliveryLabel: "حقوق النشر ومواد التسليم",
+    proofSectionTitle: "شهادة حقوق النشر",
+    extraMaterialsTitle: "مواد إضافية",
+    extraMaterialsOptional: "(اختياري)",
+    extraMaterialsDesc: "ملفات مشروع PR أو نمذجة الشخصيات أو النص أو صور/صوت/فيديو لعملية الإنتاج بالذكاء الاصطناعي",
+    extraMaterialsAdd: "انقر لإضافة المواد",
+    extraMaterialsUploading: "جارٍ الرفع",
+    sourceFileTitle: "رابط الملف المصدر على السحابة",
+    sourceFilePlaceholder: "رابط التخزين السحابي (صالح لمدة سنة على الأقل)",
+    sourceFileCodePlaceholder: "رمز الوصول (اختياري، اتركه فارغًا إذا لم يكن للرابط رمز)",
+    sourceFileNeedTitle: "يجب أن تتضمن الملفات المصدر:",
+    sourceFileNeed1: "1. النسخة النهائية بدون ترجمة (مع موسيقى)",
+    sourceFileNeed2: "2. النسخة النهائية بدون موسيقى مع ترجمة",
+    sourceFileNeed3: "3. ملف ترجمة SRT (مطابق للنسخة بدون ترجمة)",
+    sourceFileNeed4: "4. المسار الصوتي (الموسيقى)",
+    lollipopGroupLabel: "Lollipop",
+    lollipopRequiredBadge: "إلزامي",
+    extPlatformTitle: "منصات خارجية اختيارية",
+    extPlatformDesc: "الترخيص لهذه المنصات يحقق إيرادات إضافية؛ النسبة المعروضة هي حصة المنتج",
+    extPlatformRatioNA: "—",
+    highlightRequiredBadge: "إلزامي",
+    highlightDesc: "ارفع مقطعًا مميزًا يُستخدم في الترويج على المنصة",
+    highlightUploadPrompt: "انقر لرفع فيديو التمييز",
+    highlightFormatHint: "MP4 / MOV · حتى 500 ميغابايت",
 
     countries: { us: "الولايات المتحدة", ph: "الفلبين", in: "الهند" },
     tags: {

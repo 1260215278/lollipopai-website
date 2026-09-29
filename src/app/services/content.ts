@@ -166,19 +166,27 @@ export interface EpisodeItem {
 export interface SaveBasicBody {
   /** 空=新建草稿；非空=更新草稿 */
   courseId: number | null;
-  /** 封面 URL（完成 /publisher/course/upload/* 切片上传后得到，9:16） */
+  /** 竖版封面 URL（9:16，完成 /publisher/course/upload/* 切片上传后得到） */
   titleImg: string;
+  /** 横版封面 URL（4:3，20260929 稿件新增，送审必填） */
+  coverLandscape: string;
   title: string;
+  /** 翻译中文名（20260929 稿件新增，送审必填） */
+  titleTranslated: string;
   /** 剧情简介 ≤200 */
   details: string;
+  /** 总时长（分钟，20260929 稿件新增，送审必填 ≥1） */
+  totalDuration: number;
   /** 计划集数（草稿选定后不可改；驳回态可改，缩减会删除超范围单集） */
   plannedEpisodes: number;
   /** 频道 1男/2女/3通用 */
   genderType: number;
-  /** 剧集语言 code（单选，step1） */
+  /** 剧集语言 code（单选；决定类别候选与题材/标签小字翻译的渲染语种） */
   languageType: string;
-  /** 标签（逗号分隔的标签名，取自 §3.1.1 labels） */
-  courseLabel: string;
+  /** 题材 ID（一级分类，候选来自 /publisher/course/genres，送审必填） */
+  genreId: number;
+  /** 标签 ID（逗号分隔，取自所选题材组的 labelId） */
+  courseLabelIds: string;
   /** 类别 ID（候选来自 /publisher/course/classifications，送审必填） */
   classificationId: number;
   /** 版权类型 1自制/2授权 */
@@ -190,6 +198,12 @@ export interface SaveBasicBody {
    * 历史文档曾写自制清空本字段；现产品要求自制也上传，仍用本字段落库。
    */
   copyrightProof?: string;
+  /** 附加材料 URL（可选，逗号分隔多 URL；20260929 稿件新增） */
+  extraMaterials?: string;
+  /** 源文件网盘链接（可选；20260929 稿件新增） */
+  sourceFileUrl?: string;
+  /** 源文件网盘提取码（可选；网盘链接不带密码时留空） */
+  sourceFileCode?: string;
 }
 
 export interface SaveBasicResult {
@@ -203,9 +217,63 @@ export function saveBasic(body: SaveBasicBody): Promise<SaveBasicResult> {
   return http.post<SaveBasicResult>("/publisher/course/saveBasic", body);
 }
 
-/** 标签集（后端按语言写死的固定集，§3.1.1） */
-export function fetchLabels(languageType: string): Promise<string[]> {
-  return http.get<string[]>("/publisher/course/labels", { params: { languageType } });
+export interface CourseGenre {
+  genreId: number;
+  /** 跨环境对照用的稳定标识 */
+  code: string | null;
+  /** 主名（英文行业通名，稿面大字） */
+  genreName: string;
+  /** 当前语种的翻译（稿面小字，纯展示）；与主名相同时后端不下发 */
+  genreNameLocal?: string | null;
+}
+
+/**
+ * 题材候选（20260929 稿件新增的一级分类）。
+ * 后管 common_info(3170) 维护，语言无关存储；languageType 只决定小字翻译取哪一种。
+ */
+export function fetchGenres(languageType: string): Promise<CourseGenre[]> {
+  return http.get<CourseGenre[]>("/publisher/course/genres", { params: { languageType } });
+}
+
+export interface CourseLabelOption {
+  labelId: number;
+  code: string | null;
+  /** 主名（英文，稿面大字） */
+  labelName: string;
+  /** 当前语种的翻译（稿面小字，纯展示）；与主名相同时后端不下发 */
+  labelNameLocal?: string | null;
+}
+
+export interface CourseLabelGroup {
+  /** 所属题材；null=未归类的历史词条，后端固定排在最后一组 */
+  genreId: number | null;
+  genreName: string | null;
+  labels: CourseLabelOption[];
+}
+
+/**
+ * 标签集，按题材分组（标签挂在题材下，选定题材后只在该组里挑）。
+ * 提交时送 labelId（见 SaveBasicBody.courseLabelIds），显示名由后端渲染写库，
+ * 前端不得把渲染名当主键回传。
+ */
+export function fetchLabels(languageType: string, genreId?: number): Promise<CourseLabelGroup[]> {
+  return http.get<CourseLabelGroup[]>("/publisher/course/labels", { params: { languageType, genreId } });
+}
+
+export interface ExternalPlatform {
+  /** 提交给 publish 的平台 code */
+  code: string;
+  platformName: string;
+  subtitle: string | null;
+  /** 平台分成百分比；null=另行协议 */
+  platformRatio: number | null;
+  /** 出品方分成百分比；null=另行协议 */
+  creatorRatio: number | null;
+}
+
+/** 可选外部平台（Step3 多选，分成比例走后管配置，前端不得写死）。 */
+export function fetchExternalPlatforms(languageType: string): Promise<ExternalPlatform[]> {
+  return http.get<ExternalPlatform[]>("/publisher/course/externalPlatforms", { params: { languageType } });
 }
 
 export interface CourseClassification {
@@ -259,10 +327,13 @@ export function deleteEpisode(courseId: number, episodeNo: number): Promise<void
 
 export interface PublishBody {
   courseId: number;
-  /** 发布范围 1账号主页/2全量推荐 */
+  /** 授权平台（发布范围）1账号主页/2全量推荐；Lollipop 必选 */
   publishScope: number;
-  /** 上架设置：立即上架=true / 暂不上架=false */
-  onShelfNow: boolean;
+  /**
+   * 可选外部平台 code 列表（20260929 稿件新增）。
+   * 上架意向字段已随「上架设置」卡一同删除，过审即立即上架。
+   */
+  externalPlatforms?: string[];
 }
 
 export interface PublishResult {
@@ -317,12 +388,23 @@ export function fetchPriceRule(episodes?: number): Promise<PriceRuleCountry[]> {
 export interface DraftCourse {
   courseId: number;
   titleImg: string;
+  /** 横版封面 4:3 */
+  coverLandscape?: string | null;
   title: string;
+  titleTranslated?: string | null;
   details: string;
+  /** 总时长（分钟） */
+  totalDuration?: number | null;
   plannedEpisodes: number;
   genderType: number;
+  /** 剧集语言 */
   languageType: string;
-  /** 逗号分隔的标签名 */
+  /** 题材 ID / 已渲染的题材名 */
+  genreId?: number | null;
+  genreName?: string | null;
+  /** 逗号分隔的标签 ID，回显时按此勾选 */
+  courseLabelIds?: string | null;
+  /** 逗号分隔的标签显示名（后端渲染结果，只读） */
   courseLabel: string;
   /** 类别 ID / 名称（20260704 新增） */
   classificationId?: number | null;
@@ -330,6 +412,12 @@ export interface DraftCourse {
   copyrightType: number;
   /** 版权证明 URL（授权时回显） */
   copyrightProof?: string;
+  /** 附加材料 URL（逗号分隔多 URL） */
+  extraMaterials?: string | null;
+  /** 源文件网盘链接 */
+  sourceFileUrl?: string | null;
+  /** 源文件网盘提取码 */
+  sourceFileCode?: string | null;
   /** 本剧高光时刻宣传视频 URL（20260703 起送审必填） */
   highlightVideoUrl?: string | null;
   highlightPlayUrl?: string | null;
@@ -343,7 +431,8 @@ export interface DraftCourse {
 
 export interface DraftPublish {
   publishScope: number;
-  onShelfNow: boolean;
+  /** 已勾选的外部平台 code */
+  externalPlatforms?: string[] | null;
 }
 
 export interface DraftResponse {
@@ -394,10 +483,19 @@ export function clearDraft(courseId: number): Promise<unknown> {
 export interface CourseDetailBasic {
   courseId: number;
   titleImg: string;
+  coverLandscape?: string | null;
+  titleTranslated?: string | null;
   details: string;
+  /** 总时长（分钟） */
+  totalDuration?: number | null;
   /** 剧集语言 code */
   languageType: string;
-  /** 标签名数组 */
+  /** 题材 ID / 已渲染的题材名 */
+  genreId?: number | null;
+  genreName?: string | null;
+  /** 逗号分隔的标签 ID */
+  courseLabelIds?: string | null;
+  /** 标签名数组（后端渲染结果） */
   courseLabel: string[];
   genderType: number;
   /** 类别 ID / 名称（20260704 新增） */
@@ -406,6 +504,12 @@ export interface CourseDetailBasic {
   copyrightType: number;
   /** 版权证明 URL（授权时） */
   copyrightProof?: string;
+  /** 附加材料 URL（逗号分隔多 URL） */
+  extraMaterials?: string | null;
+  /** 源文件网盘链接 */
+  sourceFileUrl?: string | null;
+  /** 源文件网盘提取码 */
+  sourceFileCode?: string | null;
   /** 本剧高光时刻宣传视频 URL（20260703 起送审必填） */
   highlightVideoUrl?: string | null;
   highlightFileName?: string | null;
@@ -426,8 +530,8 @@ export interface CourseDetailPublish {
   publishScope: number;
   /** 上架状态 0未上架/1已上架/2已下架（仅 auditStatus=2 有意义） */
   shelfStatus: number;
-  /** 送审时的上架意向 */
-  onShelfNow: boolean;
+  /** 已勾选的外部平台（含渲染名与分成比例） */
+  externalPlatforms?: ExternalPlatform[] | null;
 }
 
 export type CourseDetailRevenue = CourseRevenue;

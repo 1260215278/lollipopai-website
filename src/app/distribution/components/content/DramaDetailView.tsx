@@ -158,6 +158,14 @@ export const DramaDetailView: React.FC<DramaDetailViewProps> = ({
               <span className="text-sm text-gray-700">{languageLabel(basic.languageType, languages)}</span>
             </InfoRow>
 
+            <InfoRow icon={<Tag className="w-3.5 h-3.5" />} label={t.genreLabel}>
+              <span className="text-sm text-gray-700">{basic.genreName || "--"}</span>
+            </InfoRow>
+
+            <InfoRow icon={<Hash className="w-3.5 h-3.5" />} label={t.totalDurationLabel}>
+              <span className="text-sm text-gray-700">{basic.totalDuration ?? "--"}</span>
+            </InfoRow>
+
             <InfoRow icon={<Tag className="w-3.5 h-3.5" />} label={t.detailTags}>
               <div className="flex gap-1.5 flex-wrap">
                 {basic.courseLabel.map((label) => (
@@ -360,6 +368,24 @@ export const DramaDetailView: React.FC<DramaDetailViewProps> = ({
                 </span>
               ))}
             </div>
+            {publish.externalPlatforms && publish.externalPlatforms.length > 0 ? (
+              <div className="mt-4 pt-4 border-t border-gray-100">
+                <p className="text-xs text-gray-700 mb-2" style={{ fontWeight: 600 }}>
+                  {t.extPlatformTitle}
+                </p>
+                <div className="space-y-1.5">
+                  {publish.externalPlatforms.map((item) => (
+                    <div key={item.code} className="flex items-center justify-between gap-2">
+                      <span className="truncate text-xs text-gray-600">{item.platformName || item.code}</span>
+                      {/* 比例是送审时的快照，后管改配置不改已提交的剧 */}
+                      <span className="flex-shrink-0 text-xs text-gray-900" style={{ fontWeight: 700 }}>
+                        {item.creatorRatio === null ? t.extPlatformRatioNA : `${item.creatorRatio}%`}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </div>
 
           {/* Revenue */}

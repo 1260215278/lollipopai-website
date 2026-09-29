@@ -33,6 +33,8 @@ import {
   publishCourse,
   fetchDraft,
   fetchLabels,
+  fetchGenres,
+  fetchExternalPlatforms,
   fetchClassifications,
   fetchPriceRule,
   clearDraft,
@@ -43,6 +45,9 @@ import {
   type RevenueOption,
   type PriceRuleCountry,
   type CourseClassification,
+  type CourseGenre,
+  type CourseLabelGroup,
+  type ExternalPlatform,
   type DraftResponse,
 } from "../../../services/content";
 import { getLanguageTypeList, type LanguageOption } from "../../../services/language";
@@ -50,6 +55,7 @@ import { CHANNEL_VALUES, channelToGender, genderToChannel, type ChannelValue } f
 import type { Highlight } from "./types";
 import { StepIndicator } from "../StepIndicator";
 import { PhoneMockup } from "./PhoneMockup";
+import { CountryPricingModal } from "./CountryPricingModal";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -102,17 +108,24 @@ const COVER_MAX = 10 * 1024 * 1024;
 const PUB_CONFIG_CACHE_PREFIX = "distribution.upload.publishConfig.";
 
 /**
- * 自制确权材料类型（UI 三选一，落库仍走 copyrightProof）：
- * 1 作品登记证书 / 2 成片可信时间戳 / 3 AI 工程截图
+ * 自制确权材料类型（UI 二选一，落库仍走 copyrightProof）：
+ * 1 作品登记证书 / 2 成片可信时间戳
+ * 20260929 稿件 18033-780 去掉了原来的「AI 工程截图（4–20 张）」这一项。
  */
-type SelfProofKind = 1 | 2 | 3;
+type SelfProofKind = 1 | 2;
 const SELF_PROOF = {
   REGISTRATION: 1 as SelfProofKind,
   TIMESTAMP: 2 as SelfProofKind,
-  AI: 3 as SelfProofKind,
 };
-const AI_PROOF_MIN = 4;
-const AI_PROOF_MAX = 20;
+
+/**
+ * 附加材料可接受的类型 = 后端 PublisherUploadController 的图片/视频/文档白名单。
+ * 稿面提到的 PR 工程文件、人物建模源文件不在白名单内（后端会直接 -100 拒收），
+ * 这类源文件走下方「源文件网盘链接」交付，不在此处伪装成可上传。
+ */
+const EXTRA_MATERIALS_ACCEPT = `${IMAGE_ACCEPT},${VIDEO_ACCEPT},${COPYRIGHT_PROOF_ACCEPT}`;
+/** 附加材料条数上限（前端护栏，避免误选整个目录把 extra_materials 撑爆） */
+const EXTRA_MATERIALS_MAX = 20;
 
 /**
  * 模版图：列表 56px 缩略图 + 弹层全清预览（Figma 17195:516）。
@@ -121,22 +134,19 @@ const AI_PROOF_MAX = 20;
 const SELF_PROOF_THUMBS: Record<SelfProofKind, string> = {
   1: "/distribution/copyright-templates/work-registration-thumb.webp",
   2: "/distribution/copyright-templates/timestamp-thumb.webp",
-  3: "/distribution/copyright-templates/ai-engineering-thumb.webp",
 };
 const SELF_PROOF_PREVIEWS: Record<SelfProofKind, string> = {
   1: "/distribution/copyright-templates/work-registration.webp",
   2: "/distribution/copyright-templates/timestamp.webp",
-  3: "/distribution/copyright-templates/ai-engineering.webp",
 };
 
-/** 作品登记：截图/PDF；时间戳：PDF；AI：仅图片 */
+/** 作品登记：截图/PDF；时间戳：PDF */
 const SELF_PROOF_ACCEPT: Record<SelfProofKind, string> = {
   1: `${IMAGE_ACCEPT},application/pdf,.pdf`,
   2: "application/pdf,.pdf",
-  3: IMAGE_ACCEPT,
 };
 
-/** copyrightProof 多 URL 用逗号分隔（与 courseLabel 同风格；AI 4–20 张） */
+/** 多 URL 逗号分隔（copyrightProof 历史数据 / 附加材料 extraMaterials） */
 function splitProofUrls(raw: string): string[] {
   return raw
     .split(",")
@@ -148,8 +158,22 @@ function joinProofUrls(urls: string[]): string {
   return urls.filter(Boolean).join(",");
 }
 
-function inferSelfProofKind(proof: string): SelfProofKind {
-  return splitProofUrls(proof).length > 1 ? SELF_PROOF.AI : SELF_PROOF.REGISTRATION;
+/** course_label_ids 回显：逗号分隔 id 串 → number[]，非法项丢弃不猜 */
+function parseIdList(raw: string | null | undefined): number[] {
+  if (!raw) return [];
+  return raw
+    .split(",")
+    .map((x) => Number(x.trim()))
+    .filter((x) => Number.isInteger(x) && x > 0);
+}
+
+/**
+ * 老草稿只存了 URL，无法反推是登记证书还是时间戳，统一回落到第一项。
+ * 2026-09-29 前用「AI 工程截图」提交的草稿会是多 URL，本次改版后该选项已删除，
+ * 这类草稿会因为 proofValid 不通过而要求重新上传一份二选一材料——不静默放行。
+ */
+function inferSelfProofKind(_proof: string): SelfProofKind {
+  return SELF_PROOF.REGISTRATION;
 }
 
 function isPublisherBiz(err: unknown, key: string): boolean {
@@ -157,18 +181,36 @@ function isPublisherBiz(err: unknown, key: string): boolean {
 }
 
 interface BasicInfo {
+  /** 竖版封面 9:16 */
   cover: string;
+  /** 横版封面 4:3（20260929 稿件新增） */
+  coverLandscape: string;
+  /** 短剧原名 */
   name: string;
+  /** 翻译中文名（20260929 稿件新增） */
+  titleTranslated: string;
   description: string;
   totalEpisodes: string;
+  /** 总时长（分钟，20260929 稿件新增） */
+  totalDuration: string;
   channel: ChannelValue | "";
+  /** 剧集语言（单选）：决定类别候选与题材/标签小字翻译的语种 */
   languageType: string;
   classificationId: number | null;
-  tags: string[];
+  /** 题材 ID（一级分类，20260929 稿件新增；标签挂在题材下） */
+  genreId: number | null;
+  /** 标签 ID（后端渲染显示名后写库，前端不再回传标签名） */
+  tagIds: number[];
   /** 版权类型 1自制/2授权 */
   copyrightType: number;
   /** 版权证明文件 URL（自制/授权均必填） */
   copyrightProof: string;
+  /** 附加材料 URL（可选，逗号分隔多 URL） */
+  extraMaterials: string;
+  /** 源文件网盘链接（可选） */
+  sourceFileUrl: string;
+  /** 源文件网盘提取码（可选） */
+  sourceFileCode: string;
 }
 
 interface VideoRow {
@@ -220,8 +262,13 @@ interface HighlightState {
 }
 
 interface PublishConfigState {
+  /** 授权平台（Lollipop 分组，必选）1账号主页/2全量推荐 */
   publishScope: number;
-  onShelfNow: boolean;
+  /**
+   * 可选外部平台 code（20260929 稿件新增）。
+   * 「上架设置（立即上架/暂不上架）」整卡已按稿件删除，过审即立即上架。
+   */
+  externalPlatforms: string[];
 }
 
 interface UploadFormProps {
@@ -237,15 +284,22 @@ interface UploadFormProps {
 
 const emptyBasic: BasicInfo = {
   cover: "",
+  coverLandscape: "",
   name: "",
+  titleTranslated: "",
   description: "",
   totalEpisodes: "",
+  totalDuration: "",
   channel: "",
   languageType: "",
   classificationId: null,
-  tags: [],
+  genreId: null,
+  tagIds: [],
   copyrightType: 1,
   copyrightProof: "",
+  extraMaterials: "",
+  sourceFileUrl: "",
+  sourceFileCode: "",
 };
 
 const pubConfigCacheKey = (id: number) => `${PUB_CONFIG_CACHE_PREFIX}${id}`;
@@ -278,8 +332,14 @@ function parseCachedPubConfig(raw: string | null): PublishConfigState | null {
   if (!raw) return null;
   try {
     const parsed = JSON.parse(raw) as Partial<PublishConfigState>;
-    if (typeof parsed.publishScope !== "number" || typeof parsed.onShelfNow !== "boolean") return null;
-    return { publishScope: parsed.publishScope, onShelfNow: parsed.onShelfNow };
+    if (typeof parsed.publishScope !== "number") return null;
+    return {
+      publishScope: parsed.publishScope,
+      // 老缓存里没有这个键（当时还是 onShelfNow），按空数组读，不去猜
+      externalPlatforms: Array.isArray(parsed.externalPlatforms)
+        ? parsed.externalPlatforms.filter((x): x is string => typeof x === "string")
+        : [],
+    };
   } catch {
     return null;
   }
@@ -391,8 +451,11 @@ function CopyrightProofUpload({
   );
 }
 
-/** AI 工程截图：多图上传 4–20 张，URL 逗号拼接写入 copyrightProof */
-function AiScreenshotUpload({
+/**
+ * 附加材料多文件上传（稿件 18033-780 ②，可选）。
+ * URL 逗号拼接写入 course.extra_materials；图片给缩略预览，其余类型给文件名卡片。
+ */
+function ExtraMaterialsUpload({
   t,
   value,
   onChange,
@@ -405,11 +468,11 @@ function AiScreenshotUpload({
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const urls = splitProofUrls(value);
-  const canAdd = urls.length < AI_PROOF_MAX;
+  const canAdd = urls.length < EXTRA_MATERIALS_MAX;
 
   const pick = async (files: FileList | null) => {
     if (!files || files.length === 0 || !canAdd) return;
-    const remaining = AI_PROOF_MAX - urls.length;
+    const remaining = EXTRA_MATERIALS_MAX - urls.length;
     const batch = Array.from(files).slice(0, remaining);
     if (batch.length === 0) return;
     setUploading(true);
@@ -439,9 +502,7 @@ function AiScreenshotUpload({
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <span className="text-[11px] text-gray-400" style={{ fontWeight: 600 }}>
-          {urls.length > 0
-            ? `${urls.length} / ${AI_PROOF_MAX}`
-            : t.selfProofAiNeedCount}
+          {urls.length > 0 ? `${urls.length} / ${EXTRA_MATERIALS_MAX}` : t.extraMaterialsOptional}
         </span>
         {urls.length > 0 && canAdd ? (
           <button
@@ -452,14 +513,14 @@ function AiScreenshotUpload({
             style={{ fontWeight: 500 }}
           >
             {uploading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Plus className="w-3 h-3" />}
-            {t.selfProofAiAdd}
+            {t.extraMaterialsAdd}
           </button>
         ) : null}
       </div>
       <input
         ref={ref}
         type="file"
-        accept={IMAGE_ACCEPT}
+        accept={EXTRA_MATERIALS_ACCEPT}
         multiple
         className="hidden"
         onChange={(e) => {
@@ -474,7 +535,16 @@ function AiScreenshotUpload({
               key={`${url}-${idx}`}
               className="relative aspect-square rounded-xl overflow-hidden border border-gray-200 bg-gray-50 group"
             >
-              <img src={url} alt="" className="w-full h-full object-cover" />
+              {/^https?:\/\/[^?]+\.(jpg|jpeg|png|gif|bmp|webp)(\?|$)/i.test(url) ? (
+                <img src={url} alt="" className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center gap-1 px-1.5 text-gray-400">
+                  <Files className="w-4 h-4" />
+                  <span className="text-[9px] leading-tight text-center break-all line-clamp-2">
+                    {fileNameFromUrl(url)}
+                  </span>
+                </div>
+              )}
               <button
                 type="button"
                 onClick={() => removeAt(idx)}
@@ -512,9 +582,9 @@ function AiScreenshotUpload({
             <>
               <Upload className="w-4 h-4" />
               <span className="text-xs" style={{ fontWeight: 500 }}>
-                {t.selfProofAiUpload}
+                {t.extraMaterialsAdd}
               </span>
-              <span className="text-[10px] text-gray-400">{t.selfProofAiFormat}</span>
+              <span className="text-[10px] text-gray-400">{t.extraMaterialsDesc}</span>
             </>
           )}
         </button>
@@ -616,11 +686,6 @@ function SelfCopyrightUpload({
       title: t.selfProofTimestampTitle,
       desc: t.selfProofTimestampDesc,
     },
-    {
-      kind: SELF_PROOF.AI,
-      title: t.selfProofAiTitle,
-      desc: t.selfProofAiDesc,
-    },
   ];
 
   return (
@@ -686,19 +751,15 @@ function SelfCopyrightUpload({
         })}
       </div>
 
-      {kind === SELF_PROOF.AI ? (
-        <AiScreenshotUpload t={t} value={value} onChange={onChange} />
-      ) : (
-        <CopyrightProofUpload
-          t={t}
-          taskId={taskId}
-          value={value}
-          onChange={onChange}
-          accept={SELF_PROOF_ACCEPT[kind]}
-          prompt={t.selfProofUploadFile}
-          emptyHeightClass="h-[52px]"
-        />
-      )}
+      <CopyrightProofUpload
+        t={t}
+        taskId={taskId}
+        value={value}
+        onChange={onChange}
+        accept={SELF_PROOF_ACCEPT[kind]}
+        prompt={t.selfProofUploadFile}
+        emptyHeightClass="h-[52px]"
+      />
 
       <div className="rounded-[14px] border border-amber-200 bg-amber-50 px-3.5 py-2.5">
         <p className="text-[10px] text-amber-900 leading-[16px]">{t.selfProofNote}</p>
@@ -708,16 +769,12 @@ function SelfCopyrightUpload({
         <TemplatePreviewModal
           src={SELF_PROOF_PREVIEWS[previewKind]}
           caption={t.selfProofTemplateCaption}
-          wide={previewKind === SELF_PROOF.AI}
           onClose={() => setPreviewKind(null)}
         />
       ) : null}
     </div>
   );
 }
-
-/** 各国收费规则内联表每页条数 */
-const PRICE_RULE_PAGE_SIZE = 5;
 
 /**
  * 上剧流程（三步，分步草稿暂存）：
@@ -742,7 +799,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   const [videos, setVideos] = useState<VideoRow[]>([]);
   const [pubConfig, setPubConfig] = useState<PublishConfigState>({
     publishScope: 1,
-    onShelfNow: true,
+    externalPlatforms: [],
   });
   const [highlight, setHighlight] = useState<HighlightState>({
     videoUrl: "",
@@ -755,13 +812,19 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   });
 
   const [languages, setLanguages] = useState<LanguageOption[]>([]);
-  const [labelOptions, setLabelOptions] = useState<string[]>([]);
+  const [labelGroups, setLabelGroups] = useState<CourseLabelGroup[]>([]);
+  const [genreOptions, setGenreOptions] = useState<CourseGenre[]>([]);
   const [classificationOptions, setClassificationOptions] = useState<CourseClassification[]>([]);
+  const [externalPlatformOptions, setExternalPlatformOptions] = useState<ExternalPlatform[]>([]);
   const [labelsLoading, setLabelsLoading] = useState(false);
+  const [genresLoading, setGenresLoading] = useState(false);
+  const [pricingModalOpen, setPricingModalOpen] = useState(false);
   const [classificationsLoading, setClassificationsLoading] = useState(false);
 
   const [coverError, setCoverError] = useState("");
   const [coverUploading, setCoverUploading] = useState(false);
+  const [coverLandscapeError, setCoverLandscapeError] = useState("");
+  const [coverLandscapeUploading, setCoverLandscapeUploading] = useState(false);
   const [draftRestored, setDraftRestored] = useState(false);
   const [auditStatus, setAuditStatus] = useState<number | null>(resumeCourseId === null ? AuditStatus.DRAFT : null);
   const [auditRemark, setAuditRemark] = useState<string | null>(null);
@@ -770,7 +833,6 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   const [reduceConfirm, setReduceConfirm] = useState<{ from: number; to: number } | null>(null);
   const [priceRows, setPriceRows] = useState<PriceRuleCountry[]>([]);
   const [priceLoading, setPriceLoading] = useState(false);
-  const [pricePage, setPricePage] = useState(1);
   const [revenueOptions, setRevenueOptions] = useState<RevenueOption[]>([]);
   const [savingBasic, setSavingBasic] = useState(false);
   const [uploadingEps, setUploadingEps] = useState(false);
@@ -779,6 +841,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   const [submitting, setSubmitting] = useState(false);
 
   const coverRef = useRef<HTMLInputElement>(null);
+  const coverLandscapeRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const templateInputRef = useRef<HTMLInputElement>(null);
   const batchVideoInputRef = useRef<HTMLInputElement>(null);
@@ -849,12 +912,11 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     if (step === 2) folderInputRef.current?.setAttribute("webkitdirectory", "");
   }, [step]);
 
-  // Step3 进入时加载各国收费规则（内联展示，不再走弹窗）
+  // Step3 进入时加载各国收费规则（稿件 18033-1599：footer 入口弹层展示）
   useEffect(() => {
     if (step !== 3) return;
     let active = true;
     setPriceLoading(true);
-    setPricePage(1);
     fetchPriceRule(parseInt(basicInfo.totalEpisodes) || undefined)
       .then((rows) => {
         if (active) setPriceRows(rows);
@@ -875,13 +937,12 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   }, [taskSnapshot?.status]);
 
   // 任务切换回来：用 store 中已完成的版权证明 URL 回填（saveBasic 前仅存会话内存）
-  // AI 多图不走 task asset，禁止单 URL 覆盖逗号拼接结果
+  // 版权证明现在恒为单文件（二选一），附加材料走自己的 state，不与该 asset 混用
   useEffect(() => {
-    if (selfProofKind === SELF_PROOF.AI && basicInfo.copyrightType === 1) return;
     if (copyrightAsset.status === "done" && copyrightAsset.url && copyrightAsset.url !== basicInfo.copyrightProof) {
       bi({ copyrightProof: copyrightAsset.url });
     }
-  }, [copyrightAsset.status, copyrightAsset.url, basicInfo.copyrightProof, basicInfo.copyrightType, selfProofKind]);
+  }, [copyrightAsset.status, copyrightAsset.url, basicInfo.copyrightProof]);
 
   // 高光上传在 store 内跑：切换任务再进时同步 uploading / 完成 / 失败，避免本地 state 卡死
   useEffect(() => {
@@ -967,7 +1028,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
           restoredPubConfigCourse.current = c.courseId;
           setPubConfig({
             publishScope: draft.publish.publishScope,
-            onShelfNow: draft.publish.onShelfNow === true,
+            externalPlatforms: draft.publish.externalPlatforms ?? [],
           });
         }
         const existingTask = getUploadTask(taskId);
@@ -979,15 +1040,22 @@ export const UploadForm: React.FC<UploadFormProps> = ({
         setCourseId(c.courseId);
         setBasicInfo({
           cover: c.titleImg || "",
+          coverLandscape: c.coverLandscape || "",
           name: c.title || "",
+          titleTranslated: c.titleTranslated || "",
           description: c.details || "",
           totalEpisodes: c.plannedEpisodes ? String(c.plannedEpisodes) : "",
+          totalDuration: c.totalDuration ? String(c.totalDuration) : "",
           channel: genderToChannel(c.genderType),
           languageType: c.languageType || "",
           classificationId: c.classificationId ?? null,
-          tags: c.courseLabel ? c.courseLabel.split(",").filter(Boolean) : [],
+          genreId: c.genreId ?? null,
+          tagIds: parseIdList(c.courseLabelIds),
           copyrightType: c.copyrightType || 1,
           copyrightProof: c.copyrightProof || "",
+          extraMaterials: c.extraMaterials || "",
+          sourceFileUrl: c.sourceFileUrl || "",
+          sourceFileCode: c.sourceFileCode || "",
         });
         setSelfProofKind(inferSelfProofKind(c.copyrightProof || ""));
         // 草稿高光 + store 进行中/已完成态合并：store 优先（任务切换后后台刚传完）
@@ -1138,23 +1206,33 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     );
   }, [courseId, taskSnapshot?.currentEpisode, taskSnapshot?.currentFileProgress, taskSnapshot?.status]);
 
-  // 语言变化时加载标签集和类别集
+  // 主语言变化时加载题材 / 标签分组 / 类别 / 外部平台（题材与标签语言无关，仅显示名按主语言渲染）
   useEffect(() => {
     if (!basicInfo.languageType) {
-      setLabelOptions([]);
+      setLabelGroups([]);
+      setGenreOptions([]);
       setClassificationOptions([]);
+      setExternalPlatformOptions([]);
       return;
     }
+    setGenresLoading(true);
+    fetchGenres(basicInfo.languageType)
+      .then((opts) => setGenreOptions(opts))
+      .catch(() => setGenreOptions([]))
+      .finally(() => setGenresLoading(false));
     setLabelsLoading(true);
     fetchLabels(basicInfo.languageType)
-      .then((opts) => setLabelOptions(opts))
-      .catch(() => setLabelOptions([]))
+      .then((groups) => setLabelGroups(groups))
+      .catch(() => setLabelGroups([]))
       .finally(() => setLabelsLoading(false));
     setClassificationsLoading(true);
     fetchClassifications(basicInfo.languageType)
       .then((opts) => setClassificationOptions(opts))
       .catch(() => setClassificationOptions([]))
       .finally(() => setClassificationsLoading(false));
+    fetchExternalPlatforms(basicInfo.languageType)
+      .then((opts) => setExternalPlatformOptions(opts))
+      .catch(() => setExternalPlatformOptions([]));
   }, [basicInfo.languageType]);
 
   const discardDraft = async () => {
@@ -1185,7 +1263,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     setSelfProofKind(SELF_PROOF.REGISTRATION);
     setVideos([]);
     setStep(1);
-    setPubConfig({ publishScope: 1, onShelfNow: true });
+    setPubConfig({ publishScope: 1, externalPlatforms: [] });
     setHighlight({ videoUrl: "", fileName: "", fileSize: null, uploadTime: "", file: null, uploading: false, error: "" });
     setDraftRestored(false);
     setAuditStatus(AuditStatus.DRAFT);
@@ -1213,24 +1291,50 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     }
   };
 
+  const onPickCoverLandscape = async (file: File | undefined) => {
+    if (!file) return;
+    if (file.size > COVER_MAX) {
+      setCoverLandscapeError(t.coverTooLarge);
+      return;
+    }
+    setCoverLandscapeError("");
+    setCoverLandscapeUploading(true);
+    try {
+      const url = await uploadFile(file, PUBLISHER_UPLOAD_PATH);
+      bi({ coverLandscape: getOssHeicJpgUrl(file, url) });
+    } catch {
+      setCoverLandscapeError(t.coverUploadFailed);
+    } finally {
+      setCoverLandscapeUploading(false);
+    }
+  };
+
+  const toggleExternalPlatform = (code: string) => {
+    setPubConfig((p) => ({
+      ...p,
+      externalPlatforms: p.externalPlatforms.includes(code)
+        ? p.externalPlatforms.filter((x) => x !== code)
+        : [...p.externalPlatforms, code],
+    }));
+  };
+
   const proofUrls = splitProofUrls(basicInfo.copyrightProof);
-  const proofValid =
-    basicInfo.copyrightType === 2
-      ? proofUrls.length >= 1
-      : selfProofKind === SELF_PROOF.AI
-        ? proofUrls.length >= AI_PROOF_MIN && proofUrls.length <= AI_PROOF_MAX
-        : proofUrls.length === 1;
+  const proofValid = basicInfo.copyrightType === 2 ? proofUrls.length >= 1 : proofUrls.length === 1;
 
   const step1Valid =
     !!basicInfo.cover &&
+    !!basicInfo.coverLandscape &&
     !!basicInfo.name &&
+    !!basicInfo.titleTranslated &&
     !!basicInfo.description &&
     parseInt(basicInfo.totalEpisodes) >= 1 &&
+    parseInt(basicInfo.totalDuration) >= 1 &&
     !!basicInfo.channel &&
     !!basicInfo.languageType &&
     basicInfo.classificationId !== null &&
-    basicInfo.tags.length > 0 &&
-    // 自制：三选一对应材料；授权：版权证明
+    basicInfo.genreId !== null &&
+    basicInfo.tagIds.length > 0 &&
+    // 自制：二选一对应材料；授权：版权证明
     proofValid;
 
   /** Step1 → saveBasic → Step2 */
@@ -1242,15 +1346,23 @@ export const UploadForm: React.FC<UploadFormProps> = ({
       const res = await saveBasic({
         courseId,
         titleImg: basicInfo.cover,
+        coverLandscape: basicInfo.coverLandscape,
         title: basicInfo.name,
+        titleTranslated: basicInfo.titleTranslated,
         details: basicInfo.description,
+        totalDuration: parseInt(basicInfo.totalDuration) || 0,
         plannedEpisodes: planned,
         genderType: channelToGender(basicInfo.channel as ChannelValue),
         languageType: basicInfo.languageType,
-        courseLabel: basicInfo.tags.join(","),
+        genreId: basicInfo.genreId as number,
+        // 标签送 id，显示名由后端渲染写 course.course_label
+        courseLabelIds: basicInfo.tagIds.join(","),
         classificationId: basicInfo.classificationId as number,
         copyrightType: basicInfo.copyrightType,
         copyrightProof: basicInfo.copyrightProof,
+        extraMaterials: basicInfo.extraMaterials || undefined,
+        sourceFileUrl: basicInfo.sourceFileUrl || undefined,
+        sourceFileCode: basicInfo.sourceFileCode || undefined,
       });
       setCourseId(res.courseId);
       setSavedPlanned(planned);
@@ -1305,6 +1417,28 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             .then(setClassificationOptions)
             .catch(() => setClassificationOptions([]));
         }
+        return;
+      }
+      // 题材/标签字典被后管改过：清掉已失效的选择并重新拉候选，不让用户对着旧选项反复提交
+      if (isPublisherBiz(err, "publisher_course_genre_invalid")) {
+        bi({ genreId: null, tagIds: [] });
+        if (basicInfo.languageType) {
+          fetchGenres(basicInfo.languageType).then(setGenreOptions).catch(() => setGenreOptions([]));
+        }
+        return;
+      }
+      if (
+        isPublisherBiz(err, "publisher_course_label_invalid") ||
+        isPublisherBiz(err, "publisher_course_label_genre_mismatch")
+      ) {
+        bi({ tagIds: [] });
+        if (basicInfo.languageType) {
+          fetchLabels(basicInfo.languageType).then(setLabelGroups).catch(() => setLabelGroups([]));
+        }
+        return;
+      }
+      if (isPublisherBiz(err, "publisher_course_language_invalid")) {
+        bi({ languageType: "", classificationId: null, genreId: null, tagIds: [] });
         return;
       }
       if (isPublisherBiz(err, "publisher_course_episode_no_range")) {
@@ -1571,7 +1705,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     }
   };
 
-  /** Step3 → publish 送审（含上架意向；驳回重提 resubmitted=true） */
+  /** Step3 → publish 送审（授权平台 + 可选外部平台；驳回重提 resubmitted=true） */
   const handleSubmit = async () => {
     if (courseId === null || submitting) return;
     if (!highlight.videoUrl) {
@@ -1584,7 +1718,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
       const res = await publishCourse({
         courseId,
         publishScope: pubConfig.publishScope,
-        onShelfNow: pubConfig.onShelfNow,
+        externalPlatforms: pubConfig.externalPlatforms,
       });
       removeCachedPubConfig(courseId);
       toast.success(res.resubmitted ? t.resubmitSuccess : t.submitSuccess);
@@ -1594,6 +1728,13 @@ export const UploadForm: React.FC<UploadFormProps> = ({
         setStep(1);
       } else if (isPublisherBiz(err, "publisher_course_upload_all_first")) {
         setStep(2);
+      } else if (isPublisherBiz(err, "publisher_course_external_platform_invalid")) {
+        setPubConfig((prev) => ({ ...prev, externalPlatforms: [] }));
+        if (basicInfo.languageType) {
+          fetchExternalPlatforms(basicInfo.languageType)
+            .then(setExternalPlatformOptions)
+            .catch(() => setExternalPlatformOptions([]));
+        }
       } else if (isPublisherBiz(err, "publisher_course_highlight_required")) {
         setHighlight((p) => ({ ...p, error: t.highlightRequired }));
         highlightRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -1613,12 +1754,6 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   const phoneLabels = { home: t.phoneHome, forYou: t.phoneForYou, me: t.phoneMe };
   const uploadedCount = videos.filter((v) => v.uploadStatus === 1).length;
   const selectedVideoCount = videos.filter((v) => v.file).length;
-  const priceTotalPage = Math.max(1, Math.ceil(priceRows.length / PRICE_RULE_PAGE_SIZE));
-  const safePricePage = Math.min(pricePage, priceTotalPage);
-  const pagedPriceRows = priceRows.slice(
-    (safePricePage - 1) * PRICE_RULE_PAGE_SIZE,
-    safePricePage * PRICE_RULE_PAGE_SIZE,
-  );
 
   return (
     <div className="p-8">
@@ -1712,12 +1847,13 @@ export const UploadForm: React.FC<UploadFormProps> = ({
               <p className="text-xs text-gray-500 self-start" style={{ fontWeight: 600 }}>
                 {t.coverLabel} <span className="text-red-500">*</span>
               </p>
+              {/* 竖版 9:16 */}
               <div
                 onClick={() => !coverUploading && coverRef.current?.click()}
                 className="mx-auto rounded-2xl overflow-hidden cursor-pointer transition-all group"
                 style={{
                   width: 140,
-                  height: 197,
+                  height: 187,
                   background: "#ECECEE",
                   border: `2px dashed ${coverError ? "#EF4444" : "#D1D5DB"}`,
                   position: "relative",
@@ -1748,7 +1884,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                     </div>
                     <span className="text-[11px] text-gray-400 text-center leading-tight px-3">{t.coverPrompt}</span>
                     <span className="text-[10px] text-gray-300 bg-white/60 px-2 py-0.5 rounded-full">
-                      {t.coverRatio}
+                      {t.coverPortraitHint}
                     </span>
                   </div>
                 )}
@@ -1766,6 +1902,67 @@ export const UploadForm: React.FC<UploadFormProps> = ({
               />
               {coverError ? (
                 <p className="text-[10px] text-red-500 text-center leading-relaxed">{coverError}</p>
+              ) : null}
+
+              {/* 横版 4:3（20260929 稿件新增，与竖版同为送审必填） */}
+              <div
+                onClick={() => !coverLandscapeUploading && coverLandscapeRef.current?.click()}
+                className="mx-auto rounded-2xl overflow-hidden cursor-pointer transition-all group"
+                style={{
+                  width: 140,
+                  height: 105,
+                  background: "#ECECEE",
+                  border: `2px dashed ${coverLandscapeError ? "#EF4444" : "#D1D5DB"}`,
+                  position: "relative",
+                }}
+              >
+                {coverLandscapeUploading ? (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
+                  </div>
+                ) : basicInfo.coverLandscape ? (
+                  <>
+                    <img
+                      src={basicInfo.coverLandscape}
+                      alt={t.coverLandscapeHint}
+                      className="w-full h-full object-cover"
+                    />
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        bi({ coverLandscape: "" });
+                        setCoverLandscapeError("");
+                      }}
+                      className="absolute top-2 right-2 p-1 rounded-full bg-black/50 hover:bg-black/80 transition-colors"
+                    >
+                      <X className="w-3 h-3 text-white" />
+                    </button>
+                  </>
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center gap-1.5 group-hover:bg-gray-100 transition-colors">
+                    <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm">
+                      <Upload className="w-4 h-4 text-gray-400" />
+                    </div>
+                    <span className="text-[11px] text-gray-400 text-center leading-tight px-3">{t.coverPrompt}</span>
+                    <span className="text-[10px] text-gray-300 bg-white/60 px-2 py-0.5 rounded-full">
+                      {t.coverLandscapeHint}
+                    </span>
+                  </div>
+                )}
+              </div>
+              <input
+                ref={coverLandscapeRef}
+                type="file"
+                accept={IMAGE_ACCEPT}
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  e.target.value = "";
+                  void onPickCoverLandscape(f);
+                }}
+                className="hidden"
+              />
+              {coverLandscapeError ? (
+                <p className="text-[10px] text-red-500 text-center leading-relaxed">{coverLandscapeError}</p>
               ) : (
                 <p className="text-[10px] text-gray-400 text-center leading-relaxed">{t.coverHint}</p>
               )}
@@ -1784,6 +1981,17 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                   }}
                   placeholder={t.namePlaceholder}
                   className={inputClass(nameError)}
+                  maxLength={NAME_LIMIT}
+                />
+              </Field>
+
+              <Field label={t.titleTranslatedLabel} required>
+                <input
+                  type="text"
+                  value={basicInfo.titleTranslated}
+                  onChange={(e) => bi({ titleTranslated: e.target.value })}
+                  placeholder={t.titleTranslatedPlaceholder}
+                  className={inputClass(false)}
                   maxLength={NAME_LIMIT}
                 />
               </Field>
@@ -1817,36 +2025,54 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                     className={`${inputClass(false)} ${plannedLocked ? "bg-gray-50 text-gray-400 cursor-not-allowed" : ""}`}
                   />
                 </Field>
-                <Field label={t.channelLabel} required>
-                  <div className="flex gap-2">
-                    {CHANNEL_VALUES.map((c) => {
-                      const active = basicInfo.channel === c;
-                      return (
-                        <button
-                          key={c}
-                          type="button"
-                          onClick={() => bi({ channel: c })}
-                          className="flex-1 py-2.5 rounded-lg text-sm border transition-all"
-                          style={{
-                            background: active ? "#111111" : "white",
-                            color: active ? "white" : "#374151",
-                            borderColor: active ? "#111111" : "#E5E7EB",
-                            fontWeight: active ? 600 : 500,
-                          }}
-                        >
-                          {t.channels[c]}
-                        </button>
-                      );
-                    })}
-                  </div>
+                <Field label={t.totalDurationLabel} required>
+                  <input
+                    type="number"
+                    min="1"
+                    value={basicInfo.totalDuration}
+                    onChange={(e) => bi({ totalDuration: e.target.value })}
+                    placeholder={t.totalDurationPlaceholder}
+                    className={inputClass(false)}
+                  />
                 </Field>
               </div>
 
-              {/* 剧集语言（单选，移到 step1） */}
+              <Field label={t.channelLabel} required>
+                <div className="flex gap-2">
+                  {CHANNEL_VALUES.map((c) => {
+                    const active = basicInfo.channel === c;
+                    return (
+                      <button
+                        key={c}
+                        type="button"
+                        onClick={() => bi({ channel: c })}
+                        className="flex-1 py-2.5 rounded-lg text-sm border transition-all"
+                        style={{
+                          background: active ? "#111111" : "white",
+                          color: active ? "white" : "#374151",
+                          borderColor: active ? "#111111" : "#E5E7EB",
+                          fontWeight: active ? 600 : 500,
+                        }}
+                      >
+                        {t.channels[c]}
+                      </button>
+                    );
+                  })}
+                </div>
+              </Field>
+
+              {/* 剧集语言：单选，同时决定类别候选与题材/标签小字翻译的语种 */}
               <Field label={t.langLabel} required>
                 <select
                   value={basicInfo.languageType}
-                  onChange={(e) => bi({ languageType: e.target.value, classificationId: null, tags: [] })}
+                  onChange={(e) =>
+                    bi({
+                      languageType: e.target.value,
+                      classificationId: null,
+                      genreId: null,
+                      tagIds: [],
+                    })
+                  }
                   className={inputClass(false)}
                 >
                   <option value="">{t.langPlaceholder}</option>
@@ -1895,7 +2121,59 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                 )}
               </Field>
 
-              {/* 标签（按语言取 labels 接口） */}
+              {/* 题材：一级分类，语言无关字典，显示名按主语言渲染（稿件 18033-780） */}
+              <Field label={t.genreLabel} required>
+                {!basicInfo.languageType ? (
+                  <p className="text-xs text-gray-400">{t.genreSelectLangFirst}</p>
+                ) : genresLoading ? (
+                  <div className="flex items-center gap-2 text-xs text-gray-400">
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    {t.readingDuration}
+                  </div>
+                ) : genreOptions.length === 0 ? (
+                  <p className="text-xs text-gray-400">{t.genreEmpty}</p>
+                ) : (
+                  <div className="flex flex-wrap gap-1.5">
+                    {genreOptions.map((item) => {
+                      const selected = basicInfo.genreId === item.genreId;
+                      return (
+                        <button
+                          key={item.genreId}
+                          type="button"
+                          onClick={() =>
+                            bi(
+                              selected
+                                ? { genreId: null }
+                                : // 换题材时清掉旧题材下的标签，避免提交出 label_genre_mismatch
+                                  { genreId: item.genreId, tagIds: [] },
+                            )
+                          }
+                          className="px-2.5 py-1 rounded-lg text-xs border transition-all"
+                          style={{
+                            background: selected ? "#111111" : "#FAFAFA",
+                            color: selected ? "white" : "#6B7280",
+                            borderColor: selected ? "#111111" : "#E5E7EB",
+                            fontWeight: selected ? 600 : 400,
+                          }}
+                        >
+                          {item.genreName}
+                          {/* 小字是同一个题材的翻译，纯展示；英文界面下后端不下发，这里自然不渲染 */}
+                          {item.genreNameLocal ? (
+                            <span
+                              className="ml-1.5 text-[10px]"
+                              style={{ color: selected ? "#D1D5DB" : "#9CA3AF", fontWeight: 400 }}
+                            >
+                              {item.genreNameLocal}
+                            </span>
+                          ) : null}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </Field>
+
+              {/* 标签（按题材分组；提交 labelId，显示名由后端渲染） */}
               <Field label={t.tagsLabel} required>
                 {!basicInfo.languageType ? (
                   <p className="text-xs text-gray-400">{t.tagsSelectLangFirst}</p>
@@ -1905,36 +2183,68 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                     {t.readingDuration}
                   </div>
                 ) : (
-                  <div className="flex flex-wrap gap-1.5">
-                    {labelOptions.map((tv) => {
-                      const selected = basicInfo.tags.includes(tv);
-                      return (
-                        <button
-                          key={tv}
-                          type="button"
-                          onClick={() => {
-                            const tags = selected
-                              ? basicInfo.tags.filter((x) => x !== tv)
-                              : [...basicInfo.tags, tv];
-                            bi({ tags });
-                          }}
-                          className="px-2.5 py-1 rounded-lg text-xs border transition-all"
-                          style={{
-                            background: selected ? "#111111" : "#FAFAFA",
-                            color: selected ? "white" : "#6B7280",
-                            borderColor: selected ? "#111111" : "#E5E7EB",
-                            fontWeight: selected ? 600 : 400,
-                          }}
-                        >
-                          {tv}
-                        </button>
-                      );
-                    })}
+                  <div className="space-y-3">
+                    {labelGroups
+                      // 选了题材就只展示该题材组。未归类的历史词条（genreId=null）此时必须隐藏：
+                      // 后端要求标签的 genreId 与所选题材一致，选中它们必然被判 label_genre_mismatch，
+                      // 要等运营在后管把它们挂到题材下才可用。
+                      .filter(
+                        (group) =>
+                          basicInfo.genreId === null || group.genreId === basicInfo.genreId,
+                      )
+                      .map((group) => (
+                        <div key={group.genreId ?? "ungrouped"}>
+                          <p className="text-[11px] text-gray-400 mb-1.5" style={{ fontWeight: 600 }}>
+                            {group.genreName || t.tagsUngrouped}
+                          </p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {group.labels.map((label) => {
+                              const selected = basicInfo.tagIds.includes(label.labelId);
+                              return (
+                                <button
+                                  key={label.labelId}
+                                  type="button"
+                                  onClick={() =>
+                                    bi({
+                                      tagIds: selected
+                                        ? basicInfo.tagIds.filter((x) => x !== label.labelId)
+                                        : [...basicInfo.tagIds, label.labelId],
+                                    })
+                                  }
+                                  className="px-2.5 py-1 rounded-lg text-xs border transition-all"
+                                  style={{
+                                    background: selected ? "#111111" : "#FAFAFA",
+                                    color: selected ? "white" : "#6B7280",
+                                    borderColor: selected ? "#111111" : "#E5E7EB",
+                                    fontWeight: selected ? 600 : 400,
+                                  }}
+                                >
+                                  {label.labelName}
+                                  {/* 小字 = 该标签的翻译，纯展示，不是另一个标签 */}
+                                  {label.labelNameLocal ? (
+                                    <span
+                                      className="ml-1.5 text-[10px]"
+                                      style={{ color: selected ? "#D1D5DB" : "#9CA3AF", fontWeight: 400 }}
+                                    >
+                                      {label.labelNameLocal}
+                                    </span>
+                                  ) : null}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
                   </div>
                 )}
               </Field>
 
-              <Field label={t.copyrightLabel} required>
+              {/* 版权与交付资料：① 版权证书 ② 附加材料（可选）③ 源文件网盘链接（稿件 18033-780） */}
+              <Field label={t.deliveryLabel} required>
+                <p className="mb-2 flex items-center gap-1.5 text-xs text-gray-700" style={{ fontWeight: 600 }}>
+                  <span className="text-gray-400">①</span>
+                  {t.proofSectionTitle}
+                </p>
                 <div className="flex gap-5">
                   {[
                     { val: 1, label: t.copyrightSelf },
@@ -1992,6 +2302,59 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                   />
                 </Field>
               )}
+
+              {/* ② 附加材料上传（可选，多文件） */}
+              <div>
+                <p className="mb-1 flex items-center gap-1.5 text-xs text-gray-700" style={{ fontWeight: 600 }}>
+                  <span className="text-gray-400">②</span>
+                  {t.extraMaterialsTitle}
+                  <span className="text-gray-400" style={{ fontWeight: 400 }}>
+                    {t.extraMaterialsOptional}
+                  </span>
+                </p>
+                <p className="mb-2 text-[11px] text-gray-400 leading-relaxed">{t.extraMaterialsDesc}</p>
+                <ExtraMaterialsUpload
+                  t={t}
+                  value={basicInfo.extraMaterials}
+                  onChange={(joined) => bi({ extraMaterials: joined })}
+                />
+              </div>
+
+              {/* ③ 源文件网盘链接（可选） */}
+              <div>
+                <p className="mb-2 flex items-center gap-1.5 text-xs text-gray-700" style={{ fontWeight: 600 }}>
+                  <span className="text-gray-400">③</span>
+                  {t.sourceFileTitle}
+                </p>
+                <input
+                  type="url"
+                  value={basicInfo.sourceFileUrl}
+                  onChange={(e) => bi({ sourceFileUrl: e.target.value })}
+                  placeholder={t.sourceFilePlaceholder}
+                  className={inputClass(false)}
+                />
+                {/* 提取码：网盘链接自带密码时才填，独立可选字段 */}
+                <input
+                  type="text"
+                  value={basicInfo.sourceFileCode}
+                  onChange={(e) => bi({ sourceFileCode: e.target.value })}
+                  placeholder={t.sourceFileCodePlaceholder}
+                  maxLength={64}
+                  className={`${inputClass(false)} mt-2`}
+                />
+                <div className="mt-2 rounded-[14px] border border-gray-100 bg-gray-50 px-3.5 py-2.5">
+                  <p className="text-[11px] text-gray-600" style={{ fontWeight: 600 }}>
+                    {t.sourceFileNeedTitle}
+                  </p>
+                  <ul className="mt-1 space-y-0.5">
+                    {[t.sourceFileNeed1, t.sourceFileNeed2, t.sourceFileNeed3, t.sourceFileNeed4].map((line) => (
+                      <li key={line} className="text-[11px] text-gray-500 leading-[18px]">
+                        {line}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -2296,72 +2659,23 @@ export const UploadForm: React.FC<UploadFormProps> = ({
       {/* ── Step 3 发布配置：高光 → 发布范围 → 各国收费规则（默认立即上架） ── */}
       {step === 3 && (
         <div className="max-w-4xl space-y-5">
-          {/* 高光时刻（置顶） */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-6">
-            <h3 className="text-sm text-gray-900 mb-4" style={{ fontWeight: 700 }}>
-              {t.uploadHighlight} <span className="text-red-500">*</span>
-            </h3>
-            <input
-              ref={highlightRef}
-              type="file"
-              accept={HIGHLIGHT_ACCEPT}
-              className="hidden"
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                e.target.value = "";
-                void onPickHighlight(f);
-              }}
-            />
-            {highlight.videoUrl ? (
-              <div className="flex items-center gap-3 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3">
-                <Film className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm text-gray-800" style={{ fontWeight: 600 }}>
-                    {highlight.fileName || fileNameFromUrl(highlight.videoUrl)}
-                  </p>
-                  <p className="mt-0.5 text-xs text-gray-400">
-                    {highlight.fileSize !== null ? formatBytes(highlight.fileSize) : "—"}{" "}
-                    {highlight.uploadTime ? `· ${highlight.uploadTime}` : ""}
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => highlightRef.current?.click()}
-                  disabled={highlight.uploading}
-                  className="text-xs text-gray-500 hover:text-gray-900 disabled:opacity-50"
-                  style={{ fontWeight: 500 }}
-                >
-                  {highlight.uploading ? t.highlightUploading : t.epActionReplace}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => void removeHighlight()}
-                  disabled={highlight.uploading}
-                  className="text-gray-400 hover:text-red-500 disabled:opacity-50"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => highlightRef.current?.click()}
-                disabled={highlight.uploading}
-                className="w-full h-[88px] rounded-xl border border-dashed border-gray-300 flex flex-col items-center justify-center gap-1.5 text-gray-400 hover:border-gray-400 transition-colors disabled:opacity-60"
-              >
-                {highlight.uploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-5 h-5" />}
-                <span className="text-sm">{highlight.uploading ? t.highlightUploading : t.uploadHighlight}</span>
-              </button>
-            )}
-            {highlight.error && <p className="mt-2 text-xs text-red-500">{highlight.error}</p>}
-          </div>
-
           {/* 发布范围 */}
           <div className="bg-white rounded-2xl border border-gray-100 p-6">
             <h3 className="text-sm text-gray-900 mb-1" style={{ fontWeight: 700 }}>
               {t.distSectionTitle}
             </h3>
-            <p className="text-xs text-gray-400 mb-5">{t.distSectionDesc}</p>
+            <p className="text-xs text-gray-400 mb-4">{t.distSectionDesc}</p>
+            <div className="mb-3 flex items-center gap-2">
+              <span className="text-sm text-gray-900" style={{ fontWeight: 700 }}>
+                {t.lollipopGroupLabel}
+              </span>
+              <span
+                className="px-2 py-0.5 rounded-full text-xs"
+                style={{ background: "#FFF1F2", color: "#E8192C", fontWeight: 500 }}
+              >
+                {t.lollipopRequiredBadge}
+              </span>
+            </div>
             <div className="grid grid-cols-2 gap-5">
               {[
                 {
@@ -2495,140 +2809,147 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             </div>
           </div>
 
-          {/* 上架意向（送审后审核通过即按此执行；驳回重提可改） */}
+          {/* 可选外部平台（稿件 18033-1599）：比例走后管 common_info(3171)，前端不写死 */}
           <div className="bg-white rounded-2xl border border-gray-100 p-6">
             <h3 className="text-sm text-gray-900 mb-1" style={{ fontWeight: 700 }}>
-              {t.publishSettingsTitle}
+              {t.extPlatformTitle}
             </h3>
-            <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-              {[
-                { value: true, label: t.publishNowOption },
-                { value: false, label: t.publishLaterOption },
-              ].map((opt) => {
-                const active = pubConfig.onShelfNow === opt.value;
-                return (
-                  <button
-                    key={String(opt.value)}
-                    type="button"
-                    onClick={() => setPubConfig((p) => ({ ...p, onShelfNow: opt.value }))}
-                    className="flex-1 rounded-xl border-2 px-4 py-3 text-left transition-all"
-                    style={{
-                      borderColor: active ? "#111111" : "#E5E7EB",
-                      background: active ? "#FAFAFA" : "white",
-                    }}
-                  >
-                    <span className="flex items-center gap-2">
+            <p className="text-xs text-gray-400 mb-4">{t.extPlatformDesc}</p>
+            {externalPlatformOptions.length === 0 ? (
+              <p className="text-xs text-gray-400">{t.emptyTitle}</p>
+            ) : (
+              <div className="grid gap-3 sm:grid-cols-2">
+                {externalPlatformOptions.map((item) => {
+                  const active = pubConfig.externalPlatforms.includes(item.code);
+                  return (
+                    <button
+                      key={item.code}
+                      type="button"
+                      onClick={() => toggleExternalPlatform(item.code)}
+                      className="flex items-center gap-3 rounded-xl border-2 px-4 py-3 text-left transition-all"
+                      style={{ borderColor: active ? "#111111" : "#E5E7EB", background: active ? "#FAFAFA" : "white" }}
+                    >
                       <span
-                        className="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0"
-                        style={{ borderColor: active ? "#111111" : "#D1D5DB" }}
+                        className="w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0"
+                        style={{
+                          borderColor: active ? "#111111" : "#D1D5DB",
+                          background: active ? "#111111" : "white",
+                        }}
                       >
-                        {active && <div className="w-2 h-2 rounded-full bg-[#111111]" />}
+                        {active && <div className="w-1.5 h-1.5 rounded-[1px] bg-white" />}
                       </span>
-                      <span className="text-sm text-gray-900" style={{ fontWeight: active ? 700 : 500 }}>
-                        {opt.label}
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm text-gray-900" style={{ fontWeight: 600 }}>
+                          {item.platformName}
+                        </span>
+                        {item.subtitle ? (
+                          <span className="block truncate text-[11px] text-gray-400">{item.subtitle}</span>
+                        ) : null}
                       </span>
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+                      <span className="flex gap-3 flex-shrink-0">
+                        <span className="text-right">
+                          <span className="block text-[10px] text-gray-400">{t.platform}</span>
+                          <span className="block text-xs text-gray-600" style={{ fontWeight: 700 }}>
+                            {item.platformRatio === null ? t.extPlatformRatioNA : `${item.platformRatio}%`}
+                          </span>
+                        </span>
+                        <span className="text-right">
+                          <span className="block text-[10px] text-gray-400">{t.producer}</span>
+                          <span className="block text-xs text-gray-900" style={{ fontWeight: 800 }}>
+                            {item.creatorRatio === null ? t.extPlatformRatioNA : `${item.creatorRatio}%`}
+                          </span>
+                        </span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
-          {/* 各国收费规则：默认展开，每页 5 条 */}
-          <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-            <div className="p-6 border-b border-gray-100">
-              <h3 className="text-sm text-gray-900 mb-1" style={{ fontWeight: 700 }}>
-                {t.pricingTitle}
+          {/* 高光时刻 */}
+          <div className="bg-white rounded-2xl border border-gray-100 p-6">
+            <div className="mb-1 flex items-center gap-2">
+              <h3 className="text-sm text-gray-900" style={{ fontWeight: 700 }}>
+                {t.uploadHighlight} <span className="text-red-500">*</span>
               </h3>
-              <p className="text-xs text-gray-400 mb-4">{t.pricingDesc}</p>
-              {priceLoading ? (
-                <div className="flex items-center justify-center py-12 text-gray-400">
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                </div>
-              ) : priceRows.length === 0 ? (
-                <div className="py-10 text-center text-sm text-gray-400">{t.emptyTitle}</div>
-              ) : (
-                <>
-                  <div className="overflow-x-auto">
-                    <table className="w-full min-w-[520px] table-fixed text-sm">
-                      <colgroup>
-                        <col className="w-[160px]" />
-                        <col className="w-[120px]" />
-                        <col className="w-[120px]" />
-                        <col className="w-[120px]" />
-                      </colgroup>
-                      <thead>
-                        <tr className="border-b border-gray-100">
-                          <th className="text-left pb-2 pr-4 text-xs text-gray-500 whitespace-nowrap" style={{ fontWeight: 500 }}>
-                            {t.pricingColCountry}
-                          </th>
-                          <th className="text-left pb-2 pr-4 text-xs text-gray-500 whitespace-nowrap" style={{ fontWeight: 500 }}>
-                            {t.pricingColSingle}
-                          </th>
-                          <th className="text-left pb-2 pr-4 text-xs text-gray-500 whitespace-nowrap" style={{ fontWeight: 500 }}>
-                            {t.pricingColWholeLe50}
-                          </th>
-                          <th className="text-left pb-2 text-xs text-gray-500 whitespace-nowrap" style={{ fontWeight: 500 }}>
-                            {t.pricingColWholeGt50}
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {pagedPriceRows.map((c) => {
-                          const countryName = c.countryName || c.country;
-                          return (
-                            <tr key={c.country} className="border-b border-gray-50 last:border-0">
-                              <td className="py-3 pr-4 min-w-0">
-                                <span className="block truncate text-gray-800" title={countryName} style={{ fontWeight: 600 }}>
-                                  {countryName}
-                                </span>
-                              </td>
-                              <td className="py-3 pr-4 text-gray-900 whitespace-nowrap" style={{ fontWeight: 700 }}>
-                                {formatUsd(c.episodePriceUsd)}
-                              </td>
-                              <td className="py-3 pr-4 text-gray-900 whitespace-nowrap" style={{ fontWeight: 700 }}>
-                                {formatUsd(c.wholePriceLe50Usd)}
-                              </td>
-                              <td className="py-3 text-gray-900 whitespace-nowrap" style={{ fontWeight: 700 }}>
-                                {formatUsd(c.wholePriceGt50Usd)}
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                  {priceTotalPage > 1 && (
-                    <div className="mt-4 flex items-center justify-center gap-3">
-                      <button
-                        type="button"
-                        disabled={safePricePage <= 1}
-                        onClick={() => setPricePage(Math.max(1, safePricePage - 1))}
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-600 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
-                        aria-label="prev page"
-                      >
-                        <ChevronLeft className="h-4 w-4" />
-                      </button>
-                      <span className="min-w-[3.5rem] text-center text-xs text-gray-500" style={{ fontWeight: 600 }}>
-                        {safePricePage} / {priceTotalPage}
-                      </span>
-                      <button
-                        type="button"
-                        disabled={safePricePage >= priceTotalPage}
-                        onClick={() => setPricePage(Math.min(priceTotalPage, safePricePage + 1))}
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-600 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
-                        aria-label="next page"
-                      >
-                        <ChevronRight className="h-4 w-4" />
-                      </button>
-                    </div>
-                  )}
-                </>
-              )}
+              <span
+                className="px-2 py-0.5 rounded-full text-xs"
+                style={{ background: "#FFF1F2", color: "#E8192C", fontWeight: 500 }}
+              >
+                {t.highlightRequiredBadge}
+              </span>
             </div>
+            <p className="text-xs text-gray-400 mb-4">{t.highlightDesc}</p>
+            <input
+              ref={highlightRef}
+              type="file"
+              accept={HIGHLIGHT_ACCEPT}
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                e.target.value = "";
+                void onPickHighlight(f);
+              }}
+            />
+            {highlight.videoUrl ? (
+              <div className="flex items-center gap-3 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3">
+                <Film className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm text-gray-800" style={{ fontWeight: 600 }}>
+                    {highlight.fileName || fileNameFromUrl(highlight.videoUrl)}
+                  </p>
+                  <p className="mt-0.5 text-xs text-gray-400">
+                    {highlight.fileSize !== null ? formatBytes(highlight.fileSize) : "—"}{" "}
+                    {highlight.uploadTime ? `· ${highlight.uploadTime}` : ""}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => highlightRef.current?.click()}
+                  disabled={highlight.uploading}
+                  className="text-xs text-gray-500 hover:text-gray-900 disabled:opacity-50"
+                  style={{ fontWeight: 500 }}
+                >
+                  {highlight.uploading ? t.highlightUploading : t.epActionReplace}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => void removeHighlight()}
+                  disabled={highlight.uploading}
+                  className="text-gray-400 hover:text-red-500 disabled:opacity-50"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => highlightRef.current?.click()}
+                disabled={highlight.uploading}
+                className="w-full h-[88px] rounded-xl border border-dashed border-gray-300 flex flex-col items-center justify-center gap-1.5 text-gray-400 hover:border-gray-400 transition-colors disabled:opacity-60"
+              >
+                {highlight.uploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-5 h-5" />}
+                <span className="text-sm">
+                  {highlight.uploading ? t.highlightUploading : t.highlightUploadPrompt}
+                </span>
+                {!highlight.uploading && <span className="text-[11px] text-gray-300">{t.highlightFormatHint}</span>}
+              </button>
+            )}
+            {highlight.error && <p className="mt-2 text-xs text-red-500">{highlight.error}</p>}
+          </div>
 
+          {/* 提交条：收费规则改为左下入口弹层（稿件 18033-1599），不再内嵌整表 */}
+          <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
             <div className="flex items-center justify-between px-5 py-3.5 bg-gray-50/40">
-              <span className="text-xs text-gray-400">{t.stepFooter3}</span>
+              <button
+                type="button"
+                onClick={() => setPricingModalOpen(true)}
+                className="text-xs text-gray-500 underline underline-offset-2 hover:text-gray-900"
+                style={{ fontWeight: 500 }}
+              >
+                {t.viewPricingRules}
+              </button>
               <div className="flex items-center gap-3">
                 <button
                   onClick={onCancel}
@@ -2658,6 +2979,14 @@ export const UploadForm: React.FC<UploadFormProps> = ({
           </div>
         </div>
       )}
+
+      <CountryPricingModal
+        open={pricingModalOpen}
+        onClose={() => setPricingModalOpen(false)}
+        t={t}
+        rows={priceRows}
+        loading={priceLoading}
+      />
 
       {reduceConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: "rgba(0,0,0,0.4)" }}>

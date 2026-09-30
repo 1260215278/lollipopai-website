@@ -641,7 +641,7 @@ function CircledNumLine({ text }: { text: string }) {
 function DeliverySectionHeading({ no, title, suffix }: { no: string; title: string; suffix?: string }) {
   return (
     <p className="flex items-center text-xs leading-4 whitespace-nowrap" style={{ fontWeight: 600 }}>
-      <span className="w-[15.3px] flex-shrink-0 text-base leading-4 text-red-500" style={{ fontWeight: 400, fontFamily: CIRCLED_NUM_FONT }}>
+      <span className="w-[15.3px] flex-shrink-0 text-base leading-4 text-red-500 mr-1" style={{ fontWeight: 400, fontFamily: CIRCLED_NUM_FONT }}>
         {no}
       </span>
       <span className="text-gray-700">{title}</span>
@@ -2961,7 +2961,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({
           </div>
 
           {/* 高光时刻（稿件 18033:2165） */}
-          <div className="bg-white rounded-2xl border border-amber-200 p-6">
+          {/* border-amber-200 */}
+          <div className="bg-white rounded-2xl border  p-6">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
                 <h3 className="text-sm leading-5 text-gray-900" style={{ fontWeight: 700 }}>

@@ -368,6 +368,8 @@ export interface ContentMessages {
   extPlatformRatioNA: string;
   /** 高光时刻「必填」角标 */
   highlightRequiredBadge: string;
+  /** Step3 高光卡片标题（稿件 18033:2168） */
+  highlightSectionTitle: string;
   highlightDesc: string;
   highlightUploadPrompt: string;
   highlightFormatHint: string;
@@ -657,6 +659,7 @@ export const content: Record<Locale, ContentMessages> = {
     extPlatformDesc: "授权至以下平台可获得额外收益，收益比例为出品方分成",
     extPlatformRatioNA: "—",
     highlightRequiredBadge: "必填",
+    highlightSectionTitle: "高光时刻",
     highlightDesc: "上传一段本剧精彩视频，用于平台宣传推广",
     highlightUploadPrompt: "点击上传高光视频",
     highlightFormatHint: "支持 MP4 / MOV · 不超过 500MB",
@@ -957,6 +960,7 @@ export const content: Record<Locale, ContentMessages> = {
     extPlatformDesc: "授權至以下平台可獲得額外收益，收益比例為出品方分成",
     extPlatformRatioNA: "—",
     highlightRequiredBadge: "必填",
+    highlightSectionTitle: "高光時刻",
     highlightDesc: "上傳一段本劇精彩影片，用於平台宣傳推廣",
     highlightUploadPrompt: "點擊上傳高光影片",
     highlightFormatHint: "支援 MP4 / MOV · 不超過 500MB",
@@ -1258,6 +1262,7 @@ export const content: Record<Locale, ContentMessages> = {
     extPlatformDesc: "Licensing to these platforms earns extra revenue; the share shown is the producer's",
     extPlatformRatioNA: "—",
     highlightRequiredBadge: "Required",
+    highlightSectionTitle: "Highlight",
     highlightDesc: "Upload a highlight clip used for platform promotion",
     highlightUploadPrompt: "Click to upload the highlight video",
     highlightFormatHint: "MP4 / MOV · up to 500MB",
@@ -1559,6 +1564,7 @@ export const content: Record<Locale, ContentMessages> = {
     extPlatformDesc: "O licenciamento nessas plataformas gera receita extra; a porcentagem exibida é a do produtor",
     extPlatformRatioNA: "—",
     highlightRequiredBadge: "Obrigatório",
+    highlightSectionTitle: "Destaque",
     highlightDesc: "Envie um trecho de destaque usado na divulgação da plataforma",
     highlightUploadPrompt: "Clique para enviar o vídeo destaque",
     highlightFormatHint: "MP4 / MOV · até 500MB",
@@ -1860,6 +1866,7 @@ export const content: Record<Locale, ContentMessages> = {
     extPlatformDesc: "Licenciar en estas plataformas genera ingresos extra; el porcentaje mostrado es el del productor",
     extPlatformRatioNA: "—",
     highlightRequiredBadge: "Obligatorio",
+    highlightSectionTitle: "Momento destacado",
     highlightDesc: "Suba un clip destacado que se usará en la promoción de la plataforma",
     highlightUploadPrompt: "Haga clic para subir el vídeo destacado",
     highlightFormatHint: "MP4 / MOV · hasta 500MB",
@@ -2161,6 +2168,7 @@ export const content: Record<Locale, ContentMessages> = {
     extPlatformDesc: "الترخيص لهذه المنصات يحقق إيرادات إضافية؛ النسبة المعروضة هي حصة المنتج",
     extPlatformRatioNA: "—",
     highlightRequiredBadge: "إلزامي",
+    highlightSectionTitle: "لحظة مميزة",
     highlightDesc: "ارفع مقطعًا مميزًا يُستخدم في الترويج على المنصة",
     highlightUploadPrompt: "انقر لرفع فيديو التمييز",
     highlightFormatHint: "MP4 / MOV · حتى 500 ميغابايت",

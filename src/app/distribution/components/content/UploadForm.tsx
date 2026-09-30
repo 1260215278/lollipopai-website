@@ -19,6 +19,8 @@ import {
   Square,
   PauseCircle,
   Plus,
+  Check,
+  Info,
 } from "lucide-react";
 import { toast } from "sonner";
 import type { ContentMessages } from "../../i18n/content";
@@ -358,6 +360,7 @@ function CopyrightProofUpload({
   prompt,
   formatHint,
   emptyHeightClass = "h-[88px]",
+  row = false,
 }: {
   t: ContentMessages;
   taskId: string;
@@ -367,6 +370,8 @@ function CopyrightProofUpload({
   prompt?: string;
   formatHint?: string;
   emptyHeightClass?: string;
+  /** 横排紧凑按钮（图标 + 文案一行，稿件 18033:1261），自制确权材料用 */
+  row?: boolean;
 }) {
   const ref = useRef<HTMLInputElement>(null);
   // 订阅全局任务快照，asset 状态变更时会 commit 触发重渲染
@@ -403,7 +408,7 @@ function CopyrightProofUpload({
         }}
       />
       {displayUrl ? (
-        <div className="flex items-center gap-3 px-4 h-[45px] rounded-lg border border-gray-200 bg-gray-50">
+        <div className="flex items-center gap-3 px-4 h-11 rounded-[14px] border border-gray-200 bg-gray-50">
           <a
             href={displayUrl}
             target="_blank"
@@ -422,6 +427,27 @@ function CopyrightProofUpload({
             {uploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : t.coverReplace}
           </button>
         </div>
+      ) : row ? (
+        <button
+          type="button"
+          onClick={() => ref.current?.click()}
+          disabled={uploading}
+          className="w-full rounded-[14px] border-2 border-dashed border-gray-200 flex items-center justify-center gap-2 py-3 text-gray-500 hover:border-gray-400 transition-colors disabled:opacity-60"
+        >
+          {uploading ? (
+            <>
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              {asset.progress > 0 ? <span className="text-xs leading-4">{asset.progress}%</span> : null}
+            </>
+          ) : (
+            <>
+              <Upload className="w-3.5 h-3.5" />
+              <span className="text-xs leading-4" style={{ fontWeight: 500 }}>
+                {prompt ?? t.copyrightProofPrompt}
+              </span>
+            </>
+          )}
+        </button>
       ) : (
         <button
           type="button"
@@ -500,11 +526,12 @@ function ExtraMaterialsUpload({
 
   return (
     <div className="space-y-2">
+      {urls.length > 0 ? (
       <div className="flex items-center justify-between">
-        <span className="text-[11px] text-gray-400" style={{ fontWeight: 600 }}>
-          {urls.length > 0 ? `${urls.length} / ${EXTRA_MATERIALS_MAX}` : t.extraMaterialsOptional}
+        <span className="text-[10px] leading-[15px] text-gray-400" style={{ fontWeight: 600 }}>
+          {`${urls.length} / ${EXTRA_MATERIALS_MAX}`}
         </span>
-        {urls.length > 0 && canAdd ? (
+        {canAdd ? (
           <button
             type="button"
             onClick={() => ref.current?.click()}
@@ -517,6 +544,7 @@ function ExtraMaterialsUpload({
           </button>
         ) : null}
       </div>
+      ) : null}
       <input
         ref={ref}
         type="file"
@@ -571,24 +599,80 @@ function ExtraMaterialsUpload({
           type="button"
           onClick={() => ref.current?.click()}
           disabled={uploading}
-          className="w-full rounded-[14px] border border-dashed border-gray-200 flex flex-col items-center justify-center gap-1.5 py-[18px] text-gray-500 hover:border-gray-400 transition-colors disabled:opacity-60"
+          className="w-full rounded-[14px] border-2 border-dashed border-gray-200 flex items-center justify-center gap-2 py-3 text-gray-400 hover:border-gray-400 transition-colors disabled:opacity-60"
         >
           {uploading ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              {progress > 0 ? <span className="text-xs text-gray-400">{progress}%</span> : null}
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              {progress > 0 ? <span className="text-xs leading-4">{progress}%</span> : null}
             </>
           ) : (
             <>
-              <Upload className="w-4 h-4" />
-              <span className="text-xs" style={{ fontWeight: 500 }}>
+              <Upload className="w-3.5 h-3.5" />
+              <span className="text-xs leading-4" style={{ fontWeight: 500 }}>
                 {t.extraMaterialsAdd}
               </span>
-              <span className="text-[10px] text-gray-400">{t.extraMaterialsDesc}</span>
             </>
           )}
         </button>
       )}
+    </div>
+  );
+}
+
+/** 版权与交付资料的分段标题：红色序号 + 12px 标题（稿件 18033:1200 / 1271 / 1304） */
+/** Inter 子集不含 ①②③（unicode-range 外），显式回退 PingFang，对齐稿件圈号字形 */
+const CIRCLED_NUM_FONT = 'Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif';
+
+/** 「① xxx」行：圈号按稿件字形放大显示；非圈号开头（en 等 "1. xxx"）原样输出 */
+function CircledNumLine({ text }: { text: string }) {
+  const match = /^([\u2460-\u2473])\s?(.*)$/.exec(text);
+  if (!match) return <>{text}</>;
+  return (
+    <>
+      <span className="inline-block align-top text-[13px] leading-[15px]" style={{ fontFamily: CIRCLED_NUM_FONT }}>
+        {match[1]}
+      </span>{" "}
+      {match[2]}
+    </>
+  );
+}
+
+function DeliverySectionHeading({ no, title, suffix }: { no: string; title: string; suffix?: string }) {
+  return (
+    <p className="flex items-center text-xs leading-4 whitespace-nowrap" style={{ fontWeight: 600 }}>
+      <span className="w-[15.3px] flex-shrink-0 text-base leading-4 text-red-500" style={{ fontWeight: 400, fontFamily: CIRCLED_NUM_FONT }}>
+        {no}
+      </span>
+      <span className="text-gray-700">{title}</span>
+      {suffix ? (
+        <span className="ml-2 text-[10px] leading-[13.333px] text-gray-400" style={{ fontWeight: 400 }}>
+          {suffix}
+        </span>
+      ) : null}
+    </p>
+  );
+}
+
+/** ② 附加材料上传段（可选，稿件 18033:1269：上方 16 + 细分隔线 + 16） */
+function ExtraMaterialsSection({
+  t,
+  value,
+  onChange,
+}: {
+  t: ContentMessages;
+  value: string;
+  onChange: (joined: string) => void;
+}) {
+  return (
+    <div className="pt-4">
+      <div className="border-t border-gray-100 pt-4">
+        <DeliverySectionHeading no="②" title={t.extraMaterialsTitle} suffix={t.extraMaterialsOptional} />
+        <p className="pt-1 text-[10px] leading-[16.25px] text-gray-400">{t.extraMaterialsDesc}</p>
+        <div className="pt-3">
+          <ExtraMaterialsUpload t={t} value={value} onChange={onChange} />
+        </div>
+      </div>
     </div>
   );
 }
@@ -643,7 +727,7 @@ function TemplatePreviewModal({
             decoding="async"
           />
         </div>
-        <p className="mt-3 text-center text-xs text-white/90" style={{ fontWeight: 500 }}>
+        <p className="pt-3 text-center text-xs text-white/90" style={{ fontWeight: 500 }}>
           {caption}
         </p>
       </div>
@@ -661,6 +745,7 @@ function SelfCopyrightUpload({
   onKindChange,
   value,
   onChange,
+  extra,
 }: {
   t: ContentMessages;
   taskId: string;
@@ -668,6 +753,8 @@ function SelfCopyrightUpload({
   onKindChange: (k: SelfProofKind) => void;
   value: string;
   onChange: (url: string) => void;
+  /** 稿件把 ② 附加材料排在上传按钮与注释之间，由调用方注入 */
+  extra?: React.ReactNode;
 }) {
   const [previewKind, setPreviewKind] = useState<SelfProofKind | null>(null);
 
@@ -689,12 +776,12 @@ function SelfCopyrightUpload({
   ];
 
   return (
-    <div className="pt-3 space-y-3">
-      <p className="text-xs text-gray-500" style={{ fontWeight: 500 }}>
+    <div className="pt-2">
+      <p className="text-xs leading-4 text-gray-500" style={{ fontWeight: 500 }}>
         {t.selfProofPickHint}
       </p>
 
-      <div className="space-y-2.5">
+      <div className="pt-3 space-y-2.5">
         {options.map((opt) => {
           const selected = kind === opt.kind;
           return (
@@ -702,11 +789,10 @@ function SelfCopyrightUpload({
               key={opt.kind}
               type="button"
               onClick={() => onKindChange(opt.kind)}
-              className="w-full rounded-[14px] border overflow-hidden text-left transition-colors"
+              className="w-full rounded-[14px] border-2 overflow-hidden text-left transition-colors"
               style={{
                 borderColor: selected ? "#111111" : "#E5E7EB",
                 background: selected ? "#FAFAFA" : "#FFFFFF",
-                borderWidth: selected ? 1.85 : 1,
               }}
             >
               <div className="flex items-center">
@@ -724,7 +810,7 @@ function SelfCopyrightUpload({
                       className="w-full h-full object-cover opacity-80"
                     />
                     <span
-                      className="absolute left-1 bottom-1 rounded px-1 py-0.5 text-white bg-black/50 leading-none whitespace-nowrap"
+                      className="absolute left-1 bottom-1 rounded px-1 py-0.5 text-white bg-black/50 leading-3 whitespace-nowrap"
                       style={{ fontSize: 8, fontWeight: 600 }}
                     >
                       {t.selfProofTemplateBadge}
@@ -739,10 +825,10 @@ function SelfCopyrightUpload({
                     {selected ? <div className="w-2 h-2 rounded-full bg-[#111111]" /> : null}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm text-gray-900 truncate" style={{ fontWeight: 600 }}>
+                    <p className="text-sm leading-5 text-gray-900 truncate" style={{ fontWeight: 600 }}>
                       {opt.title}
                     </p>
-                    <p className="text-[11px] text-gray-400 mt-0.5 truncate">{opt.desc}</p>
+                    <p className="pt-0.5 text-[11px] leading-[16.5px] text-gray-400 truncate">{opt.desc}</p>
                   </div>
                 </div>
               </div>
@@ -751,18 +837,24 @@ function SelfCopyrightUpload({
         })}
       </div>
 
-      <CopyrightProofUpload
-        t={t}
-        taskId={taskId}
-        value={value}
-        onChange={onChange}
-        accept={SELF_PROOF_ACCEPT[kind]}
-        prompt={t.selfProofUploadFile}
-        emptyHeightClass="h-[52px]"
-      />
+      <div className="pt-3">
+        <CopyrightProofUpload
+          t={t}
+          taskId={taskId}
+          value={value}
+          onChange={onChange}
+          accept={SELF_PROOF_ACCEPT[kind]}
+          prompt={t.selfProofUploadFile}
+          row
+        />
+      </div>
 
-      <div className="rounded-[14px] border border-amber-200 bg-amber-50 px-3.5 py-2.5">
-        <p className="text-[10px] text-amber-900 leading-[16px]">{t.selfProofNote}</p>
+      {extra}
+
+      <div className="pt-3">
+        <div className="rounded-[14px] border border-[#FDE68A] bg-[#FFFBEB] px-3.5 py-2.5">
+          <p className="text-[10px] text-[#92400E] leading-[16.25px]">{t.selfProofNote}</p>
+        </div>
       </div>
 
       {previewKind !== null ? (
@@ -1803,27 +1895,27 @@ export const UploadForm: React.FC<UploadFormProps> = ({
         <div className="flex items-start gap-3 px-4 py-3 rounded-xl bg-red-50 border border-red-100 mb-5">
           <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
           <div className="flex-1 min-w-0">
-            <p className="text-xs text-red-600 mb-0.5" style={{ fontWeight: 600 }}>
+            <p className="text-xs text-red-600 pb-0.5" style={{ fontWeight: 600 }}>
               {t.rejectReasonTitle}
             </p>
             {auditRemark ? (
               <p className="text-sm text-red-700 leading-relaxed">{auditRemark}</p>
             ) : null}
-            <p className="text-xs text-red-600/80 mt-1">{t.rejectEditHint}</p>
+            <p className="text-xs text-red-600/80 pt-1">{t.rejectEditHint}</p>
           </div>
         </div>
       )}
 
       {draftRestored && !isRejected && (
-        <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-amber-50 border border-amber-100 mb-5">
+        <div className="flex items-center gap-3 px-4 py-3 rounded-[14px] bg-amber-50 border border-amber-100 mb-5">
           <RotateCcw className="w-4 h-4 text-amber-500 flex-shrink-0" />
           <div className="flex-1 min-w-0">
-            <p className="text-xs text-amber-700">{t.draftRestored}</p>
-            <p className="text-xs text-amber-600/90 mt-0.5">{t.draftRestoredReselect}</p>
+            <p className="text-xs leading-4 text-amber-700">{t.draftRestored}</p>
+            <p className="text-xs leading-4 text-amber-700">{t.draftRestoredReselect}</p>
           </div>
           <button
             onClick={() => void discardDraft()}
-            className="text-xs text-amber-600 hover:text-amber-800 underline flex-shrink-0"
+            className="text-xs leading-4 text-amber-600 hover:text-amber-800 underline flex-shrink-0"
             style={{ fontWeight: 500 }}
           >
             {t.draftStartFresh}
@@ -1831,7 +1923,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
         </div>
       )}
 
-      <div className="mb-8" style={{ maxWidth: 520 }}>
+      <div className="mb-8 flex justify-center">
         <StepIndicator steps={steps} current={step - 1} />
       </div>
 
@@ -1841,19 +1933,20 @@ export const UploadForm: React.FC<UploadFormProps> = ({
           <div className="flex flex-1 min-h-0">
             {/* 封面 */}
             <div
-              className="w-[200px] flex-shrink-0 flex flex-col items-center justify-start p-5 gap-3"
+              className="w-[200px] flex-shrink-0 flex flex-col items-center justify-start p-5 gap-4"
               style={{ background: "#F8F8F9", borderRight: "1px solid #F0F0F0" }}
             >
-              <p className="text-xs text-gray-500 self-start" style={{ fontWeight: 600 }}>
-                {t.coverLabel} <span className="text-red-500">*</span>
+              <p className="text-xs leading-4 text-gray-500 self-start" style={{ fontWeight: 600 }}>
+                {t.coverLabel} <span className="text-red-400">*</span>
               </p>
-              {/* 竖版 9:16 */}
+              {/* 竖版 9:16（稿件 18033:921：120×213，说明文字在框外） */}
+              <div className="flex flex-col items-center gap-1.5">
               <div
                 onClick={() => !coverUploading && coverRef.current?.click()}
-                className="mx-auto rounded-2xl overflow-hidden cursor-pointer transition-all group"
+                className="rounded-[14px] overflow-hidden cursor-pointer transition-all group"
                 style={{
-                  width: 140,
-                  height: 187,
+                  width: 120,
+                  height: 213,
                   background: "#ECECEE",
                   border: `2px dashed ${coverError ? "#EF4444" : "#D1D5DB"}`,
                   position: "relative",
@@ -1879,15 +1972,14 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                   </>
                 ) : (
                   <div className="w-full h-full flex flex-col items-center justify-center gap-2 group-hover:bg-gray-100 transition-colors">
-                    <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm">
-                      <Upload className="w-4 h-4 text-gray-400" />
+                    <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm">
+                      <Upload className="w-3.5 h-3.5 text-gray-400" />
                     </div>
-                    <span className="text-[11px] text-gray-400 text-center leading-tight px-3">{t.coverPrompt}</span>
-                    <span className="text-[10px] text-gray-300 bg-white/60 px-2 py-0.5 rounded-full">
-                      {t.coverPortraitHint}
-                    </span>
+                    <span className="text-[10px] text-gray-400 text-center leading-[12.5px] px-2">{t.coverPrompt}</span>
                   </div>
                 )}
+              </div>
+              <p className="text-[10px] leading-[15px] text-gray-400 text-center">{t.coverPortraitHint}</p>
               </div>
               <input
                 ref={coverRef}
@@ -1904,13 +1996,14 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                 <p className="text-[10px] text-red-500 text-center leading-relaxed">{coverError}</p>
               ) : null}
 
-              {/* 横版 4:3（20260929 稿件新增，与竖版同为送审必填） */}
+              {/* 横版 4:3（20260929 稿件新增，与竖版同为送审必填；稿件 18033:935：148×111） */}
+              <div className="flex flex-col items-center gap-1.5">
               <div
                 onClick={() => !coverLandscapeUploading && coverLandscapeRef.current?.click()}
-                className="mx-auto rounded-2xl overflow-hidden cursor-pointer transition-all group"
+                className="rounded-[14px] overflow-hidden cursor-pointer transition-all group"
                 style={{
-                  width: 140,
-                  height: 105,
+                  width: 148,
+                  height: 111,
                   background: "#ECECEE",
                   border: `2px dashed ${coverLandscapeError ? "#EF4444" : "#D1D5DB"}`,
                   position: "relative",
@@ -1939,16 +2032,15 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                     </button>
                   </>
                 ) : (
-                  <div className="w-full h-full flex flex-col items-center justify-center gap-1.5 group-hover:bg-gray-100 transition-colors">
+                  <div className="w-full h-full flex flex-col items-center justify-center gap-2 group-hover:bg-gray-100 transition-colors">
                     <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm">
-                      <Upload className="w-4 h-4 text-gray-400" />
+                      <Upload className="w-3.5 h-3.5 text-gray-400" />
                     </div>
-                    <span className="text-[11px] text-gray-400 text-center leading-tight px-3">{t.coverPrompt}</span>
-                    <span className="text-[10px] text-gray-300 bg-white/60 px-2 py-0.5 rounded-full">
-                      {t.coverLandscapeHint}
-                    </span>
+                    <span className="text-[10px] text-gray-400 text-center leading-[12.5px] px-2">{t.coverPrompt}</span>
                   </div>
                 )}
+              </div>
+              <p className="text-[10px] leading-[15px] text-gray-400 text-center">{t.coverLandscapeHint}</p>
               </div>
               <input
                 ref={coverLandscapeRef}
@@ -1962,9 +2054,9 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                 className="hidden"
               />
               {coverLandscapeError ? (
-                <p className="text-[10px] text-red-500 text-center leading-relaxed">{coverLandscapeError}</p>
+                <p className="text-[10px] text-red-500 text-center leading-[16.25px]">{coverLandscapeError}</p>
               ) : (
-                <p className="text-[10px] text-gray-400 text-center leading-relaxed">{t.coverHint}</p>
+                <p className="text-[10px] text-gray-400 text-center leading-[16.25px]">{t.coverHint}</p>
               )}
             </div>
 
@@ -2005,7 +2097,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                     }}
                     placeholder={t.descPlaceholder}
                     rows={3}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm outline-none hover:border-gray-400 focus:border-black focus:ring-1 focus:ring-black transition-all resize-none"
+                    className="w-full px-4 py-3 rounded-[10px] border border-gray-200 text-sm leading-5 outline-none hover:border-gray-400 focus:border-black focus:ring-1 focus:ring-black transition-all resize-none"
                   />
                   <span className="absolute bottom-2.5 right-3 text-xs text-gray-400">
                     {basicInfo.description.length}/{DESC_LIMIT}
@@ -2013,8 +2105,9 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                 </div>
               </Field>
 
-              <div className="grid grid-cols-2 gap-4">
-                <Field label={t.episodesLabel} required hint={isRejected ? t.episodesUnlockHint : t.episodesLockHint}>
+              {/* 集数 / 总时长 / 频道 同行三列（稿件 18033:981）；锁定提示挪到输入框下，避免窄列标题折行错位 */}
+              <div className="grid grid-cols-3 gap-3">
+                <Field label={t.episodesLabel} required>
                   <input
                     type="number"
                     min="1"
@@ -2024,6 +2117,9 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                     placeholder={t.episodesPlaceholder}
                     className={`${inputClass(false)} ${plannedLocked ? "bg-gray-50 text-gray-400 cursor-not-allowed" : ""}`}
                   />
+                  <p className="pt-1 text-[10px] leading-[15px] text-gray-400">
+                    {isRejected ? t.episodesUnlockHint : t.episodesLockHint}
+                  </p>
                 </Field>
                 <Field label={t.totalDurationLabel} required>
                   <input
@@ -2035,10 +2131,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                     className={inputClass(false)}
                   />
                 </Field>
-              </div>
-
-              <Field label={t.channelLabel} required>
-                <div className="flex gap-2">
+                <Field label={t.channelLabel} required>
+                <div className="flex gap-1.5">
                   {CHANNEL_VALUES.map((c) => {
                     const active = basicInfo.channel === c;
                     return (
@@ -2046,7 +2140,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                         key={c}
                         type="button"
                         onClick={() => bi({ channel: c })}
-                        className="flex-1 py-2.5 rounded-lg text-sm border transition-all"
+                        className="flex-1 py-2.5 rounded-[10px] text-xs leading-4 border transition-all"
                         style={{
                           background: active ? "#111111" : "white",
                           color: active ? "white" : "#374151",
@@ -2059,8 +2153,11 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                     );
                   })}
                 </div>
-              </Field>
+                </Field>
+              </div>
 
+              {/* 剧集语言 / 类别 同行两列（稿件 18033:1013） */}
+              <div className="grid grid-cols-2 gap-4">
               {/* 剧集语言：单选，同时决定类别候选与题材/标签小字翻译的语种 */}
               <Field label={t.langLabel} required>
                 <select
@@ -2094,7 +2191,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                     {t.readingDuration}
                   </div>
                 ) : (
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-3">
                     {classificationOptions.map((item) => {
                       const selected = basicInfo.classificationId === item.classificationId;
                       return (
@@ -2102,10 +2199,10 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                           key={item.classificationId}
                           type="button"
                           onClick={() => bi({ classificationId: item.classificationId })}
-                          className="px-2.5 py-1 rounded-lg text-xs border transition-all"
+                          className="px-4 py-2.5 rounded-[10px] text-sm leading-5 border transition-all"
                           style={{
-                            background: selected ? "#111111" : "#FAFAFA",
-                            color: selected ? "white" : "#6B7280",
+                            background: selected ? "#111111" : "white",
+                            color: selected ? "white" : "#374151",
                             borderColor: selected ? "#111111" : "#E5E7EB",
                             fontWeight: selected ? 600 : 400,
                           }}
@@ -2120,6 +2217,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                   </div>
                 )}
               </Field>
+              </div>
 
               {/* 题材：一级分类，语言无关字典，显示名按主语言渲染（稿件 18033-780） */}
               <Field label={t.genreLabel} required>
@@ -2133,7 +2231,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                 ) : genreOptions.length === 0 ? (
                   <p className="text-xs text-gray-400">{t.genreEmpty}</p>
                 ) : (
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-2">
                     {genreOptions.map((item) => {
                       const selected = basicInfo.genreId === item.genreId;
                       return (
@@ -2148,10 +2246,10 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                                   { genreId: item.genreId, tagIds: [] },
                             )
                           }
-                          className="px-2.5 py-1 rounded-lg text-xs border transition-all"
+                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-[14px] text-sm leading-5 border transition-all"
                           style={{
-                            background: selected ? "#111111" : "#FAFAFA",
-                            color: selected ? "white" : "#6B7280",
+                            background: selected ? "#111111" : "white",
+                            color: selected ? "white" : "#374151",
                             borderColor: selected ? "#111111" : "#E5E7EB",
                             fontWeight: selected ? 600 : 400,
                           }}
@@ -2159,12 +2257,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                           {item.genreName}
                           {/* 小字是同一个题材的翻译，纯展示；英文界面下后端不下发，这里自然不渲染 */}
                           {item.genreNameLocal ? (
-                            <span
-                              className="ml-1.5 text-[10px]"
-                              style={{ color: selected ? "#D1D5DB" : "#9CA3AF", fontWeight: 400 }}
-                            >
-                              {item.genreNameLocal}
-                            </span>
+                            <span className="text-[10px] leading-[14.286px] opacity-60">{item.genreNameLocal}</span>
                           ) : null}
                         </button>
                       );
@@ -2194,8 +2287,12 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                       )
                       .map((group) => (
                         <div key={group.genreId ?? "ungrouped"}>
-                          <p className="text-[11px] text-gray-400 mb-1.5" style={{ fontWeight: 600 }}>
+                          <p className="text-[10px] leading-[15px] text-gray-400 pb-1.5" style={{ fontWeight: 500 }}>
                             {group.genreName || t.tagsUngrouped}
+                            {(() => {
+                              const local = genreOptions.find((g) => g.genreId === group.genreId)?.genreNameLocal;
+                              return local ? <span className="text-gray-300"> · {local}</span> : null;
+                            })()}
                           </p>
                           <div className="flex flex-wrap gap-1.5">
                             {group.labels.map((label) => {
@@ -2211,10 +2308,10 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                                         : [...basicInfo.tagIds, label.labelId],
                                     })
                                   }
-                                  className="px-2.5 py-1 rounded-lg text-xs border transition-all"
+                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[10px] text-xs leading-4 border transition-all"
                                   style={{
                                     background: selected ? "#111111" : "#FAFAFA",
-                                    color: selected ? "white" : "#6B7280",
+                                    color: selected ? "white" : "#374151",
                                     borderColor: selected ? "#111111" : "#E5E7EB",
                                     fontWeight: selected ? 600 : 400,
                                   }}
@@ -2222,12 +2319,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                                   {label.labelName}
                                   {/* 小字 = 该标签的翻译，纯展示，不是另一个标签 */}
                                   {label.labelNameLocal ? (
-                                    <span
-                                      className="ml-1.5 text-[10px]"
-                                      style={{ color: selected ? "#D1D5DB" : "#9CA3AF", fontWeight: 400 }}
-                                    >
-                                      {label.labelNameLocal}
-                                    </span>
+                                    <span className="text-[10px] leading-[13.333px] opacity-50">{label.labelNameLocal}</span>
                                   ) : null}
                                 </button>
                               );
@@ -2239,18 +2331,15 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                 )}
               </Field>
 
-              {/* 版权与交付资料：① 版权证书 ② 附加材料（可选）③ 源文件网盘链接（稿件 18033-780） */}
+              {/* 版权与交付资料：① 版权证书 ② 附加材料（可选）③ 源文件网盘链接（稿件 18033:1195） */}
               <Field label={t.deliveryLabel} required>
-                <p className="mb-2 flex items-center gap-1.5 text-xs text-gray-700" style={{ fontWeight: 600 }}>
-                  <span className="text-gray-400">①</span>
-                  {t.proofSectionTitle}
-                </p>
-                <div className="flex gap-5">
+                <DeliverySectionHeading no="①" title={t.proofSectionTitle} />
+                <div className="flex gap-5 pt-2">
                   {[
                     { val: 1, label: t.copyrightSelf },
                     { val: 2, label: t.copyrightLicensed },
                   ].map((opt) => (
-                    <label key={opt.val} className="flex items-center gap-2 cursor-pointer">
+                    <label key={opt.val} className="flex h-5 items-center gap-2 cursor-pointer">
                       <div
                         onClick={() => {
                           if (basicInfo.copyrightType === opt.val) return;
@@ -2264,7 +2353,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                         {basicInfo.copyrightType === opt.val && <div className="w-2 h-2 rounded-full bg-[#111111]" />}
                       </div>
                       <span
-                        className="text-sm text-gray-700"
+                        className="text-sm leading-5 text-gray-700"
                         style={{ fontWeight: basicInfo.copyrightType === opt.val ? 600 : 400 }}
                       >
                         {opt.label}
@@ -2273,8 +2362,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                   ))}
                 </div>
 
-                {/* 自制：三选一确权材料（Figma 17195:516） */}
-                {basicInfo.copyrightType === 1 && (
+                {/* 自制：二选一确权材料；② 附加材料在上传按钮与注释之间（稿件 18033:1218） */}
+                {basicInfo.copyrightType === 1 ? (
                   <SelfCopyrightUpload
                     t={t}
                     taskId={taskId}
@@ -2287,45 +2376,42 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                     }}
                     value={basicInfo.copyrightProof}
                     onChange={(url) => bi({ copyrightProof: url })}
+                    extra={
+                      <ExtraMaterialsSection
+                        t={t}
+                        value={basicInfo.extraMaterials}
+                        onChange={(joined) => bi({ extraMaterials: joined })}
+                      />
+                    }
                   />
+                ) : (
+                  /* 授权：版权证明（图片/PDF/Word），稿件无单独画板，节奏沿用自制分支 */
+                  <div className="pt-2">
+                    <p className="text-xs leading-4 text-gray-500" style={{ fontWeight: 500 }}>
+                      {t.copyrightProofLabel} <span className="text-red-500">*</span>
+                    </p>
+                    <div className="pt-3">
+                      <CopyrightProofUpload
+                        t={t}
+                        taskId={taskId}
+                        value={basicInfo.copyrightProof}
+                        onChange={(url) => bi({ copyrightProof: url })}
+                      />
+                    </div>
+                    <ExtraMaterialsSection
+                      t={t}
+                      value={basicInfo.extraMaterials}
+                      onChange={(joined) => bi({ extraMaterials: joined })}
+                    />
+                  </div>
                 )}
               </Field>
 
-              {/* 授权：版权证明（图片/PDF/Word） */}
-              {basicInfo.copyrightType === 2 && (
-                <Field label={t.copyrightProofLabel} required>
-                  <CopyrightProofUpload
-                    t={t}
-                    taskId={taskId}
-                    value={basicInfo.copyrightProof}
-                    onChange={(url) => bi({ copyrightProof: url })}
-                  />
-                </Field>
-              )}
-
-              {/* ② 附加材料上传（可选，多文件） */}
+              {/* ③ 源文件网盘链接（可选，稿件 18033:1303） */}
               <div>
-                <p className="mb-1 flex items-center gap-1.5 text-xs text-gray-700" style={{ fontWeight: 600 }}>
-                  <span className="text-gray-400">②</span>
-                  {t.extraMaterialsTitle}
-                  <span className="text-gray-400" style={{ fontWeight: 400 }}>
-                    {t.extraMaterialsOptional}
-                  </span>
-                </p>
-                <p className="mb-2 text-[11px] text-gray-400 leading-relaxed">{t.extraMaterialsDesc}</p>
-                <ExtraMaterialsUpload
-                  t={t}
-                  value={basicInfo.extraMaterials}
-                  onChange={(joined) => bi({ extraMaterials: joined })}
-                />
-              </div>
-
-              {/* ③ 源文件网盘链接（可选） */}
-              <div>
-                <p className="mb-2 flex items-center gap-1.5 text-xs text-gray-700" style={{ fontWeight: 600 }}>
-                  <span className="text-gray-400">③</span>
-                  {t.sourceFileTitle}
-                </p>
+                <div className="pb-1.5">
+                  <DeliverySectionHeading no="③" title={t.sourceFileTitle} />
+                </div>
                 <input
                   type="url"
                   value={basicInfo.sourceFileUrl}
@@ -2333,7 +2419,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                   placeholder={t.sourceFilePlaceholder}
                   className={inputClass(false)}
                 />
-                {/* 提取码：网盘链接自带密码时才填，独立可选字段 */}
+                {/* 提取码：网盘链接自带密码时才填，独立可选字段（稿件无此项，样式同链接输入框） */}
                 <input
                   type="text"
                   value={basicInfo.sourceFileCode}
@@ -2342,17 +2428,19 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                   maxLength={64}
                   className={`${inputClass(false)} mt-2`}
                 />
-                <div className="mt-2 rounded-[14px] border border-gray-100 bg-gray-50 px-3.5 py-2.5">
-                  <p className="text-[11px] text-gray-600" style={{ fontWeight: 600 }}>
-                    {t.sourceFileNeedTitle}
-                  </p>
-                  <ul className="mt-1 space-y-0.5">
-                    {[t.sourceFileNeed1, t.sourceFileNeed2, t.sourceFileNeed3, t.sourceFileNeed4].map((line) => (
-                      <li key={line} className="text-[11px] text-gray-500 leading-[18px]">
-                        {line}
-                      </li>
-                    ))}
-                  </ul>
+                <div className="pt-2">
+                  <div className="rounded-[14px] border border-gray-200 bg-gray-50 px-3 py-2.5">
+                    <p className="text-[10px] leading-[15px] text-gray-500" style={{ fontWeight: 600 }}>
+                      {t.sourceFileNeedTitle}
+                    </p>
+                    <ul className="pt-1 space-y-0.5">
+                      {[t.sourceFileNeed1, t.sourceFileNeed2, t.sourceFileNeed3, t.sourceFileNeed4].map((line) => (
+                        <li key={line} className="text-[10px] leading-[15px] text-gray-400">
+                          <CircledNumLine text={line} />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2659,24 +2747,24 @@ export const UploadForm: React.FC<UploadFormProps> = ({
       {/* ── Step 3 发布配置：高光 → 发布范围 → 各国收费规则（默认立即上架） ── */}
       {step === 3 && (
         <div className="max-w-4xl space-y-5">
-          {/* 发布范围 */}
+          {/* 授权平台 + 可选外部平台同一张卡（稿件 18033:1735） */}
           <div className="bg-white rounded-2xl border border-gray-100 p-6">
-            <h3 className="text-sm text-gray-900 mb-1" style={{ fontWeight: 700 }}>
+            <h3 className="text-sm leading-5 text-gray-900" style={{ fontWeight: 700 }}>
               {t.distSectionTitle}
             </h3>
-            <p className="text-xs text-gray-400 mb-4">{t.distSectionDesc}</p>
-            <div className="mb-3 flex items-center gap-2">
-              <span className="text-sm text-gray-900" style={{ fontWeight: 700 }}>
+            <p className="pt-1 text-xs leading-4 text-gray-400">{t.distSectionDesc}</p>
+            <div className="pt-5 flex items-center gap-2">
+              <span className="text-xs leading-4 text-gray-900" style={{ fontWeight: 600 }}>
                 {t.lollipopGroupLabel}
               </span>
               <span
-                className="px-2 py-0.5 rounded-full text-xs"
-                style={{ background: "#FFF1F2", color: "#E8192C", fontWeight: 500 }}
+                className="px-2 py-0.5 rounded text-[10px] leading-[15px]"
+                style={{ background: "#FFF1F2", color: "#E8192C", fontWeight: 600 }}
               >
                 {t.lollipopRequiredBadge}
               </span>
             </div>
-            <div className="grid grid-cols-2 gap-5">
+            <div className="pt-3 grid grid-cols-2 gap-4">
               {[
                 {
                   scope: 1,
@@ -2686,7 +2774,6 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                   badge: t.optAccountBadge,
                   badgeBg: "#F3F4F6",
                   badgeColor: "#374151",
-                  revenueTitle: t.revenueAccountTitle,
                 },
                 {
                   scope: 2,
@@ -2696,7 +2783,6 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                   badge: t.optFullBadge,
                   badgeBg: "#FFF1F2",
                   badgeColor: "#E8192C",
-                  revenueTitle: t.revenueFullTitle,
                 },
               ]
                 .map((meta) => {
@@ -2711,7 +2797,6 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                   badge: string;
                   badgeBg: string;
                   badgeColor: string;
-                  revenueTitle: string;
                   revenue: RevenueOption;
                 } => opt !== null)
                 .map((opt) => {
@@ -2724,32 +2809,28 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                   <div
                     key={opt.scope}
                     onClick={() => setPubConfig((p) => ({ ...p, publishScope: opt.scope }))}
-                    className="rounded-2xl border-2 p-5 cursor-pointer transition-all"
+                    className="rounded-2xl border-2 p-4 cursor-pointer transition-all"
                     style={{ borderColor: active ? "#111111" : "#E5E7EB", background: active ? "#FAFAFA" : "white" }}
                   >
-                    <div className="flex items-start mb-3">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                          <div
-                            className="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0"
-                            style={{ borderColor: active ? "#111111" : "#D1D5DB" }}
-                          >
-                            {active && <div className="w-2 h-2 rounded-full bg-[#111111]" />}
-                          </div>
-                          <span className="text-sm text-gray-900" style={{ fontWeight: 700 }}>
-                            {opt.title}
-                          </span>
-                          <span
-                            className="px-2 py-0.5 rounded-full text-xs flex-shrink-0"
-                            style={{ background: opt.badgeBg, color: opt.badgeColor, fontWeight: 500 }}
-                          >
-                            {opt.badge}
-                          </span>
-                        </div>
-                        <p className="text-xs text-gray-500 leading-relaxed pl-6">{opt.desc}</p>
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0"
+                        style={{ borderColor: active ? "#111111" : "#D1D5DB" }}
+                      >
+                        {active && <div className="w-2 h-2 rounded-full bg-[#111111]" />}
                       </div>
+                      <span className="min-w-0 truncate text-sm leading-5 text-gray-900" style={{ fontWeight: 700 }}>
+                        {opt.title}
+                      </span>
+                      <span
+                        className="ml-auto px-2 py-0.5 rounded-full text-[10px] leading-[15px] flex-shrink-0"
+                        style={{ background: opt.badgeBg, color: opt.badgeColor, fontWeight: 500 }}
+                      >
+                        {opt.badge}
+                      </span>
                     </div>
-                    <div className="flex justify-center py-2">
+                    <p className="pt-2 pl-6 text-xs leading-[19.5px] text-gray-400">{opt.desc}</p>
+                    <div className="flex justify-center pt-5 pb-2">
                       <PhoneMockup
                         highlights={opt.highlights}
                         dramaName={basicInfo.name}
@@ -2758,11 +2839,11 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                         placeholderName={t.nameLabel}
                       />
                     </div>
-                    <div className="flex flex-wrap gap-1.5 mt-3">
+                    <div className="flex flex-wrap gap-1.5">
                       {opt.highlights.map((h) => (
                         <span
                           key={h}
-                          className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs"
+                          className="flex h-6 items-center gap-1 px-2 rounded-[10px] text-xs leading-4"
                           style={{
                             background: active ? "#111111" : "#F3F4F6",
                             color: active ? "white" : "#6B7280",
@@ -2776,25 +2857,22 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                         </span>
                       ))}
                     </div>
-                    <div className="mt-4 pt-4 border-t border-gray-100">
-                      <p className="text-xs text-gray-700 mb-2.5" style={{ fontWeight: 600 }}>
-                        {opt.revenueTitle}
-                      </p>
-                      <div className="flex gap-3">
+                    <div className="pt-3">
+                      <div className="flex gap-2 pt-3 border-t border-gray-100">
                         {rows.map((r, ri) => (
                           <div
                             key={ri}
-                            className="flex-1 rounded-lg px-3 py-2"
+                            className="flex-1 rounded-[10px] px-3 py-2"
                             style={{ background: r.highlight ? (active ? "#111111" : "#F3F4F6") : "#F9FAFB" }}
                           >
                             <p
-                              className="text-xs mb-0.5"
+                              className="text-[10px] leading-[15px]"
                               style={{ color: r.highlight && active ? "rgba(255,255,255,0.7)" : "#9CA3AF" }}
                             >
                               {r.label}
                             </p>
                             <p
-                              className="text-sm"
+                              className="pt-0.5 text-sm leading-5"
                               style={{ fontWeight: 800, color: r.highlight ? (active ? "white" : "#111111") : "#6B7280" }}
                             >
                               {r.val}
@@ -2807,80 +2885,94 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                 );
               })}
             </div>
-          </div>
 
-          {/* 可选外部平台（稿件 18033-1599）：比例走后管 common_info(3171)，前端不写死 */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-6">
-            <h3 className="text-sm text-gray-900 mb-1" style={{ fontWeight: 700 }}>
-              {t.extPlatformTitle}
-            </h3>
-            <p className="text-xs text-gray-400 mb-4">{t.extPlatformDesc}</p>
-            {externalPlatformOptions.length === 0 ? (
-              <p className="text-xs text-gray-400">{t.emptyTitle}</p>
-            ) : (
-              <div className="grid gap-3 sm:grid-cols-2">
-                {externalPlatformOptions.map((item) => {
-                  const active = pubConfig.externalPlatforms.includes(item.code);
-                  return (
-                    <button
-                      key={item.code}
-                      type="button"
-                      onClick={() => toggleExternalPlatform(item.code)}
-                      className="flex items-center gap-3 rounded-xl border-2 px-4 py-3 text-left transition-all"
-                      style={{ borderColor: active ? "#111111" : "#E5E7EB", background: active ? "#FAFAFA" : "white" }}
-                    >
-                      <span
-                        className="w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0"
-                        style={{
-                          borderColor: active ? "#111111" : "#D1D5DB",
-                          background: active ? "#111111" : "white",
-                        }}
-                      >
-                        {active && <div className="w-1.5 h-1.5 rounded-[1px] bg-white" />}
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block truncate text-sm text-gray-900" style={{ fontWeight: 600 }}>
-                          {item.platformName}
-                        </span>
-                        {item.subtitle ? (
-                          <span className="block truncate text-[11px] text-gray-400">{item.subtitle}</span>
-                        ) : null}
-                      </span>
-                      <span className="flex gap-3 flex-shrink-0">
-                        <span className="text-right">
-                          <span className="block text-[10px] text-gray-400">{t.platform}</span>
-                          <span className="block text-xs text-gray-600" style={{ fontWeight: 700 }}>
-                            {item.platformRatio === null ? t.extPlatformRatioNA : `${item.platformRatio}%`}
-                          </span>
-                        </span>
-                        <span className="text-right">
-                          <span className="block text-[10px] text-gray-400">{t.producer}</span>
-                          <span className="block text-xs text-gray-900" style={{ fontWeight: 800 }}>
-                            {item.creatorRatio === null ? t.extPlatformRatioNA : `${item.creatorRatio}%`}
-                          </span>
-                        </span>
-                      </span>
-                    </button>
-                  );
-                })}
+            {/* 可选外部平台（稿件 18033:2008）：比例走后管 common_info(3171)，前端不写死 */}
+            <div className="pt-5">
+              <div className="pt-5 border-t border-gray-100">
+                <p className="text-xs leading-4 text-gray-900" style={{ fontWeight: 600 }}>
+                  {t.extPlatformTitle}
+                </p>
+                <p className="pt-1 text-[10px] leading-[15px] text-gray-400">{t.extPlatformDesc}</p>
+                <div className="pt-3">
+                  {externalPlatformOptions.length === 0 ? (
+                    <p className="text-xs text-gray-400">{t.emptyTitle}</p>
+                  ) : (
+                    <div className="grid grid-cols-3 gap-3">
+                      {externalPlatformOptions.map((item) => {
+                        const active = pubConfig.externalPlatforms.includes(item.code);
+                        return (
+                          <button
+                            key={item.code}
+                            type="button"
+                            onClick={() => toggleExternalPlatform(item.code)}
+                            className="flex flex-col rounded-[14px] border-2 p-3.5 text-left transition-all"
+                            style={{ borderColor: active ? "#111111" : "#E5E7EB", background: active ? "#FAFAFA" : "white" }}
+                          >
+                            <span className="flex w-full items-center gap-2">
+                              <span
+                                className="w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0"
+                                style={{
+                                  borderColor: active ? "#111111" : "#D1D5DB",
+                                  background: active ? "#111111" : "white",
+                                }}
+                              >
+                                {active && <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />}
+                              </span>
+                              <span className="min-w-0 truncate text-sm leading-5 text-gray-900" style={{ fontWeight: 600 }}>
+                                {item.platformName}
+                              </span>
+                            </span>
+                            <span className="block w-full truncate pt-2 pl-6 text-[10px] leading-[15px] text-gray-400">
+                              {item.subtitle ?? "\u00A0"}
+                            </span>
+                            <span className="flex w-full gap-2 pt-2.5">
+                              <span className="flex-1 min-w-0 rounded-[10px] bg-gray-50 px-2.5 py-1.5">
+                                <span className="block text-[9px] leading-[13.5px] text-gray-400">{t.platform}</span>
+                                <span className="block pt-0.5 text-xs leading-4 text-gray-500" style={{ fontWeight: 700 }}>
+                                  {item.platformRatio === null ? t.extPlatformRatioNA : `${item.platformRatio}%`}
+                                </span>
+                              </span>
+                              <span
+                                className="flex-1 min-w-0 rounded-[10px] px-2.5 py-1.5"
+                                style={{ background: active ? "#111111" : "#F3F4F6" }}
+                              >
+                                <span
+                                  className="block text-[9px] leading-[13.5px]"
+                                  style={{ color: active ? "rgba(255,255,255,0.6)" : "#9CA3AF" }}
+                                >
+                                  {t.producer}
+                                </span>
+                                <span
+                                  className="block pt-0.5 text-xs leading-4"
+                                  style={{ color: active ? "white" : "#111111", fontWeight: 700 }}
+                                >
+                                  {item.creatorRatio === null ? t.extPlatformRatioNA : `${item.creatorRatio}%`}
+                                </span>
+                              </span>
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
+            </div>
           </div>
 
-          {/* 高光时刻 */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-6">
-            <div className="mb-1 flex items-center gap-2">
-              <h3 className="text-sm text-gray-900" style={{ fontWeight: 700 }}>
-                {t.uploadHighlight} <span className="text-red-500">*</span>
-              </h3>
-              <span
-                className="px-2 py-0.5 rounded-full text-xs"
-                style={{ background: "#FFF1F2", color: "#E8192C", fontWeight: 500 }}
-              >
+          {/* 高光时刻（稿件 18033:2165） */}
+          <div className="bg-white rounded-2xl border border-amber-200 p-6">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <h3 className="text-sm leading-5 text-gray-900" style={{ fontWeight: 700 }}>
+                  {t.highlightSectionTitle} <span className="text-red-500">*</span>
+                </h3>
+                <p className="pt-0.5 text-xs leading-4 text-gray-400">{t.highlightDesc}</p>
+              </div>
+              <span className="flex-shrink-0 px-2 py-1 rounded-[10px] border border-amber-100 bg-amber-50 text-xs leading-4 text-amber-600">
                 {t.highlightRequiredBadge}
               </span>
             </div>
-            <p className="text-xs text-gray-400 mb-4">{t.highlightDesc}</p>
             <input
               ref={highlightRef}
               type="file"
@@ -2892,14 +2984,15 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                 void onPickHighlight(f);
               }}
             />
+            <div className="pt-5">
             {highlight.videoUrl ? (
-              <div className="flex items-center gap-3 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3">
+              <div className="flex items-center gap-3 rounded-[14px] border border-gray-100 bg-gray-50 px-4 py-3">
                 <Film className="w-4 h-4 text-gray-400 flex-shrink-0" />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm text-gray-800" style={{ fontWeight: 600 }}>
+                  <p className="truncate text-sm leading-5 text-gray-800" style={{ fontWeight: 600 }}>
                     {highlight.fileName || fileNameFromUrl(highlight.videoUrl)}
                   </p>
-                  <p className="mt-0.5 text-xs text-gray-400">
+                  <p className="pt-0.5 text-xs leading-4 text-gray-400">
                     {highlight.fileSize !== null ? formatBytes(highlight.fileSize) : "—"}{" "}
                     {highlight.uploadTime ? `· ${highlight.uploadTime}` : ""}
                   </p>
@@ -2927,40 +3020,50 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                 type="button"
                 onClick={() => highlightRef.current?.click()}
                 disabled={highlight.uploading}
-                className="w-full h-[88px] rounded-xl border border-dashed border-gray-300 flex flex-col items-center justify-center gap-1.5 text-gray-400 hover:border-gray-400 transition-colors disabled:opacity-60"
+                className="w-full rounded-[14px] border-2 border-dashed border-gray-200 flex items-center justify-center gap-2 py-3 hover:border-gray-400 transition-colors disabled:opacity-60"
               >
-                {highlight.uploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-5 h-5" />}
-                <span className="text-sm">
-                  {highlight.uploading ? t.highlightUploading : t.highlightUploadPrompt}
+                <span className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 text-gray-500">
+                  {highlight.uploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
                 </span>
-                {!highlight.uploading && <span className="text-[11px] text-gray-300">{t.highlightFormatHint}</span>}
+                <span className="flex flex-col items-start text-left">
+                  <span className="text-xs leading-4 text-gray-600" style={{ fontWeight: 500 }}>
+                    {highlight.uploading ? t.highlightUploading : t.highlightUploadPrompt}
+                  </span>
+                  {!highlight.uploading && (
+                    <span className="text-[10px] leading-[15px] text-gray-400" style={{ fontWeight: 500 }}>
+                      {t.highlightFormatHint}
+                    </span>
+                  )}
+                </span>
               </button>
             )}
-            {highlight.error && <p className="mt-2 text-xs text-red-500">{highlight.error}</p>}
+            </div>
+            {highlight.error && <p className="pt-2 text-xs text-red-500">{highlight.error}</p>}
           </div>
 
-          {/* 提交条：收费规则改为左下入口弹层（稿件 18033-1599），不再内嵌整表 */}
+          {/* 提交条：收费规则改为左下入口弹层（稿件 18033:2195），不再内嵌整表 */}
           <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-            <div className="flex items-center justify-between px-5 py-3.5 bg-gray-50/40">
+            <div className="flex items-center justify-between px-5 py-4">
               <button
                 type="button"
                 onClick={() => setPricingModalOpen(true)}
-                className="text-xs text-gray-500 underline underline-offset-2 hover:text-gray-900"
+                className="flex items-center gap-1.5 text-xs leading-4 text-gray-500 hover:text-gray-900"
                 style={{ fontWeight: 500 }}
               >
+                <Info className="w-3.5 h-3.5" />
                 {t.viewPricingRules}
               </button>
               <div className="flex items-center gap-3">
                 <button
                   onClick={onCancel}
-                  className="px-5 py-2 rounded-xl border border-gray-200 text-gray-700 text-sm hover:bg-gray-50"
+                  className="px-5 py-2 rounded-[14px] border border-gray-200 text-gray-700 text-sm leading-5 hover:bg-gray-50"
                   style={{ fontWeight: 500 }}
                 >
                   {t.cancel}
                 </button>
                 <button
                   onClick={() => setStep(2)}
-                  className="px-5 py-2 rounded-xl border border-gray-200 text-gray-700 text-sm hover:bg-gray-50"
+                  className="px-5 py-2 rounded-[14px] border border-gray-200 text-gray-700 text-sm leading-5 hover:bg-gray-50"
                   style={{ fontWeight: 500 }}
                 >
                   {t.prev}
@@ -2968,7 +3071,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                 <button
                   onClick={() => void handleSubmit()}
                   disabled={submitting || revenueOptions.length === 0}
-                  className="px-5 py-2 rounded-xl text-white text-sm hover:opacity-90 disabled:opacity-60 flex items-center gap-2"
+                  className="px-5 py-2 rounded-[14px] text-white text-sm leading-5 hover:opacity-90 disabled:opacity-40 flex items-center gap-2"
                   style={{ background: "#111111", fontWeight: 600 }}
                 >
                   {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
@@ -2995,10 +3098,10 @@ export const UploadForm: React.FC<UploadFormProps> = ({
               <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center mb-4">
                 <AlertCircle className="w-5 h-5 text-amber-500" />
               </div>
-              <h3 className="text-gray-900 mb-2" style={{ fontWeight: 700, fontSize: "1rem" }}>
+              <h3 className="text-gray-900 pb-2" style={{ fontWeight: 700, fontSize: "1rem" }}>
                 {t.episodesLabel}
               </h3>
-              <p className="text-sm text-gray-500 leading-relaxed mb-5">
+              <p className="text-sm text-gray-500 leading-relaxed pb-5">
                 {fmt(t.episodesReduceConfirm, {
                   from: reduceConfirm.from,
                   to: reduceConfirm.to,

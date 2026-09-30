@@ -194,6 +194,6 @@ export const Field: React.FC<{
 
 /** 文本输入框基础类 */
 export const inputClass = (err = false) =>
-  `w-full px-4 py-2.5 rounded-lg border text-sm outline-none transition-all ${
+  `w-full px-4 py-2.5 rounded-[10px] border text-sm outline-none transition-all ${
     err ? "border-red-400" : "border-gray-200 hover:border-gray-400 focus:border-black focus:ring-1 focus:ring-black"
   }`;

@@ -4,6 +4,14 @@
 # This config assumes the built dist/ is served from /var/www/lollipop
 # Adjust paths as needed for your deployment.
 
+{
+	# 信任 Cloudflare 转发的 X-Forwarded-Proto / X-Forwarded-For，
+	# 否则 Caddy 处于 CF(Flexible SSL) 之后会以为自己是 http，
+	# 自动的「无斜杠→有斜杠」跳转会发出 http:// Location（诊断发现 /about → http://...），
+	# 造成抓取链路明文降级、与 HTTPS canonical 冲突。开启后跳转回到 https://。
+	trusted_proxies cloudflare
+}
+
 {$SITE_DOMAIN:www.lollipop.im} {
 	root * /var/www/lollipop
 

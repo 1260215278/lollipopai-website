@@ -41,6 +41,7 @@ export function CreatingPage({ onNavigate }: { onNavigate: (page: string) => voi
 
   return (
     <main className="pt-20 bg-[#0a0000]">
+      <h1 className="sr-only">Lollipop Drama AI Creation Tools — Create Short Dramas with AI</h1>
       <AIFeaturesSection />
       <CreatorSection onNavigate={onNavigate} />
 

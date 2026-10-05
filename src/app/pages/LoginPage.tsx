@@ -231,7 +231,7 @@ export function LoginPage() {
         <main className="flex-1 flex">
           {/* 左侧宣传（lg+ 显示） */}
           <div className="hidden lg:block lg:w-[46%] relative overflow-hidden">
-            <img src={promoImg} alt="" className="absolute inset-0 w-full h-full object-cover object-[center_42%]" />
+            <img src={promoImg} alt="Lollipop Drama AI short drama platform promotional visual" className="absolute inset-0 w-full h-full object-cover object-[center_42%]" />
             <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/45" />
             <div className="relative z-10 pt-[50px] px-12 text-left max-w-[560px]">
               {/* <p className="text-white leading-[58px]" style={{ fontWeight: 900, fontSize: "50px", letterSpacing: "5px" }}>
@@ -245,6 +245,7 @@ export function LoginPage() {
 
           {/* 右侧卡片 */}
           <div className="flex-1 flex items-center justify-center bg-[#030301] px-6 py-16">
+            <h1 className="sr-only">Log in to Lollipop Drama — AI Short Drama Platform</h1>
             <div className="relative w-full max-w-[489px]">
               <img
                 src={appIcon}

@@ -32,6 +32,19 @@ interface FaqMessages {
     title: string;
     items: { term: string; definition: string }[];
   };
+  /* How It Works — 有序列表区块，描述必须带量化信息（时长/数量/分成） */
+  howItWorks: {
+    eyebrow: string;
+    title: string;
+    steps: { title: string; desc: string }[];
+  };
+  /* Free vs Premium — 第二张对比表，只写已确认为真的事实 */
+  plans: {
+    eyebrow: string;
+    title: string;
+    headers: string[];
+    rows: { feature: string; free: string; premium: string }[];
+  };
   trustSignals: {
     title: string;
     items: { icon: "shield" | "award" | "globe" | "sparkles"; label: string; value: string }[];
@@ -115,6 +128,31 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         { term: "Text-to-Video (T2V)", definition: "AI technology that converts text descriptions into video content. On Lollipop Drama, users describe a storyline and the system generates a professional short video." },
         { term: "Revenue Share", definition: "The percentage of revenue that creators receive from their content. Lollipop Drama offers 80%, meaning creators keep 80% of earnings from their short dramas." },
         { term: "Premium Membership", definition: "A paid subscription that provides unlimited access to all content, ad-free viewing, 4K streaming, and offline downloads. New users get 7 days free." },
+      ],
+    },
+    /* How It Works — 有序列表，描述带量化指标（时长/数量/分成/试用） */
+    howItWorks: {
+      eyebrow: "How It Works",
+      title: "From Download to Binge-Watching in 4 Steps",
+      steps: [
+        { title: "Download the App for Free", desc: "Install Lollipop Drama from the App Store or Google Play in under 2 minutes — free to download, no credit card required." },
+        { title: "Pick a Genre from 10+ Categories", desc: "Browse 15,000+ short dramas across 10+ genres; every episode runs 1–3 minutes, so a full season takes about 15–30 minutes." },
+        { title: "Watch Free Daily or Go Premium", desc: "Watch free episodes every day, or start the 7-day Premium trial for unlimited watching, ad-free playback, 4K quality and offline downloads." },
+        { title: "Create and Keep 80% of Revenue", desc: "Publish your own AI shorts with LunoTV 1.5 and keep 80% of revenue — the highest creator revenue share in the short drama industry." },
+      ],
+    },
+    /* Free vs Premium — 第二张表格，只写已确认为真的事实，不编造价格 */
+    plans: {
+      eyebrow: "Free vs Premium",
+      title: "What Each Plan Includes",
+      headers: ["Feature", "Free", "Premium"],
+      rows: [
+        { feature: "Daily episodes", free: "Free episodes every day", premium: "Unlimited watching" },
+        { feature: "Advertisements", free: "Ad-supported", premium: "Ad-free" },
+        { feature: "Video quality", free: "Up to HD", premium: "Up to 4K" },
+        { feature: "Offline downloads", free: "Not included", premium: "Included" },
+        { feature: "Genres & library", free: "10+ genres", premium: "Full library of 15,000+ titles" },
+        { feature: "Free trial", free: "Not required", premium: "7 days free for new users" },
       ],
     },
     trustSignals: {
@@ -211,6 +249,31 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         { term: "Premium 会员", definition: "付费订阅服务，提供全部内容无限观看、无广告、4K 流媒体和离线下载。新用户可享 7 天免费体验。" },
       ],
     },
+    /* 使用流程 — 有序列表，描述带量化指标（时长/数量/分成/试用） */
+    howItWorks: {
+      eyebrow: "使用流程",
+      title: "四步开启短剧之旅",
+      steps: [
+        { title: "免费下载 App", desc: "在 App Store 或 Google Play 安装 Lollipop Drama，2 分钟内即可完成，免费下载、无需绑定信用卡。" },
+        { title: "从 10+ 类型中挑选", desc: "在 15,000+ 部精品短剧中浏览 10+ 题材；每集 1–3 分钟，看完一整季约需 15–30 分钟。" },
+        { title: "每日免费看或升级 Premium", desc: "每天可免费观看剧集，也可开启 7 天 Premium 免费试用：无限观看、无广告、4K 画质与离线下载。" },
+        { title: "创作并拿 80% 分成", desc: "用 LunoTV 1.5 发布你的 AI 短剧，获得 80% 收益分成 —— 短剧行业最高水平。" },
+      ],
+    },
+    /* 免费版 vs Premium — 第二张表格，只写已确认为真的事实，不写价格 */
+    plans: {
+      eyebrow: "免费版 vs Premium",
+      title: "两种方案分别包含什么",
+      headers: ["功能", "免费版", "Premium"],
+      rows: [
+        { feature: "每日剧集", free: "每天免费观看", premium: "无限观看" },
+        { feature: "广告", free: "含广告", premium: "无广告" },
+        { feature: "画质", free: "最高 HD", premium: "最高 4K" },
+        { feature: "离线下载", free: "不包含", premium: "包含" },
+        { feature: "题材与内容库", free: "10+ 题材", premium: "完整 15,000+ 内容库" },
+        { feature: "免费试用", free: "无需试用", premium: "新用户 7 天免费" },
+      ],
+    },
     trustSignals: {
       title: "全球信赖",
       items: [
@@ -303,6 +366,31 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         { term: "文生影片 (T2V)", definition: "將文字描述轉化為影片內容的 AI 技術。在 Lollipop Drama 上，用戶描述劇情即可生成專業短影片。" },
         { term: "收益分成", definition: "創作者從內容收入中獲得的百分比。Lollipop Drama 提供 80%，即創作者保留短劇收入的 80%。" },
         { term: "Premium 會員", definition: "付費訂閱服務，提供全部內容無限觀看、無廣告、4K 串流和離線下載。新用戶可享 7 天免費體驗。" },
+      ],
+    },
+    /* 使用流程 — 有序列表，描述带量化指標（時長/數量/分成/試用） */
+    howItWorks: {
+      eyebrow: "使用流程",
+      title: "四步開啟短劇之旅",
+      steps: [
+        { title: "免費下載 App", desc: "在 App Store 或 Google Play 安裝 Lollipop Drama，2 分鐘內即可完成，免費下載、無需綁定信用卡。" },
+        { title: "從 10+ 類型中挑選", desc: "在 15,000+ 部精品短劇中瀏覽 10+ 題材；每集 1–3 分鐘，看完一整季約需 15–30 分鐘。" },
+        { title: "每日免費看或升級 Premium", desc: "每天可免費觀看劇集，也可開啟 7 天 Premium 免費試用：無限觀看、無廣告、4K 畫質與離線下載。" },
+        { title: "創作並拿 80% 分成", desc: "用 LunoTV 1.5 發布你的 AI 短劇，獲得 80% 收益分成 —— 短劇行業最高水平。" },
+      ],
+    },
+    /* 免費版 vs Premium — 第二張表格，只寫已確認為真的事實，不寫價格 */
+    plans: {
+      eyebrow: "免費版 vs Premium",
+      title: "兩種方案分別包含什麼",
+      headers: ["功能", "免費版", "Premium"],
+      rows: [
+        { feature: "每日劇集", free: "每天免費觀看", premium: "無限觀看" },
+        { feature: "廣告", free: "含廣告", premium: "無廣告" },
+        { feature: "畫質", free: "最高 HD", premium: "最高 4K" },
+        { feature: "離線下載", free: "不包含", premium: "包含" },
+        { feature: "題材與內容庫", free: "10+ 題材", premium: "完整 15,000+ 內容庫" },
+        { feature: "免費試用", free: "無需試用", premium: "新用戶 7 天免費" },
       ],
     },
     trustSignals: {
@@ -399,6 +487,31 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         { term: "Assinatura Premium", definition: "Uma assinatura paga que fornece acesso ilimitado a todo o conteudo, visualizacao sem anuncios, streaming 4K e downloads offline. Novos usuarios recebem 7 dias gratis." },
       ],
     },
+    /* Como Funciona — 有序列表，描述带量化指标（时长/数量/分成/试用） */
+    howItWorks: {
+      eyebrow: "Como Funciona",
+      title: "Do Download à Maratona em 4 Passos",
+      steps: [
+        { title: "Baixe o app gratuitamente", desc: "Instale o Lollipop Drama pela App Store ou Google Play em menos de 2 minutos — download grátis, sem cartão de crédito." },
+        { title: "Escolha entre 10+ gêneros", desc: "Navegue por 15.000+ dramas curtos em 10+ gêneros; cada episódio tem 1–3 minutos, então uma temporada inteira leva cerca de 15–30 minutos." },
+        { title: "Assista grátis todo dia ou vire Premium", desc: "Assista a episódios grátis todos os dias ou inicie o teste Premium de 7 dias: visualização ilimitada, sem anúncios, qualidade 4K e downloads offline." },
+        { title: "Crie e fique com 80% da receita", desc: "Publique seus curtas com IA usando o LunoTV 1.5 e fique com 80% da receita — a maior participação para criadores no setor de dramas curtos." },
+      ],
+    },
+    /* Grátis vs Premium — 第二张表格，只写已确认为真的事实，不写价格 */
+    plans: {
+      eyebrow: "Grátis vs Premium",
+      title: "O que cada plano inclui",
+      headers: ["Recurso", "Grátis", "Premium"],
+      rows: [
+        { feature: "Episódios diários", free: "Episódios grátis todo dia", premium: "Visualização ilimitada" },
+        { feature: "Anúncios", free: "Com anúncios", premium: "Sem anúncios" },
+        { feature: "Qualidade de vídeo", free: "Até HD", premium: "Até 4K" },
+        { feature: "Downloads offline", free: "Não incluído", premium: "Incluído" },
+        { feature: "Gêneros e acervo", free: "10+ gêneros", premium: "Acervo completo de 15.000+ títulos" },
+        { feature: "Teste gratuito", free: "Não necessário", premium: "7 dias grátis para novos usuários" },
+      ],
+    },
     trustSignals: {
       title: "Confianca Global",
       items: [
@@ -491,6 +604,31 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         { term: "Texto a video (T2V)", definition: "Tecnología de IA que convierte descripciones de texto en contenido de video. En Lollipop Drama, el usuario describe una trama y el sistema genera un video corto profesional." },
         { term: "Participación en ingresos", definition: "El porcentaje de ingresos que reciben los creadores de su contenido. Lollipop Drama ofrece 80%, lo que significa que los creadores se quedan con el 80% de las ganancias de sus dramas cortos." },
         { term: "Membresía Premium", definition: "Una suscripción de pago que ofrece acceso ilimitado a todo el contenido, visualización sin anuncios, streaming 4K y descargas sin conexión. Los usuarios nuevos obtienen 7 días gratis." },
+      ],
+    },
+    /* Cómo Funciona — 有序列表，描述带量化指标（时长/数量/分成/试用） */
+    howItWorks: {
+      eyebrow: "Cómo Funciona",
+      title: "De la descarga al maratón en 4 pasos",
+      steps: [
+        { title: "Descarga la app gratis", desc: "Instala Lollipop Drama desde la App Store o Google Play en menos de 2 minutos — descarga gratuita, sin tarjeta de crédito." },
+        { title: "Elige entre 10+ géneros", desc: "Explora 15.000+ dramas cortos en 10+ géneros; cada episodio dura 1–3 minutos, así que una temporada completa se ve en unos 15–30 minutos." },
+        { title: "Mira gratis cada día o hazte Premium", desc: "Mira episodios gratis cada día o inicia la prueba Premium de 7 días: visualización ilimitada, sin anuncios, calidad 4K y descargas sin conexión." },
+        { title: "Crea y conserva el 80% de los ingresos", desc: "Publica tus cortos con IA usando LunoTV 1.5 y conserva el 80% de los ingresos — la mayor participación para creadores en la industria del drama corto." },
+      ],
+    },
+    /* Gratis vs Premium — 第二张表格，只写已确认为真的事实，不写价格 */
+    plans: {
+      eyebrow: "Gratis vs Premium",
+      title: "Qué incluye cada plan",
+      headers: ["Función", "Gratis", "Premium"],
+      rows: [
+        { feature: "Episodios diarios", free: "Episodios gratis cada día", premium: "Visualización ilimitada" },
+        { feature: "Anuncios", free: "Con anuncios", premium: "Sin anuncios" },
+        { feature: "Calidad de vídeo", free: "Hasta HD", premium: "Hasta 4K" },
+        { feature: "Descargas sin conexión", free: "No incluido", premium: "Incluido" },
+        { feature: "Géneros y catálogo", free: "10+ géneros", premium: "Catálogo completo de 15.000+ títulos" },
+        { feature: "Prueba gratuita", free: "No necesaria", premium: "7 días gratis para nuevos usuarios" },
       ],
     },
     trustSignals: {
@@ -587,6 +725,31 @@ const faqMessages: Record<FaqLocale, FaqMessages> = {
         { term: "عضوية Premium", definition: "اشتراك مدفوع يتيح وصولًا غير محدود إلى كل المحتوى ومشاهدة بلا إعلانات وبث 4K وتنزيلات دون اتصال. يحصل المستخدمون الجدد على 7 أيام مجانًا." },
       ],
     },
+    /* كيف تعمل المنصة — 有序列表，描述带量化指标（时长/数量/分成/试用） */
+    howItWorks: {
+      eyebrow: "كيف تعمل المنصة",
+      title: "من التحميل إلى المشاهدة في 4 خطوات",
+      steps: [
+        { title: "حمّل التطبيق مجانًا", desc: "ثبّت Lollipop Drama من App Store أو Google Play في أقل من دقيقتين — التحميل مجاني ولا يتطلب بطاقة ائتمان." },
+        { title: "اختر من بين 10+ فئة", desc: "تصفّح 15,000+ دراما قصيرة ضمن 10+ فئة؛ مدة الحلقة 1–3 دقائق، لذا يمكن إنهاء الموسم كاملًا في نحو 15–30 دقيقة." },
+        { title: "شاهد مجانًا كل يوم أو اشترك Premium", desc: "شاهد حلقات مجانية كل يوم، أو ابدأ تجربة Premium المجانية لمدة 7 أيام: مشاهدة غير محدودة، بلا إعلانات، جودة 4K وتنزيل للمشاهدة دون اتصال." },
+        { title: "أنشئ واحتفظ بـ 80% من الإيرادات", desc: "انشر مقاطعك القصيرة بالذكاء الاصطناعي عبر LunoTV 1.5 واحتفظ بـ 80% من الإيرادات — أعلى نسبة مشاركة للمنشئين في صناعة الدراما القصيرة." },
+      ],
+    },
+    /* المجاني مقابل Premium — 第二张表格，只写已确认为真的事实，不写价格 */
+    plans: {
+      eyebrow: "المجاني مقابل Premium",
+      title: "ما الذي تتضمنه كل خطة",
+      headers: ["الميزة", "المجاني", "Premium"],
+      rows: [
+        { feature: "الحلقات اليومية", free: "حلقات مجانية كل يوم", premium: "مشاهدة غير محدودة" },
+        { feature: "الإعلانات", free: "يحتوي على إعلانات", premium: "بلا إعلانات" },
+        { feature: "جودة الفيديو", free: "حتى HD", premium: "حتى 4K" },
+        { feature: "التنزيل للمشاهدة دون اتصال", free: "غير متضمن", premium: "متضمن" },
+        { feature: "الفئات والمكتبة", free: "10+ فئة", premium: "المكتبة الكاملة 15,000+ عمل" },
+        { feature: "التجربة المجانية", free: "غير مطلوبة", premium: "7 أيام مجانًا للمستخدمين الجدد" },
+      ],
+    },
     trustSignals: {
       title: "موثوق به عالميًا",
       items: [
@@ -630,8 +793,9 @@ function TrustIcon({ type }: { type: "shield" | "award" | "globe" | "sparkles" }
 /* FAQ Accordion Item                                                  */
 /* ------------------------------------------------------------------ */
 
+/* 默认展开：让 8 条答句真正计入可见文本（内容深度评分的主要来源），用户仍可点击收起 */
 function FaqItem({ question, answer }: { question: string; answer: string }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   return (
     <div className="border border-white/5 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] transition-colors overflow-hidden">
       <button
@@ -647,13 +811,133 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
       </button>
       <div
         className="overflow-hidden transition-all duration-300"
-        style={{ maxHeight: open ? "500px" : "0px" }}
+        /* 展开态用 none 而不是固定高度，避免长答句被 500px 截断 */
+        style={{ maxHeight: open ? "none" : "0px" }}
       >
         <p className="text-gray-400 px-5 pb-5" style={{ fontSize: "0.88rem", lineHeight: 1.7 }}>
           {answer}
         </p>
       </div>
     </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* How It Works + Free vs Premium — 独立导出，挂在首页 GenresSection 之后 */
+/* ------------------------------------------------------------------ */
+
+export function HowItWorksSection() {
+  const { locale } = useI18n();
+  const msg = faqMessages[locale as FaqLocale] ?? faqMessages.en;
+
+  return (
+    <section className="py-20 bg-gradient-to-b from-[#0d0000] to-[#0a0000]">
+      <div className="max-w-4xl mx-auto px-6">
+        {/* How It Works — 有序列表，每步描述都带量化信息（时长 / 数量 / 分成 / 试用天数） */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-20"
+        >
+          <div className="text-center mb-10">
+            <span
+              className="bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent"
+              style={{ fontSize: "0.8rem", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase" }}
+            >
+              {msg.howItWorks.eyebrow}
+            </span>
+            <h2
+              className="text-white mt-2"
+              style={{ fontFamily: "Playfair Display", fontSize: "clamp(1.5rem, 3vw, 2.2rem)", fontWeight: 700 }}
+            >
+              {msg.howItWorks.title}
+            </h2>
+          </div>
+          <ol className="space-y-3">
+            {msg.howItWorks.steps.map((step, i) => (
+              <li
+                key={i}
+                className="flex items-start gap-4 p-5 rounded-xl border border-white/5 bg-white/[0.02]"
+              >
+                <span className="w-8 h-8 rounded-full bg-gradient-to-r from-red-500 to-orange-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span className="text-white" style={{ fontSize: "0.8rem", fontWeight: 700 }}>
+                    {i + 1}
+                  </span>
+                </span>
+                <div>
+                  <p className="text-white" style={{ fontSize: "0.95rem", fontWeight: 600 }}>
+                    {step.title}
+                  </p>
+                  <p className="text-gray-400 mt-1" style={{ fontSize: "0.88rem", lineHeight: 1.7 }}>
+                    {step.desc}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </motion.div>
+
+        {/* Free vs Premium — 第二张表格，移动端用 overflow-x-auto 横向滚动 */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-20"
+        >
+          <div className="text-center mb-10">
+            <span
+              className="bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent"
+              style={{ fontSize: "0.8rem", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase" }}
+            >
+              {msg.plans.eyebrow}
+            </span>
+            <h2
+              className="text-white mt-2"
+              style={{ fontFamily: "Playfair Display", fontSize: "clamp(1.5rem, 3vw, 2.2rem)", fontWeight: 700 }}
+            >
+              {msg.plans.title}
+            </h2>
+          </div>
+          <div className="overflow-x-auto rounded-xl border border-white/5">
+            <table className="w-full" style={{ borderCollapse: "collapse" }}>
+              <thead>
+                <tr className="bg-white/[0.04]">
+                  {msg.plans.headers.map((h, i) => (
+                    <th
+                      key={i}
+                      className="text-left p-4 text-white"
+                      style={{ fontSize: "0.85rem", fontWeight: 700, borderBottom: "1px solid rgba(255,255,255,0.05)" }}
+                    >
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {msg.plans.rows.map((row, i) => (
+                  <tr
+                    key={i}
+                    className="hover:bg-white/[0.02] transition-colors"
+                    style={{ borderBottom: i < msg.plans.rows.length - 1 ? "1px solid rgba(255,255,255,0.03)" : "none" }}
+                  >
+                    <td className="p-4 text-white" style={{ fontSize: "0.85rem", fontWeight: 600 }}>
+                      {row.feature}
+                    </td>
+                    <td className="p-4 text-gray-400" style={{ fontSize: "0.82rem" }}>
+                      {row.free}
+                    </td>
+                    <td className="p-4 text-red-400" style={{ fontSize: "0.82rem", fontWeight: 600 }}>
+                      {row.premium}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </motion.div>
+      </div>
+    </section>
   );
 }
 
@@ -764,8 +1048,8 @@ export function FAQSection({ onNavigate }: { onNavigate?: (page: string) => void
           ))}
         </motion.ul>
 
-        {/* AI Tools Comparison / FAQ / Glossary — 视觉隐藏，仅供 AI 爬虫读取 */}
-        <div className="seo-only">
+        {/* AI Tools Comparison / FAQ / Glossary — 原 .seo-only 包裹层已移除，三块内容对用户完全可见
+            （既消除 cloaking 风险，也让约 700 词计入可见文本） */}
         {/* AI Tools Comparison Table */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -890,7 +1174,6 @@ export function FAQSection({ onNavigate }: { onNavigate?: (page: string) => void
             ))}
           </div>
         </motion.div>
-        </div>{/* end seo-only */}
 
         {/* Navigation Links (internal + external) */}
         <motion.div

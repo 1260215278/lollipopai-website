@@ -8,7 +8,7 @@ import { GenresSection } from "./components/GenresSection";
 import { WhyChooseSection } from "./components/WhyChooseSection";
 import { Web2Web3Section } from "./components/Web2Web3Section";
 import { TestimonialsSection } from "./components/TestimonialsSection";
-import { FAQSection, TrustSignalsSection } from "./components/FAQSection";
+import { FAQSection, TrustSignalsSection, HowItWorksSection } from "./components/FAQSection";
 import { Footer } from "./components/Footer";
 import { BackToTop } from "./components/BackToTop";
 // ── 非首页页面组件：静态导入，保证 SSR 预渲染可同步渲染（同时消除客户端骨架屏）──
@@ -199,6 +199,8 @@ export default function App({ initialPage = "home" }: { initialPage?: MarketingP
           <TrendingSection />
           <NewReleasesSection />
           <GenresSection />
+          {/* How It Works（有序列表）+ Free vs Premium（第二张表格） */}
+          <HowItWorksSection />
           {/* <WhyChooseSection /> */}
           {/* <PricingSection /> */}
           {/* <Web2Web3Section /> */}

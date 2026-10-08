@@ -1344,6 +1344,64 @@ function stripSiteFaqSchema(html: string): string {
 }
 
 /**
+ * 预渲染 HTML 无损压缩（2026-10-07 SEO 审计：HTML 体积 10/15、DOM 规模 6/10）。
+ *
+ * 只做两件事，不触碰任何其它字节（零视觉改动、零语义改动）：
+ *   1. JSON-LD 紧凑化：<script type="application/ld+json"> 内的 JSON 走
+ *      JSON.parse → JSON.stringify，去掉缩进与换行空白。
+ *      site-schema 是仓库根 index.html 里硬编码的带缩进 JSON（25,771 B），
+ *      紧凑后 14,077 B（-45.4%）；该块被复制到全部 434 个页面，故全站生效。
+ *   2. 删除内联 <svg> 上冗余的 xmlns 属性：HTML5 内联 SVG 无需声明命名空间，
+ *      每个约 25 B，首页 71 个共约 1,775 B。其余属性（class/width/height/
+ *      viewBox/fill/stroke/d/cx/cy/r …）一个都不动。
+ *
+ * 保护性回退：JSON 解析失败、解析结果为空对象/空数组、@graph 节点数为 0
+ *  → 一律原样保留原文，绝不抛错或清空（宁可冗余，不可破坏 JSON-LD）。
+ * 幂等：紧凑 JSON 再 parse/stringify 结果相同；已删的 xmlns 不再匹配。
+ *
+ * ⚠️ 顺序约束：必须发生在 scripts/compress-dist.mjs 之前。该文件生成
+ *    .br/.gz 预压缩产物，Caddy 配了 precompressed zstd gzip；若在压缩之后
+ *    改 HTML，磁盘上的 .br/.gz 会与 HTML 不一致 → 线上仍是旧体积/脏内容。
+ *    因此压缩内联在 prerender 写盘阶段，而不是独立后处理脚本。
+ */
+function minifyPrerenderedHtml(html: string): string {
+  // 1. JSON-LD 紧凑化（同时覆盖 id="site-schema" 与 id="page-schema"，属性顺序无关）
+  let out = html.replace(
+    /(<script[^>]*type="application\/ld\+json"[^>]*>)([\s\S]*?)(<\/script>)/gi,
+    (full, open: string, body: string, close: string) => {
+      try {
+        const obj = JSON.parse(body) as unknown;
+        if (obj === null || typeof obj !== "object") return full;
+        const graph = (obj as Record<string, unknown>)["@graph"];
+        if (Array.isArray(graph) && graph.length === 0) return full;
+        const compact = JSON.stringify(obj);
+        if (!compact || compact === "{}" || compact === "[]") return full;
+        return open + compact + close;
+      } catch {
+        return full; // 解析失败：保持原样
+      }
+    },
+  );
+
+  // 2. 删除内联 SVG 的 xmlns（连前导空格一起删，仅此一个属性）
+  out = out.replace(/(<svg[^>]*?)\s+xmlns="http:\/\/www\.w3\.org\/2000\/svg"/gi, "$1");
+
+  return out;
+}
+
+/** minify 统计（每次 build 在 prerender 阶段累计） */
+let minifyFiles = 0;
+let minifySavedBytes = 0;
+
+/** 写盘前统一 minify，并累计节省字节数 */
+function writeMinifiedHtml(filePath: string, html: string): void {
+  const minified = minifyPrerenderedHtml(html);
+  minifySavedBytes += Buffer.byteLength(html, "utf-8") - Buffer.byteLength(minified, "utf-8");
+  minifyFiles++;
+  writeFileSync(filePath, minified, "utf-8");
+}
+
+/**
  * 将 SEO 数据注入 HTML 模板，生成静态 HTML。
  * 策略：替换 <title>、插入/更新 <meta>、插入 canonical、OG tags、JSON-LD。
  */
@@ -2039,7 +2097,7 @@ export function prerenderPlugin(): Plugin {
         html = rewriteNonSubsetLinks(html, route.path);
         const filePath = join(outDir, `${route.path}/index.html`);
         mkdirSync(dirname(filePath), { recursive: true });
-        writeFileSync(filePath, html, "utf-8");
+        writeMinifiedHtml(filePath, html);
         count++;
       }
 
@@ -2057,7 +2115,7 @@ export function prerenderPlugin(): Plugin {
           homeHtml = injectHomepageContent(homeHtml);
         }
         homeHtml = injectSeoIntoHtml(homeHtml, homeRoute);
-        writeFileSync(join(outDir, "index.html"), homeHtml, "utf-8");
+        writeMinifiedHtml(join(outDir, "index.html"), homeHtml);
       }
 
       // 清理临时 SSR bundle
@@ -2117,6 +2175,9 @@ export function prerenderPlugin(): Plugin {
 
       console.log(
         `[prerender] Generated ${count} static HTML files (SSR ${renderRouteFn ? "enabled — full content rendered" : "disabled — meta-only mode"}) for ${routes.length} routes`,
+      );
+      console.log(
+        `[prerender] HTML minify (JSON-LD compact + inline SVG xmlns strip): ${minifyFiles} files, saved ${minifySavedBytes.toLocaleString("en-US")} bytes (${(minifySavedBytes / 1024).toFixed(1)} KB)`,
       );
     },
   };

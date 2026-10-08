@@ -1,0 +1,25 @@
+# 安全响应头（Cloudflare Pages / Netlify 的 _headers 语法）
+#
+# 生效范围说明（重要）：
+#   本文件【仅】在 Cloudflare Pages 或 Netlify 托管静态产物时生效。
+#   当前生产是「自建源站（Caddy）+ Cloudflare 代理」，_headers 不会被读取，
+#   实际生效的是仓库根的 Caddyfile。2026-10-07 线上实测这 6 项头全部缺失，
+#   且 dist/_redirects 虽可访问但不被引擎遵守 —— 印证了生产不是 Pages。
+#   保留本文件的目的：将来若迁移到 Cloudflare Pages / Netlify，
+#   不至于因为漏配而让安全响应头一夜之间全掉。
+#
+# 语法：路径后面缩进一行或多行「头名: 值」，/* 匹配全部路径。
+#
+# ⚠️ _headers 语法不支持「删除响应头」，所以 Caddyfile 里的 `-Server`
+#    （隐藏 Server 版本）这一项故意不写在这里 —— 写上去会变成无效指令。
+#    迁移到 Pages 时 Server 头由 Cloudflare 自己给，本身就是 cloudflare。
+#
+# 部署后验证：python scripts/check-security-headers.py
+
+/*
+  Strict-Transport-Security: max-age=15768000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:; media-src 'self' https:; frame-ancestors 'none'
+  Permissions-Policy: camera=(), microphone=(), geolocation=()

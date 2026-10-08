@@ -15,7 +15,35 @@
 {$SITE_DOMAIN:www.lollipop.im} {
 	root * /var/www/lollipop
 
+	# ─────────────────────────────────────────────────────────────────────
 	# Security HTTP headers
+	#
+	# ⚠️ 2026-10-07 线上实测：下面这 6 项头在生产上【全部缺失】。
+	#    curl 伪装浏览器 UA 访问 https://www.lollipop.im/，响应头里只有
+	#    Server: cloudflare、X-XSS-Protection、X-Content-Type-Options、
+	#    Referrer-Policy、Nel、Report-To、cf-cache-status ——
+	#    没有 HSTS、没有 CSP、没有 X-Frame-Options。
+	#
+	#    佐证（同一份配置里的 301 也没生效）：本文件配了
+	#      redir /guides/* /blog 301   和   redir /lollipop/* ... 301
+	#    但线上 /guides/workflow、/lollipop 都返回 200 且无 Location 头；
+	#    dist/_redirects 线上可下载却不被引擎遵守，说明生产不是 Cloudflare
+	#    Pages，而是「自建源站 + Cloudflare 代理」。
+	#    → 结论：不是配置写错，是这份 Caddyfile 没被源站加载。
+	#
+	# 部署到源站的正确姿势：
+	#   1) 把本文件放到源站的 /etc/caddy/Caddyfile
+	#   2) caddy fmt --overwrite /etc/caddy/Caddyfile   # 校验语法 + 统一缩进
+	#   3) systemctl reload caddy                       # 优雅重载，不断连接
+	#   （用 reload 而不是 restart；若改了全局 {} 块才需要 restart）
+	#
+	# 部署后验证（脚本会伪装 UA，绕开 Cloudflare 对 urllib 默认 UA 的 403）：
+	#   python scripts/check-security-headers.py
+	#   期望输出：首页 6 项全 PASS、得分 35/35、退出码 0。
+	#   当前（未部署）实测：9/35，缺 HSTS / CSP / X-Frame-Options，退出码 1。
+	#
+	# 注意：header 值本身不要再改，它们已经是对的；问题只在于没部署。
+	# ─────────────────────────────────────────────────────────────────────
 	header {
 		# Force HTTPS (6 months = 15768000 seconds)
 		Strict-Transport-Security "max-age=15768000; includeSubDomains; preload"

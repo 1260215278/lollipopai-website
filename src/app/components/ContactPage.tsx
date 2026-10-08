@@ -75,7 +75,7 @@ export function ContactPage({ onNavigate }: { onNavigate: (page: string) => void
       <section className="relative w-full h-[70vh] min-h-[480px] flex items-center justify-center overflow-hidden">
         <img
           src={bannerBg}
-          alt=""
+          alt="Lollipop Drama contact page banner"
           className="absolute inset-0 w-full h-full object-cover"
           loading="eager"
           fetchpriority="high"
@@ -138,7 +138,7 @@ export function ContactPage({ onNavigate }: { onNavigate: (page: string) => void
                   className="w-16 h-16 mx-auto rounded-full flex items-center justify-center"
                   style={{ background: card.bg }}
                 >
-                  <img src={card.icon} alt="" className="w-8 h-8" loading="lazy" />
+                  <img src={card.icon} alt={`${card.title} contact icon`} className="w-8 h-8" loading="lazy" />
                 </div>
                 <h3 className="text-white mt-5" style={{ fontSize: "1.1rem", fontWeight: 700, lineHeight: "26.4px" }}>{card.title}</h3>
                 <a

@@ -73,7 +73,7 @@ export function AboutPage({ onNavigate }: { onNavigate?: (page: string) => void 
       <section className="relative w-full h-[70vh] min-h-[480px] flex items-center justify-center overflow-hidden">
         <img
           src={heroImg}
-          alt=""
+          alt="Lollipop Drama AI short drama platform banner showing creative workspace"
           className="absolute inset-0 w-full h-full object-cover"
           loading="eager"
           fetchpriority="high"

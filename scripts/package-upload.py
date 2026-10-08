@@ -76,6 +76,40 @@ with zipfile.ZipFile(full) as z:
             print(f"    ! {n}")
 
 print()
+print("==> 多语言完整性自检（防 P0：zh/zh-TW/pt 漏打导致线上返回英文）")
+import glob as _glob
+LOCALES = {
+    "": "en",
+    "zh": "zh-CN",
+    "zh-TW": "zh-TW",
+    "pt": "pt",
+    "es": "es",
+    "ar": "ar",
+}
+ALL_OK = True
+for sub, expect_lang in LOCALES.items():
+    idx = os.path.join(DIST, sub, "index.html") if sub else os.path.join(DIST, "index.html")
+    if not os.path.isfile(idx):
+        print(f"  MISS  dist/{sub or ''}/index.html  (本地化首页缺失!)")
+        ALL_OK = False
+        continue
+    txt = open(idx, encoding="utf-8", errors="ignore").read()
+    m = re.search(r'<html[^>]*lang="([^"]+)"', txt)
+    lang = m.group(1) if m else ""
+    ok = lang.lower().startswith(expect_lang.lower())
+    # zh 必须是真实中文内容：含 CJK 字符，否则是英文回退
+    cjk = bool(re.search(r"[一-鿿]", txt)) if sub in ("zh", "zh-TW") else True
+    status = "OK " if (ok and cjk) else "BAD "
+    if not (ok and cjk):
+        ALL_OK = False
+    extra = "" if cjk else " (无中文内容=英文回退!)"
+    print(f"  {status} dist/{sub or '<root>'}/index.html lang={lang} (期望 {expect_lang}){extra}")
+if not ALL_OK:
+    print("  !! 多语言自检未通过：请先 clean build 再打包，勿上传此包")
+else:
+    print("  ✅ 6 语言本地化首页全部存在且语言正确")
+
+print()
 print("==> 产物")
 print(f"  完整版（推荐 SSH / 面板 / Caddy 源站）: {full}")
 print(f"  精简版（Cloudflare Pages 等自压缩环境）: {slim}")

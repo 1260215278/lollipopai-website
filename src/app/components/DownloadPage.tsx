@@ -42,6 +42,7 @@ export function DownloadPage({ onNavigate }: { onNavigate: (page: string) => voi
 
   return (
     <main className="pt-20 bg-[#080000]">
+      <h1 className="sr-only">Download Lollipop Drama App — AI Short Drama Platform</h1>
       <DownloadCTA />
 
       {/* 为什么下载 App —— 本地化正文，补足页面内容深度 */}

@@ -171,11 +171,12 @@ export function ForgotPasswordPage() {
 
         <main className="flex-1 flex">
           <div className="hidden lg:block lg:w-[46%] relative overflow-hidden">
-            <img src={promoImg} alt="" className="absolute inset-0 w-full h-full object-cover" />
+            <img src={promoImg} alt="Lollipop Drama AI short drama platform promotional visual" className="absolute inset-0 w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/45" />
           </div>
 
           <div className="flex-1 flex items-center justify-center bg-[#030301] px-6 py-16">
+            <h1 className="sr-only">Reset Password — Lollipop Drama AI Short Drama Platform</h1>
             <div className="relative w-full max-w-[489px]">
               <img
                 src={appIcon}

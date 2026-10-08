@@ -516,19 +516,19 @@ export function getLocalizedDynamicSeo(
     const templates: Record<typeof pageType, { title: string; desc: string }> = {
       genre: {
         title: `${name}短剧 — 在线观看 | ${brand}`,
-        desc: `在${brand}上观看${name}题材短剧。海量精品${name}短剧，AI与真人创作内容，支持免费在线观看。`,
+        description: `在${brand}上观看${name}题材短剧。海量精品${name}短剧，AI与真人创作内容，支持免费在线观看。`,
       },
       drama: {
         title: `${name} — 免费观看短剧 | ${brand}`,
-        desc: `在${brand}上观看《${name}》。精彩短剧免费在线观看，支持多语言字幕，移动端畅享4K观影体验。`,
+        description: `在${brand}上观看《${name}》。精彩短剧免费在线观看，支持多语言字幕，移动端畅享4K观影体验。`,
       },
       blog: {
         title: `${name} | ${brand}博客`,
-        desc: `阅读${brand}博客文章《${name}》。了解AI短剧行业动态、创作者经济和制作教程。`,
+        description: `阅读${brand}博客文章《${name}》。了解AI短剧行业动态、创作者经济和制作教程。`,
       },
       region: {
         title: `${name}短剧 — 本地热门 | ${brand}`,
-        desc: `为${name}用户推荐热门短剧，支持本地支付方式，畅享${brand}优质内容。`,
+        description: `为${name}用户推荐热门短剧，支持本地支付方式，畅享${brand}优质内容。`,
       },
     };
     return templates[pageType];
@@ -538,19 +538,19 @@ export function getLocalizedDynamicSeo(
     const templates: Record<typeof pageType, { title: string; desc: string }> = {
       genre: {
         title: `${name}短劇 — 線上觀看 | ${brand}`,
-        desc: `在${brand}上觀看${name}題材短劇。海量精品${name}短劇，AI與真人創作內容，支持免費線上觀看。`,
+        description: `在${brand}上觀看${name}題材短劇。海量精品${name}短劇，AI與真人創作內容，支持免費線上觀看。`,
       },
       drama: {
         title: `${name} — 免費觀看短劇 | ${brand}`,
-        desc: `在${brand}上觀看《${name}》。精彩短劇免費線上觀看，支援多語言字幕，行動端暢享4K觀影體驗。`,
+        description: `在${brand}上觀看《${name}》。精彩短劇免費線上觀看，支援多語言字幕，行動端暢享4K觀影體驗。`,
       },
       blog: {
         title: `${name} | ${brand}部落格`,
-        desc: `閱讀${brand}部落格文章《${name}》。了解AI短劇行業動態、創作者經濟和製作教程。`,
+        description: `閱讀${brand}部落格文章《${name}》。了解AI短劇行業動態、創作者經濟和製作教程。`,
       },
       region: {
         title: `${name}短劇 — 本地熱門 | ${brand}`,
-        desc: `為${name}用戶推薦熱門短劇，支援本地支付方式，暢享${brand}優質內容。`,
+        description: `為${name}用戶推薦熱門短劇，支援本地支付方式，暢享${brand}優質內容。`,
       },
     };
     return templates[pageType];
@@ -560,19 +560,19 @@ export function getLocalizedDynamicSeo(
     const templates: Record<typeof pageType, { title: string; desc: string }> = {
       genre: {
         title: `Dramas cortos de ${name} — Ver online | ${brand}`,
-        desc: `Mira dramas cortos de ${name} en ${brand}. Producciones destacadas de ${name}, creadas con IA y por humanos. Gratis para ver online.`,
+        description: `Mira dramas cortos de ${name} en ${brand}. Producciones destacadas de ${name}, creadas con IA y por humanos. Gratis para ver online.`,
       },
       drama: {
         title: `${name} — Ver drama corto gratis | ${brand}`,
-        desc: `Mira "${name}" en ${brand}. Dramas cortos disponibles online gratis, con subtítulos en varios idiomas y streaming 4K.`,
+        description: `Mira "${name}" en ${brand}. Dramas cortos disponibles online gratis, con subtítulos en varios idiomas y streaming 4K.`,
       },
       blog: {
         title: `${name} | Blog de ${brand}`,
-        desc: `Lee el artículo "${name}" en el blog de ${brand}. Tendencias de dramas cortos con IA, economía de creadores y tutoriales.`,
+        description: `Lee el artículo "${name}" en el blog de ${brand}. Tendencias de dramas cortos con IA, economía de creadores y tutoriales.`,
       },
       region: {
         title: `Dramas cortos en ${name} — Populares en tu zona | ${brand}`,
-        desc: `Dramas cortos populares para usuarios en ${name}, con métodos de pago locales. Disfruta lo mejor de ${brand}.`,
+        description: `Dramas cortos populares para usuarios en ${name}, con métodos de pago locales. Disfruta lo mejor de ${brand}.`,
       },
     };
     return templates[pageType];
@@ -582,19 +582,19 @@ export function getLocalizedDynamicSeo(
     const templates: Record<typeof pageType, { title: string; desc: string }> = {
       genre: {
         title: `دراما قصيرة من نوع ${name} — مشاهدة عبر الإنترنت | ${brand}`,
-        desc: `شاهد دراما قصيرة من نوع ${name} على ${brand}. أعمال ${name} مميزة من صنع الذكاء الاصطناعي والبشر. مجانًا عبر الإنترنت.`,
+        description: `شاهد دراما قصيرة من نوع ${name} على ${brand}. أعمال ${name} مميزة من صنع الذكاء الاصطناعي والبشر. مجانًا عبر الإنترنت.`,
       },
       drama: {
         title: `${name} — شاهد دراما قصيرة مجانًا | ${brand}`,
-        desc: `شاهد "${name}" على ${brand}. دراما قصيرة متاحة مجانًا عبر الإنترنت، مع ترجمة متعددة اللغات وبث 4K.`,
+        description: `شاهد "${name}" على ${brand}. دراما قصيرة متاحة مجانًا عبر الإنترنت، مع ترجمة متعددة اللغات وبث 4K.`,
       },
       blog: {
         title: `${name} | مدونة ${brand}`,
-        desc: `اقرأ مقال "${name}" في مدونة ${brand}. اتجاهات الدراما القصيرة بالذكاء الاصطناعي واقتصاد المبدعين ودروس الإنتاج.`,
+        description: `اقرأ مقال "${name}" في مدونة ${brand}. اتجاهات الدراما القصيرة بالذكاء الاصطناعي واقتصاد المبدعين ودروس الإنتاج.`,
       },
       region: {
         title: `دراما قصيرة في ${name} — الأكثر رواجًا محليًا | ${brand}`,
-        desc: `دراما قصيرة رائجة لمستخدمي ${name} مع طرق دفع محلية. استمتع بأفضل محتوى ${brand}.`,
+        description: `دراما قصيرة رائجة لمستخدمي ${name} مع طرق دفع محلية. استمتع بأفضل محتوى ${brand}.`,
       },
     };
     return templates[pageType];
@@ -604,19 +604,19 @@ export function getLocalizedDynamicSeo(
     const templates: Record<typeof pageType, { title: string; desc: string }> = {
       genre: {
         title: `Dramas Curtos de ${name} — Assistir Online | ${brand}`,
-        desc: `Assista a dramas curtos de ${name} no ${brand}. Grandes producoes de ${name}, criadas por IA e humanos. Gratis para assistir online.`,
+        description: `Assista a dramas curtos de ${name} no ${brand}. Grandes producoes de ${name}, criadas por IA e humanos. Gratis para assistir online.`,
       },
       drama: {
         title: `${name} — Assistir Drama Curto Gratis | ${brand}`,
-        desc: `Assista a "${name}" no ${brand}. Dramas curtos emocionantes disponiveis online gratis, com legendas multilinguas e streaming 4K.`,
+        description: `Assista a "${name}" no ${brand}. Dramas curtos emocionantes disponiveis online gratis, com legendas multilinguas e streaming 4K.`,
       },
       blog: {
         title: `${name} | Blog ${brand}`,
-        desc: `Leia o artigo "${name}" no blog do ${brand}. Descubra tendencias da industria de dramas curtos com IA, economia de criadores e tutoriais.`,
+        description: `Leia o artigo "${name}" no blog do ${brand}. Descubra tendencias da industria de dramas curtos com IA, economia de criadores e tutoriais.`,
       },
       region: {
         title: `Dramas Curtos em ${name} — Populares Localmente | ${brand}`,
-        desc: `Dramas curtos populares para usuarios em ${name}, com metodos de pagamento locais. Desfrute do melhor do ${brand}.`,
+        description: `Dramas curtos populares para usuarios em ${name}, com metodos de pagamento locais. Desfrute do melhor do ${brand}.`,
       },
     };
     return templates[pageType];

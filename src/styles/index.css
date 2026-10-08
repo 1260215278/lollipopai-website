@@ -5,6 +5,9 @@
 /*
  * .seo-only — 视觉隐藏，内容保留在 DOM 中供 AI 爬虫读取
  * 标准 visually-hidden 技术，内容不可见但完全可被搜索引擎/AI 爬虫解析
+ *
+ * 暂无使用：首页 FAQSection 里唯一一处 .seo-only 包裹层已移除（对比表 / FAQ / Glossary
+ * 三块内容已对用户完全可见），这里保留类定义备用，不要删除。
  */
 .seo-only {
   position: absolute !important;

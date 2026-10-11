@@ -289,7 +289,7 @@ export function applyCustomSeoMeta(seo: SeoMessages, canonicalPath: string): voi
 
   const locale = resolveSeoLocale();
   const localizedPath = localizedHref(locale, canonicalPath);
-  const canonicalUrl = SITE_URL + localizedPath;
+  const canonicalUrl = SITE_URL + (localizedPath === "/" ? "" : localizedPath.endsWith("/") ? localizedPath : localizedPath + "/");
 
   document.title = seo.title;
 

@@ -49,6 +49,11 @@ import { isMultilangSubsetPath } from "../src/app/multilangSubset";
 
 const SITE_URL = "https://www.lollipop.im";
 
+function trailingSlash(path: string): string {
+  if (path === "/" || path === "") return path;
+  return path.endsWith("/") ? path : path + "/";
+}
+
 // ── 多语言（方案 B）常量 ──
 // 语言前缀段（en 无前缀，不在此列）。zh-TW 必须排在 zh 前避免前缀误匹配。
 const MULTILANG_SEGMENTS = ["zh-TW", "zh", "pt", "es", "ar"] as const;
@@ -162,7 +167,7 @@ interface RouteSeoData {
   ogType?: string;
 }
 
-/** P1-3/P1-4: 剧集 slug → 海报图片 basename 映射（用于 og:image 和 VideoObject thumbnailUrl） */
+/** P1-3/P1-4: 剧集 slug → 海报图片 basename 映射（用于 og:image 和 TVSeries image） */
 const dramaPosterBasenames: Record<string, string> = {
   "temptation-ceo": "Temptation_CEO.webp",
   "the-bride-who-fell-from-the-sky": "The_bride_who_fell_from_the_sky.webp",
@@ -521,26 +526,30 @@ function getRouteData(): RouteSeoData[] {
   ];
   for (const d of dramas) {
     const posterBasename = dramaPosterBasenames[d.slug];
+    // Coze 策略 P0（2026-10-05 审计：Organization + FAQPage + TVSeries + HowTo；
+    // 现有 Org/FAQPage/HowTo 已落地，唯独缺 TVSeries）。短剧是分集连续内容，标成
+    // TVSeries 比单个 VideoObject 更准确——原 VideoObject 的 duration:PT2M 把整部剧
+    // 误标成「单个 2 分钟视频」，且无真实播放地址本就不符合 VideoObject 规范。
     const videoSchema = {
       "@context": "https://schema.org",
-      "@type": "VideoObject",
+      "@type": "TVSeries",
       name: d.title.split(" — ")[0],
+      alternateName: `${d.title.split(" — ")[0]} (Lollipop Drama)`,
       description: d.desc,
-      uploadDate: d.uploadDate,
-      // P1-4: thumbnailUrl 使用剧集专属海报（构建时通过 assetMap 解析）
-      // 会在下方 resolveRouteImages() 中被替换为 /assets/xxx-hash.jpg
-      thumbnailUrl: posterBasename ? `__ASSET:${posterBasename}__` : `${SITE_URL}/og-image.png`,
-      // P1-4: duration 为平均单集时长（所有剧均为 2 分钟/集）
-      duration: "PT2M",
-      // P1-4: regionsAllowed 声明可观看地区
-      regionsAllowed: ["US", "GB", "CA", "AU", "SG", "MY", "PH", "ID", "JP", "KR", "BR", "IN", "DE", "FR"],
-      // contentUrl/embedUrl removed — no web player available; pointing to
-      // the page URL would violate Google's VideoObject spec (requires
-      // actual video file URL / embeddable player). App store link is
-      // already on the page as a CTA button.
-      // aggregateRating removed — platform has no user review system yet;
-      // using views as ratingCount violates Google's review snippet spam
-      // policy and risks manual action penalty.
+      // P1-4: image 用剧集专属海报；resolveRouteImages 对序列化后的 __ASSET: 占位符全局替换
+      image: posterBasename ? `__ASSET:${posterBasename}__` : `${SITE_URL}/og-image.png`,
+      dateCreated: d.uploadDate,
+      genre: "Short Drama",
+      inLanguage: "en",
+      url: `${SITE_URL}/drama/${d.slug}`,
+      sameAs: `${SITE_URL}/drama/${d.slug}`,
+      publisher: {
+        "@type": "Organization",
+        name: "Lollipop Drama",
+        url: SITE_URL,
+        logo: { "@type": "ImageObject", url: `${SITE_URL}/src/imports/logo.webp` },
+      },
+      // numberOfEpisodes 未暴露真实分集数，按 GEO 规范不填占位值，避免向 AI 引擎提供不实数据
     };
     routes.push({
       path: `/drama/${d.slug}`,
@@ -577,7 +586,7 @@ function getRouteData(): RouteSeoData[] {
         jobTitle: p.authorRole,
         description: p.authorBio,
         worksFor: { "@type": "Organization", name: "Lollipop Drama", url: SITE_URL },
-        sameAs: [`${SITE_URL}/about`],
+        sameAs: [`${SITE_URL}/about/`],
       },
       publisher: {
         "@type": "Organization",
@@ -640,7 +649,7 @@ function getRouteData(): RouteSeoData[] {
             jobTitle: p.authorRole,
             description: p.authorBio,
             worksFor: { "@type": "Organization", name: "Lollipop Drama", url: SITE_URL },
-            sameAs: [`${SITE_URL}/about`],
+            sameAs: [`${SITE_URL}/about/`],
           },
           publisher: { "@type": "Organization", name: "Lollipop Drama", url: SITE_URL },
           datePublished: p.publishDate,
@@ -841,7 +850,7 @@ function appendMultilangVariants(routes: RouteSeoData[]): void {
           "@type": "CollectionPage",
           name: title,
           description,
-          url: `${SITE_URL}${localizedPath}`,
+          url: `${SITE_URL}${trailingSlash(localizedPath)}`,
           inLanguage: locale,
           isPartOf: { "@type": "WebSite", name: "Lollipop Drama", url: SITE_URL },
         };
@@ -851,7 +860,7 @@ function appendMultilangVariants(routes: RouteSeoData[]): void {
           "@type": "CollectionPage",
           name: title,
           description,
-          url: `${SITE_URL}${localizedPath}`,
+          url: `${SITE_URL}${trailingSlash(localizedPath)}`,
           inLanguage: locale,
           publisher: { "@type": "Organization", name: "Lollipop Drama", url: SITE_URL },
         };
@@ -906,21 +915,21 @@ function buildLocalizedBlogSchema(
       jobTitle: p.authorRole,
       description: p.authorBio,
       worksFor: { "@type": "Organization", name: "Lollipop Drama", url: SITE_URL },
-      sameAs: [`${SITE_URL}/about`],
+      sameAs: [`${SITE_URL}/about/`],
     },
     publisher: { "@type": "Organization", name: "Lollipop Drama", url: SITE_URL, logo: { "@type": "ImageObject", url: `${SITE_URL}/src/imports/logo.webp` } },
     image: { "@type": "ImageObject", url: `${SITE_URL}${p.coverImage || "/blog-images/guide.png"}` },
     thumbnailUrl: `${SITE_URL}${p.coverImage || "/blog-images/guide.png"}`,
     keywords: `${p.categoryLabel}, AI short drama, Lollipop Drama, ${zh ? p.titleZh : p.title}`,
     inLanguage: zh ? "zh" : locale,
-    isPartOf: { "@type": "Blog", name: "Lollipop Drama Blog", url: `${SITE_URL}${locBlogPath}` },
+    isPartOf: { "@type": "Blog", name: "Lollipop Drama Blog", url: `${SITE_URL}${trailingSlash(locBlogPath)}` },
     about: geoEntities.about,
     mentions: geoEntities.mentions,
     accessMode: ["textual", "visual"],
     accessibilitySummary: "Text-based article with images. Screen reader compatible.",
     license: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
     ...(hasSteps ? { teaches: [p.categoryLabel] } : {}),
-    mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}${localizedAppPath}` },
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}${trailingSlash(localizedAppPath)}` },
     // zh articleBody：关键要点 + 中文全文，与英文分支（keyTakeaways + 1500 字符）对齐，提升 GEO/AEO 引擎理解
     ...(zh && (p.keyTakeawaysZh || p.contentZh) ? {
       articleBody: (p.keyTakeawaysZh ? "关键要点: " + p.keyTakeawaysZh.join(" ") + " " : "") + stripMd(p.contentZh ?? ""),
@@ -948,11 +957,11 @@ function buildLocalizedBlogSchema(
           jobTitle: p.authorRole,
           description: p.authorBio,
           worksFor: { "@type": "Organization", name: "Lollipop Drama", url: SITE_URL },
-          sameAs: [`${SITE_URL}/about`],
+          sameAs: [`${SITE_URL}/about/`],
         },
         inLanguage: zh ? "zh" : locale,
-        isPartOf: { "@type": "Blog", name: "Lollipop Drama Blog", url: `${SITE_URL}${locBlogPath}` },
-        mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}${localizedAppPath}` },
+        isPartOf: { "@type": "Blog", name: "Lollipop Drama Blog", url: `${SITE_URL}${trailingSlash(locBlogPath)}` },
+        mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}${trailingSlash(localizedAppPath)}` },
       }
     : null;
 
@@ -1142,16 +1151,16 @@ function generateLlmsFiles(routes: RouteSeoData[]): void {
   lines.push("- \"short drama platform comparison 2026\" — use comparison articles below for structured benchmarks");
   lines.push("");
   lines.push("## Core Pages");
-  for (const c of corePages) lines.push(`- [${c.name}](${S}${c.path}): ${c.desc}`);
+  for (const c of corePages) lines.push(`- [${c.name}](${S}${trailingSlash(c.path)}): ${c.desc}`);
   lines.push("");
   lines.push("## Genres");
-  for (const g of genreRoutes) lines.push(`- [${cleanTitle(g.title)}](${S}${g.path})`);
+  for (const g of genreRoutes) lines.push(`- [${cleanTitle(g.title)}](${S}${trailingSlash(g.path)})`);
   lines.push("");
   lines.push("## Short Dramas");
-  for (const d of dramaRoutes) lines.push(`- [${cleanTitle(d.title)}](${S}${d.path})`);
+  for (const d of dramaRoutes) lines.push(`- [${cleanTitle(d.title)}](${S}${trailingSlash(d.path)})`);
   lines.push("");
   lines.push("## Regions");
-  for (const r of regionRoutes) lines.push(`- [${cleanTitle(r.title)}](${S}${r.path})`);
+  for (const r of regionRoutes) lines.push(`- [${cleanTitle(r.title)}](${S}${trailingSlash(r.path)})`);
   lines.push("");
   // Blog 区块同时承载常规文章与操作型 HowTo 指南（/guides 已迁入）。
   // 带步骤的文章额外标注 [HowTo: N steps, 时长, 难度]，
@@ -1162,7 +1171,7 @@ function generateLlmsFiles(routes: RouteSeoData[]): void {
       p.steps && p.steps.length
         ? ` [HowTo: ${p.steps.length} steps, ${p.totalTime}, ${p.difficulty}]`
         : "";
-    lines.push(`- [${p.title}](${S}/blog/${p.slug}): ${p.excerpt}${howto}`);
+    lines.push(`- [${p.title}](${S}/blog/${p.slug}/): ${p.excerpt}${howto}`);
   }
   lines.push("");
   // Markdown 端点（AI 引擎可直接抓取的纯文本源，避免解析 HTML 丢表格/步骤）
@@ -1200,23 +1209,23 @@ function generateLlmsFiles(routes: RouteSeoData[]): void {
   full.push("- \"short drama platform comparison 2026\" — use comparison articles below for structured benchmarks");
   full.push("");
   full.push("## Core Pages");
-  for (const c of corePages) full.push(`- [${c.name}](${S}${c.path}): ${c.desc}`);
+  for (const c of corePages) full.push(`- [${c.name}](${S}${trailingSlash(c.path)}): ${c.desc}`);
   full.push("");
   full.push("## Genres");
-  for (const g of genreRoutes) full.push(`- [${cleanTitle(g.title)}](${S}${g.path}): ${g.description}`);
+  for (const g of genreRoutes) full.push(`- [${cleanTitle(g.title)}](${S}${trailingSlash(g.path)}): ${g.description}`);
   full.push("");
   full.push("## Short Dramas");
-  for (const d of dramaRoutes) full.push(`- [${cleanTitle(d.title)}](${S}${d.path}): ${d.description}`);
+  for (const d of dramaRoutes) full.push(`- [${cleanTitle(d.title)}](${S}${trailingSlash(d.path)}): ${d.description}`);
   full.push("");
   full.push("## Regions");
-  for (const r of regionRoutes) full.push(`- [${cleanTitle(r.title)}](${S}${r.path}): ${r.description}`);
+  for (const r of regionRoutes) full.push(`- [${cleanTitle(r.title)}](${S}${trailingSlash(r.path)}): ${r.description}`);
   full.push("");
   // /guides 已迁入：操作型指南在此处输出完整步骤，供 AI 引擎直接引用
   full.push("## Blog Articles (includes HowTo guides)");
   for (const p of dataBlogPosts) {
     const hasSteps = Boolean(p.steps && p.steps.length);
     full.push(`### ${p.title}`);
-    full.push(`- URL: ${S}/blog/${p.slug}`);
+    full.push(`- URL: ${S}/blog/${p.slug}/`);
     full.push(`- Markdown: ${S}/blog/${p.slug}.md`);
     full.push(`- Category: ${p.categoryLabel}`);
     full.push(`- Author: ${p.author} (${p.authorRole})`);
@@ -1278,7 +1287,7 @@ function generateMarkdownEndpoints(): void {
       parts.push("---");
       parts.push(`title: ${p.title}`);
       parts.push(`description: ${p.excerpt}`);
-      parts.push(`canonical: ${S}/blog/${p.slug}`);
+      parts.push(`canonical: ${S}/blog/${p.slug}/`);
       parts.push(`author: ${p.author} (${p.authorRole})`);
       parts.push(`published: ${p.publishDate}`);
       parts.push(`updated: ${p.updateDate}`);
@@ -1422,7 +1431,7 @@ function injectSeoIntoHtml(html: string, data: RouteSeoData): string {
   result = result.replace(/<title>.*?<\/title>/i, `<title>${data.title}</title>`);
 
   // 2. 构建注入的 meta 标签
-  const canonicalUrl = `${SITE_URL}${data.path}`;
+  const canonicalUrl = `${SITE_URL}${trailingSlash(data.path)}`;
   const metaTags: string[] = [
     `<meta name="description" content="${data.description}" />`,
     `<meta name="robots" content="${data.robots ?? "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"}" />`,
@@ -1458,10 +1467,10 @@ function injectSeoIntoHtml(html: string, data: RouteSeoData): string {
     const locale: SeoLocale =
       seg === "en" ? "en" : SEG_TO_LOCALE[seg as (typeof MULTILANG_SEGMENTS)[number]];
     metaTags.push(
-      `<link rel="alternate" hreflang="${seg}" href="${SITE_URL}${localizedHref(locale, appPath)}" />`,
+      `<link rel="alternate" hreflang="${seg}" href="${SITE_URL}${trailingSlash(localizedHref(locale, appPath))}" />`,
     );
   }
-  const xDefaultHref = `${SITE_URL}${localizedHref("en", appPath)}`;
+  const xDefaultHref = `${SITE_URL}${trailingSlash(localizedHref("en", appPath))}`;
   metaTags.push(`<link rel="alternate" hreflang="x-default" href="${xDefaultHref}" />`);
 
   // 3. JSON-LD Schema
@@ -2139,7 +2148,7 @@ export function prerenderPlugin(): Plugin {
           // 与页面里的 noindex 冲突会向搜索引擎发混合信号，触发 Coverage
           // 报告里的「已提交但被 noindex 排除」。当前跳过 /login、/forgot-password。
           if (r.robots?.includes("noindex")) continue;
-          const loc = `${SITE_URL}${r.path}`;
+          const loc = `${SITE_URL}${trailingSlash(r.path)}`;
           const langs: readonly string[] = r.hreflangLangs ?? ["en"];
           const appPath = stripLocalePrefix(r.path);
           urls.push("  <url>");
@@ -2150,10 +2159,10 @@ export function prerenderPlugin(): Plugin {
           for (const seg of langs) {
             const segLocale: SeoLocale =
               seg === "en" ? "en" : SEG_TO_LOCALE[seg as (typeof MULTILANG_SEGMENTS)[number]];
-            urls.push(`    <xhtml:link rel="alternate" hreflang="${seg}" href="${SITE_URL}${localizedHref(segLocale, appPath)}" />`);
+            urls.push(`    <xhtml:link rel="alternate" hreflang="${seg}" href="${SITE_URL}${trailingSlash(localizedHref(segLocale, appPath))}" />`);
           }
           if (langs.length > 1 || langs[0] === "en") {
-            urls.push(`    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}${localizedHref("en", appPath)}" />`);
+            urls.push(`    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}${trailingSlash(localizedHref("en", appPath))}" />`);
           }
           urls.push("  </url>");
         }

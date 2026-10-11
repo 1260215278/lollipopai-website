@@ -325,13 +325,16 @@ print(f"  INFO  sitemap URL 总数 {sitemap.count('<url>')}")
 check(not re.search(r"<loc>[^<]*/guides", sitemap), "sitemap 零 /guides 条目")
 for p in POSTS:
     s = p["slug"]
-    check(f"<loc>https://www.lollipop.im/blog/{s}</loc>" in sitemap, f"sitemap 含 /blog/{s}")
+    # ⚠️ 2026-10-11 全站 URL 规范化：canonical / hreflang / sitemap / JSON-LD / llms.txt
+    #    统一补尾斜杠（目录式路由 /blog/<slug>/ → index.html 的真实地址）。sitemap 与
+    #    HTML 的 <link rel="canonical">、hreflang 现已一致，故此处断言须带尾斜杠。
+    check(f"<loc>https://www.lollipop.im/blog/{s}/</loc>" in sitemap, f"sitemap 含 /blog/{s}/")
     # ⚠️ 2026-09-01 止血后只声明 en + x-default。
     #    原先这里检查 zh-CN / ar —— 那两族 URL 在 dist 里根本没有产物，
     #    「sitemap 里写了」恰恰是当时的问题本身，不是验收标准。
     #    真正的验收在第 11 组：所有声明的 hreflang URL 必须能解析到实际产物。
-    check(f'hreflang="en" href="https://www.lollipop.im/blog/{s}"' in sitemap, f"{s} 含 en hreflang")
-    check(f'hreflang="x-default" href="https://www.lollipop.im/blog/{s}"' in sitemap, f"{s} 含 x-default hreflang")
+    check(f'hreflang="en" href="https://www.lollipop.im/blog/{s}/"' in sitemap, f"{s} 含 en hreflang")
+    check(f'hreflang="x-default" href="https://www.lollipop.im/blog/{s}/"' in sitemap, f"{s} 含 x-default hreflang")
 
 # ══ 6. HowTo schema ↔ 可见步骤一致 ═══════════════════════════════════════════
 print()
@@ -671,13 +674,17 @@ check(
 )
 
 # 12e. 语言版本页面无「带前缀的非子集内链」（rewriteNonSubsetLinks 生效性）
+# ⚠️ 2026-10-11 全站 URL 规范化后，sitemap 的 <loc> 统一带尾斜杠，故 subset_paths
+# 现形如 "/creating/"。语言版本页内链 target 为 "/creating"（无尾斜杠），比对两侧都去
+# 尾斜杠，避免把「子集内链接」误判为「非子集带前缀链接」（rewriteNonSubsetLinks 已正确回退英文）。
+subset_paths_norm = {p.rstrip("/") or "/" for p in subset_paths}
 non_subset_links: list[str] = []
 for seg in LANG_SEGS:
     for f in (DIST / seg).rglob("index.html"):
         t = f.read_text(encoding="utf-8", errors="ignore")
         for m in re.finditer(rf'href="/{seg}/([^"#?]+)"', t):
-            target = "/" + m.group(1)
-            if target not in subset_paths:
+            target = "/" + m.group(1).rstrip("/")
+            if target not in subset_paths_norm:
                 non_subset_links.append(f"{f.relative_to(DIST)} → {target}")
 check(
     not non_subset_links,

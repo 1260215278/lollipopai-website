@@ -15,7 +15,7 @@ import { isMultilangSubsetPath } from "./multilangSubset";
 export type SeoLocale = "zh-TW" | "zh-CN" | "en" | "pt" | "es" | "ar";
 
 /** 可索引的页面类型 */
-export type PageType = "home" | "about" | "creating" | "download" | "contact" | "privacy" | "terms";
+export type PageType = "home" | "about" | "creating" | "download" | "contact" | "privacy" | "terms" | "creator";
 
 export interface SeoMessages {
   /** 浏览器标签 / og:title — 控制在 60 字符以内 */
@@ -35,6 +35,7 @@ const pagePaths: Record<PageType, string> = {
   contact: "/contact",
   privacy: "/privacy",
   terms: "/terms",
+  creator: "/creator-program",
 };
 
 /**
@@ -265,6 +266,38 @@ export const pageSeoMessages: Record<PageType, Record<SeoLocale, SeoMessages>> =
       title: "شروط الخدمة — Lollipop Drama",
       description:
         "شروط خدمة Lollipop Drama: شروط وأحكام استخدام المنصة، بما في ذلك التزامات المستخدم وسياسة المحتوى والملكية الفكرية وإخلاء المسؤولية وتسوية النزاعات.",
+    },
+  },
+  creator: {
+    "zh-CN": {
+      title: "创作者计划 — Lollipop Drama 分成与结算",
+      description:
+        "Lollipop Drama 创作者计划：创作者最高可获 80% 收益分成，Net-30 结算，无最低粉丝门槛即可变现。免费层即可加入，覆盖 80+ 国家、15+ 语言。",
+    },
+    "zh-TW": {
+      title: "創作者計劃 — Lollipop Drama 分成與結算",
+      description:
+        "Lollipop Drama 創作者計劃：創作者最高可獲 80% 收益分成，Net-30 結算，無最低粉絲門檻即可變現。免費層即可加入，覆蓋 80+ 國家、15+ 語言。",
+    },
+    en: {
+      title: "Creator Program — Lollipop Drama Revenue Share",
+      description:
+        "Lollipop Drama Creator Program: creators keep up to 80% revenue share with Net-30 payouts and no minimum follower requirement. Join from the free tier in 80+ countries.",
+    },
+    pt: {
+      title: "Programa de Criadores — Lollipop Drama",
+      description:
+        "Programa de Criadores da Lollipop Drama: os criadores mantem ate 80% da receita, com pagamentos Net-30 e sem seguidores minimos. Junte-se pelo plano gratuito em 80+ paises.",
+    },
+    es: {
+      title: "Programa de Creadores — Lollipop Drama",
+      description:
+        "Programa de Creadores de Lollipop Drama: los creadores mantienen hasta 80% de los ingresos, con pagos Net-30 y sin minimo de seguidores. Unete desde el plan gratis en 80+ paises.",
+    },
+    ar: {
+      title: "برنامج المبدعين — Lollipop Drama",
+      description:
+        "برنامج المبدعين في Lollipop Drama: يحتفظ المبدعون بما يصل إلى 80% من الإيرادات، مع مدفوعات Net-30 ودون حد أدنى للمتابعين. انضم من الباقة المجانية في أكثر من 80 دولة.",
     },
   },
 };

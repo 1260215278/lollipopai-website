@@ -332,6 +332,34 @@ function getRouteData(): RouteSeoData[] {
         "Contact Lollipop Drama: business@lollipop.im for partnerships, service@lollipop.im for support. Singapore office: +65 80742120.",
     },
     {
+      // 2026-10-11 修复：/creator-program 此前是软 404（Caddy try_files 兜底返回首页壳）。
+      // 现作为真实条款页接入预渲染 —— 进 sitemap、带正确 canonical（/creator-program/，与 301 目标一致）。
+      // 不加入 MULTILANG_APP_PATHS：该页为英文条款页，避免 /zh/ 等语言前缀下渲染英文正文。
+      path: "/creator-program",
+      title: "Creator Program — Lollipop Drama Revenue Share & Payouts",
+      description:
+        "Lollipop Drama Creator Program: creators keep up to 80% revenue share with Net-30 payouts and no minimum follower requirement. Join from the free tier in 80+ countries.",
+      schema: withBreadcrumb(
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: "Lollipop Drama Creator Program",
+          description:
+            "Lollipop Drama Creator Program: creators keep up to 80% revenue share, Net-30 payouts, and no minimum follower requirement to monetize.",
+          url: `${SITE_URL}/creator-program`,
+          publisher: {
+            "@type": "Organization",
+            "@id": "https://www.lollipop.im/#organization",
+            name: "Lollipop Drama",
+          },
+        },
+        [
+          { name: "Home", url: SITE_URL },
+          { name: "Creator Program", url: `${SITE_URL}/creator-program` },
+        ],
+      ),
+    },
+    {
       path: "/press",
       title: "Press & Media — Lollipop Drama AI Short Drama Platform",
       description:

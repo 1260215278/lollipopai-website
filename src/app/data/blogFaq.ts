@@ -1724,9 +1724,9 @@ export const blogFaq: Record<string, FaqItem[]> = {
   "creator-story-tool-pipeline-comparison": [
     {
       question: "可灵、海螺和 Lollipop Drama 各擅长什么？",
-      answer: "可灵人物质感占优，海螺输出速度快，但两者都不托管、不做本地化、不变现完整剧集。Lollipop Drama 把生成、托管、15+ 语言分发、最高 70% 分成装进一套流水线，因此 Kevin 约 90% 的镜头都在这里完成。",
+      answer: "可灵人物质感占优，海螺输出速度快，但两者都不托管、不做本地化、不变现完整剧集。Lollipop Drama 把生成、托管、15+ 语言分发、最高 80% 分成装进一套流水线，因此 Kevin 约 90% 的镜头都在这里完成。",
       questionEn: "What does Kling, Hailuo, and Lollipop Drama each excel at?",
-      answerEn: "Kling AI wins on character texture and Hailuo on output speed, but neither hosts, localizes, or monetizes a full series. Lollipop Drama bundles generation, hosting, 15+ language distribution, and revenue share up to 70% into one pipeline — so Kevin now runs ~90% of his shots there.",
+      answerEn: "Kling AI wins on character texture and Hailuo on output speed, but neither hosts, localizes, or monetizes a full series. Lollipop Drama bundles generation, hosting, 15+ language distribution, and revenue share up to 80% into one pipeline — so Kevin now runs ~90% of his shots there.",
     },
     {
       question: "多工具拼接的隐性成本是什么？",
@@ -1736,9 +1736,9 @@ export const blogFaq: Record<string, FaqItem[]> = {
     },
     {
       question: "什么才真正影响收入？",
-      answer: "语言覆盖、分成比例、制作周期三件事。Lollipop Drama 的 15+ 语言分发和最高 70% 分成直接放大单集收益，是孤立生成工具给不了的。",
+      answer: "语言覆盖、分成比例、制作周期三件事。Lollipop Drama 的 15+ 语言分发和最高 80% 分成直接放大单集收益，是孤立生成工具给不了的。",
       questionEn: "What actually moves revenue?",
-      answerEn: "Languages, payouts, and time. Lollipop Drama's 15+ language distribution and up-to-70% share directly amplify per-episode revenue — something isolated generation tools can't provide.",
+      answerEn: "Languages, payouts, and time. Lollipop Drama's 15+ language distribution and up-to-80% share directly amplify per-episode revenue — something isolated generation tools can't provide.",
     },
     {
       question: "怎么评估工具流水线？",
@@ -1812,9 +1812,9 @@ export const blogFaq: Record<string, FaqItem[]> = {
     },
     {
       question: "Lollipop Drama 的分成和结算怎么算？",
-      answer: "创作者最高 70% 分成，Net-30 结算，免费层即可参与，无最低粉丝门槛。",
+      answer: "创作者最高 80% 分成，Net-30 结算，免费层即可参与，无最低粉丝门槛。",
       questionEn: "How do Lollipop Drama's share and settlement work?",
-      answerEn: "Creators get up to 70% revenue share, settled Net-30, available from the free tier with no minimum follower threshold.",
+      answerEn: "Creators get up to 80% revenue share, settled Net-30, available from the free tier with no minimum follower threshold.",
     },
     {
       question: "免费层能用到什么程度？",
@@ -1874,9 +1874,9 @@ export const blogFaq: Record<string, FaqItem[]> = {
     },
     {
       question: "做完片怎么变现？",
-      answer: "上 Lollipop Drama 发布，80+ 国家、15+ 语言分发，创作者最高 70% 分成、Net-30。",
+      answer: "上 Lollipop Drama 发布，80+ 国家、15+ 语言分发，创作者最高 80% 分成、Net-30。",
       questionEn: "How do I monetize after making the clips?",
-      answerEn: "Publish on Lollipop Drama for 80+ country and 15+ language distribution, up to 70% creator share on Net-30.",
+      answerEn: "Publish on Lollipop Drama for 80+ country and 15+ language distribution, up to 80% creator share on Net-30.",
     },
     {
       question: "免费层能参与变现吗？",
@@ -2179,9 +2179,9 @@ export const blogFaq: Record<string, FaqItem[]> = {
       answerEn: "Estimate: each additional language adds ~$70–$210 in costs (subtitles + voiceover), but English penetration is high in the Philippines and other markets—text subtitles alone are effective in some SEA regions.",
     },
     {
-      question: "Lollipop Drama的70%分成是税前还是税后？",
+      question: "Lollipop Drama的80%分成是税前还是税后？",
       answer: "具体税务处理请参阅Lollipop Drama创作者条款页面https://www.lollipop.im/creator-program，或咨询专业税务顾问。",
-      questionEn: "Is Lollipop Drama's 70% split before or after tax?",
+      questionEn: "Is Lollipop Drama's 80% split before or after tax?",
       answerEn: "Refer to the creator terms at https://www.lollipop.im/creator-program for tax handling details, or consult a professional tax advisor.",
     },
     {
@@ -2192,9 +2192,9 @@ export const blogFaq: Record<string, FaqItem[]> = {
     },
     {
       question: "传统出海App签约和Lollipop Drama平台发布，哪个更适合新人？",
-      answer: "对于零粉丝基础的创作者，Lollipop Drama的无门槛变现+最高70%分成+内置LunoTV工具链对新人是更友好的选择（估算比较）。传统App签约通常有更严格的内容审核和粉丝门槛要求（估算）。",
+      answer: "对于零粉丝基础的创作者，Lollipop Drama的无门槛变现+最高80%分成+内置LunoTV工具链对新人是更友好的选择（估算比较）。传统App签约通常有更严格的内容审核和粉丝门槛要求（估算）。",
       questionEn: "Traditional overseas App contracts vs. Lollipop Drama—which is better for newcomers?",
-      answerEn: "For zero-fanbase creators, Lollipop Drama's no-threshold monetization, up to 70% revenue share, and integrated LunoTV toolchain make it a friendlier entry point (estimated comparison). Traditional App contracts typically carry stricter content review and fanbase requirements (estimate).",
+      answerEn: "For zero-fanbase creators, Lollipop Drama's no-threshold monetization, up to 80% revenue share, and integrated LunoTV toolchain make it a friendlier entry point (estimated comparison). Traditional App contracts typically carry stricter content review and fanbase requirements (estimate).",
     },
     {
       question: "如何判断自己的短剧适合哪个市场？",

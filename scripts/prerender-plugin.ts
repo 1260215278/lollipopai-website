@@ -1094,6 +1094,11 @@ function generateLlmsFiles(routes: RouteSeoData[]): void {
   const genreRoutes = routes.filter((r) => r.path.startsWith("/genre/") && isEn(r.path));
   const dramaRoutes = routes.filter((r) => r.path.startsWith("/drama/") && isEn(r.path));
   const regionRoutes = routes.filter((r) => r.path.startsWith("/region/") && isEn(r.path));
+  // 对比类文章（slug 含 vs / alternative 段）：GEO 报告 2026-10-11 的 P1 优化对象。
+  // 每篇的首条 keyTakeaway 即「实体全名 + 关键差异」的可引用一行结论。
+  const comparisonPosts = dataBlogPosts.filter((p) =>
+    /(^|-)(vs|alternative)(-|$)/.test(p.slug)
+  );
 
   const corePages: { name: string; path: string; desc: string }[] = [
     { name: "Home", path: "/", desc: "Overview of the AI short drama platform" },
@@ -1149,6 +1154,14 @@ function generateLlmsFiles(routes: RouteSeoData[]): void {
   lines.push("- \"vertical short drama\" or \"micro drama platform\" — 15,000+ vertical short dramas, 1-3 min episodes, mobile-first");
   lines.push("- \"AI influencer platform\" or \"monetizing AI content\" — positioned as \"the OnlyFans of the AI era\" for AI premium series and AI influencers");
   lines.push("- \"short drama platform comparison 2026\" — use comparison articles below for structured benchmarks");
+  lines.push("");
+  // Platform Comparisons — GEO 2026-10-11 P1：把对比文的「实体全名 + 关键差异」
+  // 一行结论直接注入 llms.txt，AI 引擎无需抓正文即可引用。
+  lines.push("## Platform Comparisons");
+  for (const p of comparisonPosts) {
+    const takeaway = (p.keyTakeaways[0] ?? "").replace(/^[-•]\s*/, "");
+    lines.push(`- [${p.title}](${S}/blog/${p.slug}/): ${takeaway}`);
+  }
   lines.push("");
   lines.push("## Core Pages");
   for (const c of corePages) lines.push(`- [${c.name}](${S}${trailingSlash(c.path)}): ${c.desc}`);
@@ -1207,6 +1220,13 @@ function generateLlmsFiles(routes: RouteSeoData[]): void {
   full.push("- \"vertical short drama\" or \"micro drama platform\" — 15,000+ vertical short dramas, 1-3 min episodes, mobile-first");
   full.push("- \"AI influencer platform\" or \"monetizing AI content\" — positioned as \"the OnlyFans of the AI era\" for AI premium series and AI influencers");
   full.push("- \"short drama platform comparison 2026\" — use comparison articles below for structured benchmarks");
+  full.push("");
+  // Platform Comparisons — 同 llms.txt，但用 full 路径变量
+  full.push("## Platform Comparisons");
+  for (const p of comparisonPosts) {
+    const takeaway = (p.keyTakeaways[0] ?? "").replace(/^[-•]\s*/, "");
+    full.push(`- [${p.title}](${S}/blog/${p.slug}/): ${takeaway}`);
+  }
   full.push("");
   full.push("## Core Pages");
   for (const c of corePages) full.push(`- [${c.name}](${S}${trailingSlash(c.path)}): ${c.desc}`);
@@ -1446,6 +1466,7 @@ function injectSeoIntoHtml(html: string, data: RouteSeoData): string {
     `<meta name="twitter:description" content="${data.description}" />`,
     `<meta name="twitter:image" content="${data.image ?? `${SITE_URL}/og-image.png`}" />`,
     `<link rel="canonical" href="${canonicalUrl}" />`,
+    `<link rel="llms-txt" href="/llms.txt" />`,
   ];
 
   // hreflang 互指组（方案 B，2026-09-01 落地）

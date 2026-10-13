@@ -483,7 +483,7 @@ function getRouteData(): RouteSeoData[] {
     {
       path: "/forgot-password",
       title: "Forgot Password — Lollipop Drama",
-      description: "Reset your Lollipop Drama account password.",
+      description: "Reset your Lollipop Drama password. Enter your account email to receive a secure reset link and regain access to creator tools and your premium short-drama library.",
       robots: "noindex, follow",
     },
     {

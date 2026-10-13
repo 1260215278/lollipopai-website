@@ -572,7 +572,7 @@ export function getLocalizedDynamicSeo(
     const templates: Record<typeof pageType, { title: string; desc: string }> = {
       genre: {
         title: `${name}短剧 — 在线观看 | ${brand}`,
-        description: `在${brand}上观看${name}题材短剧。海量精品${name}短剧，AI与真人创作内容，支持免费在线观看。`,
+        description: `在${brand}上观看${name}题材短剧。海量精品${name}短剧，AI与真人创作内容，支持免费在线观看、多语言字幕与竖屏适配，随时随地追更热门剧目。`,
       },
       drama: {
         title: `${name} — 免费观看短剧 | ${brand}`,
@@ -594,7 +594,7 @@ export function getLocalizedDynamicSeo(
     const templates: Record<typeof pageType, { title: string; desc: string }> = {
       genre: {
         title: `${name}短劇 — 線上觀看 | ${brand}`,
-        description: `在${brand}上觀看${name}題材短劇。海量精品${name}短劇，AI與真人創作內容，支持免費線上觀看。`,
+        description: `在${brand}上觀看${name}題材短劇。海量精品${name}短劇，AI與真人創作內容，支持免費線上觀看、多語言字幕與豎屏適配，隨時隨地追更熱門劇目。`,
       },
       drama: {
         title: `${name} — 免費觀看短劇 | ${brand}`,

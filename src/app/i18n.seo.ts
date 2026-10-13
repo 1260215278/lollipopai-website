@@ -10,6 +10,7 @@
  */
 import { getDeployBasename, localizedHref, matchLocalePath, stripLocalePrefix } from "./localePath";
 import { isMultilangSubsetPath } from "./multilangSubset";
+import { withTrailingSlash } from "./lib/url";
 
 /** 与 i18n.tsx 的 Locale 对齐（避免循环 import） */
 export type SeoLocale = "zh-TW" | "zh-CN" | "en" | "pt" | "es" | "ar";
@@ -461,11 +462,33 @@ export function applyNoIndexMeta(title: string): void {
 }
 
 /**
+ * 递归把 schema 对象里的站内绝对 URL 补齐尾斜杠，与 canonical/sitemap 约定一致，
+ * 避免 Google 沿 JSON-LD 内无斜杠 URL 抓取命中源站 301（GSC「网页会自动重定向」）。
+ * 仅处理 https://www.lollipop.im 下的 URL；带扩展名（图片等）/带 ? # 的跳过。
+ */
+function normalizeSchemaUrls(value: unknown): unknown {
+  if (typeof value === "string") {
+    if (/^https:\/\/www\.lollipop\.im/i.test(value)) return withTrailingSlash(value);
+    return value;
+  }
+  if (Array.isArray(value)) return value.map(normalizeSchemaUrls);
+  if (value && typeof value === "object") {
+    const obj = value as Record<string, unknown>;
+    const out: Record<string, unknown> = {};
+    for (const k of Object.keys(obj)) out[k] = normalizeSchemaUrls(obj[k]);
+    return out;
+  }
+  return value;
+}
+
+/**
  * 注入或更新页面级 JSON-LD 结构化数据。
  * 每次调用会移除上一个 page-schema 标签，再插入新的。
  */
 export function setPageSchema(schema: object): void {
   if (typeof document === "undefined") return;
+
+  const normalized = normalizeSchemaUrls(schema) as object;
 
   // 移除上一个 page-schema
   const existing = document.getElementById("page-schema");
@@ -474,7 +497,7 @@ export function setPageSchema(schema: object): void {
   const script = document.createElement("script");
   script.type = "application/ld+json";
   script.id = "page-schema";
-  script.textContent = JSON.stringify(schema);
+  script.textContent = JSON.stringify(normalized);
   document.head.appendChild(script);
 }
 

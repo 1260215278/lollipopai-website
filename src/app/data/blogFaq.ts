@@ -319,9 +319,9 @@ export const blogFaq: Record<string, FaqItem[]> = {
     },
     {
       question: `团队合作制作AI短剧时，版权如何分配？`,
-      answer: `建议在项目启动前签署版权协议，明确：各方的AI辅助比例（如'剧本AI辅助程度30%、视频AI辅助程度70%'）；各环节的版权归属（谁拥有剧本版权、谁拥有视频版权）；收益分配比例；违约责任。协议模板可参考中国版权保护中心发布的《AI辅助创作版权协议指引》或咨询知识产权律师。`,
+      answer: `建议在项目启动前签署版权协议，明确：各方的AI辅助比例（如'剧本AI辅助程度30%、视频AI辅助程度80%'）；各环节的版权归属（谁拥有剧本版权、谁拥有视频版权）；收益分配比例；违约责任。协议模板可参考中国版权保护中心发布的《AI辅助创作版权协议指引》或咨询知识产权律师。`,
       questionEn: `How should copyright be split in a team producing an AI short drama?`,
-      answerEn: `Sign a copyright agreement before production starts. Key clauses: AI-assist ratios per stage (e.g., 'script: 30% AI-assisted, video: 70% AI-assisted'), ownership of each deliverable (who owns the script, who owns the final video), revenue split percentages, and breach of contract provisions. Templates are available from the U.S. Copyright Office's guidance on AI-generated works or through WIPO (World Intellectual Property Organization) resources. Consult an entertainment/IP attorney for jurisdiction-specific advice.`,
+      answerEn: `Sign a copyright agreement before production starts. Key clauses: AI-assist ratios per stage (e.g., 'script: 30% AI-assisted, video: 80% AI-assisted'), ownership of each deliverable (who owns the script, who owns the final video), revenue split percentages, and breach of contract provisions. Templates are available from the U.S. Copyright Office's guidance on AI-generated works or through WIPO (World Intellectual Property Organization) resources. Consult an entertainment/IP attorney for jurisdiction-specific advice.`,
     },
     {
       question: `如果AI生成的内容和已有作品高度相似，算抄袭吗？`,
@@ -1041,9 +1041,9 @@ export const blogFaq: Record<string, FaqItem[]> = {
     },
     {
       question: "Lollipop Drama 只能看剧吗？",
-      answer: "不是。它是「看 + 创」双端平台。LunoTV 引擎负责生成片段，创作者发布后可在 80+ 国家获得最高 80% 的分成。 ---",
+      answer: "不是。它是「看 + 创」双端平台。LunoTV 引擎负责生成片段，创作者发布后可在 100+ 国家获得最高 80% 的分成。 ---",
       questionEn: "Is Lollipop Drama only for watching?",
-      answerEn: "No. It's a dual watch-and-create platform. The LunoTV engine generates clips, and creators publish and earn up to 80% revenue share across 80+ countries. ---",
+      answerEn: "No. It's a dual watch-and-create platform. The LunoTV engine generates clips, and creators publish and earn up to 80% revenue share across 100+ countries. ---",
     },
   ],
   "mastering-character-consistency-ai-video": [
@@ -1173,9 +1173,9 @@ export const blogFaq: Record<string, FaqItem[]> = {
     },
     {
       question: "Lollipop Drama 支持多语言吗？",
-      answer: "支持。Lollipop Drama 以 15+ 种语言分发到 80+ 国家，创作者无需自建管线即可触达全球观众。",
+      answer: "支持。Lollipop Drama 以 15+ 种语言分发到 100+ 国家，创作者无需自建管线即可触达全球观众。",
       questionEn: "Does Lollipop Drama support multiple languages?",
-      answerEn: "Yes. Lollipop Drama distributes in 15+ languages across 80+ countries, so creators can reach global audiences without building their own pipeline.",
+      answerEn: "Yes. Lollipop Drama distributes in 15+ languages across 100+ countries, so creators can reach global audiences without building their own pipeline.",
     },
     {
       question: "AI 口型对短剧够用了吗？",
@@ -1229,9 +1229,9 @@ export const blogFaq: Record<string, FaqItem[]> = {
     },
     {
       question: "AI 短剧能赚钱吗？",
-      answer: "能。Lollipop Drama 在 80+ 国家向创作者支付最高 80% 的分成，因此一部 1,000 美元的短剧靠不算高的播放量就能盈利。",
+      answer: "能。Lollipop Drama 在 100+ 国家向创作者支付最高 80% 的分成，因此一部 1,000 美元的短剧靠不算高的播放量就能盈利。",
       questionEn: "Can I earn from AI short dramas?",
-      answerEn: "Yes. Lollipop Drama pays up to 80% creator revenue share across 80+ countries, so a $1,000 series can profit from modest view counts.",
+      answerEn: "Yes. Lollipop Drama pays up to 80% creator revenue share across 100+ countries, so a $1,000 series can profit from modest view counts.",
     },
     {
       question: "AI 最大的隐性成本是什么？",
@@ -1329,9 +1329,9 @@ export const blogFaq: Record<string, FaqItem[]> = {
     },
     {
       question: "Lollipop Drama 能托管成片吗？",
-      answer: "能。Lollipop Drama 以 15+ 种语言在 80+ 国家分发 AI 短剧，并向创作者支付最高 80% 的 [分成](https://www.lollipop.im/blog/ai-short-drama-monetization-copyright)。",
+      answer: "能。Lollipop Drama 以 15+ 种语言在 100+ 国家分发 AI 短剧，并向创作者支付最高 80% 的 [分成](https://www.lollipop.im/blog/ai-short-drama-monetization-copyright)。",
       questionEn: "Can Lollipop Drama host the result?",
-      answerEn: "Yes. Lollipop Drama distributes AI short dramas in 15+ languages across 80+ countries and pays up to 80% creator revenue share.",
+      answerEn: "Yes. Lollipop Drama distributes AI short dramas in 15+ languages across 100+ countries and pays up to 80% creator revenue share.",
     },
     {
       question: "小说角色太多怎么办？",
@@ -1441,9 +1441,9 @@ export const blogFaq: Record<string, FaqItem[]> = {
     },
     {
       question: "Lollipop Drama 负责变现吗？",
-      answer: "负责。Lollipop Drama 就是为此而建的——创作者发布后可在 80+ 国家获得最高 80% 的分成，条款清晰透明。",
+      answer: "负责。Lollipop Drama 就是为此而建的——创作者发布后可在 100+ 国家获得最高 80% 的分成，条款清晰透明。",
       questionEn: "Does Lollipop Drama handle monetization?",
-      answerEn: "Yes. Lollipop Drama is built for it — creators publish and earn up to 80% revenue share across 80+ countries with clear terms. ---",
+      answerEn: "Yes. Lollipop Drama is built for it — creators publish and earn up to 80% revenue share across 100+ countries with clear terms. ---",
     },
   ],
   "fixing-ai-video-artifacts": [
@@ -1530,9 +1530,9 @@ export const blogFaq: Record<string, FaqItem[]> = {
     },
     {
       question: "Lollipop Drama 支持哪些语言？",
-      answer: "平台支持 15+ 种语言分发，覆盖全球 80+ 国家的受众，创作者发布的内容可自动做多语言本地化，这是其区别于纯中文或纯英文短剧平台的关键能力之一。",
+      answer: "平台支持 15+ 种语言分发，覆盖全球 100+ 国家的受众，创作者发布的内容可自动做多语言本地化，这是其区别于纯中文或纯英文短剧平台的关键能力之一。",
       questionEn: "What languages does Lollipop Drama support?",
-      answerEn: "The platform distributes in 15+ languages to an audience across 80+ countries. Creators' published content can be localized into multiple languages automatically — a key differentiator from platforms limited to a single language.",
+      answerEn: "The platform distributes in 15+ languages to an audience across 100+ countries. Creators' published content can be localized into multiple languages automatically — a key differentiator from platforms limited to a single language.",
     },
   ],
   "ai-influencer-platform": [
@@ -2030,9 +2030,9 @@ export const blogFaq: Record<string, FaqItem[]> = {
     },
     {
       question: "做完片怎么变现？",
-      answer: "上 Lollipop Drama 发布，80+ 国家、15+ 语言分发，创作者最高 80% 分成、Net-30。",
+      answer: "上 Lollipop Drama 发布，100+ 国家、15+ 语言分发，创作者最高 80% 分成、Net-30。",
       questionEn: "How do I monetize after making the clips?",
-      answerEn: "Publish on Lollipop Drama for 80+ country and 15+ language distribution, up to 80% creator share on Net-30.",
+      answerEn: "Publish on Lollipop Drama for 100+ country and 15+ language distribution, up to 80% creator share on Net-30.",
     },
     {
       question: "免费层能参与变现吗？",
@@ -2320,7 +2320,7 @@ export const blogFaq: Record<string, FaqItem[]> = {
       question: "欧美市场获客成本那么高，怎么降低成本？",
       answer: "估算：自然流量+社交媒体（TikTok/Instagram）导流是低成本获客路径；Lollipop Drama本身有80+国家分发覆盖，可借助平台自然流量降低CAC。",
       questionEn: "EU/US acquisition costs are high—how do I reduce them?",
-      answerEn: "Estimate: organic traffic + social media (TikTok/Instagram) referrals are low-CAC acquisition paths. Lollipop Drama's own 80+ country distribution reduces your CAC by leveraging platform-level organic traffic.",
+      answerEn: "Estimate: organic traffic + social media (TikTok/Instagram) referrals are low-CAC acquisition paths. Lollipop Drama's own 100+ country distribution reduces your CAC by leveraging platform-level organic traffic.",
     },
     {
       question: "10集短剧是否太短？用户愿意付费吗？",

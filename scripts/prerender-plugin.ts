@@ -332,6 +332,34 @@ function getRouteData(): RouteSeoData[] {
         "Contact Lollipop Drama: business@lollipop.im for partnerships, service@lollipop.im for support. Singapore office: +65 80742120.",
     },
     {
+      // 2026-10-11 修复：/creator-program 此前是软 404（Caddy try_files 兜底返回首页壳）。
+      // 现作为真实条款页接入预渲染 —— 进 sitemap、带正确 canonical（/creator-program/，与 301 目标一致）。
+      // 不加入 MULTILANG_APP_PATHS：该页为英文条款页，避免 /zh/ 等语言前缀下渲染英文正文。
+      path: "/creator-program",
+      title: "Creator Program — Lollipop Drama Revenue Share & Payouts",
+      description:
+        "Lollipop Drama Creator Program: creators keep up to 80% revenue share with Net-30 payouts and no minimum follower requirement. Join from the free tier in 80+ countries.",
+      schema: withBreadcrumb(
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: "Lollipop Drama Creator Program",
+          description:
+            "Lollipop Drama Creator Program: creators keep up to 80% revenue share, Net-30 payouts, and no minimum follower requirement to monetize.",
+          url: `${SITE_URL}/creator-program`,
+          publisher: {
+            "@type": "Organization",
+            "@id": "https://www.lollipop.im/#organization",
+            name: "Lollipop Drama",
+          },
+        },
+        [
+          { name: "Home", url: SITE_URL },
+          { name: "Creator Program", url: `${SITE_URL}/creator-program` },
+        ],
+      ),
+    },
+    {
       path: "/press",
       title: "Press & Media — Lollipop Drama AI Short Drama Platform",
       description:
@@ -455,7 +483,7 @@ function getRouteData(): RouteSeoData[] {
     {
       path: "/forgot-password",
       title: "Forgot Password — Lollipop Drama",
-      description: "Reset your Lollipop Drama account password.",
+      description: "Reset your Lollipop Drama password. Enter your account email to receive a secure reset link and regain access to creator tools and your premium short-drama library.",
       robots: "noindex, follow",
     },
     {
@@ -1026,6 +1054,87 @@ function rewriteNonSubsetLinks(html: string, routePath: string): string {
         return `href="${target}${suffix}"`;
       }
       return whole;
+    },
+  );
+}
+
+/**
+ * 2026-10-13 修复 GSC「网页会自动重定向」(958 条)：
+ * 站内 <a href> 普遍缺尾斜杠（/blog、/about、/blog/slug），而 canonical/sitemap
+ * 使用尾斜杠约定。Google 沿无斜杠内链抓取 → 源站 Caddy 在 Cloudflare 之后误发
+ * http:// Location → 301 → 被判重定向。SSR 产物落盘前统一补齐尾斜杠，使内链与
+ * canonical 一致。服务端仍建议部署 trusted_proxies cloudflare 的 Caddyfile +
+ * Cloudflare SSL=Full，使残留的无斜杠 301 也走 https。
+ */
+function withTrailingSlashHref(href: string): string {
+  // 绝对站内 URL（https://www.lollipop.im/...）：拆出 origin 后只归一化路径
+  const abs = href.match(/^([a-z][a-z0-9+.\-]*:\/\/[^/]+)(.*)$/i);
+  if (abs) {
+    const origin = abs[1];
+    const rest = abs[2] || "/";
+    return origin + withTrailingSlashHref(rest);
+  }
+  if (!href.startsWith("/") || href.startsWith("//")) return href;
+  let path = href;
+  let hash = "";
+  const hi = path.indexOf("#");
+  if (hi >= 0) {
+    hash = path.slice(hi);
+    path = path.slice(0, hi);
+  }
+  let query = "";
+  const qi = path.indexOf("?");
+  if (qi >= 0) {
+    query = path.slice(qi);
+    path = path.slice(0, qi);
+  }
+  if (/\.[a-z0-9]+$/i.test(path)) return href;
+  if (path.endsWith("/")) return href;
+  if (path === "") path = "/";
+  path += "/";
+  return path + query + hash;
+}
+
+/** 给 SSR 产物里的所有站内 <a href> 补齐尾斜杠（与 canonical/sitemap 约定一致）。 */
+function normalizeInternalLinks(html: string): string {
+  return html.replace(
+    /<a\b([^>]*)\bhref="([^"]*)"([^>]*)>/gi,
+    (tag: string, pre: string, href: string, post: string) => {
+      const norm = withTrailingSlashHref(href);
+      if (norm === href) return tag;
+      return `<a${pre}href="${norm}"${post}>`;
+    },
+  );
+}
+
+/**
+ * 2026-10-13 修复 GSC「网页会自动重定向」(续)：
+ * 除了 <a href>，JSON-LD 结构化数据（模板里的全局 site-schema + 每路由
+ * page-schema）同样大量使用无尾斜杠的站内绝对 URL（如
+ * "https://www.lollipop.im" / "https://www.lollipop.im/download" /
+ * "https://www.lollipop.im/genre/romance"）。Google 沿这些 URL 抓取同样会
+ * 命中源站 301。本函数在落盘前把 application/ld+json 块内所有站内绝对 URL
+ * 补齐尾斜杠，与 canonical/sitemap 约定保持一致。
+ *
+ * 安全护栏：带扩展名的静态资源（.webp/.png/.json）、含 ? 查询或 # 片段、
+ * 以及根路径 / 一律跳过，绝不改写非导航 URL 或破坏 JSON。
+ */
+function normalizeJsonLdUrls(html: string): string {
+  return html.replace(
+    /(<script\b[^>]*type="application\/ld\+json"[^>]*>)([\s\S]*?)(<\/script>)/gi,
+    (m: string, open: string, body: string, close: string) => {
+      const fixed = body.replace(
+        /(https:\/\/www\.lollipop\.im)((?:\/[^"\\\s]*)?)/g,
+        (mm: string, origin: string, path: string) => {
+          if (!path) return origin + "/"; // 裸主机 → 补 /
+          if (path.endsWith("/")) return mm;
+          if (path.includes("?") || path.includes("#")) return mm;
+          const lastSeg = path.split("/").pop() ?? "";
+          if (lastSeg.includes(".")) return mm; // 静态资源
+          return origin + path + "/";
+        },
+      );
+      return open + fixed + close;
     },
   );
 }
@@ -2125,6 +2234,8 @@ export function prerenderPlugin(): Plugin {
         html = injectSeoIntoHtml(html, route);
         html = adjustAssetPaths(html, route.path);
         html = rewriteNonSubsetLinks(html, route.path);
+        html = normalizeInternalLinks(html);
+        html = normalizeJsonLdUrls(html);
         const filePath = join(outDir, `${route.path}/index.html`);
         mkdirSync(dirname(filePath), { recursive: true });
         writeMinifiedHtml(filePath, html);
@@ -2145,6 +2256,8 @@ export function prerenderPlugin(): Plugin {
           homeHtml = injectHomepageContent(homeHtml);
         }
         homeHtml = injectSeoIntoHtml(homeHtml, homeRoute);
+        homeHtml = normalizeInternalLinks(homeHtml);
+        homeHtml = normalizeJsonLdUrls(homeHtml);
         writeMinifiedHtml(join(outDir, "index.html"), homeHtml);
       }
 

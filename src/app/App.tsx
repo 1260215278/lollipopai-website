@@ -16,10 +16,11 @@ import { AboutPage } from "./components/AboutPage";
 import { ContactPage } from "./components/ContactPage";
 import { CreatingPage } from "./components/CreatingPage";
 import { DownloadPage } from "./components/DownloadPage";
+import { CreatorProgramPage } from "./components/CreatorProgramPage";
 import { useI18n } from "./i18n";
 import { applySeoMeta, getPageSeo, setPageSchema, clearPageSchema, type PageType } from "./i18n.seo";
 
-type MarketingPage = "home" | "about" | "creating" | "download" | "contact";
+type MarketingPage = "home" | "about" | "creating" | "download" | "contact" | "creator";
 
 const pagePaths: Record<MarketingPage, string> = {
   home: "/",
@@ -27,6 +28,7 @@ const pagePaths: Record<MarketingPage, string> = {
   creating: "/creating",
   download: "/download",
   contact: "/contact",
+  creator: "/creator-program",
 };
 
 /** 页面级 JSON-LD Schema 定义 */
@@ -154,6 +156,19 @@ const pageSchemas: Partial<Record<MarketingPage, (locale: string) => object>> = 
       },
     },
   }),
+  creator: () => ({
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Lollipop Drama Creator Program",
+    "description":
+      "Lollipop Drama Creator Program: creators keep up to 80% revenue share, Net-30 payouts, and no minimum follower requirement to monetize.",
+    "url": "https://www.lollipop.im/creator-program",
+    "publisher": {
+      "@type": "Organization",
+      "@id": "https://www.lollipop.im/#organization",
+      "name": "Lollipop Drama",
+    },
+  }),
 };
 
 export default function App({ initialPage = "home" }: { initialPage?: MarketingPage }) {
@@ -217,6 +232,7 @@ export default function App({ initialPage = "home" }: { initialPage?: MarketingP
           {currentPage === "download" && <DownloadPage onNavigate={handleNavigate} />}
           {currentPage === "about" && <AboutPage onNavigate={handleNavigate} />}
           {currentPage === "contact" && <ContactPage onNavigate={handleNavigate} />}
+          {currentPage === "creator" && <CreatorProgramPage onNavigate={handleNavigate} />}
         </Suspense>
       )}
       <BackToTop />

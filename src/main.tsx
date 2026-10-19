@@ -93,6 +93,7 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/download" element={<App initialPage="download" />} />
         <Route path="/contact" element={<App initialPage="contact" />} />
         <Route path="/about" element={<App initialPage="about" />} />
+        <Route path="/creator-program" element={<App initialPage="creator" />} />
         {/* 404 — 返回真实 404 页面而非重定向到首页，懒加载 */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

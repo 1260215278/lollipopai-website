@@ -207,7 +207,7 @@ HUB_HTML = hub.read_text(encoding="utf-8") if hub.exists() else ""
 #    会给计数凭空加 1 条 /blog/<slug>，让「第 1 页应有 N 张卡片」的断言假失败
 #    （实测实体网格正好 20 张，第 21 条来自 Footer 的 character-consistency-workflow）。
 hub_grid = re.sub(r"<footer.*?</footer>", "", hub_body, flags=re.S)
-page1_links = sorted(set(re.findall(r'href="/blog/([a-z0-9-]+)"', hub_grid)))
+page1_links = sorted(set(re.findall(r'href="/blog/([a-z0-9-]+)/?"', hub_grid)))
 expected_page1 = min(POSTS_PER_PAGE, len(POSTS))
 check(
     len(page1_links) == expected_page1,
@@ -217,7 +217,7 @@ for slug in page1_links:
     check(f'/blog/{slug}' in hub_body, f'列表页第 1 页含 {slug} 链接')
 
 # 兜底：JSON-LD ItemList 必须列出全部文章，保证第 1 页之外的文章同样可被发现
-itemlist_urls = set(re.findall(r'"url":\s*"[^"]*/blog/([a-z0-9-]+)"', HUB_HTML))
+itemlist_urls = set(re.findall(r'"url":\s*"[^"]*/blog/([a-z0-9-]+)/?"', HUB_HTML))
 missing_in_itemlist = [p["slug"] for p in POSTS if p["slug"] not in itemlist_urls]
 check(
     not missing_in_itemlist,

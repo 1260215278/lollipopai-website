@@ -10,12 +10,13 @@
  */
 import { getDeployBasename, localizedHref, matchLocalePath, stripLocalePrefix } from "./localePath";
 import { isMultilangSubsetPath } from "./multilangSubset";
+import { withTrailingSlash } from "./lib/url";
 
 /** 与 i18n.tsx 的 Locale 对齐（避免循环 import） */
 export type SeoLocale = "zh-TW" | "zh-CN" | "en" | "pt" | "es" | "ar";
 
 /** 可索引的页面类型 */
-export type PageType = "home" | "about" | "creating" | "download" | "contact" | "privacy" | "terms";
+export type PageType = "home" | "about" | "creating" | "download" | "contact" | "privacy" | "terms" | "creator";
 
 export interface SeoMessages {
   /** 浏览器标签 / og:title — 控制在 60 字符以内 */
@@ -35,6 +36,7 @@ const pagePaths: Record<PageType, string> = {
   contact: "/contact",
   privacy: "/privacy",
   terms: "/terms",
+  creator: "/creator-program",
 };
 
 /**
@@ -267,6 +269,38 @@ export const pageSeoMessages: Record<PageType, Record<SeoLocale, SeoMessages>> =
         "شروط خدمة Lollipop Drama: شروط وأحكام استخدام المنصة، بما في ذلك التزامات المستخدم وسياسة المحتوى والملكية الفكرية وإخلاء المسؤولية وتسوية النزاعات.",
     },
   },
+  creator: {
+    "zh-CN": {
+      title: "创作者计划 — Lollipop Drama 分成与结算",
+      description:
+        "Lollipop Drama 创作者计划：创作者最高可获 80% 收益分成，Net-30 结算，无最低粉丝门槛即可变现。免费层即可加入，覆盖 80+ 国家、15+ 语言。",
+    },
+    "zh-TW": {
+      title: "創作者計劃 — Lollipop Drama 分成與結算",
+      description:
+        "Lollipop Drama 創作者計劃：創作者最高可獲 80% 收益分成，Net-30 結算，無最低粉絲門檻即可變現。免費層即可加入，覆蓋 80+ 國家、15+ 語言。",
+    },
+    en: {
+      title: "Creator Program — Lollipop Drama Revenue Share",
+      description:
+        "Lollipop Drama Creator Program: creators keep up to 80% revenue share with Net-30 payouts and no minimum follower requirement. Join from the free tier in 80+ countries.",
+    },
+    pt: {
+      title: "Programa de Criadores — Lollipop Drama",
+      description:
+        "Programa de Criadores da Lollipop Drama: os criadores mantem ate 80% da receita, com pagamentos Net-30 e sem seguidores minimos. Junte-se pelo plano gratuito em 80+ paises.",
+    },
+    es: {
+      title: "Programa de Creadores — Lollipop Drama",
+      description:
+        "Programa de Creadores de Lollipop Drama: los creadores mantienen hasta 80% de los ingresos, con pagos Net-30 y sin minimo de seguidores. Unete desde el plan gratis en 80+ paises.",
+    },
+    ar: {
+      title: "برنامج المبدعين — Lollipop Drama",
+      description:
+        "برنامج المبدعين في Lollipop Drama: يحتفظ المبدعون بما يصل إلى 80% من الإيرادات، مع مدفوعات Net-30 ودون حد أدنى للمتابعين. انضم من الباقة المجانية في أكثر من 80 دولة.",
+    },
+  },
 };
 
 /**
@@ -428,11 +462,33 @@ export function applyNoIndexMeta(title: string): void {
 }
 
 /**
+ * 递归把 schema 对象里的站内绝对 URL 补齐尾斜杠，与 canonical/sitemap 约定一致，
+ * 避免 Google 沿 JSON-LD 内无斜杠 URL 抓取命中源站 301（GSC「网页会自动重定向」）。
+ * 仅处理 https://www.lollipop.im 下的 URL；带扩展名（图片等）/带 ? # 的跳过。
+ */
+function normalizeSchemaUrls(value: unknown): unknown {
+  if (typeof value === "string") {
+    if (/^https:\/\/www\.lollipop\.im/i.test(value)) return withTrailingSlash(value);
+    return value;
+  }
+  if (Array.isArray(value)) return value.map(normalizeSchemaUrls);
+  if (value && typeof value === "object") {
+    const obj = value as Record<string, unknown>;
+    const out: Record<string, unknown> = {};
+    for (const k of Object.keys(obj)) out[k] = normalizeSchemaUrls(obj[k]);
+    return out;
+  }
+  return value;
+}
+
+/**
  * 注入或更新页面级 JSON-LD 结构化数据。
  * 每次调用会移除上一个 page-schema 标签，再插入新的。
  */
 export function setPageSchema(schema: object): void {
   if (typeof document === "undefined") return;
+
+  const normalized = normalizeSchemaUrls(schema) as object;
 
   // 移除上一个 page-schema
   const existing = document.getElementById("page-schema");
@@ -441,7 +497,7 @@ export function setPageSchema(schema: object): void {
   const script = document.createElement("script");
   script.type = "application/ld+json";
   script.id = "page-schema";
-  script.textContent = JSON.stringify(schema);
+  script.textContent = JSON.stringify(normalized);
   document.head.appendChild(script);
 }
 
@@ -516,7 +572,7 @@ export function getLocalizedDynamicSeo(
     const templates: Record<typeof pageType, { title: string; desc: string }> = {
       genre: {
         title: `${name}短剧 — 在线观看 | ${brand}`,
-        description: `在${brand}上观看${name}题材短剧。海量精品${name}短剧，AI与真人创作内容，支持免费在线观看。`,
+        description: `在${brand}上观看${name}题材短剧。海量精品${name}短剧，AI与真人创作内容，支持免费在线观看、多语言字幕与竖屏适配，随时随地追更热门剧目。`,
       },
       drama: {
         title: `${name} — 免费观看短剧 | ${brand}`,
@@ -538,7 +594,7 @@ export function getLocalizedDynamicSeo(
     const templates: Record<typeof pageType, { title: string; desc: string }> = {
       genre: {
         title: `${name}短劇 — 線上觀看 | ${brand}`,
-        description: `在${brand}上觀看${name}題材短劇。海量精品${name}短劇，AI與真人創作內容，支持免費線上觀看。`,
+        description: `在${brand}上觀看${name}題材短劇。海量精品${name}短劇，AI與真人創作內容，支持免費線上觀看、多語言字幕與豎屏適配，隨時隨地追更熱門劇目。`,
       },
       drama: {
         title: `${name} — 免費觀看短劇 | ${brand}`,

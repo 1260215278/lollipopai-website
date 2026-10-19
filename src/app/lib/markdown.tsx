@@ -6,6 +6,7 @@
  * 行内代码 / 链接 / 引用 / 有序无序列表 / 表格 / 分隔线。
  */
 import type { ReactNode } from "react";
+import { withTrailingSlash } from "./url";
 
 /** 行内元素渲染：**加粗** *斜体* `代码` [链接](url) */
 export function renderInline(text: string): ReactNode[] {
@@ -27,8 +28,16 @@ export function renderInline(text: string): ReactNode[] {
         </code>,
       );
     } else if (m[5] !== undefined) {
+      const url = m[6];
+      const isInternal = url.startsWith("/") && !url.startsWith("//");
+      const href = isInternal ? withTrailingSlash(url) : url;
       nodes.push(
-        <a key={key++} href={m[6]} target="_blank" rel="noopener noreferrer" className="text-[#FF4D00] hover:underline">
+        <a
+          key={key++}
+          href={href}
+          {...(isInternal ? {} : { target: "_blank", rel: "noopener noreferrer" })}
+          className="text-[#FF4D00] hover:underline"
+        >
           {m[5]}
         </a>,
       );

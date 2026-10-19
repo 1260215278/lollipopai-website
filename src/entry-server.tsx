@@ -64,6 +64,7 @@ export function renderRoute(path: string): string {
           <Route path="/creating" element={<App initialPage="creating" />} />
           <Route path="/download" element={<App initialPage="download" />} />
           <Route path="/contact" element={<App initialPage="contact" />} />
+          <Route path="/creator-program" element={<App initialPage="creator" />} />
           {/* 博客系统 */}
           <Route path="/blog" element={<BlogListPage />} />
           <Route path="/blog/:slug" element={<BlogPostPage />} />

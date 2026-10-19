@@ -2592,4 +2592,160 @@ export const blogFaq: Record<string, FaqItem[]> = {
       answerEn: "Translate each finding into exactly one change for the next title: weak character investment goes back to the writing stage; paywall-boundary losses become a release-design fix; missing social currency means writing debatable, shareable moments into finales. Change one variable per title, keep the rest comparable, then check whether the equivalent episode boundary improves.",
     },
   ],
+  "3-second-hook-script-prompts": [
+    {
+      question: "什么是短剧的黄金 3 秒 Hook？",
+      answer: "指开播前 3 秒必须抛出的张力承诺——直接丢最糟瞬间（耳光、背叛、尸体、倒计时），让观众立刻想知道接下来发生什么，而不是先铺垫背景。",
+      questionEn: "What is a 3-second hook for short drama?",
+      answerEn: "The tension promise in the first three seconds, drop the worst moment (a slap, a betrayal, a corpse, a countdown) so the viewer must know what happens next, instead of building setup first.",
+    },
+    {
+      question: "怎么用 AI 写出高转化 Hook？",
+      answer: "用强制冷开场的提示词模板，填入角色与利害关系，每个前提生成三个变体，再测前 3 秒留存选最锋利的首句。",
+      questionEn: "How do I use AI to write a high-converting hook?",
+      answerEn: "Use a cold-open prompt template, fill in character and stakes, generate three variants per premise, then test first-3-second retention and keep the sharpest opening line.",
+    },
+    {
+      question: "冷开场和反套路开场有什么区别？",
+      answer: "冷开场是事件在时间线最前（先打耳光再解释），反套路是颠覆预期。两者可叠加，但冷开场对留存更直接有效。",
+      questionEn: "What is the difference between a cold open and a twist open?",
+      answerEn: "A cold open puts the incident first on the timeline (slap before explanation); a twist subverts expectation. They can stack, but the cold open drives retention more directly.",
+    },
+    {
+      question: "Hook 写好但整集平怎么办？",
+      answer: "Hook 只负责前 3 秒，中段仍需强节拍。用网文转短剧管线把冷开场扩成有起伏的整集，再回头校留存。",
+      questionEn: "My hook is good but the episode is flat, what now?",
+      answerEn: "The hook only owns the first three seconds, the middle still needs strong beats. Expand the cold open into a full episode with a pipeline, then re-check retention.",
+    },
+  ],
+  "ai-short-drama-engines-2026": [
+    {
+      question: "2026 年做 AI 短剧用哪个引擎最划算？",
+      answer: "没有单一答案。若瓶颈是统筹与一致性，Lollipop.im 这类管线工具总体更省；若只需偶尔神级镜头，Runway 或 Sora 按额度更灵活。关键看你的返工成本而非单次价格。",
+      questionEn: "What is the best value AI short drama engine in 2026?",
+      answerEn: "There is no single answer. If your bottleneck is orchestration and consistency, a pipeline tool like Lollipop.im is cheaper overall; if you only need occasional hero shots, Runway or Sora on credits is more flexible. Watch rework cost, not per-generation price.",
+    },
+    {
+      question: "哪个引擎角色一致性最好？",
+      answer: "Runway Gen-4 与 Kling 2.0 在跨镜头一致性上领先；Lollipop 通过角色圣经与参考图把一致性做成结构性能力。Sora 写实但连续性较弱。",
+      questionEn: "Which engine has the best character consistency?",
+      answerEn: "Runway Gen-4 and Kling 2.0 lead on cross-shot consistency; Lollipop makes consistency structural via a character bible and reference images. Sora is photoreal but weaker on continuity.",
+    },
+    {
+      question: "Lollipop 和 Runway 怎么选？",
+      answer: "要单镜头控制与遮罩用 Runway；要从剧本到成片不切工具用 Lollipop。前者是模型，后者是管线。",
+      questionEn: "How do I choose between Lollipop and Runway?",
+      answerEn: "Use Runway for single-shot control and masking; use Lollipop to go from script to finished episode without switching tools. One is a model, the other a pipeline.",
+    },
+    {
+      question: "中文短剧推荐哪款？",
+      answer: "Hailuo（MiniMax）与 Lollipop 在对白节奏、口型对齐上更母语化，适合中文竖屏短剧。",
+      questionEn: "Which engine suits Chinese-language drama?",
+      answerEn: "Hailuo (MiniMax) and Lollipop feel native on dialogue pacing and lip-sync, making them strong fits for Chinese vertical drama.",
+    },
+  ],
+  "ai-short-drama-soundscape-bgm": [
+    {
+      question: "AI 短剧一定要做音效和配乐吗？",
+      answer: "强烈建议。声音承载 40-60% 的感知情绪，省略它再好的画面也像幻灯片。哪怕只叠一层环境底噪加一段钩子，观感都判若两人。",
+      questionEn: "Do AI short dramas really need sound design and BGM?",
+      answerEn: "Strongly recommended. Sound carries 40-60% of perceived emotion, without it even great visuals feel like a slideshow. Even one ambient bed plus a hook changes the feel completely.",
+    },
+    {
+      question: "用什么提示词生成短剧配乐？",
+      answer: "按情绪加 BPM 加编制写，例如紧张、94 BPM、极简脉冲、低频弦乐、无人声。别只写电影感这类空词。",
+      questionEn: "What prompts generate good short drama BGM?",
+      answerEn: "Write emotion plus BPM plus instrumentation, e.g. tense, 94 BPM, minimal pulse, low strings, no vocals. Avoid vague words like cinematic.",
+    },
+    {
+      question: "AI 音效能替代专业音效库吗？",
+      answer: "通用音效（脚步、开门、环境、天气）AI 足够且便宜，爆炸、碎玻璃、枪声、撞车等复杂音效 AI 仍显假，留给专业库。",
+      questionEn: "Can AI SFX replace a professional sound library?",
+      answerEn: "For generic SFX (footsteps, doors, ambience, weather) AI is enough and cheap. For complex effects like explosions, glass, gunfire, and crashes, AI still sounds fake, use a pro library.",
+    },
+    {
+      question: "怎么保证配音口型不被音乐盖住？",
+      answer: "对白放独立干净音轨，讲话时把 BGM 压低 6-10 dB。母带后无声有声各看一遍，确认嘴型读得清即可。",
+      questionEn: "How do I keep voice lip-sync clear over music?",
+      answerEn: "Put dialogue on its own clean track and duck the BGM 6-10 dB under speech. After mastering, watch muted and with sound to confirm the mouth movement stays readable.",
+    },
+  ],
+  "traditional-vs-ai-short-drama-cost": [
+    {
+      question: "2026 年做一部 AI 短剧要多少钱？",
+      answer: "10 集 x 2 分钟竖屏一季，AI 优先制作约 $7,800（含生成额度与后期），传统约 $61,000。差距主要在团队、场地、设备。",
+      questionEn: "How much does it cost to make an AI short drama in 2026?",
+      answerEn: "A 10-episode x 2-minute vertical season runs about $7,800 AI-first (including generation credits and post) versus roughly $61,000 traditional. The gap is mostly crew, location, and equipment.",
+    },
+    {
+      question: "AI 短剧和传统短剧哪个 ROI 高？",
+      answer: "AI 因固定成本极低，通常前 2-3 集回本，传统要 5-7 集。对试水新题材，AI 的先手优势明显。",
+      questionEn: "Which has better ROI, AI or traditional short drama?",
+      answerEn: "AI-first usually breaks even in 2-3 episodes because fixed cost is tiny, traditional needs 5-7. For testing a new premise, AI head start is decisive.",
+    },
+    {
+      question: "AI 短剧有什么隐藏成本？",
+      answer: "不是订阅，而是耗在一致性与缺陷上的生成额度（返工）。用缺陷修复工作流压低重生次数，就是保利润。",
+      questionEn: "What is the hidden cost of AI short drama?",
+      answerEn: "Not the subscription, it is generation credits burned on inconsistency and artifacts (rework). Fewer regenerations via an artifact-fixing workflow protects margin.",
+    },
+    {
+      question: "什么情况仍该用传统拍摄？",
+      answer: "依赖知名演员脸、实拍特技或真实质感（布料、光线）的戏，传统或混合更稳。AI 在触觉真实感上尚未追平。",
+      questionEn: "When should I still shoot traditionally?",
+      answerEn: "When the drama depends on a known actor face, practical stunts, or the texture of real fabric and light, traditional or hybrid is still safer. AI has not closed the gap on tactile realism.",
+    },
+  ],
+  "vertical-camera-movement-prompts": [
+    {
+      question: "文生视频里怎么写镜头运动提示词？",
+      answer: "写清运动、轴向、速度三要素，例如慢速推近、9:16 竖屏、直推脸部。一个镜头只写一种运动，并用参考图锚定主体。",
+      questionEn: "How do I write camera movement prompts for AI video?",
+      answerEn: "Name the move, the axis, and the speed in one phrase, e.g. slow push-in, 9:16 vertical, toward the face. One movement per shot, and anchor the subject with a reference image.",
+    },
+    {
+      question: "竖屏短剧最适合什么镜头运动？",
+      answer: "近、快、情绪驱动的运动：慢推营造紧张、快甩遮剪辑、手持卖亲密与紧迫。避免缓慢航拍这类横屏思维。",
+      questionEn: "What camera moves work best for vertical short drama?",
+      answerEn: "Close, fast, emotionally-driven moves: slow push for tension, fast whip to cover cuts, handheld for intimacy and urgency. Avoid slow aerial drifts built for landscape.",
+    },
+    {
+      question: "为什么我的镜头提示词不出效果？",
+      answer: "多半因为只写电影感这类空词。模型需要具名运动、轴向与速度；同时用参考图锚定主体，否则角色会随镜头滑动。",
+      questionEn: "Why do my camera prompts not work?",
+      answerEn: "Usually because they say only vague words like cinematic. Models need a named move, axis, and speed, plus a reference image to anchor the subject so it does not slide.",
+    },
+    {
+      question: "一个提示词能叠多种运动吗？",
+      answer: "不建议。把环绕、推、变焦叠进一句会让模型平均成模糊运动。每种运动单独成镜，后期再剪接。",
+      questionEn: "Can I stack multiple movements in one prompt?",
+      answerEn: "Not advised. Stacking orbit, push, and zoom makes the model average them into mush. Shoot each move separately and cut in editing.",
+    },
+  ],
+  "viral-ai-drama-visual-styles": [
+    {
+      question: "爆款 AI 短剧有什么共同的视觉风格？",
+      answer: "可归为五种，霓虹暗黑、柔焦粉彩、黄金时刻、冷峻临床、动画写实。共同点是强调色加单源光，而非特定题材。",
+      questionEn: "What visual styles do viral AI dramas share?",
+      answerEn: "Five clusters, Neon Noir, Soft Pastel, Golden Hour, Clinical Cold, and Anime Realism. The common thread is a strong grade and single-source light, not a specific subject.",
+    },
+    {
+      question: "调色和题材哪个更影响转发？",
+      answer: "我们的样本里调色比题材更能预测转发。观众 0.5 秒就决定，先看到的是调色。",
+      questionEn: "Does grade or subject drive shares more?",
+      answerEn: "In our sample, grade predicted shares more than subject. Viewers decide in 0.5 seconds, and grade is what they see first.",
+    },
+    {
+      question: "怎么用提示词复刻这些风格？",
+      answer: "每种风格是一行调色提示词，例如青橙调色、高对比、单道青色轮廓光、9:16 竖屏。观感是设定，不是换模型。",
+      questionEn: "How do I copy these styles with prompts?",
+      answerEn: "Each style is one grade prompt line, e.g. teal-orange grade, high contrast, single cyan rim light, 9:16 vertical. The look is a setting, not a model switch.",
+    },
+    {
+      question: "竖屏短剧用什么画幅和景别最好？",
+      answer: "竖屏 9:16 配紧凑近景优于宽幅建制镜头，更利于手机端留存。开场脸占画面约 70% 效果最佳。",
+      questionEn: "What aspect and shot size work best for vertical drama?",
+      answerEn: "Vertical 9:16 with tight close-ups beats wide establishing shots for phone retention. Opening with the face at about 70% of frame works best.",
+    },
+  ],
 };

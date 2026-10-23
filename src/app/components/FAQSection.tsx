@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "motion/react";
+import { Link } from "react-router";
 import { ChevronDown, ExternalLink, ArrowRight, Shield, Award, Globe, Sparkles } from "lucide-react";
 import { useI18n } from "../i18n";
 import type { Locale } from "../i18n-types";
@@ -992,14 +993,9 @@ export function TrustSignalsSection() {
 export function FAQSection({ onNavigate }: { onNavigate?: (page: string) => void }) {
   const { locale } = useI18n();
   const msg = faqMessages[locale as FaqLocale] ?? faqMessages.en;
-
-  const handleLinkClick = (e: React.MouseEvent, href: string, external?: boolean) => {
-    if (external) return; // Let external links open normally
-    e.preventDefault();
-    const page = href.replace("/", "") || "home";
-    onNavigate?.(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  // 说明：站内链接已改用 react-router 的 <Link>（自动带部署前缀 /lollipop/），
+  // onNavigate 保留仅为兼容旧调用方；window.scrollTo 由各 Link 自身处理。
+  void onNavigate;
 
   return (
     <section id="faq" className="py-20 bg-gradient-to-b from-[#0d0000] to-[#0a0000]">
@@ -1186,24 +1182,32 @@ export function FAQSection({ onNavigate }: { onNavigate?: (page: string) => void
             {msg.navLinks.title}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-            {msg.navLinks.links.map((link, i) => (
-              <a
-                key={i}
-                href={link.href}
-                onClick={(e) => handleLinkClick(e, link.href, link.external)}
-                target={link.external ? "_blank" : undefined}
-                rel={link.external ? "noopener noreferrer" : undefined}
-                className="flex items-center gap-2 p-3 rounded-lg border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-red-500/20 transition-all text-gray-300 hover:text-white"
-                style={{ fontSize: "0.85rem" }}
-              >
-                {link.external ? (
+            {msg.navLinks.links.map((link, i) =>
+              link.external ? (
+                <a
+                  key={i}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 p-3 rounded-lg border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-red-500/20 transition-all text-gray-300 hover:text-white"
+                  style={{ fontSize: "0.85rem" }}
+                >
                   <ExternalLink className="w-4 h-4 text-gray-500 flex-shrink-0" />
-                ) : (
+                  <span>{link.label}</span>
+                </a>
+              ) : (
+                <Link
+                  key={i}
+                  to={link.href}
+                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                  className="flex items-center gap-2 p-3 rounded-lg border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-red-500/20 transition-all text-gray-300 hover:text-white"
+                  style={{ fontSize: "0.85rem" }}
+                >
                   <ArrowRight className="w-4 h-4 text-red-400 flex-shrink-0" />
-                )}
-                <span>{link.label}</span>
-              </a>
-            ))}
+                  <span>{link.label}</span>
+                </Link>
+              ),
+            )}
           </div>
         </motion.div>
       </div>

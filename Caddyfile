@@ -67,22 +67,24 @@
 	# slug 保持不变，因此 /guides/<slug> → /blog/<slug> 是一一对应的。
 	# 列表页与三个分类聚合页统一落到 /blog（新站已无对应聚合页）。
 	#
-	# ⚠️ Caddy 的指令按「最长路径优先」之外还有固定优先级：redir 属于
-	#    rewrite 之前的阶段，放在这里不会被下面的 try_files / file_server 抢先。
-	redir /guides/workflow /blog 301
-	redir /guides/production /blog 301
-	redir /guides/distribution /blog 301
-	redir /guides/character-consistency-workflow /blog/character-consistency-workflow 301
-	redir /guides/ten-episodes-two-weeks /blog/ten-episodes-two-weeks 301
-	redir /guides/publish-and-monetize-vertical-drama /blog/publish-and-monetize-vertical-drama 301
-	redir /guides/script-to-screen-pipeline /blog/script-to-screen-pipeline 301
-	redir /guides/fix-ai-video-artifacts /blog/fix-ai-video-artifacts 301
-	redir /guides/first-vertical-drama-zero-experience /blog/first-vertical-drama-zero-experience 301
-	redir /guides/ai-drama-budget-under-1000 /blog/ai-drama-budget-under-1000 301
-	redir /guides/multilingual-localization-workflow /blog/multilingual-localization-workflow 301
-	redir /guides/ai-drama-legal-checklist /blog/ai-drama-legal-checklist 301
+	# ⚠️ 2026-10-23 修复：所有 redir 目标改为显式 https://{host}...，
+	#    不再用相对路径（相对路径会沿用请求 scheme；origin 在 CF 之后若
+	#    未正确识别 X-Forwarded-Proto 会发成 http://，导致 GSC「网页会自动
+	#    重定向」计数虚高）。显式写死 https 可单跳直达、杜绝明文降级。
+	redir /guides/workflow https://{host}/blog 301
+	redir /guides/production https://{host}/blog 301
+	redir /guides/distribution https://{host}/blog 301
+	redir /guides/character-consistency-workflow https://{host}/blog/character-consistency-workflow 301
+	redir /guides/ten-episodes-two-weeks https://{host}/blog/ten-episodes-two-weeks 301
+	redir /guides/publish-and-monetize-vertical-drama https://{host}/blog/publish-and-monetize-vertical-drama 301
+	redir /guides/script-to-screen-pipeline https://{host}/blog/script-to-screen-pipeline 301
+	redir /guides/fix-ai-video-artifacts https://{host}/blog/fix-ai-video-artifacts 301
+	redir /guides/first-vertical-drama-zero-experience https://{host}/blog/first-vertical-drama-zero-experience 301
+	redir /guides/ai-drama-budget-under-1000 https://{host}/blog/ai-drama-budget-under-1000 301
+	redir /guides/multilingual-localization-workflow https://{host}/blog/multilingual-localization-workflow 301
+	redir /guides/ai-drama-legal-checklist https://{host}/blog/ai-drama-legal-checklist 301
 	# 兜底：/guides 本身及其余路径 → /blog
-	redir /guides* /blog 301
+	redir /guides* https://{host}/blog 301
 
 	# ── /lollipop/* → /* 301（2026-09-05 根部署迁移）──
 	# 生产环境（www.lollipop.im）实际把 dist 部署在网站根目录，但历史上构建产物里
@@ -90,12 +92,13 @@
 	# sitemap 里 298 条 URL 100% 被 SPA 兜底成首页壳 → GSC 525 个页面未编入索引。
 	# 现已把全站前缀剥离，这里把已被引擎收录的 /lollipop/... 旧 URL 301 到根路径，
 	# 把已积累的权重传给新 URL，同时让 GSC 的「自动重定向」计数自然消化。
-	redir /lollipop / 301
+	# ⚠️ 2026-10-23 修复：目标改显式 https://{host}...，避免明文降级（见上）。
+	redir /lollipop https://{host}/ 301
 
 	@oldDeployPrefix path /lollipop/*
 	handle @oldDeployPrefix {
 		uri strip_prefix /lollipop
-		redir * {uri} 301
+		redir * https://{host}{uri} 301
 	}
 
 	# Compression: Brotli (preferred) + Gzip fallback
@@ -116,13 +119,13 @@
 		path /press /press/*
 		not header_regexp User-Agent (?i)(GPTBot|ClaudeBot|anthropic-ai|Claude-Web|PerplexityBot|CCBot|Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|Applebot|facebookexternalhit|Twitterbot|LinkedInBot|Sogou|SemrushBot|AhrefsBot|Bytespider|PetalBot|Yisouspider|360Spider|DotBot|MJ12bot)
 	}
-	redir @humanOnPress / 302
+	redir @humanOnPress https://{host}/ 302
 
 	@humanOnGlossary {
 		path /glossary /glossary/*
 		not header_regexp User-Agent (?i)(GPTBot|ClaudeBot|anthropic-ai|Claude-Web|PerplexityBot|CCBot|Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|Applebot|facebookexternalhit|Twitterbot|LinkedInBot|Sogou|SemrushBot|AhrefsBot|Bytespider|PetalBot|Yisouspider|360Spider|DotBot|MJ12bot)
 	}
-	redir @humanOnGlossary / 302
+	redir @humanOnGlossary https://{host}/ 302
 
 	# SPA + prerendered static files:
 	# 1. Try exact file (e.g. /about/index.html)
@@ -134,6 +137,26 @@
 	# 配置 index 指令，才能正确匹配预渲染的目录索引文件。
 	# 否则 /about、/genre/romance 等无斜杠路径会 fallback 到首页 index.html，
 	# 导致所有子页面返回首页的 SEO 标签（重复内容风险）。
+	# ── 显式尾斜杠重定向（https，单跳，杜绝 file_server 明文降级）──
+	# 根因（2026-10-23 GSC Coverage：1180 条「网页会自动重定向」）：
+	# Caddy file_server 对目录「/zh」会自动 301 到「/zh/」，但若 origin 在
+	# Cloudflare(Flexible SSL) 之后、且未正确识别 X-Forwarded-Proto，该跳转的
+	# Location 会是 http:// 而非 https://，形成 https→http→https 双跳 + 明文降级，
+	# 被 Google 记为「网页会自动重定向」。显式写死 https://{host}{uri}/ 可单跳
+	# 直达，且不依赖 trusted_proxies 运行时是否成功解析 CF IP 段。
+	# 仅对「真实存在的预渲染目录」生效（file {path}/index.html 兜底），
+	# 不存在的路径交给下方 SPA fallback，不会被误重定向。
+	@add-slash {
+		not path */
+		not path *.html
+		not path *.xml
+		not path *.txt
+		not path *.json
+		not path *.webp
+		file {path}/index.html
+	}
+	redir @add-slash https://{host}{uri}/ 301
+
 	try_files {path} {path}/index.html /index.html
 
 	# Serve pre-compressed .br/.gz files when available (build 阶段预生成)

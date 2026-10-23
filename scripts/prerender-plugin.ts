@@ -79,8 +79,24 @@ function stripMd(md: string): string {
     .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
     .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
     .replace(/[*_`~]/g, "")
+    // 2026-10-23：剥除裸 URL 结尾标点，避免 articleBody/description 里出现
+    // `https://www.lollipop.im/)` 被 Google 的 URL 提取器误判为坏链。
+    .replace(/https?:\/\/[A-Za-z0-9\-._~:/?#\[\]@!$&'()*+,;=%]+/g, (u) => u.replace(/[.,;:!?)\]】）]+$/, ""))
     .replace(/\s+/g, " ")
     .trim();
+}
+
+/**
+ * 2026-10-23：剥除裸 URL 结尾标点（).,;:!? 及全角 ）】）。
+ * 用于 JSON-LD / meta 的 description 字段——这些字段直接来自 blog.ts 的
+ * excerpt / seoDescription，其中常有括号包裹的裸 URL
+ * （如 "...platform, https://www.lollipop.im/) ran..."），否则 Google 的
+ * URL 提取器会把结尾 `)` 一并抓成坏链。可见正文已由 markdown.tsx 的
+ * linkifyBareUrls 包成干净 <a>，此处覆盖结构化数据这一路。
+ */
+function cleanUrlTrail(s: string): string {
+  if (!s) return s;
+  return s.replace(/https?:\/\/[A-Za-z0-9\-._~:/?#\[\]@!$&'()*+,;=%]+/g, (u) => u.replace(/[.,;:!?)\]】）]+$/, ""));
 }
 
 /** GEO: 按文章分类生成 about（主题实体）和 mentions（提及实体），供 AI 引擎理解文章主题与关联实体 */
@@ -449,7 +465,7 @@ function getRouteData(): RouteSeoData[] {
                       ? {
                           "@type": "HowTo",
                           name: p.title,
-                          description: p.excerpt,
+                          description: cleanUrlTrail(p.excerpt),
                           totalTime: p.totalTime,
                           step: p.steps.map((s, si) => ({
                             "@type": "HowToStep",
@@ -461,7 +477,7 @@ function getRouteData(): RouteSeoData[] {
                       : {
                           "@type": "Article",
                           name: p.title,
-                          description: p.excerpt,
+                          description: cleanUrlTrail(p.excerpt),
                         },
                 })),
               },
@@ -604,7 +620,7 @@ function getRouteData(): RouteSeoData[] {
     const articleSchema = {
       "@type": hasSteps ? "TechArticle" : "Article",
       headline: p.title,
-      description: p.seoDescription,
+      description: cleanUrlTrail(p.seoDescription),
       datePublished: p.publishDate,
       dateModified: p.updateDate,
       ...(hasSteps && p.difficulty ? { proficiencyLevel: p.difficulty } : {}),
@@ -629,7 +645,9 @@ function getRouteData(): RouteSeoData[] {
       thumbnailUrl: `${SITE_URL}${p.coverImage || "/blog-images/guide.png"}`,
       keywords: `${p.categoryLabel}, AI short drama, Lollipop Drama, ${p.title}`,
       // articleBody 放 keyTakeaways + 更长的英文摘要（1500 字符），利于 GEO/AEO 引擎理解文章主题
-      articleBody: (p.keyTakeaways ? "Key Takeaways: " + p.keyTakeaways.join(" ") + " " : "") + plainEn.slice(0, 1500),
+      // keyTakeaways 直接拼接进 articleBody，需先剥离结尾标点（).,;:!? 及全角 ）】），
+      // 否则裸 URL 后接括号会残留 https://www.lollipop.im) 被 Google URL 提取器误判。
+      articleBody: (p.keyTakeaways ? "Key Takeaways: " + p.keyTakeaways.map(cleanUrlTrail).join(" ") + " " : "") + plainEn.slice(0, 1500),
       // 英文按空格分词计数（原 replace(/\s/g,"").length 对英文算的是去空格字符数，语义错误）
       wordCount: p.content.split(/\s+/).filter(Boolean).length,
       encodingFormat: "text/html",
@@ -659,7 +677,7 @@ function getRouteData(): RouteSeoData[] {
       ? {
           "@type": "HowTo",
           name: p.title,
-          description: p.seoDescription,
+          description: cleanUrlTrail(p.seoDescription),
           step: p.steps!.map((s, i) => ({
             "@type": "HowToStep",
             position: i + 1,
@@ -709,7 +727,7 @@ function getRouteData(): RouteSeoData[] {
     routes.push({
       path: `/blog/${p.slug}`,
       title: p.seoTitle,
-      description: p.seoDescription,
+      description: cleanUrlTrail(p.seoDescription),
       image: `${SITE_URL}${p.coverImage || "/blog-images/guide.png"}`,
       ogType: "article",
       // 只有进入多语言子集的文章（= 有中文标题，见 multilangSubset.ts）才生成 6 语言互指。
@@ -864,7 +882,7 @@ function appendMultilangVariants(routes: RouteSeoData[]): void {
         title = seo.title;
         // 中文有 excerptZh 时直接用它做 description（比模板拼装更自然）
         if (zh && p?.excerptZh) {
-          description = p.excerptZh;
+          description = cleanUrlTrail(p.excerptZh);
         }
       }
 
@@ -933,7 +951,7 @@ function buildLocalizedBlogSchema(
   const articleSchema = {
     "@type": hasSteps ? "TechArticle" : "Article",
     headline: zh ? p.titleZh : p.title,
-    description: zh ? (p.excerptZh ?? p.titleZh) : p.seoDescription,
+    description: zh ? cleanUrlTrail(p.excerptZh ?? p.titleZh) : cleanUrlTrail(p.seoDescription),
     datePublished: p.publishDate,
     dateModified: p.updateDate,
     ...(hasSteps && p.difficulty ? { proficiencyLevel: p.difficulty } : {}),
@@ -960,7 +978,8 @@ function buildLocalizedBlogSchema(
     mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}${trailingSlash(localizedAppPath)}` },
     // zh articleBody：关键要点 + 中文全文，与英文分支（keyTakeaways + 1500 字符）对齐，提升 GEO/AEO 引擎理解
     ...(zh && (p.keyTakeawaysZh || p.contentZh) ? {
-      articleBody: (p.keyTakeawaysZh ? "关键要点: " + p.keyTakeawaysZh.join(" ") + " " : "") + stripMd(p.contentZh ?? ""),
+      // keyTakeawaysZh 同 EN 分支：先剥离结尾标点，避免 https://www.lollipop.im/） 残留。
+      articleBody: (p.keyTakeawaysZh ? "关键要点: " + p.keyTakeawaysZh.map(cleanUrlTrail).join(" ") + " " : "") + stripMd(p.contentZh ?? ""),
     } : {}),
     speakable: { "@type": "SpeakableSpecification", cssSelector: ["h1", ".key-takeaways li", ".faq p"] },
   };
@@ -969,7 +988,7 @@ function buildLocalizedBlogSchema(
     ? {
         "@type": "HowTo",
         name: zh ? p.titleZh : p.title,
-        description: zh ? (p.excerptZh ?? p.titleZh) : p.seoDescription,
+        description: zh ? cleanUrlTrail(p.excerptZh ?? p.titleZh) : cleanUrlTrail(p.seoDescription),
         // 无中文步骤时回退英文步骤：宁可语言不完美，也不要生成空 HowTo 或崩构建
         step: (zh ? p.stepsZh ?? p.steps : p.steps)!.map((s, i) => ({
           "@type": "HowToStep",
@@ -1124,14 +1143,26 @@ function normalizeJsonLdUrls(html: string): string {
     /(<script\b[^>]*type="application\/ld\+json"[^>]*>)([\s\S]*?)(<\/script>)/gi,
     (m: string, open: string, body: string, close: string) => {
       const fixed = body.replace(
-        /(https:\/\/www\.lollipop\.im)((?:\/[^"\\\s]*)?)/g,
-        (mm: string, origin: string, path: string) => {
-          if (!path) return origin + "/"; // 裸主机 → 补 /
-          if (path.endsWith("/")) return mm;
-          if (path.includes("?") || path.includes("#")) return mm;
+        // 第三组 [.,;:!?)\]【）]* 吃掉 URL 结尾的标点（).,;:!? 及全角 ）】），
+        // 避免 Google 的 URL 提取器把括号吞进 URL 当成 https://www.lollipop.im/) 坏链。
+        // path 组排除 )】）] —— 这些收尾标点必须落到第三组被剥离，不能当路径字符。
+        /(https:\/\/www\.lollipop\.im)((?:\/[^"\\\s)\]【）]*)?)([.,;:!?)\]【）]*)/g,
+        (mm: string, origin: string, path: string, _trail: string, offset: number, fullBody: string) => {
+          const url = origin + (path ?? "");
+          const after = fullBody[offset + mm.length];
+          if (!path) {
+            // 裸主机：仅当其后紧跟 JSON 字符串闭合引号（即它是 schema 的 url 字段值）、
+            // 标签边界或字符串末尾时才补 /；正文里括号/空格引用的裸 URL
+            // （如 "...platform, https://www.lollipop.im) by running..."）保持裸主机，
+            // 且末尾标点已被第三组吃掉，不会生成坏链。
+            if (after === '"' || after === "<" || after === undefined) return url + "/";
+            return url;
+          }
+          if (path.endsWith("/")) return url;
+          if (path.includes("?") || path.includes("#")) return url;
           const lastSeg = path.split("/").pop() ?? "";
-          if (lastSeg.includes(".")) return mm; // 静态资源
-          return origin + path + "/";
+          if (lastSeg.includes(".")) return url; // 静态资源
+          return url + "/";
         },
       );
       return open + fixed + close;

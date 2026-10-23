@@ -8,6 +8,56 @@
 import type { ReactNode } from "react";
 import { withTrailingSlash } from "./url";
 
+/**
+ * 行内裸 URL 链接化（2026-10-23 修复）
+ *
+ * 正文里常出现括号包裹的裸 URL，例如
+ *   "...(an AI short-drama platform, https://www.lollipop.im/) ran..."
+ * 旧实现只渲染 [text](url) 显式链接，裸 URL 以纯文本输出；Google 的 URL
+ * 提取器会把结尾的 `)` 一起抓成 `https://www.lollipop.im/)` 并去爬，
+ * 命中 SPA 兜底壳 → 被记为「noindex」。GSC Coverage 明细就此出现 /). /) 坏链。
+ *
+ * 这里把裸 URL 包成真正的 <a>，并剥离结尾标点（).,;:!? 及全角 ）】），
+ * 既消除坏链提取，又让 URL 可点击、利于 AIO 引用。
+ */
+// 仅匹配合法 URL 字符（ASCII 字符集），遇中文/CJK 标点即止——
+// 否则 https://www.lollipop.im/）把毕业作业 会被整句中文误吞为 URL，
+// 导致 <a href> 携带全角 ） 变成点击 404 的坏链。
+const BARE_URL_RE = /https?:\/\/[A-Za-z0-9\-._~:/?#\[\]@!$&'()*+,;=%]+/g;
+const TRAIL_PUNCT_RE = /[.,;:!?)\]】）]+$/;
+
+export function linkifyBareUrls(text: string): ReactNode[] {
+  const nodes: ReactNode[] = [];
+  let last = 0;
+  let key = 0;
+  let m: RegExpExecArray | null;
+  BARE_URL_RE.lastIndex = 0;
+  while ((m = BARE_URL_RE.exec(text)) !== null) {
+    let url = m[0];
+    let trail = "";
+    while (TRAIL_PUNCT_RE.test(url)) {
+      trail = url.slice(-1) + trail;
+      url = url.slice(0, -1);
+    }
+    if (m.index > last) nodes.push(text.slice(last, m.index));
+    nodes.push(
+      <a
+        key={key++}
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-[#FF4D00] hover:underline"
+      >
+        {url}
+      </a>,
+    );
+    if (trail) nodes.push(trail);
+    last = m.lastIndex;
+  }
+  if (last < text.length) nodes.push(text.slice(last));
+  return nodes;
+}
+
 /** 行内元素渲染：**加粗** *斜体* `代码` [链接](url) */
 export function renderInline(text: string): ReactNode[] {
   const nodes: ReactNode[] = [];
@@ -16,7 +66,7 @@ export function renderInline(text: string): ReactNode[] {
   let m: RegExpExecArray | null;
   let key = 0;
   while ((m = regex.exec(text)) !== null) {
-    if (m.index > last) nodes.push(text.slice(last, m.index));
+    if (m.index > last) nodes.push(...linkifyBareUrls(text.slice(last, m.index)));
     if (m[2] !== undefined) {
       nodes.push(<strong key={key++}>{m[2]}</strong>);
     } else if (m[3] !== undefined) {
@@ -44,7 +94,7 @@ export function renderInline(text: string): ReactNode[] {
     }
     last = regex.lastIndex;
   }
-  if (last < text.length) nodes.push(text.slice(last));
+  if (last < text.length) nodes.push(...linkifyBareUrls(text.slice(last)));
   return nodes;
 }
 
@@ -210,6 +260,9 @@ export function stripMarkdown(md: string): string {
     .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
     .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
     .replace(/[*_`~]/g, "")
+    // 2026-10-23：剥除裸 URL 结尾标点，避免 articleBody 里出现
+    // `https://www.lollipop.im/)` 被 Google 的 URL 提取器误判为坏链。
+    .replace(/https?:\/\/[A-Za-z0-9\-._~:/?#\[\]@!$&'()*+,;=%]+/g, (u) => u.replace(/[.,;:!?)\]】）]+$/, ""))
     .replace(/\s+/g, " ")
     .trim();
 }

@@ -19,6 +19,7 @@ import { useI18n } from "../i18n";
 import { blogMeta, isGuideCategory, type BlogMeta } from "../data/blog";
 import { blogCategoryLabel } from "../lib/blogCategory";
 import { localizedHref } from "../localePath";
+import { linkifyBareUrls } from "../lib/markdown";
 
 /**
  * 筛选维度（不是 BlogPost.category 全集）。
@@ -311,7 +312,7 @@ export function BlogListPage() {
                       overflow: "hidden",
                     }}
                   >
-                    {cardExcerpt}
+                    {linkifyBareUrls(cardExcerpt)}
                   </p>
 
                   {/* Read More */}

@@ -20,7 +20,7 @@ import { useI18n } from "../i18n";
 import { blogMeta, isGuideCategory } from "../data/blog";
 import { getFullPost } from "../data/blogContent";
 import { blogFaq } from "../data/blogFaq";
-import { renderMarkdown, stripMarkdown } from "../lib/markdown";
+import { renderMarkdown, stripMarkdown, linkifyBareUrls } from "../lib/markdown";
 import { blogCategoryLabel } from "../lib/blogCategory";
 
 /** ISO 8601 时长 → 本地化可读文本（P14D → "14 天"，PT3H → "3 小时"） */
@@ -319,7 +319,7 @@ export function BlogPostPage() {
             {postTitle}
           </h1>
           <p className="text-gray-400 mt-4" style={{ fontSize: "1.1rem", lineHeight: 1.7 }}>
-            {postExcerpt}
+            {linkifyBareUrls(postExcerpt)}
           </p>
         </motion.div>
 
@@ -338,7 +338,7 @@ export function BlogPostPage() {
               {postTakeaways.map((t, i) => (
                 <li key={i} className="flex gap-2.5">
                   <span className="shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full" style={{ background: "#FF4D00" }} />
-                  <p className="text-gray-300" style={{ fontSize: "0.95rem", lineHeight: 1.7 }}>{t}</p>
+                  <p className="text-gray-300" style={{ fontSize: "0.95rem", lineHeight: 1.7 }}>{linkifyBareUrls(t)}</p>
                 </li>
               ))}
             </ul>

@@ -600,26 +600,20 @@ function getRouteData(): RouteSeoData[] {
       datePublished: meta.uploadDate,
       episodeType: "standard",
       numberOfEpisodes: meta.episodes,
-      // 真实 genre：如 "Romance · Revenge" → 拆成 Genre 元素
-      genre: meta.genre.split(" · ").map((g: string) => ({ "@type": "Genre", name: g.trim() })),
+      // schema.org TVSeries.genre 要求 string 或 URL，不能是 Genre[] 对象数组
+      genre: meta.genre.replace(" · ", ", "),
       keywords: `${meta.genre}, short drama, AI drama, ${meta.title.toLowerCase()}`,
       inLanguage: "en",
       url: `${SITE_URL}/drama/${d.slug}`,
       sameAs: `${SITE_URL}/drama/${d.slug}`,
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: meta.rating,
-        ratingCount: 1,
-        bestRating: "10",
-        worstRating: "1",
-      },
+      // aggregateRating 故意留空：平台尚无真实用户评价系统，fake ratingCount 会触发
+      // Google Review Snippet 垃圾政策（之前 DramaPage 里已有同样注释说明）
       publisher: {
         "@type": "Organization",
         name: "Lollipop Drama",
         url: SITE_URL,
         logo: { "@type": "ImageObject", url: `${SITE_URL}/src/imports/logo.webp` },
       },
-      contentRating: "TV-14",
     };
     routes.push({
       path: `/drama/${d.slug}`,

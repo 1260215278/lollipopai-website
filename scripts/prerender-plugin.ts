@@ -554,56 +554,76 @@ function getRouteData(): RouteSeoData[] {
   }
 
   // --- 剧集详情页 (12 dramas) ---
+  // 真实元数据：从 src/app/data/dramas.ts 提取，确保 schema 字段精准
+  const dramaMeta: Record<string, { title: string; genre: string; episodes: number; rating: string; views: string; seoDesc: string; uploadDate: string }> = {
+    "temptation-ceo":                    { title: "Temptation CEO",                    genre: "Romance · Revenge",       episodes: 80,  rating: "9.8", views: "52M", seoDesc: "Watch Temptation CEO full episodes on Lollipop Drama. A thrilling romance revenge drama about a woman who discovers her CEO husband's betrayal. 80 episodes, 52M views.", uploadDate: "2026-01-15" },
+    "the-bride-who-fell-from-the-sky":   { title: "The Bride Who Fell from the Sky",  genre: "Romance · Fantasy",       episodes: 60,  rating: "9.5", views: "38M", seoDesc: "Watch The Bride Who Fell from the Sky full episodes on Lollipop Drama. A fantasy romance about a celestial bride who falls into the mortal realm. 60 episodes, 38M views.", uploadDate: "2026-02-01" },
+    "the-revenge-of-the-plus-size-wife": { title: "The Revenge of the Plus-Size Wife", genre: "Romance · Revenge",       episodes: 100, rating: "9.6", views: "67M", seoDesc: "Watch The Revenge of the Plus-Size Wife full episodes on Lollipop Drama. A body-positive revenge drama about a woman who transforms her life. 100 episodes, 67M views.", uploadDate: "2026-01-20" },
+    "my-royal-alpha-boyfriend":          { title: "My Royal Alpha Boyfriend",          genre: "Romance · Fantasy",       episodes: 50,  rating: "9.1", views: "29M", seoDesc: "Watch My Royal Alpha Boyfriend full episodes on Lollipop Drama. A fantasy romance about a modern girl and a werewolf prince. 50 episodes, 29M views.", uploadDate: "2026-02-10" },
+    "dark-secrets":                      { title: "Dark Secrets",                      genre: "Thriller · Drama",        episodes: 70,  rating: "9.0", views: "44M", seoDesc: "Watch Dark Secrets full episodes on Lollipop Drama. A psychological thriller about a small town hiding deadly secrets. 70 episodes, 44M views.", uploadDate: "2026-01-05" },
+    "why-jump-off-the-building":         { title: "Why Jump Off the Building",         genre: "Thriller · Mystery",      episodes: 90,  rating: "9.4", views: "41M", seoDesc: "Watch Why Jump Off the Building full episodes on Lollipop Drama. A mystery thriller uncovering the truth behind a shocking incident. 90 episodes, 41M views.", uploadDate: "2026-01-10" },
+    "crimson-dynasty":                   { title: "Crimson Dynasty",                   genre: "Historical · Power",      episodes: 45,  rating: "9.2", views: "18M", seoDesc: "Watch Crimson Dynasty full episodes on Lollipop Drama. A historical drama about palace intrigue and royal power struggles in an ancient empire. 45 episodes.", uploadDate: "2026-02-15" },
+    "neon-abyss":                        { title: "Neon Abyss",                        genre: "Sci-Fi · Thriller",       episodes: 36,  rating: "9.0", views: "12M", seoDesc: "Watch Neon Abyss full episodes on Lollipop Drama. A cyberpunk sci-fi thriller set in a neon-drenched future where reality is negotiable. 36 episodes, AI-enhanced.", uploadDate: "2026-02-20" },
+    "whispered-love":                    { title: "Whispered Love",                    genre: "Romance · Drama",         episodes: 55,  rating: "8.9", views: "15M", seoDesc: "Watch Whispered Love full episodes on Lollipop Drama. A tender romance drama about two people finding love through whispered conversations. 55 episodes.", uploadDate: "2026-02-25" },
+    "the-forgotten":                     { title: "The Forgotten",                     genre: "Mystery · Suspense",      episodes: 40,  rating: "9.4", views: "10M", seoDesc: "Watch The Forgotten full episodes on Lollipop Drama. A suspense mystery about a woman who wakes up with no memory in a town where no one remembers her. 40 episodes.", uploadDate: "2026-03-01" },
+    "iron-will":                         { title: "Iron Will",                         genre: "Action · Martial Arts",   episodes: 48,  rating: "9.1", views: "14M", seoDesc: "Watch Iron Will full episodes on Lollipop Drama. An action-packed martial arts drama about a fighter's journey from underground rings to championship. 48 episodes.", uploadDate: "2026-03-05" },
+    "cloud-atlas":                       { title: "Cloud Atlas",                       genre: "Fantasy · Adventure",     episodes: 60,  rating: "9.3", views: "16M", seoDesc: "Watch Cloud Atlas full episodes on Lollipop Drama. A fantasy adventure about explorers journeying through floating islands above the clouds. 60 episodes.", uploadDate: "2026-03-10" },
+  };
   const dramas = [
-    { slug: "temptation-ceo", title: "Temptation CEO — Watch Free Short Drama | Lollipop Drama", desc: "Watch Temptation CEO, a binge-worthy short drama on Lollipop Drama. A powerful CEO's secret desire turns into an irresistible temptation. Stream all episodes free.", uploadDate: "2026-01-15" },
-    { slug: "the-bride-who-fell-from-the-sky", title: "The Bride Who Fell From The Sky — Watch Free | Lollipop Drama", desc: "Watch The Bride Who Fell From The Sky, a romantic short drama on Lollipop Drama. A mysterious bride falls from the sky and changes everything. Stream all episodes free.", uploadDate: "2026-02-01" },
-    { slug: "the-revenge-of-the-plus-size-wife", title: "The Revenge of the Plus-Size Wife — Watch Free | Lollipop Drama", desc: "Watch The Revenge of the Plus-Size Wife, a satisfying revenge short drama on Lollipop Drama. She was mocked for her size — now she's back for justice. Stream free.", uploadDate: "2026-01-20" },
-    { slug: "my-royal-alpha-boyfriend", title: "My Royal Alpha Boyfriend — Watch Free | Lollipop Drama", desc: "Watch My Royal Alpha Boyfriend, a fantasy romance short drama on Lollipop Drama. A werewolf prince claims her as his mate. Stream all episodes free.", uploadDate: "2026-02-10" },
-    { slug: "dark-secrets", title: "Dark Secrets — Watch Free Short Drama | Lollipop Drama", desc: "Watch Dark Secrets, a thrilling short drama on Lollipop Drama. Everyone has secrets, but some are worth killing for. Stream all episodes free.", uploadDate: "2026-01-05" },
-    { slug: "why-jump-off-the-building", title: "Why Jump Off The Building — Watch Free | Lollipop Drama", desc: "Watch Why Jump Off The Building, a suspenseful short drama on Lollipop Drama. A woman's desperate jump reveals a web of betrayal. Stream all episodes free.", uploadDate: "2026-01-10" },
-    { slug: "crimson-dynasty", title: "Crimson Dynasty — Watch Free Short Drama | Lollipop Drama", desc: "Watch Crimson Dynasty, a historical palace drama on Lollipop Drama. Power, passion, and betrayal in the imperial court. Stream all episodes free.", uploadDate: "2026-02-15" },
-    { slug: "neon-abyss", title: "Neon Abyss — Watch Free Short Drama | Lollipop Drama", desc: "Watch Neon Abyss, a cyberpunk sci-fi short drama on Lollipop Drama. In a neon-soaked future, one woman fights to reclaim her identity. Stream free.", uploadDate: "2026-02-20" },
-    { slug: "whispered-love", title: "Whispered Love — Watch Free Short Drama | Lollipop Drama", desc: "Watch Whispered Love, a heartwarming romance short drama on Lollipop Drama. Sometimes the quietest love speaks the loudest. Stream all episodes free.", uploadDate: "2026-02-25" },
-    { slug: "the-forgotten", title: "The Forgotten — Watch Free Short Drama | Lollipop Drama", desc: "Watch The Forgotten, a mystery thriller short drama on Lollipop Drama. He woke up with no memory, but everyone seems to know him. Stream all episodes free.", uploadDate: "2026-03-01" },
-    { slug: "iron-will", title: "Iron Will — Watch Free Short Drama | Lollipop Drama", desc: "Watch Iron Will, an action short drama on Lollipop Drama. A soldier's unbreakable will is tested in the ultimate battle for survival. Stream all episodes free.", uploadDate: "2026-03-05" },
-    { slug: "cloud-atlas", title: "Cloud Atlas — Watch Free Short Drama | Lollipop Drama", desc: "Watch Cloud Atlas, a fantasy adventure short drama on Lollipop Drama. Journey across floating islands in a world above the clouds. Stream all episodes free.", uploadDate: "2026-03-10" },
+    { slug: "temptation-ceo",                    title: "Temptation CEO — Watch Free Short Drama | Lollipop Drama" },
+    { slug: "the-bride-who-fell-from-the-sky",   title: "The Bride Who Fell From The Sky — Watch Free | Lollipop Drama" },
+    { slug: "the-revenge-of-the-plus-size-wife", title: "The Revenge of the Plus-Size Wife — Watch Free | Lollipop Drama" },
+    { slug: "my-royal-alpha-boyfriend",          title: "My Royal Alpha Boyfriend — Watch Free | Lollipop Drama" },
+    { slug: "dark-secrets",                      title: "Dark Secrets — Watch Free Short Drama | Lollipop Drama" },
+    { slug: "why-jump-off-the-building",         title: "Why Jump Off The Building — Watch Free | Lollipop Drama" },
+    { slug: "crimson-dynasty",                   title: "Crimson Dynasty — Watch Free Short Drama | Lollipop Drama" },
+    { slug: "neon-abyss",                        title: "Neon Abyss — Watch Free Short Drama | Lollipop Drama" },
+    { slug: "whispered-love",                    title: "Whispered Love — Watch Free Short Drama | Lollipop Drama" },
+    { slug: "the-forgotten",                     title: "The Forgotten — Watch Free Short Drama | Lollipop Drama" },
+    { slug: "iron-will",                         title: "Iron Will — Watch Free Short Drama | Lollipop Drama" },
+    { slug: "cloud-atlas",                       title: "Cloud Atlas — Watch Free Short Drama | Lollipop Drama" },
   ];
   for (const d of dramas) {
+    const meta = dramaMeta[d.slug];
     const posterBasename = dramaPosterBasenames[d.slug];
-    // Coze 策略 P0（2026-10-05 审计：Organization + FAQPage + TVSeries + HowTo；
-    // 现有 Org/FAQPage/HowTo 已落地，唯独缺 TVSeries）。短剧是分集连续内容，标成
-    // TVSeries 比单个 VideoObject 更准确——原 VideoObject 的 duration:PT2M 把整部剧
-    // 误标成「单个 2 分钟视频」，且无真实播放地址本就不符合 VideoObject 规范。
+    // TVSeries schema：短剧是分集连续内容，TVSeries 比单个 VideoObject 更准确
+    // (原 VideoObject 的 duration:PT2M 把整部剧误标成"单个 2 分钟视频"且无真实播放地址)
     const videoSchema = {
       "@context": "https://schema.org",
       "@type": "TVSeries",
-      name: d.title.split(" — ")[0],
-      alternateName: `${d.title.split(" — ")[0]} (Lollipop Drama)`,
-      description: d.desc,
+      name: meta.title,
+      alternateName: `${meta.title} (Lollipop Drama)`,
+      description: meta.seoDesc,
       // P1-4: image 用剧集专属海报；resolveRouteImages 对序列化后的 __ASSET: 占位符全局替换
       image: posterBasename ? `__ASSET:${posterBasename}__` : `${SITE_URL}/og-image.png`,
-      dateCreated: d.uploadDate,
-      genre: "Short Drama",
+      dateCreated: meta.uploadDate,
+      datePublished: meta.uploadDate,
+      episodeType: "standard",
+      numberOfEpisodes: meta.episodes,
+      // schema.org TVSeries.genre 要求 string 或 URL，不能是 Genre[] 对象数组
+      genre: meta.genre.replace(" · ", ", "),
+      keywords: `${meta.genre}, short drama, AI drama, ${meta.title.toLowerCase()}`,
       inLanguage: "en",
       url: `${SITE_URL}/drama/${d.slug}`,
       sameAs: `${SITE_URL}/drama/${d.slug}`,
+      // aggregateRating 故意留空：平台尚无真实用户评价系统，fake ratingCount 会触发
+      // Google Review Snippet 垃圾政策（之前 DramaPage 里已有同样注释说明）
       publisher: {
         "@type": "Organization",
         name: "Lollipop Drama",
         url: SITE_URL,
         logo: { "@type": "ImageObject", url: `${SITE_URL}/src/imports/logo.webp` },
       },
-      // numberOfEpisodes 未暴露真实分集数，按 GEO 规范不填占位值，避免向 AI 引擎提供不实数据
     };
     routes.push({
       path: `/drama/${d.slug}`,
       title: d.title,
-      description: d.desc,
+      description: meta.seoDesc,
       imageBasename: posterBasename,
       schema: withBreadcrumb(videoSchema, [
         { name: "Home", url: SITE_URL },
         { name: "Drama", url: SITE_URL },
-        { name: d.title.split(" — ")[0], url: `${SITE_URL}/drama/${d.slug}` },
+        { name: meta.title, url: `${SITE_URL}/drama/${d.slug}` },
       ]),
     });
   }

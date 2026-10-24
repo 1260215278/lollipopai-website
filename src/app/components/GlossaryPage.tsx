@@ -97,6 +97,7 @@ export function GlossaryPage({ onNavigate }: { onNavigate?: (page: string) => vo
 
   return (
     <>
+    <main>
       <section className="relative w-full min-h-[50vh] flex items-center justify-center overflow-hidden pt-24 pb-16 bg-gradient-to-b from-[#1a0000] to-[#0a0000]">
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-[#0a0000]" />
         <motion.div
@@ -152,7 +153,7 @@ export function GlossaryPage({ onNavigate }: { onNavigate?: (page: string) => vo
           ))}
         </div>
       </section>
-
+    </main>
       <Footer onNavigate={onNavigate} />
     </>
   );

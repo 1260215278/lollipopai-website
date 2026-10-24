@@ -207,6 +207,7 @@ export default function App({ initialPage = "home" }: { initialPage?: MarketingP
   return (
     <div className="relative bg-[#0a0000] min-h-screen" style={{ fontFamily: "Inter, sans-serif" }}>
       <Navbar currentPage={currentPage} onNavigate={handleNavigate} />
+      <main>
       {currentPage === "home" && (
         <>
           <HeroSection />
@@ -228,7 +229,6 @@ export default function App({ initialPage = "home" }: { initialPage?: MarketingP
             <TestimonialsSection />
             <FAQSection onNavigate={handleNavigate} />
           </div>
-          <Footer onNavigate={handleNavigate} />
         </>
       )}
       {/* 非首页子页面：按需加载，各自独立的 chunk */}
@@ -241,6 +241,8 @@ export default function App({ initialPage = "home" }: { initialPage?: MarketingP
           {currentPage === "creator" && <CreatorProgramPage onNavigate={handleNavigate} />}
         </Suspense>
       )}
+      </main>
+      <Footer onNavigate={handleNavigate} />
       <BackToTop />
     </div>
   );

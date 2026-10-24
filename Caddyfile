@@ -1,49 +1,23 @@
+{
+	auto_https disable_redirects
+}
+
 # Lollipop Drama — Caddy Server Configuration
 #
 # Deploy: copy to /etc/caddy/Caddyfile (or import via caddy reload)
 # This config assumes the built dist/ is served from /var/www/lollipop
 # Adjust paths as needed for your deployment.
 
-{
-	# 信任 Cloudflare 转发的 X-Forwarded-Proto / X-Forwarded-For，
-	# 否则 Caddy 处于 CF(Flexible SSL) 之后会以为自己是 http，
-	# 自动的「无斜杠→有斜杠」跳转会发出 http:// Location（诊断发现 /about → http://...），
-	# 造成抓取链路明文降级、与 HTTPS canonical 冲突。开启后跳转回到 https://。
-	trusted_proxies cloudflare
-}
-
 {$SITE_DOMAIN:www.lollipop.im} {
-	root * /var/www/lollipop
+	tls internal
+	root * /srv/www/lollipop/current
 
-	# ─────────────────────────────────────────────────────────────────────
+        # Short cache for llms.txt to force Cloudflare refresh
+        header /llms*.txt Cache-Control "public, max-age=60"
+        header /llms*.txt Surrogate-Control "public, max-age=0"
+        header /llms*.txt CDN-Cache-Control "public, max-age=60"
+
 	# Security HTTP headers
-	#
-	# ⚠️ 2026-10-07 线上实测：下面这 6 项头在生产上【全部缺失】。
-	#    curl 伪装浏览器 UA 访问 https://www.lollipop.im/，响应头里只有
-	#    Server: cloudflare、X-XSS-Protection、X-Content-Type-Options、
-	#    Referrer-Policy、Nel、Report-To、cf-cache-status ——
-	#    没有 HSTS、没有 CSP、没有 X-Frame-Options。
-	#
-	#    佐证（同一份配置里的 301 也没生效）：本文件配了
-	#      redir /guides/* /blog 301   和   redir /lollipop/* ... 301
-	#    但线上 /guides/workflow、/lollipop 都返回 200 且无 Location 头；
-	#    dist/_redirects 线上可下载却不被引擎遵守，说明生产不是 Cloudflare
-	#    Pages，而是「自建源站 + Cloudflare 代理」。
-	#    → 结论：不是配置写错，是这份 Caddyfile 没被源站加载。
-	#
-	# 部署到源站的正确姿势：
-	#   1) 把本文件放到源站的 /etc/caddy/Caddyfile
-	#   2) caddy fmt --overwrite /etc/caddy/Caddyfile   # 校验语法 + 统一缩进
-	#   3) systemctl reload caddy                       # 优雅重载，不断连接
-	#   （用 reload 而不是 restart；若改了全局 {} 块才需要 restart）
-	#
-	# 部署后验证（脚本会伪装 UA，绕开 Cloudflare 对 urllib 默认 UA 的 403）：
-	#   python scripts/check-security-headers.py
-	#   期望输出：首页 6 项全 PASS、得分 35/35、退出码 0。
-	#   当前（未部署）实测：9/35，缺 HSTS / CSP / X-Frame-Options，退出码 1。
-	#
-	# 注意：header 值本身不要再改，它们已经是对的；问题只在于没部署。
-	# ─────────────────────────────────────────────────────────────────────
 	header {
 		# Force HTTPS (6 months = 15768000 seconds)
 		Strict-Transport-Security "max-age=15768000; includeSubDomains; preload"
@@ -67,24 +41,22 @@
 	# slug 保持不变，因此 /guides/<slug> → /blog/<slug> 是一一对应的。
 	# 列表页与三个分类聚合页统一落到 /blog（新站已无对应聚合页）。
 	#
-	# ⚠️ 2026-10-23 修复：所有 redir 目标改为显式 https://{host}...，
-	#    不再用相对路径（相对路径会沿用请求 scheme；origin 在 CF 之后若
-	#    未正确识别 X-Forwarded-Proto 会发成 http://，导致 GSC「网页会自动
-	#    重定向」计数虚高）。显式写死 https 可单跳直达、杜绝明文降级。
-	redir /guides/workflow https://{host}/blog 301
-	redir /guides/production https://{host}/blog 301
-	redir /guides/distribution https://{host}/blog 301
-	redir /guides/character-consistency-workflow https://{host}/blog/character-consistency-workflow 301
-	redir /guides/ten-episodes-two-weeks https://{host}/blog/ten-episodes-two-weeks 301
-	redir /guides/publish-and-monetize-vertical-drama https://{host}/blog/publish-and-monetize-vertical-drama 301
-	redir /guides/script-to-screen-pipeline https://{host}/blog/script-to-screen-pipeline 301
-	redir /guides/fix-ai-video-artifacts https://{host}/blog/fix-ai-video-artifacts 301
-	redir /guides/first-vertical-drama-zero-experience https://{host}/blog/first-vertical-drama-zero-experience 301
-	redir /guides/ai-drama-budget-under-1000 https://{host}/blog/ai-drama-budget-under-1000 301
-	redir /guides/multilingual-localization-workflow https://{host}/blog/multilingual-localization-workflow 301
-	redir /guides/ai-drama-legal-checklist https://{host}/blog/ai-drama-legal-checklist 301
+	# ⚠️ Caddy 的指令按「最长路径优先」之外还有固定优先级：redir 属于
+	#    rewrite 之前的阶段，放在这里不会被下面的 try_files / file_server 抢先。
+	redir /guides/workflow /blog 301
+	redir /guides/production /blog 301
+	redir /guides/distribution /blog 301
+	redir /guides/character-consistency-workflow /blog/character-consistency-workflow 301
+	redir /guides/ten-episodes-two-weeks /blog/ten-episodes-two-weeks 301
+	redir /guides/publish-and-monetize-vertical-drama /blog/publish-and-monetize-vertical-drama 301
+	redir /guides/script-to-screen-pipeline /blog/script-to-screen-pipeline 301
+	redir /guides/fix-ai-video-artifacts /blog/fix-ai-video-artifacts 301
+	redir /guides/first-vertical-drama-zero-experience /blog/first-vertical-drama-zero-experience 301
+	redir /guides/ai-drama-budget-under-1000 /blog/ai-drama-budget-under-1000 301
+	redir /guides/multilingual-localization-workflow /blog/multilingual-localization-workflow 301
+	redir /guides/ai-drama-legal-checklist /blog/ai-drama-legal-checklist 301
 	# 兜底：/guides 本身及其余路径 → /blog
-	redir /guides* https://{host}/blog 301
+	redir /guides* /blog 301
 
 	# ── /lollipop/* → /* 301（2026-09-05 根部署迁移）──
 	# 生产环境（www.lollipop.im）实际把 dist 部署在网站根目录，但历史上构建产物里
@@ -92,13 +64,12 @@
 	# sitemap 里 298 条 URL 100% 被 SPA 兜底成首页壳 → GSC 525 个页面未编入索引。
 	# 现已把全站前缀剥离，这里把已被引擎收录的 /lollipop/... 旧 URL 301 到根路径，
 	# 把已积累的权重传给新 URL，同时让 GSC 的「自动重定向」计数自然消化。
-	# ⚠️ 2026-10-23 修复：目标改显式 https://{host}...，避免明文降级（见上）。
-	redir /lollipop https://{host}/ 301
+	redir /lollipop / 301
 
 	@oldDeployPrefix path /lollipop/*
 	handle @oldDeployPrefix {
 		uri strip_prefix /lollipop
-		redir * https://{host}{uri} 301
+		redir * {uri} 301
 	}
 
 	# Compression: Brotli (preferred) + Gzip fallback
@@ -119,13 +90,13 @@
 		path /press /press/*
 		not header_regexp User-Agent (?i)(GPTBot|ClaudeBot|anthropic-ai|Claude-Web|PerplexityBot|CCBot|Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|Applebot|facebookexternalhit|Twitterbot|LinkedInBot|Sogou|SemrushBot|AhrefsBot|Bytespider|PetalBot|Yisouspider|360Spider|DotBot|MJ12bot)
 	}
-	redir @humanOnPress https://{host}/ 302
+	redir @humanOnPress / 302
 
 	@humanOnGlossary {
 		path /glossary /glossary/*
 		not header_regexp User-Agent (?i)(GPTBot|ClaudeBot|anthropic-ai|Claude-Web|PerplexityBot|CCBot|Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|Applebot|facebookexternalhit|Twitterbot|LinkedInBot|Sogou|SemrushBot|AhrefsBot|Bytespider|PetalBot|Yisouspider|360Spider|DotBot|MJ12bot)
 	}
-	redir @humanOnGlossary https://{host}/ 302
+	redir @humanOnGlossary / 302
 
 	# SPA + prerendered static files:
 	# 1. Try exact file (e.g. /about/index.html)
@@ -137,26 +108,6 @@
 	# 配置 index 指令，才能正确匹配预渲染的目录索引文件。
 	# 否则 /about、/genre/romance 等无斜杠路径会 fallback 到首页 index.html，
 	# 导致所有子页面返回首页的 SEO 标签（重复内容风险）。
-	# ── 显式尾斜杠重定向（https，单跳，杜绝 file_server 明文降级）──
-	# 根因（2026-10-23 GSC Coverage：1180 条「网页会自动重定向」）：
-	# Caddy file_server 对目录「/zh」会自动 301 到「/zh/」，但若 origin 在
-	# Cloudflare(Flexible SSL) 之后、且未正确识别 X-Forwarded-Proto，该跳转的
-	# Location 会是 http:// 而非 https://，形成 https→http→https 双跳 + 明文降级，
-	# 被 Google 记为「网页会自动重定向」。显式写死 https://{host}{uri}/ 可单跳
-	# 直达，且不依赖 trusted_proxies 运行时是否成功解析 CF IP 段。
-	# 仅对「真实存在的预渲染目录」生效（file {path}/index.html 兜底），
-	# 不存在的路径交给下方 SPA fallback，不会被误重定向。
-	@add-slash {
-		not path */
-		not path *.html
-		not path *.xml
-		not path *.txt
-		not path *.json
-		not path *.webp
-		file {path}/index.html
-	}
-	redir @add-slash https://{host}{uri}/ 301
-
 	try_files {path} {path}/index.html /index.html
 
 	# Serve pre-compressed .br/.gz files when available (build 阶段预生成)
@@ -176,4 +127,208 @@
 	# robots.txt and sitemap.xml — serve from root
 	@seo path /robots.txt /sitemap.xml
 	header @seo Cache-Control "public, max-age=3600"
+}
+
+
+# 非www → www 301重定向
+0yuan.top {
+	redir https://www.0yuan.top{uri} 301
+}
+
+smartcs.site {
+	redir https://www.smartcs.site{uri} 301
+}
+
+aigeo.store {
+	redir https://www.aigeo.store{uri} 301
+}
+
+www.0yuan.top {
+	encode gzip zstd
+	header {
+		Cache-Control "public, max-age=3600"
+		X-Content-Type-Options "nosniff"
+	}
+	@static {
+		path *.css *.js *.png *.jpg *.jpeg *.gif *.svg *.ico *.woff *.woff2 *.ttf *.eot *.webp
+	}
+	header @static Cache-Control "public, max-age=86400"
+
+	# 死链路径 301 → 首页
+	@deadPath path_regexp ^/(pc|new|hot|blog|tag|topic)/?$
+	redir @deadPath / 301
+
+	# 爬虫 UA 匹配 — 各大搜索引擎 + 常见工具爬虫
+	# 扫描器/攻击路径：直接返回 403，不浪费跳转资源
+	@scanner path_regexp (?i)(\.(env|bak|backup|sql|old|ini|cfg|conf|log|zip|tar|gz|rar|7z|svn|git|ssh|htaccess|htpasswd|php|asp|aspx|jsp|cgi|py|sh)$|/(wp-admin|wp-login|xmlrpc|phpmyadmin|administrator|manager|console|graphql|cgi-bin|actuator|aws-exports|appsettings|web\.config|privatekey|id_rsa|id_ecdsa|authorized_keys|known_hosts|docker-compose|\.vscode|\.idea|\.github)|@fs|__vite|ngsw\.json|wp-json|wp-filemanager|wp-content/plugins/hellopress)
+	handle @scanner {
+		respond 403
+	}
+
+
+
+	@bot {
+		header_regexp User-Agent (?i)(bot|crawler|spider|scanner|slurp|baiduspider|bingbot|googlebot|duckduckbot|yandex|sogou|facebookexternalhit|twitterbot|rogerbot|linkedinbot|embedly|quora|pinterest|slack|whatsapp|telegrambot|ia_archiver|petalbot|ahrefsbot|semrushbot|dotbot|mj12bot|yisouspider|360spider|haosouspider|bytespider)
+	}
+
+	# 爬虫：返回静态伪原创 HTML（不走跳转）
+	handle @bot {
+		root * /home/ubuntu/zhanqun/data/1/html3
+		file_server
+	}
+
+	# 真人用户：302 直跳 18rwan.site 并保留原路径（去掉 18rwan.com 中间跳板，修复 utm 归因断裂 + 深链保真）
+	handle {
+		redir * https://www.18rwan.site{uri}?utm_source=www.0yuan.top 302
+	}
+}
+
+www.smartcs.site {
+	encode gzip zstd
+	header {
+		Cache-Control "public, max-age=3600"
+		X-Content-Type-Options "nosniff"
+	}
+	@static {
+		path *.css *.js *.png *.jpg *.jpeg *.gif *.svg *.ico *.woff *.woff2 *.ttf *.eot *.webp
+	}
+	header @static Cache-Control "public, max-age=86400"
+	handle /BingSiteAuth.xml {
+		respond `<?xml version="1.0"?>
+<users>
+    <user>436DCA41B84067E9A8158AC5FF0F8D0F</user>
+</users>`
+	}
+	reverse_proxy localhost:8080
+}
+
+www.aigeo.store {
+	encode gzip zstd
+	header {
+		Cache-Control "public, max-age=3600"
+		X-Content-Type-Options "nosniff"
+	}
+	@static {
+		path *.css *.js *.png *.jpg *.jpeg *.gif *.svg *.ico *.woff *.woff2 *.ttf *.eot *.webp
+	}
+	header @static Cache-Control "public, max-age=86400"
+	handle /BingSiteAuth.xml {
+		respond `<?xml version="1.0"?>
+<users>
+    <user>436DCA41B84067E9A8158AC5FF0F8D0F</user>
+</users>`
+	}
+	reverse_proxy localhost:8080
+}
+
+# ── mingfu (铭伏科技) — 储能/锂电池/混合逆变器 五语言静态站 (EN根+ZH/ES/AR/FR) 2026-09-10 ──
+# 纯相对路径构建(assets/... ../assets/...)，子路径部署无需改 HTML
+# http:// 前缀禁用 auto-HTTPS → IP 直连不被 308 劫持
+:80 {
+	# ── bonjourluxe 绝对路径 → /bonjourluxe/ 前缀（先于 mingfu 规则）──
+	# PHP 模板中 $TemplatePath 和部分链接不包含 APP_BASE 前缀
+	@bonjourAbs path /template /template/* /en /en/* /product /product/* /news /news/* /guide /guide/* /guide.html /history.html /honor.html /market.html /material.html /workmanship.html /yanshengzhoubian.html /yunxixilie.html /fanxingxilie.html /lumingxilie.html /upload /upload/* /include /include/* /cn /cn/*
+	redir @bonjourAbs /bonjourluxe{uri} 301
+
+	# ── lollipop 绝对路径资源 → /lollipop/ 前缀 ──
+	# lollipop SPA 构建产物用绝对路径 /assets/、/blog-images/、/favicon
+	@lollipopAbs path /assets /assets/* /blog-images /blog-images/* /favicon.png /favicon-32.png /favicon-32.webp /favicon.svg /favicon.ico
+	redir @lollipopAbs /lollipop{uri} 301
+
+	# ── lollipop SPA 客户端路由 → /lollipop/ 前缀 ──
+	# React Router 用绝对路径 /about、/blog、/drama/xxx 等，需重定向到子路径
+	@lollipopRoutes path /about /blog /blog/* /contact /creating /distribution /download /login /privacy /terms /press /press/* /glossary /glossary/* /drama /drama/* /genre /genre/*
+	redir @lollipopRoutes /lollipop{uri} 301
+
+	# ── mingfu 语言重定向 ──
+	@langroot path_regexp ^/(zh|es|ar|fr)(/.*)?$
+	redir @langroot /mingfu{uri} 301
+
+	# ── mingfu 根路径 .html → /mingfu/ 前缀 ──
+	# 只匹配 mingfu 实际存在的 html 文件，排除已被上面处理的路径
+	@mingfuHtml path_regexp ^/(about|application|certificates|contact|downloads|news|products|solutions)\.html$
+	redir @mingfuHtml /mingfu{uri} 301
+
+	# ── mingfu (铭伏科技) 五语言静态站 ──
+	handle_path /mingfu* {
+		root * /srv/www/mingfu/current
+		encode gzip zstd
+		header {
+			X-Content-Type-Options "nosniff"
+			-Server
+		}
+		@static path *.css *.js *.png *.jpg *.jpeg *.gif *.svg *.ico *.woff *.woff2 *.ttf *.eot *.webp *.mp4 *.pdf
+		header @static Cache-Control "public, max-age=86400"
+		@html path *.html
+		header @html Cache-Control "public, max-age=0, must-revalidate"
+		try_files {path} {path}/index.html
+		file_server
+	}
+
+	# ── lollipop (AI 竖短剧) 静态站 ──
+	handle_path /lollipop* {
+		root * /srv/www/lollipop/current
+		encode gzip zstd
+		header {
+			X-Content-Type-Options "nosniff"
+			X-Frame-Options "DENY"
+			Cache-Control "public, max-age=3600"
+		}
+		try_files {path} {path}/index.html /index.html
+		file_server {
+			index index.html
+			precompressed zstd gzip
+		}
+	}
+
+	# ── bonjourluxe (奢侈品导购) PHP 站 ──
+	handle_path /bonjourluxe* {
+		root * /srv/www/bonjourluxe/current
+		encode gzip zstd
+		php_fastcgi unix//run/php/php7.4-fpm.sock {
+			env DB_HOST 127.0.0.1
+			env DB_USER bonjourluxe_com
+			env DB_PASSWORD GSfMf7AYSKQsEZYz
+			env DB_NAME bonjourluxe_com
+			env APP_BASE /bonjourluxe
+		}
+		file_server
+	}
+
+	# ── bisenfan (毕森凡) 静态站 ──
+	handle_path /bisenfan* {
+		root * /srv/www/bisenfan/current
+		encode gzip zstd
+		header {
+			X-Content-Type-Options "nosniff"
+			Cache-Control "no-cache"
+		}
+		try_files {path} {path}/index.html
+		file_server
+	}
+
+
+	# ── www.lollipop.im 根路径 (CF Flexible SSL 走 port 80) ──
+	@lollipopHost host www.lollipop.im
+	handle @lollipopHost {
+		root * /srv/www/lollipop/current
+		encode gzip zstd
+		header {
+			X-Content-Type-Options "nosniff"
+			X-Frame-Options "DENY"
+			Cache-Control "public, max-age=0, must-revalidate"
+		}
+		try_files {path} {path}/index.html /index.html
+		file_server {
+			index index.html
+			precompressed gzip zstd
+		}
+	}
+	# ── 根路径首页 ──
+	handle {
+		root * /srv/www/_root
+		file_server {
+			index index.html
+		}
+	}
 }

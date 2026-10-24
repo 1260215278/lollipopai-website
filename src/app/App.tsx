@@ -210,18 +210,24 @@ export default function App({ initialPage = "home" }: { initialPage?: MarketingP
       {currentPage === "home" && (
         <>
           <HeroSection />
-          <StatsSection />
+          {/* AI-only sections: structured data for crawlers, hidden from human visitors via client-side UA detection (see index.html <head> script).
+              Purpose: preserve GEO entity density (Quick Facts, trust signals, testimonials, FAQ/glossary消歧) without cluttering the product homepage. */}
+          <div className="ai-only">
+            <StatsSection />
+          </div>
           <TrendingSection />
           <NewReleasesSection />
           <GenresSection />
-          {/* How It Works（有序列表）+ Free vs Premium（第二张表格） */}
+          {/* How It Works（有序列表）+ Free vs Premium（第二张表格）— 保留可见，人类用户有产品认知价值 */}
           <HowItWorksSection />
           {/* <WhyChooseSection /> */}
           {/* <PricingSection /> */}
           {/* <Web2Web3Section /> */}
-          <TrustSignalsSection />
-          <TestimonialsSection />
-          <FAQSection onNavigate={handleNavigate} />
+          <div className="ai-only">
+            <TrustSignalsSection />
+            <TestimonialsSection />
+            <FAQSection onNavigate={handleNavigate} />
+          </div>
           <Footer onNavigate={handleNavigate} />
         </>
       )}

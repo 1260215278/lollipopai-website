@@ -496,6 +496,21 @@
                 text-decoration: none;
             }
         </style>
+        <!-- AI-only content gating: AI crawlers (GPTBot/ClaudeBot/PerplexityBot/Google-Extended/etc.)
+             see full body including structured-data blocks below; human browsers inject .ai-only {display:none}
+             to preserve GEO density without cluttering the product homepage. Script must be INLINE (no defer)
+             so style is injected BEFORE body renders — prevents FOUC flash of AI-only sections. -->
+        <script>
+        (function(){
+            var ua=(navigator&&navigator.userAgent)||'';
+            var isBot=/GPTBot|ClaudeBot|anthropic-ai|PerplexityBot|CCBot|Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|Applebot|facebookexternalhit|Twitterbot|LinkedInBot|SemrushBot|AhrefsBot|Bytespider|PetalBot|DotBot|MJ12bot|Google-Extended|OAI-SearchBot|ChatGPT-User/i.test(ua);
+            if(!isBot){
+                var s=document.createElement('style');
+                s.textContent='.ai-only{display:none!important}';
+                (document.head||document.documentElement).appendChild(s);
+            }
+        })();
+        </script>
     </head>
 
     <body>

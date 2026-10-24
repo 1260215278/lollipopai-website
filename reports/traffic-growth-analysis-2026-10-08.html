@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>访问量增长缓慢原因分析报告 - Lollipop Drama</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.6;
+            padding: 24px;
+        }
+        .container { max-width: 1100px; margin: 0 auto; }
+        h1 {
+            font-size: 28px;
+            color: #f1f5f9;
+            margin-bottom: 8px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #334155;
+        }
+        .date { color: #94a3b8; font-size: 14px; margin-bottom: 32px; }
+        h2 {
+            font-size: 22px;
+            color: #38bdf8;
+            margin: 32px 0 16px;
+            padding-left: 12px;
+            border-left: 4px solid #38bdf8;
+        }
+        h3 {
+            font-size: 18px;
+            color: #fbbf24;
+            margin: 24px 0 12px;
+        }
+        p { margin-bottom: 12px; color: #cbd5e1; }
+        .summary-box {
+            background: linear-gradient(135deg, #1e293b, #1e1b4b);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        .summary-box h2 { border: none; padding: 0; margin-top: 0; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #f87171;
+        }
+        .stat-value.good { color: #4ade80; }
+        .stat-value.warn { color: #fbbf24; }
+        .stat-label { font-size: 13px; color: #94a3b8; margin-top: 4px; }
+        .issue-card {
+            background: #1e293b;
+            border-left: 4px solid #f87171;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        .issue-card.medium { border-left-color: #fbbf24; }
+        .issue-card.low { border-left-color: #60a5fa; }
+        .issue-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .issue-title { font-size: 17px; font-weight: 600; color: #f1f5f9; }
+        .impact-badge {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .impact-critical { background: #7f1d1d; color: #fca5a5; }
+        .impact-high { background: #78350f; color: #fcd34d; }
+        .impact-medium { background: #1e3a5f; color: #93c5fd; }
+        .chain {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+            font-family: "SF Mono", Consolas, monospace;
+            font-size: 13px;
+            overflow-x: auto;
+        }
+        .chain-step { margin: 4px 0; }
+        .chain-arrow { color: #f87171; }
+        .chain-ok { color: #4ade80; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 14px;
+        }
+        th, td {
+            text-align: left;
+            padding: 10px 12px;
+            border-bottom: 1px solid #334155;
+        }
+        th { color: #94a3b8; font-weight: 600; background: #1e293b; }
+        td { color: #cbd5e1; }
+        .fix-list {
+            list-style: none;
+            padding: 0;
+        }
+        .fix-list li {
+            padding: 8px 0 8px 28px;
+            position: relative;
+        }
+        .fix-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #38bdf8;
+            font-weight: 700;
+        }
+        .priority-tag {
+            display: inline-block;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 8px;
+            font-weight: 600;
+        }
+        .p0 { background: #7f1d1d; color: #fca5a5; }
+        .p1 { background: #78350f; color: #fcd34d; }
+        .p2 { background: #1e3a5f; color: #93c5fd; }
+        .trend-chart {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+        .bar-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 120px;
+            margin: 16px 0;
+        }
+        .bar {
+            flex: 1;
+            background: linear-gradient(180deg, #38bdf8, #1e40af);
+            border-radius: 2px 2px 0 0;
+            min-width: 4px;
+            transition: height 0.3s;
+        }
+        .bar.peak { background: linear-gradient(180deg, #4ade80, #166534); }
+        .bar.decline { background: linear-gradient(180deg, #f87171, #7f1d1d); }
+        .chart-label {
+            font-size: 11px;
+            color: #94a3b8;
+            text-align: center;
+            margin-top: 8px;
+        }
+        .callout {
+            background: #1e1b4b;
+            border: 1px solid #4338ca;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .callout-title { color: #a78bfa; font-weight: 600; margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>访问量增长缓慢原因分析报告</h1>
+    <div class="date">诊断日期：2026-10-08 | 数据来源：Google Search Console Coverage 报告 + 服务器诊断</div>
+
+    <div class="summary-box">
+        <h2>核心结论</h2>
+        <p>网站访问量增长缓慢的<strong style="color:#f87171">根本原因</strong>是 Google 索引覆盖率极低：仅 <strong>390 / 1,742 页面被索引（22.4%）</strong>，1,352 个页面未被索引。三大致命问题导致 Googlebot 无法有效抓取和索引网站内容：</p>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">22.4%</div>
+                <div class="stat-label">索引覆盖率</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">969</div>
+                <div class="stat-label">重定向问题页面</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value warn">235</div>
+                <div class="stat-label">noindex 排除页面</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value warn">130</div>
+                <div class="stat-label">备用页面（canonical）</div>
+            </div>
+        </div>
+        <p style="margin-top:12px;">此外，<strong style="color:#fbbf24">生产域名服务的是 9 月 2 日的旧版本</strong>，而最新部署（10 月 7 日）只在 IP 地址上可访问。这意味着 Google 看到的内容比实际最新内容滞后了一个多月。</p>
+    </div>
+
+    <h2>一、GSC Coverage 数据分析</h2>
+
+    <h3>1.1 展示量趋势（2026-08-04 至 2026-10-04）</h3>
+    <div class="trend-chart">
+        <div class="bar-container">
+            <div class="bar" style="height:5%" title="08-04: 72"></div>
+            <div class="bar" style="height:8%" title="08-05: 107"></div>
+            <div class="bar" style="height:9%" title="08-06: 128"></div>
+            <div class="bar" style="height:17%" title="08-07: 224"></div>
+            <div class="bar" style="height:56%" title="08-08: 753"></div>
+            <div class="bar" style="height:22%" title="08-09: 2922"></div>
+            <div class="bar" style="height:64%" title="08-10: 8620"></div>
+            <div class="bar" style="height:57%" title="08-11: 7643"></div>
+            <div class="bar" style="height:90%" title="08-12: 12127"></div>
+            <div class="bar peak" style="height:100%" title="08-13: 13516 峰值"></div>
+            <div class="bar" style="height:87%" title="08-14: 11786"></div>
+            <div class="bar" style="height:77%" title="08-15: 10394"></div>
+            <div class="bar" style="height:66%" title="08-16: 8908"></div>
+            <div class="bar" style="height:56%" title="08-17: 7550"></div>
+            <div class="bar" style="height:49%" title="08-18: 6571"></div>
+            <div class="bar" style="height:36%" title="08-19: 4883"></div>
+            <div class="bar" style="height:22%" title="08-20: 2997"></div>
+            <div class="bar decline" style="height:8%" title="08-21: 1028"></div>
+            <div class="bar decline" style="height:9%" title="08-22: 1277"></div>
+            <div class="bar decline" style="height:10%" title="08-23: 1341"></div>
+            <div class="bar decline" style="height:8%" title="08-24: 1064"></div>
+            <div class="bar decline" style="height:9%" title="08-25: 1167"></div>
+            <div class="bar decline" style="height:7%" title="08-26: 974"></div>
+            <div class="bar decline" style="height:6%" title="08-27: 804"></div>
+            <div class="bar decline" style="height:7%" title="08-28: 981"></div>
+            <div class="bar decline" style="height:12%" title="08-29: 1612"></div>
+            <div class="bar decline" style="height:31%" title="08-30: 4234"></div>
+            <div class="bar decline" style="height:12%" title="08-31: 1644"></div>
+            <div class="bar decline" style="height:10%" title="09-01: 1333"></div>
+            <div class="bar decline" style="height:10%" title="09-02: 1321"></div>
+            <div class="bar decline" style="height:13%" title="09-03: 1758"></div>
+            <div class="bar decline" style="height:7%" title="09-04: 935"></div>
+            <div class="bar decline" style="height:6%" title="09-05: 825"></div>
+            <div class="bar decline" style="height:8%" title="09-06-14: ~900"></div>
+            <div class="bar decline" style="height:8%" title="09-15-18: ~970"></div>
+            <div class="bar decline" style="height:8%" title="09-19: 1027"></div>
+            <div class="bar decline" style="height:9%" title="09-20: 1253"></div>
+            <div class="bar decline" style="height:10%" title="09-21: 1401"></div>
+            <div class="bar decline" style="height:13%" title="09-22: 1727"></div>
+            <div class="bar decline" style="height:15%" title="09-23: 1999"></div>
+            <div class="bar decline" style="height:15%" title="09-24: 2064"></div>
+            <div class="bar decline" style="height:17%" title="09-25: 2307"></div>
+            <div class="bar decline" style="height:17%" title="09-26: 2267"></div>
+            <div class="bar decline" style="height:19%" title="09-27: 2550"></div>
+            <div class="bar decline" style="height:21%" title="09-28: 2784"></div>
+            <div class="bar decline" style="height:18%" title="09-29: 2496"></div>
+            <div class="bar decline" style="height:18%" title="09-30: 2489"></div>
+            <div class="bar decline" style="height:20%" title="10-01: 2643"></div>
+            <div class="bar decline" style="height:15%" title="10-02: 2038"></div>
+            <div class="bar decline" style="height:15%" title="10-03: 2003"></div>
+            <div class="bar decline" style="height:15%" title="10-04: 2043"></div>
+        </div>
+        <div class="chart-label">展示量从 8 月 13 日峰值 13,516 暴跌至 10 月稳定在 ~2,000-2,800，降幅达 85%</div>
+    </div>
+    <p><strong>关键趋势：</strong></p>
+    <ul style="padding-left:20px; margin-bottom:16px; color:#cbd5e1;">
+        <li><strong>08-04 ~ 08-13（增长期）</strong>：展示量从 72 飙升至 13,516，Google 开始大量发现和索引页面</li>
+        <li><strong>08-13 ~ 08-21（断崖式下跌）</strong>：展示量从 13,516 跌至 1,028，降幅 92%</li>
+        <li><strong>08-22 ~ 09-04（低迷期）</strong>：展示量稳定在 800-1,700 的低位</li>
+        <li><strong>09-05 ~ 09-18（二次下跌）</strong>：已编入索引从 289 跌至 289 再到 344，展示量跌至 800-1,000</li>
+        <li><strong>09-19 ~ 10-04（缓慢恢复）</strong>：索引数从 344 增长到 390，展示量恢复至 ~2,000-2,800</li>
+    </ul>
+
+    <h3>1.2 严重问题汇总</h3>
+    <table>
+        <tr>
+            <th>原因</th>
+            <th>来源</th>
+            <th>验证状态</th>
+            <th>网页数</th>
+            <th>占比</th>
+        </tr>
+        <tr>
+            <td style="color:#f87171; font-weight:600;">网页会自动重定向</td>
+            <td>网站</td>
+            <td style="color:#f87171;">失败</td>
+            <td><strong>969</strong></td>
+            <td>71.7%</td>
+        </tr>
+        <tr>
+            <td style="color:#fbbf24; font-weight:600;">被"noindex"标记排除了</td>
+            <td>网站</td>
+            <td style="color:#f87171;">失败</td>
+            <td><strong>235</strong></td>
+            <td>17.4%</td>
+        </tr>
+        <tr>
+            <td style="color:#fbbf24; font-weight:600;">备用网页（有适当的规范标记）</td>
+            <td>网站</td>
+            <td style="color:#f87171;">失败</td>
+            <td><strong>130</strong></td>
+            <td>9.6%</td>
+        </tr>
+        <tr>
+            <td>已抓取 - 尚未编入索引</td>
+            <td>Google 系统</td>
+            <td style="color:#f87171;">失败</td>
+            <td>6</td>
+            <td>0.4%</td>
+        </tr>
+        <tr>
+            <td>由于禁止访问 (403) 而被屏蔽了</td>
+            <td>网站</td>
+            <td style="color:#fbbf24;">已开始</td>
+            <td>3</td>
+            <td>0.2%</td>
+        </tr>
+        <tr>
+            <td>已发现 - 尚未编入索引</td>
+            <td>Google 系统</td>
+            <td style="color:#4ade80;">已通过</td>
+            <td>8</td>
+            <td>0.6%</td>
+        </tr>
+        <tr>
+            <td>未找到 (404)</td>
+            <td>网站</td>
+            <td>未启动</td>
+            <td>1</td>
+            <td>0.1%</td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align:right; font-weight:600;">总计未索引</td>
+            <td style="font-weight:700; color:#f87171;">1,352</td>
+            <td>100%</td>
+        </tr>
+    </table>
+
+    <h2>二、根因深度分析</h2>
+
+    <h3>问题 1：尾部斜杠双重重定向链（969 页）<span class="priority-tag p0">P0</span></h3>
+    <div class="issue-card">
+        <div class="issue-header">
+            <span class="issue-title">969 个页面因重定向链被 Google 拒绝索引</span>
+            <span class="impact-badge impact-critical">CRITICAL</span>
+        </div>
+        <p><strong>根因：</strong>Cloudflare 对所有不带尾部斜杠的 URL 自动添加斜杠，同时将协议从 HTTPS 降级为 HTTP，导致每个 URL 经历两次 301 重定向。</p>
+        <div class="chain">
+            <div class="chain-step"><strong>请求</strong>: https://www.lollipop.im/blog/ai-short-drama-pillar-guide <span style="color:#94a3b8">(sitemap 中的 URL，无斜杠)</span></div>
+            <div class="chain-step"><span class="chain-arrow">→ 第1跳 301</span> Location: <strong style="color:#f87171">http</strong>://www.lollipop.im/blog/ai-short-drama-pillar-guide/ <span style="color:#94a3b8">(加了斜杠 + 降级为HTTP!)</span></div>
+            <div class="chain-step"><span class="chain-arrow">→ 第2跳 301</span> Location: <strong style="color:#4ade80">https</strong>://www.lollipop.im/blog/ai-short-drama-pillar-guide/ <span style="color:#94a3b8">(HTTP升回HTTPS)</span></div>
+            <div class="chain-step"><span class="chain-ok">→ 最终 200</span> 返回页面内容</div>
+        </div>
+        <p><strong>影响范围：</strong>sitemap.xml 中 564 个 URL 中有 558 个不带斜杠，全部受影响。加上 Google 通过 hreflang、内部链接发现的额外 URL，总计 969 个页面。</p>
+        <p><strong>Google 的处理方式：</strong>Googlebot 遵循重定向但不会索引经过多次重定向的页面，直接标记为"网页会自动重定向"错误。</p>
+        <p><strong>根因定位：</strong>Cloudflare 的 SSL/TLS 加密模式可能为 "Flexible"（灵活），导致 Cloudflare 到源站使用 HTTP，返回的 Location 头也使用 HTTP 协议。</p>
+    </div>
+
+    <h3>问题 2：生产域名服务旧版本内容<span class="priority-tag p0">P0</span></h3>
+    <div class="issue-card">
+        <div class="issue-header">
+            <span class="issue-title">www.lollipop.im 服务的是 9 月 2 日的部署，最新内容只在 IP 上可访问</span>
+            <span class="impact-badge impact-critical">CRITICAL</span>
+        </div>
+        <p><strong>发现：</strong>服务器上存在两个不同步的部署目录：</p>
+        <table>
+            <tr>
+                <th>目录</th>
+                <th>最后修改</th>
+                <th>服务域名</th>
+                <th>index.html 大小</th>
+            </tr>
+            <tr>
+                <td>/var/www/lollipop</td>
+                <td style="color:#f87171;">2026-09-02</td>
+                <td>www.lollipop.im (生产域名)</td>
+                <td>223 KB</td>
+            </tr>
+            <tr>
+                <td>/srv/www/lollipop/current</td>
+                <td style="color:#4ade80;">2026-10-07</td>
+                <td>43.160.226.253 (IP)</td>
+                <td>148 KB</td>
+            </tr>
+        </table>
+        <p><strong>影响：</strong>Caddy 配置中 www.lollipop.im 域名的 root 指向 <code>/var/www/lollipop</code>（旧目录），Google 看到的内容比实际最新内容滞后一个多月。新增的 9 篇文章、SEO 修复、封面图等优化全部未生效。</p>
+        <p><strong>修复：</strong>更新 Caddy 配置，将 www.lollipop.im 的 root 改为 /srv/www/lollipop/current，或将新部署同步到 /var/www/lollipop。</p>
+    </div>
+
+    <h3>问题 3：235 个页面被 noindex 排除<span class="priority-tag p1">P1</span></h3>
+    <div class="issue-card medium">
+        <div class="issue-header">
+            <span class="issue-title">235 个页面被 noindex 标记排除索引</span>
+            <span class="impact-badge impact-high">HIGH</span>
+        </div>
+        <p><strong>已知 noindex 页面（6 个）：</strong></p>
+        <ul style="padding-left:20px; color:#cbd5e1;">
+            <li><code>/login/index.html</code> - noindex, follow（正确配置）</li>
+            <li><code>/forgot-password/index.html</code> - noindex, follow（正确配置）</li>
+            <li><code>/yandex_*.html</code> - 验证文件</li>
+            <li><code>/_redirects</code> - Netlify 重定向规则文件</li>
+        </ul>
+        <p><strong>推测：</strong>实际只有 6 个文件包含 noindex 标签，但 GSC 报告 235 个。可能原因：</p>
+        <ul style="padding-left:20px; color:#cbd5e1;">
+            <li>多语言版本（/zh/login/, /pt/login/ 等 5 种语言 × 2 页面 = 10 个额外页面）</li>
+            <li>旧部署目录 /var/www/lollipop 中可能存在更多 noindex 页面</li>
+            <li>Google 缓存了已删除但曾经存在 noindex 的页面</li>
+            <li>SPA 路由产生的动态 noindex（React Router 的某些路由可能包含 noindex）</li>
+        </ul>
+    </div>
+
+    <h3>问题 4：130 个备用页面（canonical 指向问题）<span class="priority-tag p1">P1</span></h3>
+    <div class="issue-card medium">
+        <div class="issue-header">
+            <span class="issue-title">130 个页面被标记为备用页面</span>
+            <span class="impact-badge impact-high">HIGH</span>
+        </div>
+        <p><strong>问题：</strong>canonical 标签使用不带尾部斜杠的 URL，但实际服务的 URL 带尾部斜杠。canonical 指向的 URL 本身会 301 重定向，导致 Google 无法正确解析规范页面。</p>
+        <div class="chain">
+            <div>HTML 中的 canonical: &lt;link rel="canonical" href="https://www.lollipop.im/blog/ai-short-drama-pillar-guide" /&gt;</div>
+            <div class="chain-arrow">→ 但该 URL 301 重定向到带斜杠版本</div>
+            <div>Google 看到的: "这个 canonical 指向一个重定向 URL，标记为备用页面"</div>
+        </div>
+    </div>
+
+    <h3>问题 5：语言变体重定向不一致<span class="priority-tag p1">P1</span></h3>
+    <div class="issue-card medium">
+        <div class="issue-header">
+            <span class="issue-title">/zh/* 和 /pt/* 重定向到查询参数格式</span>
+            <span class="impact-badge impact-high">HIGH</span>
+        </div>
+        <p>不同语言路径的重定向行为不一致：</p>
+        <table>
+            <tr><th>URL</th><th>重定向到</th><th>问题</th></tr>
+            <tr><td>/zh/about</td><td>→ /about/?lang=zh-CN</td><td>URL 结构改变</td></tr>
+            <tr><td>/pt/about</td><td>→ /about/?lang=pt</td><td>URL 结构改变</td></tr>
+            <tr><td>/es/about</td><td>→ /es/about/</td><td>仅加斜杠（正常）</td></tr>
+            <tr><td>/ar/about</td><td>→ /ar/about/</td><td>仅加斜杠（正常）</td></tr>
+        </table>
+        <p>文件实际存在但 Cloudflare 页面规则将 /zh/* 和 /pt/* 导向了错误的 URL 格式。</p>
+    </div>
+
+    <h3>问题 6：510 个 HTML 文件引用旧 /lollipop/ 前缀<span class="priority-tag p2">P2</span></h3>
+    <div class="issue-card low">
+        <div class="issue-header">
+            <span class="issue-title">510 个 HTML 文件的 favicon 等资源链接仍使用 /lollipop/ 前缀</span>
+            <span class="impact-badge impact-medium">MEDIUM</span>
+        </div>
+        <p>首页已修复，但子页面（genre 页、region 页、privacy 等）仍包含：</p>
+        <div class="chain">
+            &lt;link rel="icon" href="/lollipop/favicon-32.png" /&gt;<br>
+            &lt;link rel="icon" href="/lollipop/favicon.png" /&gt;
+        </div>
+        <p>这些路径会经历 301 重定向（/lollipop/ → /），增加额外的重定向负担。</p>
+    </div>
+
+    <h2>三、修复方案（按优先级排序）</h2>
+
+    <div class="callout">
+        <div class="callout-title">P0 - 立即修复（影响 969 + 全部页面）</div>
+        <ol style="padding-left:20px; color:#cbd5e1;">
+            <li><strong>修复 Cloudflare SSL 模式</strong>：登录 Cloudflare → SSL/TLS → 将加密模式从 "Flexible" 改为 "Full (Strict)"，确保 Cloudflare 到源站使用 HTTPS，消除 HTTPS→HTTP→HTTPS 双重重定向链。</li>
+            <li><strong>同步生产部署目录</strong>：将 Caddy 配置中 www.lollipop.im 的 root 从 /var/www/lollipop 改为 /srv/www/lollipop/current，确保 Google 看到最新内容。</li>
+            <li><strong>统一 URL 格式</strong>：在 sitemap.xml 和 canonical 标签中将所有 URL 改为带尾部斜杠格式，与实际服务 URL 一致。或者反向操作：配置 Caddy 禁止自动添加尾部斜杠。</li>
+        </ol>
+    </div>
+
+    <div class="callout">
+        <div class="callout-title">P1 - 尽快修复（影响 365 页面）</div>
+        <ol style="padding-left:20px; color:#cbd5e1;">
+            <li><strong>修复 Cloudflare 语言页面规则</strong>：删除 /zh/* 和 /pt/* 的特殊页面规则，确保所有语言路径统一使用路径前缀格式。</li>
+            <li><strong>清理 noindex 标签</strong>：检查旧部署目录中是否有多余的 noindex 页面，确保只有 /login 和 /forgot-password 使用 noindex。</li>
+            <li><strong>验证 canonical 一致性</strong>：确保 canonical URL 与实际服务 URL 一致（都带斜杠或都不带斜杠）。</li>
+        </ol>
+    </div>
+
+    <div class="callout">
+        <div class="callout-title">P2 - 计划修复（影响 510 页面）</div>
+        <ol style="padding-left:20px; color:#cbd5e1;">
+            <li><strong>修复 /lollipop/ 旧前缀</strong>：重新构建或批量替换 510 个 HTML 文件中的 /lollipop/ 路径。</li>
+            <li><strong>补充 blog.ts 缺失字段</strong>：5 篇文章缺少 coverImage，4 篇缺少 author/excerpt/seoTitle/seoDescription。</li>
+            <li><strong>提交 GSC 重新验证</strong>：修复后在 GSC 中点击"验证修复"按钮，加速 Google 重新抓取。</li>
+        </ol>
+    </div>
+
+    <h2>四、预期效果</h2>
+    <table>
+        <tr>
+            <th>修复项</th>
+            <th>当前未索引页面</th>
+            <th>预计恢复</th>
+            <th>修复后索引率</th>
+        </tr>
+        <tr>
+            <td>P0: 修复重定向链</td>
+            <td>969</td>
+            <td>~900</td>
+            <td>~75%</td>
+        </tr>
+        <tr>
+            <td>P1: 修复 noindex + canonical</td>
+            <td>235 + 130</td>
+            <td>~300</td>
+            <td>~92%</td>
+        </tr>
+        <tr>
+            <td>P2: 修复旧前缀</td>
+            <td>510（间接）</td>
+            <td>~200</td>
+            <td>~98%</td>
+        </tr>
+        <tr style="background:#1e293b;">
+            <td colspan="2" style="text-align:right; font-weight:700;">预计总恢复</td>
+            <td style="font-weight:700; color:#4ade80;">~1,400 页</td>
+            <td style="font-weight:700; color:#4ade80;">~98%</td>
+        </tr>
+    </table>
+
+    <div class="summary-box" style="margin-top:32px;">
+        <h2>行动清单</h2>
+        <ul class="fix-list">
+            <li><strong>登录 Cloudflare 控制台</strong>，将 SSL/TLS 模式从 Flexible 改为 Full (Strict) <span class="priority-tag p0">P0</span></li>
+            <li><strong>SSH 到服务器</strong>，更新 Caddy 配置中 www.lollipop.im 的 root 指向 /srv/www/lollipop/current <span class="priority-tag p0">P0</span></li>
+            <li><strong>检查 Cloudflare 页面规则</strong>，删除 /zh/* 和 /pt/* 的重写规则 <span class="priority-tag p1">P1</span></li>
+            <li><strong>批量修复 sitemap.xml 和 canonical 标签</strong>，统一为带尾部斜杠格式 <span class="priority-tag p0">P0</span></li>
+            <li><strong>批量替换 510 个 HTML 文件中的 /lollipop/ 路径</strong> <span class="priority-tag p2">P2</span></li>
+            <li><strong>在 GSC 中点击"验证修复"</strong>，加速 Google 重新抓取 <span class="priority-tag p2">P2</span></li>
+        </ul>
+    </div>
+
+</div>
+</body>
+</html>

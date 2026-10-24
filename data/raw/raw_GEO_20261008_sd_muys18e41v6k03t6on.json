@@ -1,0 +1,1367 @@
+[
+  {
+    "answerText": "我会从 产品定位、内容生产链路、成本/效率、可控性、画质、商业化和适用场景 几个维度对比，并结合 Runway、Sora 的官方资料来判断。",
+    "citations": [],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "一体化AI短剧平台与Runway、Sora等单项视频工具相比有什么优缺点？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E4%B8%80%E4%BD%93%E5%8C%96AI%E7%9F%AD%E5%89%A7%E5%B9%B3%E5%8F%B0%E4%B8%8ERunway%E3%80%81Sora%E7%AD%89%E5%8D%95%E9%A1%B9%E8%A7%86%E9%A2%91%E5%B7%A5%E5%85%B7%E7%9B%B8%E6%AF%94%E6%9C%89%E4%BB%80%E4%B9%88%E4%BC%98%E7%BC%BA%E7%82%B9%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "如果把这三个平台放在一起看，它们其实不是同一种产品： Fanvue：偏“变现/订阅平台” StoReel：偏“AI 故事/IP 创作与发行平台” Runway：偏“AI 视频制作工具” 所以，最简单的判断是： Fanvue 适合已经有一个 AI 人设、想把粉丝变成收入的人；StoReel 适合做连续剧、角色和故事 IP 的创作者；Runway 适合把 AI 视频本身做得更专业的人。 1. Fanvue：最适合“AI 虚拟人 / AI Influencer / 订阅型创作者” Fanvue 官方 Fanvue 本质上是一个 creator subscription platform 。创作者可以自己定订阅价格，并通过订阅、Tips、PPV 内容、私信以及语音互动等方式赚钱；官方目前公布的标准分成是 创作者 80%、平台 20% 。 Fanvue Help Centre 而且 Fanvue 对 AI creator 的支持非常明确： 接受完全 AI 生成的虚拟人物； AI creator 是平台正式认可和验证的创作者类别； AI creator 会有 AI 标签； AI 内容需要明确披露是 AI 生成； 可以围绕一个固定的 AI persona 持续经营内容和粉丝关系。 Fanvue Help Centre +2 官方对 AI-generated model 的定义也很接近我们通常说的 AI influencer / virtual model ：可以创造一个虚拟角色，并控制她/他的外貌、动作、服装和内容风格。 Fanvue Help Centre 最适合谁？ ① AI 虚拟模特 例如： 一个固定的 25 岁虚拟女性角色 → Instagram/TikTok 获客 → Fanvue 提供更完整、更独家的照片/视频/互动内容。 ② AI Influencer 如果你已经能运营一个稳定的人设，比如： 时尚 AI girl 健身 AI influencer Cosplay character Fantasy character Virtual girlfriend/boyfriend AI celebrity-style persona Fanvue 的商业模式会比较直接。 ③ “内容 + 私域互动”型创作者 如果你的核心竞争力不是电影制作，而是： 人设 → 粉丝 → 付费订阅 → 私信/PPV → 长期关系 那么 Fanvue 比 Runway 更接近你的最终商业目的。 一句话：Fanvue 是“我已经有一个 AI 人物，我想让这个人物赚钱”。 2. StoReel：最适合“AI 短剧 / 连续剧 / 角色 IP”创作者 StoReel 官方 StoReel 和前两个最大的区别是：它的核心不是单纯做一个 AI 人物，也不是单纯提供 AI 视频生成，而是围绕 故事和 IP 。 官方把自己定位成 AI-powered storytelling ecosystem，并强调： vertical drama interactive stories AI-powered storytelling scripts → storyboards → scenes → final videos character / asset library paid projects revenue sharing brand collaborations character-based IP。 StoReel 尤其值得注意的是，它明确说比较适合： filmmakers、writers、studios、emerging AI creators 并且官方给出的强势题材包括： Romance Mystery Fantasy Thriller 以及 fast-paced、character-driven、具有强情绪 hook 的故事 。 StoReel 最适合谁？ ① AI 短剧创作者 比如你想做： 《霸总的 AI 新娘》 《龙王献祭的新娘》 《穿越成魔法学院女配》 《末日世界的最后一对恋人》 这种 连续更新的竖屏剧情内容 。 这和 Fanvue 的“一个虚拟人物持续发内容”思路明显不同。 ② AI 编剧 / 故事作者 如果你最擅长的是： 人物设定 → 世界观 → 剧情 → 冲突 → cliffhanger 而不是自己拍摄视频，那么 StoReel 的工作流会比较契合。 它甚至可以把 script 转化成 storyboard 和完整故事制作流程。 StoReel ③ 想做长期 IP 的 AI 创作者 这是我认为 StoReel 最有意思的地方。 假设你创造了一个角色： “Luna，一个来自赛博朋克世界的 AI 女侦探” 你不是只做 20 张图片，而是不断围绕她做： 第一季 第二季 番外篇 新角色 新世界 品牌合作 周边/其他形式的 IP StoReel 官方明确强调 character-based IP 和让创作者保留原创故事及角色的 ownership。 StoReel 一句话：StoReel 是“我想把 AI 创作变成一个故事/IP 生意”。 3. Runway：最适合“AI 视频制作型创作者” Runway 官方 Runway 和前两者的商业模式完全不同。 它首先是一个 AI creative production platform ，而不是以粉丝订阅或内容发行作为核心。 目前 Runway 的工具覆盖 AI image/video generation、video-to-video、声音、TTS、Lip Sync 等；例如 Gen-4.5 支持 Text-to-Video 和 Image-to-Video，并强调复杂镜头运动、构图、时间控制和视觉质量。 Runway +1 最适合谁？ ① AI Film / AI MV 创作者 如果你想做： AI 短电影 AI MV cinematic trailer fashion film commercial concept film Runway 会比 Fanvue 或 StoReel 更适合作为 生产工具 。 ② AI 视频导演 如果你的优势是： 镜头语言 + prompt + storyboard + visual consistency + editing Runway 更适合。 尤其是需要反复生成、修改、控制镜头的创作者。 ③ 商业 AI 视频制作团队 Runway 也明显考虑 professional / team production。 目前官方将用户分为从 Free、Standard、Pro、Max 到 Team、Enterprise 等不同层级；Max 面向高产量创作者，提供 9,500 credits/月，并支持完整模型访问。 Runway +1 所以如果你的模式是： 客户给我一个广告需求 → 我用 AI 做视频 → 客户付我 $2,000 Runway 的定位明显比 Fanvue 更合适。 一句话：Runway 是“我需要把 AI 视频做出来，而且做得专业”。 三个平台怎么选？ 你的核心目标 最适合 做一个 AI 美女/帅哥/虚拟人并赚钱 Fanvue AI influencer + 订阅 + 私信 + PPV Fanvue 做 AI girlfriend / boyfriend 类 persona Fanvue 做 AI 短剧 StoReel 做连续剧/互动故事 StoReel 做角色 IP / 世界观 StoReel AI 编剧 + AI 制片 StoReel AI 短电影 Runway AI MV / 广告 / cinematic video Runway 专业 AI 视频制作 Runway 给客户做 AI 视频 Runway 如果你是一个“从 0 开始”的 AI 创作者 我会这样理解三者的关系： Runway = 生产工具 ↓ StoReel = 故事/IP/发行生态 ↓ Fanvue = 粉丝变现 因此它们甚至 不是只能三选一 。 例如，一个 AI creator 完全可以： Runway 生成高质量人物和视频 ↓ StoReel 做成连续的 AI 剧集/IP ↓ Fanvue 建立核心付费粉丝群，销售独家内容 不过，如果你现在只能选一个： 我的建议 想赚钱最快 → Fanvue 尤其你已经有一个稳定 AI persona，并且擅长社媒运营。 想打造长期内容品牌 → StoReel 尤其你真正喜欢的是人物、剧情、世界观和连续剧。 想成为 AI 视频制作人 → Runway 尤其你想接商业项目、做电影/MV/广告，而不是经营一个虚拟人的粉丝订阅。 最关键的区别不是“谁的 AI 最强”，而是“你卖的到底是什么”： Fanvue 卖的是粉丝关系；StoReel 卖的是故事/IP；Runway 卖的是创作能力。 官方资料 Fanvue AI Creator 帮助中心 — AI creator、AI 内容政策和相关工具。 Fanvue Help Centre Fanvue AI 内容政策 — AI 内容披露、虚拟人物、deepfake 等规则。 Fanvue Help Centre StoReel Creator / AI Storytelling — AI 故事生产、IP、创作者变现和合作模式。 StoReel Runway 创作者套餐说明 — 不同创作量和专业生产需求对应的套餐。 Runway Runway Gen-4.5 — 当前视频生成能力和 Text/Image-to-Video 工作流。 Runway 如果你的目标是 “做一个 AI 虚拟人并在 TikTok/Instagram → Fanvue 变现” ，我也可以进一步给你做一张 Fanvue vs StoReel vs Runway 的商业模式、流量来源、收入潜力、内容尺度、成本和适合的 AI 工具栈对比表 。 Sources",
+    "citations": [
+      {
+        "domain": "https://help.fanvue.com",
+        "position": "1",
+        "snippet": null,
+        "title": "About Fanvue | Fanvue Help Centre",
+        "url": "https://help.fanvue.com/en/articles/7860505-about-fanvue?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://storeel.com",
+        "position": "2",
+        "snippet": null,
+        "title": "StoReel",
+        "url": "https://storeel.com/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://help.runwayml.com",
+        "position": "3",
+        "snippet": null,
+        "title": "Creating with Gen-4.5 – Runway",
+        "url": "https://help.runwayml.com/hc/en-us/articles/46974685288467-Creating-with-Gen-4-5?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "Fanvue、StoReel和Runway分别适合什么类型的AI内容创作者？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=Fanvue%E3%80%81StoReel%E5%92%8CRunway%E5%88%86%E5%88%AB%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E7%B1%BB%E5%9E%8B%E7%9A%84AI%E5%86%85%E5%AE%B9%E5%88%9B%E4%BD%9C%E8%80%85%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "如果你是 完全新手 ，目标不是单纯“生成几个漂亮镜头”，而是从 故事创意 → 剧本 → 分镜 → 角色 → 多镜头视频 → 配音/字幕 → 剪辑 → 成片 ，我会这样选： 我的结论 🥇 首选：CapCut / 剪映 —— 最适合新手“一条龙做完” CapCut 官方 AI 视频工具 如果你以前没做过短剧，我最推荐先从 CapCut（剪映海外版） 入门。 它的优势不是某一个模型一定最强，而是 工作流完整 ： 输入一个故事创意，可以辅助生成剧本 AI storyboard 可以把剧本拆成场景、镜头 AI 视频生成可以把脚本/图片变成视频 可以加入 AI 配音、音乐、字幕 最后直接在同一个剪辑器里剪成片 支持 9:16，比较适合 TikTok / Reels / Shorts 等竖屏短剧 CapCut 官方目前明确提供从 idea/script → storyboard → scene generation → editing → export 的流程。 CapCut +1 甚至它的 AI Story Generator 可以从主题和要点开始，生成剧情、对白、场景描述，再继续生成视频。 CapCut 适合： “我完全不会，我就想把脑子里的一个故事做成第一条短剧。” 缺点： 如果你以后追求真正的“连续剧级”角色一致性、镜头调度和电影感，单靠 CapCut 会逐渐不够。 🥈 想认真做“AI短剧”：Runway Runway 官方 如果你的目标是： 以后真的想做 10 集、30 集甚至几十集 AI 微短剧 那么我会更推荐 Runway 。 它现在已经直接把 microdrama（微短剧） 作为一个应用场景来做：可以建立 recurring cast（固定演员/角色）、固定场景，然后逐镜生成连续镜头。官方甚至给出了“一个角色贯穿 90 集”的工作流。 Runway 它比较重要的能力是 Reference（参考图） ： 固定主角脸 固定服装 固定场景 固定视觉风格 从上一镜头继续下一镜头 Runway 官方也建议通过 References 来维持角色、地点等的一致性。 Runway Academy 另外，它现在有 Character Script to Video ，可以给角色图片 + 台词 + 声音，让角色直接完成对白表演。 Runway 适合： “我不只是想玩 AI 视频，我想做真正有连续人物和剧情的 AI 微短剧。” 缺点： 学习成本明显高于 CapCut。你需要逐渐学会“角色参考图、镜头提示词、首尾帧、连续性”等概念。 🥉 想追求画面和角色表现：Kling / 可灵 如果你特别看重： 人物动作、电影感、真实感、镜头表现 可以把 Kling（可灵） 作为主要的视频生成工具，再配合 CapCut/剪映负责剪辑。 目前 Kling 系列已经被整合进 CapCut，支持文字/图片生成视频，并强调运动稳定性和视觉一致性；CapCut 还展示了 Kling 3.0 的多场景、storyboard-level 控制。 CapCut +1 也就是说，新手没必要一开始就： ChatGPT → Midjourney → Kling → ElevenLabs → Premiere →…… 完全可以先在一个平台里完成大部分工作。 适合： “我已经会一点 AI 了，我想让短剧画面更像电影。” 如果让我给新手排一个梯队 工具 新手友好 故事→成片 连续角色 画面质量 长期做短剧 CapCut / 剪映 ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ ⭐⭐⭐ ⭐⭐⭐⭐ ⭐⭐⭐⭐ Runway ⭐⭐⭐ ⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ Kling / 可灵 ⭐⭐⭐⭐ ⭐⭐⭐ ⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐ Hailuo / 海螺 ⭐⭐⭐⭐ ⭐⭐⭐ ⭐⭐⭐⭐ ⭐⭐⭐⭐ ⭐⭐⭐⭐ 单纯 AI 剪辑工具 ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐ ⭐⭐ ⭐⭐⭐ ⭐⭐ Hailuo 也值得作为备用的视频生成器；例如 CapCut 当前提供 Hailuo 2.3 的文字/图片生成视频，并强调人物动作和表情表现。 CapCut 🎬 我最建议你的实际工作流 不要一开始就追求“一个按钮生成整部短剧”。 新手最稳的是： ① 故事创意 ↓ ② AI 把创意扩成 1 集剧本 ↓ ③ 自动拆成 8～15 个镜头 ↓ ④ 给主角制作固定角色图 ↓ ⑤ 每个镜头分别生成 5～10 秒视频 ↓ ⑥ 配音 / 对白 / 音效 ↓ ⑦ CapCut / 剪映统一剪辑 ↓ ⑧ 字幕 + BGM + 转场 ↓ ⑨ 输出 9:16 竖屏成片 这比“输入一句话，直接生成 2 分钟电视剧”靠谱得多。因为目前 AI 短剧最大的难点仍然是 角色一致性、场景连续性和镜头之间的叙事连贯性 。Runway 自己的长视频制作指南也建议先做 storyboard，再按镜头生成，并使用角色/场景参考来减少变化。 Runway ⭐ 如果你只想选一个 完全新手 → CapCut / 剪映 想认真做连续 AI 短剧 → Runway 已经会一点，追求画面 → Kling / 可灵 而且我不建议你现在就购买一堆工具。 先用 CapCut/剪映完成第一条 30～60 秒短剧 ，等你发现“角色不一致”“动作不够好”“镜头衔接不好”等具体问题，再针对性加入 Runway 或 Kling。 如果你愿意，我还可以进一步给你做一套 “零基础 AI 短剧生产线” ：从一个故事创意开始，具体告诉你 用什么 AI 写剧本、怎么做角色、怎么生成每个镜头、怎么保持人物一致、怎么配音，最后怎么在剪映里剪成 60 秒成片 。 Sources",
+    "citations": [
+      {
+        "domain": "https://www.capcut.com",
+        "position": "1",
+        "snippet": null,
+        "title": "AI Storyboard Generator |Turn Ideas Into Visual Plans",
+        "url": "https://www.capcut.com/tools/ai-storyboard-generator?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://runway.com",
+        "position": "2",
+        "snippet": null,
+        "title": "AI Microdrama Maker: Vertical Short Drama Series | Runway",
+        "url": "https://runway.com/use-cases/microdramas?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://academy.runwayml.com",
+        "position": "3",
+        "snippet": null,
+        "title": "Gen-4 References | Runway Academy | Runway Academy",
+        "url": "https://academy.runwayml.com/tutorial/gen-4-references?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://help.runwayml.com",
+        "position": "4",
+        "snippet": null,
+        "title": "Character Script to Video – Runway",
+        "url": "https://help.runwayml.com/hc/en-us/articles/51285026291219-Character-Script-to-Video?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "新手想从故事创意做到成片，应该选择什么AI短剧制作工具？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E6%96%B0%E6%89%8B%E6%83%B3%E4%BB%8E%E6%95%85%E4%BA%8B%E5%88%9B%E6%84%8F%E5%81%9A%E5%88%B0%E6%88%90%E7%89%87%EF%BC%8C%E5%BA%94%E8%AF%A5%E9%80%89%E6%8B%A9%E4%BB%80%E4%B9%88AI%E7%9F%AD%E5%89%A7%E5%88%B6%E4%BD%9C%E5%B7%A5%E5%85%B7%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "可以。做“AI短剧多集连贯”，最重要的思路不是 每一集重新生成角色 ，而是把角色当成一个固定的“数字演员资产”来管理。 一套比较稳的工作流 1. 先建立“角色圣经” 每个主要角色建立一份固定档案，例如： 项目 示例 角色ID 男主_A01 年龄/气质 28岁，冷静、克制 脸型 窄脸、下颌线明显 发型 黑色短发，左分 眼睛 深棕色 服装 黑色夹克、灰T恤 身高/体型 180cm、偏瘦 声音 男声、低沉、略沙哑 语速 中慢 口头禅 “我知道。” 情绪基线 冷静 > 愤怒 > 悲伤 关键是：这些属性在第1集确定后，后面尽量不要改变。 视觉上最好制作一套“角色参考包”： 正脸 左/右侧脸 45°脸 全身 半身 不同表情 常用服装 常用场景 例如 Runway Gen-4 的 References 就是专门解决这类问题的：可以把角色参考图保存下来，在不同场景、灯光和环境中反复调用；官方建议高质量、自然光、相对中性的角色照片，并支持一次使用最多 3 个 Reference。 Runway +1 Runway Gen-4 References 官方教程 2. 不要直接“文生视频”，先锁定角色图片 这是非常重要的一步。 推荐： 角色设计 → 角色定妆图 → 不同镜头的角色图片 → 图片转视频 而不是： “第7集，男主在咖啡馆里生气地说……” → 直接生成视频 后者很容易出现： 第1集：男主长脸 第2集：男主变圆脸 第3集：发型变了 第4集：年龄突然增加5岁 第5集：衣服颜色变了 比较稳定的流程是： 角色原始参考图 ↓ Character Reference ↓ 生成第1集镜头图 ↓ 生成第2集镜头图 ↓ 生成第3集镜头图 ↓ …… ↓ 图片转视频 而且 上一集已经确认的画面，可以继续成为下一集的 Reference 。 Runway 官方也建议在复杂变化中逐步迭代，并把满意的结果继续作为新的 Reference，这实际上非常适合连续剧生产。 Runway 3. 给每个角色一个固定“Reference ID” 例如： A01_Male_Lead A02_Female_Lead A03_Boss A04_Mother 然后你的素材库可以这样组织： CHARACTERS/ │ ├── A01_Male_Lead/ │ ├── master_face.jpg │ ├── front.jpg │ ├── profile_left.jpg │ ├── profile_right.jpg │ ├── full_body.jpg │ ├── casual_outfit.jpg │ └── business_outfit.jpg │ ├── A02_Female_Lead/ │ ├── master_face.jpg │ ├── front.jpg │ ├── profile.jpg │ └── full_body.jpg 不要每一集重新选择“最像的图片”。 始终调用同一个角色资产。 4. 声音也要建立“声音资产” 视觉一致性解决以后，还有一个经常被忽略的问题： 声音会漂。 比如同一个男主： 第1集：低沉磁性 第2集：声音比较年轻 第3集：语速变快 第4集：声线又变了 第5集：情绪表达完全不同 所以最好给每个角色建立固定 Voice ID。 例如： A01_Male_Lead Voice: V001 Pitch: Low Speed: 0.92 Style: Calm / restrained Emotion: Medium 如果使用 ElevenLabs 之类的声音克隆工具，可以建立固定的 Voice Clone，然后所有集数都调用同一个 voice。 ElevenLabs 官方建议用于克隆的素材保持 单一说话者、干净录音、稳定的音量、音色和说话方式 ；Instant Voice Cloning 通常需要约 1–2 分钟优质音频，而 Professional Voice Cloning 推荐至少约 30 分钟、最佳可以达到 2–3 小时。 ElevenLabs +1 ElevenLabs Voice Cloning 官方文档 5. 最好不要让AI“自己决定表演” 这是很多AI短剧声音不一致的根源。 例如不要只给： “他说：你为什么骗我？” 而应该建立角色的 表演参数 ： Character: A01 Voice: V001 Emotion: suppressed anger Speed: 0.90 Pitch: -5% Pause before sentence: 0.4s Volume: medium-low Delivery: restrained 这样第1集、第5集、第20集都可以保持类似的表演逻辑。 如果已经有真人/演员的参考表演，还可以采用： 真人表演 → AI换声 而不是： 文字 → AI直接自由发挥 例如 ElevenLabs 的 Voice Changer 可以把已有表演转换成目标声音，同时尽量保留原来的情绪和表达方式，包括哭、笑、耳语等细节。 ElevenLabs ElevenLabs Voice Changer 文档 6. 给每一集建立“连续性表” 这是专业制作中非常值得做的一步。 例如： 集数 时间 地点 男主服装 女主服装 男主状态 EP01 周一上午 公司 黑夹克 白衬衫 平静 EP02 周一晚上 酒吧 黑夹克 白衬衫 生气 EP03 周二上午 医院 灰T恤 白外套 疲惫 EP04 周二晚上 家里 灰T恤 白外套 悲伤 这样AI就不会出现： EP02 明明是晚上，男主突然换成了下一天的衣服。 进一步可以记录： Character ID Face Reference Hair Outfit ID Accessories Location Time of Day Emotional State Voice ID Speaking Style Previous Shot Next Shot 这相当于给AI短剧建立一个 连续性数据库 。 7. Prompt不要每集完全重写 建议建立一个“固定Prompt + 本集变量”的结构。 例如固定部分： A01 male lead, 28-year-old East Asian man, slim build, narrow face, short black side-parted hair, dark brown eyes, sharp jawline, wearing black jacket, cinematic realistic drama, natural skin texture, consistent facial identity. 然后每个镜头只改变： Location: subway station Time: night Action: walking toward the camera Emotion: anxious Camera: medium close-up Lighting: fluorescent 即： 角色固定参数 + 服装固定参数 + 视觉风格固定参数 + 本集场景参数 + 镜头参数 不要把所有东西每次重新描述一遍并且换词。 8. 视频生成阶段也要“镜头级”管理 不要一次生成： “男主从公司走出去，上车，开车回家，然后发现女主……” 这种长视频很容易导致人物漂移。 最好拆成： SHOT 001 男主办公室起身 SHOT 002 男主走出办公室 SHOT 003 男主走进电梯 SHOT 004 男主走到停车场 SHOT 005 男主上车 SHOT 006 男主发现手机上的消息 每个 Shot 都引用： 同一个 Character Reference + 连续性信息。 这样控制力明显更高。 Runway 的参考图系统也支持把角色与环境分别作为 Reference，从而控制人物和场景；其官方示例甚至展示了多个角色同时使用不同 Reference 的方式。 Runway +1 9. 我最推荐的“AI短剧标准流水线” 如果你准备真正制作几十集短剧，我会采用： ┌──────────────┐ │ 剧本/分集 │ └──────┬───────┘ ↓ ┌─────────────────┐ │ Character Bible │ └───────┬─────────┘ ↓ ┌──────────────┴──────────────┐ ↓ ↓ ┌───────────────┐ ┌───────────────┐ │ Visual Assets │ │ Voice Assets │ │ 人物参考图 │ │ Voice ID │ │ 服装 │ │ 语速 │ │ 发型 │ │ 音色 │ │ 表情 │ │ 情绪 │ └───────┬───────┘ └───────┬───────┘ ↓ ↓ 每个镜头生成 每句台词生成 ↓ ↓ └──────────────┬──────────────┘ ↓ 视频剪辑 ↓ 连续性检查 ↓ 发布 10. 最重要的原则：不要追求100%“生成一致”，而要做“资产一致” 这是我认为最关键的一点。 AI目前很难做到： 每一次从零生成都自动得到完全相同的人。 所以不要把一致性问题交给模型自己解决。 应该把它变成： 固定角色资产 + 固定声音资产 + 固定Prompt + 固定Reference + 连续性数据库 + 人工质检 这样AI负责“生成变化”，而你控制“不允许变化的东西”。 一个实用的工具组合 如果你现在准备做短剧，我会优先考虑这种组合： 视觉： Runway Gen-4 References 官方文档 —— 角色/场景一致性 Runway Gen-4 Image —— 先做角色定妆和镜头关键帧 再用图生视频完成镜头 声音： ElevenLabs Voice Cloning —— 固定角色声音 ElevenLabs Voice Changer —— 保留真人表演、替换成角色声音 管理： Notion / Airtable / Google Sheets 建立 Character Bible 每个角色一个 ID 每个角色一个 Voice ID 每套服装一个 Outfit ID 每集记录时间、地点、服装、情绪和上一镜状态 如果你要做的是“10～100集AI短剧” 我建议直接采用： Character Bible → 角色定妆 → Reference Pack → Voice Clone → Episode Continuity Sheet → Keyframe → Image-to-Video → Voice → Lip Sync → 剪辑 → QC 而不是“写一集 → 生成一集”。 这两种方法最大的区别是：前者是在做一套 可持续生产的数字演员系统 ，后者只是一次次生成AI视频。对于多集短剧，前者的稳定性会高很多。 Sources",
+    "citations": [
+      {
+        "domain": "https://help.runwayml.com",
+        "position": "1",
+        "snippet": null,
+        "title": "Creating with Gen-4 Image References – Runway",
+        "url": "https://help.runwayml.com/hc/en-us/articles/40042718905875-Creating-with-Gen-4-Image-References?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://elevenlabs.io",
+        "position": "2",
+        "snippet": null,
+        "title": "Instant Voice Cloning | ElevenLabs Documentation",
+        "url": "https://elevenlabs.io/docs/eleven-creative/voices/voice-cloning/instant-voice-cloning?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "如何用AI保持短剧多集之间的角色外观和声音一致？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E5%A6%82%E4%BD%95%E7%94%A8AI%E4%BF%9D%E6%8C%81%E7%9F%AD%E5%89%A7%E5%A4%9A%E9%9B%86%E4%B9%8B%E9%97%B4%E7%9A%84%E8%A7%92%E8%89%B2%E5%A4%96%E8%A7%82%E5%92%8C%E5%A3%B0%E9%9F%B3%E4%B8%80%E8%87%B4%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "可以把 AI 生成的“故事创意、剧本、分镜”理解成 三个不同成熟度的设计文件 ，而不是直接拿去拍。真正可执行的短剧流程，关键是建立一条稳定的“决策链”： 创意 Brief → 故事大纲 → 剧本 → 剧本拆解 → 角色/场景/资产表 → Shot List → Storyboard → Animatic → 拍摄/AI生成 → 粗剪 → 精剪 → 声音/字幕/调色 → 发布 → 数据复盘 这和传统影视制作的逻辑一致；AI 的价值主要是把前期设计、视觉预演和重复性工作大幅加速，而不是取消导演和制片人的判断。Adobe 也建议从剧本出发，先做 storyboard，再形成 shot list，并由制作团队补齐拍摄所需的细节。 Adobe 1. 先把 AI 的“故事创意”变成一页 Brief 不要直接让 AI： “帮我写一个爆款短剧。” 而是先固定一个 制作约束表 ： 项目 示例 类型 都市悬疑 平台 TikTok / 抖音 / Shorts 时长 60–90 秒 核心受众 18–35 岁 核心冲突 女主发现男友隐瞒一个秘密 情绪曲线 好奇 → 怀疑 → 紧张 → 反转 主要角色 女主、男友、神秘第三人 场景数量 ≤3 视觉风格 写实、冷色、电影感 制作限制 1 个室内场景 + 1 个街景 结尾 必须留下下一集钩子 原则：AI 负责发散，人负责收敛。 最后只保留一个明确版本，并给它一个版本号，例如： EP01_Story_v03_APPROVED 这样后面的剧本、分镜、素材都知道自己服务的是哪一个故事版本。 2. 把创意变成“可拍的剧本” 推荐让 AI 按三个层次工作： 第一层：Logline 一句话说清： 谁 + 想要什么 + 遇到什么阻碍 + 为什么现在必须行动。 第二层：Beat Sheet 例如 90 秒短剧： 0–5 秒：Hook 5–20 秒：建立人物/问题 20–45 秒：冲突升级 45–70 秒：错误判断 70–82 秒：反转 82–90 秒：下一集悬念 第三层：正式剧本 这时才生成： SCENE 01 INT. APARTMENT – NIGHT 女主推门进入。 她发现桌上放着两杯还冒着热气的咖啡。 女主 你不是说今晚一个人在家吗？ 男友没有回答。 手机突然响起。 屏幕上显示： “别相信他。” 这里有一个非常重要的区别： 剧本描述“发生什么”；分镜描述“观众怎么看到它”。 3. 剧本完成后，不要马上做分镜 这是 AI 短剧工作流最容易出问题的地方。 应该先做一次 Script Breakdown（剧本拆解） 。 把剧本转换成生产数据库： Scene Character Location Prop Costume VFX Audio 01 女主/男友 公寓 咖啡杯/手机 睡衣/家居服 — 手机铃声 02 女主 街道 手机 外套 雨 汽车声 03 女主/陌生人 咖啡店 信封 同上 — 环境声 这一步非常重要，因为它把： “故事语言” → “制作语言” 进行了第一次转换。 Runway 最近的 AI shot-list 指南也把 script breakdown 放在 shot list 之前，并建议识别地点、人物、道具、服装、特效等会影响生产的元素。 Runway 4. 建立“视觉圣经”，解决 AI 最大的问题：一致性 如果你使用 AI 生成人物和场景，这一步甚至比 storyboard 更重要。 建立一个： Visual Bible / Style Bible 至少包含： 角色卡 CHAR_01 女主 年龄：27 身高：165cm 发型：黑色中长发 服装：米色针织衫 性格：冷静、警觉 视觉特征：左眼下方一颗小痣 配一张 锁定的角色参考图 。 场景卡 LOC_01 公寓 现代小户型 木地板 灰白墙面 暖黄色台灯 夜晚 窗外城市灯光 风格卡 写实电影感 35mm 浅景深 低饱和 冷暖对比 柔和侧光 之后所有 AI 图像/视频生成，都引用这些 ID： CHAR_01 + LOC_01 + STYLE_01 而不是每一次重新描述人物。 Runway 的资料也特别强调，用 reference images 来维持角色、服装和地点的一致性；否则独立生成每个镜头很容易出现人物漂移。 Runway +1 5. 从剧本生成 Shot List 这是整个流程中 最关键的中间层 。 不要让 AI 直接： “根据剧本生成 20 张分镜。” 先让它生成结构化 Shot List。 例如： Shot Scene 景别 镜头 动作 时长 目的 01 01 Wide Static 女主进门 3s 建立空间 02 01 Medium Dolly in 女主看到咖啡 3s 引导注意 03 01 ECU Static 咖啡冒热气 2s 信息 04 01 MCU Push in 女主皱眉 3s 情绪 05 01 OTS Static 她质问男友 4s 冲突 06 01 CU Static 男友沉默 2s 悬念 07 01 ECU Push in 手机亮起 2s Hook 每个 shot 最好固定字段： Shot ID / Scene / Character / Action / Framing / Camera / Lens / Lighting / Duration / Dialogue / SFX / Narrative Purpose 这就开始从“AI创作”进入“生产管理”。 Runway 对 AI shot list 的定义也是逐镜头记录构图、角度、运动、主体动作以及技术信息，并建议把它作为导演、摄影和 AD 共同审阅的生产文件。 Runway 6. Shot List 和 Storyboard 要“一一对应” 例如： SC01-SH01 SC01-SH02 SC01-SH03 ... Storyboard 直接使用相同的 ID： ┌──────────────┐ │ IMAGE │ │ │ └──────────────┘ SH03 | ECU | 手机 Action: 手机屏幕亮起 Dialogue: “别相信他。” Duration: 2 sec Camera: Slow push-in 这样就形成： 剧本 Scene → Shot List → Storyboard Panel 三者可以互相追踪。 Storyboard 的核心不是“画得漂亮”，而是明确每个镜头看到什么、怎么运动、说什么、持续多久，以及它对应哪个 shot。 Runway 7. 再进一步：做 Animatic 这是 AI 短剧非常值得增加的一层。 把 storyboard 图片按照 shot duration 排起来： SH01 3s SH02 3s SH03 2s SH04 3s SH05 4s SH06 2s SH07 2s 加： 临时对白 临时音乐 临时音效 简单转场 就得到一个 Animatic / Previs 。 此时你已经能看到： “这个 90 秒故事到底像不像 90 秒？” 如果发现前 30 秒太慢，现在修改只需要换几张图。 如果等真正生成 30 个 AI 视频镜头后才发现节奏不对，返工成本会非常高。 所以应该遵循： 越靠前修改，成本越低。 8. 然后才进入“生成/拍摄” 这里可以分成两条路线。 A. 真人拍摄 最终文件： Approved Script → Breakdown → Shot List → Storyboard → Call Sheet → Shoot 导演和摄影师按 shot list 拍摄。 Adobe 的 shooting-script 工作流同样建议由导演/摄影指导从剧本建立详细 shot list，并由制作团队进一步检查道具、服装、布景等信息。 Adobe B. AI 视频生成 则变成： Approved Shot List → Reference Images → Image/Keyframe → Video Generation → Select → Edit 例如： SH07 Reference: CHAR_01 LOC_01 STYLE_01 Prompt: ECU, slow push-in, the smartphone lights up on the table, female hand enters frame, cold blue screen light, shallow depth of field, cinematic realism, 2 seconds. 这里一个非常实用的原则是： 不要让 AI 一次生成“完整短剧”。 应该： 一镜一生成 / 一镜多候选 例如一个镜头生成 4–8 个候选： SH07_A SH07_B SH07_C SH07_D 然后人工选一个进入 Final。 9. 给每个镜头建立“状态机” 这是我最推荐 AI 短剧团队采用的方法。 每个 Shot 都有状态： IDEA ↓ SCRIPT ↓ SHOT_DESIGNED ↓ STORYBOARDED ↓ GENERATING ↓ CANDIDATES ↓ SELECTED ↓ FINAL ↓ EDITED ↓ LOCKED 例如： SC01-SH07 Status: SELECTED Character: CHAR_01 ✓ Location: LOC_01 ✓ Storyboard: v03 ✓ Video: SH07_C ✓ Dialogue: ✓ SFX: pending Color: pending 这样几十、几百个 AI 生成镜头也不会失控。 10. 文件夹也应该按照“生产流程”设计 一个简单但非常实用的结构： PROJECT_EP01/ 01_BRIEF/ 02_STORY/ 03_SCRIPT/ 04_BREAKDOWN/ 05_CHARACTERS/ 06_LOCATIONS/ 07_STYLE/ 08_SHOTLIST/ 09_STORYBOARD/ 10_ANIMATIC/ 11_GENERATION/ 12_SELECTS/ 13_EDIT/ 14_AUDIO/ 15_COLOR/ 16_EXPORT/ 17_ARCHIVE/ 文件命名： EP01_SC03_SH07_v04.mp4 EP01_SC03_SH07_v04_select.mp4 EP01_SC03_SH07_storyboard_v02.jpg 不要出现： final.mp4 final2.mp4 final_final.mp4 final_really_final.mp4 AI 项目尤其容易产生大量版本，因此 版本控制本身就是生产能力 。 11. 后期剪辑应该重新回到“剧本/分镜” 进入剪辑后，不是简单把 AI 生成的视频拼起来。 推荐三轮： Rough Cut 只问： 故事成立吗？ 不纠结颜色和特效。 Fine Cut 问： 节奏成立吗？情绪有没有起来？ 调整： 镜头长度 reaction shot 空镜 J-cut / L-cut 音乐进入点 转场 Picture Lock 最后才锁： VFX 字幕 音效 调色 音乐 混音 如果使用 Premiere，可以把项目模板、素材组织和多人协作结构标准化；Adobe 目前的 Productions 功能也支持把大型项目拆成多个项目并共享资产。 Adobe Help Center +1 Premiere 目前甚至提供 AI Assistant beta，可以协助整理素材、准备 footage 和生成初步剪辑，但 Adobe 仍把创意决策留在编辑者手中。 Adobe Help Center 12. 最终可以把整个系统压缩成这张“生产地图” ┌──────────────┐ │ AI Story Ideas │ └──────┬───────┘ ↓ ┌──────────────┐ │ Story Brief │ └──────┬───────┘ ↓ ┌──────────────┐ │ Beat Sheet │ └──────┬───────┘ ↓ ┌──────────────┐ │ Script │ └──────┬───────┘ ↓ ┌──────────────┐ │Script Breakdown│ └──────┬───────┘ ↓ ┌───────────────┼────────────────┐ ↓ ↓ ↓ Character Bible Location Bible Style Bible └───────────────┼────────────────┘ ↓ ┌──────────────┐ │ Shot List │ └──────┬───────┘ ↓ ┌──────────────┐ │ Storyboard │ └──────┬───────┘ ↓ ┌──────────────┐ │ Animatic │ └──────┬───────┘ ↓ ┌──────────┴──────────┐ ↓ ↓ 真人拍摄 AI生成 └──────────┬──────────┘ ↓ ┌──────────────┐ │ Selects │ └──────┬───────┘ ↓ ┌──────────────┐ │ Rough Cut │ └──────┬───────┘ ↓ ┌──────────────┐ │ Fine Cut │ └──────┬───────┘ ↓ Sound / Color / VFX ↓ ┌──────────────┐ │ Final Master │ └──────┬───────┘ ↓ 发布 + 数据 ↓ 复盘 ↺ 一个特别实用的“AI分工原则” 可以把 AI 和人这样分： 工作 AI 人 故事创意发散 ★★★★★ ★★★ 故事结构方案 ★★★★ ★★★★ 最终故事选择 ★★ ★★★★★ 初稿剧本 ★★★★★ ★★★ 剧本修改 ★★★★ ★★★★★ 剧本拆解 ★★★★★ ★★★★ Shot List 初稿 ★★★★★ ★★★★ Storyboard 初稿 ★★★★★ ★★★★ 角色/场景视觉探索 ★★★★★ ★★★★ 最终视觉设计 ★★★ ★★★★★ AI 视频生成 ★★★★★ ★★★ 镜头选择 ★★★ ★★★★★ 节奏/表演判断 ★★ ★★★★★ 最终剪辑 ★★★ ★★★★★ 数据复盘 ★★★★ ★★★★ 一句话总结： 不要让 AI 直接从“故事”跳到“成片”；要用 Shot List 把创意变成生产规格，用 Storyboard/Animatic 验证视觉和节奏，再进入生成/拍摄，最后用剪辑把所有镜头重新变成故事。 值得直接收藏的资料 Runway：AI Shot List 工作流指南 —— 很适合参考“剧本 → breakdown → shot list → storyboard → 生成”的完整逻辑。 Runway：AI Storyboard 指南 —— 详细解释 storyboard panel、shot number、camera movement、duration 等字段。 Runway Academy：Storyboard Creator 教程 —— 如果你准备实际用 AI 做 storyboard，可以从这里开始。 Adobe：Shooting Script / 拍摄脚本工作流 —— 传统影视制作中从 screenplay 到 storyboard、shot list 的参考。 Adobe Premiere：Productions 协作工作流 —— 适合把短剧项目进一步做成多人协作的标准化制作系统。 Adobe Premiere：项目模板 —— 适合把文件夹、素材箱、时间线等固化成可复用模板。 Runway Academy：AI Workflow 教程 —— 如果希望进一步把“角色生成、分镜、素材生成”等环节自动化，可以研究 Workflows。 如果你是准备 真正批量生产 1–3 分钟 AI 短剧 ，下一步最值得做的不是再研究更多 AI 工具，而是先建立一套 「短剧生产 Master Template」 ：包括 故事卡、剧本模板、角色 Bible、场景 Bible、Shot List、分镜表、AI Prompt 表、素材命名规则、剪辑工程模板和最终交付检查表 。这样每写完一个故事，就能像流水线一样进入下一集。 Sources",
+    "citations": [
+      {
+        "domain": "https://www.adobe.com",
+        "position": "1",
+        "snippet": null,
+        "title": "Shooting scripts | Plan your film production | Adobe",
+        "url": "https://www.adobe.com/creativecloud/video/discover/shooting-script.html?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://runway.com",
+        "position": "2",
+        "snippet": null,
+        "title": "Runway Resources | AI shot list: how to build a camera-ready plan",
+        "url": "https://runway.com/resources/ai-shot-list?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://helpx.adobe.com",
+        "position": "3",
+        "snippet": null,
+        "title": "Create a Production in Premiere | Premiere",
+        "url": "https://helpx.adobe.com/premiere/desktop/collaborate-with-others/collaborate-using-productions/create-a-production.html?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "如何把AI生成的故事创意、剧本和分镜组织成可执行的短剧制作流程？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E5%A6%82%E4%BD%95%E6%8A%8AAI%E7%94%9F%E6%88%90%E7%9A%84%E6%95%85%E4%BA%8B%E5%88%9B%E6%84%8F%E3%80%81%E5%89%A7%E6%9C%AC%E5%92%8C%E5%88%86%E9%95%9C%E7%BB%84%E7%BB%87%E6%88%90%E5%8F%AF%E6%89%A7%E8%A1%8C%E7%9A%84%E7%9F%AD%E5%89%A7%E5%88%B6%E4%BD%9C%E6%B5%81%E7%A8%8B%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "如果你是在 中国境内制作、发布或商业化 AI 生成短剧 ，肖像权、音乐版权和内容著作权最好不要分开看。AI 只是制作工具，并不会自动把原本受保护的素材变成“无版权风险”。 尤其值得注意的是， 最高人民法院近期已经专门发布涉人工智能纠纷的司法意见 ，对 AI 换脸、拟声、虚拟人物以及 AI 生成内容的责任认定进一步明确。 Yüksek Halk Mahkemesi +1 1. 肖像权：不要认为“AI生成的人脸”就没有侵权风险 最安全的原则 如果短剧中的人物可以让普通观众识别为某个真实的人，尤其是： 明星、网红、演员； 商业领域知名人士； 普通人的真实照片经过 AI 换脸； 使用真人照片作为 AI 生图/视频参考； 用真人的脸训练或驱动数字人； “AI 复活”已经去世的演员、名人； 原则上都应该先取得相应授权。 《民法典》第1018、1019条明确规定，自然人享有肖像权，未经同意不得制作、使用、公开其肖像，也明确禁止利用信息技术手段伪造侵害他人肖像权。 Yüksek Halk Mahkemesi 而且， 现在不能简单地用“这不是原照片，是 AI 生成的”来抗辩。 最高人民法院近期明确：如果 AI 生成的虚拟数字形象能够让公众识别出特定自然人，未经同意使用、公开，可能构成对姓名权、肖像权等人格权益的侵害；对于 AI 拟声，只要合成人声能够让公众识别出特定自然人，也可能侵犯声音权益。 Yüksek Halk Mahkemesi +1 甚至出现“AI 偶然撞脸”的情况，短剧制作方也不能完全放心。最高法近期公布的相关理解与适用内容特别提到了 AI 短剧“撞脸”问题：如果制作方根据行业经验和人物知名度，本应能够判断观众会把 AI 人脸识别为特定人物，就应主动避免使用。 İPC Mahkemesi 实务上建议 签肖像授权协议时，不要只写一句“同意用于短剧”。 最好明确： 使用什么：肖像、姓名、声音、动作、表情、数字人形象等； 使用方式：AI生成、AI换脸、AI数字人、宣传海报等； 使用范围：抖音、快手、微信、海外平台等； 使用期限； 是否允许商业化、广告投放； 是否允许二次剪辑； 是否允许训练/生成新的数字形象； 是否允许授权第三方平台； 是否允许生成与本人不同的剧情、台词和行为； 报酬及违约责任。 尤其建议把“肖像授权”和“声音/拟声授权”分开写。 2. 音乐版权：一首歌通常不只有一个权利人 这是 AI 短剧里非常容易踩坑的地方。 例如你把一首热门歌曲放进短剧，即使只是作为背景音乐，也不能简单理解为“网上能听到，所以可以使用”。 中国《著作权法》规定了包括复制权、表演权、广播权、信息网络传播权、摄制权、改编权等在内的多项权利。 Ulusal Kültürel Miras İdaresi 同时，音乐还可能涉及 录音制品权利和表演者权利 。例如，一首歌可能同时存在： 词作者 → 曲作者 → 音乐著作权人/出版社 → 演唱者 → 录音制作者 所以使用一首商业歌曲时，要判断你究竟使用的是： 歌曲本身； 某个歌手演唱的录音； 某个翻唱版本； 歌曲片段； AI 改编版本； AI 翻唱/拟声版本。 这些并不一定是同一种授权。 《著作权法》还明确规定，被许可人复制、发行或者通过信息网络传播录音录像制品时，在相应情形下还涉及著作权人、表演者等权利人的许可。 Ulusal Kültürel Miras İdaresi AI音乐尤其要注意 比如你让 AI： “生成一首类似某某歌手风格的片尾曲” 这里至少要检查两个问题： 第一，歌词/旋律有没有直接或实质性模仿已有作品？ 如果 AI 生成的旋律、歌词高度接近已有歌曲，仍然可能产生著作权问题。AI 并不会成为规避版权的“防火墙”。 第二，是否在模仿特定歌手的声音？ 如果生成的声音能够识别为某个真人歌手，还可能从“音乐版权”进一步进入 声音权益/人格权 问题。最高法近期已经对此作出明确说明。 Yüksek Halk Mahkemesi +1 更稳妥的选择 商业短剧最好使用： 自己创作并确认权利归属的音乐； 明确允许商业视频使用的音乐素材； 正规音乐库并购买相应商业授权； 委托作曲人原创，并签署完整版权协议。 不要仅凭“素材库写着免费”就直接使用。 要看它是否允许： 商业使用 + 短视频 + 广告投放 + 信息网络传播 + 改编 + 全球使用 这些授权范围。 3. 内容著作权：AI生成 ≠ 自动获得完整著作权 这是 AI 短剧目前最值得关注的问题之一。 中国《著作权法》基本原则是，著作权属于作者；创作作品的自然人是作者。 Yantai Cumhuriyet Savcılığı 因此，AI 短剧最好不要理解为： “我输入一个 prompt → AI生成完整短剧 → 所有版权天然属于我。” 现实情况要看 人的创作投入程度 。 最高人民法院近期介绍的北京互联网法院 AI 文生图案件中，法院认定，如果作品体现了使用者的智力投入和个性化表达，AI 可以被视为创作工具，相关 AI 生成图片可以获得著作权保护。 Yüksek Halk Mahkemesi 所以制作 AI 短剧时，建议保留能够证明“人参与创作”的全过程材料，例如： 剧本初稿； 人物设定； 分镜； prompt； AI 输出的多个版本； 人工筛选记录； 人工修改记录； 后期剪辑工程文件； 配音、音乐、字幕的制作记录； 最终成片； AI平台的生成记录和账号记录。 这相当于给未来的版权争议留下 创作证据链 。 4. 还要特别注意“改编”和“二次创作” 例如： “把某部小说改成 AI 短剧。” 或者： “让 AI 按某部电视剧的人物、情节重新生成一个短剧。” 这可能不只是“AI生成”，而涉及原作品的 改编权、摄制权等权利 。 《著作权法》明确将“摄制权”以及“改编权”列为著作权人的权利。 Ulusal Kültürel Miras İdaresi 所以： “我没有复制原片，只让 AI 重新生成了一遍” ≠ 一定没有侵权。 如果核心人物关系、情节结构、独创性表达等大量来自受版权保护的作品，仍然需要进行版权分析。 5. AI平台本身的授权条款也要看 这是很多制作团队容易忽略的一层。 例如你使用某 AI 视频平台生成短剧，要检查平台的服务协议是否规定： 生成内容的权利归谁； 用户是否获得商业使用权； 平台是否获得免费使用、展示、训练或再许可权； 是否允许广告、影视、短剧商业化； 输入素材是否必须由用户拥有合法权利； 平台对侵权素材承担什么责任； 是否存在地区限制； 免费版和商业版授权是否不同。 也就是说，最好同时确认两件事： 我有没有权利使用输入素材？ 以及： AI平台有没有给我足够的权利商业化输出结果？ 《生成式人工智能服务管理暂行办法》也明确要求提供和使用生成式 AI 服务时尊重知识产权，并不得侵害他人的肖像权、名誉权、隐私权和个人信息权益。 Çin Bakanlığı +1 6. 发布时还要考虑 AI 内容标识 如果是面向中国公众提供的 AI 生成视频，除了传统的版权/人格权问题，还应考虑生成式 AI 内容的标识、透明度等合规要求。 目前的监管框架要求生成式 AI 服务提升生成内容的透明度；相关规则还涉及生成合成内容标识等要求。 Çin Bakanlığı +1 所以商业化 AI 短剧项目，建议从制作阶段就保留： 素材来源 → 授权文件 → AI生成记录 → 人工创作记录 → 后期工程文件 → 最终成片 → 发布记录 而不是等收到投诉以后再找证据。 7. 一个比较实用的“AI短剧版权检查表” 上线前可以让法务/制片人逐项确认： 项目 上线前确认 真人脸 是否获得肖像授权？ 真人声音 是否获得声音/拟声授权？ 明星姓名 是否涉及姓名权、商业化使用问题？ AI换脸 是否获得本人明确授权？ AI数字人 授权是否包含AI生成/数字化使用？ 背景音乐 是否有商业使用许可？ 歌词 是否获得相应版权？ 录音 是否获得录音制品相关权利？ 翻唱/AI翻唱 是否涉及原曲及声音权益？ 小说/IP 是否取得改编/摄制等权利？ AI生成画面 是否有第三方图片、角色、作品被直接模仿或使用？ AI平台 平台条款是否允许商业化？ 人工创作 是否保留创作和修改证据？ 发布 是否需要进行 AI 内容标识？ 商业广告 是否另外取得广告/商业代言相关授权？ 一个简单的风险判断 可以把 AI 短剧素材分成三档： 🟢 相对安全 自己写剧本 + 自己设计人物 + 自己/正规授权音乐 + AI生成虚构人物 + 人工剪辑制作。 🟡 需要重点审查 AI生成“类似某明星”的脸、声音、人物形象；AI生成与已有影视作品高度相似的人物或剧情；AI音乐声称“某歌手风格”。 🔴 高风险 未经许可 AI 换脸明星 + 模仿明星声音 + 使用热门歌曲原录音 + 改编热门小说/电视剧 + 商业投放。 后者实际上可能同时触发 肖像权/声音权益 + 著作权 + 录音制品权 + 名誉权/不正当竞争等多重风险 。最高法近期的人工智能纠纷意见也特别强调了 AI 换脸、拟声以及虚拟人物相关人格权风险。 Yüksek Halk Mahkemesi +1 官方/权威资料 《中华人民共和国民法典》— 最高人民法院 ：重点看第1018—1022条肖像权相关规定。 《中华人民共和国著作权法》— 国家版权局 ：重点看第10条著作权内容、第11条著作权归属以及录音录像制品相关规定。 《生成式人工智能服务管理暂行办法》— 工业和信息化部 ：重点看知识产权、肖像权、个人信息和内容合规要求。 最高人民法院《关于依法审理涉人工智能纠纷案件的意见》 ：目前非常值得关注，涉及 AI 换脸、拟声、数字人、死者虚拟形象等问题。 最高人民法院关于涉 AI 人工智能纠纷意见的答记者问 ：对 AI 换脸、拟声等典型风险有较直观的解释。 北京互联网法院 AI 文生图著作权案件介绍 ：可参考法院如何判断 AI 生成内容中的人的智力投入和独创性。 如果你的目标是实际制作/上线一部 AI 短剧，最重要的不是单纯问“AI生成的东西有没有版权”，而是建立一套“素材授权 + AI平台授权 + 人工创作证据 + 发布合规”的完整链条。 以上是中国法框架下的一般信息，不替代针对具体项目的法律意见。 Sources",
+    "citations": [
+      {
+        "domain": "https://www.court.gov.cn",
+        "position": "1",
+        "snippet": null,
+        "title": "最高法发布《关于依法审理涉人工智能纠纷案件的意见》 - 中华人民共和国最高人民法院",
+        "url": "https://www.court.gov.cn/zixun/xiangqing/511101.html?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://ipc.court.gov.cn",
+        "position": "2",
+        "snippet": null,
+        "title": "法律适用丨周加海、司艳丽、秦元明、贾玉慧、张音：《最高人民法院关于依法审理涉人工智能纠纷案件的意见》的理解与适用 - 最高人民法院知识产权法庭",
+        "url": "https://ipc.court.gov.cn/zh-cn/news/view-6039.html?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.ncac.gov.cn",
+        "position": "3",
+        "snippet": null,
+        "title": "中华人民共和国著作权法-法律法规-国家版权局",
+        "url": "https://www.ncac.gov.cn/xxfb/flfg/flfg_532/202103/t20210309_50530.html?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://jcy.yantai.gov.cn",
+        "position": "4",
+        "snippet": null,
+        "title": "中华人民共和国著作权法(2020修正)",
+        "url": "https://jcy.yantai.gov.cn/art/2022/6/30/art_63946_2902495.html?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.miit.gov.cn",
+        "position": "5",
+        "snippet": null,
+        "title": "生成式人工智能服务管理暂行办法",
+        "url": "https://www.miit.gov.cn/zcfg/qtl/art/2023/art_f4e8f71ae1dc43b0980b962907b7738f.html?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "AI生成短剧涉及肖像权、音乐版权和内容著作权时，需要注意什么？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=AI%E7%94%9F%E6%88%90%E7%9F%AD%E5%89%A7%E6%B6%89%E5%8F%8A%E8%82%96%E5%83%8F%E6%9D%83%E3%80%81%E9%9F%B3%E4%B9%90%E7%89%88%E6%9D%83%E5%92%8C%E5%86%85%E5%AE%B9%E8%91%97%E4%BD%9C%E6%9D%83%E6%97%B6%EF%BC%8C%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "可以。 如果你说的“一体化平台”是指：普通创作者不需要自己拼接 5～8 个 AI 工具，最好能从“故事/剧本 → 角色 → 分镜 → 视频 → 配音/对白 → 剪辑 → 成片”一路完成，那么 2026 年已经出现了一批比较值得关注的平台。 我会把它们分成两类： 真正面向 AI 短剧的“一站式”平台 ，以及 虽然不是专门做短剧，但个人创作者很适合拿来做短剧的综合型平台 。 一、我比较推荐的 2026 AI 短剧一体化平台 平台 一体化程度 最适合 上手难度 我的评价 次幕AI ⭐⭐⭐⭐⭐ 真人 AI 短剧、漫剧、互动剧 ★★ 国内值得重点试 辰入梦 ⭐⭐⭐⭐⭐ 小说/剧本 → 古风、现代短剧 ★★ 个人创作者友好 小云雀 / 火山剧创 ⭐⭐⭐⭐⭐ 批量短剧、商业化生产 ★★★ 更偏专业生产 SkyReels ⭐⭐⭐⭐⭐ 一人一剧、多集短剧 ★★★ 技术路线很完整 OneVideo Studio ⭐⭐⭐⭐⭐ 海外 TikTok/Shorts/Reels ★ 极低门槛 Reela ⭐⭐⭐⭐⭐ AI 动画剧、系列内容 ★ 很适合不想剪片的人 Toonflow ⭐⭐⭐⭐⭐ AI 漫剧、小说转视频 ★★★ 开源/本地化很有吸引力 Runway ⭐⭐⭐⭐ 高质量影视感短剧 ★★★★ 画面/创意能力强，但不是纯“一键短剧” 即梦 / 可灵 / 海螺 ⭐⭐～⭐⭐⭐ 做高质量单镜头 ★★ 更适合作为生成引擎，而非完整剧组 1. 次幕AI：我认为国内个人创作者最值得先试的之一 次幕AI 官方平台 它的定位非常直接，就是 “AI短剧 · AI漫剧 · 互动影游一站式创作平台” 。 它把： 剧本解析 智能分镜 角色一致性/锁脸 文生视频 图生视频 首尾帧 AI仿真人/数字人 AI配音 对白 AI剪辑 一键成片 放进一个工作流，而且平台声称整合了 50+ 模型 ，包括 Seedance、Kling、Hailuo、Sora、Veo、Vidu 等。 次幕AI 特别适合： “我有一个小说/剧本，但不会画画、不会做分镜、不会做视频。” 它甚至提供 3D 导演台 ，可以用比较影视化的方式控制机位、焦距、画幅、姿势和灯光。 我的评价：★★★★★ 如果你是中文创作者，而且目标是真正做“连续的 AI 短剧”，我会把它放在第一梯队。 2. 辰入梦：非常适合“普通人把小说变成短剧” 辰入梦 AI 短剧 这个产品的定位更加垂直： AI短剧一键生成 。 它的工作流基本就是： 小说/剧本 → 剧本解析 → 角色 → 分镜 → 视频 → 配音 → 时间线 → 成片 官方页面还提供了一个比较具体的案例：第一次使用的创作者，从小说开始制作一集短剧；平台支持角色三视图、角色复用、自动分镜、3D 场景设计，以及 Vidu、Kling、Veo 等视频模型。 Chenrumeng 这类产品最大的价值其实不是“某一个视频模型多强”，而是帮你解决： 角色一致性 + 镜头规划 + 批量生产。 这恰恰是普通人自己用 Kling / 即梦 / Hailuo 拼短剧时最痛苦的部分。 我的评价：★★★★★ 尤其适合： 网文作者 小说推文 AI 漫剧 古风短剧 霸总/甜宠/玄幻/悬疑 想做连续剧账号的个人创作者 3. 小云雀 / 火山剧创：更接近“AI短剧工业流水线” 2026 年国内 AI 短剧生态里，这一方向已经明显从“AI生成一个漂亮镜头”发展到了 整集生产 。 公开的 2026 年行业资料显示，小云雀/火山剧创已经覆盖剧本解析、分镜、角色、视频、配音、剪辑和整集直出等环节；小云雀还被定位为面向个人创作者的“一站式短剧 Agent”。 Yeyu Lingfeng +1 如果你未来想做的是： 一个账号 → 每周更新几集 → 长期连载 那么这种“Agent + 短剧流水线”的平台其实比单纯追求最高画质的工具更加重要。 我的评价：★★★★½ 缺点是：相比“一句话生成一个视频”，学习成本会稍高一些；有些能力也明显更偏机构/商业生产。 4. SkyReels：非常值得关注的“一人一剧”路线 SkyReels 官方网站 SkyReels 的路线很有意思：不是单纯做一个视频生成器，而是试图把 剧本、角色、分镜、视频、配音、多集续写 做成一个 AI 短剧生产系统。 2026 年的相关资料把它描述为“全球首个视频+3D大模型短剧平台”，其 WorldEngine 全流程 Agent 可以从故事创意开始，自动生成剧本、角色、分镜、视频、配音并继续生成多集内容。 Alignify 它特别适合： “我想做一个 IP，而不是只做一条 AI 视频。” 例如： 《我死后才知道老板是隐藏首富》 ↓ 第一集 ↓ 第二集 ↓ 第三集 ↓ 固定男女主 ↓ 固定世界观 ↓ 连续更新 这才是我认为 2026 年 AI 短剧真正有商业价值的方向。 5. OneVideo Studio：海外普通创作者非常值得试 OneVideo Studio 这是我这次搜索里比较惊喜的一个。 它的产品逻辑非常简单： 一句话 → AI 编剧 → AI 角色 → 分镜 → 对白 → Lip-sync → 音乐 → 字幕 → 成片 官方甚至直接把流程概括成： “Write one sentence → AI writes and plans the shots → Characters speak, the film assembles” 并且支持 15 秒～5 分钟 的视频，主打 TikTok、YouTube Shorts 和 Reels。 OneVideo Studio 它还提供： 角色连续性 多镜头 AI 对白 Lip-sync 自动字幕 音乐 单镜头重新生成 Sequel Mode 中英文角色对白 注册有免费额度，Pro 目前页面显示为约 $19/月 。 OneVideo Studio 我的评价：★★★★★ 如果你主要做： TikTok YouTube Shorts Instagram Reels 英语/中文短剧 我会强烈建议试一下。 它最大的优势不是“画质一定全行业第一”，而是： 你真的可以把自己当编剧，而不是当 AI 视频工程师。 6. Reela：适合“不想剪辑”的创作者 Reela 官方平台 Reela 的思路又不太一样。 你可以给它： 一个 Prompt 一个剧本 小说章节 图片 视频素材 角色参考图 音乐 声音样本 然后让它负责： 剧本 → Voiceover → 音效 → BGM → 剪辑 → 字幕 → 最终视频 而且它明确强调角色、场景、道具在系列中的连续性。 Reela +1 它甚至支持： “Whole series in one run” 所以特别适合： AI 动画连续剧 / 故事账号 / faceless channel / YouTube 系列内容。 我的评价：★★★★½ 7. Toonflow：如果你喜欢开源，这个很有意思 Toonflow.NET 这是另一条路线： 小说 → 剧本 → 分镜 → 图片 → 视频 → 配音 → 字幕 → 剪辑 并且采用多 Agent 架构。 它声称支持： Mac Windows 开源 本地部署 角色一致性 批量小说转换 可灵 即梦 海螺 Nano Banana 等模型接入 9:16 / 16:9 自动配音和字幕 核心卖点是 不把你锁死在一个 AI 模型里面 。 Toonflow 这对于稍微懂一点电脑的创作者很有价值： 今天用 Kling，明天换 Seedance，后天换 Hailuo，不需要重新学习整套工作流。 如果你愿意折腾一点技术，它甚至可能比商业 SaaS 更有长期价值。 8. Runway：不是最“一键”，但是综合能力非常强 Runway AI 视频生成器 Runway 我不会把它归到“纯 AI 短剧一键生成器”，但它仍然非常值得个人创作者使用。 它现在已经把： 视频生成 图片生成 视频编辑 角色 对白 Voiceover 音乐 多模型 Extend Upscale 4K 放在一个平台里面。 Runway 尤其值得注意的是，它现在不只是自己的模型，而是把包括 Kling、Veo、Seedance 等模型也放到了同一个工作流里。 Runway 价格方面，目前 Standard 年付折算约 $12/月 起，Pro 约 $28/月 起；免费档有一次性 125 credits。 Runway 不过它的问题也很明显： Runway 更像“AI 影视工作台”，而不是“你给我小说，我直接给你第1集”。 例如多角色对白，目前仍然需要一定工作流操作。 Runway Help 所以： 想做 电影感 → Runway 想做 批量短剧 → 专门的 AI 短剧平台 二、反而不建议把“即梦 / 可灵 / 海螺”单独当成短剧平台 这三个非常重要，但我会特别提醒： 不要把“最好的视频模型”和“最好的 AI 短剧平台”混为一谈。 例如： 即梦：强在画面和中文创作生态 Kling：强在视频生成、运动和角色表现 Hailuo：强在视频生成和角色连续性 Vidu：也很适合做参考图/角色驱动的视频 但如果你让它们独立承担： 小说 → 剧本 → 角色库 → 100 个分镜 → 配音 → BGM → 字幕 → 剪辑 → 连续剧 就会重新变成 人工拼流水线 。 Hailuo 自己的 2026 年资料也特别强调，多场景角色一致性本身仍然是 AI 视频制作的重要难题。 hailuoai.video +1 所以我更建议把它们看成： “发动机” 而次幕、辰入梦、SkyReels、OneVideo、Reela 这种看成： “整车” 三、如果让我给普通创作者做一个实际排序 🇨🇳 中文创作者 第一梯队： 次幕AI — 综合型、一站式程度非常高 辰入梦 — 小说/剧本 → 短剧非常直接 小云雀/火山剧创 — 更适合批量化生产 SkyReels — 适合建立连续剧/IP Toonflow — 喜欢开源、本地化的人值得研究 🌎 海外/TikTok/YouTube 创作者 OneVideo Studio — 最符合“普通人一句话做短剧” Reela — 最适合不想自己剪辑的人 Runway — 想追求电影感和创作自由 SkyReels — 想做连续剧/IP Topview / MagicLight / Novi AI — 更偏内容营销或自动化生产 2026 年的一份 AI 短剧横评也把 DramaSo、Topview、MagicLight、Pippit、即梦、海螺、Novi AI 等列为主要选手，并特别指出： 即梦/海螺更像“单镜头生成器”，而真正围绕“一集/一季”设计的平台相对少。 DramaSo 四、如果你的目标是“普通人靠 AI 做短剧账号”，我会这样选 预算低 + 完全小白： OneVideo / 辰入梦 中文网文 → AI短剧： 辰入梦 / 次幕AI 想做古风、玄幻、漫剧： 次幕AI / Toonflow / 知漫剧 知漫剧本身就是专门针对“剧本 → 分镜 → 角色 → 配音 → 成片”的 AI 漫剧平台。 Zhimanj 想做真正连续的几十集 IP： SkyReels / 次幕AI / 小云雀 想做 TikTok / Shorts 的英文短剧： OneVideo / Reela 想把画面做到尽可能“电影感”： Runway + Kling/Seedance/Veo 而不是追求“一键生成”。 一个很重要的趋势 我认为 2026 年 AI 短剧最大的变化其实不是“视频模型变得多厉害”，而是 从“生成一个镜头”进入“AI 剧组”阶段 。 最新研究也已经开始把这个问题定义为： One Sentence → One Drama 也就是从一句故事创意开始，自动完成剧本、空间/角色一致性、镜头生成、BGM、转场和质量检查。 arXiv 这也是为什么我会更推荐你关注 次幕、辰入梦、SkyReels、OneVideo、Reela、Toonflow 这种“导演 Agent / AI 剧组”，而不是只看哪个视频模型的单镜头 benchmark 最高。 如果你告诉我你的目标是「抖音/小红书/视频号」还是「TikTok/YouTube Shorts」，以及你想做真人短剧、AI 漫剧还是网文推文，我可以进一步给你做一张“2026 AI短剧平台横向对比表”，包括：价格、免费额度、最长时长、角色一致性、中文能力、是否支持小说一键转剧、是否能批量做 10/50/100 集，以及我最推荐的具体工作流。 Sources",
+    "citations": [
+      {
+        "domain": "https://cimucimu.com",
+        "position": "1",
+        "snippet": null,
+        "title": "次幕AI - AI短剧·AI漫剧·互动影游一站式创作平台 | 3D导演台·智能分镜·AI剪辑一键成片",
+        "url": "https://cimucimu.com/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://chenrumeng.cn",
+        "position": "2",
+        "snippet": null,
+        "title": "辰入梦 AI 短剧 | 一站式 AI 短剧生成工具，几分钟生成古风/现代短剧",
+        "url": "https://chenrumeng.cn/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.yeyulingfeng.com",
+        "position": "3",
+        "snippet": null,
+        "title": "AI 短剧制作解决方案竞品分析报告(2026年9月) - 夜雨聆风学习网",
+        "url": "https://www.yeyulingfeng.com/a/1035003.html?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://alignify.co",
+        "position": "4",
+        "snippet": null,
+        "title": "最佳AI短剧平台（2026）：剧本生成、角色一致、竖屏分发",
+        "url": "https://alignify.co/zh/tools/short-drama?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.onevideo.studio",
+        "position": "5",
+        "snippet": null,
+        "title": "OneVideo Studio — The AI Director OS · AI Short Drama Generator",
+        "url": "https://www.onevideo.studio/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://reela.com",
+        "position": "6",
+        "snippet": null,
+        "title": "Reela – AI Video Studio: Avatars, Voiceover, Music & Auto Editing",
+        "url": "https://reela.com/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.toonflow.net",
+        "position": "7",
+        "snippet": null,
+        "title": "Toonflow.NET",
+        "url": "https://www.toonflow.net/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://runway.com",
+        "position": "8",
+        "snippet": null,
+        "title": "AI Video Generator | Runway",
+        "url": "https://runway.com/product/ai-video-generator?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://help.runwayml.com",
+        "position": "9",
+        "snippet": null,
+        "title": "Creating Multi-Character Dialogues with Act-Two – Runway",
+        "url": "https://help.runwayml.com/hc/en-us/articles/41748090660499-Creating-Multi-Character-Dialogues-with-Act-Two?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://hailuoai.video",
+        "position": "10",
+        "snippet": null,
+        "title": "Maintain Character Continuity in AI Fan Storyboards — Hailuo AI",
+        "url": "https://hailuoai.video/pages/knowledge/character-continuity-ai-fan-storyboards?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://drama.so",
+        "position": "11",
+        "snippet": null,
+        "title": "2026 年最好的 7 款 AI 短剧生成器（附诚实短板） | DramaSo 博客",
+        "url": "https://drama.so/zh/blog/best-ai-drama-generator?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.zhimanj.hl.cn",
+        "position": "12",
+        "snippet": null,
+        "title": "知漫剧AI漫剧制作平台_AI短剧一键成片_知漫剧",
+        "url": "https://www.zhimanj.hl.cn/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://arxiv.org",
+        "position": "13",
+        "snippet": null,
+        "title": "One Sentence, One Drama: Personalized Short-Form Drama Generation via Multi-Agent Systems",
+        "url": "https://arxiv.org/abs/2605.22144?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "2026年有哪些适合普通创作者制作AI短剧的一体化平台？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=2026%E5%B9%B4%E6%9C%89%E5%93%AA%E4%BA%9B%E9%80%82%E5%90%88%E6%99%AE%E9%80%9A%E5%88%9B%E4%BD%9C%E8%80%85%E5%88%B6%E4%BD%9CAI%E7%9F%AD%E5%89%A7%E7%9A%84%E4%B8%80%E4%BD%93%E5%8C%96%E5%B9%B3%E5%8F%B0%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "如果你的目标是做一个 面向全球创作者的 AI 短剧平台 ，我会把现有市场分成三类： AI 原生短剧平台、传统短视频平台、创作者付费/会员平台 。真正同时覆盖“制作 + 发布 + 变现”的平台其实还不多。 值得重点关注的平台 平台 制作 AI 短剧 全球发布 创作者变现 更适合谁 OpenDrama ✅ 原生 AI 创作 ✅ ✅ 按作品收入分成 想“一站式”创作、发布、赚钱的全球创作者 DramaBox / Duanju Lab ✅ AI 工作流 ✅ ⚠️ 以发行/合作为主 专业制作团队、IP 方 YouTube Shorts ⚠️ 外部制作后上传 ✅ 很强 ✅ 广告、Premium、会员等 全球个人创作者 TikTok ⚠️ 外部制作后上传 ✅ 极强 ✅ Creator Rewards 等 获取全球流量、测试爆款 Instagram Reels ⚠️ 外部制作后上传 ✅ 很强 ✅ Gifts、订阅、品牌合作等 社交传播和粉丝经营 Patreon ⚠️ 外部制作 ✅ ✅ 会员/付费内容 已有粉丝的独立创作者 ReelShort ⚠️ 非开放式创作平台 ✅ ⚠️ 项目制合作/授权 专业短剧团队、版权/IP 方 GoodShort / ShortMax 等 ⚠️ 主要是发行平台 ✅ ⚠️ 以合作/采购为主 已完成短剧的制作公司 1. OpenDrama —— 最接近“一站式 AI 短剧创作者平台” 这是目前我认为 最值得关注的新型模式 。 OpenDrama 的定位不是单纯“看短剧”，而是让用户直接： 创作 AI 短剧 → 发布 → 获得全球流量 → 按观众付费获得收入。 它公开的信息显示，创作者可以制作带声音的 AI 短剧，发布给全球观众，并从作品产生的 coin 消费中获得 80% ；另外还有基于观看时长的 Pass pool 分成，并设置现金提现门槛。 OpenDrama OpenDrama 官方平台 如果你问“哪个平台最像我理想中的 AI 短剧创作者平台？”——OpenDrama 是目前非常值得研究的案例。 2. DramaBox / Duanju Lab —— “AI制作 + 全球发行”路线 DramaBox 最近已经不只是一个短剧观看 App，其官方业务体系开始覆盖： AI 剧本 AI 角色 AI 场景 AI 配音 AI 剪辑 内容合规 版权管理 全球发行 其官方页面显示， Duanju Lab 负责 AI 内容生产， Juhe SaaS 负责版权、发行和结算， MiniShows 则面向东非、东南亚和拉美等市场进行全球化发行。 DramaBox +1 DramaBox 官方 AI/全球短剧平台 不过需要特别注意： DramaBox 更像“专业内容产业平台”，而不是 YouTube 那种任何人上传就能赚钱的开放 UGC 平台。 现阶段更适合制作公司、IP 方和专业创作者谈发行/制作合作。 3. YouTube Shorts —— 全球创作者最成熟的变现基础设施之一 如果你的 AI 短剧是 30 秒～3 分钟的连续剧形式，YouTube Shorts 非常值得作为 第一发行渠道 。 YouTube 的优势是： 全球覆盖面非常广 创作者可以自己拥有频道和作品 Shorts 有广告收入分成 YouTube Premium 有收入分成 会员、Super Thanks、Shopping 等可以叠加 长短视频可以形成完整 IP 生态 目前 YouTube 官方规则中，Shorts 创作者在符合条件并加入 Shorts Monetization Module 后，可以获得 Creator Pool 分配收入的 45% ；同时还有 YouTube Premium 等收入来源。 Google Help +1 YouTube Shorts 创收政策 YouTube Partner Program 官方说明 特别适合的玩法： AI 短剧正片 → Shorts 连载 → 评论区/频道引导 → 完整季/长视频 → 会员/IP/品牌合作 但要注意，YouTube 对重复、搬运、低原创价值内容有明确限制，所以不能简单地批量生成大量高度同质化 AI 视频。 Google Help 4. TikTok —— 最适合“爆款测试 + 全球分发” TikTok 更适合把 AI 短剧做成： 强钩子 + 反转 + Cliffhanger + 连续剧 例如： Episode 01：她发现自己的丈夫其实已经死了三年 Episode 02：葬礼当天，她收到了丈夫发来的短信 Episode 03：短信告诉她——“不要相信你妈妈” 这种结构非常适合 TikTok 的推荐机制。 TikTok 官方 Creator Rewards Program 对符合条件的视频要求包括 原创、高质量、超过 1 分钟 等条件，因此如果目标是直接依赖 Creator Rewards 赚钱，最好不要把全部内容限制在 30～60 秒。( TikTok Support ) TikTok Creator Rewards 官方说明 我的建议：TikTok 更应该被看作“流量发动机”，而不是唯一的商业化终点。 5. Instagram Reels —— 适合打造角色/IP Instagram Reels 特别适合 AI 短剧中的： 角色账号 CP/情侣线 时尚/豪门题材 恋爱剧情 Meme 化剧情 角色幕后内容 粉丝互动 它的价值不只是播放量，而是 建立角色粉丝资产 。 所以可以把： TikTok = 获客 YouTube = 长期内容资产 Instagram = 社区/IP 自有平台 = 付费变现 组合起来。 6. Patreon —— 适合把 AI 短剧变成“付费会员制” Patreon 本身不是 AI 短剧分发平台，但对于已经有粉丝的创作者非常有价值。 例如： 免费： 每周 3 集 TikTok/YouTube Shorts $5/月： 提前看 10 集 无广告 番外 $10/月： 平行世界剧情 角色 POV 未公开结局 $20/月： 创作者直播 投票决定剧情 Patreon 官方支持创作者通过会员获得持续收入，也支持销售一次性数字产品，包括视频内容。 Patreon +1 Patreon 创作者会员 Patreon 数字产品销售 还有一类：ReelShort / DramaBox / GoodShort 这里需要特别区分。 ReelShort 、 DramaBox 、GoodShort 等是 非常重要的短剧发行平台 ，但它们并不等于“开放式 AI 创作者平台”。 目前行业更常见的模式是： 创作者/制作公司 → 完成剧集 → 向平台投稿/谈合作/授权 → 平台发行 而不是： 创作者注册 → 上传 → 自动获得收入分成。 近期行业资料也明确把 ReelShort 和 DramaBox 描述为以 commission / licensing 为主，而不是开放式 creator upload。 Generated Worlds +1 ReelShort DramaBox 如果你是“全球 AI 短剧创作者”，我会这样组合 🥇 最推荐的发行矩阵 第一层：获取流量 TikTok YouTube Shorts Instagram Reels ↓ 第二层：短剧商业化 OpenDrama 自有付费页面 Patreon ↓ 第三层：专业发行 ReelShort DramaBox GoodShort 其他区域短剧 App ↓ 第四层：IP商业化 品牌植入 授权 游戏 漫画 小说 周边 影视改编 这样比“只押注一个短剧 App”更合理。 如果你是在找“值得对标的平台” 我会重点研究下面 6 个 ： 优先级 平台 最值得研究的东西 ⭐⭐⭐⭐⭐ OpenDrama AI创作 + 发布 + coin 分成的一体化模式 ⭐⭐⭐⭐⭐ YouTube Shorts 全球创作者生态 + 广告分成 ⭐⭐⭐⭐⭐ TikTok 全球分发 + 爆款算法 ⭐⭐⭐⭐ DramaBox AI生产 + 短剧商业化 + 全球发行 ⭐⭐⭐⭐ ReelShort 精品短剧/IP商业模式 ⭐⭐⭐ Patreon 粉丝付费、会员和 IP 社区 值得注意的是， 2026 年这个赛道正在快速变化 ：近期行业资料已经把 AI 短剧的商业模式概括为广告分成、观众打赏、单集付费、订阅和版权/授权五种主要模式，而且没有一个平台同时把这五种模式全部做好。 Generated Worlds 如果你的真正问题是“我想做一个面向全球创作者的 AI 短剧平台，哪些竞品最值得拆解？” ，那么我会进一步把 OpenDrama、DramaBox、ReelShort、TikTok、YouTube Shorts、GoodShort、ShortMax 做成一张更详细的 竞品地图（用户、AI生产、内容供给、推荐算法、付费模型、创作者分成、版权归属、全球市场、护城河） 。这会比单纯列平台更有参考价值。 Content diagnostic : content_references {\"count\":1,\"examples\":[{\"type\":\"grouped_webpages\",\"sourceIndex\":12,\"shape\":{\"name\":\"missing\",\"data\":\"present\",\"dil\":\"missing\"}}]} Sources",
+    "citations": [
+      {
+        "domain": "https://opendrama.ai",
+        "position": "1",
+        "snippet": null,
+        "title": "AI Short Drama Generator & Game Maker | OpenDrama",
+        "url": "https://opendrama.ai/create?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.drama.box",
+        "position": "2",
+        "snippet": null,
+        "title": "DramaBox | AI Short-Drama Production & Global Distribution",
+        "url": "https://www.drama.box/en/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://support.google.com",
+        "position": "3",
+        "snippet": null,
+        "title": "YouTube Shorts monetization policies - YouTube Help",
+        "url": "https://support.google.com/youtube/answer/12504220?hl=en&utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.patreon.com",
+        "position": "4",
+        "snippet": null,
+        "title": "Start a paid membership on Patreon — Patreon",
+        "url": "https://www.patreon.com/product/paid-membership?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://generatedworlds.com",
+        "position": "5",
+        "snippet": null,
+        "title": "Where to Publish Your AI Short Drama in 2026 · Generated Worlds",
+        "url": "https://generatedworlds.com/guides/where-to-publish-ai-short-dramas?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "适合全球创作者制作、发布和变现AI短剧的内容平台有哪些？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E9%80%82%E5%90%88%E5%85%A8%E7%90%83%E5%88%9B%E4%BD%9C%E8%80%85%E5%88%B6%E4%BD%9C%E3%80%81%E5%8F%91%E5%B8%83%E5%92%8C%E5%8F%98%E7%8E%B0AI%E7%9F%AD%E5%89%A7%E7%9A%84%E5%86%85%E5%AE%B9%E5%B9%B3%E5%8F%B0%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "可以把 AI短剧制作 拆成 5 个核心环节： 剧本 → 视频画面 → 配音 → 字幕 → 剪辑 。实际上，现在已经有一些工具能覆盖多个环节，但如果追求“短剧感”和可控性，建议按环节组合工具。 一、AI短剧工具链总览 环节 主要任务 推荐工具 适合什么 📝 剧本 故事、人物、小节、对白、分镜脚本 ChatGPT 、Claude 剧情创作、改编、对白 🎬 视频 文生视频、图生视频、角色动画 Runway 、Kling、Veo、Seedance AI场景、人物、镜头 🎙️ 配音 AI人物声音、旁白、角色对白 ElevenLabs 、HeyGen 真人感配音、角色声音 💬 字幕 语音转字幕、翻译、字幕动画 CapCut 、Descript 中文短剧、短视频字幕 ✂️ 剪辑 拼接、转场、BGM、音效、字幕、调色 CapCut 、Premiere Pro、DaVinci Resolve 最终成片 1. 📝 剧本：ChatGPT 如果是从零开始做短剧，我会把 OpenAI 的 ChatGPT 放在第一步。 它比较适合： 故事创意 人物设定 10～60秒短剧剧情 台词设计 分集剧本 分镜脚本 镜头提示词 根据视频生成工具的特点改写 prompt OpenAI 官方也明确把 ChatGPT 的用途包括创意写作、故事构思、改写和编辑等。 OpenAI +1 ChatGPT 官方网站 推荐工作方式： 故事梗概 → 人物小传 → 完整剧本 → 分镜表 → 每个镜头的 AI 视频 Prompt 例如让 ChatGPT 输出： 镜头 时长 画面 台词 音效 视频Prompt 01 5秒 女主深夜走进办公室 “你终于来了。” 雷声 cinematic night office... 02 5秒 男主转身 “你知道我是谁？” 心跳 close-up... 这样后面做视频会方便很多。 2. 🎬 视频：Runway / Kling / Veo / Seedance 这是目前 AI 短剧里最关键的一环。 ⭐ Runway Runway 适合比较电影化的短剧镜头。 它支持： Text → Video Image → Video Video → Video 角色动画 场景修改 物体删除/添加 镜头延展 角色一致性 官方目前也强调了 参考图保持角色一致性 以及文本、图片、视频生成等能力。 Runway Runway 官方 AI Video Generator 特别适合： “我要拍一个赛博朋克爱情短剧，每个镜头5～10秒。” 而不是简单的“一个AI头像站在那里讲话”。 其他值得考虑的模型 现在 Runway 本身也提供多个模型，包括 Kling、Veo、Seedance 等，因此制作短剧时可以根据不同镜头选择模型。 Runway Developer Portal 简单理解： Runway → 电影感、镜头控制 Kling → 人物/动作/场景生成 Veo → 电影化生成、原生声音 Seedance → 多模态、连续镜头探索 HeyGen → AI演员/数字人类型 如果你的短剧是“ 真人演员剧情片 ”，建议重点研究 Runway、Kling、Veo、Seedance，而不是只使用数字人。 3. 🎙️ 配音：ElevenLabs / HeyGen ⭐ ElevenLabs 如果你已经有视频，只缺角色声音， ElevenLabs 是很值得考虑的专业配音工具。 典型流程： 剧本台词 → AI Voice → 每个角色单独生成音频 → 导入剪辑软件 可以给不同角色设置不同声音，例如： 女主：年轻、温柔 男主：低沉、冷静 反派：压迫感 旁白：电影预告片风格 ⭐ HeyGen 如果你做的是 数字人/AI演员短剧 ，HeyGen会更方便。 它可以从脚本直接生成 AI Avatar 视频，并提供声音、口型同步等能力；官方目前支持大量语言和方言。 HeyGen +1 HeyGen 官方网站 而且它现在已经把： Script → Avatar → Voice → B-roll → Captions → Video 整合到一个工作流中。 HeyGen 所以： 电影型短剧 → ElevenLabs + Runway/Kling 数字人短剧 → HeyGen 会比较合理。 4. 💬 字幕：CapCut 对于中文短剧，我非常推荐 CapCut （剪映国际版） 。 它的 AI 自动字幕可以： 语音 → 文字 自动识别对白 自动对齐时间轴 多语言字幕 字体/颜色/动画 字幕翻译 逐字字幕效果 官方文档显示，Auto Captions 可以直接通过 AI speech-to-text 从视频语音生成字幕，而且 Web、桌面和移动端均有相关功能。 CapCut +1 CapCut 官方网站 对于短剧尤其方便，因为可以做现在短视频常见的： 大字体 + 重点词变色 + 逐字出现 + 人物对白气泡 5. ✂️ 最终剪辑：CapCut / Premiere Pro / DaVinci 新手：CapCut 如果你是个人创作者，我建议直接： CapCut 一站式完成最终剪辑。 可以处理： AI生成视频拼接 配音 字幕 BGM 音效 转场 镜头裁剪 调色 画面比例 9:16竖屏 TikTok / Shorts / Reels输出 甚至 CapCut 自己也提供 Text-to-Video，可以从脚本生成视频，不过不同地区的功能可用性可能不同。 CapCut 专业制作：Premiere Pro / DaVinci Resolve 如果以后要做： 5～20分钟连续短剧 / 系列剧 / 商业项目 可以升级到： Premiere Pro + After Effects 或者： DaVinci Resolve 这样对音频、调色、复杂时间线和后期特效的控制会明显更强。 我最推荐的 3 套组合 🟢 入门省钱版 ChatGPT → Runway/Kling → CapCut 流程： ChatGPT写剧本 ↓ AI生成视频 ↓ CapCut配音/字幕/音乐/剪辑 ↓ 竖屏短剧 适合第一次做 AI 短剧。 🔵 进阶电影感 ChatGPT → Midjourney/图像工具 → Runway/Kling/Veo → ElevenLabs → CapCut 流程： ChatGPT ↓ 人物设定 + 分镜 ↓ 生成统一角色图片 ↓ Image → Video ↓ ElevenLabs角色配音 ↓ CapCut最终剪辑 这是我比较推荐的 “AI电影短剧”工作流 。 Runway目前也支持用角色参考图维持跨镜头角色的一致性，这对于连续短剧非常重要。 Runway 🟣 数字人短剧 ChatGPT → HeyGen → CapCut 如果你的形式是： “两个人面对镜头演戏” 或者： “一个虚拟演员讲故事” 那么甚至可以把大量环节压缩到： ChatGPT → HeyGen → CapCut HeyGen可以直接把脚本交给 Avatar，让角色进行口型同步和表演，因此不一定需要先单独制作完整的配音。 HeyGen 最重要的一点：不要把“AI短剧”理解成一个工具 真正比较成熟的工作流应该是： ① 剧本 → ② 人物设定 → ③ 分镜 → ④ 角色参考图 → ⑤ 视频生成 → ⑥ 配音 → ⑦ 音效/BGM → ⑧ 字幕 → ⑨ 剪辑 → ⑩ 调色/包装 其中最难的其实不是“生成一个漂亮视频”，而是 让第1镜头的人物和第20镜头还是同一个人，并且剧情、动作、声音、对白能够对得上 。 如果你准备做的是 抖音/小红书/YouTube Shorts 这种 30～90 秒竖屏 AI 短剧 ，我会优先推荐： ChatGPT + Runway/Kling + ElevenLabs + CapCut 如果是 数字人连续短剧 ： ChatGPT + HeyGen + CapCut 如果是 电影感 AI 短片 ： ChatGPT + 图像生成 + Runway/Kling/Veo + ElevenLabs + DaVinci/Premiere OpenAI / ChatGPT Runway HeyGen CapCut Sources",
+    "citations": [
+      {
+        "domain": "https://openai.com",
+        "position": "1",
+        "snippet": null,
+        "title": "Writing with ChatGPT | OpenAI",
+        "url": "https://openai.com/academy/writing/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://runway.com",
+        "position": "2",
+        "snippet": null,
+        "title": "AI Video Generator | Runway",
+        "url": "https://runway.com/product/ai-video-generator?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://dev.runwayml.com",
+        "position": "3",
+        "snippet": null,
+        "title": "AI Video, Image and Audio Model APIs | Runway",
+        "url": "https://dev.runwayml.com/models/catalog?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.heygen.com",
+        "position": "4",
+        "snippet": null,
+        "title": "HeyGen: Create Realistic AI Videos of Yourself in Minutes",
+        "url": "https://www.heygen.com/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.capcut.com",
+        "position": "5",
+        "snippet": null,
+        "title": "Auto Captions App: Generate Your Captions with One Click",
+        "url": "https://www.capcut.com/tools/auto-caption-app?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "制作AI短剧时，剧本、视频、配音、字幕和剪辑分别需要哪些工具？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E5%88%B6%E4%BD%9CAI%E7%9F%AD%E5%89%A7%E6%97%B6%EF%BC%8C%E5%89%A7%E6%9C%AC%E3%80%81%E8%A7%86%E9%A2%91%E3%80%81%E9%85%8D%E9%9F%B3%E3%80%81%E5%AD%97%E5%B9%95%E5%92%8C%E5%89%AA%E8%BE%91%E5%88%86%E5%88%AB%E9%9C%80%E8%A6%81%E5%93%AA%E4%BA%9B%E5%B7%A5%E5%85%B7%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "如果你说的“小型内容工作室”是 2–10 人左右，希望把“脚本”尽可能直接变成“可发布视频” ，我的建议不是找一个“最强 AI 视频模型”，而是选一个 能覆盖完整生产链的 AI 视频工作台 。 先给结论 我会把目前的平台分成 4 类： 平台 最适合 从脚本到成片 画面生成能力 人物/口播 剪辑/包装 小团队推荐 HeyGen 口播、知识、营销、教程、短视频 ★★★★★ ★★★★ ★★★★★ ★★★★ 首选 Runway 广告、剧情、视觉内容、品牌片 ★★★ ★★★★★ ★★★ ★★★★ 视觉向首选 CapCut 抖音/TikTok/Reels/短视频矩阵 ★★★★★ ★★★★ ★★★★ ★★★★★ 效率/性价比首选 Synthesia 企业培训、产品介绍、内部内容 ★★★★★ ★★★ ★★★★★ ★★★★ 企业内容首选 这些平台的定位其实很不同：例如 HeyGen 已经把脚本、avatar、配音、B-roll、字幕和编辑放在同一个流程里；Runway 更偏“创意生成与视觉控制”；CapCut 则更接近“AI + 完整短视频剪辑器”；Synthesia 强项是结构化、可批量生产的 presenter/培训类视频。 HeyGen +3 1. 如果目标真的是“脚本 → 可发布”：优先看 HeyGen HeyGen 官方 Script-to-Video 这是我认为 最接近你描述的生产模式 的平台。 典型流程可以直接是： 脚本 → 自动拆场景 → Avatar/人物 → AI 配音 → B-roll → 字幕 → 转场 → 品牌元素 → 导出 HeyGen 官方目前明确把 script-to-video 做成完整工作流：输入脚本后，可以自动生成 narration、captions、transition graphics 和匹配的 stock footage；同时可以选择 AI avatar 或自己的 digital twin。 HeyGen +1 尤其适合： 知识类短视频 产品介绍 SaaS/科技内容 教程 新闻/资讯解说 YouTube Shorts / TikTok / Reels 企业营销内容 多语言版本 “一个人/一个 IP”持续生产内容 它还有一个很重要的优势： 多语言规模化 。官方目前支持 175+ languages，并提供 voice cloning 和 lip-sync。 HeyGen 但它的短板 如果你的工作室做的是： “电影感广告 / MV / 剧情片 / 高概念视觉 / 非真人叙事” 我不会把 HeyGen 当主力。 因为这时候你真正需要的不是“一个人把稿子念出来”，而是 镜头语言、角色连续性、摄影机运动、视觉风格控制 。 这时候应该看 Runway。 2. 如果工作室的核心竞争力是“画面”：选 Runway Runway 官方 Runway Gen-4 官方文档 Runway 更像一个 AI 视觉制作工作站 ，而不是单纯的 script-to-video 工具。 它目前的 Gen-4 工作方式非常典型： 脚本/创意 → 生成关键帧 → image-to-video → 多镜头 → 剪辑 例如： “一个宇航员走进废弃购物中心” 你不会期待它直接把整段脚本自动剪成最终广告，而是： 先设计人物/场景； 生成关键视觉； 用 image-to-video 做运动； 控制镜头； 再进入剪辑和声音制作。 Runway 官方文档目前仍强调 Gen-4 的一个重要特点： 输入图片决定视觉基础，文字 prompt 主要描述运动 ；同时支持 5/10 秒生成以及多种画幅。 Runway Help +1 更重要的是，它现在有 Workflows ，可以把多个模型和步骤串起来，例如： Text → Image → Video 从而开始向“小型 AI 制片流水线”发展。 Runway Help 我会这样定位 Runway 如果你们卖的是： “我们帮品牌做漂亮的视频” → Runway 很值得成为核心平台。 如果你们卖的是： “我们每周批量做 50 条产品讲解视频” → HeyGen / CapCut 更合理。 3. 如果主要做短视频矩阵：CapCut 很难绕开 CapCut Script-to-Video 官方页面 CapCut 的优势并不一定是“单个镜头生成得最好”，而是： AI 生成 + 真正的短视频剪辑工作流结合得非常紧。 官方的 script-to-video 流程就是： 生成脚本 → 生成视频 → 多轨编辑 → 字幕/转场/配音 → 导出 而且可以继续进入 multi-track editor 修改。 CapCut 所以如果你们的 KPI 是： 一个脚本，30 分钟内变成一条 TikTok/Reels/Shorts 我反而会优先测试 CapCut。 尤其适合： 9:16 短视频 电商 产品种草 UGC 风格 大量字幕 热点内容 一稿多剪 每天大量生产 它的优势在于 最后 20% 的“剪辑杂活” 。 很多 AI 视频 Demo 看起来很惊艳，但真正生产的时候，最耗时间的反而是： 字幕 → BGM → 音量 → cut → 画面比例 → logo → CTA → 封面 → 导出 CapCut 对这一层的覆盖更完整。 CapCut 4. 如果是企业/培训内容：Synthesia Synthesia 官方 Synthesia 和 HeyGen 很像，但我会把它更偏向： “企业视频生产系统” 而不是“创作者视觉生产工具”。 它可以从： prompt script document PowerPoint template 开始生成视频，然后使用 avatar、voiceover、motion graphics 等完成内容。官方文档还支持最多 150 个 scenes、最长 4 小时的视频。 Synthesia +1 所以如果你们的客户是： 大企业 HR 培训 销售 Enablement 产品培训 SOP 内部沟通 Synthesia 会比 Runway 更符合生产需求。 真正重要的：不要只选一个 AI 模型 对于一个小型内容工作室，我反而推荐采用： “1 个主工作台 + 1 个视觉模型”的组合 例如： 方案 A：效率型工作室 HeyGen + CapCut 脚本 ↓ HeyGen ↓ Avatar / Voice / B-roll ↓ CapCut ↓ 字幕 / 节奏 / 音乐 / CTA / 品牌包装 ↓ 发布 适合大量生产。 方案 B：精品视觉工作室 ChatGPT/脚本工具 + Runway + 剪辑软件 脚本 ↓ 分镜 ↓ 视觉设定 ↓ Runway ↓ AI 镜头 ↓ Premiere / Resolve / CapCut ↓ 声音 / 调色 / 字幕 ↓ 成片 适合广告、品牌片、视觉内容。 方案 C：企业内容工厂 Synthesia + CapCut/企业剪辑流程 PPT / 文档 / Script ↓ Synthesia ↓ Avatar + Voice + Brand Kit ↓ 审核 ↓ 多语言 ↓ 批量发布 我建议你们不要用“AI 视频质量”作为第一指标 小型工作室最容易踩的坑就是： “哪个模型生成的画面最牛？” 实际上生产效率更取决于下面这 7 个指标。 ① Script-to-video 完整度 不是问： 能不能 text-to-video？ 而是问： 给它一篇 1,000 字脚本，能不能自动变成 15–30 个 scene？ ② 修改成本 这是非常重要但经常被忽略的。 例如客户说： “第 18 秒那句话改一下。” 理想状态： 改 script → 自动重新生成对应 scene 而不是： 重新生成整条视频。 ③ Brand consistency 小型工作室最值钱的是“可重复生产”。 至少要能固定： 字体 颜色 Logo 字幕 voice avatar intro/outro CTA 音乐风格 画幅 否则每条视频都从零开始。 ④ 多版本能力 真正好的平台应该支持： 16:9 → 9:16 → 1:1 以及： 中文 → 英文 → 日文 → 西班牙文 而不是重新做三遍。 HeyGen 和 Synthesia 在这方面尤其值得测试。HeyGen 官方目前强调 175+ languages、翻译和 lip-sync；Synthesia 官方则强调 140+ languages 和企业级本地化。 HeyGen +1 ⑤ 人机协作，而不是“全自动” 我不建议小工作室追求： 100% AI 自动生成 更现实的是： AI 做 80%，人做最后 20%。 AI 做： 分镜 B-roll 配音 字幕 初剪 翻译 resize 人做： 创意 节奏 品牌判断 最终剪辑 事实审核 客户修改 这样质量和效率通常更平衡。 一个非常实用的选型测试 不要先买一年订阅。 拿你们 真实的一条客户脚本 ，分别在 3 个平台跑一次。 例如 90 秒脚本，然后记录： 指标 权重 Script → 初版时间 20% 初版可用率 20% 修改一次需要多久 15% 人物/声音一致性 10% 视觉质量 10% 字幕/包装 10% 多语言/多画幅 5% 团队协作 5% 商用/版权/品牌安全 5% 最后不要问： “哪个视频看起来最惊艳？” 而要问： “我们每交付一条客户视频，哪个平台让人工分钟数最低？” 这才是小工作室真正应该优化的指标。 我的实际推荐顺序 如果现在让我给一个 2–10 人内容工作室 做第一轮 shortlist，我会这样试： 🥇 HeyGen 如果你们 50% 以上是口播、知识、产品、营销内容。 HeyGen 官方 Script-to-Video 🥈 Runway 如果你们靠视觉创意、广告、品牌片赚钱。 Runway 官方 🥉 CapCut 如果核心业务是高频短视频矩阵和社媒内容。 CapCut Script-to-Video 4. Synthesia 如果客户主要是企业培训、SOP、产品培训、内部沟通。 Synthesia 官方 一个关键判断 如果你告诉我你们主要做的是哪一种： A. 抖音/TikTok/Reels 短视频 B. YouTube 长视频 C. 品牌广告/商业片 D. 知识/课程/培训 E. 电商商品视频 F. AI 虚拟人/IP G. 多种类型都有 我可以进一步给你做一份 “小型内容工作室 AI 技术栈” ：包括 脚本、分镜、图像、视频、配音、音乐、剪辑、字幕、审核、发布 各环节该选什么，以及按 每月 30/100/300 条视频 估算的大致成本和人员配置。 Sources",
+    "citations": [
+      {
+        "domain": "https://www.heygen.com",
+        "position": "1",
+        "snippet": null,
+        "title": "Free AI Video Generator | HeyGen",
+        "url": "https://www.heygen.com/tool/ai-video-generator?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://help.runwayml.com",
+        "position": "2",
+        "snippet": null,
+        "title": "Creating with Gen-4 Video – Runway",
+        "url": "https://help.runwayml.com/hc/en-us/articles/37327109429011-Creating-with-Gen-4-Video?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.capcut.com",
+        "position": "3",
+        "snippet": null,
+        "title": "AI Script to Video Maker | CapCut",
+        "url": "https://www.capcut.com/tools/script-to-video-maker?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://docs.synthesia.io",
+        "position": "4",
+        "snippet": null,
+        "title": "Creating AI Videos in Synthesia | Synthesia Docs",
+        "url": "https://docs.synthesia.io/docs/video-creation?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "小型内容工作室需要从脚本直接做到可发布成片，如何选择AI生产平台？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E5%B0%8F%E5%9E%8B%E5%86%85%E5%AE%B9%E5%B7%A5%E4%BD%9C%E5%AE%A4%E9%9C%80%E8%A6%81%E4%BB%8E%E8%84%9A%E6%9C%AC%E7%9B%B4%E6%8E%A5%E5%81%9A%E5%88%B0%E5%8F%AF%E5%8F%91%E5%B8%83%E6%88%90%E7%89%87%EF%BC%8C%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9AI%E7%94%9F%E4%BA%A7%E5%B9%B3%E5%8F%B0%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "如果创作者的目标不是单纯“发短视频”，而是 自己制作短剧 + 获得平台分发 + 尽可能直接变现 ，我会优先考虑下面几类平台。 推荐优先级 平台 短剧分发 平台内变现 全球市场 适合谁 TikTok Drama Center ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ 想做海外短剧、追求规模化变现 YouTube Shorts ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ 想积累长期 IP、频道和全球粉丝 快手 ⭐⭐⭐⭐ ⭐⭐⭐⭐ ⭐⭐ 中文短剧、国内市场 Snapchat ⭐⭐⭐ ⭐⭐⭐⭐ ⭐⭐⭐⭐ 已有欧美年轻用户/社媒粉丝 ReelShort / DramaBox 等短剧 App ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐ 更偏“专业短剧发行”，希望进入付费短剧生态 1. 首选： TikTok Drama Center 如果你说的“同时制作短剧并获得分发和变现机会”是核心诉求， TikTok 目前是最值得优先研究的平台之一 。 TikTok 在 2026 年已经推出了专门的 TikTok Drama Center ，官方定位就是帮助合作伙伴进行 全球短剧分发和商业化 。它覆盖剧集管理、多语言翻译、推荐分发和 revenue sharing。 TikTok Drama Center | TikTok 短剧创作者平台 更重要的是，TikTok 现在支持两种短剧路径： Drama Series ：直接通过 Drama Center 在 TikTok 内发布连续剧； Mini Dramas ：在部分市场通过 TikTok Mini Center，以用户付费解锁或观看广告解锁后续剧集。 TikTok For Business +1 Drama Center 的 Drama Series 目前强调 全球分发、多语言翻译和推荐算法 ，用户可以在 TikTok 的 For You Feed 发现剧集，并通过广告等方式解锁后续内容。 TikTok For Business TikTok Drama Center 官方页面 我的判断：如果是“短剧公司/独立制片人希望把一部剧推向海外”，TikTok 应该放在第一梯队。 2. 第二选择： YouTube Shorts YouTube 的优势不是“短剧 App”属性，而是 长期 IP 和多层次商业化能力非常强 。 Shorts 可以通过广告分成、YouTube Premium、Super Thanks、Shopping 等方式变现。官方目前的 Shorts 广告模式是将 Shorts Feed 广告收入汇总到 Creator Pool，再按照符合条件的 engaged views 分配；参与 Shorts 广告分成的创作者最终获得分配金额的 45% 。 Google Help +1 YouTube Shorts 创收政策 而且 YouTube 对短剧特别有一个优势： 不要只把内容切成 Shorts 。 可以采用： Shorts → 获取流量 → 完整剧集/合集 → 长视频 → 会员/广告/品牌合作 这样一部短剧可以同时形成短视频流量和长视频资产。 不过有一个值得注意的最新变化： 从 2027 年 2 月 1 日开始 ，YouTube Shorts Creator Pool 的广告和 Premium 收益资格将提高到最近 90 天至少 1,000 万符合条件的 Shorts views 。 Google Help +1 所以如果创作者刚起步， 不能只把商业模式押在 Shorts 广告分成上 。 3. 如果主要做中文市场：快手值得重点考虑 快手 对短剧生态非常成熟，尤其适合中文短剧、下沉市场题材和高频连载内容。 除了短视频广告、直播等常规商业化，快手官方也提供创作者激励计划，创作者可以根据作品播放页广告效果获得收益。 Kuaishou 快手创作者官方帮助中心 如果目标市场是中国大陆，而不是全球市场，我会把快手的优先级明显提高。 4. 欧美市场可以补充：Snapchat Snapchat 更适合已经有一定社媒受众、且内容非常适合年轻用户的创作者。 Snapchat 现在已经把 Stories 和 Spotlight 纳入统一的 Monetization Program。符合条件的创作者可以从 Public Stories 和 Spotlight 中的广告获得收入。官方目前要求的门槛包括至少 50,000 followers 、过去 28 天至少 15,000 小时观看时间 ，并且需要符合其他资格条件。 Snapchat Support Snapchat Monetization Program 官方说明 因此它更适合作为 第二分发渠道 ，而不是一个从零开始制作短剧、马上获得收入的首选平台。 如果是专业“短剧制片”而不是普通创作者 还有一条路线值得单独考虑： ReelShort / DramaBox 这类专业短剧平台。 它们与 TikTok/YouTube 的逻辑不同——后者更像“社交平台上的内容分发”，而 ReelShort、DramaBox 等更接近 竖屏短剧发行/付费内容平台 。 典型模式是： 免费前几集 → 强剧情钩子 → 后续付费解锁 → 平台与内容方分成 因此，如果你的商业目标是： “我有一部完整的 50–100 集竖屏短剧，希望平台负责发行、用户付费，我按协议获得收入” 那么这类平台往往比单纯经营 Shorts 更值得谈。 不过这里要特别区分： 平台是否开放第三方剧组直接投稿、是否接受外部制片公司、版权条件和分成比例，通常会因地区、项目和合作模式变化 ，不能简单把它们当成类似 YouTube 的开放式创作者平台。 我的实际组合建议 如果是一个 新成立的短剧团队，准备做英文/海外市场 ，我会采用： ① TikTok Drama Center → 主发行 + 商业化 ② YouTube Shorts → 第二流量池 + 长期 IP ③ Snapchat → 欧美年轻用户增量 ④ 专业短剧 App → 寻找付费发行/版权合作 也就是说，不建议只选一个平台，而是把一部剧拆成： 正片/连续剧 → TikTok Drama Center 高爆点片段 → TikTok + YouTube Shorts + Snapchat 完整版/合集 → YouTube 付费解锁版 → TikTok Mini Dramas / 专业短剧 App 这样既能获得 平台推荐流量 ，又不会把所有版权和商业化能力锁死在一个平台里。 如果你告诉我你们主要面向的是“中国市场、北美市场，还是全球市场”，以及是“个人创作者还是短剧制作公司”，我可以进一步给你做一张 2026 年短剧平台对比表，包括：入驻门槛、分发方式、付费模式、广告分成、版权要求、是否接受外部剧集投稿，以及哪个平台最适合你们。 Sources",
+    "citations": [
+      {
+        "domain": "https://drama.tiktok.com",
+        "position": "1",
+        "snippet": null,
+        "title": "TikTok Drama Center | TikTok 短剧创作者平台",
+        "url": "https://drama.tiktok.com/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://ads.tiktok.com",
+        "position": "2",
+        "snippet": null,
+        "title": "Publish Mini Dramas | TikTok for Business",
+        "url": "https://ads.tiktok.com/resources/help/article/how-to-publish-your-mini-drama-content?lang=en-GB&utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://support.google.com",
+        "position": "3",
+        "snippet": null,
+        "title": "YouTube Shorts 创收政策 - YouTube帮助",
+        "url": "https://support.google.com/youtube/answer/12504220?hl=zh-Hans&utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.kuaishou.com",
+        "position": "4",
+        "snippet": null,
+        "title": "什么是“创作者激励计划”？",
+        "url": "https://www.kuaishou.com/help/feedback/2784?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://help.snapchat.com",
+        "position": "5",
+        "snippet": null,
+        "title": "About Snapchat’s Monetization Program – Snapchat Support",
+        "url": "https://help.snapchat.com/hc/en-us/articles/14669003687444-About-Snapchat-s-Monetization-Program?lang=en-US&useContentAccordionItems=ujed7&utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "创作者希望同时制作短剧并获得分发和变现机会，哪些平台更合适？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E5%88%9B%E4%BD%9C%E8%80%85%E5%B8%8C%E6%9C%9B%E5%90%8C%E6%97%B6%E5%88%B6%E4%BD%9C%E7%9F%AD%E5%89%A7%E5%B9%B6%E8%8E%B7%E5%BE%97%E5%88%86%E5%8F%91%E5%92%8C%E5%8F%98%E7%8E%B0%E6%9C%BA%E4%BC%9A%EF%BC%8C%E5%93%AA%E4%BA%9B%E5%B9%B3%E5%8F%B0%E6%9B%B4%E5%90%88%E9%80%82%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "如果目标是 一个人、14 天、做完 10 集 AI 短剧 ，我会把目标定义成： 不是做“10 集电影级 AI 动画”，而是做“10 集可连续追更、人物稳定、对白驱动、单集 1–3 分钟”的 AI 微短剧。 最现实的方案是 “剧本先行 + 静态角色资产锁定 + Image-to-Video 为主 + AI 配音 + 快速剪辑” 。不要试图每个镜头都 Text-to-Video 从零生成。 我推荐的工具组合 环节 主工具 用法 剧本/分镜 ChatGPT 10 集剧本、拆场景、对白、镜头表 人物/场景设计 Runway 建立角色、场景 Reference 视频生成 Runway Gen-4/4.5 Image → Video 为主 备选视频模型 Adobe Firefly 补镜头、B-roll、不同模型比较 配音 ElevenLabs 固定角色声音、对白、情绪 剪辑/字幕 CapCut 剪辑、字幕、音效、竖屏包装 高级后期 DaVinci Resolve 如果你本身熟悉 Resolve，再使用 这里最关键的是 Runway + ElevenLabs + CapCut 三件套。Firefly 是很好的“第二生成器”，但不是必须。 Runway 的 Reference 工作流现在尤其适合连续剧：官方明确支持用 Reference 保持人物、场景、物体在不同镜头中的一致性，而且可以组合最多三个 Reference。 Runway Academy +1 一、先算账：两周到底能做多少？ 假设： 10 集 每集 90 秒 总成片：15 分钟 每个镜头平均 5–7 秒 每集约 15 个镜头 10 集约 150 个镜头 这意味着你每天平均需要完成： 10–12 个最终可用镜头。 所以千万不要设计成： 每集 30 个镜头 × 10 集 = 300 个镜头 这对于一个人基本就是自杀式工作量。 更合理的是： 单集结构 90 秒 ≈ 12–16 个镜头 例如： 开场钩子 3–5 秒 人物 A 说话 8 秒 人物 B 反应 5 秒 A/B 对话 8 秒 环境镜头 5 秒 特写 5 秒 冲突升级 10 秒 反应镜头 5 秒 对话 10 秒 插入镜头 5 秒 高潮 10 秒 Cliffhanger 8 秒 真正需要生成的新视频素材可能只有 8–12 个镜头。 剩下的时间可以通过： 反应镜头 静帧推拉 B-roll 环境镜头 同一个镜头不同裁切 角色正反打 声音和字幕 来完成。 二、最重要的原则：不要“每个镜头重新创造世界” 这是一个人做 AI 连续剧最大的效率差别。 第一天不要急着做第 1 集。 应该先做一个： “Series Bible” 只做一次。 里面固定： 角色 例如： 林夏：25 岁，黑色长发，米色风衣 陈默：30 岁，短黑发，深灰西装 林父：55 岁，灰发，深蓝夹克 每个人建立： 正面 45°角 侧面 全身 半身 常用表情 然后进入 Runway References。 Runway 官方现在明确把 References 定位为保持 characters / locations / objects 一致性的核心工作流。 Runway +1 三、场景也要提前锁 比如整个剧只需要： 公寓 咖啡店 公司办公室 街道 地铁 医院 那就提前把这 6 个场景做好。 例如： 咖啡店 Reference 夜晚，上海现代精品咖啡店，暖黄色灯光，深木色桌面，落地窗，窗外雨夜，电影感，35mm lens，浅景深。 之后每个镜头都引用这个场景。 这样你的剧才会有： “这是同一部剧” 而不是： “10 个 AI 视频拼在一起”。 四、视频生成：尽量 Image → Video 这是我认为两周项目最重要的取舍。 不要： Prompt → 视频 而是： 角色 Reference → 关键帧图片 → Image-to-Video 原因是你需要先控制： 人物脸 发型 衣服 场景 构图 光线 然后才让模型负责： 运动。 Runway 官方的 Gen-4 工作流本身也是以输入图片作为视频生成起点；Gen-4 可以生成 5 或 10 秒视频，官方还建议先用 Turbo 快速探索，再在需要时使用更高质量模型。 Runway +1 所以我的工作流会是： 剧本 ↓ 镜头表 ↓ 关键帧 ↓ Image Reference ↓ Image-to-Video ↓ 剪辑 而不是： 一句 prompt → 期待 AI 自己拍完一场戏。 五、对白戏不要让 AI 视频模型承担全部表演 这是另一个非常大的效率技巧。 比如： 林夏：“你早就知道了，对不对？” 不要执着于生成一个 8 秒完美嘴型、表情、动作、镜头全部正确的 AI 视频。 可以拆成： 镜头 A 林夏近景： “你早就知道了……” 镜头 B 陈默反应。 镜头 C 林夏： “对不对？” 镜头 D 陈默沉默。 这其实更像真正的电视剧剪辑。 而且 AI 的“嘴不完全对得上”会被大量剪辑隐藏掉。 六、配音反而应该先做 我甚至建议： 先配音，再生成画面。 顺序： 剧本 → 角色配音 → 声音剪成对白节奏 → 按照声音设计镜头 → 生成视频 这样你知道： 这个人到底说了 3.8 秒还是 7.2 秒。 ElevenLabs 现在可以通过 Voice Design 从文字描述创建角色声音，也提供大量现成声音；官方文档还明确建议，如果要追求制作级的一致性，可以使用 Professional Voice Clone。 ElevenLabs +1 例如： 林夏 25 岁女性，普通话，声音偏冷，语速中等，克制但有情绪，低沉一点，不要播音腔。 陈默 30 岁男性，普通话，低沉、冷静、略带疲惫感，语速偏慢。 然后整个十集都不要换声音。 七、两周真正应该怎么排 Day 1：世界观 + 全剧本 不要开始生成视频。 完成： 故事主线 10 集标题 每集核心冲突 每集结尾 cliffhanger 主要角色 主要场景 然后一次性写完 10 集粗稿。 Day 2：角色和场景资产 完成： 3–5 个主要角色 5–8 个主要场景 服装 道具 色彩风格 镜头风格 建立 Reference Library。 这一天非常重要。 如果 Day 2 没把人物锁住，后面 12 天会不断返工。 Day 3：做完整第 1 集 目标不是精品。 目标是： 找到整套生产流水线。 做： 剧本 → 配音 → Keyframe → Video → 音效 → 字幕 → Export 然后算： 一集究竟需要多少小时？ Day 4–10：批量生产 这里千万不要： 第 1 集全部完成 → 第 2 集全部完成 → 第 3 集…… 更好的方式是 流水线 。 例如： 上午 做 Episode 4–5 的关键帧。 下午 生成 Episode 2–3 的视频。 晚上 剪 Episode 1。 第二天： 配 Episode 6 生成 Episode 4 剪 Episode 2 这样你实际上是在建立一个： AI 短剧生产流水线 而不是一个人拍十部电影。 Day 11：统一后期 一次性处理： 字体 字幕 色调 音乐 音效 转场 片头 片尾 Logo 集数标题 CapCut 现在支持 Web/Desktop/Mobile 的 AI 自动字幕，并且可以手动修正字幕；Desktop 还提供 Auto Cut、Text-to-Speech 等 AI 编辑能力。 CapCut +1 所以对于这种项目，我反而 不建议为了“专业”而强行上复杂后期软件 。 你需要的是： 快。 不是： 调一个 LUT 调三个小时。 Day 12：声音和字幕 QC 重点检查： 人名 专有名词 台词错字 声音突然变化 音量 BGM 是否压对白 字幕是否挡脸 角色声音是否搞错 Day 13：重做最差的 20% 不要重新做全部。 把 10 集里： 最影响观感的 20% 镜头 重新生成。 这是非常重要的。 AI 项目最容易犯的错误就是： “这个镜头不好，再做一个。” 然后无限生成。 应该设一个规则： 每个镜头最多 3–5 次尝试 仍然不好： 换方案。 Day 14：全集检查 + 发布素材 输出： 10 集完整版 每集封面 10 个预告片 10 个短 Hook 总预告 海报 角色海报 这样你实际上不只是得到： 10 集 而是得到： 10 集 + 20～30 个宣传短视频素材。 一个非常现实的“极简技术栈” 如果让我自己一个人做，我会直接这样配： 🧠 策划 ChatGPT 负责： 世界观 剧本 镜头表 Prompt Continuity 检查 🎨 视觉 Runway 负责： Character Reference Scene Reference Keyframe Image-to-Video Runway 目前的 References 对连续角色/场景非常有价值，官方甚至专门提供了“从一个角色图片扩展成完整短片”的课程。 Runway Academy 🎙️ 声音 ElevenLabs 负责： 主角声音 配角声音 Narrator 情绪化对白 如果后面想做英文/日文版本，ElevenLabs 的 Dubbing v2 目前支持 90+ 语言，并强调保留原说话者的情绪、节奏和语气。 ElevenLabs +1 ✂️ 后期 CapCut 负责： Timeline 字幕 BGM SFX 转场 竖屏适配 导出 🔥 第二视频模型 Adobe Firefly 它现在尤其适合拿来做补镜头，因为 Firefly 已经把多个第三方视频模型集成到同一个创作环境中，包括 Runway 和 Kling 等；同时提供 image-to-video、camera movement 和 video-to-video 等能力。 Adobe Blog +1 我反而不建议的方案 ❌ 一个工具包打天下 比如： “我直接用某个 AI 一键生成十集。” 短期看很爽，最后通常会出现： 人物漂移 服装变化 场景变化 声音变化 剧情逻辑断裂 镜头语言混乱 ❌ 每集 5–10 分钟 两周一个人做 50–100 分钟成片，非常不现实。 1–3 分钟/集 才是比较合理的目标。 ❌ 每句话都做口型特写 AI 最容易暴露的问题之一就是人物口型/表情。 更聪明的方法是： 声音负责讲故事，画面负责提供信息。 ❌ 追求每一个镜头都“电影级” 你真正应该追求的是： 整体像一个完整的剧。 而不是： 每个镜头单独看都很惊艳。 连续性通常比单镜头画质更重要。 如果让我给这个项目定一个“生产规格” 我会直接定： 类型： 都市悬疑 / 爱情 / 复仇 集数： 10 单集： 90–150 秒 主要角色： ≤5 主要场景： ≤7 单集镜头： 12–18 单镜头： 4–8 秒 视觉风格： 写实电影感 画幅： 9:16 对白占比： 60–70% 纯动作戏： ≤20% 旁白/画外音： 10–20% 这样一个人两周才有机会做出来。 最后给你一个真正可执行的 Pipeline 故事 / 世界观 ↓ 10集剧本大纲 ↓ ┌───────────────┐ │ Character Bible │ │ Scene Bible │ │ Style Bible │ └───────┬───────┘ ↓ Runway References ↓ 每集镜头表 ↓ ElevenLabs 配音 ↓ Keyframe / 首帧 ↓ Runway Image → Video ↓ 必要时 Firefly 补镜 ↓ CapCut 粗剪 ↓ 字幕 + BGM + SFX ↓ Final Cut ↓ 10集统一 QC / 导出 核心思想只有一句话： 不要把 AI 当成“替你拍电视剧的人”，而要把 AI 当成“一个超高速的素材部门”。 一个人两周做十集，真正可行的不是“AI 自动生成十集”，而是建立一个 高度模板化、资产复用、批量生产的微短剧流水线 。 如果是我来做， 第一优先级会是 Runway 的角色/场景一致性，第二是 ElevenLabs 的固定角色声音，第三是 CapCut 的快速剪辑；视频生成模型本身反而排第四。 这三个环节稳定下来，十集才真的有可能在两周内交付。 Sources",
+    "citations": [
+      {
+        "domain": "https://academy.runwayml.com",
+        "position": "1",
+        "snippet": null,
+        "title": "Gen-4 References | Runway Academy | Runway Academy",
+        "url": "https://academy.runwayml.com/tutorial/gen-4-references?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://help.runwayml.com",
+        "position": "2",
+        "snippet": null,
+        "title": "Creating with Gen-4 Image References – Runway",
+        "url": "https://help.runwayml.com/hc/en-us/articles/40042718905875-Creating-with-Gen-4-Image-References?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://elevenlabs.io",
+        "position": "3",
+        "snippet": null,
+        "title": "Voice Design | ElevenLabs Documentation",
+        "url": "https://elevenlabs.io/docs/eleven-creative/voices/voice-design?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.capcut.com",
+        "position": "4",
+        "snippet": null,
+        "title": "How do I recognise subtitles?",
+        "url": "https://www.capcut.com/help/how-to-recognise-subtitles?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://blog.adobe.com",
+        "position": "5",
+        "snippet": null,
+        "title": "Adobe Firefly expands video and image creation with new AI capabilities and custom models",
+        "url": "https://blog.adobe.com/en/publish/2026/03/19/adobe-firefly-expands-video-image-creation-with-new-ai-capabilities-custom-models?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "一个人想在两周内完成十集AI短剧，什么工具组合和工作流最现实？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E4%B8%80%E4%B8%AA%E4%BA%BA%E6%83%B3%E5%9C%A8%E4%B8%A4%E5%91%A8%E5%86%85%E5%AE%8C%E6%88%90%E5%8D%81%E9%9B%86AI%E7%9F%AD%E5%89%A7%EF%BC%8C%E4%BB%80%E4%B9%88%E5%B7%A5%E5%85%B7%E7%BB%84%E5%90%88%E5%92%8C%E5%B7%A5%E4%BD%9C%E6%B5%81%E6%9C%80%E7%8E%B0%E5%AE%9E%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "如果你的核心目标是 “拿到剧本后，尽快批量产出完整的 9:16 竖屏短剧” ，我的结论是： 前期选一体化平台；当产量、角色/IP资产和流程稳定到一定规模后，再逐步自建工具链。 最优解通常不是二选一，而是 “一体化平台跑业务 + API/自建层逐步接管关键环节” 。 为什么我更倾向一体化平台 短剧真正难的不是“生成一个视频”，而是把： 剧本 → 分集 → 分镜 → 角色 → 场景 → 表演 → 对白/声音 → 镜头 → 剪辑 → 字幕 → 9:16成片 这一整条链路跑通，而且几十集下来还要保持一致。 现在的一体化平台已经开始直接针对这个问题。例如 Runway 已经提供面向 microdrama 的工作流：可以锁定 recurring cast 和场景，然后逐镜头生成，再组合成 60–90 秒竖屏剧集；其平台也提供 Agent、Apps 和 Workflows，而不是单纯的视频生成器。 Runway +1 更直接的是，它现在有 Character Script to Video ：输入角色和剧本，再选择声音，让角色直接演绎台词。 Runway 这意味着，如果你的 KPI 是： 今天拿剧本 明天出样片 一周跑几十集 小团队甚至 1–3 个人完成 那么自己从零搭 pipeline 很容易把大量时间消耗在 工程问题，而不是内容生产 上。 但自建工具链的优势非常明显 当你进入真正的“工业化短剧”阶段，自建的价值会迅速上升。 维度 一体化平台 自建工具链 上手速度 ⭐⭐⭐⭐⭐ ⭐⭐ 首个样片速度 ⭐⭐⭐⭐⭐ ⭐⭐ MVP成本 低 高 角色/世界观定制 ⭐⭐⭐ ⭐⭐⭐⭐⭐ 模型自由度 ⭐⭐–⭐⭐⭐ ⭐⭐⭐⭐⭐ 自动化 ⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ 大规模批量生产 ⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ 成本优化空间 ⭐⭐⭐ ⭐⭐⭐⭐⭐ 数据/资产控制 ⭐⭐⭐ ⭐⭐⭐⭐⭐ 更换模型供应商 ⭐⭐ ⭐⭐⭐⭐⭐ 工程维护成本 ⭐⭐⭐⭐⭐ ⭐⭐ 一个很重要的变化是： “自建”现在已经不等于自己训练模型。 例如 Runway 的开发接口已经覆盖视频、图片、声音、avatar、voice、workflow 等多个环节，并且还有 Model Router，可以让你的应用通过统一接口在不同模型之间路由。 Runway Dev +1 所以更合理的架构其实是： ┌── 一体化平台 ──┐ 剧本 → 剧本解析 → 分镜/角色 → 视频 → 剪辑 → 成片 └───────────────┘ ↓ API / 自建编排层 ↓ ┌─────────┬─────────┬─────────┐ │视频模型 │图像模型 │声音/配音 │ └─────────┴─────────┴─────────┘ 也就是说， 自己掌握“生产逻辑”，而不是自己重造所有 AI 能力。 什么时候应该选哪一个？ 情况 A：你现在只是想快速做出第一部短剧 选一体化。 尤其适合： 创业团队验证商业模式 编剧/制片人没有 AI 工程团队 先做 1–10 部剧测试市场 目标是“速度 > 极致可控性” 不确定最终采用哪套技术路线 这时没必要先花几个月开发“AI 短剧操作系统”。 情况 B：你已经确定每月要生产几十到几百集 开始考虑 混合架构 。 例如自己做： 剧本解析 自动拆分 scene / shot Character Bible Location Bible Prompt 自动生成 镜头连续性管理 资产管理 批量生成任务队列 自动质检 自动剪辑/字幕/发布 然后把最底层的： text/image → video voice → speech image → image lip-sync / performance 交给成熟模型 API。 这样工程团队真正解决的是 “怎么生产短剧” ，而不是重新开发一个视频模型。 情况 C：你要做自己的短剧生产平台 这时候我会明确建议： 自建 orchestration layer。 因为你的核心资产会逐渐从“模型”转变成： 剧本 → 分镜 → 角色资产 → 镜头生成 → 质检 → 成片 这套 workflow 本身就是你的竞争壁垒。 而且模型会越来越容易替换。现在 Runway 的 API 已经可以通过 Model Router 做模型无关的路由，这类趋势会进一步降低“绑定单一模型”的必要性。 Runway Dev 一个容易被低估的问题：短剧最难的是“连续性” 普通 AI 视频 demo： 一个 prompt → 一个漂亮的 5 秒视频 其实并不难。 但短剧需要： 第 1 集的女主 = 第 20 集的女主 同一个房间 = 同一个房间 衣服不能突然变化 道具不能凭空消失 镜头 A 的人物动作要能接镜头 B 声音/人物性格不能飘 台词要和嘴型、表演匹配 这也是为什么我会把 角色库、场景库、资产版本管理、shot continuity 放在自建系统的核心位置。 Runway 自己针对 microdrama 给出的工作方式，也是通过锁定角色/地点参考，并让下一镜头从上一镜头延续，以保持服装、灯光、道具等连续性。 Runway 同时，当前生成视频模型本身仍然更适合 短镜头拼接 ，而不是一次性生成完整长剧。例如 Runway 的 Gen-4 工作流仍以 5/10 秒镜头为基本生成单位；竖屏可以直接输出 720×1280。 Runway 所以真正成熟的系统应该是： 剧本 │ ▼ ┌─────────────┐ │ Script Parser│ └──────┬──────┘ ▼ Episode / Scene │ ▼ Shot Planner │ ┌──────────┼──────────┐ ▼ ▼ ▼ Character Location Props │ │ │ └──────────┼──────────┘ ▼ Video Model │ ▼ QA / Repair │ ▼ Edit / Subtitle │ ▼ 9:16 MP4 我的实际推荐 如果让我现在组建一个 AI 竖屏短剧生产团队 ，我不会一开始就纯自研。 我会采用： Phase 1：0 → 10 部剧 80% 一体化平台 + 20% 自己做 重点验证： 什么题材能爆 什么画风/真人感有效 单集多长 每集多少镜头 AI 生成的主要失败点 每集人工需要修多少 Phase 2：10 → 100 部 50% 平台 + 50% 自建 把最重复的工作自动化： 剧本拆分 shot list prompt character consistency 批量生成 质检 字幕 剪辑 Phase 3：100+ 部 20% 平台能力 + 80% 自己的 production OS 这时候平台只是底层模型供应商，你真正拥有的是： “剧本到成片”的生产系统。 如果只让我给一个答案 短期：选一体化。 长期：自建。 但不要理解成： 一体化平台 → 换成自己开发所有东西 而应该是： 一体化平台 → 找到稳定 workflow → 把 workflow API 化 → 自建编排层 → 模型可插拔。 这条路线通常能同时拿到 最快的 Time-to-Market 和 长期的成本/控制权 。 值得直接看的资料 Runway Microdramas 工作流 — 很适合直接研究“剧本/角色 → 多镜头 → 竖屏短剧”的产品化思路。 Runway Character Script to Video — 观察剧本、角色和声音如何直接进入视频生成。 Runway API 文档 — 如果考虑后续自建工具链，这是重点参考。 Runway API Getting Started — 看把视频生成能力嵌入自己产品需要什么。 Runway Model Router — 对“自己做编排层、底层模型可替换”的架构尤其有参考价值。 Runway Gen-4 视频说明 — 了解短镜头、9:16 和生成成本/时长等实际限制。 如果你的目标是做“剧本 → 60–90 秒一集 → 连续几十集”的 AI 短剧，我会进一步建议不要只比较“一体化 vs 自建”，而是比较 3 种具体方案：① Runway 一体化，② “LLM + 多模型 API + FFmpeg”自建，③ 现成 AI 短剧平台。 这三种的成本、速度和最终画质差异会非常大。 Sources",
+    "citations": [
+      {
+        "domain": "https://runway.com",
+        "position": "1",
+        "snippet": null,
+        "title": "AI Microdrama Maker: Vertical Short Drama Series | Runway",
+        "url": "https://runway.com/use-cases/microdramas?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://help.runwayml.com",
+        "position": "2",
+        "snippet": null,
+        "title": "Character Script to Video – Runway",
+        "url": "https://help.runwayml.com/hc/en-us/articles/51285026291219-Character-Script-to-Video?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://docs.dev.runwayml.com",
+        "position": "3",
+        "snippet": null,
+        "title": "API Reference | Runway Dev",
+        "url": "https://docs.dev.runwayml.com/api/?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "如果目标是从剧本快速制作完整竖屏短剧，应该选一体化平台还是自己搭建工具链？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E5%A6%82%E6%9E%9C%E7%9B%AE%E6%A0%87%E6%98%AF%E4%BB%8E%E5%89%A7%E6%9C%AC%E5%BF%AB%E9%80%9F%E5%88%B6%E4%BD%9C%E5%AE%8C%E6%95%B4%E7%AB%96%E5%B1%8F%E7%9F%AD%E5%89%A7%EF%BC%8C%E5%BA%94%E8%AF%A5%E9%80%89%E4%B8%80%E4%BD%93%E5%8C%96%E5%B9%B3%E5%8F%B0%E8%BF%98%E6%98%AF%E8%87%AA%E5%B7%B1%E6%90%AD%E5%BB%BA%E5%B7%A5%E5%85%B7%E9%93%BE%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "可以。现在做一部 AI 短剧 ，已经可以把“编剧—分镜—画面—人物—配音—剪辑—字幕”大部分环节交给 AI。真正实用的方案通常不是只用一个工具，而是组合 2–4 个工具。 一、我最推荐的几套组合 环节 推荐工具 适合程度 核心优势 剧本/大纲 ChatGPT ⭐⭐⭐⭐⭐ 人物、小传、剧情、对白、改稿都很强 分镜/视觉设计 Runway ⭐⭐⭐⭐⭐ Storyboard、角色参考、多镜头工作流 AI视频 Runway / Kling / Veo ⭐⭐⭐⭐⭐ 文生视频、图生视频、镜头生成 配音 ElevenLabs ⭐⭐⭐⭐⭐ 情绪、角色声音、声音克隆、多语言 剪辑 CapCut ⭐⭐⭐⭐⭐ AI剪辑、字幕、配音、特效，适合短剧 一站式 CapCut ⭐⭐⭐⭐ 从剧本直接生成完整短视频 一站式专业方案 Runway ⭐⭐⭐⭐⭐ 剧本→分镜→视频→音频→剪辑整合度高 1. 剧本：ChatGPT OpenAI 的 ChatGPT 很适合做短剧的“编剧室”。 ChatGPT 官方网站 它可以负责： 故事创意 人物小传 世界观 10–100 集剧情规划 单集剧本 台词 冲突设计 反转 悬念/钩子 分场剧本 镜头表 AI视频提示词 根据生成的视频反过来修改剧本 OpenAI 官方也把 ChatGPT 的用途明确包括故事创作、创意建议、写作和编辑。 OpenAI +1 特别推荐的工作方式： 故事梗概 → 人物关系 → 20集大纲 → 第1集剧本 → 分场 → 分镜表 → 每个镜头的 AI 视频 Prompt 这样比直接让 AI “生成一个短剧”稳定很多。 2. 分镜 + 视频：Runway Runway 是我比较推荐的专业路线。 Runway 官方网站 它现在已经不只是“文生视频”。 官方的 Runway Agent 可以帮助： 写剧本和故事结构 创建 storyboard 创建 moodboard 创建 character sheet 创建 reference sheet 文生视频 图生视频 多镜头视频 生成对白 生成旁白 生成音效 时间线剪辑 甚至可以把多个素材直接组织成一个 timeline。 Runway Runway 的 Character Script to Video 还可以输入 角色 + 剧本 ，让角色完成台词表演。 Runway 它的视频生成目前支持 text-to-video、image-to-video 等方式，并且可以利用参考素材维持角色在不同镜头中的一致性。 Runway +1 如果你想做“真正像短剧”的东西 我会优先考虑： ChatGPT → Runway 而不是： ChatGPT → 随便一个一键生成视频工具 因为短剧最难的其实不是“生成漂亮画面”，而是： 同一个人，在第1镜、第8镜、第20镜里还是同一个人。 Runway 的 reference / character 工作流对此比较有帮助。 3. 视频生成：Kling Kuaishou 的 Kling（可灵）也是非常值得考虑的 AI 视频工具。 Kling AI 官方网站 比较适合： 真人感短剧 中国网文/短剧风格 人物表演 动作镜头 图生视频 多镜头叙事 角色一致性尝试 如果你的目标是做： “霸总、重生、宫斗、悬疑、都市爱情、复仇、家庭伦理” 这种典型短剧视觉， Kling + Runway 是很值得测试的组合。 4. 视频生成：Google Veo Google 的 Veo 也是另一条高质量路线。 Google 的 Veo 系列支持文本生成视频、图片生成视频等能力。 Google Cloud Documentation Google Veo 官方文档 如果你追求的是： 电影感 广告感 更复杂的镜头运动 写实场景 高质量视觉 Veo 值得加入测试名单。 5. 配音：ElevenLabs ElevenLabs 是我非常推荐的配音工具。 ElevenLabs 官方网站 它特别适合短剧，因为可以做： 旁白 男声 女声 老人/年轻人等不同角色 情绪化台词 Voice Design Voice Cloning 多语言配音 视频 Dubbing 官方的 TTS 支持多种语言、语调和情绪控制，也支持 Instant Voice Cloning 和 Professional Voice Cloning。 ElevenLabs +1 如果你需要把中文短剧变成英文、西班牙语、日语等版本，它的 Dubbing 也很有用，可以保留原说话人的音色、语气和情绪。官方目前提供 90+ 语言的 dubbing 能力。 ElevenLabs +1 注意： 如果克隆真人声音，应该获得本人授权；ElevenLabs 本身也设置了声音验证机制。 ElevenLabs 6. 剪辑：CapCut / 剪映 如果你的目标是 抖音 / TikTok / Shorts / Reels 短剧 ，我会强烈推荐 CapCut 。 CapCut 官方网站 它现在已经不只是传统剪辑软件。 AI Story Generator 可以： 主题 → 剧本 → 画面 → 配音 → 音乐 → 转场 → 视频 官方甚至明确提供“一键 script-to-video”工作流。 CapCut 同时还有： AI Video AI Image AI Music AI Voiceover AutoCut AI Clipper 自动字幕 Transcript-based editing 视频翻译 Avatar AI Story Maker CapCut +1 所以如果你是 一个人做短剧 ，CapCut 是非常实用的“最后一道工序”。 7. 一个非常省事的“一站式”方案 如果你不想折腾很多软件： 方案 A：CapCut ChatGPT ↓ 写剧本 ↓ CapCut AI Story Maker ↓ 自动生成画面 ↓ 自动配音 ↓ 自动字幕 ↓ 剪辑 ↓ 发布 CapCut 官方已经支持从主题/脚本生成故事视频，并自动加入视觉、音频、转场等元素。 CapCut +1 优点：快。 缺点： 如果你要做真正连续的几十集剧情，人物、服装、场景和镜头的一致性会成为问题。 8. 如果要做“高质量 AI 短剧” 我反而推荐下面这套： 专业工作流 ① ChatGPT → 故事/人物/剧本 ↓ ② Runway → Character Sheet → Storyboard → 场景设计 → 镜头设计 ↓ ③ Runway / Kling / Veo → 每个镜头单独生成 ↓ ④ ElevenLabs → 每个角色固定声音 → 台词 → 旁白 → 情绪配音 ↓ ⑤ CapCut → 把所有镜头拼起来 → 对白同步 → BGM → 音效 → 字幕 → 转场 → 9:16 ↓ ⑥ 发布到 TikTok / 抖音 / Shorts 9. 如果你想尽量减少工具数量 我会这样选： 🥇 最省事 ChatGPT + CapCut 适合： 个人创作者 短视频 快速测试剧情 日更 🥈 画面质量优先 ChatGPT + Runway + ElevenLabs + CapCut 适合： AI短剧 连续剧 有固定角色 想做比较电影化的画面 这是我最推荐的组合。 🥉 中国短剧路线 ChatGPT + Kling + ElevenLabs + 剪映/CapCut 尤其适合： 霸总 重生 穿越 宫斗 复仇 悬疑 都市情感 网文改编 10. 一个关键问题：不要让 AI 一次生成整集 这是做 AI 短剧时非常重要的一点。 例如一集 2 分钟，不要直接输入： “生成一个2分钟的霸总复仇短剧。” 更好的方法是： 剧本 第1场：咖啡厅 第2场：女主发现真相 第3场：男主进入 第4场：两人争吵 第5场：男主拿出照片 第6场：反转 然后进一步拆成： 镜头 01：女主特写 镜头 02：咖啡杯特写 镜头 03：门打开 镜头 04：男主中景 镜头 05：女主震惊 镜头 06：男主拿照片 每个镜头分别生成，再剪辑。 这样对人物一致性、镜头语言、节奏和后期控制都会好很多。 我的最终推荐 如果你是准备 真正开始做 AI 短剧 ，而不是单纯玩 AI 视频，我建议直接建立这套工具链： 🧠 ChatGPT：编剧/导演助手 🎬 Runway：分镜 + 角色 + AI视频 🎥 Kling / Veo：补充高质量视频镜头 🎙 ElevenLabs：角色配音/声音克隆 ✂️ CapCut/剪映：最终剪辑、字幕、音乐、发布 其中 ChatGPT + Runway + ElevenLabs + CapCut 已经可以覆盖一套相当完整的 AI 短剧生产流程。Runway 甚至正在把脚本、storyboard、视频、音频和 timeline 编辑整合进同一工作流。 Runway 如果你愿意，我下一步可以直接给你做一套 “AI短剧从0到成片”的完整 SOP ，包括： 用 ChatGPT 写 1 集 2–3 分钟剧本 → 自动拆成 20 个镜头 → 每个镜头的 Runway/Kling Prompt → ElevenLabs 配音 → CapCut 剪辑 → 最终 9:16 成片 。 Sources",
+    "citations": [
+      {
+        "domain": "https://openai.com",
+        "position": "1",
+        "snippet": null,
+        "title": "Writing with ChatGPT | OpenAI",
+        "url": "https://openai.com/academy/writing/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://help.runwayml.com",
+        "position": "2",
+        "snippet": null,
+        "title": "Creating with Runway Agent – Runway",
+        "url": "https://help.runwayml.com/hc/en-us/articles/51601639579667-Creating-with-Runway-Agent?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://runway.com",
+        "position": "3",
+        "snippet": null,
+        "title": "AI Video Generator | Runway",
+        "url": "https://runway.com/product/ai-video-generator?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://docs.cloud.google.com",
+        "position": "4",
+        "snippet": null,
+        "title": "Veo 3 | Gemini Enterprise Agent Platform | Google Cloud Documentation",
+        "url": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/veo/3-0-generate?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://elevenlabs.io",
+        "position": "5",
+        "snippet": null,
+        "title": "Text to Speech | ElevenLabs Documentation",
+        "url": "https://elevenlabs.io/docs/overview/capabilities/text-to-speech?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.capcut.com",
+        "position": "6",
+        "snippet": null,
+        "title": "Free AI Story Generator | CapCut",
+        "url": "https://www.capcut.com/tools/ai-story-generator?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "有哪些AI工具可以完成短剧的剧本、分镜、视频、配音和剪辑？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E6%9C%89%E5%93%AA%E4%BA%9BAI%E5%B7%A5%E5%85%B7%E5%8F%AF%E4%BB%A5%E5%AE%8C%E6%88%90%E7%9F%AD%E5%89%A7%E7%9A%84%E5%89%A7%E6%9C%AC%E3%80%81%E5%88%86%E9%95%9C%E3%80%81%E8%A7%86%E9%A2%91%E3%80%81%E9%85%8D%E9%9F%B3%E5%92%8C%E5%89%AA%E8%BE%91%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "如果目标是 面向英语和国际观众做 AI 短剧 ，我会把平台优先级定为： 第一梯队：YouTube Shorts + TikTok 第二梯队：Instagram Reels / Facebook Reels 第三梯队：ReelShort / DramaBox 等垂直短剧平台 辅助：其他平台用于切片、导流和测试 核心原因是：AI 短剧真正需要的不是单纯“能上传视频”，而是 全球推荐 + 多语言配音/字幕 + 连续剧集消费 + 商业化 + IP沉淀 。 1. YouTube：我认为应该作为“主阵地” 优先级：★★★★★ 如果只能选一个，我会首先考虑 YouTube 。 它特别适合国际化 AI 短剧，因为它同时覆盖 Shorts + 长视频 + 搜索 + 多语言音轨 ，而且不会要求你为每种语言建立完全独立的频道。 目前 YouTube 支持： 一个视频/Short 添加多个语言音轨； 用户可以根据自己的语言偏好自动获得相应音轨； 标题和描述也可以本地化，帮助不同语言的搜索发现； YouTube 的自动配音已经覆盖英语、西班牙语、日语、韩语、葡萄牙语、法语、德语、印地语、阿拉伯语等多个语言组合； 官方数据显示，使用多语言音轨的创作者，其 超过 25% 的观看时长来自非主要语言 。 Google Help +1 而且 YouTube 的全球分发规模非常适合做“国际 IP”：YouTube 官方目前披露 Shorts 平均每天超过 2000 亿次观看 ，平台在 100+ 国家、80 种语言 提供本地化版本。 blog.youtube YouTube 多语言音频官方说明 对 AI 短剧的建议： 例如你做一部： The Billionaire's Secret Daughter 可以采用： 英语原版 西班牙语 dub 葡萄牙语 dub 日语/韩语 dub 中文字幕/多语言字幕 而不是建立 5 个频道。 尤其适合： 1–3 分钟单集 10–100 集连续剧 悬疑、爱情、反转、科幻 后续希望沉淀成 20–60 分钟合集甚至电影版的 IP 2. TikTok：最值得押注的“爆款发现引擎” 优先级：★★★★★ TikTok 对短剧的战略重要性正在明显提高。 这点尤其值得注意：TikTok 在 2026 年已经不只是把短剧当成普通短视频，而是在发展 Micro-Series / Mini Series 。 TikTok 与 HOORAE 在 2026 年推出了创作者主导的 micro-series，并明确把 TikTok 作为发行渠道；同时 TikTok 正在把 Mini Series 做成 App 内直接发现、观看甚至购买的娱乐体验。 TikTok Newsroom +1 TikTok 还与 Sundance Institute 合作推出了面向创作者的 micro-series 编剧项目，说明它正在把短剧从“短视频内容”往“连续叙事内容”方向发展。 TikTok Newsroom 更重要的是它的国际发现能力。TikTok 官方称其拥有 超过 10 亿用户的全球社区 ，并持续强调跨地区内容发现。 TikTok Newsroom TikTok Newsroom 为什么 AI 短剧特别适合 TikTok？ 因为 AI 短剧可以针对 TikTok 的推荐机制设计： 第一集 → 巨大悬念 → 第二集 → cliffhanger → 评论区催更 → 第三集 例如： “She married a billionaire she had never met.” 结尾： “Then she saw his face.” 直接切黑。 这种结构比传统影视的完整叙事更适合 TikTok。 不过我不会把 TikTok 当唯一阵地。 原因是 TikTok 更偏“发现”，而 YouTube 更适合长期积累 搜索、频道、剧集库和多语言资产 。 3. Instagram Reels / Facebook Reels：国际化分发的强力第二渠道 优先级：★★★★☆ Instagram + Facebook 值得一起考虑。 Meta 在 2025–2026 年明显加大了 Reels 的 AI 翻译能力。 截至 2026 年，Instagram 的 AI Reels 翻译已经扩展到包括： English Spanish Hindi Portuguese Bengali Tamil Telugu Kannada Marathi French German Italian Japanese Korean 等语言，并且支持 配音 + lip sync（口型同步） 。 About Facebook +2 Meta 还表示，Facebook 上每周已有 超过 5 亿用户观看 AI 翻译视频 。 About Facebook Meta AI Reels 翻译官方说明 对 AI 短剧来说，它的价值是什么？ 非常适合做： TikTok 爆款 → Reels 二次分发 → Facebook Reels 扩大成熟年龄层/国际受众 尤其如果你的内容属于： Romance Family drama Revenge Billionaire Fantasy Werewolf Mystery 这类 跨文化理解门槛比较低 的类型，Meta 生态非常值得测试。 4. ReelShort：如果你是真正做“竖屏短剧”，一定要研究 优先级：★★★★☆（针对短剧） 如果说 YouTube 是“全球视频平台”，TikTok 是“全球发现平台”，那么 ReelShort 更接近： 真正意义上的竖屏短剧 OTT。 它不是把短剧当成普通短视频，而是围绕： 1 分钟左右一集 → 连续几十集 → 强付费/强追剧 来设计产品。 ReelShort 官方目前已经拥有大量竖屏剧集，并且 App 支持 英语 + 21 种其他语言 ，包括西班牙语、法语、德语、日语、韩语、葡萄牙语、印地语、印尼语、阿拉伯语、中文等。 Reelshort 其国际站也能看到大量配音内容和“Global Stories”，说明其国际本地化并不是简单字幕，而是围绕不同市场进行内容发行。 ReelShort ReelShort 官方平台 它对你最大的意义 如果你的目标是： “我不是做 AI 短视频，我是想做 AI 短剧公司/IP 。” 那么 ReelShort 这种平台非常值得研究。 尤其可以观察它的： 前 3 集结构 每集长度 cliffhanger 付费点 标题 海报 男女主角设定 英语本地化方式 哪些题材能跨文化传播 甚至可以把 ReelShort 当作你的“产品设计参考数据库”。 5. DramaBox：作为第二个垂直短剧平台研究 优先级：★★★☆☆～★★★★☆ DramaBox 也值得关注。 它的内容分类非常明显地围绕短剧用户的高频爽点： Werewolf Revenge Billionaire Cinderella Secret Identity Second-chance Love Mafia Influencer Marriage Fantasy Enemies to Lovers Rebirth 等。 DramaBox DramaBox 官方网站 所以如果你准备做 AI 短剧，我反而建议 不要只研究“AI 视频平台” ，而要研究这些平台： 它们已经验证了什么样的故事能够让用户连续看 50–100 集。 这对 AI 内容生产比单纯研究视频生成模型更重要。 我会这样排优先级 平台 国际分发 多语言 短剧适配 IP沉淀 我的建议 YouTube Shorts ★★★★★ ★★★★★ ★★★★☆ ★★★★★ 主阵地 TikTok ★★★★★ ★★★★☆ ★★★★★ ★★★★☆ 爆款主阵地 Instagram Reels ★★★★★ ★★★★★ ★★★★☆ ★★★★☆ 同步发行 Facebook Reels ★★★★☆ ★★★★★ ★★★★☆ ★★★☆☆ 国际扩散 ReelShort ★★★★☆ ★★★★★ ★★★★★ ★★★★★ 垂直短剧发行 DramaBox ★★★★☆ ★★★★☆ ★★★★★ ★★★★☆ 垂直短剧发行/研究 Snapchat Spotlight ★★★☆☆ ★★★☆☆ ★★★★☆ ★★★☆☆ 暂不优先 这里特别提醒一个反直觉点： 我不会把 Snapchat Spotlight 放在前面。 Snapchat 在 2026 年已经明确表示，完全由 AI 生成的视频将不再获得 Spotlight 推荐；AI 辅助、AI 编辑仍可以，但纯 AI 生成内容受到明显限制。 Snap Newsroom 如果是我来搭建你的发行体系 我会采用一个 “1+2+N”结构 ： ① 一个 IP 主库：YouTube 完整剧集全部进入 YouTube。 例如： Season 1 — 60 episodes 每集 1–3 分钟。 然后： English Spanish Portuguese Japanese Korean 逐步加入配音。 这样你的 YouTube Channel 本身就是 全球 IP Library 。 ② 两个流量引擎：TikTok + Reels 同一集重新剪成： 30–60 秒高冲突版本 但不是简单复制。 比如： YouTube： Episode 01 — The Billionaire's Secret TikTok： “She thought she married a poor man…” Instagram： “POV: your husband has been lying to you for 10 years.” 利用不同平台的推荐机制重新包装。 ③ N 个区域/垂直发行渠道 当某个系列跑出来以后，再考虑： ReelShort DramaBox 其他短剧 OTT FAST/AVOD 海外版权 YouTube 长版合集 独立 App 品牌合作 这时候你卖的已经不是“一条 AI 视频”，而是： 一个可以多语言发行的短剧 IP。 最重要的一点：不要一开始就做“全语言” 我反而建议第一阶段只做： English → Spanish → Portuguese 或者： English → Spanish → Japanese/Korean 具体组合根据题材决定。 YouTube 官方自己的建议也是先集中资源做好 1–2 个语言 ，而不是一开始铺几十种语言。 Google Help 一个比较合理的测试模型是： 10 个故事 × 3 个语言 × 30 集 而不是： 1 个故事 × 20 个语言。 因为你首先要验证的是： “什么故事能让国际观众追下去？” 而不是： “我能不能把它翻译成 20 种语言？” 最终建议 如果你的定位是 “AI 生产 + 英语国际市场 + 连续短剧/IP” ，我的优先顺序会是： YouTube > TikTok > Instagram/Facebook > ReelShort ≈ DramaBox 其中： YouTube = 全球 IP 总库 TikTok = 爆款发现和用户增长 Instagram/Facebook = 多语言扩散 ReelShort/DramaBox = 专业短剧商业化渠道 而且从 2026 年的平台动作来看， TikTok 和 Meta 都在主动把 AI 翻译、多语言配音和 micro-series 纳入产品战略；YouTube 则已经把多语言音轨和自动配音做成成熟的全球发行基础设施。 TikTok Newsroom +2 如果你愿意，我下一步可以进一步给你做一份 “AI 英语短剧出海平台矩阵” ，把 YouTube / TikTok / Instagram / ReelShort / DramaBox 的用户画像、内容长度、推荐机制、变现方式、版权/IP归属、AI内容政策、适合的题材 放在一张表里，并给出一个 从 0 到第一个百万播放的发行方案 。 Sources",
+    "citations": [
+      {
+        "domain": "https://support.google.com",
+        "position": "1",
+        "snippet": null,
+        "title": "Add Multi-language features to your videos - YouTube Help",
+        "url": "https://support.google.com/youtube/answer/13338784?hl=en&utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://blog.youtube",
+        "position": "2",
+        "snippet": null,
+        "title": "YouTube for Press",
+        "url": "https://blog.youtube/press/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://newsroom.tiktok.com",
+        "position": "3",
+        "snippet": null,
+        "title": "TikTok Bolsters Micro-Series Content with First-of-its-kind Partnership with HOORAE - Newsroom | TikTok",
+        "url": "https://newsroom.tiktok.com/tiktok-bolsters-micro-series-content-with-first-of-its-kind-partnership-with-hoorae?lang=en&utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://about.fb.com",
+        "position": "4",
+        "snippet": null,
+        "title": "Discover Reels From Around the World With Meta AI Translation",
+        "url": "https://about.fb.com/news/2025/10/discover-reels-around-world-meta-ai-translation/amp/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://w2a.reelshort.com",
+        "position": "5",
+        "snippet": null,
+        "title": "‎ReelShort - Stream Drama & TV App - App Store",
+        "url": "https://w2a.reelshort.com/w2a/booksAdvPage/?ad_id=%7B%7Bad.id%7D%7D&adset_id=%7B%7Badset.id%7D%7D&book_id=6a45c77e2fdd0135260e2dea&book_type=1&campaign_id=%7B%7Bcampaign.id%7D%7D&chapterId=rt5qe8ea5a&chapterIndex=1&cms_atid=6a50923b7c2ddb80a3b7f5d5&mediaType=fb&push_type=2&px=223%3A891565%3A18623&utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.reelshort.com",
+        "position": "6",
+        "snippet": null,
+        "title": "ReelShort: Setiap Detik Penuh Drama",
+        "url": "https://www.reelshort.com/id?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.dramabox.com",
+        "position": "7",
+        "snippet": null,
+        "title": "all Drama Movies-DramaBox",
+        "url": "https://www.dramabox.com/browse/201?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://newsroom.snap.com",
+        "position": "8",
+        "snippet": null,
+        "title": "Rewarding Authentic Creativity on Spotlight",
+        "url": "https://newsroom.snap.com/rewarding-authentic-creativity-on-spotlight?careersEnableJobDetailPage=kwlw6&lang=en-US&utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "想面向英语和国际观众制作AI短剧，应该优先考虑哪些平台的多语言和发行能力？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E6%83%B3%E9%9D%A2%E5%90%91%E8%8B%B1%E8%AF%AD%E5%92%8C%E5%9B%BD%E9%99%85%E8%A7%82%E4%BC%97%E5%88%B6%E4%BD%9CAI%E7%9F%AD%E5%89%A7%EF%BC%8C%E5%BA%94%E8%AF%A5%E4%BC%98%E5%85%88%E8%80%83%E8%99%91%E5%93%AA%E4%BA%9B%E5%B9%B3%E5%8F%B0%E7%9A%84%E5%A4%9A%E8%AF%AD%E8%A8%80%E5%92%8C%E5%8F%91%E8%A1%8C%E8%83%BD%E5%8A%9B%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "Worked for 7s Searching the web 我会把“降成本”拆成 前期策划、画面生成、声音、后期与制作流程 五个环节，重点找能直接落地、且有官方资料支持的方法。 Searching the web Searched 10 websites 如果目标是做 连续更新的 AI 短剧 ，真正有效的降本不是“把每个镜头都用最便宜的模型生成”，而是把制作流程改造成： 剧本先锁定 → 角色/场景资产复用 → 低成本大量试错 → 高质量模型只做最终镜头 → 声音统一 → 剪辑负责叙事。 这样通常比“每个镜头直接用最高档视频模型生成”更省钱，而且成片反而更稳定。 1. 先从剧本降成本，而不是从模型降成本 AI 短剧最容易出现的浪费是： 一个镜头反复生成十几次，最后发现故事本身不好看。 建议把剧本拆成三级： A级：剧情核心镜头 例如冲突、反转、亲密戏、关键动作。这些镜头值得使用最高质量模型。 B级：叙事镜头 对话、走路、环境变化、人物反应，可以用中档模型。 C级：过场/B-roll 城市、房间、手机、手部、风景、特写等，尽量使用静态图 + image-to-video，甚至直接用图片、字幕和声音完成。 尤其是短剧，不需要让每秒都“动得很贵”。 声音、剪辑节奏和演员反应经常比复杂运动更能推动剧情。 2. 建立“角色资产库”，不要每一镜重新生角色 这是降低返工成本最重要的方法之一。 先为每个主要角色制作： 正脸 45°侧脸 全身 常用服装 常用表情 不同光线 角色年龄/发型/体型等固定描述 然后把这些作为后续生成的 Reference。 例如 Runway 的 Gen-4 References 就支持从参考图中保持角色、环境和物体的一致性，并可以将角色放到不同地点、光线和场景中。 Runway Runway Gen-4 References 官方说明 核心原则： 不要让模型“重新想象张三”，而是让模型“把已经确定的张三放到下一个镜头里”。 这会显著降低角色漂移导致的废片率。 3. 用“图片 → 视频”，而不是所有镜头都 Text-to-Video 如果预算有限，我会优先采用： 剧本 → 分镜图 → Image-to-Video 而不是： 剧本 → Text-to-Video → 不满意 → 重做 原因是分镜图已经锁定了： 人物长相 服装 构图 场景 色调 光线 摄影机位置 视频模型只需要解决“ 这个画面怎么动 ”。 例如 Runway 的 Gen-4 要求输入图像，而且官方明确建议先使用成本更低的 Turbo 进行探索，再在需要时切换到 Gen-4。Gen-4 Turbo 是 5 credits/秒，而 Gen-4 是 12 credits/秒。 Runway Runway Gen-4 官方制作指南 因此可以采用“两阶段生成”： Turbo/低成本模型：验证构图、动作、节奏 高质量模型：只重做最终入片的镜头 不要一开始就用最高档模型“盲抽卡”。 4. 把“抽卡”变成一个有预算的筛选系统 假设最终需要 60 秒成片 ，不要直接生成 60 秒。 可以做成： 60 秒最终片 ↓ 20 个镜头 × 3 秒 ↓ 每个镜头先生成 2–4 个低成本版本 ↓ 每个镜头选 Top 1 ↓ 只有最终选中的 20 个镜头升级高质量 ↓ 剪辑 这种方法的关键是 先低成本筛选，后高成本渲染 。 Runway 当前也明确把较短时长和 Turbo 模型列为更省 credits 的使用方式；其官方计划说明甚至直接建议根据不同模型的 credits 消耗来分配制作预算。 Runway +1 一个实用的预算比例 如果总 AI 制作预算 = 100： 10–15 ：剧本/分镜/角色设计 20–25 ：低成本视频测试 35–45 ：最终高质量视频生成 10–15 ：声音 10–15 ：剪辑、调色、字幕、QC 不要把 80% 的钱花在“生成画面”上。 5. 镜头不要太长：3–6 秒通常更容易控制 AI 视频目前最容易失控的地方之一，就是 长镜头里的连续动作 。 与其要求： “一个人走进房间 → 坐下 → 拿手机 → 看消息 → 惊讶 → 转身说话” 不如拆成： 推门进入 坐下 手机特写 表情特写 对方反应 这样每个生成任务都简单得多。 而且短镜头本身非常适合短剧剪辑： 通过剪辑制造“连续性”，不需要 AI 真正连续完成整个动作。 Runway Gen-4.5 当前支持 2–10 秒生成，这种短片段式工作流也与现有生成能力比较匹配。 Runway Runway Gen-4.5 官方指南 6. “省画面钱”的关键技巧：让声音承担叙事 这是 AI 短剧特别值得利用的一点。 例如： 昂贵做法： 3 个角色在豪华餐厅里连续生成 30 秒对话。 便宜做法： 人物 A 特写 → 人物 B 特写 → 餐厅环境镜头 → A 的反应 → B 的反应 → 手机特写 → 声音继续推动剧情。 观众会自动把这些镜头“脑补”为一个连续场景。 所以真正应该追求的是： 画面成本低 + 声音真实 + 剪辑高级。 而不是： 画面每秒都复杂。 7. 声音不要最后才做，要“先锁声音、后剪画面” AI 短剧很容易出现一种问题： 画面很漂亮，但人物一开口，整个片子的廉价感就暴露了。 建议先确定： 主角声音 配角声音 语速 情绪 音高 停顿习惯 音量标准 然后整个系列固定下来。 ElevenLabs 的资料显示，它支持保持说话人的身份、语气、节奏和情绪；其 Dubbing 工作流也强调 transcription → translation → voice selection → pacing → quality control 的流程。 ElevenLabs +1 ElevenLabs Dubbing 官方文档 更重要的是， 不要给每句话重新随机生成声音 。尽量使用 track-level 的统一声音设置。ElevenLabs 的文档也特别指出，track-level 设置有助于稳定性和一致性。 ElevenLabs 8. 音效是“低成本提高质感”的神器 很多人会花大量预算提高画面，却忽略： 开门声 脚步声 手机震动 衣服摩擦 风声 环境底噪 汽车声 杯子放桌面的声音 这些东西非常便宜，却能显著提高“真实感”。 例如 ElevenLabs 目前支持通过文字生成 Sound Effects，并可控制持续时间和循环。 ElevenLabs ElevenLabs Sound Effects 官方文档 一个简单的经验： 画面从 70 分提高到 90 分可能很贵；声音从 60 分提高到 90 分往往便宜得多。 9. 不要让 AI 做“剪辑师”，让 AI 做素材工 这是我比较推荐的生产架构： AI 负责 角色 场景 B-roll 特效 部分对白 声音 音效 素材变体 人负责 哪个镜头留下 什么时候切 谁先说话 哪里停顿 哪个表情最重要 反转什么时候揭示 音乐什么时候进入 也就是说： AI负责生产素材，人负责最终叙事。 Adobe 目前的 Premiere AI Assistant 已经可以协助整理素材、处理 transcript、加 marker 和建立 first cut；Premiere 本身也支持 Text-Based Editing，可以通过文本快速建立粗剪。 Adobe Help Center +2 Adobe Premiere AI Assistant 官方说明 10. 最值得做的是“模板化” 如果是短剧账号，而不是只做一条片子，可以建立一个 AI 短剧生产模板 。 例如固定： 视觉模板 电影感/写实/二次元 9:16 固定色调 固定镜头语言 固定人物比例 固定字幕风格 角色模板 男主 A 女主 B 反派 C 老人 D 场景模板 家 办公室 街道 餐厅 医院 学校 声音模板 男主 Voice A 女主 Voice B Narrator Voice C 剪辑模板 开头 2 秒 Hook 3–5 秒一个主要信息点 对话镜头切换 反转前停顿 结尾 Cliffhanger 这样做以后，下一集不是“重新制作”，而是： 往既有生产系统里填内容。 这才是真正意义上的规模化降本。 11. 一个比较理想的 AI 短剧流水线 我会推荐这样的结构： 故事大纲 ↓ AI 辅助剧本 ↓ 人工修改剧本 ↓ 分镜表 ↓ 角色 Bible + 场景 Bible ↓ 生成角色/场景参考图 ↓ 低成本视频模型批量测试 ↓ 人工选镜头 ↓ 高质量模型生成最终镜头 ↓ 统一配音 ↓ 音乐 + SFX ↓ Premiere / Resolve 剪辑 ↓ 字幕 + 调色 + 音量标准化 ↓ 人工 QC ↓ 9:16 成片 其中最重要的一条是： “先选择，再高质量生成”，而不是“先高质量生成，再想办法选择”。 12. 一个具体的“低成本高质量”配置 如果是一个小团队，我会考虑： 环节 推荐策略 剧本 LLM + 人工编剧 分镜 AI 图片生成 角色 Reference/Character Sheet 普通镜头 低成本 Turbo / 快速模型 关键镜头 高质量视频模型 复杂场景 Image-to-Video 对白 固定 AI Voice 音效 AI SFX 音乐 授权音乐/AI音乐 剪辑 Premiere / DaVinci Resolve 字幕 自动转录 + 人工校对 QC 人工 如果需要商业化发行，还要特别检查 每个模型的商用授权、训练数据政策、人物肖像权和声音授权 。例如 Adobe 明确说明其 Firefly Video Model 使用授权内容和公版内容训练，并将其定位为商业安全；但 Adobe 也提醒，合作方模型可能拥有不同的商业使用条款。 Adobe +1 Adobe Firefly 商业安全与 AI 政策 13. 最容易踩的 5 个坑 ❌ 1. 每个镜头都用最高质量模型 结果：成本爆炸，而且废片率仍然很高。 改成：低成本探索 → 高质量终稿。 ❌ 2. 每个镜头重新生成角色 结果：脸、发型、衣服越来越不一致。 改成：Character Bible + Reference。 ❌ 3. 试图一个 AI 镜头讲完整段剧情 结果：动作、手、表情、人物关系全部容易失控。 改成：短镜头 + 剪辑连续性。 ❌ 4. 忽视声音 结果：画面像电影，声音像 PPT。 改成：固定声音角色 + SFX + 环境声 + 音乐。 ❌ 5. 让 AI 决定最终叙事 结果：技术很炫，但不好看。 改成：AI 生成素材，人控制节奏。 最核心的结论 如果只让我给出一条原则： AI 短剧降本的核心不是“减少 AI 使用”，而是减少“无效生成”。 最有效的成本结构是： 剧本少返工 → 角色少漂移 → 分镜先筛选 → 短镜头生成 → 关键镜头才用高档模型 → 声音统一 → 剪辑制造连续性 → 模板化批量生产。 这样既能控制成本，又不会把成片变成明显的“AI 味”。 另外需要特别注意：如果你在规划工具链时看到旧的 Sora 教程，要谨慎。OpenAI 官方资料显示 Sora 产品已于 2026 年 4 月 26 日停止服务，API 也于 2026 年 9 月 24 日停止 ，所以不建议把现在的新项目建立在旧 Sora 工作流上。 OpenAI OpenAI Sora 停止服务说明 值得直接收藏的官方资料 Runway Gen-4 / Turbo 制作指南 Runway Gen-4 References（角色/场景一致性） Runway Gen-4.5 官方指南 ElevenLabs Dubbing ElevenLabs Sound Effects Adobe Premiere AI Assistant Adobe Firefly Video 如果你的目标是 真正批量生产 1–3 分钟、9:16 的中文 AI 短剧 ，我还可以进一步给你设计一套「 单集 1 万元 / 5000 元 / 1000 元三个预算档位 」的完整制作方案，包括 具体工具组合、每集镜头数、AI 生成次数、人员配置和单集成本模型 。 Sources",
+    "citations": [
+      {
+        "domain": "https://help.runwayml.com",
+        "position": "1",
+        "snippet": null,
+        "title": "Creating with Gen-4 Image References – Runway",
+        "url": "https://help.runwayml.com/hc/en-us/articles/40042718905875-Creating-with-Gen-4-Image-References?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://elevenlabs.io",
+        "position": "2",
+        "snippet": null,
+        "title": "Dubbing | ElevenLabs Documentation",
+        "url": "https://elevenlabs.io/docs/eleven-creative/services/productions/dubbing?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://helpx.adobe.com",
+        "position": "3",
+        "snippet": null,
+        "title": "Premiere AI Assistant overview | Premiere",
+        "url": "https://helpx.adobe.com/premiere/desktop/premiere-ai-assistant/overview.html?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.adobe.com",
+        "position": "4",
+        "snippet": null,
+        "title": "Approach to generative AI with Adobe Firefly - Adobe",
+        "url": "https://www.adobe.com/ai/overview/firefly/gen-ai-approach.html?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://openai.com",
+        "position": "5",
+        "snippet": null,
+        "title": "What to know about the Sora discontinuation | OpenAI Help Center",
+        "url": "https://openai.com/sora/?cfplatform=android&webview=1&utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "如何降低AI短剧的制作成本，同时保证画面、声音和叙事质量？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E5%A6%82%E4%BD%95%E9%99%8D%E4%BD%8EAI%E7%9F%AD%E5%89%A7%E7%9A%84%E5%88%B6%E4%BD%9C%E6%88%90%E6%9C%AC%EF%BC%8C%E5%90%8C%E6%97%B6%E4%BF%9D%E8%AF%81%E7%94%BB%E9%9D%A2%E3%80%81%E5%A3%B0%E9%9F%B3%E5%92%8C%E5%8F%99%E4%BA%8B%E8%B4%A8%E9%87%8F%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "可以。 预算低于 1,000 美元、没有专业摄制团队时，最可行的不是“让 AI 一次生成整部短剧”，而是把 AI 当成一个小型虚拟剧组：编剧 + 概念设计 + 演员/场景生成 + 配音 + 后期。 如果目标是做出一部 5–10 分钟、可以公开发布、观感接近独立短片 的作品，我建议把预算控制在 $400–800 ，剩余资金留给重做镜头和意外开支。 1. 先把项目规模控制住 低预算 AI 短剧最容易失败的原因，是剧本写得像 Netflix，制作能力却只有一个人。 建议第一部作品： 时长：5–8 分钟 人物：2–3 个主要角色 地点：2–4 个 主要场景：15–30 个镜头 每个 AI 视频镜头：3–8 秒 台词：少而精 视觉风格：统一，不追求“每个镜头都大片级” 尽量避免大量群演、打斗、复杂手部动作和长对白 一个特别适合 AI 制作的结构是： 一个地点 + 两个人 + 一个秘密 + 一次反转 例如： 深夜，失业程序员收到一段来自“明天自己的语音留言”，留言告诉他不要打开门。 门外的人却声称自己就是他的未来版本。 这种故事对 AI 的要求远低于“古代战争史诗”，但观众仍然会觉得它是完整的短剧。 2. 推荐的低预算工作流 我会采用下面这条链路： ChatGPT → 分镜/角色设定 → 图像生成 → AI 视频 → AI 配音 → 音效/音乐 → DaVinci Resolve → 发布 其中最重要的原则是： 先做“静态角色和场景”，再让它们动起来。 不要直接让 AI 根据一句文字生成“一个男人走进咖啡馆并说话”。人物很容易变脸、换衣服、改变场景。 例如 Runway 的 Gen-4 工作流本身就要求输入图像，再根据文字描述运动；官方文档也建议先用较低成本的 Turbo 模型探索，再用更高质量模型制作最终镜头。Gen-4 Turbo 是 5 credits/秒，而 Gen-4 是 12 credits/秒。 Runway Help +1 Runway 官方 Gen-4 制作指南 3. 第一阶段：剧本不要超过 8 分钟 建议把剧本拆成： 部分 建议 开场 Hook 15–30 秒 建立人物 1–2 分钟 冲突 2 分钟 升级 2 分钟 反转/高潮 1 分钟 结尾 30–60 秒 不要先生成视频。 先完成： Logline（一句话故事） 角色表 完整剧本 镜头表 角色视觉设定 场景视觉设定 镜头表应该长这样 镜头 时长 画面 台词 声音 01 5s 夜晚公寓外景 无 雨声 02 4s 男主特写 “谁？” 门铃 03 6s 男主走向门 无 脚步 04 5s 门缝视角 “别开门。” 女声 05 7s 男主惊恐 “你是谁？” 低频氛围 这一步非常重要，因为 AI 视频的成本来自“生成次数”，而不是剧本长度 。 4. 第二阶段：建立“视觉圣经” 这是一个人制作 AI 短剧时最值得投入的步骤。 给每个主要角色做： 正面 侧面 半身 全身 不同表情 固定服装 固定发型 固定色彩 例如： 角色 A：Alex 32 岁男性，亚洲面孔，短黑发，深灰色连帽衫，疲惫的眼神，瘦削脸型，冷白色电影灯光，neo-noir cinematography。 然后尽量让所有镜头都从这个角色参考图开始。 不要让 AI 每一个镜头重新“创造 Alex”。 同样给地点建立参考图： 公寓客厅 公寓走廊 电梯 街道 这样即使镜头是 AI 生成的，观众也会感觉它们属于同一部电影。 5. 第三阶段：AI 视频只负责“运动” 这是省钱的关键。 不要要求 AI： “生成一个 30 秒的完整电影场景。” 而是： “角色站在门前，缓慢抬头，看向门上的猫眼，镜头轻微向前推进。” 5 秒镜头往往比 10 秒镜头更容易控制。 Runway 当前的资料显示，Gen-4 支持 5 秒和 10 秒输出；Turbo 的成本为 5 credits/秒，而标准 Gen-4 为 12 credits/秒。 Runway Help 所以可以采用： 80% 低成本测试 → 20% 高质量最终生成 而不是每一次都用最高质量。 Runway 目前的 Free 计划提供一次性 125 credits；Standard 为每月 625 credits，Pro 为 2,250 credits，Max 为 9,500 credits。 Runway Help +3 Runway 官方 Credits/套餐说明 6. 第四阶段：对白不要依赖 AI 视频模型 这是低预算项目的一个重要技巧。 不要要求视频模型同时解决： 人物一致性 表情 嘴型 手 动作 台词 声音 背景 把它拆开。 推荐： AI 视频 → 无对白画面 然后： AI Voice → 配音 最后： 剪辑软件 → 对嘴/声音/画面组合 例如 ElevenLabs 当前提供 Text-to-Speech、Voice Design、Sound Effects、Music、Dubbing 等功能；免费层有 10,000 credits/月，Starter 为 $6/月，并包含商业授权和 Instant Voice Cloning，Creator 为 $22/月。 ElevenLabs +1 ElevenLabs 官方定价 一个非常实用的声音组合 主角 A：低沉男声 主角 B：年轻女声 电话/AI：经过 EQ 和 distortion 的声音 环境：雨、空调、城市噪声 音乐：一条贯穿全片的主题音乐 声音做得好，画面瑕疵会明显不那么刺眼。 7. 后期不要花钱买昂贵剪辑软件 一个人做的话，我反而建议直接用 DaVinci Resolve 。 Blackmagic 官方目前仍提供免费版本；免费版可以完成剪辑、调色、VFX、动态图形和音频后期，并支持最高 Ultra HD 3840×2160、60fps 的 8-bit 视频。Studio 版本目前标价 $295。 Blackmagic Design +1 DaVinci Resolve 官方下载页 预算有限时不要买 Studio。 把钱留给： AI 视频生成次数。 8. $1,000 怎么分配？ 我会这样花： 项目 建议预算 AI 视频生成 $250–400 AI 配音/声音 $20–50 图像生成 $30–80 音乐/音效/素材 $0–50 剪辑软件 $0 字幕/缩略图 $0–30 云存储/硬盘 $50–100 重做/备用预算 $150–250 总计 约 $500–960 甚至可以做到 $300–500 。 例如，Runway 的 API 定价目前显示 Gen-4 Turbo 为 $0.25/5秒、$0.50/10秒 的量级；实际创作平台的订阅/积分体系有所不同，但这个数据很好地说明了为什么“短镜头 + 大量筛选”比“少数超长镜头”更适合低预算制作。 Runway Dev 9. 一个很重要的预算原则：不要计算“成片秒数” 应该计算： 最终镜头 × 平均生成次数 例如： 你最终需要 40 个镜头，每个镜头平均生成 8 次： 40 × 8 = 320 次生成 如果每个镜头只需要 5 秒： 320 × 5 = 1,600 个生成秒数 这就是为什么 AI 短剧最大的成本不是最终成片，而是 废片率 。 所以制作流程应该是： 低成本测试 → 选镜头 → 高质量重做 而不是： 高质量生成 → 发现不行 → 再花钱生成 10. 真正省钱的秘诀：让 AI “少动” AI 视频最擅长的通常不是复杂动作，而是： 人物转头 眼神变化 缓慢走路 风吹头发 镜头推进 环境运动 光影变化 简单物体运动 因此可以大量使用： A. 静态镜头 人物站着说话。 B. 慢推镜头 AI 只需要制造很轻微的运动。 C. Cutaway 人物说话 → 切到窗户 → 切到手机 → 再切回人物。 这会同时解决： AI 嘴型问题 人物一致性问题 长镜头生成问题 成本问题 而且从电影语言来看， 剪辑本身就是一种叙事方式 。 11. 不要追求“AI 感完全消失” 第一部作品我反而建议做成： 风格化 AI 电影 而不是： “我要骗所有人相信这是实拍。” 因为现在观众已经知道 AI 视频存在。 如果你把它设计成： neo-noir surreal cyberpunk dreamlike graphic novel animation/live-action hybrid AI 的瑕疵反而可以变成风格。 比如： 真人脸 + 不完全现实的背景 + 电影化灯光 + 极简动作 往往比试图制作一部“完全真实的好莱坞电影”更容易成功。 12. 发布时一定考虑 AI 内容披露 如果发布到 YouTube，尤其要注意这一点。 YouTube 当前要求创作者对 看起来真实、且经过 AI 实质性生成或修改的内容 进行披露，例如生成一个现实中不存在的真实场景、让真实人物说出从未说过的话等。 Google Help +1 上传时可以在 YouTube Studio 的 AI use 设置中进行披露。YouTube 也明确说明，单纯使用 AI 辅助写脚本、标题、缩略图、字幕等生产辅助，一般不属于这一披露要求。 Google Help 另外，YouTube 在 2026 年进一步强调 AI 内容标签的可见性；符合条件的 Shorts 和长视频会有更明显的 AI disclosure。官方也表示，仅仅添加这个标签本身不会降低视频推荐或影响获利资格。 Google Help YouTube：生成式 AI 内容披露规则 13. 我会采用的“单人 AI 剧组” 如果让我自己拿 $1,000 做第一部，我会把角色分工成这样： 传统剧组 单人 AI 方案 编剧 ChatGPT 导演 我自己 + 分镜规划 美术指导 AI 图像生成 摄影 AI 视频模型 演员 AI 角色/声音 配音演员 ElevenLabs 摄影棚 AI 场景 VFX AI + Resolve 剪辑 DaVinci Resolve 调色 Resolve 音效师 AI SFX + 素材库 作曲 AI 音乐 宣发设计 AI 图像 + Resolve 因此真正需要你亲自做的，是： 故事、审美、选择、剪辑、节奏。 AI 负责大量执行。 14. 最值得投入时间的 5 件事 如果预算只有 $1,000，我会把时间优先级排成： 剧本 角色一致性 声音 剪辑节奏 视觉质量 而不是： “找一个最强的 AI 视频模型。” 因为一个拥有顶级 AI 视频、但故事无聊、声音糟糕、镜头乱跳的短剧，仍然不好看。 反过来， 一个 6 分钟、故事清晰、声音优秀、剪辑紧凑的 AI 短片，即使某些镜头有明显 AI 痕迹，也完全可以发布。 15. 一个可直接执行的 14 天计划 第 1–2 天 确定故事 写 5–8 分钟剧本 确定 2–3 个角色 确定视觉风格 第 3 天 做角色 reference 做场景 reference 完成分镜表 第 4–6 天 批量生成静态图 生成视频测试 淘汰失败镜头 第 7–9 天 制作最终视频镜头 做必要的重生成 第 10 天 AI 配音 环境音 音乐 音效 第 11–12 天 DaVinci Resolve 剪辑 调色 字幕 声音混音 第 13 天 手机/电脑/电视分别检查 检查人物一致性 检查 AI 瑕疵 检查字幕和音量 第 14 天 海报/缩略图 Trailer YouTube/Shorts/TikTok 版本 AI disclosure 发布 最终推荐配置 如果你现在就要开始，我会选： 剧本/分镜： ChatGPT 角色/场景设计： 一个图像生成工具 视频： Runway 等主力视频模型，优先 image-to-video 声音： ElevenLabs 剪辑/调色/音频： DaVinci Resolve Free 预算： $500–700 左右，留 $300 左右给重做 Runway 的当前方案尤其适合这种工作流：官方现在已经提供 Gen-4.5、Gen-4、Aleph 等不同的视频生成/编辑能力，而且其 Pro 计划包含 Text to Speech 和 Custom Voices；这意味着你也可以逐渐把更多制作环节集中到一个工作空间里。 Runway Help +1 核心思想只有一句： 不要用 AI 试图“一键拍电影”；要用 AI 把一个人的制作能力扩展成一个小型电影团队。 这样， $1,000 足够做出第一部真正可以发布的 AI 短剧，而且还不必购买专业摄影机、灯光、场地或雇佣摄制团队。 Sources",
+    "citations": [
+      {
+        "domain": "https://help.runwayml.com",
+        "position": "1",
+        "snippet": null,
+        "title": "Creating with Gen-4 Video – Runway",
+        "url": "https://help.runwayml.com/hc/en-us/articles/37327109429011-Creating-with-Gen-4-Video?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://elevenlabs.io",
+        "position": "2",
+        "snippet": null,
+        "title": "ElevenLabs Pricing for Creators & Businesses of All Sizes",
+        "url": "https://elevenlabs.io/pricing?gspk=NjA4NTkwMWE0ODIz&gsxid=HurvDiQuT291lh&ps_partner_key=NjA4NTkwMWE0ODIz&ps_xid=HurvDiQuT291lh&pscd=try.elevenlabs.io&utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.blackmagicdesign.com",
+        "position": "3",
+        "snippet": null,
+        "title": "DaVinci Resolve | Blackmagic Design",
+        "url": "https://www.blackmagicdesign.com/products/davinciresolve?cId=cj&utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://docs.dev.runwayml.com",
+        "position": "4",
+        "snippet": null,
+        "title": "Billing | Runway API",
+        "url": "https://docs.dev.runwayml.com/usage/billing/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://support.google.com",
+        "position": "5",
+        "snippet": null,
+        "title": "Disclosing use of GenAI content - Computer - YouTube Help",
+        "url": "https://support.google.com/youtube/answer/14328491?hl=en-GB&utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "预算低于1000美元、没有专业摄制团队时，怎样制作一部可发布的AI短剧？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E9%A2%84%E7%AE%97%E4%BD%8E%E4%BA%8E1000%E7%BE%8E%E5%85%83%E3%80%81%E6%B2%A1%E6%9C%89%E4%B8%93%E4%B8%9A%E6%91%84%E5%88%B6%E5%9B%A2%E9%98%9F%E6%97%B6%EF%BC%8C%E6%80%8E%E6%A0%B7%E5%88%B6%E4%BD%9C%E4%B8%80%E9%83%A8%E5%8F%AF%E5%8F%91%E5%B8%83%E7%9A%84AI%E7%9F%AD%E5%89%A7%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "Worked for 11s Searching the web 我会把两类平台拆成“内容生产链”和“变现链”来比较，并优先用官方资料核对 Fanvue 的创作者政策、AI 内容规则和收入机制。 Searching the web Searching the web Searched 12 websites 如果你说的“面向 AI 短剧创作的平台”是指 Higgsfield、PixVerse 这类以 AI 视频/短剧生产为核心的平台 ，那么它和 Fanvue 的核心差异其实不是“都能做 AI 内容”，而是： Fanvue 更像“内容消费 + 粉丝关系 + 直接付费”的变现平台；AI 短剧平台更像“内容生产基础设施 + 流量/品牌/项目型变现”的创作平台。 截至 2026 年 ，可以这样理解。 1. 核心定位完全不同 维度 Fanvue AI 短剧/AI 视频创作平台 核心产品 粉丝订阅和付费内容平台 AI 内容生产工具/创作生态 平台解决的问题 “怎么把粉丝变成收入” “怎么低成本、高效率地做内容” 内容单位 图片、视频、聊天、语音、定制内容等 短视频、连续短剧、角色、广告、视觉故事 核心资产 Creator + Persona + Fan relationship IP、角色、故事、视频资产 流量来源 Fanvue 内部粉丝 + Creator 自己导流 TikTok/Instagram/YouTube 等外部平台 主要收入 Subscription、Tips、PPV、Custom content Campaign、品牌合作、平台奖励、广告/流量、IP授权等 Fanvue 官方把自己定义为 social subscription platform ；创作者可以设月度订阅价格，另外通过 tips、PPV、单独内容销售、语音等方式赚钱。 Fanvue Help Centre +1 而 Higgsfield 则把自己定位成 AI creative studio，覆盖 AI 视频、图片、storyboarding、短视频和影视创作等生产环节。 Higgsfield +1 2. 在“内容制作”上的区别 Fanvue：AI 是“内容供给方式” Fanvue 本身并不是一个主要用来制作 AI 短剧的工具。 它允许 AI Creator 存在，而且允许完全 AI 生成内容。Fanvue 会把 AI Creator 明确标注为 AI，并要求相关内容符合其 AI 内容政策。 Fanvue Help Centre +1 所以一个典型 Fanvue AI Creator 的生产流程可能是： AI 生成人物 → 做图片/视频 → 建立一个虚拟 Persona → 发布 → 和粉丝互动 → 付费解锁内容 重点是 Persona 和粉丝关系 。 例如： “Sophia，一个 25 岁的虚拟模特” 今天发照片，明天发视频，后天给订阅者发 PPV 内容，再通过聊天、Tips、定制内容继续变现。 AI 短剧平台：AI 是“整个制作管线” Higgsfield 这类平台的目标更接近： 故事 → 角色 → 分镜 → 镜头 → 动画/视频 → 配音 → 剪辑 → 发布 例如： 《霸道总裁重生后爱上自己的秘书》 ↓ 20 集竖屏短剧 ↓ 每集 1–2 分钟 ↓ AI 角色保持一致 ↓ TikTok / YouTube Shorts / Instagram Reels 分发 这时候核心资产不是某一张漂亮图片，而是： Character + Story + World + Episode Library + Audience Higgsfield 官方也明确强调其工作流可以覆盖从 social video 到 AI filmmaking、storyboarding、campaign production 等场景。 Higgsfield +1 因此，如果你的目标是做 “AI 短剧 IP” ，生产型 AI 平台明显更接近上游。 3. 最大的区别其实在“钱怎么来” 这是两种模式最值得关注的地方。 Fanvue：直接从粉丝钱包里赚钱 Fanvue 的收入机制非常明确： 月度 Subscription Tips Pay-per-view 单独内容销售 Custom content Voice calls / voice notes 而且目前 Fanvue 标准 Creator Earnings Rate 是 80% ，Fanvue 保留 20%。 Fanvue +1 例如： 假设一个 AI Persona 有： 1,000 个付费订阅者 × $10/月 那么毛收入： $10,000/月 按照标准 80% creator share，理论上创作者侧为： $8,000/月 实际还需要考虑税费、退款、chargeback 等因素；Fanvue 的政策明确说明这些因素可能影响最终可提现收入。 Fanvue 所以 Fanvue 的经济模型非常像： 粉丝数量 × ARPU × 留存率 4. AI 短剧平台：通常不是“订阅你的 AI 导演” 以 Higgsfield Earn 为例，它的模式是： 你制作 AI 视频 → 发布到社交平台 → 根据活动规则/表现获得奖励 官方介绍的是 paid campaigns、approved videos、performance bonuses 等机制。 Higgsfield +1 PixVerse 也有类似的 Creator Earn 模式：创作者参加 campaign，把 AI 视频发布到 Instagram、YouTube 或 X，根据 campaign 条件、内容审核和表现获得现金或 Credits。 PixVerse 所以它更接近： 内容产量 × 流量表现 × Campaign/品牌预算 而不是： 粉丝 × 月费 5. 这会导致完全不同的创作者经济学 可以把两种模式画成： Fanvue AI Persona ↓ 内容生产 ↓ 吸引粉丝 ↓ 粉丝订阅 ↓ PPV / Tips / Custom ↓ Creator Revenue 也就是说， “粉丝关系”本身就是资产。 AI 短剧平台 AI 工具 ↓ 大量生产短剧/短视频 ↓ TikTok / YouTube / IG 等平台获得流量 ↓ 广告 / Campaign / 品牌合作 / IP ↓ Creator Revenue 这里最重要的资产是： 内容 IP + 流量 + 创作者账号。 6. AI 短剧其实还有第三种变现模式 这点很重要。 如果你说的“AI短剧平台”不是 Higgsfield/PixVerse 这种 制作工具 ，而是 ReelShort、DramaBox 一类的 短剧发行平台 ，那么经济模型又不一样。 短剧平台通常围绕： 连续剧 → Episode → 用户观看 → 付费解锁/广告/订阅/版权 而不是 Fanvue 那种： Creator → Persona → Fan → Subscription 例如 ReelShort 本身就是以大量 vertical short drama/series 为核心内容形态。其官方页面也展示了完整的多集竖屏剧和面向创作者的内容活动。 ReelShort +1 所以严格来说，现在可以把市场分成三个层次： 类型 代表模式 核心资产 主要收入 Fan monetization Fanvue AI Persona + 粉丝 订阅/PPV/Tips AI production Higgsfield / PixVerse AI 创作能力 Campaign/奖励/品牌 Short-drama distribution ReelShort / DramaBox 剧集/IP/流量 观看付费/广告/版权等 7. 对 AI 创作者而言，三种模式的商业价值也不同 如果你擅长“人物” 比如你能做： 高辨识度 AI 美女/帅哥 虚拟 Influencer 固定人物设定 长期更新 和粉丝互动 那么 Fanvue 的模式比较匹配。 因为 Fanvue 已经明确把 AI Creator 当成正式创作者类别，而不是单纯把 AI 当作制作工具。 Fanvue Help Centre 如果你擅长“故事” 比如你能持续做： 10–50 集连续故事 反转 爱情/悬疑/爽剧 固定角色 世界观 Cliffhanger 那么 AI 短剧 + TikTok/YouTube/Reels/短剧 App 的模式更自然。 这里的核心不是“这个角色今天能不能卖 $10 订阅”，而是： 这个 IP 能不能让用户连续看 30 集？ 如果你擅长“AI 视频生产” 例如你可以一天生成： 20–50 条高质量短视频 那么 Higgsfield/PixVerse 一类的 campaign/reward 模式也可能比较合适。 Higgsfield 官方目前甚至把 AI Influencer 作为一种可以经营的虚拟角色，并通过 Earn 项目让创作者参与付费 campaign。 Higgs Fields +1 8. 一个很有意思的趋势：两种模式其实正在融合 我认为这是这个领域最值得关注的地方。 未来可能不是： Fanvue vs. AI 短剧 而是： AI Production → Social Distribution → Fan Monetization 例如： AI 制作工具 ↓ 每天制作 3 集 AI 短剧 ↓ TikTok / Instagram / YouTube 免费发布第 1 集 ↓ 用户喜欢某个 AI 角色 ↓ Fanvue 获得： Exclusive episodes Behind-the-scenes Alternative endings Custom stories 私人互动 Tips Subscription 这样实际上形成一个完整漏斗： 免费短剧负责获客 → Fanvue 负责深度变现。 这比单纯在 Fanvue 上传 AI 图片，或者单纯靠 AI 视频平台的 campaign 奖励，都多了一层商业化。 9. 如果从“创业/平台设计”的角度看 两者的护城河也不同。 Fanvue 型平台 最重要的是： Creator → Fan relationship 所以平台竞争力来自： 支付体系 订阅 CRM DM 推荐 Tips PPV Creator tools 用户留存 Fanvue 甚至已经提供 App Store，让创作者使用内容创作、排程、互动、收入和 analytics 工具。 Fanvue Help Centre AI 短剧平台 最重要的是： Idea → Video 的生产效率 所以竞争力来自： Character consistency Video generation Storyboard Camera control Voice Lip sync Multi-shot Editing 长视频/多集生产 工作流自动化 换句话说： Fanvue 优化的是“每一个粉丝值多少钱”；AI 短剧平台优化的是“每一美元能生产多少内容”。 10. 一句话总结 如果把两者放进一个内容产业链： Higgsfield / PixVerse：负责“生产内容” TikTok / YouTube / Instagram：负责“获得流量” ReelShort / DramaBox：负责“短剧消费/发行” Fanvue：负责“把高价值粉丝进一步变现” 所以它们并不是完全直接竞争的产品。 真正有潜力的商业模式反而可能是把它们串起来： AI 短剧生产 → 免费短视频获客 → 建立 AI 角色/IP → Fanvue 深度订阅 → PPV / Tips / Custom → 最终做成 IP/版权/品牌合作。 官方资料 Fanvue — About / How Fanvue works Fanvue — Creator Earnings & Payouts Fanvue — AI Generated Content Policy Higgsfield — AI Creative Studio Higgsfield — Creator Partnership Program Higgsfield — Earn Creator Program PixVerse — Earn / Creator Monetization ReelShort 如果你是在做 “AI短剧 + Fanvue”这个商业模式的竞品/市场分析 ，我还可以进一步 给你拆一张 **「Fanvue vs AI短剧平台 vs ReelShort/DramaBox」商业模式画布** ， 包括 **用户、内容供给、获客、付费机制、平台抽成、创作者收入、AI成本、护城河和潜在市场规模** 。 Sources",
+    "citations": [
+      {
+        "domain": "https://help.fanvue.com",
+        "position": "1",
+        "snippet": null,
+        "title": "About Fanvue | Fanvue Help Centre",
+        "url": "https://help.fanvue.com/en/articles/7860505-about-fanvue?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://higgsfield.ai",
+        "position": "2",
+        "snippet": null,
+        "title": "About Higgsfield AI • Higgsfield",
+        "url": "https://higgsfield.ai/about?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://legal.fanvue.com",
+        "position": "3",
+        "snippet": null,
+        "title": "Creator Earnings & Payouts | Fanvue",
+        "url": "https://legal.fanvue.com/creator-earnings-payouts?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://pixverse.ai",
+        "position": "4",
+        "snippet": null,
+        "title": "Earn Money with AI Generated Videos | PixVerse Earn",
+        "url": "https://pixverse.ai/en/earn?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.reelshort.com",
+        "position": "5",
+        "snippet": null,
+        "title": "ReelTalk EP 35-Surrender to My Reel Vertical Impact Movie Watch Online | ReelShort",
+        "url": "https://www.reelshort.com/movie/reeltalk-ep-35-surrender-to-my-reel-vertical-impact-689b4c59ab5190f7610e5779?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.higgsfields.net",
+        "position": "6",
+        "snippet": null,
+        "title": "Earn Money with AI | Higgsfield Earn Creator Program",
+        "url": "https://www.higgsfields.net/earn?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "Fanvue和面向AI短剧创作的平台，在内容制作和创作者变现方面有什么区别？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=Fanvue%E5%92%8C%E9%9D%A2%E5%90%91AI%E7%9F%AD%E5%89%A7%E5%88%9B%E4%BD%9C%E7%9A%84%E5%B9%B3%E5%8F%B0%EF%BC%8C%E5%9C%A8%E5%86%85%E5%AE%B9%E5%88%B6%E4%BD%9C%E5%92%8C%E5%88%9B%E4%BD%9C%E8%80%85%E5%8F%98%E7%8E%B0%E6%96%B9%E9%9D%A2%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "如果你说的“个人创作者制作竖屏 AI 短剧”是指 一个人用 AI 完成编剧→角色/画面→配音→剪辑→连续剧集→平台分发 ，那么我会把平台分成两类来看： 第一梯队：TikTok、抖音、YouTube Shorts 第二梯队：Instagram Reels、快手 补充分发：视频号、西瓜视频 如果目标是做“AI短剧 IP”而不是单纯追求播放量，我尤其建议采用 多平台分发，而不是押注一个平台 。 我的推荐排序 平台 AI短剧适配 冷启动 变现潜力 海外能力 我会怎么用 TikTok ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ 主阵地之一 抖音 ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ ⭐⭐ 中文市场主阵地 YouTube Shorts ⭐⭐⭐⭐⭐ ⭐⭐⭐ ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ 长期资产/海外主阵地 Instagram Reels ⭐⭐⭐⭐ ⭐⭐⭐ ⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ IP/品牌传播 快手 ⭐⭐⭐⭐ ⭐⭐⭐⭐ ⭐⭐⭐⭐ ⭐⭐⭐ 下沉市场+短剧 西瓜视频 ⭐⭐⭐⭐ ⭐⭐⭐ ⭐⭐⭐ ⭐⭐ 中文长尾分发 视频号 ⭐⭐⭐⭐ ⭐⭐⭐ ⭐⭐⭐⭐ ⭐ 私域/商业转化 1. TikTok ：我认为最值得个人创作者试水 如果你做的是 强剧情、强反转、强连续性的 AI 竖屏短剧 ，TikTok 很值得优先测试。 一个很重要的原因是 TikTok 已经明显从“15秒短视频”向 更长的故事型内容 发展。TikTok 官方披露，用户在平台上的观看时间中有相当部分来自 1 分钟以上的视频，并推出了 Creator Rewards Program，重点考虑 原创性、观看时长、搜索价值和用户互动 。 TikTok Newsroom +1 这恰好和 AI 短剧非常契合： 第一集制造悬念 → 第二集解释一部分 → 第三集继续反转 → 最后形成追剧。 尤其适合： AI 科幻 恐怖/悬疑 平行世界 末日 爱情反转 “如果……会怎样”的脑洞故事 东方文化 + 全球观众 无真人演员的连续剧 TikTok 还有 Creator Search Insights ，可以查看用户正在搜索、但内容供给相对不足的话题，这对于一个人找选题尤其有价值。 TikTok Newsroom 注意： Creator Rewards 并不是“发 AI 视频就能拿钱”。官方要求原创、高质量、符合规则，而且不同国家/地区的资格不同。 TikTok Newsroom 2. 抖音 ：如果做中文短剧，这是必试 如果你的主要受众是中国大陆，我会把抖音放在第一梯队。 原因很简单： 中国短剧的用户教育已经完成 。 用户已经习惯： 开头冲突 → 30秒一个钩子 → 结尾卡点 → “下一集” 这比在 Instagram、YouTube 上教育用户“AI短剧是什么”容易得多。 而且 2026 年已经能看到大量 AI 短剧/AI 影视内容在字节系生态中出现。例如西瓜视频近期出现了完整的 AIGC 科幻短剧案例，并明确使用 Seedance 2.5 等 AI 视频技术制作。 Xigua Video +1 特别适合： 古风 霸总 重生 玄幻 都市爽剧 悬疑 灵异 历史脑洞 AI真人感短剧 但有一个重要区别： 不要把“AI生成能力”当卖点，把“故事”当卖点。 用户不会因为“这是 AI 做的”一直追 30 集；他们会因为： “这个男人明明已经死了，为什么下一秒出现在她家门口？” 而继续看。 3. YouTube Shorts ：长期价值最高的平台之一 如果你的目标不仅是获得流量，而是最终建立一个 AI短剧频道/IP/商业资产 ，我会非常重视 YouTube。 YouTube Shorts 可以和长视频、直播、会员、Shopping 等生态结合，而不是一个孤立的短视频平台。官方目前提供 Shorts Feed 广告分成、YouTube Premium、会员、Super Thanks、Shopping 等多种变现方式。 Google Help +1 而且 YouTube 对原创 AI 内容的态度并不是简单的“不能做 AI”。 真正需要注意的是： 低价值、重复、批量生产的内容风险很高。 YouTube 明确要求可变现内容具有原创性，并在 2025 年进一步明确将“repetitious content”表述为 inauthentic content ，针对重复/批量生产内容。 Google Help +1 所以对于 AI 短剧来说，我反而建议： AI只是生产工具，人负责导演。 例如： 自己写剧本 自己设计角色 自己控制镜头 自己做声音 自己做剪辑 自己构建世界观 这样比“每天自动生成100条 AI 美女视频”有长期价值很多。 4. Instagram Reels ：适合“视觉型 AI 短剧” Instagram 我不会把它作为第一生产平台，但会作为 重要分发平台 。 特别适合： 高颜值角色 时尚 奇幻 科幻 艺术电影 AI摄影 情感短剧 奢华/都市题材 它更适合： “一眼惊艳 → 用户进入主页 → 发现整个系列” 而不是完全依靠传统短剧的“连续追剧”。 所以可以把 TikTok/抖音的内容稍微重新剪辑成 Reels，而不是完全原封不动搬运。 5. 快手 ：不要低估 如果你做中文市场，我建议至少测试快手。 快手官方目前仍然提供包括广告分成、付费任务、礼物等多种创作者变现方式，并明确鼓励创作者发布原创、高质量作品。 Kwai 尤其适合： 强情节 家庭伦理 逆袭 农村/现实题材 情感 爽剧 连续剧 它未必是“AI艺术短片”最好的地方，但可能是 故事型内容商业化 非常值得测试的地方。 6. 西瓜视频 ：AI短剧值得观察 这个平台我会放在“实验场”。 原因是现在已经能看到相当多 AI 短剧、AIGC 影视内容，而且一些账号正在尝试将 AI 做成完整的短剧/IP，而不仅仅是几秒钟的 AI 视频。 Xigua Video +1 例如近期一个 AIGC 科幻短剧账号已经做到几十万粉丝，说明 “AI影视 + 连续剧” 在这里确实存在用户需求。 Xigua Video 对于个人创作者，它特别适合测试： “我的 AI 短剧能不能从短视频变成真正的系列 IP？” 如果是我自己一个人做，我会这样组合 中国市场 抖音 → 快手 → 西瓜 → 视频号 一部剧： 10–30 集 每集 30–90 秒 9:16 每集结尾留一个强悬念 然后根据平台重新剪辑，而不是完全复制。 海外市场 TikTok → YouTube Shorts → Instagram Reels 这是我更推荐的组合。 尤其是： TikTok负责测试爆款 → YouTube负责沉淀 IP → Instagram负责品牌/视觉传播。 但真正重要的是：不要把“平台”放在第一位 对于个人 AI 短剧创作者，我认为目前最大的机会其实是： 一个人做一个“小型影视工作室”。 例如： 1个人 ↓ AI编剧 ↓ AI角色设计 ↓ AI视频生成 ↓ AI配音 ↓ AI音乐 ↓ 剪辑 ↓ 一部 20 集短剧 ↓ 同时发布 5–7个平台 这样平台本身就变成了 分发渠道 ，而不是你的商业模式。 我给你的优先级 如果只能选 3 个 ： 中文： 🥇 抖音 🥈 快手 🥉 西瓜视频 海外： 🥇 TikTok 🥈 YouTube Shorts 🥉 Instagram Reels 如果你准备认真做 1–2 年： TikTok + YouTube Shorts + 抖音 我认为这是目前个人 AI 竖屏短剧最值得测试的“三平台组合”。 另外值得特别注意的是，YouTube 已经明确对 重复、批量化、缺乏原创价值的 AI 内容 加强了变现限制，所以未来真正有竞争力的不是“谁生成得最快”，而是 谁能用 AI 以极低成本持续生产真正有剧本、有角色、有世界观的原创 IP 。 Google Help +1 官方入口： TikTok · YouTube Shorts · 抖音 · 快手 · 西瓜视频 如果你是准备 现在开始一个人做 AI 短剧 ，我还可以进一步给你排一个「 2026 年个人 AI 短剧最值得做的 10 个题材 + 每个平台适合的集数/时长/更新频率 + 变现路径 」，这个会比单纯比较平台更有实际操作价值。 Sources",
+    "citations": [
+      {
+        "domain": "https://newsroom.tiktok.com",
+        "position": "1",
+        "snippet": null,
+        "title": "Empowering Creators to Succeed on TikTok with Enhanced Resources and New Monetization Tools - Newsroom | TikTok",
+        "url": "https://newsroom.tiktok.com/for-creators-future-format-summit?lang=en&utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://m.ixigua.com",
+        "position": "2",
+        "snippet": null,
+        "title": "全球首部AIGC怪兽科幻IP短剧 - 短剧高清在线观看 | 西瓜视频",
+        "url": "https://m.ixigua.com/dx/7671512544682495270?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://support.google.com",
+        "position": "3",
+        "snippet": null,
+        "title": "How to earn money on YouTube - YouTube Help",
+        "url": "https://support.google.com/youtube/answer/72857?hl=en&utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.kwai.com",
+        "position": "4",
+        "snippet": null,
+        "title": "Kwai for creators",
+        "url": "https://www.kwai.com/creators/earn?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "个人创作者制作竖屏AI短剧，最值得尝试的平台有哪些？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E4%B8%AA%E4%BA%BA%E5%88%9B%E4%BD%9C%E8%80%85%E5%88%B6%E4%BD%9C%E7%AB%96%E5%B1%8FAI%E7%9F%AD%E5%89%A7%EF%BC%8C%E6%9C%80%E5%80%BC%E5%BE%97%E5%B0%9D%E8%AF%95%E7%9A%84%E5%B9%B3%E5%8F%B0%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "如果是 预算有限、2–10人的小团队做 AI 短剧 ，我不建议一开始就追求“最强模型”，而应该优先选择 单位成片成本低 + 人物一致性好 + 能批量迭代 + 后期方便 + 商用条款清楚 的平台。 目前比较值得考虑的是： 可灵 Kling、Vidu、海螺 Hailuo、Runway、即梦/剪映体系 。其中，小团队尤其应该关注“平台工作流”而不只是单个视频模型。 一句话结论 平台 预算友好度 短剧适配 人物一致性 批量生产 后期剪辑 我会怎么选 Vidu ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐½ ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐ 低预算首选之一 可灵 Kling ⭐⭐⭐⭐½ ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐½ ⭐⭐⭐⭐ 真人短剧首选之一 海螺 Hailuo ⭐⭐⭐⭐ ⭐⭐⭐⭐½ ⭐⭐⭐⭐ ⭐⭐⭐⭐ ⭐⭐⭐ 性价比备选 即梦/剪映 ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐ ⭐⭐⭐⭐ ⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ 中文团队工作流很合适 Runway ⭐⭐⭐ ⭐⭐⭐⭐½ ⭐⭐⭐⭐½ ⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ 预算允许时做高质镜头 注意：AI 视频平台的价格和积分规则变化非常快，下面的价格更适合拿来判断 成本结构 ，实际购买前应以平台结算页为准。 1. 如果预算特别紧：优先考虑 Vidu Vidu 官方网站 我认为 Vidu 是目前非常适合小团队测试“AI 短剧工业化”的平台之一 。 它的优势不只是文生视频，而是有： 文生视频 图生视频 参考生视频 多主体一致性 AI 音效 AI 生图 One Click Film 等工作流 官方目前还明确把 多主体一致性 和参考生视频作为核心能力。 Vidu 更关键的是，它的 API 定价相对透明。例如 Vidu Q3 Pro： 540p：约 $0.045/秒 720p：约 $0.10/秒 1080p：约 $0.12/秒 而且有错峰价格，部分场景可以降到约一半。( Vidu ) 为什么适合短剧？ 短剧真正烧钱的并不是“生成一条视频”，而是： 同一个演员/角色 × 多个镜头 × 多次重生成 Vidu 的参考图/参考视频能力比较适合建立： 角色定妆图 → 场景图 → 镜头生成 → 连续镜头 这样的流程。 如果团队以后想从“人工操作”升级成自动化生产，Vidu 也有 API；官方目前提供按量付费和团队级套餐。 Vidu 适合： 2–5人团队 每周生产几十到几百个镜头 竖屏短剧 漫剧/真人混合剧 想以后做 API 自动化 2. 如果主要做真人短剧：重点测试可灵 Kling 可灵 AI 官方网站 如果你们的目标是： “AI 演员 + 真人感 + 连续剧情 + 对白/动作” 我会把 Kling 放在第一梯队。 它更值得测试的是： 人物运动 人物表情 镜头运动 图生视频 参考人物 多镜头连续性 复杂动作 对于短剧而言， “人物看起来像不像真人”往往比单纯画质更重要 。 不过我不建议小团队只买 Kling 一个平台。 更好的方法是： Vidu/Kling 做主镜头 → 其他模型做特殊镜头 → 剪映/CapCut 统一后期。 这样不会被某一个模型的缺陷卡住。 3. 海螺 Hailuo：适合做第二生产线 Hailuo AI 官方网站 海螺也是值得小团队测试的平台。 它的优势是 视频生成能力与成本之间的平衡 ，尤其适合大量尝试： 情绪镜头 环境镜头 动作镜头 转场镜头 氛围镜头 B-roll 不过如果你们的核心诉求是“同一个 AI 演员连续出演几十个镜头”，我会优先比较 Kling/Vidu ，而不是单独押注 Hailuo。 另外，Hailuo 的订阅体系比较适合有一定生成量的创作者；官方公布的历史/现行条款中，Pro 等套餐采用月度 credits 机制，例如 Pro 为 4,500 credits/月。 hailuoai.video 我的定位： Kling/Vidu = 主力演员和剧情镜头 Hailuo = 补充镜头、实验镜头 4. 中文小团队不要低估“即梦 + 剪映” 如果团队主要在中国大陆、成员不懂复杂英文提示词，或者你们最终就是要做： 脚本 → 分镜 → AI画面 → 配音 → 字幕 → 竖屏发布 那么“模型最强”未必是最重要的。 更重要的是 工作流是不是顺手 。 这时候可以重点测试： 剪映官方 CapCut/剪映体系本身非常适合承担 最后一公里 ： 剪辑 字幕 配音 音乐 模板 画幅转换 社媒发布素材 CapCut 官方目前也已经把 AI credits 纳入会员体系；新版 Pro 包含 1,200 AI credits，并把云存储提升到 1TB。 CapCut 对于小团队，我反而建议： 不要追求一个平台包办一切。 而是让： AI视频平台负责“生成” 剪映负责“成片” 这通常比全程锁定某一个 AI 视频平台更灵活。 5. Runway：质量很好，但预算有限时不要当主力 Runway 官方 Runway 更像一个 专业创作工作台 。 它的优点是： 模型比较丰富 视频编辑能力强 图像/视频/声音工作流完整 团队协作成熟 适合广告、MV、影视视觉等高要求项目 目前 Runway 的 Standard 每月 625 credits，Pro/Unlimited 为 2,250 credits，Max 为 9,500 credits；Team 则是 每个席位 6,900 credits/月，并进入团队共享池 。 Runway +1 尤其值得注意的是，Runway 在 2026 年正在从原来的 Unlimited 模式转向 Max/credit-based 模式；Max 更强调高生成量和速度。 Runway 所以对于 预算有限的短剧团队 ： ❌ 不建议把 Runway 当成所有镜头的“主力渲染器”。 ✅ 更适合用来制作 关键镜头、宣传片、片头、高潮场景和高质量视觉镜头 。 真正省钱的关键：不要用 AI 直接“生成一集” 这是我最建议小团队采用的生产方式。 假设你们要做一部： 60集 × 每集2分钟 千万不要： 输入第1集剧本 → AI直接生成2分钟视频 而应该拆成： Step 1：剧本 例如： 第12集：女主发现男主隐藏身份。 ↓ Step 2：拆成 8–12 个镜头 例如： 女主推门 男主回头 女主特写 文件掉落 女主发现照片 男主沉默 两人对视 女主转身离开 ↓ Step 3：先做角色资产 每个主要角色建立： 正面 侧面 半身 全身 不同表情 不同服装 形成自己的 Character Bible 。 ↓ Step 4：先生成静态关键帧 不要马上生成视频。 先确定： 这个角色长什么样 + 这个场景长什么样 + 构图是什么样 这样失败成本低很多。 ↓ Step 5：最后才做视频 例如： 关键帧 → Vidu/Kling → 5–10秒镜头 ↓ Step 6：剪映/CapCut成片 最后处理： 台词 配音 字幕 BGM 音效 转场 画面裁切 小团队应该怎么算“真实成本”？ 不要看： “这个平台一个月只要 $20。” 真正应该计算： 成片成本 = 生成成本 × 重试次数 × 镜头数量 + 配音 + 音乐 + 人工剪辑 举个简单例子。 假设： 每集 2 分钟 需要 15 个镜头 每镜头平均 8 秒 每个镜头平均生成 4 次才满意 那么： 15 × 8 × 4 = 480秒生成量 也就是说，最终只有： 120秒成片 但实际上需要生成： 480秒素材 这就是为什么 AI 短剧最重要的指标不是“生成一秒多少钱”，而是： 有效成片率 例如： 平台 单次生成成本 成功率 实际成本 A 低 25% 高 B 中 50% 中 C 高 70% 反而可能低 所以建议你们 先做同一个10镜头测试集 ，再决定长期采购哪个平台。 我会给小团队这样配置 💰 极低预算：$50–150/月 推荐：Vidu/可灵 + 剪映 配置： 一个主视频生成平台 一个备用视频生成平台 剪映/CapCut 免费/低成本 TTS 自己建立角色素材库 重点不是画质，而是： 跑通完整生产流程。 💰 中低预算：$200–500/月 这是我认为 性价比最高的区间 。 建议： 主力：Kling 或 Vidu + 辅助：Hailuo + 后期：CapCut/剪映 + 关键镜头：Runway 这样可以避免： “某一个平台今天人物一致性崩了，整个项目停摆。” 💰 $500–1,500/月 这时候可以开始真正考虑 小型 AI 短剧工作室 。 建议： Kling/Vidu：主力镜头 Hailuo：补充镜头 Runway：高价值镜头 CapCut：后期 API：开始自动化 自建角色/场景数据库 自动生成分镜 Prompt 自动批量提交任务 Vidu 的官方 API 已经提供按量计费和团队/工作室级资源包，例如 Studio Basic、Team Creator 等，说明它比较适合从个人创作逐步走向批量生产。 Vidu 最后还有一个经常被忽略的问题：商用授权 如果你们做的是 付费短剧、广告、品牌内容、平台投稿 ，一定不要只看“能不能生成”。 至少确认： 输出视频是否允许商业使用 输入的演员照片是否有肖像权 配音是否允许商业使用 音乐是否有版权 平台是否保留训练/使用你上传素材的权利 是否允许客户买断/转授权 API 与网页端的授权是否一致 例如 Luma 的官方 API FAQ 明确写明 API 生成的视频和图片允许商业使用。 Luma APIs 而 Vidu 的官方定价/平台页面则明确提供商业化和企业/团队使用路径。 Vidu +1 不要因为“生成出来的视频没有水印”就默认它可以商业使用。 我的最终排序 如果我是一个 3–5人的预算有限 AI 短剧团队 ，我会这样试： 第一梯队 ① Vidu — 最值得测试批量生产和一致性 ② Kling — 真人短剧/动作/人物表现重点测试 第二梯队 ③ Hailuo — 作为第二生成器 ④ 即梦 + 剪映 — 中文团队和后期工作流非常值得测试 第三梯队 ⑤ Runway — 不做最低成本主力，而用于关键高质量镜头 最重要的是： 不要先买年费。 先拿同一套 10个短剧镜头 ，分别在 Vidu、Kling、Hailuo、Runway 上测试，然后记录： 人物一致性 × 镜头成功率 × 单条有效镜头成本 × 生成速度 × 后期耗时 跑完这一轮，通常就能非常明确地知道哪个平台最适合你们。 官方/价格资料 Vidu 官方定价 Vidu API 定价 Vidu API/团队套餐 Runway Credits 官方说明 Runway 套餐选择指南 Runway Team 套餐说明 CapCut/剪映会员说明 Hailuo 官方订阅条款 如果你告诉我 团队人数、每月预算（例如 ¥1,000 / ¥3,000 / ¥10,000）、目标是“真人短剧/漫剧/小说推文/广告短剧”以及每月计划产出多少集 ，我可以进一步给你做一张 “平台 × 月成本 × 每集成本 × 推荐工作流”的采购方案表 。 Content diagnostic : content_references {\"count\":1,\"examples\":[{\"type\":\"grouped_webpages\",\"sourceIndex\":2,\"shape\":{\"name\":\"missing\",\"data\":\"present\",\"dil\":\"missing\"}}]} Sources",
+    "citations": [
+      {
+        "domain": "https://www.vidu.com",
+        "position": "1",
+        "snippet": null,
+        "title": "Vidu AI视频生成定价方案 | Vidu AI",
+        "url": "https://www.vidu.com/zh/pricing?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://hailuoai.video",
+        "position": "2",
+        "snippet": null,
+        "title": "Hailuo AI Video Subscription Service Terms",
+        "url": "https://hailuoai.video/doc/payment-policy.html?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.capcut.com",
+        "position": "3",
+        "snippet": null,
+        "title": "What Is the Price of CapCut for New Subscribers",
+        "url": "https://www.capcut.com/help/new-capcut-subscription-pricing?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://help.runwayml.com",
+        "position": "4",
+        "snippet": null,
+        "title": "How do credits work? – Runway",
+        "url": "https://help.runwayml.com/hc/en-us/articles/15124877443219-How-do-credits-work?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://docs.lumalabs.ai",
+        "position": "5",
+        "snippet": null,
+        "title": "FAQ",
+        "url": "https://docs.lumalabs.ai/ue/docs/faq?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "预算有限的小团队如何选择AI短剧生产平台？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E9%A2%84%E7%AE%97%E6%9C%89%E9%99%90%E7%9A%84%E5%B0%8F%E5%9B%A2%E9%98%9F%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9AI%E7%9F%AD%E5%89%A7%E7%94%9F%E4%BA%A7%E5%B9%B3%E5%8F%B0%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "Worked for 12s Searching the web 我会按“角色一致性—配音—剪辑—发布”四个维度横向比较主流平台，并优先核对官方功能说明，再补充适合不同制作流程的选择建议。 Searching the web Searching the web Searched 13 websites 如果把“AI短剧平台”理解为 从剧本/角色 → 分镜 → 视频生成 → 配音 → 剪辑 → 发布/导出 的一站式工作流，那么不同平台的定位其实差异很大：有的强在“生成模型”，有的强在“角色一致性”，有的则更像“AI剪辑工作台”。 下面的评分是我基于各平台目前公开功能做的 工作流能力评估 ，不是统一测试集上的客观跑分。 核心对比 平台 角色一致性 配音/口型 剪辑能力 发布/分发 更适合 MiniCut ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐ 连载AI短剧、漫剧、批量生产 Runway ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐½ ⭐⭐⭐⭐½ ⭐⭐⭐⭐ 高品质影视感、专业创作 Vidu ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐ ⭐⭐⭐ ⭐⭐⭐ 多角色、多镜头剧情 HeyGen ⭐⭐⭐⭐½ ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐½ 真人数字人、口播、国际化内容 CapCut ⭐⭐⭐ ⭐⭐⭐⭐½ ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ 短视频剪辑、TikTok/社媒运营 Hailuo / 海螺 ⭐⭐⭐⭐½ ⭐⭐⭐ ⭐⭐½ ⭐⭐½ 高性价比视频生成、作为生成引擎 1. 角色一致性：MiniCut / Runway / Vidu 最值得关注 🥇 MiniCut：最贴近“连续剧”需求 MiniCut 官方中文站 MiniCut 的思路不是单纯提供一个视频模型，而是建立 角色库 + 剧本 + 分镜 + 成片 的连续工作流。官方明确强调角色库可以让角色在整部剧中保持一致，并支持把角色锁定到分镜、跨集使用。它还可以调用包括 Seedance、Kling、Veo、Hailuo 等多个模型。 MiniCut +1 优势： 适合几十集、上百集的连续剧； 角色库天然适合“固定男女主”； 可以在不同镜头选择不同模型； 改剧本后，只重新生成发生变化的镜头，而不是整集重做。 MiniCut 所以如果你的核心问题是： “我要做一个60集AI短剧，男女主从第一集到第60集都不能换脸。” MiniCut 的产品设计比单纯的视频生成器更贴合这个需求。 🥈 Runway：角色和场景控制非常强 Runway 官方 Runway 的 Gen-4 References 可以用1–3张参考图保持角色、地点、物体等元素的一致性。官方甚至直接提供了“microdrama”工作流：锁定演员 → 按镜头生成 → 延续上一帧 → 竖屏剪辑成连续剧。 Runway +1 特别值得注意的是，它不只是“脸一致”，还强调： 发型、服装； 场景； 灯光； 道具； 镜头之间的连续性。 这对于真人影视风格短剧很重要。 我的判断： 如果追求“电影感”和镜头控制，Runway 比单纯的短剧流水线平台更强；如果追求“批量连载”，MiniCut 的工作流更省事。 🥉 Vidu：多参考角色非常适合剧情片 Vidu 官方 Vidu 的 Reference to Video（参考生视频） 支持最多 7个参考素材 ，可以分别控制人物、场景、风格、构图、镜头运动等。官方明确将其定位于多镜头、故事型视频。 Vidu 这使 Vidu 特别适合： 男主 + 女主 + 配角 + 固定场景 + 固定道具 这种复杂短剧。 此外，Vidu 的工具/API体系已经包含 Lip Sync、Digital Human、Video Extend、Subject Library 等功能。 Vidu 2. 配音：HeyGen / MiniCut / Runway 更完整 🥇 HeyGen：配音和口型是核心优势 HeyGen 官方 HeyGen 当前支持： AI voiceover； 177+语言/方言； 声音克隆； 角色与音频一键同步； 自动字幕； 音乐和音效。 HeyGen 因此如果短剧大量依赖： 人物说话 → 口型 → 情绪 → 声音人格 HeyGen 很强。 但它的传统优势更偏 数字人/Avatar ，不是传统意义上复杂的影视级多场景短剧。 Runway：开始补齐“角色表演 + 声音” Runway 现在有 Character Script to Video ，可以： 上传角色图片； 输入台词； 选择预设声音； 克隆声音； 自定义生成声音； 或直接上传自己的音频； 生成带同步表演的视频。 Runway 另外还有 Act-Two，可以把真人表演驱动到角色上；对于多角色对话也有专门工作流。 Runway 所以 Runway 更适合： “我不仅要角色说话，还要角色像演员一样表演。” MiniCut：更偏“短剧流水线” MiniCut 把 剧本、角色、镜头、配音、音乐、剪辑 放在同一套工作流中。官方定位本身就是“AI短剧、竖屏视频、图片、配音和音乐”。 MiniCut +1 对于批量制作来说，这一点比单独比较某个模型的音质更重要。 3. 剪辑：CapCut 明显领先 CapCut 官方 如果单独比较 后期剪辑 ，我会把 CapCut 放第一。 它提供： 多轨视频编辑； Auto Captions； Text-to-Speech； Auto Reframe； Keyframes； 调色； 特效； 模板； AI脚本转视频； 长视频自动切短视频。 CapCut +1 而且 CapCut 的定位天然就是社交媒体视频，因此做： 9:16 + 字幕 + BGM + 音效 + 转场 + 封面 非常方便。 所以一个很实用的组合其实是： Vidu / Runway / Kling / Hailuo 负责“拍”，CapCut负责“剪”。 4. 发布能力：CapCut / Runway / MiniCut 更偏“内容生产” 这里需要特别区分： “导出视频” ≠ “直接发布到短剧平台”。 很多AI视频平台所谓的“发布”，实际上是生成、导出，然后由你上传到 TikTok、YouTube Shorts、Instagram Reels 等平台。 Runway Runway 的官方微短剧方案已经明确针对： Short-drama apps； TikTok； Instagram Reels； YouTube Shorts； 并提供竖屏9:16、片头、悬念结尾、封面等短剧包装思路。 Runway CapCut CapCut 则明显偏向社媒内容生产，官方直接把 YouTube、Instagram 等作为主要内容场景，并提供 Reels/TikTok 模板。 CapCut MiniCut MiniCut甚至针对： TikTok Series； Instagram Reels； YouTube Shorts； Faceless YouTube Channel 提供专门的短剧生产流程和导出规格。 MiniCut 所以如果你说的“发布能力”是 内容做好之后快速适配不同平台 ，这三个更值得看。 5. Hailuo / 海螺：更适合作为“生成引擎” MiniMax / Hailuo 官方 Hailuo 的一个重要优势是 Subject Reference 。 MiniMax 官方介绍的 S2V-01，可以通过单张参考图保持人物身份，在不同镜头和运动中维持角色特征。官方也说明了它仍可能出现环境变化、提示词遵循度下降等情况。 MiniMax 所以我不会把 Hailuo 单独视为一个完整的“短剧生产操作系统”，而更倾向于把它看成： 一个很强的AI视频生成模块。 例如： MiniCut → 负责剧本/角色/分镜 → Hailuo负责某些镜头 → CapCut负责最终剪辑 这种组合反而很合理。 综合排名 如果你是要 真正制作连续AI短剧 ，而不是偶尔生成一个视频，我会这样排： 🏆 第一梯队：MiniCut 最适合：连续剧、漫剧、批量生产 优点是把“剧本—角色—分镜—生成—剪辑”串起来，而且可以混用不同视频模型。 MiniCut +1 推荐指数：★★★★★ 🎬 第二梯队：Runway 最适合：电影感、真人感、导演型创作 角色参考、场景连续性、镜头控制、角色表演都比较完整。官方甚至已经针对 microdrama 建立完整工作流。 Runway +1 推荐指数：★★★★★ 🎭 第三梯队：Vidu 最适合：多角色、多参考、多镜头剧情 7个参考素材、角色/场景/风格控制以及 Lip Sync 等能力，使它特别适合复杂剧情镜头。 Vidu +1 推荐指数：★★★★½ 🗣️ 第四梯队：HeyGen 最适合：数字人、口播、对话型内容 声音、口型、Avatar、字幕和编辑整合得很好，但如果你要拍传统意义上的“多场景影视短剧”，它不是我的第一选择。 HeyGen 推荐指数：★★★★ ✂️ 第五梯队：CapCut 最适合：最终剪辑和发布前包装 它未必是最好的“AI摄影棚”，但非常可能是最好的“AI短视频后期工作台”。 CapCut +1 推荐指数：★★★★½（剪辑维度★★★★★） 我的实际选型建议 如果你准备 从零开始做一套 AI 短剧生产线 ，我反而不建议只选一个平台。 方案 A：追求效率 MiniCut → 成片 适合一个人做几十集甚至上百集的竖屏短剧。 方案 B：追求画面质量 Runway / Vidu → CapCut 前者负责角色、场景和镜头生成，后者负责字幕、节奏、音乐、音效和最终包装。 方案 C：真人数字人短剧 HeyGen → CapCut 尤其适合办公室、情感对话、知识类剧情、主播型短剧。 方案 D：专业工作室 MiniCut 做剧本/资产管理 → Vidu/Runway/Hailuo/Kling/Seedance 按镜头选模型 → CapCut/专业NLE最终剪辑 这是我认为目前最有扩展性的路线，因为 不同模型在不同镜头上的强项并不一样 。MiniCut 本身也采取了“每个镜头可以选择模型”的思路。 MiniCut 一句话总结： 角色连续剧：MiniCut / Runway；多角色参考：Vidu；声音和口型：HeyGen / Runway；后期剪辑：CapCut；单镜头生成：Hailuo 等模型。 如果目标是 真正商业化生产 30–100 集竖屏短剧 ，我会优先考虑 MiniCut + Vidu/Runway + CapCut ，而不是押注一个“全能平台”。 Sources",
+    "citations": [
+      {
+        "domain": "https://www.minicut.ai",
+        "position": "1",
+        "snippet": null,
+        "title": "#1 Creative Suite for AI Generated Media | MiniCut",
+        "url": "https://www.minicut.ai/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://help.runwayml.com",
+        "position": "2",
+        "snippet": null,
+        "title": "Creating with Gen-4 Image References – Runway",
+        "url": "https://help.runwayml.com/hc/en-us/articles/40042718905875-Creating-with-Gen-4-Image-References?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.vidu.com",
+        "position": "3",
+        "snippet": null,
+        "title": "Reference to Video AI — Keep Characters Consistent | Vidu AI",
+        "url": "https://www.vidu.com/ai-reference-to-video?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://platform.vidu.com",
+        "position": "4",
+        "snippet": null,
+        "title": "Vidu API",
+        "url": "https://platform.vidu.com/solutions?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.heygen.com",
+        "position": "5",
+        "snippet": null,
+        "title": "Free AI Video Generator | HeyGen",
+        "url": "https://www.heygen.com/tool/ai-video-generator?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.capcut.com",
+        "position": "6",
+        "snippet": null,
+        "title": "CapCut AI Video Editor: Smart Online Video Editing with Advanced AI Tools",
+        "url": "https://www.capcut.com/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://runway.com",
+        "position": "7",
+        "snippet": null,
+        "title": "AI Microdrama Maker: Vertical Short Drama Series | Runway",
+        "url": "https://runway.com/use-cases/microdramas?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.minimax.io",
+        "position": "8",
+        "snippet": null,
+        "title": "S2V-01: Subject Reference of Hailuo - MiniMax News | MiniMax",
+        "url": "https://www.minimax.io/news/s2v-01-release?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "比较不同AI短剧制作平台的角色一致性、配音、剪辑和发布能力。 Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E6%AF%94%E8%BE%83%E4%B8%8D%E5%90%8CAI%E7%9F%AD%E5%89%A7%E5%88%B6%E4%BD%9C%E5%B9%B3%E5%8F%B0%E7%9A%84%E8%A7%92%E8%89%B2%E4%B8%80%E8%87%B4%E6%80%A7%E3%80%81%E9%85%8D%E9%9F%B3%E3%80%81%E5%89%AA%E8%BE%91%E5%92%8C%E5%8F%91%E5%B8%83%E8%83%BD%E5%8A%9B%E3%80%82%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "如果把 StoReel Canvas 和 Runway、Kling、Veo、Sora 等 AI 视频工具放在一起看，我认为它最核心的差异不是“单个视频模型有多强”，而是 产品定位不同：StoReel Canvas 更像“AI 短剧生产工作台”，而很多其他工具更像“AI 视频生成器/影视创作工具” 。 注：Sora 目前已经停止服务——OpenAI 官方说明 Sora Web/App 于 2026 年 4 月 26 日 停止，API 于 2026 年 9 月 24 日 停止。因此下面把 Sora 作为产品思路的对比，而不是当前可用工具推荐。 OpenAI +1 一句话对比 工具 核心思路 最突出的优势 StoReel Canvas 从故事到成片的一体化短剧流水线 剧本 → 分镜 → 配音 → 视频，面向连续故事生产 Runway 专业级生成式影视工作台 镜头控制、角色/场景一致性、后期与多模型工作流 Kling 高质量 AI 视频生成平台 视频生成质量、运动表现、长镜头/多模态能力 Veo / Flow 高质量影视级生成模型 + 创作环境 真实感、物理效果、原生音频、镜头控制 Sora 从文字/素材直接创造视频世界 创意生成、Remix、Storyboard、社交式创作 1. StoReel Canvas 最大的不同：它首先解决的是“做一部短剧” StoReel Canvas 官方直接把自己定位成 AI Short Drama Creator ，核心功能是： 剧本创作 Storyboard / 分镜 配音 视频生成 将这些步骤放在一个工作流里 也就是说，它的基本单位不是“一个 5～10 秒的视频 clip”，而是 一整个故事/短剧项目 。 StoReel Canvas +1 StoReel Canvas 官方中文版 这点非常重要。 例如你想做： “一个女孩在末日城市寻找失踪哥哥的 3 分钟 AI 短剧” 传统 AI 视频工作流可能是： 写故事 → 找/生成角色 → 做角色图 → 生成场景 → 一个镜头一个镜头生成 → 配音 → 剪辑 → 修一致性 而 StoReel Canvas 的产品思路明显更接近： 故事/剧本 → AI 自动拆分 → 分镜 → 场景 → 配音 → 视频 所以它更偏向 “内容生产流水线” ，而不是单纯追求某一个镜头的极致画质。 2. 它的第二个差异：Storyboard 是核心工作流，而不是附加功能 StoReel 官方还强调了 One-Click Storyboards ：可以从一张图生成包含多个电影化角度的 storyboard，并支持批量生产。 StoReel 这意味着它试图解决 AI 视频创作中一个很现实的问题： “我不是缺一个漂亮镜头，我缺的是 30 个镜头，而且它们必须属于同一个故事。” 相比之下，Runway 的核心优势更偏向 对单个镜头以及角色/场景的一致性进行精细控制 。 例如 Runway Gen-4 References 可以用参考图维持角色、场景、物体的一致性，还可以从不同角度重新生成同一个角色或场景。 Runway +1 所以可以简单理解： StoReel： “帮我把故事拆成很多镜头并生产出来。” Runway： “我已经知道我要什么镜头，帮我把这个镜头做到可控、漂亮、一致。” 3. StoReel 更强调“批量化生产” StoReel 官方介绍里有一个比较值得注意的关键词： batch / scalable story creation ——支持批量生成和导出，目标是规模化故事生产。 StoReel 这和专业 AI 视频模型的定位有明显区别。 比如： 传统 AI 视频工具 更像： Prompt → Generate → 看结果 → 修改 Prompt → 再生成 适合： 广告片段 MV 概念片 产品展示 一个精彩镜头 实验性视觉内容 StoReel 更像： IP/剧本 → 人物 → 分镜 → 大量场景 → 大量镜头 → 配音 → 连续内容 因此如果目标是： “每天批量生产几十条 AI 短剧/连续剧内容” StoReel 的产品设计逻辑会比单纯的视频生成器更贴近这个需求。 4. 但在“单镜头质量和精细控制”方面，不能简单认为 StoReel 一定更强 这是一个很重要的区别。 Runway Gen-4 的官方定位就是 world consistency + controllability ，可以保持角色、地点和物体跨镜头的一致性，并通过 reference 来控制不同镜头。 Runway Runway 甚至允许： character reference → 不同地点 → 不同光线 → 不同镜头角度 同时保持人物视觉身份。 Runway Gen-4 官方介绍 所以如果你的需求是： “我要把这个角色拍成电影，而且我要精确控制摄影机、构图、动作、光线和视觉风格。” Runway / Veo 这类专业生成模型通常更值得优先考虑。 StoReel 的优势反而在于： 不要求创作者自己管理那么多生产环节。 5. Veo 的差异：更偏“电影镜头 + 音频 + 物理真实感” Google 的 Veo 3.1 目前强调的是： text-to-video image-to-video 原生声音 对话 音效 环境声音 character consistency scene extension first/last frame camera controls 尤其是 video + audio 是它非常重要的卖点。 Google DeepMind +1 Google DeepMind Veo 官方页面 因此： Veo 更像“我要生成一个非常好的电影镜头”。 而： StoReel 更像“我要把一整个短剧生产出来”。 这是两者最根本的定位差异。 6. Sora 的思路又不一样 Sora 曾经比较强调： Storyboard Remix Extend Blend 从文本、图片、视频素材开始创作 社区式作品浏览 OpenAI 当时的产品介绍明确提到 Storyboard 可以对视频不同时间点指定输入。 OpenAI 所以 Sora 和 StoReel 其实比 Veo 更接近一些——两者都在尝试从“单次生成”走向“故事/内容创作”。 但差异在于： Sora 更像通用创意视频生成平台；StoReel 更垂直地针对“短剧生产”。 而且目前 Sora 已经停止服务，所以不能把它当成 StoReel 的现实竞争对手。 OpenAI 7. 一个更直观的定位图 我会这样理解这几个产品： 故事 / 内容生产 ↑ | StoReel Canvas | | Sora ────────────┼────────── Runway | | | ↓ 单镜头 / 视觉创作 Veo / Kling 当然这不是性能排名，而是 产品工作流定位 。 如果你的问题是： “哪个工具能生成最惊艳的一个镜头？” → 更应该关注 Veo / Runway / Kling 。 如果问题是： “哪个工具能让我把一个故事变成很多镜头？” → StoReel Canvas 的定位更有针对性。 如果问题是： “我想做连续 AI 短剧/短视频 IP，并大量生产。” → StoReel Canvas 的差异化就比较明显。 8. StoReel Canvas 真正值得关注的，其实是“工作流抽象” 我认为这是它最有意思的地方。 现在 AI 视频行业正在从： “Prompt → Video” 逐渐变成： “Idea → Story → Characters → Scenes → Shots → Video → Audio → Publish” StoReel Canvas 直接把后面这一整条链路作为产品。 它甚至进一步提供了创作者资产库、模板、角色、场景以及可复用资产，并希望连接发布和商业化。 StoReel 所以它和 Runway、Veo 的竞争维度并不完全相同。 Runway/Veo 的核心竞争力是“生成模型和创作控制”。 StoReel Canvas 的核心竞争力更可能是“内容生产操作系统”。 我的结论 如果只用一句话概括： StoReel Canvas 不是单纯想成为“更好的 AI 视频模型”，而是在尝试成为“AI 短剧的生产线”。 因此它最适合： 🎬 AI 短剧 📱 TikTok / Reels / Shorts 连续剧情内容 📖 漫画/小说 → 视频 👤 固定角色的连续故事 ⚡ 批量化内容生产 🏭 AI 内容工作室 / 内容团队 而如果你更关心： 电影级单镜头 极致视觉质量 摄影机控制 复杂动作 VFX 精细 image-to-video 专业影视制作 那么 Runway / Veo / Kling 等专业视频模型 仍然值得重点比较。 StoReel Canvas 官方网站 Runway AI Video Generator Google Veo 官方页面 Kling Canvas 如果你是想 评估 StoReel Canvas 是否值得做成一个产品/创业项目 ，我还可以进一步从 “技术壁垒、商业模式、用户群、与 Runway/Kling/Veo 的竞争壁垒” 四个维度做一张竞品分析表。 Sources",
+    "citations": [
+      {
+        "domain": "https://openai.com",
+        "position": "1",
+        "snippet": null,
+        "title": "What to know about the Sora discontinuation | OpenAI Help Center",
+        "url": "https://openai.com/sora/?cfplatform=android&webview=1&utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://canvas.storeel.com",
+        "position": "2",
+        "snippet": null,
+        "title": "StoReel Canvas - AI 短剧创作平台",
+        "url": "https://canvas.storeel.com/zh/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.storeelapp.com",
+        "position": "3",
+        "snippet": null,
+        "title": "StoReel",
+        "url": "https://www.storeelapp.com/homepage.html?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://help.runwayml.com",
+        "position": "4",
+        "snippet": null,
+        "title": "Creating with Gen-4 Image References – Runway",
+        "url": "https://help.runwayml.com/hc/en-us/articles/40042718905875-Creating-with-Gen-4-Image-References?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://runway.com",
+        "position": "5",
+        "snippet": null,
+        "title": "Runway Gen-4: AI Video Generation with World Consistency",
+        "url": "https://runway.com/research/introducing-runway-gen-4?rd=1&utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://deepmind.google",
+        "position": "6",
+        "snippet": null,
+        "title": "Veo 3.1 — Google DeepMind",
+        "url": "https://deepmind.google/models/veo/?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "StoReel Canvas与其他AI视频生成工具相比，主要差异是什么？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=StoReel%20Canvas%E4%B8%8E%E5%85%B6%E4%BB%96AI%E8%A7%86%E9%A2%91%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7%E7%9B%B8%E6%AF%94%EF%BC%8C%E4%B8%BB%E8%A6%81%E5%B7%AE%E5%BC%82%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "如果团队只有 1–3 人 ，目标是减少“打开 5 个 AI 网站、买 5 份订阅、反复导出素材”的情况，我会优先选择 一体化 AI 创作平台（all-in-one creative suite） ，而不是单项能力最强的模型。 我的推荐排序 平台类型 最适合 能合并掉哪些工具 1–3人团队的性价比 Canva / 综合设计型 社媒、广告、品牌内容、短视频 图片、排版、模板、简单视频、文案、素材库 ⭐⭐⭐⭐⭐ Runway / AI视频型 AI视频、广告片、短片、视觉内容 视频生成、图片、声音/音乐、部分后期 ⭐⭐⭐⭐½ Adobe Firefly / 专业创意套件型 已经使用 Photoshop/Adobe 的团队 图片、视频、音频、PS/Express 等 ⭐⭐⭐⭐ Descript / 内容编辑型 播客、访谈、YouTube、知识视频 剪辑、字幕、转录、配音、音频处理 ⭐⭐⭐⭐ CapCut / 短视频型 TikTok/Reels/短视频矩阵 剪辑、字幕、图片/视频生成、音频 ⭐⭐⭐⭐½ 1. 如果你们什么都做：优先 Canva Canva 的优势不是某一个模型特别强，而是 把设计、模板、图片/视频素材、AI生成、品牌管理和协作放在一个工作区 。Canva 自己也把 Magic Studio 定位成“无需在多个 AI 工具之间切换”的一体化工作流。 Canva 目前 Canva 已经把 Canva Teams 改为 Canva Business ，Business 面向团队，包含协作、审批、Brand Kits，以及比 Pro 更高的 AI 使用额度；官方目前列出的美国价格是 $250/人/年 。 Canva +1 Canva 官方定价 适合： 1–3 人营销团队 社交媒体内容 广告素材 YouTube 缩略图 PPT/提案 品牌视觉 简单短视频 为什么省钱： 如果原来是 Canva + 图片生成器 + stock 素材库 + 简单视频工具，Canva 可以吃掉相当一部分订阅。 注意： 高频 AI 生成用户可能仍会遇到额度问题；Canva 目前还提供单独的 AI Pass ，官方标价为 $100/人/月 ，所以重度 AI 用户不要只看基础订阅价格。 Canva 2. 如果核心产品是 AI 视频：选 Runway Runway 更适合真正把“AI视频生产”作为主业务的小团队。 它的 Team 方案目前是 $69/席/月 ，年付折算 $55/席/月 ；关键在于每个席位增加 6,900 credits，并汇入整个团队的共享 credit pool 。团队可以共享项目、素材、Brand Kits，并进行帧级评论。 Runway Runway 官方 Team 方案 更重要的是，Runway 不只是视频生成：个人 Standard/Pro 方案已经把 视频、图片、音乐、声音效果、语音 等放在同一个平台里。 Runway 因此对于 2–3 人 AI 视频团队，我更倾向于 Runway，而不是： Midjourney + ElevenLabs + Kling/其他视频模型 + 独立剪辑软件 这种组合很容易变成 4–6 个订阅。 3. 如果团队已经是 Adobe 用户：Firefly 的“整合价值”最高 Adobe Firefly 现在已经不只是图片生成器，而是覆盖 图片、视频、音频、语音、音乐 ，并可以连接 Adobe 的 Photoshop、Express 等工作流。官方页面目前列出 Firefly Standard $9.99/月、Pro $19.99/月等个人方案；团队版 Firefly Pro 为 $19.99/许可证/月 （年付月结）。 Adobe +1 Adobe Firefly 官方方案 如果你们已经在付 Photoshop/Creative Cloud，那么它尤其划算——因为你不是为了 AI 再增加一个工具 ，而是在原有 Adobe 工作流里增加 AI。 Adobe 的团队方案也明确把 Photoshop、Firefly、Acrobat 等放进小企业创意工作流。 Adobe 所以： 已经是 Adobe 用户 → Firefly 从零搭建 AI 视频团队 → Runway 从零搭建营销/内容团队 → Canva 4. 如果主要做播客、访谈、YouTube：Descript 很划算 Descript 是另一种“一体化”思路：不是把所有生成模型塞进来，而是把 剪辑、转录、字幕、声音处理、AI剪辑、配音 集中起来。 目前 Creator 是 $24/人/月（年付价格） ，包含 30 media hours、800 AI credits、4K 导出和 AI video co-editor；Business 是 $50/人/月起。 Descript +1 Descript 官方定价 特别适合： 一小时访谈 → 自动转录 → 删除废话 → 修音 → 自动切片 → 字幕 → YouTube/Shorts 这种工作流。 5. 如果你们主要做短视频：CapCut 是“低成本优先”的选择 CapCut 对 1–3 人短视频团队很有吸引力，因为它把剪辑、字幕、模板以及越来越多的 AI 图片/视频/音频能力放进同一个产品。 CapCut Teams 的价格根据 地区、席位数量和月/年付方式 动态变化；官方说明 2026 年常见的年付起始范围约为 $15–30/席/月 ，但建议以你们所在地结账页面为准。 CapCut CapCut 官方网站 如果团队做的是 TikTok、Reels、Shorts，而不是电影级生成视频，我会认真考虑它。 最实际的选择 如果你的核心目标是 “少工具切换 + 少订阅” ，我会这样选： 🥇 综合内容团队：Canva 1–3人、图片+社媒+广告+简单视频 → Canva Business 它最像“小型内容部门的操作系统”。 🥈 AI视频团队：Runway 大量生成式视频 → Runway Team 尤其适合共享 credits 的小团队，因为不是每个人各买一份完全独立的 AI 视频额度。 Runway 🥉 Adobe工作流：Firefly 已有 Photoshop/Adobe → Firefly 避免为了 AI 再建立第二套创意工具链。 🎙️ 播客/知识视频：Descript 访谈、播客、YouTube → Descript 剪辑效率往往比单纯追求最强生成模型更重要。 📱 短视频矩阵：CapCut 大量 Shorts/Reels/TikTok → CapCut 低门槛、低切换成本。 一个重要原则 对于 1–3 人团队 ，我不建议追求“每个领域最强的 AI”： Midjourney + Runway + Kling + ElevenLabs + ChatGPT + Photoshop + Premiere + Canva 单项能力可能很强，但 管理成本和订阅成本反而会迅速上升 。 更合理的是： 1 个主平台 + 1 个补强工具 例如： Canva + ChatGPT → 营销/社媒团队 Runway + Canva → AI视频+营销 Firefly/Adobe + 一个视频生成器 → 专业视觉团队 Descript + Canva → 播客/YouTube CapCut + Canva → 短视频团队 如果你的团队告诉我主要做的是 广告 / YouTube / TikTok / 游戏宣传片 / 电商内容 / 短剧 / 播客 中的哪一种，我可以进一步按 “1人、2人、3人分别每月最低订阅成本 + 能替代哪些工具 + 推荐具体套餐” 给你算一张表。 Sources",
+    "citations": [
+      {
+        "domain": "https://www.canva.com",
+        "position": "1",
+        "snippet": null,
+        "title": "Introducing Magic Studio: the power of AI, all in one place",
+        "url": "https://www.canva.com/newsroom/news/magic-studio/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://runway.com",
+        "position": "2",
+        "snippet": null,
+        "title": "Runway for Teams | AI Video and Image Creation for Business",
+        "url": "https://runway.com/team-plan?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.adobe.com",
+        "position": "3",
+        "snippet": null,
+        "title": "Compare plans that include generative AI | Adobe Firefly",
+        "url": "https://www.adobe.com/products/firefly/plans.html?via=appscribed&utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.staging.descript.com",
+        "position": "4",
+        "snippet": null,
+        "title": "Descript Pricing | Plans for Every Creator, Free to Start",
+        "url": "https://www.staging.descript.com/pricing?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.capcut.com",
+        "position": "5",
+        "snippet": null,
+        "title": "What Is the Price of CapCut Teams?",
+        "url": "https://www.capcut.com/help/capcut-teams-price?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "对于一到三人的制作团队，哪类AI娱乐平台能减少工具切换和订阅成本？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E5%AF%B9%E4%BA%8E%E4%B8%80%E5%88%B0%E4%B8%89%E4%BA%BA%E7%9A%84%E5%88%B6%E4%BD%9C%E5%9B%A2%E9%98%9F%EF%BC%8C%E5%93%AA%E7%B1%BBAI%E5%A8%B1%E4%B9%90%E5%B9%B3%E5%8F%B0%E8%83%BD%E5%87%8F%E5%B0%91%E5%B7%A5%E5%85%B7%E5%88%87%E6%8D%A2%E5%92%8C%E8%AE%A2%E9%98%85%E6%88%90%E6%9C%AC%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "可以。 AI短剧不要只当成“视频发布项目”，而要当成一个“IP + 内容分发 + 粉丝资产 + 商业化”的小型媒体生意。 截至 2026 年 10 月 ，比较适合个人/小团队的路线是： 短视频平台负责获客，长视频/付费平台负责变现，自己的社群/邮件名单负责沉淀用户。 1. 先确定你的商业模式 我建议把收入来源设计成下面 5 层： 收入来源 适合阶段 怎么做 平台广告分成 有流量后 YouTube、部分短视频平台 付费看全集 中早期 TikTok Series、Patreon 等 会员订阅 有核心粉丝后 Patreon / 自建会员 品牌植入 有稳定播放后 剧中植入产品、定制短剧 IP授权/衍生品 IP成熟后 小说、漫画、游戏、角色周边、授权 不要把“平台广告分成”作为唯一收入。 对AI短剧尤其如此，因为平台政策会变化，而且单纯批量生成、重复模板化内容可能很难建立长期商业价值。 2. 平台怎么选？ 第一主阵地：YouTube 如果你面向全球市场，我会优先考虑 YouTube 。 比较理想的组合是： YouTube Shorts ：15–60秒的剧情钩子、反转、人物冲突 YouTube长视频 ：5–15分钟完整一集 合集 ：把10集剪成一部完整故事 幕后/制作过程 ：增加频道原创度和粉丝黏性 YouTube目前允许符合条件的创作者通过广告、Shorts Feed广告、会员、Super Thanks、Shopping、YouTube Premium等方式获得收入。现行较高层级的YPP广告收入门槛是 1,000订阅 + 4,000小时有效观看时长/365天，或者1,000订阅 + 1,000万Shorts有效观看/90天 。 Google Help +1 YouTube Partner Program 官方说明 注意一个非常重要的时间点： YouTube已经公布， 2027年2月1日起 新的YPP广告/Premium收入门槛将调整为1,000订阅 + 8,000小时有效观看，或者1,000订阅 + 2,000万Shorts有效观看。500订阅阶段的粉丝资助和Shopping等早期变现资格不会同步取消。 Google Help +1 所以如果你现在开始做，应该按照 2027规则 规划，而不是只盯着当前门槛。 3. TikTok：特别适合“短剧连载” TikTok 适合把AI短剧做成： “第1集 → 第2集 → 第3集 → …… → 大结局” 例如： 《我死后，未婚夫终于看到了我的日记》 EP01：她死了 EP02：葬礼当天，他收到一封信 EP03：信里出现了不可能知道的秘密 EP04：他发现她其实…… EP05：真相 EP06：大结局 每集结尾留一个 强悬念 。 TikTok还有一个很值得AI短剧创作者研究的变现工具： Series 。符合条件的创作者可以把最多80个视频放入付费内容集合，让用户购买观看；官方目前列出的常见资格包括18岁以上、账号至少30天、公开账号、过去30天至少发布3条公开内容、10,000粉丝和过去30天至少1,000次观看等，同时部分低于1万粉丝但已有其他平台付费内容的创作者可以申请。( TikTok Support ) TikTok Series 官方说明 这意味着你可以设计： 免费版： 1–10集，每集30–90秒 付费版： 11–30集 + 大结局 + 番外篇 而不是把所有内容全部免费发布。 4. Patreon：建立真正属于你的“付费粉丝池” 如果你希望AI短剧最终成为长期业务，可以考虑 Patreon 。 例如设置： $3/月 提前观看 壁纸 剧情投票 $7/月 提前看全集 番外篇 删除场景/导演剪辑版 $15/月 制作幕后 角色设定集 每月直播 粉丝决定下一部作品 Patreon目前支持月度/年度会员和一次性数字产品销售；2025年8月4日之后发布的新创作者页面适用标准 10%平台费 ，另有支付处理、税费等成本。 Patreon Help Center +1 Patreon 创作者费用说明 所以它更适合： 把“看剧的人”变成“支持这个IP的人”。 5. AI短剧最重要的其实不是AI，而是IP 这是很多AI视频创作者容易犯的错误： “我可以一天生成100个视频。” 但商业价值往往不是来自 生成速度 ，而是来自： 角色 + 世界观 + 故事 + 情绪 + 连续追更 例如不要做： 今天一个霸总故事 明天一个丧尸故事 后天一个猫咪故事 而应该建立： 一个固定IP宇宙 比如： 《AI都市异闻录》 固定角色： 林默——调查员 苏晚——AI仿生人 ZERO——神秘人工智能 老周——地下情报商 然后连续做： 第一季：失控的仿生人 第二季：记忆黑市 第三季：AI城市 第四季：人类最后一天 这样你的每一条视频实际上都在给同一个IP积累资产。 6. 发布不要“一条视频发一个平台” 建议建立一个 内容流水线 。 例如你制作一集10分钟AI短剧： 原始素材 1 × 10分钟正片 ↓ YouTube 10分钟完整版 3个Shorts 1个幕后视频 ↓ TikTok 5–8个剧情切片 角色介绍 悬念片段 大结局预告 ↓ Instagram Reels 角色短片 海报 幕后花絮 ↓ Facebook 完整版 剪辑版 Reels ↓ Patreon 提前看 完整合集 番外 制作素材 一集内容 → 20～30条不同形式的内容。 这才是AI真正能够提高效率的地方。 7. AI内容一定要处理“版权”和“AI披露” 这是商业化之前必须解决的问题。 至少要确认： AI生成工具的商业使用权 配音/声音是否拥有商业授权 音乐是否拥有商用许可 图片/视频素材是否可以商业使用 是否使用真人肖像 是否模仿真人声音 是否使用影视IP角色 是否使用受版权保护的小说/漫画剧情 是否涉及商标 尤其是 真人声音和真人肖像 。 例如YouTube要求创作者披露某些“逼真、由AI生成或重大AI修改”的内容，包括让真实人物表现其没有做过的事情、改变真实事件/地点，或者生成现实中没有发生的逼真场景。YouTube同时明确表示，进行规定的AI披露本身不会降低视频的获利资格。 Google Help +1 YouTube AI内容披露官方规则 TikTok同样要求对包含逼真人像、音频或视频的AI生成内容进行标识。( TikTok Support ) 所以建议你建立一个简单的： AI制作资产表 素材 来源 商用许可 备注 人物图 AI工具 ✅ 原创角色 配音 AI工具 ✅ 商业授权 BGM 音乐库 ✅ 商用 Logo 自制 ✅ 真人声音 — ❌ 不使用 电影角色 — ❌ 不使用 以后品牌方、平台或者发行商问版权时，你会非常省事。 8. 真正赚钱的漏斗应该这样设计 我比较推荐： 免费短视频 ↓ 产生兴趣 ↓ 追更 ↓ 关注账号 ↓ 观看完整剧集 ↓ 加入社群/邮件名单 ↓ 购买全集/会员 ↓ 购买周边/数字产品 ↓ IP授权 也就是说： 平台负责“流量”，你负责“用户关系”。 不要让所有用户都停留在TikTok/YouTube上。 9. 一个比较现实的收入结构 假设你的IP成熟以后，每月： 100万免费播放 不要只考虑： “这些播放能赚多少钱？” 而应该考虑： A. 平台收入 广告 / Shorts / Premium等 B. 付费全集 例如： 1,000人 × $9.99 = ~$10,000 C. 会员 例如： 500人 × $7/月 = ~$3,500/月 D. 品牌合作 1–2个品牌 × $2,000–$10,000 E. IP授权 根据项目单独谈 这时候你经营的已经不是一个“AI视频账号”，而是一个 数字娱乐IP 。 10. 我会建议你这样启动 如果你是一个人或者2–3人的小团队，我建议不要一开始做50集。 做一个： 「30天AI短剧验证项目」 第1周：IP 确定： 剧名 类型 世界观 3–5个核心角色 第一季故事 30集大纲 第2周：生产 一次性做： 5集正式内容 15–20个Shorts 角色海报 Trailer 幕后素材 第3周：发布 每天： 1–2个短视频 每周1集完整剧集 观察： 3秒留存 完播率 评论率 分享率 关注转化率 第4周：优化 找到表现最好的： 角色 + 类型 + 情绪 + 故事结构 然后围绕它继续生产，而不是不断换题材。 最后给你一个我认为最重要的商业原则 不要把自己定位成“AI视频制作者”。 更好的定位是： AI影视创作者 / AI短剧工作室 / 数字IP工作室 因为“AI”只是生产工具。 真正可以积累价值的是： IP → 角色 → 故事 → 粉丝 → 社群 → 会员 → 商品 → 授权 如果你告诉我你准备做的是 中文市场、北美市场还是全球市场 ，以及你打算做 真人感AI短剧、动漫短剧、古风短剧、悬疑、爱情还是科幻 ，我可以进一步给你设计一套具体的 “AI短剧账号商业化方案” ，包括平台组合、每周发布量、30集内容结构、变现路径和第一阶段目标。 Content diagnostic : content_references {\"count\":2,\"examples\":[{\"type\":\"grouped_webpages\",\"sourceIndex\":5,\"shape\":{\"name\":\"missing\",\"data\":\"present\",\"dil\":\"missing\"}},{\"type\":\"grouped_webpages\",\"sourceIndex\":12,\"shape\":{\"name\":\"missing\",\"data\":\"present\",\"dil\":\"missing\"}}]} Sources",
+    "citations": [
+      {
+        "domain": "https://support.google.com",
+        "position": "1",
+        "snippet": null,
+        "title": "How to earn money on YouTube - YouTube Help",
+        "url": "https://support.google.com/youtube/answer/72857?hl=en&utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://support.patreon.com",
+        "position": "2",
+        "snippet": null,
+        "title": "Creator fees overview – Patreon Help Center",
+        "url": "https://support.patreon.com/hc/en-us/articles/11111747095181-Creator-fees-overview?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "如何把AI短剧发布到平台并建立创作者收入来源？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E5%A6%82%E4%BD%95%E6%8A%8AAI%E7%9F%AD%E5%89%A7%E5%8F%91%E5%B8%83%E5%88%B0%E5%B9%B3%E5%8F%B0%E5%B9%B6%E5%BB%BA%E7%AB%8B%E5%88%9B%E4%BD%9C%E8%80%85%E6%94%B6%E5%85%A5%E6%9D%A5%E6%BA%90%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "如果你的目标是 “完全没有影视制作经验，也能自己从一个故事点子做出短剧，并最终发布出去” ，现在已经有几类平台可以组合使用。需要注意的是： “制作平台”和“短剧发行平台”通常不是同一个东西 ，所以最实用的方式往往是“AI 制作工具 + 短视频/短剧平台”。 我比较推荐的几类平台 平台 适合做什么 零经验友好度 能否从剧本开始 发布/分发 Invideo AI 从故事/剧本直接生成视频 ⭐⭐⭐⭐⭐ ✅ 导出后自行发布 CapCut / 剪映 AI生成 + 剪辑 + 字幕 + 配音 ⭐⭐⭐⭐⭐ ✅ TikTok、YouTube等 Dreamina AI人物、场景、图像/视频生成 ⭐⭐⭐⭐ ✅ 导出后自行发布 DramaBox AI短剧制作 + 短剧发行生态 ⭐⭐⭐⭐ ✅ 有自己的短剧分发体系 ReelShort 专业竖屏短剧发行/观看 ⭐⭐ 通常不是DIY制作工具 ✅ 短剧发行 TikTok / YouTube / Instagram 成片后的大众分发 ⭐⭐⭐⭐⭐ — ✅ 1. Invideo AI：最适合“一个人从零做一部短剧” 如果你完全不会拍摄、剪辑、灯光、录音，我会首先试 Invideo AI 。 它现在已经不只是“文字转视频”：官方介绍称，它可以从一个概念或剧本开始，由 AI 完成 剧本、分镜、生成镜头、配音、音乐和剪辑 ，甚至明确把 microdrama series （微短剧系列）列为使用场景。 Help Center +1 开始使用 Invideo AI 适合： 想写一个“霸总/悬疑/爱情/科幻”故事 不想自己拍摄真人演员 想快速验证一个故事有没有吸引力 一个人完成从剧本到成片 不足： 如果你追求真人影视剧那种稳定的人物表演和连续性，AI生成结果仍然需要人工修改。 2. CapCut / 剪映：最容易上手的“制作 + 后期”工具 CapCut 非常适合没有剪辑经验的人。 它现在有 Script to Video / AI Story Maker ，可以输入自己的剧本，也可以让 AI 帮你写剧本，然后自动生成视觉素材、声音、音乐和视频结构，之后再进入时间线修改。 CapCut +2 CapCut 官方 AI 视频工具 例如你可以输入： “一个失忆的女孩发现自己其实是亿万富翁家族失踪多年的继承人，制作成10集、每集60秒的竖屏悬疑爱情短剧。” 然后让 AI 先生成第一版，再人工修改。 特别适合： TikTok / Reels / YouTube Shorts 竖屏短剧 AI短剧 不懂剪辑的人 需要大量字幕、配音、音乐的人 3. Dreamina：如果你希望“自己控制画面” Dreamina 更适合希望自己控制 角色、视觉风格、场景和镜头 的人。 它提供 script-to-video，可以把剧本拆解成具体的视觉场景，并生成声音、视觉效果等；官方还提供了较长视频和参考图能力。 Dreamina Dreamina Script-to-Video 一个比较实用的工作流是： ChatGPT → 写剧本 → Dreamina生成角色/场景 → CapCut剪辑 → TikTok/YouTube发布 这比单纯“一键生成整部短剧”更容易控制最终效果。 4. DramaBox：比较特殊——它正在把“制作”和“发行”连接起来 DramaBox 值得特别关注，因为它已经不只是一个看短剧的平台。 它现在推出了 Duanju Lab ，官方描述为一个整合式 AI 短剧工作流，可以处理： 剧本 角色 场景 视觉 配音 剪辑 内容审核 同时，它还有 Juhe SaaS、Juhe TV 和 MiniShows 等发行/分发体系。 DramaBox +1 DramaBox / Duanju Lab 官方网站 这类平台对于你说的“ 创作并发布短剧 ”尤其值得研究，因为它试图把： 创作 → 审核 → 版权/管理 → 分发 放到同一个生态里。 不过它目前更像一个正在快速发展的 专业短剧基础设施/生态 ，而不是一个像 CapCut 那样已经人人熟悉的消费级剪辑软件。 5. ReelShort：更适合“研究市场/寻找发行机会”，而不是自己剪片 ReelShort 是目前比较知名的竖屏短剧平台。 它的核心定位是观看和发行短剧，而不是让普通用户像 CapCut 一样直接自己制作。官方目前主打大量3分钟左右的短剧集。 Reelshort ReelShort 官方网站 所以如果你的目标是： “我想做出一部短剧，然后让大量观众观看。” ReelShort 值得研究。 但如果你的问题是： “我什么都不会，在哪里直接输入故事就能做出来？” 那我会优先选择 Invideo / CapCut / Dreamina 。 如果你是完全的新手，我建议这样组合 路线 A：最快做出第一部 ChatGPT → Invideo AI → CapCut → TikTok/YouTube Shorts 你负责： 想故事 决定人物 决定每集结尾的悬念 AI负责： 剧本 画面 配音 音乐 初剪 最后你用 CapCut 做人工调整。 这是 门槛最低 的路线。Invideo 官方目前甚至明确把“microdrama series”列为 AI filmmaking 的应用场景。 Help Center 路线 B：更像真正的“AI影视制作” ChatGPT → Dreamina → CapCut → TikTok / YouTube 优势是你可以分别控制： 剧本 → 角色设计 → 场景 → 镜头 → 配音 → 剪辑 因此更容易形成统一的视觉风格。 路线 C：想做成真正的短剧项目 ChatGPT/编剧 → AI制作 → 短剧平台/发行方 可以重点研究 DramaBox、ReelShort 等短剧生态 ，而不是单纯把它当成普通短视频。 一个很重要的区别 现在所谓的“AI短剧平台”其实有两种： ① AI影视制作工具 你给它故事 → 它帮你做视频 例如 Invideo、CapCut、Dreamina 。 ② 短剧内容/发行平台 你制作内容 → 平台负责让观众观看，甚至参与发行/商业化 例如 DramaBox、ReelShort 。 两者不要混为一谈。 而且微短剧本身的特点就是 短、竖屏、高频反转、每集留悬念 ；它和传统电视剧的制作逻辑并不完全一样。 The Verge 如果只能选三个 我的排序会是： 🥇 Invideo AI —— 想最快从“故事”变成“成片” 🥈 CapCut / 剪映 —— 想简单、便宜、自己掌控剪辑和发布 🥉 DramaBox / Duanju Lab —— 想认真探索“AI短剧制作 + 专业短剧发行生态” 如果你愿意，我还可以进一步给你整理一份 “2026年适合个人创作者的 AI 短剧平台完整对比表” ，包括 价格、是否免费、中文支持、最长视频长度、角色一致性、AI配音、能不能做连续剧、是否能直接投稿/发行、TikTok/YouTube适配度 。 Sources",
+    "citations": [
+      {
+        "domain": "https://help.invideo.io",
+        "position": "1",
+        "snippet": null,
+        "title": "Get started with AI filmmaking | Help Center",
+        "url": "https://help.invideo.io/en/articles/14717491-get-started-with-ai-filmmaking?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.capcut.com",
+        "position": "2",
+        "snippet": null,
+        "title": "Text to Video Using AI: Unlocking Creativity",
+        "url": "https://www.capcut.com/tools/text-to-video-ai?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://dreamina.capcut.com",
+        "position": "3",
+        "snippet": null,
+        "title": "Script to Video AI Generator | Create Story from Scripts",
+        "url": "https://dreamina.capcut.com/tools/script-to-video-ai?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.drama.box",
+        "position": "4",
+        "snippet": null,
+        "title": "DramaBox | AI Short-Drama Production & Global Distribution",
+        "url": "https://www.drama.box/en/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.reelshort.app",
+        "position": "5",
+        "snippet": null,
+        "title": "ReelShort – Short Drama Streaming App",
+        "url": "https://www.reelshort.app/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.theverge.com",
+        "position": "6",
+        "snippet": null,
+        "title": "What even is a 'microdrama'?",
+        "url": "https://www.theverge.com/entertainment/1003297/microdramas-neighbours-epis-roseberry-reelshort-dramabox-vertical-video?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "有哪些平台能帮助没有影视制作经验的人创作并发布短剧？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E6%9C%89%E5%93%AA%E4%BA%9B%E5%B9%B3%E5%8F%B0%E8%83%BD%E5%B8%AE%E5%8A%A9%E6%B2%A1%E6%9C%89%E5%BD%B1%E8%A7%86%E5%88%B6%E4%BD%9C%E7%BB%8F%E9%AA%8C%E7%9A%84%E4%BA%BA%E5%88%9B%E4%BD%9C%E5%B9%B6%E5%8F%91%E5%B8%83%E7%9F%AD%E5%89%A7%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "如果你的核心业务是 爱情、悬疑、复仇类竖屏短剧 ，我不建议把重点放在“哪个 AI 生成视频最好看”，而应该选择 “AI 短剧/影视制作型平台” ——也就是能够解决 角色一致性 + 连续镜头 + 分镜 + 对白/口型 + 9:16竖屏 + 批量生产 的平台。 从目前的平台能力看，我会这样选： 结论先说 首选：Runway 第二选择：Google Veo / Flow 高性价比、适合批量尝试：Hailuo AI 如果主要面向中文短剧生产：可以把 Kling 等国产视频模型作为重要补充，但最好不要只依赖单一模型。 其中，如果你准备真正做成一个 连续几十集甚至上百集的 AI 竖屏短剧项目 ，我尤其推荐： “Runway/Flow 做核心制作 + 其他视频模型做镜头补充 + 专门的配音/剪辑工具做后期” 而不是寻找一个“从剧本一键生成100集”的平台。 1. 为什么爱情、悬疑、复仇特别需要“角色一致性” 这三类题材有一个共同特点： 女主/男主会连续出现几十集 同一套房间、办公室、医院、豪宅需要反复出现 人物服装、发型、年龄、脸型不能每个镜头都变 两个人的对话需要连续镜头 悬疑剧还需要大量 特写、回忆、闪回、线索镜头 复仇剧需要大量情绪表演：愤怒、哭泣、冷笑、震惊、隐忍 所以真正的核心不是“一次生成一个漂亮视频”，而是： A角色 → 第1集 → 第10集 → 第50集，还是同一个A角色。 这也是为什么我会把 角色/场景 Reference（一致性参考）能力 放在第一优先级。 例如 Runway 的 Gen-4 References，可以用参考图固定角色，并把同一个角色放到不同场景、光线和环境中。官方甚至明确把“consistent characters across different lighting conditions and locations”作为核心能力。 Runway Help +1 2. 第一推荐：Runway Runway 官方平台 如果你问我： “我就是想认真做 AI 竖屏短剧，应该先学哪个平台？” 我的答案会是： Runway。 原因不是单纯因为画质，而是它已经开始针对 microdrama（微短剧） 设计工作流。 Runway 官方甚至专门推出了 “AI Microdrama Maker: Vertical Short Drama Series” ，描述的就是： 竖屏、手机端、连续剧、固定演员、固定场景、每集结尾 Hook。 官方展示的工作方式是： 建立角色 → 固定角色 Reference → 按镜头生成 → 从上一镜头继续 → 竖屏输出 → 连续剧集。 而且官方明确举例说明，同一个演员可以在 90 集 中保持一致，同一个公寓也可以跨集保持一致。 Runway 这和你的需求高度匹配。 Runway 特别适合你的三个题材 爱情： 男女主双人镜头 对视 拥抱 吵架 表白 情绪特写 悬疑： 夜景 跟踪 回忆 线索特写 门后偷窥 手机信息 犯罪现场 复仇： 女主黑化 豪门场景 法庭 办公室 对峙 情绪表演 “身份揭露”高潮 尤其值得注意的是，Runway 的 Act-Two 可以把一个真人/表演视频作为 performance，让角色进行相应的表演和面部动作；官方也提供了多角色对白的制作流程。 Runway Help 所以它不是简单的： Prompt → 一个随机视频 而更接近： Character → Scene → Performance → Shot → Episode 这才比较接近真正的短剧制作。 3. 第二推荐：Google Veo / Flow Google Veo 官方页面 如果你的第一优先级是： “我要非常电影化、真实、漂亮的画面。” 那么 Veo 3.1 非常值得考虑。 Google 官方目前把 Veo 3.1 定位为面向电影制作人与故事创作者的视频模型，并支持： Text-to-Video Image-to-Video 原生音频 对白 环境音 角色参考 场景参考 Scene Extension First/Last Frame Camera Controls Google DeepMind +1 这对于悬疑和爱情特别有价值。 比如： 悬疑： 女主凌晨走进地下停车场 → 听到脚步声 → 回头 → 镜头推进 → 灯突然熄灭 → 黑屏。 Veo 的场景延续、首尾帧等控制能力可以帮助你把这种镜头做得更连续。 Google DeepMind 而且 Veo 3.1 已经支持 原生音频和对白 ，这对于短剧非常重要。 Google DeepMind 但我为什么没有把它排第一？ 因为你的需求不是单纯“做电影镜头”。 你要的是： 连续生产大量短剧。 所以我会更看重整个制作工作流，而不仅仅是单个镜头的质量。 4. 第三推荐：Hailuo AI Hailuo AI 官方平台 如果你希望： 快速试大量剧情、低成本做很多镜头、不断迭代 Hailuo AI 很值得作为你的生产工具之一。 它目前也非常强调 Subject Reference / Character Consistency 。 例如官方介绍的 Subject Reference，就是上传人物图片，然后让 AI 在不同视频中保持人物身份。 Hailuoai +1 它还在推广 S2V（Subject-to-Video）和 I2V（Image-to-Video）工作流，用一个 Master Reference Image 作为人物/主体的视觉锚点。 Hailuoai 对于短剧来说，这种模式非常有用： 先做人物资产： 女主 男主 女二 反派 男二 然后每个人制作： 正脸 侧脸 45°脸 全身 半身 不同服装 之后再拿这些 Reference 去大量生成镜头。 Hailuo 官方也建议使用多个角度的角色参考图，以降低跨镜头的人物漂移。 Hailuoai 5. 我反而不建议你选择“纯 AI 编剧平台”作为核心 这是一个很重要的区别。 如果你说： “我要做爱情+悬疑+复仇短剧。” 很多平台会告诉你： 输入一句话 → 自动生成剧本 → 自动生成视频。 听起来很爽。 但如果你真的要商业化，我不建议把整个生产流程建立在这种模式上。 因为短剧真正值钱的是： 人物关系 + 情绪递进 + 每集 Hook + 反转 + 信息差。 例如一部复仇剧： 第1集：女主被丈夫抛弃 ↓ 第3集：发现丈夫其实早就出轨 ↓ 第8集：女主发现自己才是继承人 ↓ 第15集：发现真正害死父亲的人是婆婆 ↓ 第30集：女主开始反击 ↓ 第50集：男主发现自己一直误会女主 ↓ 第60集：最终身份揭露 这种东西最好由 编剧/策划控制故事结构 ，AI负责加速生产。 6. 最适合你的其实是“四层 AI 工作流” 如果你准备认真做，我建议不要找“一个万能平台”。 而是建立下面这套架构： 第一层：剧本 AI 负责： 故事大纲 人物小传 人物关系 60集/80集/100集结构 每集 Hook 对白 场景拆分 这里重点不是视频模型。 第二层：角色/场景资产 AI 先制作： Character Bible 例如： 角色 设定 女主 28岁、黑长发、冷感 男主 32岁、西装、克制 反派 45岁、豪门女主人 女二 26岁、精致、攻击性 然后生成每个人的： 正脸 侧脸 全身 表情 常用服装 这样以后所有视频都使用这些 Reference。 这是非常关键的一步。 第三层：AI Video 这里我会采用： Runway + Veo + Hailuo/Kling 而不是只用一个。 例如： Runway 负责： 角色一致性 连续剧情 对话 表演 主线镜头 Veo 负责： 高质量电影镜头 氛围 悬疑 大场面 高质量音频 Hailuo/Kling 负责： 大量尝试 补镜头 特效 B-roll 快速迭代 这样比“一个平台包打天下”更合理。 7. 你的题材其实非常适合“先图片、后视频” 这是我特别建议你采用的生产方法。 不要： 剧本 → 直接 Text-to-Video 而是： 剧本 → 分镜 → 人物图 → 场景图 → Image-to-Video 例如： 第12集 女主在雨夜发现男主背叛。 先生成： 镜头1 女主站在酒店门口。 镜头2 女主看到男主和另一个女人。 镜头3 女主眼睛特写。 镜头4 男主回头。 镜头5 女主转身离开。 然后分别把这些画面变成视频。 这样人物和场景的控制力会比完全依赖 Text-to-Video 好很多。 Runway 官方对于长视频/电影制作也建议先进行 storyboard，再逐镜头生成，并通过 character plates 加强角色一致性。 Runway Help 8. 如果让我直接给你一个选择表 你的目标 推荐 做完整 AI 竖屏短剧 Runway ⭐⭐⭐⭐⭐ 电影感/真实感 Veo 3.1 / Flow ⭐⭐⭐⭐⭐ 快速大量试镜头 Hailuo AI ⭐⭐⭐⭐ 人物一致性 Runway / Veo / Hailuo 悬疑氛围 Veo + Runway 爱情/人物表演 Runway 复仇/豪门短剧 Runway + Veo 大量低成本生产 Hailuo + 其他模型 中文短剧生产 Runway + 国产模型组合 商业化连续剧 不要只用一个平台 9. 如果你只准备付一个平台的钱 我的排序是： 🥇 第一选择：Runway 因为它现在已经非常明确地把 microdrama / vertical short drama 当成应用场景，而且角色 Reference、连续场景、表演、竖屏输出等能力和你的需求高度重合。 Runway Runway Microdrama 工作流 🥈 第二选择：Google Flow / Veo 如果你更加重视 画质、真实感、电影感、声音 ，选择 Veo/Flow。 Google Veo 3.1 🥉 第三选择：Hailuo AI 如果你希望 快速、大量、低成本测试不同剧情和镜头 ，Hailuo 很适合作为生产线上的重要模型。 Hailuo AI 最后给你一个更实际的建议 如果你的目标不是“玩 AI 视频”，而是准备 真正做爱情/悬疑/复仇竖屏短剧账号或短剧公司 ，我会把平台选择定义成： “AI影视制作工作流平台” > “单纯AI视频生成器” 而目前最值得你重点研究的组合是： 剧本 AI → Runway/Flow 建角色和分镜 → Runway/Veo/Hailuo 生成镜头 → AI配音/音效 → 剪辑 → 9:16短剧成片。 尤其是 角色一致性、连续场景和每集 Hook ，这三个能力比单纯“视频画质最高”重要得多。 如果你愿意，我下一步可以直接按照你的目标，给你做一套 “AI竖屏短剧生产线” ：包括 剧本用什么 AI、人物用什么 AI、视频用什么 AI、配音用什么 AI、剪辑用什么 AI，以及每集 1–2 分钟如何批量生产 ，并顺便比较 Runway、Veo、Kling、Hailuo、Sora 的成本和优缺点。 Sources",
+    "citations": [
+      {
+        "domain": "https://help.runwayml.com",
+        "position": "1",
+        "snippet": null,
+        "title": "Creating with Gen-4 Image References – Runway",
+        "url": "https://help.runwayml.com/hc/en-us/articles/40042718905875-Creating-with-Gen-4-Image-References?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://runway.com",
+        "position": "2",
+        "snippet": null,
+        "title": "AI Microdrama Maker: Vertical Short Drama Series | Runway",
+        "url": "https://runway.com/use-cases/microdramas?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://deepmind.google",
+        "position": "3",
+        "snippet": null,
+        "title": "Veo 3.1 — Google DeepMind",
+        "url": "https://deepmind.google/models/veo/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://hailuoai.video",
+        "position": "4",
+        "snippet": null,
+        "title": "AI-Generated Content Showcase with Dynamic Camera Work – AI Generated Video | Hailuo AI",
+        "url": "https://hailuoai.video/generate/ai-video/369788954360717318?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "如果主要制作爱情、悬疑和复仇题材的竖屏短剧，应该选择哪类AI平台？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E5%A6%82%E6%9E%9C%E4%B8%BB%E8%A6%81%E5%88%B6%E4%BD%9C%E7%88%B1%E6%83%85%E3%80%81%E6%82%AC%E7%96%91%E5%92%8C%E5%A4%8D%E4%BB%87%E9%A2%98%E6%9D%90%E7%9A%84%E7%AB%96%E5%B1%8F%E7%9F%AD%E5%89%A7%EF%BC%8C%E5%BA%94%E8%AF%A5%E9%80%89%E6%8B%A9%E5%93%AA%E7%B1%BBAI%E5%B9%B3%E5%8F%B0%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "如果你的目标是 批量制作连续剧/短剧，并让主角在几十集、数百个镜头里尽量保持同一张脸、发型、服装和人设 ，现在已经有几类工具比较适合。关键区别是：有些只是“单镜头角色参考”，有些已经开始支持 多参考、多镜头、项目级复用、Storyboard/剧本工作流 。 截至 2026 年 10 月 ，我会重点看下面这些： 第一梯队：最适合连续剧生产 平台 角色一致性 多镜头/连续剧能力 批量生产适合度 我的评价 Dreamina / Seedance ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ 最值得优先测试 Vidu ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐½ 多角色、多参考很强 Runway ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐½ ⭐⭐⭐⭐½ 专业影视工作流很成熟 Kling AI ⭐⭐⭐⭐½ ⭐⭐⭐⭐½ ⭐⭐⭐⭐½ 动作、真人感、连续镜头强 PixVerse ⭐⭐⭐⭐½ ⭐⭐⭐⭐½ ⭐⭐⭐⭐½ 短剧/动漫/动作类值得测试 Google Veo / Flow ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐½ ⭐⭐⭐⭐ 画质和角色一致性很强，但生产管理不如前几家 1. Dreamina + Seedance：我最推荐做“AI连续短剧” Dreamina 官方 Dreamina 目前非常值得关注，因为它不是单纯的视频生成器，而是在往 完整的 AI 内容生产工作台 发展。 它的 Seedance 工作流可以使用角色图片、Storyboard、风格图、视频参考等多模态输入。官方资料甚至提到 Seedance 2.5 可以处理 最多 50 个多模态参考输入 ，用于角色、场景、分镜等统一规划。 Dreamina +1 尤其适合： 真人 AI 短剧 古装/现代都市连续剧 动漫连续剧 同一个男女主贯穿几十集 多角色同框 根据剧本 + 分镜批量出镜头 后续继续做角色局部修改 它的思路比较接近： 角色库 → 场景库 → 分镜 → Seedance → 批量镜头 → 剪辑 而不是每次重新 Prompt 一个角色。 如果你准备真正批量做 20～100 集短剧，我会把 Dreamina/Seedance 放在第一批测试。 2. Vidu：非常适合“多角色 + 多镜头”连续剧 Vidu 官方 Vidu 的优势非常明确： Reference to Video + Multi-Reference Consistency 。 官方说明目前支持最多 7 个参考素材 ，可以把多个角色、场景、物体同时作为参考，从而保持多镜头故事中的视觉连续性。 Vidu +1 更重要的是，它不只是“给一张脸”。 参考素材可以承担不同角色： Character Style Scene Composition Camera movement Effects 这对于连续剧特别有用。 例如： Reference 1 = 女主 Reference 2 = 男主 Reference 3 = 男二 Reference 4 = 宫殿 Reference 5 = 服装 Reference 6 = 镜头风格 然后不断生成不同剧情镜头。 Vidu 官方甚至展示过用 8 × 4 秒镜头制作 30 秒三角色动画 PV 的流程。 Vidu 所以如果你要做的是： “固定角色 + 固定世界观 + 不断换剧情” Vidu 很值得重点测试。 3. Runway：专业影视/连续剧工作流非常成熟 Runway 官方 Runway 的优势不是单纯“角色锁脸”，而是 整个影视生产流程比较成熟 。 它的 Gen-4 References 可以从一张或多张参考图中提取角色，并在不同： 场景 光线 地点 风格 镜头 中保持角色特征。官方明确把“consistent characters across different lighting conditions, locations and treatments”作为 References 的核心能力。 Runway Help +1 更值得注意的是 Runway 官方自己就给出了 长片/连续故事生产方法 ： Character plates → Storyboard → Scenes → Video shots → Assembly Character plates 可以提前制作： 正面 侧面 背面 全身 不同服装 然后作为后续镜头的“角色圣经”。 Runway Help 另外，Runway Agent 已经支持让 AI 根据一个角色制作 multi-shot scene with this character across three different locations ，并有时间线编辑器。 Runway Help 所以： 如果你更偏专业影视制作，而不是纯短视频爆量，Runway 非常值得放进工作流。 第二梯队：也非常值得测试 4. Kling AI：真人短剧、动作戏值得重点测试 Kling AI 官方 Kling 很早就针对一致性推出了 Multi-Image Reference 。 官方披露的能力是：可以上传同一个人物的多张图片，让模型在不同场景中保持人物的视觉一致性。 Kuaishou Technology 现在的 Kling 3.0 又进一步加入： 多图参考 视频参考 Character consistency Object consistency Scene consistency 原生音频 多角色对话 最长约 15 秒的视频生成 官方特别强调了 improved element consistency 。 Kuaishou Technology 如果你的短剧是： 真人感 + 动作 + 打斗 + 古装 + 强剧情 Kling 值得和 Seedance、Vidu 做 A/B 测试。 5. PixVerse：很适合短剧、动漫、动作连续场景 PixVerse 官方 PixVerse 现在也有比较明确的角色一致性方案，包括： Character Reference Character Lock Multi-shot Reference-to-Video 官方资料说明其角色参考可以帮助保持 脸、发型、服装 等特征，并支持多镜头叙事。 PixVerse +1 比较有意思的是 PixVerse Canvas。 它把角色、风格、品牌规范等变成可以反复挂载到不同镜头节点的 Reusable References ，项目本身还可以记住角色、风格和项目规则。 PixVerse 这其实非常接近你要的： “一个连续剧项目，而不是生成一堆互不相关的视频。” 如果要批量生产几十集，我会特别关注 Canvas 这种 项目级上下文 。 6. Google Veo / Flow：角色一致性和画质非常强 Google DeepMind Veo Veo 现在明确支持： Character reference Scene reference Object reference Style reference Scene extension First/last frame Camera control Google 官方明确写着可以使用角色参考图片，让角色在 不同场景中保持一致 。 Google DeepMind 它特别适合： 高质量单镜头 → 延展 → 下一镜头 而不是传统的“每次从零生成”。 所以如果你追求： 电影质感 > 批量效率 Veo 值得放进你的核心模型池。 如果你要的是“真正批量做连续剧”，我会这样选 真人 AI 短剧 Dreamina/Seedance + Kling + Vidu 这是我最建议你实际测试的组合。 古装/都市/言情连续剧 Dreamina/Seedance + Vidu + Kling 角色、服装、场景连续性会比单纯 Text-to-Video 工作流更重要。 动漫/二次元连续剧 Vidu + PixVerse + Dreamina/Seedance Vidu 的多参考能力尤其值得测试。 偏电影/精品短剧 Runway + Veo + Kling Runway 负责角色/场景/镜头管理，Veo/Kling负责部分高质量镜头。 但有一个非常重要的区别 你问的是“ 角色一致性 ”，这里实际上有三个等级： Level 1：脸一致 例如： 第一集女主 ≈ 第二集女主 大多数现在的头部模型都能做到。 Level 2：角色资产一致 不仅脸一样，还要： 发型一样 身材比例一样 服装一样 饰品一样 年龄一样 角色画风一样 这才开始适合连续剧。 Level 3：连续剧级一致性 这是最重要的： 第 1 集第 7 镜 → 第 1 集第 8 镜 → 第 2 集 → 第 10 集 → 第 50 集 依然能够保持： 角色 + 服装 + 场景 + 道具 + 时间线 + 镜头语言 + 世界观 目前没有哪个平台能做到“完全不会漂移”。甚至 Vidu 自己的资料也承认，多参考是 降低漂移，而不是彻底消除漂移 。 Vidu 所以真正做量产短剧，不能只依赖一个“Character Consistency”按钮。 我更建议你建立“AI短剧角色资产库” 例如女主 林晚 ： CHARACTER_ID: LIN_WAN_001 Face: - oval face - brown eyes - small mole under left eye - black long hair Body: - 168cm - slim - proportions fixed Default costume: - white blouse - black skirt - silver necklace Character references: - front - 3/4 - profile - full body - emotional expressions - costume reference Voice: - female / 25-30 - Mandarin - calm / slightly cold 然后每一集不要重新“创造林晚”。 而是： LIN_WAN_001 ↓ Episode 01 ├─ Shot 001 ├─ Shot 002 ├─ Shot 003 ↓ Episode 02 ├─ Shot 001 ├─ Shot 002 ↓ Episode 03 ... 角色是资产，镜头才是变量。 这会比单纯研究“哪个模型最能锁脸”重要得多。 Runway 官方自己的长片工作流也推荐先做 character plates，再进入 storyboard 和场景生成。 Runway Help 如果让我现在只选 3 个 我的 shortlist 是： ① Dreamina / Seedance —— 最适合规模化连续剧 ② Vidu —— 多角色、多参考、多镜头非常值得测试 ③ Runway —— 专业影视级工作流和角色/场景管理最成熟 然后把 Kling、PixVerse、Veo 当作“镜头级模型池”，哪个模型最适合某个镜头就用哪个，而 角色资产统一由你的 Character Bible / Reference Library 管理 。 这实际上比“整部剧只用一个 AI”更靠谱。 Dreamina · Vidu · Runway · Kling AI · PixVerse · Google Veo 如果你准备的是 “一次性批量生产 50～100 集、每集 1～3 分钟的 AI 短剧” ，我还可以进一步给你做一张 「Seedance vs Vidu vs Kling vs Runway vs PixVerse」量产短剧对比表 ，把 角色一致性、多角色对话、中文口型、单集成本、API、批量生成、分镜、自动化能力、适合 9:16 短剧与否 全部列出来。 Sources",
+    "citations": [
+      {
+        "domain": "https://dreamina.capcut.com",
+        "position": "1",
+        "snippet": null,
+        "title": "Consistent Character AI Video Generator: Lock Identity for Free",
+        "url": "https://dreamina.capcut.com/seedance/consistent-character-ai-video-generator?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.vidu.com",
+        "position": "2",
+        "snippet": null,
+        "title": "参考生视频 AI — 保持角色一致性 | Vidu AI",
+        "url": "https://www.vidu.com/zh/ai-reference-to-video?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://help.runwayml.com",
+        "position": "3",
+        "snippet": null,
+        "title": "Creating with Gen-4 Image References – Runway",
+        "url": "https://help.runwayml.com/hc/en-us/articles/40042718905875-Creating-with-Gen-4-Image-References?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://ir.kuaishou.com",
+        "position": "4",
+        "snippet": null,
+        "title": "Kuaishou Kling AI Unveils “Multi-Image Reference” Feature to Further Tackle AI Video Consistency Challenges | Kuaishou Technology",
+        "url": "https://ir.kuaishou.com/news-releases/news-release-details/kuaishou-kling-ai-unveils-multi-image-reference-feature-further/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://pixverse.ai",
+        "position": "5",
+        "snippet": null,
+        "title": "How to Create Consistent Characters with AI Video Using AI Character Animation Tools | PixVerse",
+        "url": "https://pixverse.ai/en/blog/ai-video-generator-with-character-consistency?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://deepmind.google",
+        "position": "6",
+        "snippet": null,
+        "title": "Veo 3.1 — Google DeepMind",
+        "url": "https://deepmind.google/models/veo/?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "想批量制作连续剧集，哪些AI视频和短剧平台支持角色一致性？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E6%83%B3%E6%89%B9%E9%87%8F%E5%88%B6%E4%BD%9C%E8%BF%9E%E7%BB%AD%E5%89%A7%E9%9B%86%EF%BC%8C%E5%93%AA%E4%BA%9BAI%E8%A7%86%E9%A2%91%E5%92%8C%E7%9F%AD%E5%89%A7%E5%B9%B3%E5%8F%B0%E6%94%AF%E6%8C%81%E8%A7%92%E8%89%B2%E4%B8%80%E8%87%B4%E6%80%A7%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "AI短剧里“ 手部细节差、复杂动作崩、多人互动不自然 ”，本质上不是单纯的“提示词写得不够好”，而是当前视频生成模型在 人体拓扑、时序一致性、空间关系和因果交互 上的几个共同难点。近期综述也把 human-centric motion、temporal consistency 和 multimodal alignment 列为仍未完全解决的问题。 Springer Link +1 对于短剧制作，我更建议不要试图“一次生成完整动作”，而是把它当成 传统影视的分镜 + AI生成 + 后期合成 问题来处理。 1. 手部细节：不要让 AI 长时间展示“手” 最容易出问题的是： 手指交叉、抓握、捏取 两只手互相接触 手拿手机、杯子、刀、笔等物体 手与另一人的手发生接触 快速挥手、打斗、推搡 手从身体后方突然伸出来 这类动作要求模型同时保持 手指结构 + 物体位置 + 人体姿态 + 时间连续性 ，难度明显高于简单的走路、转身、点头。 制作上的第一原则：让“手部动作”成为一个独立镜头 例如不要： 女主拿起手机，看了一眼，然后用右手快速输入密码，同时男主从后面走过来抢走手机。 拆成： 女主伸手拿手机——中景 手机被拿起——手部特写 手机屏幕——插入镜头 女主输入密码——手部特写 男主伸手抢手机——另一个镜头 女主反应——面部特写 这样实际上是在 降低单个生成任务的动作复杂度 。 Runway 的官方提示指南也明确建议，一次生成尽量聚焦于一个主要动作，不要在一个短片段里塞入多个动作、场景变化和风格变化。 Runway +1 2. 对手部镜头，优先使用“静态关键帧 → Image-to-Video” 如果直接 Text-to-Video： “一个女人拿起杯子，五根手指自然地握住杯柄，然后喝水……” 模型必须自己决定： 手长什么样 杯子在哪里 手指怎么弯 手掌怎么接触杯子 手臂从哪里过来 出错概率自然很高。 更稳定的方法是： 先生成/制作一张手部正确的关键画面 → 再让视频模型只负责运动。 例如： 首帧：女人右手已经正确握住咖啡杯。 动作：她缓慢抬起杯子，手腕自然旋转，杯子保持与手掌接触。 这样模型的任务从： “创造一只正确的手 + 创造一个正确的动作” 变成： “让已经存在的手按照合理轨迹运动”。 Runway 的官方 Image-to-Video 文档也采用类似逻辑：输入图像负责构图、人物、光线和视觉风格，而 prompt 主要描述 运动、摄影机和时间变化 。 Runway 3. 不要用“抽象动作”，改成“物理动作” 例如不要写： 她愤怒地打了男主。 更容易控制的是： 女主右肩向前转动，右手快速向前挥动，男主头部向右侧躲闪，两人保持身体距离。 甚至进一步拆成： 女主抬起右臂。 停顿。 手臂快速向前挥出。 男主向右侧躲闪。 也就是把： 情绪 → 动作 转换成： 身体部位 → 运动方向 → 速度 → 终点 → 反应 这与目前视频模型的实际工作方式更匹配。Runway 的官方指南同样建议使用清晰、直接的物理动作，而不是过于抽象的概念描述。 Runway 4. 复杂动作：采用“一镜一动作” 这是做 AI 短剧非常重要的一条经验。 假设剧情是： 男主冲进房间 → 推开女主 → 拿起桌上的枪 → 转身 → 对准门口 → 女二冲进来 → 男主转身。 不要一次生成。 可以拆成： 镜头 AI任务 难度 01 男主冲进房间 ★★ 02 男主推门 ★★ 03 男主推开女主 ★★★★ 04 手拿起桌面物体 ★★★ 05 男主转身 ★★ 06 男主看向门口 ★ 07 女二冲进来 ★★ 08 男主回头 ★★ 然后用剪辑把它们连接起来。 AI短剧真正稳定的秘诀不是让AI一次生成更多，而是让每次生成解决更小的问题。 目前的视频生成研究也观察到，随着动作和构图复杂度增加，时序和语义一致性更容易下降。 ScienceDirect +1 5. 多人互动：不要让三个人同时“做事” 这是多人场景最容易崩的地方。 比如： 三个人在客厅争吵，A指着B，B推开A，C从旁边走过来拉住B，A后退一步，然后三个人同时说话。 对于生成模型来说，这相当于同时解决： 3个人 × 人体动作 × 空间关系 × 手部接触 × 表情 × 台词 × 时间顺序 非常容易出现： 人物互换 手臂穿模 人物突然消失 第三个人脸发生变化 人物位置漂移 谁在碰谁搞不清 前后景人物关系改变 甚至 OpenAI 对早期 Sora 的公开说明就直接把“多人和复杂物体交互”列为困难场景，并指出多人场景可能出现实体突然出现等问题。 OpenAI 6. 多人场景最好使用“主角 + 反应镜头” 例如三人争吵： 镜头 A A说话 中近景，只让 A 完成动作。 镜头 B B反应 切到 B。 镜头 C C反应 切到 C。 镜头 D A推B 只生成两个人的动作。 镜头 E C拉住B 再单独生成 C+B。 镜头 F 三人全景 这里只需要三个人保持基本站位，不要求复杂肢体互动。 这样最终观众看到的仍然是： 三个人发生了一场复杂的互动。 但 AI 实际完成的是： A → B → C → A+B → B+C → 三人静态全景。 这是目前非常实用的“复杂度欺骗”。 7. 多人镜头一定要给人物明确“空间身份” 不要： 三个人站在房间里，左边的人和中间的人争吵，右边的人阻止他们。 更推荐： 左侧女性保持站立。 中央男性面对左侧女性。 右侧男性站在中央男性身后。 左侧女性向中央男性靠近。 中央男性保持不动。 右侧男性伸出右手阻止左侧女性。 Runway 的官方指南对于多主体动作也建议通过明确的 左右位置 + 人物身份 + 各自动作 来减少模型混淆。 Runway 8. “接触动作”最好分成两个镜头 这是一个特别有效的技巧。 比如： A递给B一部手机。 不要强迫一个镜头完成“拿着 → 递出 → B接住”。 可以： Shot 1 A拿着手机向B伸手。 Cut Shot 2 B从画面外伸手接过手机。 Cut Shot 3 B已经拿着手机。 观众的大脑会自动补全： A把手机给了B。 这就是传统影视里的 动作匹配剪辑（action matching） 。 AI生成视频不需要真正模拟完整的物理过程，只要 剪辑上的因果关系成立 即可。 9. 用“遮挡”解决很多 AI 无法解决的问题 如果一个动作特别复杂，可以主动让东西挡住。 例如： 男主突然拔刀。 与其生成： 手从腰间 → 握住刀柄 → 拔出 → 刀刃完全出现 不如： 镜头 1： 男主把手伸向腰间。 镜头 2： 身体被前景人物部分遮挡，只看到快速抽出的动作。 镜头 3： 刀已经在手中。 观众会自动补全中间过程。 同样适用于： 拥抱 接吻 打斗 抢夺 穿衣 脱衣 拿取物品 人物跌倒 人物碰撞 遮挡不是妥协，而是影视语言。 10. 打斗戏尤其不要追求“一镜到底” AI目前最容易失败的恰恰是： A挥拳 → B格挡 → A转身 → B踢腿 → A摔倒 → C冲过来。 建议改成： A出拳 → Cut → B被击中 → Cut → A特写 → Cut → B倒地 → Cut → C冲入画面。 甚至可以通过： 快速剪辑 特写 反应镜头 POV 遮挡 声音 镜头震动 Motion Blur 制造动作强度。 不要让 AI 模拟整个打斗，应该让 AI 负责“动作碎片”，剪辑负责“动作逻辑”。 11. 角色一致性比动作复杂度更重要 AI短剧最忌讳： 第一镜头女主很好看 第二镜头脸变了 第三镜头衣服变了 第四镜头发型变了 因此建议建立一个 Character Bible（角色视觉圣经） ： 角色：林夏 年龄：28 脸型：椭圆 发型：黑色长直发 发长：肩胛骨 服装：米白色风衣、黑色长裤 鞋：黑色高跟鞋 首饰：银色耳环 然后为每个主要角色准备： 正面 左45° 右45° 侧面 全身 半身 表情参考 常用服装 后续所有视频尽量从这些固定参考图出发。 这也是为什么目前不少 image-to-video 工作流强调： 输入图像先锁定人物与场景，视频模型主要负责运动。 Runway +1 12. Prompt不要写成“剧本”，而要写成“摄影指导” 一个很常见的错误： 女主因为发现男友背叛非常生气，她冲过去质问男友，男友解释，两人发生争执，女主打了男友一巴掌，然后哭着跑出去。 这是 剧情描述 ，不是好的视频生成指令。 可以变成： Medium shot. The woman stands on the left side of the frame. She takes two steps toward the man, raises her right hand, and slaps his left cheek. The man turns his head slightly from the impact. Locked camera. Natural body motion. 也就是： 人物位置 + 动作 + 方向 + 镜头 + 摄影机 而不是： 故事 + 情绪 + 大量事件 。 13. 对复杂镜头，可以引入“动作参考” 如果你的制作要求已经比较高，建议从单纯的 Text-to-Video 工作流升级成： 真人动作参考 / Pose → AI角色 → Video 也就是先让真人完成动作，再让 AI 做角色替换、风格化或者视觉重构。 这类方法的核心优势是： AI不需要“想象动作”，只需要“跟随动作”。 目前的人体动作视频研究本身也把整个过程拆成输入、动作规划、视频生成和 refinement 等阶段，而不是简单地认为“一段 prompt 就等于一段完整表演”。 PubMed 14. 一个比较成熟的 AI短剧工作流 如果你要做的是 连续几十集的 AI短剧 ，我会建议采用下面这套 pipeline： 剧本 ↓ 动作拆解 ↓ 分镜 ↓ 角色设定图 ↓ 场景设定图 ↓ 关键帧 ↓ Image-to-Video ↓ 单动作生成 ↓ 人工筛选 ↓ 局部重生成 ↓ 剪辑 ↓ 声音 / 台词 / 音效 ↓ 特效 ↓ 最终成片 而不是： 剧本 ↓ Prompt ↓ 一次生成完整视频 ↓ 完蛋 后者目前仍然非常容易在复杂动作上失控。 15. 可以直接采用的“复杂动作拆解公式” 以后写 AI 视频提示词，可以套这个结构： 主体 + 初始姿态 + 单一动作 + 动作方向 + 速度 + 结束状态 + 摄影机 例如： 女性站在窗边，身体朝向镜头，右手自然垂下。她缓慢抬起右手，将窗帘向右侧拉开。动作连续、自然，结束时右手停留在身体右侧。中近景，固定摄影机。 多人： 女性站在画面左侧，男性站在画面右侧。女性向男性走近两步。男性保持站立不动。女性抬起右手指向男性。固定中景，人物位置保持稳定。 比： 两个人激烈争吵，女方愤怒地指责男方。 可控得多。 16. 最后给你一个“AI短剧动作难度表” 动作 建议 走路 ✅ 直接生成 转身 ✅ 直接生成 点头/摇头 ✅ 很适合 表情变化 ✅ 较适合 挥手 ✅ 较适合 单手拿物 ⚠️ 需要控制 双手操作物体 ⚠️ 拆镜头 手指精细操作 ⚠️ 特写 + 关键帧 两人握手 ⚠️ 尽量短 拥抱 ⚠️ 拆成几个镜头 递/接物品 ⚠️ 动作匹配剪辑 两人打斗 ❌ 不建议一镜到底 三人打斗 ❌ 强烈拆镜头 5人以上互动 ❌ 尽量用剪辑制造 多人同时复杂动作 ❌ 避免 手部超特写 ⚠️ 后期修复/替换 群演 ⚠️ 尽量让大部分人做简单动作 核心原则 不是让 AI 变得“更聪明”，而是让每个生成任务变得“更简单”。 对于现在的 AI 短剧生产，我会把优先级排成： ① 分镜拆动作 > ② 锁定人物/场景 > ③ Image-to-Video > ④ 动作参考 > ⑤ 局部重生成 > ⑥ 剪辑隐藏缺陷 > ⑦ 最后才是疯狂改 Prompt。 这比单纯换模型或者把 prompt 写得越来越长通常有效得多。当前模型官方资料本身也强调了复杂动作、物理交互和多主体场景仍存在局限。 OpenAI +1 相关资料与工具文档 Runway Gen-4 Video Prompting Guide — 多主体动作、Prompt简化、动作描述等官方建议。 Runway Image-to-Video Prompting Guide — 输入关键帧后控制动作和摄影机的工作流。 Runway Gen-4 官方制作说明 — 输入图、时长、固定 seed 等制作参数。 OpenAI Sora 技术介绍 — 官方列出的物理、多人物和复杂交互局限。 Human Motion Video Generation: A Survey — 人体动作视频生成领域的系统性综述。 Video Diffusion Generation: Comprehensive Review and Open Problems — 视频扩散模型的能力、限制和研究方向。 2026年视频生成综述（Computer Vision and Image Understanding） — 对复杂运动、长时序和空间/语义一致性问题的最新综述。 如果你的目标是 真正用于生产 AI 短剧 ，下一步最值得做的是把一个“手部崩坏 + 两人打斗 + 三人争吵”的实际场景拿出来，我可以直接给你拆成 分镜表 + 每镜头 Prompt + 首帧构图 + 动作拆解 + 剪辑衔接方案 。 Sources",
+    "citations": [
+      {
+        "domain": "https://link.springer.com",
+        "position": "1",
+        "snippet": null,
+        "title": "Towards human-centered and efficient video synthesis: a survey of multimodal diffusion models | Artificial Intelligence Review | Springer Nature Link",
+        "url": "https://link.springer.com/article/10.1007/s10462-026-11699-z?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://help.runwayml.com",
+        "position": "2",
+        "snippet": null,
+        "title": "Gen-4 Video Prompting Guide – Runway",
+        "url": "https://help.runwayml.com/hc/en-us/articles/39789879462419-Gen-4-Video-Prompting-Guide?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.sciencedirect.com",
+        "position": "3",
+        "snippet": null,
+        "title": "A survey of emerging approaches and advances in video generation - ScienceDirect",
+        "url": "https://www.sciencedirect.com/science/article/pii/S1077314226002183?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://openai.com",
+        "position": "4",
+        "snippet": null,
+        "title": "Sora: Creating video from text | OpenAI",
+        "url": "https://openai.com/index/sora/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://pubmed.ncbi.nlm.nih.gov",
+        "position": "5",
+        "snippet": null,
+        "title": "Human Motion Video Generation: A Survey - PubMed",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40742844/?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "AI短剧制作中手部细节、复杂动作和多人互动效果不好，应该怎样改进？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=AI%E7%9F%AD%E5%89%A7%E5%88%B6%E4%BD%9C%E4%B8%AD%E6%89%8B%E9%83%A8%E7%BB%86%E8%8A%82%E3%80%81%E5%A4%8D%E6%9D%82%E5%8A%A8%E4%BD%9C%E5%92%8C%E5%A4%9A%E4%BA%BA%E4%BA%92%E5%8A%A8%E6%95%88%E6%9E%9C%E4%B8%8D%E5%A5%BD%EF%BC%8C%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E6%94%B9%E8%BF%9B%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "如果你的目标是 做连续剧/连载短剧，而不是偶尔生成一个“很酷的 AI 视频” ，我的结论很明确： 首选：AI 短剧一体化平台 第二：Runway 不建议现在选 Sora 作为生产平台——Sora 已于 2026 年 4 月 26 日停止提供。 OpenAI 这里真正的区别不是“谁的视频单镜头最好”，而是 谁更适合把几十集、几百个镜头持续生产下去 。 三者怎么选 维度 Runway Sora AI短剧一体化平台 单镜头画质/电影感 ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐ 人物长期一致性 ⭐⭐⭐⭐⭐ ⭐⭐⭐⭐ ⭐⭐⭐⭐⭐ 多集连续生产 ⭐⭐⭐⭐ ❌ 已停止 ⭐⭐⭐⭐⭐ 剧本→分镜→镜头 ⭐⭐⭐ ⭐⭐/已停止 ⭐⭐⭐⭐⭐ 配音/字幕/剪辑 ⭐⭐⭐ ⭐⭐/已停止 ⭐⭐⭐⭐⭐ 角色资产管理 ⭐⭐⭐⭐⭐ ⭐⭐⭐ ⭐⭐⭐⭐⭐ 适合批量做几十集 ⭐⭐⭐⭐ ❌ ⭐⭐⭐⭐⭐ 专业创作自由度 ⭐⭐⭐⭐⭐ — ⭐⭐⭐⭐ 学习成本 中高 低中 低 最适合 导演型创作 已不适用 连载短剧 1. Runway：如果你想“像导演一样做剧”，它很强 Runway 最大的优势是 可控性和角色/场景一致性 。 它现在的 Gen-4 References 可以保存角色、场景、物件等 Reference，并在不同场景、光线、机位中复用。官方甚至专门提供了“长片/电影”的制作流程：先做 storyboard，再制作 character plates、environment plates，然后逐镜生成，最后在剪辑软件里组装。 Runway Help +1 这对连续剧特别重要。 例如你有： 女主：林夏 男主：顾言 固定场景：咖啡馆、办公室、家 固定服装：第1–5集保持一致 固定视觉风格：韩剧电影感 你可以把这些做成 References，然后反复用于后面的镜头，而不是每一集重新“猜”一次角色长什么样。Runway 官方也明确把 Gen-4 定位为支持跨场景保持 character/location/object consistency。 Runway 而且现在 Runway 有 Workflows ，可以把多个生成步骤串起来、保存成模板，比较适合建立自己的“剧集生产流水线”。 Runway 所以如果你本身懂影视制作，我会推荐 Runway。 Runway 官方 Runway Gen-4 References 官方教程 Runway 长片/电影制作教程 Runway Workflows 2. Sora：以前很有潜力，但现在不应该作为你的选择 Sora 2 本身其实已经具备一些非常适合连续叙事的能力，例如角色引用、跨镜头保持世界状态、视频延长等。OpenAI 的 Sora 2 文档还曾支持可复用 Character，并可以把视频延长到最长 120 秒的连续序列。 OpenAI Developers 但这是历史能力了。 OpenAI 官方目前明确写着： As of April 26, 2026, the Sora product is no longer available. 也就是说，现在是 2026 年 10 月 ，所以如果你是准备今天开始一个连续剧项目， Sora 不应该进入你的采购/工作流选择。 OpenAI +1 3. AI 短剧一体化平台：如果你真的要“连载”，这是最省事的 这一类平台和 Runway 的定位不太一样。 它们不是单纯问： “帮我生成一个 10 秒视频。” 而是试图解决： “我有一个 60 集剧本，怎么持续把它变成 60 集成片？” 例如目前的 小影马官方平台 ，已经把： 剧本 → 角色设定 → 分镜 → 镜头 → 配音 → 字幕 → 剪辑 → 成片 放在一个工作空间里。 更关键的是，它官方明确写了 Agent 流水线适合“连载短剧”和需要角色前后一致的项目 。 小影马 这就是我为什么把“AI短剧一体化平台”排第一。 你做连续剧时，真正耗时间的往往不是生成某一个漂亮镜头，而是： 第 1 集的女主和第 15 集是不是同一个人 男主的发型、衣服有没有乱 第 8 集的房间是不是第 3 集那个房间 台词能不能自动对应镜头 分镜有没有漏 每个角色有没有声音 字幕有没有生成 30 集能不能批量生产 修改剧本后能不能重新跑一遍流程 一体化平台正好针对这些问题。 近期国内对 AI 短剧工具的横向评测也把这类产品区分为“剧本到成片”的全流程生产工具，并提到了多角色一致性、自动审片、分镜、动画/角色演绎等能力。 The Paper 小影马 AI短剧制作平台 如果是我来搭一部连续剧 我反而 不会三选一 ，而会采用： AI短剧一体化平台 = 制片系统 ↓ Runway = 高质量关键镜头/特殊镜头生成器 ↓ 专业剪辑软件 = 最终剪辑、声音、调色 也就是： 一体化平台负责“规模化生产”，Runway负责“精品镜头”。 比如一部 30 集竖屏短剧： 80% 普通对话镜头 → 一体化平台批量生产 10% 转场/B-roll → 一体化平台或其他模型 10% 关键戏 → Runway 精修 最后统一剪辑、配乐、音效、字幕 这样比“所有镜头都拿 Runway 一条一条做”更适合长期连载。 如果只允许我选一个 做 10～100 集 AI 连续剧：选 AI 短剧一体化平台。 做 5～20 分钟的精品 AI 短片/电影：选 Runway。 Sora：目前不选，因为官方已经停止 Sora 产品。 OpenAI 如果你告诉我你说的“ AI短剧一体化平台 ”具体是哪一个（例如 小影马、巨日禄、ELSER.AI、即梦/可灵相关工作流 等），我可以进一步给你做一张 “Runway vs 具体平台”深度对比表 ，尤其比较 角色一致性、10/30/60集批量生产、中文对白、声音、分镜、成本和商业版权 。 Sources",
+    "citations": [
+      {
+        "domain": "https://openai.com",
+        "position": "1",
+        "snippet": null,
+        "title": "Sora 2 is here | OpenAI",
+        "url": "https://openai.com/index/sora-2/?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://help.runwayml.com",
+        "position": "2",
+        "snippet": null,
+        "title": "Creating with Gen-4 Image References – Runway",
+        "url": "https://help.runwayml.com/hc/en-us/articles/40042718905875-Creating-with-Gen-4-Image-References?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://runway.com",
+        "position": "3",
+        "snippet": null,
+        "title": "Runway Gen-4: AI Video Generation with World Consistency",
+        "url": "https://runway.com/research/introducing-runway-gen-4?rd=1&utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://developers.openai.com",
+        "position": "4",
+        "snippet": null,
+        "title": "Sora 2 Prompting Guide",
+        "url": "https://developers.openai.com/cookbook/examples/sora/sora2_prompting_guide?trk=article-ssr-frontend-pulse_little-text-block&utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://yingma.tv",
+        "position": "5",
+        "snippet": null,
+        "title": "小影马 - AI短剧制作平台",
+        "url": "https://yingma.tv/official?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://m.thepaper.cn",
+        "position": "6",
+        "snippet": null,
+        "title": "2026年AI短剧工具横评：一键成片与全流程生产怎么选",
+        "url": "https://m.thepaper.cn/newsDetail_forward_33643563?utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "Runway、Sora和AI短剧一体化平台，哪个更适合制作连续剧而不是单个视频？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=Runway%E3%80%81Sora%E5%92%8CAI%E7%9F%AD%E5%89%A7%E4%B8%80%E4%BD%93%E5%8C%96%E5%B9%B3%E5%8F%B0%EF%BC%8C%E5%93%AA%E4%B8%AA%E6%9B%B4%E9%80%82%E5%90%88%E5%88%B6%E4%BD%9C%E8%BF%9E%E7%BB%AD%E5%89%A7%E8%80%8C%E4%B8%8D%E6%98%AF%E5%8D%95%E4%B8%AA%E8%A7%86%E9%A2%91%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  },
+  {
+    "answerText": "可以。 没有影视制作经验的人，完全可以用 AI 独立完成第一部竖屏短剧 。但我建议你不要把目标定成“做一部 20 集爆款短剧”，而是先完成一部 60–120 秒、3–5 个场景、2 个主要角色 的“样片”。 核心思路是： 你不是在“拍电影”，而是在管理一条 AI 内容生产流水线。 下面给你一套从 0 到成片的实际方法。 一、第一部作品，先把规模压到最低 我推荐你的第一部短剧控制在： 时长：60–120 秒 角色：2 人 场景：2–3 个 镜头：12–20 个 对白：20–40 句 单镜头：3–8 秒 画幅：9:16 风格：现实都市 / 悬疑 / 情感 制作周期：第一次大约 3–7 天 为什么？ 因为目前 AI 视频最适合的工作方式仍然是 把一个复杂场景拆成许多短镜头分别生成，再进行剪辑 。例如 Runway 的 Gen-4/Gen-4.5 支持 9:16 竖屏，Gen-4 的典型输出是 5 或 10 秒；官方也建议图生视频时，让输入图片负责人物、构图、光线和风格，而文字提示主要描述运动。 Runway Help +2 所以不要让 AI 一次生成“一个人从咖啡店走出去、遇到前任、两人争吵、下雨、拥抱、离开”的 30 秒连续戏。 拆成 6 个镜头，成功率会高得多。 二、你真正需要掌握的，其实只有 6 个环节 完整流程可以画成： 故事 → 剧本 → 分镜 → 人物/场景图 → AI 视频 → 配音/音效 → 剪辑 你可以把它理解成一个小型剧组： 传统剧组 AI 短剧 编剧 ChatGPT 等大语言模型 导演 你 + AI 演员 AI 人物 摄影 AI 视频模型 美术 AI 图片模型 配音演员 AI TTS 剪辑师 CapCut / Premiere 等 音效师 音效库 + AI 制片人 你 其中最重要的不是“哪个 AI 最强”，而是 你能不能把一个故事拆成可生成的镜头。 三、第一步：不要先学工具，先找一个“能拍”的故事 这是新手最容易犯的错误： “我先研究 Midjourney、Runway、Kling、Sora……然后再想做什么。” 反过来。 先找一个 极简单但有反转 的故事。 例如： 《凌晨三点的外卖》 人物： 女主：25 岁，独居 外卖员：30 岁左右 故事： 凌晨 3 点，女主收到一份自己从未点过的外卖。 外卖员站在门口，只说： “你妈妈让我给你的。” 女主愣住。 因为她母亲已经去世三年。 她打开袋子，里面是一部旧手机。 手机突然亮了。 屏幕上只有一句： “别开门。” 门外的外卖员再次敲门。 ——结束。 这就已经足够成为一部 60–90 秒的短剧。 而且它特别适合 AI： 人物少 场景少 夜景 室内 情绪明确 不需要打斗 不需要大量群演 不需要复杂动作 结尾有悬念 第一部作品千万不要挑战古装战争、校园群像、科幻大战。 四、第二步：让 AI 把故事变成“镜头表” 不要直接问： “帮我写一个短剧。” 而是让 AI 输出 可以直接生产的视频镜头表 。 例如： 镜头 时长 景别 内容 01 4s 特写 手机显示 03:07 02 5s 中景 女主独自在客厅 03 4s 特写 门铃突然响 04 5s 近景 女主惊讶抬头 05 6s 门口 外卖员站在门外 06 5s 近景 女主隔门问话 07 5s 外卖员 “你妈妈让我给你的。” 08 5s 女主 表情凝固 09 4s 特写 外卖袋 10 5s 特写 旧手机亮起 11 5s 手机 “别开门。” 12 6s 门 外卖员再次敲门 13 5s 女主 慢慢后退 14 4s 黑屏 敲门声 14 个镜头已经可以剪出一部完整短剧。 这时候你才开始进入 AI 制作。 五、第三步：先锁定“人物”，再生成视频 这是 AI 短剧和普通 AI 视频最大的区别之一。 如果你直接： “生成一个 25 岁中国女生坐在客厅里。” 然后下一个镜头： “生成这个女生站在门口。” AI 很可能给你两个长得完全不同的人。 所以正确方式是： 先做“角色设定图” 例如： 女主： 25-year-old Chinese woman, shoulder-length black hair, oval face, pale skin, dark brown eyes, wearing an oversized gray sweatshirt, subtle natural makeup, realistic contemporary Chinese urban drama, cinematic lighting, neutral expression, medium close-up, photorealistic 然后生成一张 标准人物参考图 。 之后所有镜头尽量使用这个人物作为 reference / image input。 Runway 的官方文档也明确强调，图生视频时，输入图像承担人物、构图、灯光和视觉风格等信息，提示词重点应该放在“运动”上。 Runway Help +1 所以你的工作方式应该是： 人物图 → 镜头图 → 图生视频 而不是： 一句文字 → 直接生成完整电视剧 六、第四步：先生成“关键帧”，再让 AI 动起来 这是我特别推荐新手掌握的技巧。 假设第 5 个镜头： 外卖员站在女主家门口。 不要直接让视频 AI 从文字生成。 先生成一张： “外卖员站在门口的电影剧照” 确认： 人长得对不对 衣服对不对 房门对不对 光线对不对 构图对不对 满意以后，再拿这张图去做 Image-to-Video。 比如运动提示： The delivery man slowly raises his eyes toward the camera. Subtle breathing. The hallway light flickers slightly. The camera slowly pushes in. 这样做的好处是： 图片负责“长什么样”，视频负责“怎么动”。 Runway 的官方教程也是类似的思路，并且支持 9:16 的竖屏输出。 Runway Help +1 Runway 官方 Generative Video 入门 七、第五步：学会一个非常重要的 Prompt 公式 新手不要写特别长的 prompt。 对于 图生视频 ，我建议： 主体 + 动作 + 镜头运动 + 环境变化 例如： 普通 女孩很害怕。 不够好。 更适合视频生成 The woman slowly turns toward the door, her expression becoming tense. The camera slowly pushes in. Subtle breathing. Dim warm apartment lighting. 也就是说： 不要反复描述人物长相。 如果人物已经由参考图确定了，那么 prompt 主要告诉 AI： 这个人现在要干什么。 这也符合 Runway 对 Image-to-Video prompting 的官方建议。 Runway Help +1 八、第六步：千万不要让 AI 负责“演完整场戏” 这是新手最容易失败的地方。 比如你想做： 女孩打开门，看见外卖员，然后说“你是谁”，外卖员说“你妈妈让我给你的”，女孩震惊，然后后退。 不要这么做。 拆成： 镜头 A 女孩听见门铃。 镜头 B 女孩走到门口。 镜头 C 女孩打开门。 镜头 D 外卖员站在门外。 镜头 E 女孩震惊。 镜头 F 外卖员说话。 镜头 G 女孩看到外卖袋。 镜头 H 手机亮起。 镜头 I “别开门。” 镜头 J 敲门。 这才是 AI 短剧真正可控的生产方式 。 九、配音：不要低估声音的重要性 画面有一点 AI 感，观众可能还能接受。 但： 人物嘴型不自然 + 配音机械 + 没有环境声 观众马上就会感觉： “这是 AI 做的。” 你可以使用 ElevenLabs 一类的 TTS 工具生成对白。它目前支持多语言、情绪和语速等控制，并提供 Instant Voice Clone / Professional Voice Clone。 ElevenLabs +1 ElevenLabs 官方 Text to Speech 文档 但这里有一个重要原则： 不要随便克隆真人声音。 如果不是你自己的声音，或者没有得到明确授权，不要拿别人的声音去做克隆。 ElevenLabs 的官方流程也要求在创建 Instant Voice Clone 时确认你拥有相应的权利和同意。 ElevenLabs 十、一个人做 AI 短剧，声音最好这样处理 第一部作品甚至可以： 人物对白 + 环境声 + 音乐 三层就够了。 例如《凌晨三点的外卖》： 环境声 空调声 房间底噪 门铃 电梯声 走廊脚步 敲门声 人物 女主： “谁？” 外卖员： “你的外卖。” 女主： “我没点。” 外卖员： “你妈妈让我给你的。” 停顿。 女主： “……你说什么？” 然后音乐进入。 手机亮起： 别开门。 然后： 咚。 咚。 咚。 黑屏。 实际上这个声音设计甚至比画面特效更重要。 十一、剪辑阶段才是真正决定“像不像短剧”的地方 你可以用 CapCut 这类工具。 尤其适合新手的是： 自动字幕 剪切 音频 音效 BGM 转场 字幕动画 画面裁切 9:16 输出 CapCut 官方目前支持 Web、桌面和移动端的 AI 自动字幕识别，并可以进一步手动修改字幕内容、时间和样式。 CapCut CapCut 官方帮助中心：自动字幕 十二、剪辑时记住一个原则：不要舍不得删 假设你生成了一个 8 秒的漂亮镜头。 你可能会想： “这个画面这么漂亮，全部用掉。” 错。 如果真正有效的信息只有： 2.5 秒 就只用 2.5 秒。 AI 短剧很容易犯的毛病就是： 画面漂亮，但节奏很慢。 短剧的核心不是“每一帧都漂亮”。 而是： 下一秒发生什么？ 观众想知道。 十三、第一部短剧的最佳制作顺序 我建议你严格按照这个顺序： Day 1：故事 确定： 一句话故事 主角 冲突 结局 反转 最终得到： 1 页剧本 Day 2：分镜 把剧本拆成： 10–20 个镜头 每个镜头写： 景别 人物 动作 摄影机运动 台词 音效 时长 Day 3：人物和场景 生成： 主角标准图 配角标准图 房间 街道 门口 道具 建立一个文件夹： AI短剧/ ├── 01_剧本 ├── 02_人物 ├── 03_场景 ├── 04_分镜 ├── 05_视频 ├── 06_配音 ├── 07_音效 └── 08_最终成片 这一步看似无聊，但会极大减少后期混乱。 Day 4：生成视频 一次不要生成 20 个镜头。 先生成： 镜头 1–3 看看人物一致性。 如果人物已经崩了： 马上修。 不要做到第 18 个镜头才发现： “完了，女主已经换了一个人。” Day 5：配音 + 音效 完成： 人物对白 环境音 音效 BGM Day 6：剪辑 完成： 镜头排序 剪切 字幕 音乐 音效 调色 片头/片尾 Day 7：发布 导出： 1080 × 1920 / 9:16 然后发布。 YouTube Shorts 目前允许符合条件的方形或竖屏视频最长达到 3 分钟，所以 60–120 秒的第一部作品完全在 Shorts 的时长范围内。 Google Help YouTube 官方 Shorts 说明 十四、工具到底怎么选？ 你不需要一开始订阅十几个 AI。 我会建议新手先用下面这种组合： 工作 工具类型 推荐 剧本 LLM ChatGPT 人物/场景图 AI Image 任选一个稳定的图像模型 图生视频 AI Video Runway / Kling 等 配音 TTS ElevenLabs 等 剪辑 NLE CapCut 音效 音效库 / AI 后期补 字幕 自动字幕 CapCut 其中视频生成可以优先从 Runway 这类工具开始练习，因为官方文档对“图片 → 视频”的工作流解释得比较清楚，而且现在的 Gen-4.5 已经支持 Text-to-Video 和 Image-to-Video，并支持 9:16 输出。 Runway Help +1 Runway 官方视频生成教程 十五、你真正应该学的不是“Prompt”，而是“导演语言” 这是非常关键的一点。 很多人学 AI 视频，会花大量时间研究： “什么关键词能生成电影感？” 其实更应该学习： 景别 大远景 全景 中景 近景 特写 摄影机 static push in pull out tracking pan tilt handheld orbit 表演 looks up slowly turns hesitates freezes takes a breath steps backward 剪辑 cut match cut reaction shot insert shot close-up establishing shot 当你开始用这种方式思考： “这个信息应该用什么镜头告诉观众？” 你就已经开始从“玩 AI”进入“做导演”了。 十六、一个非常实用的 AI 短剧工作模板 以后每个镜头都可以填这个： 【镜头编号】 S05 【时长】 5 秒 【场景】 凌晨，公寓门口 【人物】 30 岁男性外卖员 【构图】 中近景 【人物动作】 站在门口，缓慢抬头 【表情】 平静、略显诡异 【摄影机】 slow push-in 【灯光】 冷白色走廊灯 【环境】 安静，夜晚 【对白】 “你妈妈让我给你的。” 【音效】 轻微电流声、远处空调声 【生成 Prompt】 The delivery man slowly raises his eyes toward the camera... 然后： 一镜一镜生产。 不要让 AI 自己替你决定整部剧。 十七、第一部作品最应该追求的不是“电影感” 我反而建议你给自己定四个 KPI： ① 故事看得懂 观众不用看评论区解释。 ② 人物基本稳定 女主第一个镜头和最后一个镜头还是同一个人。 ③ 节奏不拖 每隔几秒都有信息变化。 ④ 能完整看完 哪怕只有 300 个播放量，也要把第一部完整做出来。 第一部的真正目标不是爆。 而是完成一次完整闭环： 想法 → 剧本 → 分镜 → 生成 → 配音 → 剪辑 → 发布 完成一次以后，第二部会快很多。 十八、如果让我带一个完全零基础的人做，我会这样开始 我甚至不会让他先做 90 秒。 第一练习：30 秒 题目： 《不要回头》 只有： 1 个角色 1 个房间 1 个声音 6 个镜头 30 秒 剧情： 女孩半夜听到身后有人叫她名字。 她准备回头。 手机突然收到一条短信： “千万不要回头，我就在你身后。” 她僵住。 黑屏。 然后第二部： 60 秒、2 个角色。 第三部： 90 秒、3 个角色。 第四部： 3 分钟。 这样你的能力会真正增长。 最后给你一条最重要的建议 不要把 AI 当成“自动拍电影机器”。 目前最有效的方式更像： 人负责故事、审美、选择和剪辑；AI 负责大量生成和迭代。 尤其是 AI 视频，你应该习惯： 生成 → 筛选 → 修改 → 再生成 而不是： 输入 Prompt → 等待 → 直接用。 Runway 官方也把生成过程设计成持续迭代，并建议先测试较低成本的 Turbo，再根据结果切换更高质量模型。 Runway Help 如果你现在真的准备做第一部，我建议下一步 不要再泛泛地研究 AI 工具 ，而是直接做一个小项目：我可以按照你的题材（ 爱情 / 悬疑 / 复仇 / 都市 / 古装 / 科幻 / 搞笑 ），直接给你设计一部 60–90 秒 AI 竖屏短剧 ，并进一步拆成 完整剧本 + 15 个镜头的分镜表 + 每个镜头的 AI 图片 Prompt + 图生视频 Prompt + 配音台词 + 音效 + CapCut 剪辑时间轴 ，你可以照着一步一步做出第一部。 Sources",
+    "citations": [
+      {
+        "domain": "https://help.runwayml.com",
+        "position": "1",
+        "snippet": null,
+        "title": "Creating with Gen-4 Video – Runway",
+        "url": "https://help.runwayml.com/hc/en-us/articles/37327109429011-Creating-with-Gen-4-Video?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://elevenlabs.io",
+        "position": "2",
+        "snippet": null,
+        "title": "Text to Speech | ElevenLabs Documentation",
+        "url": "https://elevenlabs.io/docs/overview/capabilities/text-to-speech?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://www.capcut.com",
+        "position": "3",
+        "snippet": null,
+        "title": "How do I recognise subtitles?",
+        "url": "https://www.capcut.com/help/how-to-recognise-subtitles?utm_source=chatgpt.com"
+      },
+      {
+        "domain": "https://support.google.com",
+        "position": "4",
+        "snippet": null,
+        "title": "Understand three-minute YouTube Shorts - YouTube Help",
+        "url": "https://support.google.com/youtube/answer/15424877?cq_net=g&hl=en&utm_source=chatgpt.com"
+      }
+    ],
+    "country": "US",
+    "index": null,
+    "linksAttached": [],
+    "prompt": "没有影视制作经验的人，怎样从零完成第一部AI竖屏短剧？ Please provide relevant web links or sources for your answer.",
+    "url": "https://chatgpt.com/?q=%E6%B2%A1%E6%9C%89%E5%BD%B1%E8%A7%86%E5%88%B6%E4%BD%9C%E7%BB%8F%E9%AA%8C%E7%9A%84%E4%BA%BA%EF%BC%8C%E6%80%8E%E6%A0%B7%E4%BB%8E%E9%9B%B6%E5%AE%8C%E6%88%90%E7%AC%AC%E4%B8%80%E9%83%A8AI%E7%AB%96%E5%B1%8F%E7%9F%AD%E5%89%A7%EF%BC%9F%20Please%20provide%20relevant%20web%20links%20or%20sources%20for%20your%20answer.",
+    "webSearchQuery": null
+  }
+]

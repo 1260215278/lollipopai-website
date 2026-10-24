@@ -1,6 +1,9 @@
 """
-只上传 HTML 文件（含 llms-txt link 标签）
+上传 HTML + llms + Markdown + sitemap/robots 文件
 使用 tar 打包，在服务器解压
+
+2026-10-24 修复：原脚本只 include *.html，导致 llms.txt / llms-full.txt /
+.well-known/* / *.md / sitemap.xml / robots.txt 被静默跳过。
 """
 import paramiko
 import os
@@ -25,13 +28,27 @@ print("=== Step 1: Creating HTML-only tar ===")
 if os.path.exists(LOCAL_TAR):
     os.remove(LOCAL_TAR)
 
+DEPLOY_EXTS = ('.html', '.txt', '.md', '.xml')
+DEPLOY_EXACT = {'robots.txt', 'llms.txt', 'llms-full.txt', 'sitemap.xml', 'BingSiteAuth.xml', 'Google*.html', 'yandex*.html', '*.txt'}
 count = 0
 with tarfile.open(LOCAL_TAR, 'w:gz') as tar:
     for root, dirs, files in os.walk(DIST_DIR):
         for f in files:
-            if f.endswith('.html'):
-                full = os.path.join(root, f)
-                arc = os.path.relpath(full, DIST_DIR)
+            full = os.path.join(root, f)
+            arc = os.path.relpath(full, DIST_DIR)
+            include = (
+                f.endswith(DEPLOY_EXTS)
+                or f == 'llms.txt'
+                or f == 'llms-full.txt'
+                or f.startswith('llms')
+            )
+            # Skip source maps and asset hashed files
+            if f.endswith('.map'):
+                continue
+            # Only include llms*.txt files from root or .well-known/
+            if f.startswith('llms') and os.path.dirname(arc) not in ('', '.well-known'):
+                continue
+            if include:
                 tar.add(full, arcname=arc)
                 count += 1
 
@@ -88,17 +105,18 @@ stdin, stdout, stderr = client.exec_command(
 stdout.read()
 print("  Extracted")
 
-# Step 4: Rsync HTML files to production (only .html files, no delete)
+# Step 4: Rsync to production (HTML + llms + md + sitemap/robots, no delete)
+RSYNC_INCLUDES = "--include='*/' --include='.well-known/' --include='*.html' --include='*.md' --include='*.xml' --include='*.txt' --include='llms.txt' --include='llms-full.txt' --exclude='*'"
 print("\n=== Step 4: Rsync to production ===")
 stdin, stdout, stderr = client.exec_command(
-    "sudo rsync -a --include='*/' --include='*.html' --exclude='*' /tmp/html-update/ /srv/www/lollipop/current/ 2>&1",
+    f"sudo rsync -a {RSYNC_INCLUDES} /tmp/html-update/ /srv/www/lollipop/current/ 2>&1",
     timeout=120
 )
 stdout.read()
 print("  /srv/www/lollipop/current/ - Done")
 
 stdin, stdout, stderr = client.exec_command(
-    "sudo rsync -a --include='*/' --include='*.html' --exclude='*' /tmp/html-update/ /var/www/lollipop/ 2>&1",
+    f"sudo rsync -a {RSYNC_INCLUDES} /tmp/html-update/ /var/www/lollipop/ 2>&1",
     timeout=120
 )
 stdout.read()

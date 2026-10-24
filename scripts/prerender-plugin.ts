@@ -311,9 +311,13 @@ function getRouteData(): RouteSeoData[] {
           // 不再重复 name/url/sameAs 等造成「双实体」。
           "@id": "https://www.lollipop.im/#organization",
           "foundingDate": "2024",
+          // 2026-10-24 P0 修复：founder 此前误写为 Nyx Entertainment Group（母公司，Organization 类型）。
+          // Nyx 是 parentOrganization，不是 founder。统一为 James C.（Person，Co-Founder），与 index.html 全局 schema 一致。
           "founder": {
             "@type": "Person",
-            "name": "Nyx Entertainment Group"
+            "name": "James C.",
+            "jobTitle": "Co-Founder",
+            "url": "https://www.lollipop.im/about#team"
           },
           "address": {
             "@type": "PostalAddress",

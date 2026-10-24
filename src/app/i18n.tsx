@@ -63,8 +63,8 @@ const enMessages = {
   },
   hero: {
     bannerAlt: ["Lollipop Banner 1", "Lollipop Banner 2"],
-    taglineLine1: "Stream Short Dramas. Create. Monetize.",
-    taglineLine2: "The Next-Generation Global Content Ecosystem for AI Dramas.",
+    taglineLine1: "Lollipop Drama: AI Short Drama Platform — Stream, Create, Monetize",
+    taglineLine2: "80% Revenue Share. Built-in AI Creation Tools. 15,000+ Premium Dramas.",
     stats: [
       { label: "Premium Dramas" },
       { label: "Global Users" },
@@ -486,8 +486,8 @@ const translations: Record<Locale, TranslationMessages> = {
     },
     hero: {
       bannerAlt: ["Lollipop 横幅 1", "Lollipop 横幅 2"],
-      taglineLine1: "观看短剧 · 人人可创作 · 创作可变现",
-    taglineLine2: "消费即激励 · 下一代海外内容生态平台",
+      taglineLine1: "Lollipop Drama — AI 短剧平台 · 观看 · 创作 · 变现",
+    taglineLine2: "80% 创作者分成 · 内置 AI 创作工具 · 15,000+ 精品短剧",
       stats: [
         { label: "精品短剧" },
         { label: "全球用户" },
@@ -904,8 +904,8 @@ const translations: Record<Locale, TranslationMessages> = {
     },
     hero: {
       bannerAlt: ["Lollipop 橫幅 1", "Lollipop 橫幅 2"],
-      taglineLine1: "觀看短劇 · 人人可創作 · 創作可變現",
-    taglineLine2: "消費即激勵 · 下一代海外內容生態平台",
+      taglineLine1: "Lollipop Drama — AI 短劇平台 · 觀看 · 創作 · 變現",
+    taglineLine2: "80% 創作者分成 · 內建 AI 創作工具 · 15,000+ 精品短劇",
       stats: [
         { label: "精品短劇" },
         { label: "全球用戶" },
@@ -1322,8 +1322,8 @@ const translations: Record<Locale, TranslationMessages> = {
     },
     hero: {
       bannerAlt: ["Banner Lollipop 1", "Banner Lollipop 2"],
-      taglineLine1: "Assista Dramas Curtos. Crie. Monetize.",
-    taglineLine2: "O ecossistema global de conteúdo da próxima geração.",
+      taglineLine1: "Lollipop Drama: Plataforma de Dramas Curtos com IA — Assista, Crie, Monetize",
+    taglineLine2: "80% de Receita · Ferramentas de Criação IA · 15.000+ Dramas Premium",
       stats: [
         { label: "Dramas Premium" },
         { label: "Usuários Globais" },
@@ -1740,8 +1740,8 @@ const translations: Record<Locale, TranslationMessages> = {
     },
     hero: {
       bannerAlt: ["Banner Lollipop 1", "Banner Lollipop 2"],
-      taglineLine1: "Mira Dramas Cortos. Crea. Monetiza.",
-    taglineLine2: "El ecosistema global de contenido de nueva generación.",
+      taglineLine1: "Lollipop Drama: Plataforma de Dramas Cortos con IA — Mira, Crea, Monetiza",
+    taglineLine2: "80% de Ingresos · Herramientas de Creación IA · 15.000+ Dramas Premium",
       stats: [
         { label: "Dramas Premium" },
         { label: "Usuarios globales" },
@@ -2158,8 +2158,8 @@ const translations: Record<Locale, TranslationMessages> = {
     },
     hero: {
       bannerAlt: ["لافتة Lollipop 1", "لافتة Lollipop 2"],
-      taglineLine1: "شاهد الدراما القصيرة. أبدع. حقق الدخل.",
-    taglineLine2: "النظام البيئي العالمي للمحتوى من الجيل التالي.",
+      taglineLine1: "لولي بوب دراما: منصة الدراما القصيرة بالذكاء الاصطناعي — شاهد، أبدع، حقق الدخل",
+    taglineLine2: "80% أرباح للمبدعين · أدوات إبداع بالذكاء الاصطناعي · 15,000+ دراما متميزة",
       stats: [
         { label: "دراما متميزة" },
         { label: "مستخدمون عالميون" },

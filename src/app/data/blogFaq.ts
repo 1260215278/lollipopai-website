@@ -2631,4 +2631,107 @@ export const blogFaq: Record<string, FaqItem[]> = {
       answerEn: "ShortMax and GoodShort are smaller but have their niches. ShortMax focuses on genre content (action, thriller). GoodShort has some well-received series but slower library updates. Both pay creators 20-40%, between ReelShort/DramaBox (10-20%) and Lollipop Drama (80%). Choose them for specific genre preferences or niche market targeting.",
     },
   ],
+
+  "ai-short-drama-copyright-commercial-rights": [
+    {
+      question: "Can I clone a real person's voice?",
+      answer: "仅在取得书面同意或明确商业授权时方可使用，否则违反各国肖像权和隐私法规。",
+      questionEn: "Can I clone a real person's voice?",
+      answerEn: "Only with written consent or explicit commercial license (e.g., ElevenLabs Commercial Voice Library). Violates laws in US, China, EU.",
+    },
+    {
+      question: "If I use Suno/Udio music, who owns it?",
+      answer: "你拥有工具允许范围内的使用权，但服务商保留模型知识产权。免费版不支持流媒体商业分发。",
+      questionEn: "If I use Suno/Udio music, who owns it?",
+      answerEn: "You have use rights within the tool's scope, but providers retain model IP. Free tiers exclude streaming distribution; Pro tiers are broader. Always check current TOS.",
+    },
+    {
+      question: "AI generated a character face I didn't design — who owns it?",
+      answer: "无人拥有。纯 AI 生成面孔不受版权保护，但围绕它建立的角色编排归你所有。",
+      questionEn: "AI generated a character face I didn't design — who owns it?",
+      answerEn: "Nobody. Pure AI faces are raw output, not copyrightable. But if you built a consistent design system around it, you own that arrangement.",
+    },
+    {
+      question: "China says AI works are copyrightable but US says no — which is right?",
+      answer: "两者在各自司法辖区均成立，并非矛盾。",
+      questionEn: "China says AI works are copyrightable but US says no — which is right?",
+      answerEn: "Both, within their jurisdictions. This is a jurisdictional split, not a contradiction.",
+    },
+    {
+      question: "If Lollipop Drama provides AI tools, do they own my output?",
+      answer: "不会。根据 2026 年服务条款，你保留全部所有权，Lollipop Drama 仅提供引擎服务。",
+      questionEn: "If Lollipop Drama provides AI tools, do they own my output?",
+      answerEn: "No. Under Lollipop Drama's 2026 TOS, you retain full ownership of all content produced through our tools. See lollipop.im/terms.",
+    },
+    {
+      question: "Do I need to disclose AI generation?",
+      answer: "需要。各大平台和司法辖区均要求可见披露。不披露会导致降权、下架或封禁。",
+      questionEn: "Do I need to disclose AI generation?",
+      answerEn: "Yes — every major platform and jurisdiction requires visible disclosure. China's NRTA (July 2026) and EU AI Act (August 2026) mandate specific formats. Non-disclosure causes demotion, takedowns, and suspensions.",
+    },
+  ],
+  "ai-short-drama-distribution-platforms-submission": [
+    {
+      question: "Can I upload to both Lollipop Drama AND ReelShort?",
+      answer: "ReelShort exclusivity varies by contract (typically 12–24 months for the same series). Lollipop has **no exclusivity requirement**. Check TOS first.",
+      questionEn: "Can I upload to both Lollipop Drama AND ReelShort?",
+      answerEn: "ReelShort exclusivity varies by contract (typically 12–24 months for the same series). Lollipop has **no exclusivity requirement**. Check TOS first.",
+    },
+    {
+      question: "Do I need 100k followers to publish?",
+      answer: "Lollipop requires **zero followers**. ReelShort/DramaBox pitches prioritize IP quality, but a track record helps. TikTok Creator Fund eligibility varies (US: 10k followers).",
+      questionEn: "Do I need 100k followers to publish?",
+      answerEn: "Lollipop requires **zero followers**. ReelShort/DramaBox pitches prioritize IP quality, but a track record helps. TikTok Creator Fund eligibility varies (US: 10k followers).",
+    },
+    {
+      question: "How long does Lollipop Drama approval take?",
+      answer: "**24–48 hours** typically. Pipeline content reviews fastest (Liu Yujie: 29 hours). External tool content takes longer for rights verification.",
+      questionEn: "How long does Lollipop Drama approval take?",
+      answerEn: "**24–48 hours** typically. Pipeline content reviews fastest (Liu Yujie: 29 hours). External tool content takes longer for rights verification.",
+    },
+    {
+      question: "What if my AI content gets rejected?",
+      answer: "Most platforms give 1–2 sentence reasons. Common fixes: add AI label, correct aspect ratio, swap licensed music. Fix and resubmit, or try Lollipop's more permissive AI policies.",
+      questionEn: "What if my AI content gets rejected?",
+      answerEn: "Most platforms give 1–2 sentence reasons. Common fixes: add AI label, correct aspect ratio, swap licensed music. Fix and resubmit, or try Lollipop's more permissive AI policies.",
+    },
+    {
+      question: "Do all platforms require AI disclosure?",
+      answer: "**China (NRTA 2026): mandatory per-episode overlay.** Global: TikTok (synthetic label), YouTube (\"Made with AI\"), WeChat (AI notice). Lollipop auto-applies for pipeline content.",
+      questionEn: "Do all platforms require AI disclosure?",
+      answerEn: "**China (NRTA 2026): mandatory per-episode overlay.** Global: TikTok (synthetic label), YouTube (\"Made with AI\"), WeChat (AI notice). Lollipop auto-applies for pipeline content.",
+    },
+  ],
+  "ai-short-drama-retention-analytics-drop-off-cohorts": [
+    {
+      question: "My first episode has 60% completion but E1→E2 return is only 30% — what does that mean?",
+      answer: "People loved watching Episode 1 but didn't care enough to come back. Your cliffhanger is weak. Make it matter. A \"who is the killer\" cliffhanger where every viewer already guessed the answer is worse than no cliffhanger. Add a stakes shift (\"the killer is *you*, viewer\" / \"the bomb is in your building\").",
+      questionEn: "My first episode has 60% completion but E1→E2 return is only 30% — what does that mean?",
+      answerEn: "People loved watching Episode 1 but didn't care enough to come back. Your cliffhanger is weak. Make it matter. A \"who is the killer\" cliffhanger where every viewer already guessed the answer is worse than no cliffhanger. Add a stakes shift (\"the killer is *you*, viewer\" / \"the bomb is in your building\").",
+    },
+    {
+      question: "Is 3% replay rate bad?",
+      answer: "No — 3–9% is the 2026 benchmark. Below 2% means your episodes don't have shareable moments. Replay rate correlates directly with TikTok Duets and Stitches — if no one is remixing your episode, no one is rewatching it.",
+      questionEn: "Is 3% replay rate bad?",
+      answerEn: "No — 3–9% is the 2026 benchmark. Below 2% means your episodes don't have shareable moments. Replay rate correlates directly with TikTok Duets and Stitches — if no one is remixing your episode, no one is rewatching it.",
+    },
+    {
+      question: "AI dramas have lower retention than human-shot ones?",
+      answer: "2026 data shows AI dramas with consistent face/voice quality *match* human-shot dramas on 10s+ retention. The gap is in 3s hooks where AI-generated thumbnails can feel uncanny. Spend extra time on your E1 thumbnail — human-shot face close-ups consistently outperform AI-generated ones by 6–9% on Start Rate.",
+      questionEn: "AI dramas have lower retention than human-shot ones?",
+      answerEn: "2026 data shows AI dramas with consistent face/voice quality *match* human-shot dramas on 10s+ retention. The gap is in 3s hooks where AI-generated thumbnails can feel uncanny. Spend extra time on your E1 thumbnail — human-shot face close-ups consistently outperform AI-generated ones by 6–9% on Start Rate.",
+    },
+    {
+      question: "Should I make episodes longer to increase retention?",
+      answer: "No. Test different lengths with audience cohorts. 60–90 seconds is the sweet spot for most genres in 2026. Comedy can go to 60, mystery-thriller benefits from 90, romance sweet spot is 75.",
+      questionEn: "Should I make episodes longer to increase retention?",
+      answerEn: "No. Test different lengths with audience cohorts. 60–90 seconds is the sweet spot for most genres in 2026. Comedy can go to 60, mystery-thriller benefits from 90, romance sweet spot is 75.",
+    },
+    {
+      question: "How do I get cohort data without expensive tools?",
+      answer: "Lollipop Drama creator dashboard shows per-episode completion. YouTube Shorts Studio has a \"returning viewers\" metric. Reelytics ($29/month) adds cross-episode cohort tracking. If budget is zero, manually track viewers who comment on multiple episodes — that's your free cohort proxy.",
+      questionEn: "How do I get cohort data without expensive tools?",
+      answerEn: "Lollipop Drama creator dashboard shows per-episode completion. YouTube Shorts Studio has a \"returning viewers\" metric. Reelytics ($29/month) adds cross-episode cohort tracking. If budget is zero, manually track viewers who comment on multiple episodes — that's your free cohort proxy.",
+    },
+  ],
 };

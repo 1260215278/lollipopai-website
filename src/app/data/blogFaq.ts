@@ -2768,4 +2768,37 @@ export const blogFaq: Record<string, FaqItem[]> = {
     },
   ],
 
+  "ai-short-drama-voice-music-image-rights-tool-licenses": [
+    {
+      question: "Suno 免费版音乐可以商用吗？",
+      answer: "不行。2026 年 9 月 3 日 TOS 变更后，Suno 免费版歌曲归 Suno 所有，仅限个人使用。商用需要 Pro（$8–10/月）或 Premier（$24–30/月）计划，且必须通过下载流程获取——直接流式播放到编辑器不算拥有。",
+      questionEn: "Can I use Suno free-tier music in a commercial series?",
+      answerEn: "NO. Sept 3, 2026 TOS change made free-tier songs Suno property, personal-use only. Pay for Pro ($8–10/mo) or Premier ($24–30/mo), download the song through the download flow (streaming into your editor doesn't count), and only then do you own that download.",
+    },
+    {
+      question: "Udio 可以商用吗？",
+      answer: "绝对不行——包括所有付费计划。Udio 2025 年 11 月 12 日 TOS 禁止所有商业利用，也禁止下载。Udio 及其授权方拥有全部 Output。建议完全避免 Udio 用于商业项目，改用 Suno Pro 或 ElevenLabs Music Starter。",
+      questionEn: "Can I use Udio for anything commercial?",
+      answerEn: "NO — even paid plans. Udio's Nov 12, 2025 TOS bans all commercial exploitation and all downloads. Udio and its licensors own every Output. Do not use Udio for commercial projects; switch to Suno Pro or ElevenLabs Music Starter instead.",
+    },
+    {
+      question: "Runway 免费版视频可以商用吗？",
+      answer: "可以。Runway 2026 年 10 月 23 日 TOS 更新明确保留了免费版 Output 的商业权利。唯一的外观区别是 Runway logo 水印。免费版 C2PA AI 溯源水印不会触发变现限制——TikTok 和大多数平台都接受。",
+      questionEn: "Can I use Runway free-tier videos commercially?",
+      answerEn: "YES. Runway's Oct 23, 2026 TOS update explicitly retains commercial rights for free-tier Output. A Runway logo overlay is the only cosmetic difference. The C2PA AI provenance watermark doesn't trigger monetization restrictions — TikTok and most platforms accept it.",
+    },
+    {
+      question: "ElevenLabs 克隆真人声音需要什么？",
+      answer: "Instant Voice Cloning（Starter $6/月）可以克隆任何声音，但**必须获得声音所有者的书面同意**。Professional Voice Cloning（Creator $22/月+）只能克隆**你自己的声音**——即使有同意也不能克隆他人。ElevenLabs 会封禁跳过同意流程的账号。",
+      questionEn: "What do I need to clone a real person's voice with ElevenLabs?",
+      answerEn: "Instant Voice Cloning (Starter, $6/mo) = clone ANY voice but you need written consent from the owner. Professional Voice Cloning (Creator, $22/mo+) = clone YOUR OWN voice only — no one else, even with consent. ElevenLabs bans accounts that skip the consent process.",
+    },
+    {
+      question: "AI 音乐可以上传到 Spotify 吗？",
+      answer: "只有 Suno 付费计划下载的歌曲或你自己 UGC 分发的曲目可以。ElevenLabs Music 在**任何许可下**都禁止 Spotify/Apple Music/SoundCloud 分发。Epidemic/Artlist 库存音乐不能单独上传——它们只有同步许可。",
+      questionEn: "Can I post AI-generated music to Spotify?",
+      answerEn: "Yes — but only Suno paid-plan downloads or your own UGC-distributed tracks. ElevenLabs Music prohibits Spotify/Apple Music/SoundCloud under ANY license. Epidemic/Artlist stock music cannot be uploaded standalone — they only grant sync licenses.",
+    },
+  ],
+
 };

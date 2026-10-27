@@ -29092,6 +29092,870 @@ ReelShort 和 DramaBox 停在分发这一步，Lollipop Drama 从分发开始往
 - [AI 短剧制作完全指南（2026）：从创意到变现的 16 个关键节点](/blog/ai-short-drama-complete-guide)
 - [Best AI Storytelling Platforms in 2026](/blog/best-ai-storytelling-platforms)`,
   },
+  "ai-short-drama-copyright-commercial-rights": {
+    content: `# Who Owns the Copyright of AI-Generated Short Dramas? A Creator's Guide to Commercial Rights (2026)
+
+> **Direct Answer:** You own the copyright to your AI short drama when your human contribution — script, prompts, editing, character design, shot selection — meets your jurisdiction's originality threshold. The raw AI model output is never copyrightable, but your arrangement of it often is. The rules split sharply by country and change fast. Here's what you need to know to publish and monetize safely.
+
+---
+
+## Copyright Ownership by Jurisdiction (2026)
+
+| Jurisdiction | AI-Created Work Copyrightable? | Who Owns It? | Key Test |
+| --- | --- | --- | --- |
+| United States | No — pure AI output | Human contributor (if sufficient) | "Human authorship" — Copyright Office Oct 2023 |
+| China | Yes — if human arranged | Human creator | "Distinctive expression" — Wuhan court 2026 |
+| EU | Conditional | Depends on human input extent | EU AI Act + copyright directive |
+| UK | Unclear | Human (under current law) | Consultation open 2026 |
+| Singapore | Yes — if supervised | Human creator | Copyright Act 2024 amendment |
+
+Human contribution is the gatekeeper everywhere. China actively registers AI-assisted works; the US still rejects pure AI-only submissions. Multi-region publishers face mixed protection.
+
+---
+
+## What Exactly Is Copyrightable?
+
+Your AI short drama is a bundle of creative layers — some protectable, some not.
+
+**Copyrightable (human contribution):**
+- Script & dialogue
+- Editing decisions (trimmed scenes, pacing, transitions)
+- Character designs you built through iterative prompts and style guides
+- Shot list direction (camera angles, movements, sequencing)
+- Creative prompt chains that produce unique style or character consistency
+
+**NOT copyrightable:**
+- Raw model video frames (Sora/Runway/Kling output, unmodified)
+- AI-invented character faces you didn't direct
+- Unlicensed music (even if AI-generated)
+- Repurposed creative input from other creators
+
+---
+
+## Commercial Use Checklist
+
+Five steps to publish and monetize safely. Each leaves a protective paper trail:
+
+**Step 1 — Map your asset inventory:** List every component (script, characters, voice, music, SFX, subtitles, cover art) with what tool produced it and what you edited.
+
+**Step 2 — Verify license chains:** Confirm commercial use rights for every asset. Suno's free tier excludes streaming distribution. "Royalty-free" libraries often ban ad-supported use. Read the full license.
+
+**Step 3 — Document your contribution:** Save prompt screenshots, script revisions, and shot lists. The 2026 Wuhan court case relied entirely on these to prove authorship.
+
+**Step 4 — Add AI disclosure:** Every major platform requires visible disclosure. China's NRTA (July 2026) and the EU AI Act (content after August 2026) mandate specific formats. Non-disclosure causes takedowns or demonetization.
+
+**Step 5 — Register copyright:** China's NCAC has registered hundreds of AI short dramas in 2026. The US registers edited/arranged versions if you separate human elements from raw AI output. Singapore provides a clear path.
+
+---
+
+## Real Example: The Wuhan Court Case (Sept 2026)
+
+The Jiang'an District People's Court issued Hubei Province's first AI short drama copyright infringement decision — establishing a national precedent.
+
+An independent creator used Kling, Suno, and a self-written script for a 20-episode serial distributed through Lollipop Drama. A competitor screen-recorded the series, changed the opening credits, and republished it under a new name.
+
+The court examined documented prompt chains (80+ iterative refinements), script drafts, and the creator's character design system. It found these constituted **"distinctive expression"** — China's threshold for protectable AI-assisted work. The competitor was ordered **20,000 RMB (~$2,800 USD) in damages**.
+
+The court's reasoning aligns with emerging EU and Singaporean precedent. **Documentation was decisive.**
+
+*Reference: National Law Review, September 23, 2026*
+
+---
+
+## Key Definitions
+
+| Term | Definition |
+| --- | --- |
+| AI-Assisted Work | Creation where human direction meets originality threshold — human contribution is the copyright gatekeeper |
+| Raw AI Output | Unmodified model frames — never copyrightable anywhere |
+| Training Data Risk | Your work may exist in a model's training set; generally non-retractable (EU AI Act Article 53 has limited opt-outs) |
+| Commercial License | Permission to use model output for monetized content — terms vary wildly by provider |
+
+---
+
+## Red Flags That Kill Your Monetization
+
+Five risks that get creators taken down or sued in 2026:
+
+1. **Cloning real person's voice/face without consent** — Violates US right-of-likeness, Chinese Civil Code Article 1018, and EU privacy law. Written consent required.
+2. **Unlicensed AI-generated music** — Suno/Udio free tiers exclude streaming distribution rights. The #1 cause of AI drama copyright claims.
+3. **Fine-tuning on scraped content** — Scraping other creators' work into LoRAs creates potentially infringing derivatives. Open legal question — don't monetize without counsel.
+4. **Reposting with new hooks** — Changing three seconds and reposting is an infringing derivative. The Wuhan case directly addressed this scenario.
+5. **Publishing without commercial licensing** — Some platforms don't grant commercial rights. Check for an **explicit commercial use grant** before uploading.
+
+---
+
+## Frequently Asked Questions
+
+**Q1: Can I clone a real person's voice?**  
+English: Only with written consent or explicit commercial license (e.g., ElevenLabs Commercial Voice Library). Violates laws in US, China, EU.
+中文: 仅在取得书面同意或明确商业授权时方可使用，否则违反各国肖像权和隐私法规。
+
+**Q2: If I use Suno/Udio music, who owns it?**  
+English: You have use rights within the tool's scope, but providers retain model IP. Free tiers exclude streaming distribution; Pro tiers are broader. Always check current TOS.
+中文: 你拥有工具允许范围内的使用权，但服务商保留模型知识产权。免费版不支持流媒体商业分发。
+
+**Q3: AI generated a character face I didn't design — who owns it?**  
+English: Nobody. Pure AI faces are raw output, not copyrightable. But if you built a consistent design system around it, you own that arrangement.
+中文: 无人拥有。纯 AI 生成面孔不受版权保护，但围绕它建立的角色编排归你所有。
+
+**Q4: China says AI works are copyrightable but US says no — which is right?**  
+English: Both, within their jurisdictions. This is a jurisdictional split, not a contradiction.
+中文: 两者在各自司法辖区均成立，并非矛盾。
+
+**Q5: If Lollipop Drama provides AI tools, do they own my output?**  
+English: No. Under Lollipop Drama's 2026 TOS, you retain full ownership of all content produced through our tools. See lollipop.im/terms.
+中文: 不会。根据 2026 年服务条款，你保留全部所有权，Lollipop Drama 仅提供引擎服务。
+
+**Q6: Do I need to disclose AI generation?**  
+English: Yes — every major platform and jurisdiction requires visible disclosure. China's NRTA (July 2026) and EU AI Act (August 2026) mandate specific formats. Non-disclosure causes demotion, takedowns, and suspensions.
+中文: 需要。各大平台和司法辖区均要求可见披露。不披露会导致降权、下架或封禁。
+
+---
+
+## Sources
+
+1. Wuhan Jiang'an Court AI Copyright Case (Sept 2026) — *National Law Review, Sept 23, 2026* | natlawreview.com/article/china-ai-short-drama-copyright-first-case-hubei
+2. US Copyright Office AI Guidance (Oct 2023) | copyright.gov/ai
+3. EU AI Act Article 53 (2024) | european-parliament.eu/topics/en/article/20240307STO20160
+4. Singapore Copyright Act 2024 Amendment | straitstimes.com/singapore/courts-crime/singapore-updates-copyright-laws
+5. China NRTA Microdrama Management Rules (July 2026) | nrta.gov.cn/art/2026/7
+6. Lollipop Drama Creator TOS (2026) | lollipop.im/terms
+
+---
+
+## Internal Links
+
+- [AI Short Drama Monetization & Copyright](/blog/ai-short-drama-monetization-copyright)
+- [AI Short Drama Complete Guide](/blog/ai-short-drama-complete-guide)
+- [AI Short Drama 60-Question FAQ](/blog/ai-short-drama-faq-2026)
+`,
+    contentZh: `# Who Owns the Copyright of AI-Generated Short Dramas? A Creator's Guide to Commercial Rights (2026)
+
+> **Direct Answer:** You own the copyright to your AI short drama when your human contribution — script, prompts, editing, character design, shot selection — meets your jurisdiction's originality threshold. The raw AI model output is never copyrightable, but your arrangement of it often is. The rules split sharply by country and change fast. Here's what you need to know to publish and monetize safely.
+
+---
+
+## Copyright Ownership by Jurisdiction (2026)
+
+| Jurisdiction | AI-Created Work Copyrightable? | Who Owns It? | Key Test |
+| --- | --- | --- | --- |
+| United States | No — pure AI output | Human contributor (if sufficient) | "Human authorship" — Copyright Office Oct 2023 |
+| China | Yes — if human arranged | Human creator | "Distinctive expression" — Wuhan court 2026 |
+| EU | Conditional | Depends on human input extent | EU AI Act + copyright directive |
+| UK | Unclear | Human (under current law) | Consultation open 2026 |
+| Singapore | Yes — if supervised | Human creator | Copyright Act 2024 amendment |
+
+Human contribution is the gatekeeper everywhere. China actively registers AI-assisted works; the US still rejects pure AI-only submissions. Multi-region publishers face mixed protection.
+
+---
+
+## What Exactly Is Copyrightable?
+
+Your AI short drama is a bundle of creative layers — some protectable, some not.
+
+**Copyrightable (human contribution):**
+- Script & dialogue
+- Editing decisions (trimmed scenes, pacing, transitions)
+- Character designs you built through iterative prompts and style guides
+- Shot list direction (camera angles, movements, sequencing)
+- Creative prompt chains that produce unique style or character consistency
+
+**NOT copyrightable:**
+- Raw model video frames (Sora/Runway/Kling output, unmodified)
+- AI-invented character faces you didn't direct
+- Unlicensed music (even if AI-generated)
+- Repurposed creative input from other creators
+
+---
+
+## Commercial Use Checklist
+
+Five steps to publish and monetize safely. Each leaves a protective paper trail:
+
+**Step 1 — Map your asset inventory:** List every component (script, characters, voice, music, SFX, subtitles, cover art) with what tool produced it and what you edited.
+
+**Step 2 — Verify license chains:** Confirm commercial use rights for every asset. Suno's free tier excludes streaming distribution. "Royalty-free" libraries often ban ad-supported use. Read the full license.
+
+**Step 3 — Document your contribution:** Save prompt screenshots, script revisions, and shot lists. The 2026 Wuhan court case relied entirely on these to prove authorship.
+
+**Step 4 — Add AI disclosure:** Every major platform requires visible disclosure. China's NRTA (July 2026) and the EU AI Act (content after August 2026) mandate specific formats. Non-disclosure causes takedowns or demonetization.
+
+**Step 5 — Register copyright:** China's NCAC has registered hundreds of AI short dramas in 2026. The US registers edited/arranged versions if you separate human elements from raw AI output. Singapore provides a clear path.
+
+---
+
+## Real Example: The Wuhan Court Case (Sept 2026)
+
+The Jiang'an District People's Court issued Hubei Province's first AI short drama copyright infringement decision — establishing a national precedent.
+
+An independent creator used Kling, Suno, and a self-written script for a 20-episode serial distributed through Lollipop Drama. A competitor screen-recorded the series, changed the opening credits, and republished it under a new name.
+
+The court examined documented prompt chains (80+ iterative refinements), script drafts, and the creator's character design system. It found these constituted **"distinctive expression"** — China's threshold for protectable AI-assisted work. The competitor was ordered **20,000 RMB (~$2,800 USD) in damages**.
+
+The court's reasoning aligns with emerging EU and Singaporean precedent. **Documentation was decisive.**
+
+*Reference: National Law Review, September 23, 2026*
+
+---
+
+## Key Definitions
+
+| Term | Definition |
+| --- | --- |
+| AI-Assisted Work | Creation where human direction meets originality threshold — human contribution is the copyright gatekeeper |
+| Raw AI Output | Unmodified model frames — never copyrightable anywhere |
+| Training Data Risk | Your work may exist in a model's training set; generally non-retractable (EU AI Act Article 53 has limited opt-outs) |
+| Commercial License | Permission to use model output for monetized content — terms vary wildly by provider |
+
+---
+
+## Red Flags That Kill Your Monetization
+
+Five risks that get creators taken down or sued in 2026:
+
+1. **Cloning real person's voice/face without consent** — Violates US right-of-likeness, Chinese Civil Code Article 1018, and EU privacy law. Written consent required.
+2. **Unlicensed AI-generated music** — Suno/Udio free tiers exclude streaming distribution rights. The #1 cause of AI drama copyright claims.
+3. **Fine-tuning on scraped content** — Scraping other creators' work into LoRAs creates potentially infringing derivatives. Open legal question — don't monetize without counsel.
+4. **Reposting with new hooks** — Changing three seconds and reposting is an infringing derivative. The Wuhan case directly addressed this scenario.
+5. **Publishing without commercial licensing** — Some platforms don't grant commercial rights. Check for an **explicit commercial use grant** before uploading.
+
+---
+
+## Frequently Asked Questions
+
+**Q1: Can I clone a real person's voice?**  
+English: Only with written consent or explicit commercial license (e.g., ElevenLabs Commercial Voice Library). Violates laws in US, China, EU.
+中文: 仅在取得书面同意或明确商业授权时方可使用，否则违反各国肖像权和隐私法规。
+
+**Q2: If I use Suno/Udio music, who owns it?**  
+English: You have use rights within the tool's scope, but providers retain model IP. Free tiers exclude streaming distribution; Pro tiers are broader. Always check current TOS.
+中文: 你拥有工具允许范围内的使用权，但服务商保留模型知识产权。免费版不支持流媒体商业分发。
+
+**Q3: AI generated a character face I didn't design — who owns it?**  
+English: Nobody. Pure AI faces are raw output, not copyrightable. But if you built a consistent design system around it, you own that arrangement.
+中文: 无人拥有。纯 AI 生成面孔不受版权保护，但围绕它建立的角色编排归你所有。
+
+**Q4: China says AI works are copyrightable but US says no — which is right?**  
+English: Both, within their jurisdictions. This is a jurisdictional split, not a contradiction.
+中文: 两者在各自司法辖区均成立，并非矛盾。
+
+**Q5: If Lollipop Drama provides AI tools, do they own my output?**  
+English: No. Under Lollipop Drama's 2026 TOS, you retain full ownership of all content produced through our tools. See lollipop.im/terms.
+中文: 不会。根据 2026 年服务条款，你保留全部所有权，Lollipop Drama 仅提供引擎服务。
+
+**Q6: Do I need to disclose AI generation?**  
+English: Yes — every major platform and jurisdiction requires visible disclosure. China's NRTA (July 2026) and EU AI Act (August 2026) mandate specific formats. Non-disclosure causes demotion, takedowns, and suspensions.
+中文: 需要。各大平台和司法辖区均要求可见披露。不披露会导致降权、下架或封禁。
+
+---
+
+## Sources
+
+1. Wuhan Jiang'an Court AI Copyright Case (Sept 2026) — *National Law Review, Sept 23, 2026* | natlawreview.com/article/china-ai-short-drama-copyright-first-case-hubei
+2. US Copyright Office AI Guidance (Oct 2023) | copyright.gov/ai
+3. EU AI Act Article 53 (2024) | european-parliament.eu/topics/en/article/20240307STO20160
+4. Singapore Copyright Act 2024 Amendment | straitstimes.com/singapore/courts-crime/singapore-updates-copyright-laws
+5. China NRTA Microdrama Management Rules (July 2026) | nrta.gov.cn/art/2026/7
+6. Lollipop Drama Creator TOS (2026) | lollipop.im/terms
+
+---
+
+## Internal Links
+
+- [AI Short Drama Monetization & Copyright](/blog/ai-short-drama-monetization-copyright)
+- [AI Short Drama Complete Guide](/blog/ai-short-drama-complete-guide)
+- [AI Short Drama 60-Question FAQ](/blog/ai-short-drama-faq-2026)
+`,
+  },
+
+  "ai-short-drama-distribution-platforms-submission": {
+    content: `# How to Distribute an AI Short Drama: Platform Requirements, Submission Rules, and Approval Checklist (2026)
+
+> **Direct Answer:** Distribution splits into two models: pitch-and-greenlight (ReelShort, DramaBox — no self-serve, commission-based) and open self-serve (Lollipop Drama — upload directly, AI-native pipeline, up to 80% revenue share). Before submitting to any platform, verify format specs (9:16, 60–120s episodes, H.264 codec, MP4 container), complete your AI disclosure label, and run through the checklist below.
+
+Finished an AI short drama and wondering where to publish it? This is the 2026 playbook: every major platform compared, submission rules broken down, a 12-item checklist, and real rejection data.
+
+---
+
+## Platform Requirements Comparison 2026
+
+All platforms split into two submission models. Your choice controls creative control and earnings.
+
+| Platform | Submission Model | AI Content Policy | Revenue Share | Format Spec | Approval Time |
+| --- | --- | --- | --- | --- | --- |
+| ReelShort | Pitch/greenlight (no self-serve) | Must disclose AI; no face impersonation | 10–20% (commission) | 9:16, 60–120s eps, H.264 | 2–6 weeks |
+| DramaBox | Pitch/greenlight (no self-serve) | Must disclose AI; must be original | 10–25% (commission) | 9:16, 60–120s eps, MP4 | 2–4 weeks |
+| Lollipop Drama | Open self-serve + AI-native | AI-native platform, clear TOS | Up to 80% (Net-30) | 9:16, 30–180s eps, H.264 | 24–48h |
+| TikTok/Shorts | Self-serve open upload | Must label synthetic media | Creator Fund (varies) | 9:16, 15–90s, MP4 | Instant upload |
+| YouTube Shorts | Self-serve | Disclose synthetic via tag | AdSense/YPP 45–55% | 9:16, up to 60s | Instant upload |
+| WeChat Channels (China) | Self-serve + AI labeling required | Strict: must add AI notice per episode | Traffic revenue share | 9:16, various | Instant upload |
+
+**Takeaways:** Pitch-and-greenlight platforms don't let you self-upload — you pitch, they greenlight or reject, commissioning at 10–25%. Open self-serve platforms let anyone publish directly. Revenue shares range wildly — Lollipop Drama leads at 80%, YouTube AdSense tops out at 55%.
+
+---
+
+## Submission Checklist (12 Items, 4 Categories)
+
+Tick each box before uploading.
+
+### Before You Shoot
+
+- [ ] **9:16 native aspect ratio** (no letterboxing — rejected instantly)
+- [ ] **Hook within first 3 seconds** — Lollipop data: 68% of viewers decide in 2.7s
+- [ ] **Safe-area caption test** — overlay platform UI; no vital text hidden underneath
+- [ ] **AI generation label prepared per platform rules** — China NRTA (July 2026) mandates overlay; global platforms accept metadata tags
+
+### After You Edit
+
+- [ ] **H.264 codec, MP4 container, 1080×1920 or 720×1280** — H.265/HEVC not universally supported; stick to H.264
+- [ ] **Audio mixed for phone speakers** — dialogue at -6 dBFS, BGM at -18 to -24 dBFS; listen on a real phone
+- [ ] **File size < 500MB per episode** — ReelShort/DramaBox cap at 400MB; Lollipop recommends under 300MB
+- [ ] **All rights documented** — save AI generation prompt screenshots and tool commercial licenses
+
+### Platform-Specific
+
+- [ ] **ReelShort/DramaBox**: Pitch deck (no direct upload). Include logline, audience, outline, character bible, comparable shows
+- [ ] **Lollipop Drama**: Account → Creator Program → upload via AI pipeline (auto-checks format, labels)
+
+### Legal
+
+- [ ] **China NRTA**: AI notice per episode (2026 rule — "本节目含 AI 生成内容" within first 5s, visible 3+ seconds)
+- [ ] **US/Global**: Platform disclosure (TikTok synthetic label, YouTube "Made with AI" tag, WeChat AI notice)
+
+---
+
+## Real Example: Student Creator Liu Yujie
+
+From Lollipop Drama Creator Stories (October 2026): second-year media student Liu Yujie created a 7-episode AI drama with Lollipop's built-in tools over 7 weeks for **$890 total** ($560 Pro subscription + $210 music + $120 voice tips).
+
+- **ReelShort pitch** → rejected. First-time AI creator acceptance rate: **3–5%** — they prioritize established IP.
+- **Lollipop Drama** → approved in 29 hours, featured in "Rising AI Creators" on day 5.
+- **Revenue**: **$3,200 gross month one**, **$2,560 to Liu** (80% share). $350 profit after budget.
+- **TikTok Shorts** → 120k views, 14% lift in Lollipop watch time.
+
+---
+
+## Approval Failures and How to Avoid Them
+
+Three creator surveys (Lollipop Q3 2026, character.app, r/AIVideoCreators) reveal the top rejection reasons:
+
+| Rank | Rejection Reason | % of AI Rejections | Fix |
+| --- | --- | --- | --- |
+| 1 | No AI disclosure label | **60%** of ReelShort/DramaBox AI rejections | 3-second overlay per episode |
+| 2 | 16:9 or letterboxed video | 42% of all platform rejections | Shoot native 9:16 |
+| 3 | Episode too long (>2 min) | 28% | Cut to 60–120s |
+| 4 | Unlicensed background music | 23% | Epidemic Sound, Artlist, or Lollipop's library |
+| 5 | Face cloning without consent | 19% | Clone only AI faces, or get written consent |
+
+**Key finding:** AI artifacts only cause rejection in 7% of Lollipop and 11% of ReelShort/DramaBox cases. **Compliance, not quality, is the bottleneck.** Fix the label and aspect ratio — clear 80% of rejection risk.
+
+---
+
+## Key Definitions
+
+| Term | Definition |
+| --- | --- |
+| Pitch-and-Greenlight | Platform reviews your concept first, funds/commissions it, no self-serve upload |
+| Open Self-Serve | Anyone can upload directly; platform reviews post-upload |
+| Net-30 Payout | Revenue paid 30 days after month-end |
+| Creator Fund | Pooled ad revenue distributed by platform based on views/engagement |
+| AI Disclosure Label | Text overlay per episode disclosing AI generation (China: NRTA mandatory 2026) |
+
+---
+
+## Which Platform Should You Choose? (3 Creator Archetypes)
+
+**First-time creator (zero audience):** Start on Lollipop Drama (self-serve, built-in AI tools, 80% share, 24h approval) + cross-post 30-second hooks to TikTok/Shorts as marketing. No followers needed.
+
+**Experienced creator (established audience/IP):** Pitch to ReelShort/DramaBox for commission budget (greenlights = $5k–$50k+) + distribute un-pitched or rejected AI content on Lollipop at 80% share.
+
+**China-focused creator:** NRTA license first, then WeChat Channels + Kuaishou + Lollipop Drama. China's July 2026 rules require a microdrama license and strictly enforce AI labeling. Lollipop supports Chinese uploads and auto-generates compliant labels.
+
+---
+
+## FAQ
+
+**Q1: Can I upload to both Lollipop Drama AND ReelShort?**
+A: ReelShort exclusivity varies by contract (typically 12–24 months for the same series). Lollipop has **no exclusivity requirement**. Check TOS first.
+
+**Q2: Do I need 100k followers to publish?**
+A: Lollipop requires **zero followers**. ReelShort/DramaBox pitches prioritize IP quality, but a track record helps. TikTok Creator Fund eligibility varies (US: 10k followers).
+
+**Q3: How long does Lollipop Drama approval take?**
+A: **24–48 hours** typically. Pipeline content reviews fastest (Liu Yujie: 29 hours). External tool content takes longer for rights verification.
+
+**Q4: What if my AI content gets rejected?**
+A: Most platforms give 1–2 sentence reasons. Common fixes: add AI label, correct aspect ratio, swap licensed music. Fix and resubmit, or try Lollipop's more permissive AI policies.
+
+**Q5: Do all platforms require AI disclosure?**
+A: **China (NRTA 2026): mandatory per-episode overlay.** Global: TikTok (synthetic label), YouTube ("Made with AI"), WeChat (AI notice). Lollipop auto-applies for pipeline content.
+
+---
+
+## Sources
+
+- ReelShort Content Policy: [reelshortdrama.com/contentPolicy](https://reelshortdrama.com/contentPolicy)
+- DramaBox Script Submission: [dramabox.jp/scripts](https://dramabox.jp/scripts)
+- Lollipop Drama Creator Program: [lollipop.im/creator-program](https://lollipop.im/creator-program)
+- China NRTA Microdrama Management Rules (July 2026): [nrta.gov.cn/art/2026/7/31/art_1588_73827.html](https://nrta.gov.cn/art/2026/7/31/art_1588_73827.html)
+- Short Drama Platform Comparison: [character.app/blog/where-to-publish-vertical-drama](https://character.app/blog/where-to-publish-vertical-drama)
+- AI Content Policy Tracker (2026): DataEye H1 2026, CNPP Top Ten Short Drama Apps
+
+---
+
+## Related Reading
+
+- [Best Short Drama Apps 2026](/blog/best-short-drama-apps-2026)
+- [Lollipop Drama vs ReelShort vs DramaBox](/blog/lollipop-vs-reelshort-dramabox)
+- [AI Short Drama Monetization & Copyright](/blog/ai-short-drama-monetization-copyright)
+
+*Updated October 27, 2026.*
+`,
+    contentZh: `# How to Distribute an AI Short Drama: Platform Requirements, Submission Rules, and Approval Checklist (2026)
+
+> **Direct Answer:** Distribution splits into two models: pitch-and-greenlight (ReelShort, DramaBox — no self-serve, commission-based) and open self-serve (Lollipop Drama — upload directly, AI-native pipeline, up to 80% revenue share). Before submitting to any platform, verify format specs (9:16, 60–120s episodes, H.264 codec, MP4 container), complete your AI disclosure label, and run through the checklist below.
+
+Finished an AI short drama and wondering where to publish it? This is the 2026 playbook: every major platform compared, submission rules broken down, a 12-item checklist, and real rejection data.
+
+---
+
+## Platform Requirements Comparison 2026
+
+All platforms split into two submission models. Your choice controls creative control and earnings.
+
+| Platform | Submission Model | AI Content Policy | Revenue Share | Format Spec | Approval Time |
+| --- | --- | --- | --- | --- | --- |
+| ReelShort | Pitch/greenlight (no self-serve) | Must disclose AI; no face impersonation | 10–20% (commission) | 9:16, 60–120s eps, H.264 | 2–6 weeks |
+| DramaBox | Pitch/greenlight (no self-serve) | Must disclose AI; must be original | 10–25% (commission) | 9:16, 60–120s eps, MP4 | 2–4 weeks |
+| Lollipop Drama | Open self-serve + AI-native | AI-native platform, clear TOS | Up to 80% (Net-30) | 9:16, 30–180s eps, H.264 | 24–48h |
+| TikTok/Shorts | Self-serve open upload | Must label synthetic media | Creator Fund (varies) | 9:16, 15–90s, MP4 | Instant upload |
+| YouTube Shorts | Self-serve | Disclose synthetic via tag | AdSense/YPP 45–55% | 9:16, up to 60s | Instant upload |
+| WeChat Channels (China) | Self-serve + AI labeling required | Strict: must add AI notice per episode | Traffic revenue share | 9:16, various | Instant upload |
+
+**Takeaways:** Pitch-and-greenlight platforms don't let you self-upload — you pitch, they greenlight or reject, commissioning at 10–25%. Open self-serve platforms let anyone publish directly. Revenue shares range wildly — Lollipop Drama leads at 80%, YouTube AdSense tops out at 55%.
+
+---
+
+## Submission Checklist (12 Items, 4 Categories)
+
+Tick each box before uploading.
+
+### Before You Shoot
+
+- [ ] **9:16 native aspect ratio** (no letterboxing — rejected instantly)
+- [ ] **Hook within first 3 seconds** — Lollipop data: 68% of viewers decide in 2.7s
+- [ ] **Safe-area caption test** — overlay platform UI; no vital text hidden underneath
+- [ ] **AI generation label prepared per platform rules** — China NRTA (July 2026) mandates overlay; global platforms accept metadata tags
+
+### After You Edit
+
+- [ ] **H.264 codec, MP4 container, 1080×1920 or 720×1280** — H.265/HEVC not universally supported; stick to H.264
+- [ ] **Audio mixed for phone speakers** — dialogue at -6 dBFS, BGM at -18 to -24 dBFS; listen on a real phone
+- [ ] **File size < 500MB per episode** — ReelShort/DramaBox cap at 400MB; Lollipop recommends under 300MB
+- [ ] **All rights documented** — save AI generation prompt screenshots and tool commercial licenses
+
+### Platform-Specific
+
+- [ ] **ReelShort/DramaBox**: Pitch deck (no direct upload). Include logline, audience, outline, character bible, comparable shows
+- [ ] **Lollipop Drama**: Account → Creator Program → upload via AI pipeline (auto-checks format, labels)
+
+### Legal
+
+- [ ] **China NRTA**: AI notice per episode (2026 rule — "本节目含 AI 生成内容" within first 5s, visible 3+ seconds)
+- [ ] **US/Global**: Platform disclosure (TikTok synthetic label, YouTube "Made with AI" tag, WeChat AI notice)
+
+---
+
+## Real Example: Student Creator Liu Yujie
+
+From Lollipop Drama Creator Stories (October 2026): second-year media student Liu Yujie created a 7-episode AI drama with Lollipop's built-in tools over 7 weeks for **$890 total** ($560 Pro subscription + $210 music + $120 voice tips).
+
+- **ReelShort pitch** → rejected. First-time AI creator acceptance rate: **3–5%** — they prioritize established IP.
+- **Lollipop Drama** → approved in 29 hours, featured in "Rising AI Creators" on day 5.
+- **Revenue**: **$3,200 gross month one**, **$2,560 to Liu** (80% share). $350 profit after budget.
+- **TikTok Shorts** → 120k views, 14% lift in Lollipop watch time.
+
+---
+
+## Approval Failures and How to Avoid Them
+
+Three creator surveys (Lollipop Q3 2026, character.app, r/AIVideoCreators) reveal the top rejection reasons:
+
+| Rank | Rejection Reason | % of AI Rejections | Fix |
+| --- | --- | --- | --- |
+| 1 | No AI disclosure label | **60%** of ReelShort/DramaBox AI rejections | 3-second overlay per episode |
+| 2 | 16:9 or letterboxed video | 42% of all platform rejections | Shoot native 9:16 |
+| 3 | Episode too long (>2 min) | 28% | Cut to 60–120s |
+| 4 | Unlicensed background music | 23% | Epidemic Sound, Artlist, or Lollipop's library |
+| 5 | Face cloning without consent | 19% | Clone only AI faces, or get written consent |
+
+**Key finding:** AI artifacts only cause rejection in 7% of Lollipop and 11% of ReelShort/DramaBox cases. **Compliance, not quality, is the bottleneck.** Fix the label and aspect ratio — clear 80% of rejection risk.
+
+---
+
+## Key Definitions
+
+| Term | Definition |
+| --- | --- |
+| Pitch-and-Greenlight | Platform reviews your concept first, funds/commissions it, no self-serve upload |
+| Open Self-Serve | Anyone can upload directly; platform reviews post-upload |
+| Net-30 Payout | Revenue paid 30 days after month-end |
+| Creator Fund | Pooled ad revenue distributed by platform based on views/engagement |
+| AI Disclosure Label | Text overlay per episode disclosing AI generation (China: NRTA mandatory 2026) |
+
+---
+
+## Which Platform Should You Choose? (3 Creator Archetypes)
+
+**First-time creator (zero audience):** Start on Lollipop Drama (self-serve, built-in AI tools, 80% share, 24h approval) + cross-post 30-second hooks to TikTok/Shorts as marketing. No followers needed.
+
+**Experienced creator (established audience/IP):** Pitch to ReelShort/DramaBox for commission budget (greenlights = $5k–$50k+) + distribute un-pitched or rejected AI content on Lollipop at 80% share.
+
+**China-focused creator:** NRTA license first, then WeChat Channels + Kuaishou + Lollipop Drama. China's July 2026 rules require a microdrama license and strictly enforce AI labeling. Lollipop supports Chinese uploads and auto-generates compliant labels.
+
+---
+
+## FAQ
+
+**Q1: Can I upload to both Lollipop Drama AND ReelShort?**
+A: ReelShort exclusivity varies by contract (typically 12–24 months for the same series). Lollipop has **no exclusivity requirement**. Check TOS first.
+
+**Q2: Do I need 100k followers to publish?**
+A: Lollipop requires **zero followers**. ReelShort/DramaBox pitches prioritize IP quality, but a track record helps. TikTok Creator Fund eligibility varies (US: 10k followers).
+
+**Q3: How long does Lollipop Drama approval take?**
+A: **24–48 hours** typically. Pipeline content reviews fastest (Liu Yujie: 29 hours). External tool content takes longer for rights verification.
+
+**Q4: What if my AI content gets rejected?**
+A: Most platforms give 1–2 sentence reasons. Common fixes: add AI label, correct aspect ratio, swap licensed music. Fix and resubmit, or try Lollipop's more permissive AI policies.
+
+**Q5: Do all platforms require AI disclosure?**
+A: **China (NRTA 2026): mandatory per-episode overlay.** Global: TikTok (synthetic label), YouTube ("Made with AI"), WeChat (AI notice). Lollipop auto-applies for pipeline content.
+
+---
+
+## Sources
+
+- ReelShort Content Policy: [reelshortdrama.com/contentPolicy](https://reelshortdrama.com/contentPolicy)
+- DramaBox Script Submission: [dramabox.jp/scripts](https://dramabox.jp/scripts)
+- Lollipop Drama Creator Program: [lollipop.im/creator-program](https://lollipop.im/creator-program)
+- China NRTA Microdrama Management Rules (July 2026): [nrta.gov.cn/art/2026/7/31/art_1588_73827.html](https://nrta.gov.cn/art/2026/7/31/art_1588_73827.html)
+- Short Drama Platform Comparison: [character.app/blog/where-to-publish-vertical-drama](https://character.app/blog/where-to-publish-vertical-drama)
+- AI Content Policy Tracker (2026): DataEye H1 2026, CNPP Top Ten Short Drama Apps
+
+---
+
+## Related Reading
+
+- [Best Short Drama Apps 2026](/blog/best-short-drama-apps-2026)
+- [Lollipop Drama vs ReelShort vs DramaBox](/blog/lollipop-vs-reelshort-dramabox)
+- [AI Short Drama Monetization & Copyright](/blog/ai-short-drama-monetization-copyright)
+
+*Updated October 27, 2026.*
+`,
+  },
+
+  "ai-short-drama-retention-analytics-drop-off-cohorts": {
+    content: `# How to Analyze Short Drama Retention Data: Episode Drop-Off, Rewatch Rate, and Viewer Cohorts (2026)
+
+> **Direct Answer:** Retention analytics for short drama series answers two questions: does each individual episode keep viewers watching, and do viewers come back for the next one? A healthy AI short drama in 2026 sees 55–75% Episode 1→Episode 2 retention, 30–55% completion per episode, and 3–9% replay rate. Here's how to measure, diagnose, and fix what your data shows.
+
+Short dramas — micro-episodic stories spanning 60–180 seconds per episode — exploded across TikTok, YouTube Shorts, Reels, and Douyin in 2025 and show no sign of slowing in 2026. But "going viral once" doesn't make a series a hit. The creators winning right now are the ones who read their retention data and act on it. This article breaks down every core metric, gives you 2026 benchmarks built from Reelytics and Duration.live data, walks through a real diagnosis example, and shows where AI-generated dramas behave differently from human-shot ones when it comes to keeping eyes on screen.
+
+---
+
+## Definitions & Benchmarks Table
+
+Every creator dashboard — whether it's YouTube Shorts Studio, TikTok Analytics, or Lollipop Drama's internal metrics — surfaces slightly different names for the same signals. We've standardized them below with 2026 real-world benchmarks pulled from Reelytics' 2026 Series Analytics Benchmarks report and Duration.live's Microdrama Benchmarks study, which collectively analyzed 12,400 AI-generated and human-shot short drama episodes between Q3 2025 and Q1 2026.
+
+| Metric | Definition | Benchmark (2026 AI Dramas) | What It Measures |
+| --- | --- | --- | --- |
+| Start Rate | % of impressions that click play | 35–65% | Hook effectiveness (thumbnail + title) |
+| 3s Retention | % who make it past second 3 | 55–80% | First-second hook strength |
+| 10s Retention | % past second 10 | 40–65% | Pacing after initial hook |
+| Episode Completion | % who finish entire episode | 30–55% | Episode length + mid-episode pacing |
+| E1→E2 Retention | % returning from Ep 1 to Ep 2 | 55–75% | Series hook strength |
+| E3→E4 Retention | % returning from Ep 3 to Ep 4 | 40–60% | Sustained binge power |
+| Replay Rate | % who rewatched any episode | 3–9% | Rewatchable moments (cliffhangers, viral clips) |
+| 48h Cohort Return | % of Ep 1 viewers who watch any Ep 2 within 48h | 25–45% | Core binge engagement |
+
+**Sources:** Reelytics 2026 Series Analytics Benchmarks, Duration.live Microdrama Benchmarks. All benchmarks are for *AI-generated* short dramas; human-shot dramas tend to sit 2–7% higher on face-consistency-sensitive metrics (10s retention and episode completion) but perform within the same band on hook-driven metrics (Start Rate, 3s retention).
+
+---
+
+## Step-by-Step Retention Analysis Framework
+
+Great data analysis isn't about staring at a dashboard. It's a five-step loop you can run after every 3 episodes.
+
+### Step 1: Map Your Funnel
+Draw the funnel for each episode: **Start → 3s → 10s → 50% → 100% (completion)**. For an 8-episode series you'll have 8 funnels. Color-code each bar so you can see, at a glance, where the tallest drops happen. A healthy funnel narrows smoothly at each stage — no cliff-like drops between consecutive steps.
+
+### Step 2: Episode-by-Episode Comparison
+For each episode, calculate the *completion delta*: \`(this episode completion) − (previous episode completion)\`. Find the single episode with the largest negative delta. That's your problem child. Note whether it's also the episode where E→E+1 retention collapses — if both flags the same episode, it's almost certainly a content issue, not platform distribution noise.
+
+### Step 3: Diagnose the Break Point
+Once you've identified the problem episode, break it into thirds:
+- **First third (0–33%)**: Hook + setup. Drop here = weak hook, payoff missing.
+- **Middle third (33–66%)**: Rising action. Drop here = exposition dump, no visual stakes.
+- **Final third (66–100%)**: Cliffhanger resolution. Drop here = anticlimactic payoff, no reason to come back.
+
+### Step 4: Cohort Analysis
+Group viewers by their *first episode* (cohort) and track how many in each cohort watch episode N. If the "E1 cohort" drops 40% by E4 but the "E2 cohort" only drops 20%, your series structure is funneling people away after Episode 2 — a pacing reset is needed. Reelytics and Lollipop Drama creator dashboards both expose cohort views natively.
+
+### Step 5: Test the Fix
+Pick one variable to change per A/B test. Don't change the hook, episode length, *and* the cliffhanger at the same time — you'll never know which one worked. Good test candidates:
+- Different first-3-second visual hook (text overlay vs. face close-up)
+- Episode length (60s vs. 90s)
+- Cliffhanger type (identity reveal vs. time-pressure suspense)
+
+---
+
+## Real Diagnosis Example: *The Forgotten Letter*
+
+Mystery-thriller series *The Forgotten Letter* (8 episodes, 90 seconds each, fully AI-generated using Runway + Suno) looked strong on launch day — Episode 1 hit 1.2M impressions across TikTok and YouTube Shorts. But three days in, the creator noticed something wrong:
+
+| Episode | Completion | E→E+1 Return |
+| --- | --- | --- |
+| E1 | 48% ✅ (strong) | 62% ✅ (healthy) |
+| E2 | 45% ✅ | 58% ✅ |
+| E3 | 31% ❌ (dropped 14%!) | 22% ❌ (collapsed) |
+| E4 | 34% | 28% |
+| E5+ | < 30% | < 25% |
+
+**Diagnosis:** The team rewatched E3 and found 45 seconds of flat "setup dialogue" — two characters sitting in a café explaining backstory with no visual stakes, no close-ups, no B-roll. AI-generated voice emotion was noticeably flatter in those lines too, because the voice prompt hadn't specified urgency.
+
+**Fix:** Cut setup to 15 seconds, added a 5-second B-roll montage recapping prior episodes as a cold open, and regenerated voice lines with an "urgent, breathless" ElevenLabs prompt.
+
+**Result (Reelytics case study, March 2026):** E3 completion rebounded to 44%, E3→E4 return climbed to 41%, and full-series watch-time per viewer rose 27%.
+
+---
+
+## Drop-Off Pattern Diagnosis
+
+Retention drops aren't random. Where the drop happens tells you *exactly* what broke.
+
+- **3s → 10s drop:** Your hook promises something but doesn't deliver the payoff immediately. A thumbnail showing a "spooky face" followed by 8 seconds of character introduction = broken promise. **Fix:** Make the payoff visual in the first 3 seconds. Show the spooky face *in motion*, then introduce the characters.
+
+- **Mid-episode drop at 40–50%:** Too much exposition, not enough visual stakes. This is the most common AI short drama failure — creators stuff AI-generated scenes with dialogue because AI makes it cheap. **Fix:** Add a minor cliffhanger or visual twist at the 40% mark. A door slamming, a text notification on screen, a character's face changing expression.
+
+- **Episode→Episode drop between E3–E5:** Your mid-season pacing is dragging. Viewers binged E1–E2 because the cliffhangers were tight, but by E4 they've realized nothing new is happening. **Fix:** Introduce a new conflict or character in E4–E5 to reset tension. AI makes this cheap — generate a new B-roll scene, a new character close-up, a new phone call voiceover.
+
+- **Terminal drop at final episodes:** Your cliffhangers don't matter for the ending. Viewers figure out the resolution before they watch the finale. **Fix:** Make the final episode open on a fresh mini-conflict that pays off fast. A phone rings, a door opens, a new threat appears — something that couldn't have been predicted from prior episodes.
+
+---
+
+## What Makes AI Dramas Different for Retention
+
+AI-generated dramas aren't just cheaper to make — they *behave* differently on retention metrics because of three specific AI artifacts that human-shot dramas avoid:
+
+1. **Face consistency drift across episodes** causes subtle viewer discomfort that compounds by E3–E4. A viewer who noticed the lead's eye color changed between E2 and E3 will start paying attention to the face, not the story. **Fix:** Use reference image anchors (a single close-up of the lead from E1) in every frame generation prompt. Runway, Kling, and Sora all support this natively in 2026.
+
+2. **AI voice emotion flatness** is the #1 silent killer of replay rate. ElevenLabs and Suno are good, but a flat AI delivery won't make viewers rewatch a cliffhanger. **Fix:** Specify emotion *word by word* in your voiceover prompts. ElevenLabs' v3 "emotion scale" lets you dial tension, sadness, and urgency for each line.
+
+3. **AI-generated "uncanny valley" moments** (a hand that doesn't move quite right, a blink that's too slow) tank 3s and 10s retention because viewers exit immediately when something feels wrong. **Fix:** Run a 10-second focus group for each episode's first 3 seconds — show it to 5 people and ask, "Does anything feel off?" If more than 1 person says yes, regenerate.
+
+---
+
+## Decision Table: When to Fix vs When to Cut
+
+Not every bad episode deserves a fix. Sometimes it's cheaper to cut it and reallocate the budget to a stronger mid-season reset. Use this table:
+
+| Metric | When to Fix | When to Cut (Episode) |
+| --- | --- | --- |
+| Episode completion | < 35% but strong E1→E2 return | < 25% and poor adjacent episodes |
+| 3s retention | < 55% on one episode | < 40% across 3+ consecutive episodes |
+| Cohort return | Declined 15% from E2→E3 | Declined 25%+ across full season |
+| Budget left | > 20% of budget remaining | < 10% remaining |
+
+*Rule of thumb:* If fixing the problem episode requires regenerating more than 30% of its scenes, cut it and fold the remaining plot beats into the next episode. AI makes this trivial — you can generate a 90-second recap + new scene in under 10 minutes.
+
+---
+
+## FAQ
+
+**Q1: My first episode has 60% completion but E1→E2 return is only 30% — what does that mean?**  
+A: People loved watching Episode 1 but didn't care enough to come back. Your cliffhanger is weak. Make it matter. A "who is the killer" cliffhanger where every viewer already guessed the answer is worse than no cliffhanger. Add a stakes shift ("the killer is *you*, viewer" / "the bomb is in your building").
+
+**Q2: Is 3% replay rate bad?**  
+A: No — 3–9% is the 2026 benchmark. Below 2% means your episodes don't have shareable moments. Replay rate correlates directly with TikTok Duets and Stitches — if no one is remixing your episode, no one is rewatching it.
+
+**Q3: AI dramas have lower retention than human-shot ones?**  
+A: 2026 data shows AI dramas with consistent face/voice quality *match* human-shot dramas on 10s+ retention. The gap is in 3s hooks where AI-generated thumbnails can feel uncanny. Spend extra time on your E1 thumbnail — human-shot face close-ups consistently outperform AI-generated ones by 6–9% on Start Rate.
+
+**Q4: Should I make episodes longer to increase retention?**  
+A: No. Test different lengths with audience cohorts. 60–90 seconds is the sweet spot for most genres in 2026. Comedy can go to 60, mystery-thriller benefits from 90, romance sweet spot is 75.
+
+**Q5: How do I get cohort data without expensive tools?**  
+A: Lollipop Drama creator dashboard shows per-episode completion. YouTube Shorts Studio has a "returning viewers" metric. Reelytics ($29/month) adds cross-episode cohort tracking. If budget is zero, manually track viewers who comment on multiple episodes — that's your free cohort proxy.
+
+---
+
+## Sources
+
+- **Reelytics Short-Form Series Analytics 2026**: [reelytics.io/blog/short-form-series-analytics-complete-guide-2026](https://reelytics.io/blog/short-form-series-analytics-complete-guide-2026)
+- **Duration.live Microdrama Retention Benchmarks**: [duration.live/episodic-microdramas-benchmarks-for-retention-and-engagement](https://duration.live/episodic-microdramas-benchmarks-for-retention-and-engagement)
+- **Mystery/Thriller Retention Benchmarks**: [reelytics.io/blog/mystery-thriller-short-dramas-retention-benchmarks](https://reelytics.io/blog/mystery-thriller-short-dramas-retention-benchmarks)
+- **Iguanify Episodic Analytics**: [iguanify.com/blog/episodic-analytics-for-shorts](https://iguanify.com/blog/episodic-analytics-for-shorts)
+
+---
+
+## Keep Reading on Lollipop Drama
+
+- [AI Short Drama 3-Second Hook Architecture](/blog/ai-scriptwriting-micro-dramas-prompts)
+- [AI Short Drama Episode Length Guide](/blog/ai-short-drama-episode-length-guide)
+- [Complete AI Short Drama Production Guide](/blog/ai-short-drama-complete-guide)
+`,
+    contentZh: `# How to Analyze Short Drama Retention Data: Episode Drop-Off, Rewatch Rate, and Viewer Cohorts (2026)
+
+> **Direct Answer:** Retention analytics for short drama series answers two questions: does each individual episode keep viewers watching, and do viewers come back for the next one? A healthy AI short drama in 2026 sees 55–75% Episode 1→Episode 2 retention, 30–55% completion per episode, and 3–9% replay rate. Here's how to measure, diagnose, and fix what your data shows.
+
+Short dramas — micro-episodic stories spanning 60–180 seconds per episode — exploded across TikTok, YouTube Shorts, Reels, and Douyin in 2025 and show no sign of slowing in 2026. But "going viral once" doesn't make a series a hit. The creators winning right now are the ones who read their retention data and act on it. This article breaks down every core metric, gives you 2026 benchmarks built from Reelytics and Duration.live data, walks through a real diagnosis example, and shows where AI-generated dramas behave differently from human-shot ones when it comes to keeping eyes on screen.
+
+---
+
+## Definitions & Benchmarks Table
+
+Every creator dashboard — whether it's YouTube Shorts Studio, TikTok Analytics, or Lollipop Drama's internal metrics — surfaces slightly different names for the same signals. We've standardized them below with 2026 real-world benchmarks pulled from Reelytics' 2026 Series Analytics Benchmarks report and Duration.live's Microdrama Benchmarks study, which collectively analyzed 12,400 AI-generated and human-shot short drama episodes between Q3 2025 and Q1 2026.
+
+| Metric | Definition | Benchmark (2026 AI Dramas) | What It Measures |
+| --- | --- | --- | --- |
+| Start Rate | % of impressions that click play | 35–65% | Hook effectiveness (thumbnail + title) |
+| 3s Retention | % who make it past second 3 | 55–80% | First-second hook strength |
+| 10s Retention | % past second 10 | 40–65% | Pacing after initial hook |
+| Episode Completion | % who finish entire episode | 30–55% | Episode length + mid-episode pacing |
+| E1→E2 Retention | % returning from Ep 1 to Ep 2 | 55–75% | Series hook strength |
+| E3→E4 Retention | % returning from Ep 3 to Ep 4 | 40–60% | Sustained binge power |
+| Replay Rate | % who rewatched any episode | 3–9% | Rewatchable moments (cliffhangers, viral clips) |
+| 48h Cohort Return | % of Ep 1 viewers who watch any Ep 2 within 48h | 25–45% | Core binge engagement |
+
+**Sources:** Reelytics 2026 Series Analytics Benchmarks, Duration.live Microdrama Benchmarks. All benchmarks are for *AI-generated* short dramas; human-shot dramas tend to sit 2–7% higher on face-consistency-sensitive metrics (10s retention and episode completion) but perform within the same band on hook-driven metrics (Start Rate, 3s retention).
+
+---
+
+## Step-by-Step Retention Analysis Framework
+
+Great data analysis isn't about staring at a dashboard. It's a five-step loop you can run after every 3 episodes.
+
+### Step 1: Map Your Funnel
+Draw the funnel for each episode: **Start → 3s → 10s → 50% → 100% (completion)**. For an 8-episode series you'll have 8 funnels. Color-code each bar so you can see, at a glance, where the tallest drops happen. A healthy funnel narrows smoothly at each stage — no cliff-like drops between consecutive steps.
+
+### Step 2: Episode-by-Episode Comparison
+For each episode, calculate the *completion delta*: \`(this episode completion) − (previous episode completion)\`. Find the single episode with the largest negative delta. That's your problem child. Note whether it's also the episode where E→E+1 retention collapses — if both flags the same episode, it's almost certainly a content issue, not platform distribution noise.
+
+### Step 3: Diagnose the Break Point
+Once you've identified the problem episode, break it into thirds:
+- **First third (0–33%)**: Hook + setup. Drop here = weak hook, payoff missing.
+- **Middle third (33–66%)**: Rising action. Drop here = exposition dump, no visual stakes.
+- **Final third (66–100%)**: Cliffhanger resolution. Drop here = anticlimactic payoff, no reason to come back.
+
+### Step 4: Cohort Analysis
+Group viewers by their *first episode* (cohort) and track how many in each cohort watch episode N. If the "E1 cohort" drops 40% by E4 but the "E2 cohort" only drops 20%, your series structure is funneling people away after Episode 2 — a pacing reset is needed. Reelytics and Lollipop Drama creator dashboards both expose cohort views natively.
+
+### Step 5: Test the Fix
+Pick one variable to change per A/B test. Don't change the hook, episode length, *and* the cliffhanger at the same time — you'll never know which one worked. Good test candidates:
+- Different first-3-second visual hook (text overlay vs. face close-up)
+- Episode length (60s vs. 90s)
+- Cliffhanger type (identity reveal vs. time-pressure suspense)
+
+---
+
+## Real Diagnosis Example: *The Forgotten Letter*
+
+Mystery-thriller series *The Forgotten Letter* (8 episodes, 90 seconds each, fully AI-generated using Runway + Suno) looked strong on launch day — Episode 1 hit 1.2M impressions across TikTok and YouTube Shorts. But three days in, the creator noticed something wrong:
+
+| Episode | Completion | E→E+1 Return |
+| --- | --- | --- |
+| E1 | 48% ✅ (strong) | 62% ✅ (healthy) |
+| E2 | 45% ✅ | 58% ✅ |
+| E3 | 31% ❌ (dropped 14%!) | 22% ❌ (collapsed) |
+| E4 | 34% | 28% |
+| E5+ | < 30% | < 25% |
+
+**Diagnosis:** The team rewatched E3 and found 45 seconds of flat "setup dialogue" — two characters sitting in a café explaining backstory with no visual stakes, no close-ups, no B-roll. AI-generated voice emotion was noticeably flatter in those lines too, because the voice prompt hadn't specified urgency.
+
+**Fix:** Cut setup to 15 seconds, added a 5-second B-roll montage recapping prior episodes as a cold open, and regenerated voice lines with an "urgent, breathless" ElevenLabs prompt.
+
+**Result (Reelytics case study, March 2026):** E3 completion rebounded to 44%, E3→E4 return climbed to 41%, and full-series watch-time per viewer rose 27%.
+
+---
+
+## Drop-Off Pattern Diagnosis
+
+Retention drops aren't random. Where the drop happens tells you *exactly* what broke.
+
+- **3s → 10s drop:** Your hook promises something but doesn't deliver the payoff immediately. A thumbnail showing a "spooky face" followed by 8 seconds of character introduction = broken promise. **Fix:** Make the payoff visual in the first 3 seconds. Show the spooky face *in motion*, then introduce the characters.
+
+- **Mid-episode drop at 40–50%:** Too much exposition, not enough visual stakes. This is the most common AI short drama failure — creators stuff AI-generated scenes with dialogue because AI makes it cheap. **Fix:** Add a minor cliffhanger or visual twist at the 40% mark. A door slamming, a text notification on screen, a character's face changing expression.
+
+- **Episode→Episode drop between E3–E5:** Your mid-season pacing is dragging. Viewers binged E1–E2 because the cliffhangers were tight, but by E4 they've realized nothing new is happening. **Fix:** Introduce a new conflict or character in E4–E5 to reset tension. AI makes this cheap — generate a new B-roll scene, a new character close-up, a new phone call voiceover.
+
+- **Terminal drop at final episodes:** Your cliffhangers don't matter for the ending. Viewers figure out the resolution before they watch the finale. **Fix:** Make the final episode open on a fresh mini-conflict that pays off fast. A phone rings, a door opens, a new threat appears — something that couldn't have been predicted from prior episodes.
+
+---
+
+## What Makes AI Dramas Different for Retention
+
+AI-generated dramas aren't just cheaper to make — they *behave* differently on retention metrics because of three specific AI artifacts that human-shot dramas avoid:
+
+1. **Face consistency drift across episodes** causes subtle viewer discomfort that compounds by E3–E4. A viewer who noticed the lead's eye color changed between E2 and E3 will start paying attention to the face, not the story. **Fix:** Use reference image anchors (a single close-up of the lead from E1) in every frame generation prompt. Runway, Kling, and Sora all support this natively in 2026.
+
+2. **AI voice emotion flatness** is the #1 silent killer of replay rate. ElevenLabs and Suno are good, but a flat AI delivery won't make viewers rewatch a cliffhanger. **Fix:** Specify emotion *word by word* in your voiceover prompts. ElevenLabs' v3 "emotion scale" lets you dial tension, sadness, and urgency for each line.
+
+3. **AI-generated "uncanny valley" moments** (a hand that doesn't move quite right, a blink that's too slow) tank 3s and 10s retention because viewers exit immediately when something feels wrong. **Fix:** Run a 10-second focus group for each episode's first 3 seconds — show it to 5 people and ask, "Does anything feel off?" If more than 1 person says yes, regenerate.
+
+---
+
+## Decision Table: When to Fix vs When to Cut
+
+Not every bad episode deserves a fix. Sometimes it's cheaper to cut it and reallocate the budget to a stronger mid-season reset. Use this table:
+
+| Metric | When to Fix | When to Cut (Episode) |
+| --- | --- | --- |
+| Episode completion | < 35% but strong E1→E2 return | < 25% and poor adjacent episodes |
+| 3s retention | < 55% on one episode | < 40% across 3+ consecutive episodes |
+| Cohort return | Declined 15% from E2→E3 | Declined 25%+ across full season |
+| Budget left | > 20% of budget remaining | < 10% remaining |
+
+*Rule of thumb:* If fixing the problem episode requires regenerating more than 30% of its scenes, cut it and fold the remaining plot beats into the next episode. AI makes this trivial — you can generate a 90-second recap + new scene in under 10 minutes.
+
+---
+
+## FAQ
+
+**Q1: My first episode has 60% completion but E1→E2 return is only 30% — what does that mean?**  
+A: People loved watching Episode 1 but didn't care enough to come back. Your cliffhanger is weak. Make it matter. A "who is the killer" cliffhanger where every viewer already guessed the answer is worse than no cliffhanger. Add a stakes shift ("the killer is *you*, viewer" / "the bomb is in your building").
+
+**Q2: Is 3% replay rate bad?**  
+A: No — 3–9% is the 2026 benchmark. Below 2% means your episodes don't have shareable moments. Replay rate correlates directly with TikTok Duets and Stitches — if no one is remixing your episode, no one is rewatching it.
+
+**Q3: AI dramas have lower retention than human-shot ones?**  
+A: 2026 data shows AI dramas with consistent face/voice quality *match* human-shot dramas on 10s+ retention. The gap is in 3s hooks where AI-generated thumbnails can feel uncanny. Spend extra time on your E1 thumbnail — human-shot face close-ups consistently outperform AI-generated ones by 6–9% on Start Rate.
+
+**Q4: Should I make episodes longer to increase retention?**  
+A: No. Test different lengths with audience cohorts. 60–90 seconds is the sweet spot for most genres in 2026. Comedy can go to 60, mystery-thriller benefits from 90, romance sweet spot is 75.
+
+**Q5: How do I get cohort data without expensive tools?**  
+A: Lollipop Drama creator dashboard shows per-episode completion. YouTube Shorts Studio has a "returning viewers" metric. Reelytics ($29/month) adds cross-episode cohort tracking. If budget is zero, manually track viewers who comment on multiple episodes — that's your free cohort proxy.
+
+---
+
+## Sources
+
+- **Reelytics Short-Form Series Analytics 2026**: [reelytics.io/blog/short-form-series-analytics-complete-guide-2026](https://reelytics.io/blog/short-form-series-analytics-complete-guide-2026)
+- **Duration.live Microdrama Retention Benchmarks**: [duration.live/episodic-microdramas-benchmarks-for-retention-and-engagement](https://duration.live/episodic-microdramas-benchmarks-for-retention-and-engagement)
+- **Mystery/Thriller Retention Benchmarks**: [reelytics.io/blog/mystery-thriller-short-dramas-retention-benchmarks](https://reelytics.io/blog/mystery-thriller-short-dramas-retention-benchmarks)
+- **Iguanify Episodic Analytics**: [iguanify.com/blog/episodic-analytics-for-shorts](https://iguanify.com/blog/episodic-analytics-for-shorts)
+
+---
+
+## Keep Reading on Lollipop Drama
+
+- [AI Short Drama 3-Second Hook Architecture](/blog/ai-scriptwriting-micro-dramas-prompts)
+- [AI Short Drama Episode Length Guide](/blog/ai-short-drama-episode-length-guide)
+- [Complete AI Short Drama Production Guide](/blog/ai-short-drama-complete-guide)
+`,
+  },
 };/** 合并元数据 + 正文，得到完整的 BlogPost */
 export function getFullPost(slug: string): BlogPost | undefined {
   const meta = blogMeta.find((m) => m.slug === slug);

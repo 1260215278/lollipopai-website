@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
-import { Mail, Phone, MapPin, Twitter, Instagram, Youtube, Facebook } from "lucide-react";
+import { Mail, Phone, MapPin, Twitter, Instagram, Youtube, Facebook, Linkedin } from "lucide-react";
 import logoImg from "../../imports/Lollipop1.webp";
 import { useI18n } from "../i18n";
 
@@ -91,8 +91,8 @@ export function Footer({ onNavigate }: { onNavigate?: (page: string) => void }) 
               <a href="https://www.facebook.com/lollipopai" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="text-gray-500 hover:text-white transition-colors">
                 <Facebook className="w-4.5 h-4.5" style={{ width: "1.125rem", height: "1.125rem" }} />
               </a>
-              <a href="https://play.google.com/store/apps/details?id=com.StargetVenturesLLC.hks" target="_blank" rel="noopener noreferrer" aria-label="Google Play" className="text-gray-500 hover:text-white transition-colors" style={{ fontSize: "0.7rem", fontWeight: 600, border: "1px solid rgba(255,255,255,0.1)", borderRadius: "4px", padding: "2px 6px" }}>
-                G Play
+              <a href="https://www.linkedin.com/company/lollipop-ai-drama" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-gray-500 hover:text-white transition-colors">
+                <Linkedin className="w-4.5 h-4.5" style={{ width: "1.125rem", height: "1.125rem" }} />
               </a>
             </div>
           </div>

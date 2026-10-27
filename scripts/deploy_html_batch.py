@@ -11,6 +11,10 @@ import sys
 import time
 import tarfile
 import io
+import re
+import json
+import urllib.request
+import urllib.error
 
 sys.stdout.reconfigure(line_buffering=True)
 
@@ -147,3 +151,46 @@ for label, cmd in checks:
 
 client.close()
 print("\nDone")
+
+# Step 7: IndexNow 推送（加速 Bing/Google 索引）
+print("\n=== Step 7: IndexNow 推送 ===")
+INDEXNOW_KEY = "9424f6f511b0ebf9e69d43cf9f260e25"
+INDEXNOW_HOST = "www.lollipop.im"
+INDEXNOW_ENDPOINT = "https://api.indexnow.org/IndexNow"
+
+# 从本地 dist sitemap.xml 提取所有 URL
+sitemap_path = os.path.join(DIST_DIR, "sitemap.xml")
+if os.path.exists(sitemap_path):
+    sitemap_xml = open(sitemap_path, encoding="utf-8").read()
+    all_urls = re.findall(r"<loc>([^<]+)</loc>", sitemap_xml)
+    # 只推 500 个（IndexNow 建议单次不超过 10000）
+    push_urls = all_urls[:500]
+    print(f"  Sitemap 共 {len(all_urls)} URL，推送前 {len(push_urls)} 个")
+
+    payload = json.dumps({
+        "host": INDEXNOW_HOST,
+        "key": INDEXNOW_KEY,
+        "urlList": push_urls,
+    }).encode("utf-8")
+
+    req = urllib.request.Request(
+        INDEXNOW_ENDPOINT,
+        data=payload,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            status = resp.status
+            body = resp.read().decode("utf-8", errors="replace")
+            print(f"  IndexNow POST status: {status}")
+            if status == 200:
+                print(f"  ✅ 推送成功（Bing 通常 24-48h 内开始爬取）")
+            else:
+                print(f"  ⚠️ 非 200 响应: {body[:200]}")
+    except urllib.error.HTTPError as e:
+        print(f"  ❌ HTTP {e.code}: {e.read().decode(errors='replace')[:200]}")
+    except Exception as e:
+        print(f"  ❌ 推送失败: {e}")
+else:
+    print(f"  ⚠️ 未找到 sitemap.xml（{sitemap_path}），跳过 IndexNow")

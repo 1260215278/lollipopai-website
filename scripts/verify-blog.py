@@ -21,8 +21,12 @@ import sys
 from html import unescape
 from pathlib import Path
 
-DIST = Path(r"C:\Users\Administrator\Documents\lollipop\dist")
-SRC = Path(r"C:\Users\Administrator\Documents\lollipop\src")
+# 路径一律相对本脚本推导（scripts/ 的上级即仓库根），
+# 不再硬编码某台机器上的 worktree 绝对路径 —— 硬编码曾导致本脚本
+# 长期校验错误的目录（旧 worktree），dist/src/Caddyfile 全部对不上。
+ROOT = Path(__file__).resolve().parent.parent
+DIST = ROOT / "dist"
+SRC = ROOT / "src"
 
 # ── 从 BlogListPage.tsx 反查每页篇数，避免校验脚本与实现脱节 ──────────────────
 _blist = (SRC / "app" / "pages" / "BlogListPage.tsx").read_text(encoding="utf-8")
@@ -394,14 +398,14 @@ check(not residual, f"dist HTML 零 /guides 残留" + (f"（{residual[:5]}）" i
 check(not (DIST / "guides").exists(), "dist/guides 目录已移除")
 
 # 7b. 旧 /guides 路径的 301 覆盖（迁出的 9 篇 slug 保持不变，必须一一对应）
-caddy = Path(r"C:\Users\Administrator\Documents\lollipop\Caddyfile").read_text(encoding="utf-8")
+caddy = (ROOT / "Caddyfile").read_text(encoding="utf-8")
 for p in MIGRATED_POSTS:
     s = p["slug"]
     check(f"/guides/{s} /blog/{s} 301" in caddy, f"Caddyfile 301: /guides/{s} → /blog/{s}")
 check("/guides* /blog 301" in caddy, "Caddyfile 有兜底 /guides* → /blog")
 # 源码层不应再有任何 /guides 路由（比对 path= 而非裸字符串，避免命中说明性注释）
 for f in ["src/main.tsx", "src/entry-server.tsx"]:
-    t = (Path(r"C:\Users\Administrator\Documents\lollipop") / f).read_text(encoding="utf-8")
+    t = (ROOT / f).read_text(encoding="utf-8")
     check(not re.search(r'path="/guides', t), f"{f} 零 /guides 路由")
 
 # ══ 8. 旧文案残留 ═══════════════════════════════════════════════════════════
@@ -427,7 +431,7 @@ print()
 print("=" * 70)
 print("9. 全站通用回归（两份路由表一致性 + 兜底污染）")
 print("=" * 70)
-ROOT = Path(r"C:\Users\Administrator\Documents\lollipop")
+ROOT = Path(__file__).resolve().parent.parent
 main_routes = set(re.findall(r'<Route path="([^"]+)"', (ROOT / "src" / "main.tsx").read_text(encoding="utf-8")))
 ssr_routes = set(
     re.findall(r'<Route path="([^"]+)"', (ROOT / "src" / "entry-server.tsx").read_text(encoding="utf-8"))

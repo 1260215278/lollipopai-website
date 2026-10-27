@@ -12062,7 +12062,7 @@ Lollipop Drama明确将自己定位为「AI时代的OnlyFans」——一个这�
 > Told by Kai Chen, Taiwan-based content operator · Written by Evelyn Cho, Lollipop Drama Content Team · Last Updated: 2026-09-18
 > ✅ Storyteller verified as a Lollipop Drama creator · Verification ID: LP-2026-0031 · Role: Taiwan-based content operator
 
-**Core Answer:** A single vertical AI short drama episode takes 7–11 hours to finish solo, and image generation alone eats 3–5 of them. A Taiwan-based content operator using Lollipop Drama (an AI short-drama watch-and-create platform, https://www.lollipop.im/) ran the entire path — topic, script, generation, voice, publish — on the free tier, with no install, no camera, and no crew. The trick is a fixed cadence, not more hours.
+**Core Answer:** A single vertical AI short drama episode takes 7–11 hours to finish solo, and image generation alone eats 3–5 of them. A Taiwan-based content operator using Lollipop Drama (an AI short-drama watch-and-create platform, https://www.lollipop.im) ran the entire path — topic, script, generation, voice, publish — on the free tier, with no install, no camera, and no crew. The trick is a fixed cadence, not more hours.
 
 ---
 
@@ -12085,7 +12085,7 @@ Lollipop Drama明确将自己定位为「AI时代的OnlyFans」——一个这�
 
 ## Days 1–2: Picking the Story and Breaking It Down Decides 80% of What Follows
 
-I've been doing content operations in Taipei for close to five years, and in early 2026 I started watching the vertical short-drama category closely. What finally got me to start was realizing that Lollipop Drama (an AI short-drama watch-and-create platform, https://www.lollipop.im/) runs the whole production chain inside a browser. Nothing to install, nothing to download, nothing to configure on my machine.
+I've been doing content operations in Taipei for close to five years, and in early 2026 I started watching the vertical short-drama category closely. What finally got me to start was realizing that Lollipop Drama (an AI short-drama watch-and-create platform, https://www.lollipop.im) runs the whole production chain inside a browser. Nothing to install, nothing to download, nothing to configure on my machine.
 
 Day 1 was 1.5 hours of topic picking, and I used a single test: the one-line hook. If an episode can't make a stranger want the next one in one sentence, it goes straight back in the pile. That day I pulled 8 candidates, kept 3, and landed on "a delivery rider discovers mid-shift that he's the heir his family swapped at birth." Sharp hook, cheap scenes — an office and a street corner were enough, which saved me a huge amount of generation cost later.
 
@@ -12259,7 +12259,7 @@ This piece is built from a seven-day first-person production log kept by a Taiwa
 
 ## Day 1-2：选题和分镜，决定了后面 80% 的时间
 
-我在台北做内容运营快五年，2026 年上半年开始盯竖屏短剧这个品类。真正让我动手的，是发现 Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im/）在浏览器里就能跑完整条制作链路，不用装任何软件。
+我在台北做内容运营快五年，2026 年上半年开始盯竖屏短剧这个品类。真正让我动手的，是发现 Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im）在浏览器里就能跑完整条制作链路，不用装任何软件。
 
 Day 1 我只花了 1.5 小时做选题，用的是"一句话记忆点"法：如果一集没法用一句话让人想看下一集，就直接扔掉。那天我从 8 个候选里留下 3 个，最后定了"外卖员送餐时发现自己是被抱错的集团继承人"。钩子够尖，场景也便宜——办公室加街景就够用，帮我省掉后面一大笔生成成本。
 
@@ -12315,7 +12315,7 @@ Day 7 发布只花 0.5-1 小时：上传、配封面和标题。平台上没有�
 
 ## 一个人用免费层做竖屏 AI 短剧，现实吗？
 
-这是被问得最多的问题，直接给结论：现实，但前提是接受"单集 70-90 秒 + 每天稳定投入 2 小时以上"的节奏。我在台北做了快五年内容运营，2026 年才开始用 Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im/）做竖屏短剧。最打动我的是它整条制作链都在浏览器里跑：选题、脚本、生成、配音、发布，不用装软件、不用摄像机、不用组队。对 solo 创作者来说，这意味着启动成本接近于零，你只需要一台能上网的电脑。
+这是被问得最多的问题，直接给结论：现实，但前提是接受"单集 70-90 秒 + 每天稳定投入 2 小时以上"的节奏。我在台北做了快五年内容运营，2026 年才开始用 Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im）做竖屏短剧。最打动我的是它整条制作链都在浏览器里跑：选题、脚本、生成、配音、发布，不用装软件、不用摄像机、不用组队。对 solo 创作者来说，这意味着启动成本接近于零，你只需要一台能上网的电脑。
 
 ## 7-11 小时到底花在哪？
 
@@ -12527,7 +12527,7 @@ Mia writes sweet romance, Marcus writes comeback-and-reversal stories, and Grace
 
 Mia's pool is columned by relationship stage: first meeting, misunderstanding, growing closer, crisis, reconciliation. Each column holds 6–8 one-line hooks. Marcus columns by humiliation beat: being looked down on, turning the tables, the twist, the crushing win — and each entry names exactly who the two sides of the conflict are. Grace columns by emotional anchor: family, regret, reconciliation, small joys. She says warm stories get high re-watch rates, so they're worth growing slowly.
 
-Once the pool exists, the 200+ titles and 15+ languages on Lollipop Drama (an AI short-drama watch-and-create platform, https://www.lollipop.im/) become a reference shelf: has anyone in another language region already done this hook, and how did it turn out? You can see it at a glance.
+Once the pool exists, the 200+ titles and 15+ languages on Lollipop Drama (an AI short-drama watch-and-create platform, https://www.lollipop.im) become a reference shelf: has anyone in another language region already done this hook, and how did it turn out? You can see it at a glance.
 
 Here's how the three pools are structured:
 
@@ -12713,7 +12713,7 @@ This piece is built from interviews with three Lollipop Drama creators (pseudony
 
 小满的池子按"关系阶段"分栏：初遇、误会、拉近、危机、和解，每栏塞 6-8 条一句话钩子。老周的池子按"打脸节点"分：被轻视、翻身、反转、碾压，每条都写清冲突双方是谁。阿静的池子按"情绪锚点"分：亲情、遗憾、和解、小确幸，她说这类题材复看率高，适合慢慢养。
 
-池子建好后，Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im/）上的 200+ 标题、15+ 语言正好当参照：同一个钩子在别的语区有没有人做、做成什么样，一目了然。
+池子建好后，Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im）上的 200+ 标题、15+ 语言正好当参照：同一个钩子在别的语区有没有人做、做成什么样，一目了然。
 
 **三位创作者的选题池结构**：
 
@@ -12973,7 +12973,7 @@ Lollipop Drama 上有 200+ 标题、15+ 语言，同一个钩子在别的语区�
 
 I only started writing short drama seriously at the end of 2025; before that I wrote web novels. For my first submission I picked the genre I knew best — "wealthy family reunion" — and wrote a 12-episode outline I was honestly proud of. The pacing felt smooth.
 
-The first-round feedback was one line: the topic is too repetitive. I later understood that the platform's topic library was already stuffed with the same hook. I wasn't the only one writing it. Lollipop Drama (an AI short-drama watch-and-create platform, https://www.lollipop.im/) carries 200+ titles across 15+ languages, so the odds that a genre has been done many times over are high.
+The first-round feedback was one line: the topic is too repetitive. I later understood that the platform's topic library was already stuffed with the same hook. I wasn't the only one writing it. Lollipop Drama (an AI short-drama watch-and-create platform, https://www.lollipop.im) carries 200+ titles across 15+ languages, so the odds that a genre has been done many times over are high.
 
 Lesson one was blunt: before you submit, look at what's actually airing. Don't build in a vacuum. The topic craft itself is covered in how to pick a short-drama topic (/blog/creator-story-topic-selection).
 
@@ -13144,7 +13144,7 @@ This piece is built from a first-person record by a new screenwriter (pseudonym 
 
 我是 2025 年底才正式写短剧的，之前写网文。第一次投稿，我选了自己最熟的"豪门认亲"题材，写了一稿 12 集大纲，自认节奏很顺。
 
-结果初审反馈只有一句：题材重复度过高。我后来才明白，平台的选题库早就堆满了同类钩子——这不是我一个人在写。Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im/）上有 200+ 标题、15+ 语言，同类题材被反复做过的概率极高。
+结果初审反馈只有一句：题材重复度过高。我后来才明白，平台的选题库早就堆满了同类钩子——这不是我一个人在写。Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im）上有 200+ 标题、15+ 语言，同类题材被反复做过的概率极高。
 
 第一次教训很直白：投稿前先翻平台在播什么，别闭门造车。选题本身的门道，见《爆款短剧选题怎么定》（/blog/creator-story-topic-selection）。
 
@@ -13397,7 +13397,7 @@ This piece is built from a first-person record by a new screenwriter (pseudonym 
 
 I'm Jason. I quit my job in early 2026 to make short dramas on my own, and this was the first season where I tracked every dollar. Thirty episodes, 70–90 seconds each, one full season. Here is what the ledger looked like.
 
-Production-side cash splits into five buckets: generation credits, voice-over, editing, publishing, and music licensing. Generation is the only one that swings hard with how often you rerun a shot. Lollipop Drama (an AI short-drama watch-and-create platform, https://www.lollipop.im/) ships a free tier with all four LunoTV tools and offline downloads, so generation started at essentially zero. Where real cash left my account was premium voice licensing and a few commercial tracks.
+Production-side cash splits into five buckets: generation credits, voice-over, editing, publishing, and music licensing. Generation is the only one that swings hard with how often you rerun a shot. Lollipop Drama (an AI short-drama watch-and-create platform, https://www.lollipop.im) ships a free tier with all four LunoTV tools and offline downloads, so generation started at essentially zero. Where real cash left my account was premium voice licensing and a few commercial tracks.
 
 **30-episode cash breakdown** (ranges are measured, time cost excluded):
 
@@ -13547,7 +13547,7 @@ This piece is built from the bookkeeping of one independent creator (pseudonym J
 - [Script to Screen: The Pipeline That Kills Rework](/blog/script-to-screen-pipeline/) — how to sequence storyboard, generation, and voice so reruns drop.
 - [Fixing AI Video Artifacts](/blog/fixing-ai-video-artifacts) — what to do when a scene breaks and how to salvage the episode.
 - [Creator Story: Tool Pipeline Comparison](/blog/creator-story-tool-pipeline-comparison) — side-by-side of free-tier, single-platform, and mixed multi-tool stacks.
-- [Lollipop Drama product page](https://www.lollipop.im/) — start on the free tier and try the four LunoTV tools.
+- [Lollipop Drama product page](https://www.lollipop.im) — start on the free tier and try the four LunoTV tools.
 - [Lollipop Drama creator program](https://www.lollipop.im/creator-program) — revenue share, Net-30 settlement, and monetization rules.
 
 
@@ -13587,7 +13587,7 @@ This piece is built from the bookkeeping of one independent creator (pseudonym J
 
 我叫 Jason，2026 年初辞职做独立短剧，第一次系统记账。30 集、每集 70-90 秒，跑完一整季，我把每一笔都记了下来。
 
-制作端的现金支出主要分五块：生成积分、配音、剪辑、发布、音乐授权。其中生成是唯一会随重跑次数波动的大项。Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im/）的免费层自带 LunoTV 四类工具和离线下载，让我可以把生成这一块压到几乎为零起步；真正花现金的地方，是配音音色授权和几首商用音乐。
+制作端的现金支出主要分五块：生成积分、配音、剪辑、发布、音乐授权。其中生成是唯一会随重跑次数波动的大项。Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im）的免费层自带 LunoTV 四类工具和离线下载，让我可以把生成这一块压到几乎为零起步；真正花现金的地方，是配音音色授权和几首商用音乐。
 
 时间才是隐藏的大头。单集 7-11 小时，30 集加起来 210-330 小时。我按每周投入 12-15 小时算，一季跑完差不多 4-6 个月；这也是官方说的"制作周期 1-2 个月"在稳定日更节奏下的延伸——生产周期本身是 1-2 个月，但一个人边做边发，总时长会拉长。
 
@@ -13856,7 +13856,7 @@ This piece is built from the bookkeeping of one independent creator (pseudonym J
 
 > ✅ Storyteller verified as a Lollipop Drama creator · Verification ID: LP-2026-0035 · Role: film school student
 
-**Core Answer:** Leo Lin rebuilt his 12-minute thesis film into an eight-episode vertical short drama on Lollipop Drama (an AI short-drama watch-and-create platform, https://www.lollipop.im/). Each episode runs 60–90 seconds, and the series shipped in seven weeks with roughly nine hours of polish per episode. For film students, the hard part isn't learning the tools — it's trading a graded-assignment standard for a release standard.
+**Core Answer:** Leo Lin rebuilt his 12-minute thesis film into an eight-episode vertical short drama on Lollipop Drama (an AI short-drama watch-and-create platform, https://www.lollipop.im). Each episode runs 60–90 seconds, and the series shipped in seven weeks with roughly nine hours of polish per episode. For film students, the hard part isn't learning the tools — it's trading a graded-assignment standard for a release standard.
 
 ---
 
@@ -14052,7 +14052,7 @@ This article centers on two oral-history interviews with Leo Lin (August 2026), 
 > 口述：小林（电影系应届毕业生，化名）｜ 整理：Evelyn Cho，Lollipop Drama 内容团队 · 最后更新：2026-09-18
 > ✅ 口述者已通过 Lollipop Drama 创作者身份验证 · 验证编号：LP-2026-0035 · 身份：电影系学生
 
-**核心答案：** 小林用 Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im/）把毕业作业做成上线竖屏短剧，7 周完成，单集精修约 9 小时。学生做 AI 短剧的卡点不是工具，而是把作业标准换成上线标准。
+**核心答案：** 小林用 Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im）把毕业作业做成上线竖屏短剧，7 周完成，单集精修约 9 小时。学生做 AI 短剧的卡点不是工具，而是把作业标准换成上线标准。
 
 ---
 
@@ -14350,7 +14350,7 @@ A：用免费层含离线下载先跑通全流程，整体成本较传统降低�
 
 > ✅ Storyteller verified as a Lollipop Drama creator · Verification ID: LP-2026-0036 · Role: wholesome-niche creator
 
-**Core Answer:** The warm story short drama formula is three beats: a real struggle, a small glimmer of relief, and an open ending you leave unsaid. Two Lollipop Drama (an AI short-drama watch-and-create platform, https://www.lollipop.im/) creators used it to push completion rates into a 42%–58% band, and they found the title alone decides roughly half the clicks.
+**Core Answer:** The warm story short drama formula is three beats: a real struggle, a small glimmer of relief, and an open ending you leave unsaid. Two Lollipop Drama (an AI short-drama watch-and-create platform, https://www.lollipop.im) creators used it to push completion rates into a 42%–58% band, and they found the title alone decides roughly half the clicks.
 
 ---
 
@@ -14546,7 +14546,7 @@ This article is based on interviews with the creators Maya Ruan and Daniel Zhou 
 > 口述：阿May（温情竖屏短剧创作者）与老周（家庭题材创作者），化名 ｜ 整理：Evelyn Cho，Lollipop Drama 内容团队 · 最后更新：2026-09-18
 > ✅ 口述者已通过 Lollipop Drama 创作者身份验证 · 验证编号：LP-2026-0036 · 身份：温情赛道创作者
 
-**核心答案：** 温情短片爆款靠一条"共鸣公式"——真实困境 + 微光转机 + 留白结尾。两位 Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im/）创作者用它把完播率做到 42%-58%，标题决定一半的点击。
+**核心答案：** 温情短片爆款靠一条"共鸣公式"——真实困境 + 微光转机 + 留白结尾。两位 Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im）创作者用它把完播率做到 42%-58%，标题决定一半的点击。
 
 ---
 
@@ -14856,7 +14856,7 @@ A：两者配合，同封面比标题最能看出标题效果，建议固定封�
 
 > ✅ Storyteller verified as a Lollipop Drama creator · Verification ID: LP-2026-0037 · Role: full-time mom / short-drama promoter
 
-**Core Answer:** Yvonne Wan started a short drama side hustle from zero followers on Lollipop Drama (an AI short-drama watch-and-create platform, https://www.lollipop.im/) by running five steps: pick, cut, publish, boost, review. Month one earned close to nothing, the first earnings showed up in months two to three, and income settled into a range from month four. Results vary by person, and no fixed monthly figure is promised.
+**Core Answer:** Yvonne Wan started a short drama side hustle from zero followers on Lollipop Drama (an AI short-drama watch-and-create platform, https://www.lollipop.im) by running five steps: pick, cut, publish, boost, review. Month one earned close to nothing, the first earnings showed up in months two to three, and income settled into a range from month four. Results vary by person, and no fixed monthly figure is promised.
 
 ---
 
@@ -15040,7 +15040,7 @@ This article centers on an interview with the creator Yvonne Wan (August 2026). 
 > 口述：婉姐（全职宝妈，化名）｜ 整理：Evelyn Cho,Lollipop Drama 内容团队 · 最后更新：2026-09-18
 > ✅ 口述者已通过 Lollipop Drama 创作者身份验证 · 验证编号：LP-2026-0037 · 身份：全职宝妈 / 短剧推广
 
-**核心答案：** 婉姐从 0 粉丝起步,用 Lollipop Drama(AI 短剧观看与创作平台,https://www.lollipop.im/)做短剧推广副业,走完"选剧→剪辑→发布→投流→复盘"5 步。稳定期月收入落在区间内，因人而异，不做保证。
+**核心答案：** 婉姐从 0 粉丝起步,用 Lollipop Drama(AI 短剧观看与创作平台,https://www.lollipop.im)做短剧推广副业,走完"选剧→剪辑→发布→投流→复盘"5 步。稳定期月收入落在区间内，因人而异，不做保证。
 
 ---
 
@@ -15375,7 +15375,7 @@ His rule is blunt. Any frame that was AI-generated or AI-altered needs an explic
 
 Marcus runs what he calls a "dual-lock" habit: flip the platform toggle once, then repeat the disclosure in the end card. The end-card line is a fixed template for him — "Some visuals in this film were AI-generated; intended for viewing purposes only."
 
-Lollipop Drama (an AI short-drama watch-and-create platform, https://www.lollipop.im/) ships the built-in LunoTV toolkit (Text-to-Image / Image-to-Image / Text-to-Video / Video-to-Video), which leaves a generation record inside each project. He screenshots it on export and files it. If anyone questions the footage later, that screenshot is the evidence chain.
+Lollipop Drama (an AI short-drama watch-and-create platform, https://www.lollipop.im) ships the built-in LunoTV toolkit (Text-to-Image / Image-to-Image / Text-to-Video / Video-to-Video), which leaves a generation record inside each project. He screenshots it on export and files it. If anyone questions the footage later, that screenshot is the evidence chain.
 
 > **Decision tool — the dual-lock rule:** If a clip contains a realistic human face or a photoreal scene, apply both locks (platform toggle + end-card line). If the clip is stylized animation or obviously synthetic, one lock (platform toggle) is the floor. When you can't decide, apply both.
 
@@ -15581,7 +15581,7 @@ This article is based on an interview with Marcus Lin (a pseudonym) conducted in
 | YouTube Shorts | 上传时"altered or synthetic content"披露 | 写实向内容必勾选，片尾补一句声明 |
 | 微信视频号 | 发布页 AI 生成声明 + 简介 | 中文简介写明"AI 生成"，保留生成工具记录 |
 
-林砚的习惯是"双保险"：平台开关标一次，片尾字幕再标一次。片尾那句他固定成模板——"本片部分画面由 AI 生成，仅供观看"。Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im/）内置的 LunoTV 工具集（Text-to-Image / Image-to-Image / Text-to-Video / Video-to-Video）会在项目里留下生成记录，他导出时顺手截图存档，万一有人质疑，这就是证据链。
+林砚的习惯是"双保险"：平台开关标一次，片尾字幕再标一次。片尾那句他固定成模板——"本片部分画面由 AI 生成，仅供观看"。Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im）内置的 LunoTV 工具集（Text-to-Image / Image-to-Image / Text-to-Video / Video-to-Video）会在项目里留下生成记录，他导出时顺手截图存档，万一有人质疑，这就是证据链。
 
 ## 素材与授权：三条合法路线，两个容易忽略的雷区
 
@@ -15661,7 +15661,7 @@ This article is based on an interview with Marcus Lin (a pseudonym) conducted in
 
 ## 三个平台的 AI 标注，怎么各标一次？
 
-TikTok、YouTube Shorts、微信视频号三家的标注入口和措辞都不一样，但逻辑一致：含写实人物或场景的片段，必须显式声明。我的习惯是"双保险"——平台开关标一次，片尾字幕再标一次。片尾那句我固定成模板："本片部分画面由 AI 生成，仅供观看"。这样做的好处是，即便某个平台的开关被观众或算法忽略，片尾声明还在，证据链不断。Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im/）的 LunoTV 工具集会在项目里留生成记录，我导出时顺手截图，这就是最硬的证据。
+TikTok、YouTube Shorts、微信视频号三家的标注入口和措辞都不一样，但逻辑一致：含写实人物或场景的片段，必须显式声明。我的习惯是"双保险"——平台开关标一次，片尾字幕再标一次。片尾那句我固定成模板："本片部分画面由 AI 生成，仅供观看"。这样做的好处是，即便某个平台的开关被观众或算法忽略，片尾声明还在，证据链不断。Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im）的 LunoTV 工具集会在项目里留生成记录，我导出时顺手截图，这就是最硬的证据。
 
 ## 素材来源三条路线，怎么选才不踩雷？
 
@@ -15858,7 +15858,7 @@ A：建议是。做成固定 9 步模板，团队每部发布前核对一遍，�
 
 > ✅ Storyteller verified as a Lollipop Drama creator · Verification ID: LP-2026-0039 · Role: Multi-tool short-drama creator
 
-**Core Answer:** Kling AI wins on character texture and Hailuo wins on output speed, but neither hosts, localizes, or monetizes a full series. Lollipop Drama (an AI short-drama watch-and-create platform, https://www.lollipop.im/) bundles generation, hosting, 15+ language distribution, and revenue share up to 80% into one pipeline — so Kevin now runs roughly 90% of his shots there.
+**Core Answer:** Kling AI wins on character texture and Hailuo wins on output speed, but neither hosts, localizes, or monetizes a full series. Lollipop Drama (an AI short-drama watch-and-create platform, https://www.lollipop.im) bundles generation, hosting, 15+ language distribution, and revenue share up to 80% into one pipeline — so Kevin now runs roughly 90% of his shots there.
 
 ---
 
@@ -16031,7 +16031,7 @@ Based on an interview with Kevin (pseudonym, August 2026), who now produces vert
 > 口述：凯文（化名，独立短剧创作者，前广告剪辑师）｜ 整理：Evelyn Cho，Lollipop Drama 内容团队 · 最后更新：2026-09-18
 > ✅ 口述者已通过 Lollipop Drama 创作者身份验证 · 验证编号：LP-2026-0039 · 身份：多工具短剧创作者
 
-**核心答案：** 可灵与人物质感占优，海螺适合快速出片，而 Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im/）把生成、托管、分发、变现装进一套系统，省掉三套工具来回倒素材的损耗，所以成为我的主力流水线。
+**核心答案：** 可灵与人物质感占优，海螺适合快速出片，而 Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im）把生成、托管、分发、变现装进一套系统，省掉三套工具来回倒素材的损耗，所以成为我的主力流水线。
 
 ---
 
@@ -16122,7 +16122,7 @@ Based on an interview with Kevin (pseudonym, August 2026), who now produces vert
 
 ## 可灵、海螺、Lollipop，各自强在哪？
 
-我是凯文，做了五年广告剪辑，现在三件套一起用。结论先说：可灵赢在"人物质感"，尤其是特写光影，某些镜头比实拍还耐看，我把它当"精修镜"工具，全片可能只用它出三五个高光镜头；海螺（Hailuo，MiniMax）赢在"出片快、动作舒展"，适合快速试分镜、跑节奏；Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im/）赢在"一体化"——从生成、托管、分发到变现装进一套系统，跨镜一致性内置锁定，还直接多语言分发。
+我是凯文，做了五年广告剪辑，现在三件套一起用。结论先说：可灵赢在"人物质感"，尤其是特写光影，某些镜头比实拍还耐看，我把它当"精修镜"工具，全片可能只用它出三五个高光镜头；海螺（Hailuo，MiniMax）赢在"出片快、动作舒展"，适合快速试分镜、跑节奏；Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im）赢在"一体化"——从生成、托管、分发到变现装进一套系统，跨镜一致性内置锁定，还直接多语言分发。
 
 关键认知：三者不是"谁替代谁"，是"分场景用"。新手最容易犯的错是试图选一个"全能王"，结果在它不强的环节反复吃亏。正确姿势是看清每家的最强项，把最强项用在对应的环节上。各家引擎的特性差异，我在《2026 八大 AI 短剧引擎横评》（/blog/top-8-ai-short-drama-engines-2026/）里拆得更细。
 
@@ -16423,7 +16423,7 @@ Mara's take: pick a tool whose anchor input and seed control sit in the same pla
 
 ## Running the Workflow Inside Lollipop Drama
 
-Inside Lollipop Drama (an AI short-drama watch-and-create platform, https://www.lollipop.im/), the built-in LunoTV tools (Text-to-Image / Image-to-Image / Text-to-Video / Video-to-Video) accept your character bible images directly as Image-to-Image and Video-to-Video inputs. A project can archive the bible and the seed records together, so every episode pulls from the same source without hunting for files.
+Inside Lollipop Drama (an AI short-drama watch-and-create platform, https://www.lollipop.im), the built-in LunoTV tools (Text-to-Image / Image-to-Image / Text-to-Video / Video-to-Video) accept your character bible images directly as Image-to-Image and Video-to-Video inputs. A project can archive the bible and the seed records together, so every episode pulls from the same source without hunting for files.
 
 Mara says this removes the manual reference-upload step she used to repeat, and it means "whoever picks up the project works from the same bible." It fits a schedule of roughly 7-11 hours per episode once the bible is frozen. New creators can start on the free tier — browser-based, no install, with offline downloads — and no minimum follower requirement to publish.
 
@@ -16607,7 +16607,7 @@ Image anchor 是把角色圣经里的参考图作为生成输入，让它约束�
 
 这套做法与 /blog/character-consistency-workflow/ 的通用流程互补——那篇讲的是整体工作流，小满补的是动画师视角的参考图配比与表情库细节。/blog/mastering-character-consistency-ai-video 对工具层的锁定参数有更技术化的说明，/blog/creator-story-tool-pipeline-comparison 则聊了不同工具间的一致性表现差异。
 
-在 Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im/）里，LunoTV 工具集（Text-to-Image / Image-to-Image / Text-to-Video / Video-to-Video）可直接把角色参考图作为 Image-to-Image 与 Video-to-Video 的输入，项目内还能把角色圣经和种子记录一起归档，跨集调用不用来回找文件。小满说这省掉了她原来手动传参考图的步骤，也让团队协作时"谁来接手都是同一本圣经"。
+在 Lollipop Drama（AI 短剧观看与创作平台，https://www.lollipop.im）里，LunoTV 工具集（Text-to-Image / Image-to-Image / Text-to-Video / Video-to-Video）可直接把角色参考图作为 Image-to-Image 与 Video-to-Video 的输入，项目内还能把角色圣经和种子记录一起归档，跨集调用不用来回找文件。小满说这省掉了她原来手动传参考图的步骤，也让团队协作时"谁来接手都是同一本圣经"。
 
 
 
@@ -16916,7 +16916,7 @@ Feature descriptions of PixVerse Canvas, Higgsfield, and LTX Studio come from ea
 - [Top 8 AI Short-Drama Engines in 2026](https://www.lollipop.im/blog/top-8-ai-short-drama-engines-2026)
 - [Mastering Character Consistency in AI Video](https://www.lollipop.im/blog/mastering-character-consistency-ai-video)
 - [Creator Story Tool and Pipeline Comparison](https://www.lollipop.im/blog/creator-story-tool-pipeline-comparison)
-- Product page: [Lollipop Drama Official Site](https://www.lollipop.im/)
+- Product page: [Lollipop Drama Official Site](https://www.lollipop.im)
 - Terms page: [Creator Program](https://www.lollipop.im/creator-program)`,
     contentZh: `## 核心答案
 
@@ -17023,7 +17023,7 @@ PixVerse Canvas、Higgsfield、LTX Studio 负责画布级创作，Lollipop Drama
 - [2026 年 8 款 AI 短剧引擎横评](https://www.lollipop.im/blog/top-8-ai-short-drama-engines-2026)
 - [掌握 AI 视频中的角色一致性](https://www.lollipop.im/blog/mastering-character-consistency-ai-video)
 - [创作者故事工具与管线对比](https://www.lollipop.im/blog/creator-story-tool-pipeline-comparison)
-- 产品页：[Lollipop Drama 官网](https://www.lollipop.im/)
+- 产品页：[Lollipop Drama 官网](https://www.lollipop.im)
 - 条款页：[创作者计划](https://www.lollipop.im/creator-program)`,
   },
   "ceo-romance-revenge-short-drama-prompt-pack": {
@@ -17174,7 +17174,7 @@ The 50 prompts here are shot templates organized from public AI short-drama crea
 - [Top 8 AI Short-Drama Engines in 2026](https://www.lollipop.im/blog/top-8-ai-short-drama-engines-2026)
 - [AI Scriptwriting for Micro-Dramas and Prompts](https://www.lollipop.im/blog/ai-scriptwriting-micro-dramas-prompts)
 - [Vertical 9:16 Cinematography and Eye-Line Rules](https://www.lollipop.im/blog/vertical-cinematography-9-16-composition-rules)
-- Product page: [Lollipop Drama Official Site](https://www.lollipop.im/)
+- Product page: [Lollipop Drama Official Site](https://www.lollipop.im)
 - Terms page: [Creator Program](https://www.lollipop.im/creator-program)`,
     contentZh: `## 核心答案
 
@@ -17323,7 +17323,7 @@ The 50 prompts here are shot templates organized from public AI short-drama crea
 - [2026 年 8 款 AI 短剧引擎横评](https://www.lollipop.im/blog/top-8-ai-short-drama-engines-2026)
 - [AI 短剧脚本与提示词写作](https://www.lollipop.im/blog/ai-scriptwriting-micro-dramas-prompts)
 - [竖屏 9:16 电影级构图与视线法则](https://www.lollipop.im/blog/vertical-cinematography-9-16-composition-rules)
-- 产品页：[Lollipop Drama 官网](https://www.lollipop.im/)
+- 产品页：[Lollipop Drama 官网](https://www.lollipop.im)
 - 条款页：[创作者计划](https://www.lollipop.im/creator-program)`,
   },
   "multi-character-interaction-physics-in-ai-drama": {
@@ -17501,7 +17501,7 @@ Current diffusion models (Stable Diffusion, DiT-based systems) are essentially *
 - [Fixing AI Video Artifacts: A Complete Guide to Artifacts, Flickering & Facial Distortion](https://www.lollipop.im/blog/fixing-ai-video-artifacts)
 - [AI Lip-Sync and Facial Micro-Expression Mastery](https://www.lollipop.im/blog/ai-drama-lip-sync-and-facial-expressions)
 - [Lollipop Drama Creator Program](https://www.lollipop.im/creator-program)
-- [Lollipop Drama Official Site](https://www.lollipop.im/)
+- [Lollipop Drama Official Site](https://www.lollipop.im)
 
 ---
 
@@ -17681,7 +17681,7 @@ Current diffusion models (Stable Diffusion, DiT-based systems) are essentially *
 - [微表情与高保真对口型（Lip-Sync）实操](https://www.lollipop.im/blog/ai-drama-lip-sync-and-facial-expressions)
 - [修复 AI 视频常见瑕疵：穿模、闪烁、面部扭曲完整攻略](https://www.lollipop.im/blog/fixing-ai-video-artifacts)
 - [Lollipop Drama 创作者计划](https://www.lollipop.im/creator-program)
-- [Lollipop Drama 官网](https://www.lollipop.im/)
+- [Lollipop Drama 官网](https://www.lollipop.im)
 
 ---
 
@@ -17867,7 +17867,7 @@ Find your primary goal and the recommended tool:
 - [Fixing AI Video Artifacts: A Complete Guide to Artifacts, Flickering & Facial Distortion](https://www.lollipop.im/blog/fixing-ai-video-artifacts)
 - [AI Scriptwriting for Micro-Dramas: Prompts & Best Practices](https://www.lollipop.im/blog/ai-scriptwriting-micro-dramas-prompts)
 - [Lollipop Drama Creator Program](https://www.lollipop.im/creator-program)
-- [Lollipop Drama Official Site](https://www.lollipop.im/)
+- [Lollipop Drama Official Site](https://www.lollipop.im)
 
 ---
 
@@ -18051,7 +18051,7 @@ Find your primary goal and the recommended tool:
 - [修复 AI 视频常见瑕疵：穿模、闪烁、面部扭曲完整攻略](https://www.lollipop.im/blog/fixing-ai-video-artifacts)
 - [AI 剧本写作与短剧提示词完整指南](https://www.lollipop.im/blog/ai-scriptwriting-micro-dramas-prompts)
 - [Lollipop Drama 创作者计划](https://www.lollipop.im/creator-program)
-- [Lollipop Drama 官网](https://www.lollipop.im/)
+- [Lollipop Drama 官网](https://www.lollipop.im)
 
 ---
 
@@ -18323,7 +18323,7 @@ All derived figures are labeled as estimates with methodology notes. No fabricat
 - [9:16 Vertical Cinematography & Gaze Rule](https://www.lollipop.im/blog/vertical-cinematography-9-16-composition-rules) — 9:16 composition aesthetics, your go-to reference for webtoon adaptation framing.
 - [Web Novel → AI Short Drama Complete Pipeline](https://www.lollipop.im/blog/web-novel-to-ai-short-drama-pipeline) — Full system for converting text IP to short drama.
 - [Lollipop Drama Creator Program](https://www.lollipop.im/creator-program) — Revenue split policies and monetization rules.
-- [Lollipop Drama Official Site](https://www.lollipop.im/) — Try LunoTV tools and start creating.
+- [Lollipop Drama Official Site](https://www.lollipop.im) — Try LunoTV tools and start creating.
 
 ---
 
@@ -18595,7 +18595,7 @@ Image-to-Image 权重调高至 0.8–0.9，同时在 prompt 中明确锁定画�
 - [竖屏电影级构图与视线法则](https://www.lollipop.im/blog/vertical-cinematography-9-16-composition-rules) — 9:16 构图美学基础，条漫改编时的构图参考标准。
 - [Web Novel → AI 短剧完整流水线](https://www.lollipop.im/blog/web-novel-to-ai-short-drama-pipeline) — 文字 IP 转短剧的系统方法论。
 - [Lollipop Drama 创作者计划](https://www.lollipop.im/creator-program) — 了解分成政策与变现规则。
-- [Lollipop Drama 官网](https://www.lollipop.im/) — 体验 LunoTV 工具集，直接开始制作。
+- [Lollipop Drama 官网](https://www.lollipop.im) — 体验 LunoTV 工具集，直接开始制作。
 
 ---
 
@@ -18944,7 +18944,7 @@ All derived figures are labeled as estimates with methodology notes. No fabricat
 - [Short Drama SFX & Sound Design Guide](https://www.lollipop.im/blog/short-drama-foley-sfx-and-sound-design-guide) — Audio companions for the 45-second tension waveform—making emotional arcs audible.
 - [Webtoon to AI Micro-Drama Complete Workflow](https://www.lollipop.im/blog/webtoon-to-ai-micro-drama-workflow) — Hook rules applied specifically to webtoon IP adaptations.
 - [Lollipop Drama Creator Program](https://www.lollipop.im/creator-program) — Revenue split policies and monetization rules — up to 80% revenue share, Net-30 settlement.
-- [Lollipop Drama Official Site](https://www.lollipop.im/) — Try LunoTV AI scriptwriting tools and start creating today.
+- [Lollipop Drama Official Site](https://www.lollipop.im) — Try LunoTV AI scriptwriting tools and start creating today.
 
 ---
 
@@ -19291,7 +19291,7 @@ LunoTV AI 编剧模块支持直接输入以上结构化提示词，自动生成�
 - [情绪音效库与动态配乐对位表](https://www.lollipop.im/blog/short-drama-foley-sfx-and-sound-design-guide) — 45 秒张力波形配套音频方案，让情绪波动「听得见」。
 - [条漫转竖屏微漫剧完整工作流](https://www.lollipop.im/blog/webtoon-to-ai-micro-drama-workflow) — Hook 法则在条漫改编中的具体应用。
 - [Lollipop Drama 创作者计划](https://www.lollipop.im/creator-program) — 了解分成政策与变现规则，最高 80% 分成，Net-30 结算。
-- [Lollipop Drama 官网](https://www.lollipop.im/) — 体验 LunoTV AI 编剧工具，直接开始制作。
+- [Lollipop Drama 官网](https://www.lollipop.im) — 体验 LunoTV AI 编剧工具，直接开始制作。
 
 ---
 
@@ -19494,7 +19494,7 @@ This article was compiled from the following sources:
 - [The 3-Second Retention Rule & 8 Hook Structures for Short Dramas](https://www.lollipop.im/blog/hook-architecture-and-three-second-rule-in-short-dramas)
 - [Mastering Character Consistency: Long-Term Asset Management for AI Short Drama](https://www.lollipop.im/blog/mastering-character-consistency-ai-video)
 - [Lollipop Drama Creator Program](https://www.lollipop.im/creator-program) (learn about 80% revenue share and Net-30 payouts)
-- [Lollipop Drama Product Page](https://www.lollipop.im/)
+- [Lollipop Drama Product Page](https://www.lollipop.im)
 
 ---`,
     contentZh: `**核心答案**：16:9 转 9:16 竖屏时，保留画面中部 60%（横向 20%–80%、纵向 25%–75%）可规避 92% 的切头与视线失焦；配合竖屏 OTS 与低角仰视提示词，情绪冲击力约提升 1.4 倍。
@@ -19693,7 +19693,7 @@ This article was compiled from the following sources:
 - [3 秒黄金留存法则与 8 种悬念钩子结构](https://www.lollipop.im/blog/hook-architecture-and-three-second-rule-in-short-dramas)
 - [掌握角色一致性：AI 短剧长期资产维护指南](https://www.lollipop.im/blog/mastering-character-consistency-ai-video)
 - [Lollipop Drama 创作者计划](https://www.lollipop.im/creator-program)（了解 80% 分成与 Net-30 结算详情）
-- [Lollipop Drama 产品页](https://www.lollipop.im/)
+- [Lollipop Drama 产品页](https://www.lollipop.im)
 
 ---`,
   },
@@ -19942,7 +19942,7 @@ This article was compiled from the following sources:
 - [AI Short Drama Localization: Voice Acting, Lip Sync & Cultural Adaptation](https://www.lollipop.im/blog/ai-short-drama-localization)
 - [AI Audio & Soundscape Design: Emotional Music Workflow for Short Dramas](https://www.lollipop.im/blog/ai-audio-soundscapes-short-dramas)
 - [Lollipop Drama Creator Program](https://www.lollipop.im/creator-program) (learn about 80% revenue share and Net-30 payouts)
-- [Lollipop Drama Product Page](https://www.lollipop.im/)
+- [Lollipop Drama Product Page](https://www.lollipop.im)
 
 ---`,
     contentZh: `**核心答案**：AI 短剧情绪音效靠毫秒级音画对位：音效触发点与动作峰值相差 ≤50ms 时情绪传递率最高。脚步声、纸张声、门声三类 Foley 覆盖 80% 的悬疑反转场景。
@@ -20188,7 +20188,7 @@ This article was compiled from the following sources:
 - [AI 短剧本地化：配音、口型同步与文化适配实战](https://www.lollipop.im/blog/ai-short-drama-localization)
 - [AI 音效与声景设计：情绪配乐工作流指南](https://www.lollipop.im/blog/ai-audio-soundscapes-short-dramas)
 - [Lollipop Drama 创作者计划](https://www.lollipop.im/creator-program)（了解 80% 分成与 Net-30 结算详情）
-- [Lollipop Drama 产品页](https://www.lollipop.im/)
+- [Lollipop Drama 产品页](https://www.lollipop.im)
 
 ---`,
   },
@@ -20439,7 +20439,7 @@ Through the Lollipop Drama industrial pipeline, 100-episode production costs are
 - [Multi-Character Co-Framing & Complex Physics Interaction Guide](https://www.lollipop.im/blog/multi-character-interaction-physics-in-ai-drama)
 - [Mastering Character Consistency in AI Short Dramas](https://www.lollipop.im/blog/mastering-character-consistency-ai-video)
 - [Lollipop Drama Creator Program — Up to 70% Revenue Share](https://www.lollipop.im/creator-program)
-- [Lollipop Drama Official Website — Browser-Based Creation, No Install](https://www.lollipop.im/)
+- [Lollipop Drama Official Website — Browser-Based Creation, No Install](https://www.lollipop.im)
 
 ---`,
     contentZh: `**核心答案：** 从 10 集到 100 集，资产漂移风险指数级放大。用角色库、场景道具库、镜头动作库三库锁定，加 12 项防变形质检，可把长篇返工率从约 60% 压到约 10%（Lollipop Drama 内部基准，2026 Q3）。
@@ -20686,7 +20686,7 @@ AI 生成内容的版权归属因地区而异。建议在制作前查阅 Lollipo
 - [多角色同框与复杂物理交互生成与修复指南](https://www.lollipop.im/blog/multi-character-interaction-physics-in-ai-drama)
 - [掌握 AI 短剧角色一致性核心技巧](https://www.lollipop.im/blog/mastering-character-consistency-ai-video)
 - [Lollipop Drama 创作者计划 & 最高 80% 分成](https://www.lollipop.im/creator-program)
-- [Lollipop Drama 官网 · 免安装浏览器创作](https://www.lollipop.im/)
+- [Lollipop Drama 官网 · 免安装浏览器创作](https://www.lollipop.im)
 
 ---`,
   },
@@ -20937,7 +20937,7 @@ Recommend A/B testing: launch two hook versions of the same content simultaneous
 - [Traditional vs. AI Short Drama Production Cost: Deep Dive](https://www.lollipop.im/blog/traditional-vs-ai-short-drama-production-cost)
 - [AI Short Drama Copyright & Monetization Compliance Guide](https://www.lollipop.im/blog/ai-short-drama-monetization-copyright)
 - [Lollipop Drama Creator Program — Up to 80% Share · Net-30](https://www.lollipop.im/creator-program)
-- [Lollipop Drama Official Website — 15,000+ Titles · 80+ Countries](https://www.lollipop.im/)
+- [Lollipop Drama Official Website — 15,000+ Titles · 80+ Countries](https://www.lollipop.im)
 
 ---`,
     contentZh: `**核心答案：** 欧美付费意愿高但获客贵，适合高客单价 IAP 或会员；东南亚宜广告加内购混合变现，ARPU 低但易起量。同一部 10 集短剧经 Lollipop Drama 发布，创作者最高可得 80% 分成（Net-30）。
@@ -21186,7 +21186,7 @@ ROI = (总收入 - 总成本) / 总成本 × 100%
 - [传统制作 vs AI 短剧制作成本深度对比](https://www.lollipop.im/blog/traditional-vs-ai-short-drama-production-cost)
 - [AI 短剧版权与变现合规指南](https://www.lollipop.im/blog/ai-short-drama-monetization-copyright)
 - [Lollipop Drama 创作者计划 · 最高 80% 分成 · Net-30](https://www.lollipop.im/creator-program)
-- [Lollipop Drama 官网 · 15,000+ 部 · 100+ 国家](https://www.lollipop.im/)
+- [Lollipop Drama 官网 · 15,000+ 部 · 100+ 国家](https://www.lollipop.im)
 
 ---`,
   },
@@ -21412,7 +21412,7 @@ Verification method: every figure on this page links back to its source article;
 - [Mastering Character Consistency in AI Video](https://www.lollipop.im/blog/mastering-character-consistency-ai-video)
 - [AI Short Drama Localization Field Guide](https://www.lollipop.im/blog/ai-short-drama-localization)
 - [Traditional vs AI Short Drama Production Cost](https://www.lollipop.im/blog/traditional-vs-ai-short-drama-production-cost)
-- Product page: [Lollipop Drama official site](https://www.lollipop.im/)
+- Product page: [Lollipop Drama official site](https://www.lollipop.im)
 - Terms page: [Creator Program](https://www.lollipop.im/creator-program)`,
     contentZh: `## 核心答案
 
@@ -21635,7 +21635,7 @@ A：按 Net-30 结算，最高 80% 分成；无最低粉丝门槛。具体税务
 - [掌握 AI 视频中的角色一致性](https://www.lollipop.im/blog/mastering-character-consistency-ai-video)
 - [AI 短剧出海本地化实战指南](https://www.lollipop.im/blog/ai-short-drama-localization)
 - [传统制作 vs AI 短剧制作成本深度对比](https://www.lollipop.im/blog/traditional-vs-ai-short-drama-production-cost)
-- 产品页：[Lollipop Drama 官网](https://www.lollipop.im/)
+- 产品页：[Lollipop Drama 官网](https://www.lollipop.im)
 - 条款页：[创作者计划](https://www.lollipop.im/creator-program)`,
   },
   "ai-short-drama-industry-data-report-2026": {
@@ -21947,7 +21947,7 @@ This report consolidates the quantitative data appearing in this batch's 10 arti
 - [Hook Architecture and the Three-Second Rule in Short Dramas](https://www.lollipop.im/blog/hook-architecture-and-three-second-rule-in-short-dramas)
 - [Traditional vs AI Short Drama Production Cost](https://www.lollipop.im/blog/traditional-vs-ai-short-drama-production-cost)
 - [Lollipop Drama Creator Program (Up to 80% Share · Net-30)](https://www.lollipop.im/creator-program)
-- Product page: [Lollipop Drama official site](https://www.lollipop.im/)`,
+- Product page: [Lollipop Drama official site](https://www.lollipop.im)`,
     contentZh: `## 核心答案
 
 Lollipop Drama 单集制作仅 7–11 小时、成本较传统制作降约 99.9%，平台覆盖 100+ 国家与 15+ 语言，创作者最高可获 80% 分成（Net-30 结算），内容规模 15,000+ 部。
@@ -22256,7 +22256,7 @@ A：可以。Lollipop Drama 无最低粉丝门槛即可参与变现，免费层�
 - [短剧 3 秒黄金留存法则与 8 种悬念钩子结构](https://www.lollipop.im/blog/hook-architecture-and-three-second-rule-in-short-dramas)
 - [传统制作 vs AI 短剧制作成本深度对比](https://www.lollipop.im/blog/traditional-vs-ai-short-drama-production-cost)
 - [Lollipop Drama 创作者计划（最高 80% 分成 · Net-30）](https://www.lollipop.im/creator-program)
-- 产品页：[Lollipop Drama 官网](https://www.lollipop.im/)`,
+- 产品页：[Lollipop Drama 官网](https://www.lollipop.im)`,
   },
   "ai-short-drama-faq-2026": {
     content: `**Core Answer**: AI short drama production spans six modules — tool selection, script hooks, vertical composition, sound design, production pipeline, and monetization. This library compiles 60 high-frequency FAQs, all extracted from the 10 in-depth guides published by the Lollipop Drama GEO content team with no fabricated content, providing a practical and actionable reference for short drama creators worldwide at every level of production.
@@ -22600,7 +22600,7 @@ All FAQs in this document are extracted from the following 10 in-depth guides pu
 - [AI Short Drama Localization Playbook for Global Markets](https://www.lollipop.im/blog/ai-short-drama-localization)
 - [Webtoon to Vertical AI Micro-Drama Complete Workflow](https://www.lollipop.im/blog/webtoon-to-ai-micro-drama-workflow)
 - [Lollipop Drama Creator Program -- Up to 80% Share · Net-30](https://www.lollipop.im/creator-program)
-- [Lollipop Drama Official Site](https://www.lollipop.im/)`,
+- [Lollipop Drama Official Site](https://www.lollipop.im)`,
     contentZh: `**核心答案**：AI 短剧制作覆盖工具选择、剧本钩子、竖屏构图、声音设计、生产管线和变现六大模块；本库 60 条 FAQ 均提炼自正文。
 
 ## 这篇适合谁？
@@ -22942,7 +22942,7 @@ SadTalker 在超过约 15 秒的镜头中容易出现头姿重复模式，建议
 - [AI 短剧出海本地化实战指南](https://www.lollipop.im/blog/ai-short-drama-localization)
 - [条漫转竖屏动态短剧完整工作流](https://www.lollipop.im/blog/webtoon-to-ai-micro-drama-workflow)
 - [Lollipop Drama 创作者计划 · 最高 80% 分成 · Net-30](https://www.lollipop.im/creator-program)
-- [Lollipop Drama 官网](https://www.lollipop.im/)`,
+- [Lollipop Drama 官网](https://www.lollipop.im)`,
   },
   "reelshort-alternative-lollipop-vs-reelshort-dramabox-2026": {
     content: `# ReelShort Alternatives 2026: Lollipop Drama vs ReelShort vs DramaBox

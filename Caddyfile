@@ -58,6 +58,11 @@
 	# 兜底：/guides 本身及其余路径 → /blog
 	redir /guides* /blog 301
 
+	# ── P1-10 内容合并（2026-10-27）：消除同意图关键词内耗 ──
+	# lollipop-vs-reelshort-dramabox 与 reelshort-alternative-lollipop-vs-reelshort-dramabox-2026
+	# 是同一"ReelShort vs DramaBox 对比"意图的两篇，合并为前者
+	redir /blog/reelshort-alternative-lollipop-vs-reelshort-dramabox-2026 /blog/lollipop-vs-reelshort-dramabox 301
+
 	# ── /lollipop/* → /* 301（2026-09-05 根部署迁移）──
 	# 生产环境（www.lollipop.im）实际把 dist 部署在网站根目录，但历史上构建产物里
 	# canonical / sitemap / hreflang / JSON-LD 全部写死了 /lollipop/ 前缀，导致
@@ -316,7 +321,11 @@ www.aigeo.store {
 		header {
 			X-Content-Type-Options "nosniff"
 			X-Frame-Options "DENY"
-			Cache-Control "public, max-age=0, must-revalidate"
+			# 2026-10-27 CF cache 问题：此前 max-age=0 must-revalidate 不够，
+			# CF Flexible SSL 仍缓存旧内容。改用 no-store 强制每次回源验证。
+			Cache-Control "no-cache, no-store, must-revalidate"
+			Pragma "no-cache"
+			Expires "0"
 		}
 		try_files {path} {path}/index.html /index.html
 		file_server {

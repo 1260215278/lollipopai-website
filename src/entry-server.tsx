@@ -37,6 +37,8 @@ import {
 } from "./app/pages/LegalDocumentPage";
 import { PressPage } from "./app/components/PressPage";
 import { GlossaryPage } from "./app/components/GlossaryPage";
+import { AuthorPage } from "./app/components/AuthorPage";
+import { EditorialPolicyPage } from "./app/components/EditorialPolicyPage";
 
 /**
  * 渲染指定路由为完整 HTML 字符串。
@@ -81,6 +83,10 @@ export function renderRoute(path: string): string {
           <Route path="/press" element={<PressPage />} />
           {/* Glossary 术语表 — GEO 知识节点 */}
           <Route path="/glossary" element={<GlossaryPage />} />
+          {/* Author 作者实体页 */}
+          <Route path="/authors/:slug" element={<AuthorPage />} />
+          {/* Editorial Policy 编辑政策 */}
+          <Route path="/editorial-policy" element={<EditorialPolicyPage />} />
           {/* 登录 / 找回密码（noindex，但仍需正确正文——否则会被 * 兜底成首页） */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />

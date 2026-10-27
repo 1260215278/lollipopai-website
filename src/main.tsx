@@ -17,6 +17,8 @@ const LegalTosPage = lazy(() => import("./app/pages/LegalDocumentPage").then(m =
 const NotFoundPage = lazy(() => import("./app/components/NotFoundPage").then(m => ({ default: m.NotFoundPage })));
 const PressPage = lazy(() => import("./app/components/PressPage").then(m => ({ default: m.PressPage })));
 const GlossaryPage = lazy(() => import("./app/components/GlossaryPage").then(m => ({ default: m.GlossaryPage })));
+const AuthorPage = lazy(() => import("./app/components/AuthorPage").then(m => ({ default: m.AuthorPage })));
+const EditorialPolicyPage = lazy(() => import("./app/components/EditorialPolicyPage").then(m => ({ default: m.EditorialPolicyPage })));
 import { I18nProvider } from "./app/i18n.tsx";
 import { getRouterBasename } from "./app/localePath";
 import { MultilangSubsetGuard } from "./app/components/MultilangSubsetGuard";
@@ -87,6 +89,10 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/press" element={<PressPage />} />
         {/* Glossary 术语表 — GEO 知识节点 */}
         <Route path="/glossary" element={<GlossaryPage />} />
+        {/* Author 作者实体页 — GEO 实体权威信号 */}
+        <Route path="/authors/:slug" element={<AuthorPage />} />
+        {/* Editorial Policy 编辑政策 — AI 内容披露 + 事实核查方法 */}
+        <Route path="/editorial-policy" element={<EditorialPolicyPage />} />
         {/* 营销站 — 首页保持同步加载（首屏关键路径） */}
         <Route path="/" element={<App initialPage="home" />} />
         <Route path="/creating" element={<App initialPage="creating" />} />

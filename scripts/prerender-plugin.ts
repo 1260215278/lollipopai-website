@@ -434,6 +434,77 @@ function getRouteData(): RouteSeoData[] {
         ],
       ),
     },
+    // ── Authors 作者实体页（2026-10-27 P1-6：GEO 实体权威信号）──
+    {
+      path: "/authors/evelyn-cho",
+      title: "Evelyn Cho — Content Lead | Lollipop Drama Author",
+      description:
+        "Evelyn Cho is Content Lead at Lollipop Drama, overseeing editorial strategy, SEO/GEO research, and creator education for the AI short drama platform.",
+      schema: withBreadcrumb(
+        {
+          "@context": "https://schema.org",
+          "@type": "ProfilePage",
+          mainEntity: {
+            "@type": "Person",
+            "@id": `${SITE_URL}/authors/evelyn-cho#person`,
+            name: "Evelyn Cho",
+            jobTitle: "Content Lead",
+            description: "Evelyn Cho leads content strategy at Lollipop Drama, overseeing the editorial calendar, SEO research, and GEO optimization for the company's 84+ English-language blog articles.",
+            url: `${SITE_URL}/authors/evelyn-cho`,
+            sameAs: [
+              "https://www.lollipop.im/about#team",
+            ],
+            worksFor: {
+              "@type": "Organization",
+              "@id": `${SITE_URL}/#organization`,
+              name: "Lollipop Drama",
+              url: SITE_URL,
+            },
+            knowsAbout: [
+              "AI Short Drama Production",
+              "Creator Economy",
+              "SEO / GEO Content Strategy",
+              "Entertainment Media Analytics",
+            ],
+          },
+        },
+        [
+          { name: "Home", url: SITE_URL },
+          { name: "Authors", url: `${SITE_URL}/authors/evelyn-cho` },
+        ],
+      ),
+    },
+    // ── Editorial Policy 编辑政策（2026-10-27 P1-7：AI 内容披露 + 事实核查方法）──
+    {
+      path: "/editorial-policy",
+      title: "Editorial Policy — Fact-Checking & AI Content Disclosure | Lollipop Drama",
+      description:
+        "Lollipop Drama's editorial policy: content creation process, fact-checking methodology, AI content disclosure policy, corrections procedure, and reader feedback.",
+      schema: withBreadcrumb(
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: "Editorial Policy — Lollipop Drama",
+          description: "How we research, write, fact-check, and correct our content. AI content disclosure, corrections policy, and reader feedback.",
+          url: `${SITE_URL}/editorial-policy`,
+          dateModified: "2026-10-27",
+          isPartOf: {
+            "@type": "WebSite",
+            name: "Lollipop Drama",
+            url: SITE_URL,
+          },
+          publisher: {
+            "@type": "Organization",
+            "@id": `${SITE_URL}/#organization`,
+            name: "Lollipop Drama",
+          },
+        },
+        [
+          { name: "Home", url: SITE_URL },
+          { name: "Editorial Policy", url: `${SITE_URL}/editorial-policy` },
+        ],
+      ),
+    },
     {
       path: "/blog",
       title: "Blog — AI Short Drama & Creator Guides | Lollipop Drama",

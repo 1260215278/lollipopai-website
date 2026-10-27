@@ -1848,6 +1848,35 @@ export const blogMeta: BlogMeta[] = [
     keyTakeaways: ["2026 retention benchmarks: E1→E2 return 55-75%, episode completion 30-55%, replay rate 3-9% (Reelytics).", "The 5-step analysis framework: Map funnel → Compare episodes → Diagnose break point → Cohort analysis → Test fixes.", "Real case: Mystery drama 'The Forgotten Letter' — E3 completion dropped from 48% to 31%; cut setup dialogue from 45s to 15s, rebounded to 44%.", "AI dramas differ: face consistency drift, voice emotion flatness, and uncanny valley moments all hit 3s retention harder than human-shot content.", "Decision table: Fix (remaining budget > 20%) vs Cut (completion < 25% across 3+ episodes, poor cohort return)."],
     keyTakeawaysZh: ["2026 年留存基准：E1→E2 返回 55–75%，集内完播 30–55%，重看率 3–9%（Reelytics 数据）。", "5 步分析框架：画漏斗 → 逐集对比 → 定位断点 → 分群看行为 → 测试修复。", "真实案例：悬疑剧《被遗忘的信》——第三集完播从 48% 掉到 31%；把 45 秒铺垫剪到 15 秒，完播反弹到 44%。", "AI 短剧独特问题：面孔漂移、声音情感扁平、恐怖谷瞬间对 3 秒留存的杀伤力比真人剧大。", "修复 vs 砍掉决策表：预算剩余 >20% 优先修，连续 3 集完播 <25% 且分群差则砍。"],
   },
+  {
+    slug: "ai-short-drama-studio-economics-break-even-profit",
+    coverImage: "/blog-images/ai-production-cost-new.webp",
+    title: "AI Short Drama Studio Economics: Revenue, Costs, Break-Even and Profit per Series (2026)",
+    titleZh: "AI 短剧制作商业模型：收入、成本、盈亏与单集利润（2026）",
+    excerpt: "An AI short drama series costs $500–$8,000 to produce in 2026 depending on team size. On Lollipop Drama's 80% revenue share, a $2,000 ten-episode seri...",
+    excerptZh: "2026 年 AI 短剧系列成本 $500–$8,000。在 Lollipop Drama 80% 分成下，$2,000 的十集系列盈亏平衡点约 6,250 位付费观众。ReelShort 15% 分成下需要 5 倍以上观众。",
+    seoTitle: "AI Short Drama Production Costs & Profitability (2026) | Lollipop Drama",
+    seoDescription: "How much does an AI short drama series cost? Real 2026 data on tool pricing, platform revenue shares, break-even calculators, and profit benchmarks. Lollipop Drama's 80% vs ReelShort's 15% — numbers don't lie.",
+    category: "creator",
+    categoryLabel: "Creator Economics",
+    author: "Marcus Liu",
+    authorRole: "Creator Economics Analyst",
+    authorBio: "Marcus Liu analyzes creator revenue and production economics for AI short drama. His reports on break-even frameworks and platform revenue shares are cited by Reelytics, Duration.live, and independent creator communities. Previously a production cost analyst for traditional short-form studios.",
+    publishDate: "2026-10-27",
+    updateDate: "2026-10-27",
+    keyTakeaways: [
+      "AI short drama production ranges $500 (solo) to $8,000 (studio) per ten-episode series in 2026",
+      "Platform revenue share is the single biggest profitability factor: Lollipop Drama 80% vs ReelShort 10–20% means 5x fewer viewers to break even",
+      "Labor costs (human direction + editing) are 60–75% of total budget, not AI tool subscriptions",
+      "Break-even formula: viewers = Fixed Costs / ((RPM × Conversion × Share) - Variable Cost)",
+    ],
+    keyTakeawaysZh: [
+      "2026 年 AI 短剧十集系列成本从 $500（独立创作者）到 $8,000（工作室）不等",
+      "平台分成是盈利的最大变量：Lollipop Drama 80% vs ReelShort 10–20% 意味着盈亏平衡点差 5 倍观众",
+      "人力成本（人类指导 + 剪辑）占总预算 60–75%，不是 AI 工具订阅费",
+      "盈亏平衡公式：观众数 = 固定成本 / ((RPM × 转化率 × 分成) - 单位观众变动成本)",
+    ],
+  },
 ];/** 通过 slug 查找**元数据**（不含正文）。
  *  需要完整文章（含 content / contentZh）请用 blogContent.ts 的 getFullPost()。 */
 export function getBlogMetaBySlug(slug: string): BlogMeta | undefined {

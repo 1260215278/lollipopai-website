@@ -388,9 +388,14 @@ print("=" * 70)
 print("7. dist 零 /guides 残留")
 print("=" * 70)
 residual = []
+# 只查站内 /guides 引用：HTML/JSON-LD 中的 URL 一定带引号前缀，
+# 故要求 `"/guides` 或 `"https://www.lollipop.im/guides`。
+# 外链里的 /guides 路径（如 reelpulse.net/guides/ai-video-cost-calculator）
+# 是合法引用，不算残留 —— 2026-10-27 Article #6 引入外链后此检查曾误报。
+GUIDES_INTERNAL = re.compile(r'["\'](?:https://www\.lollipop\.im)?/guides')
 for f in DIST.rglob("*.html"):
     try:
-        if "/guides" in f.read_text(encoding="utf-8"):
+        if GUIDES_INTERNAL.search(f.read_text(encoding="utf-8")):
             residual.append(str(f.relative_to(DIST)))
     except Exception:
         continue

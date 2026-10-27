@@ -71,11 +71,8 @@
 	# 把已积累的权重传给新 URL，同时让 GSC 的「自动重定向」计数自然消化。
 	redir /lollipop / 301
 
-	@oldDeployPrefix path /lollipop/*
-	handle @oldDeployPrefix {
-		uri strip_prefix /lollipop
-		redir * {uri} 301
-	}
+	@oldDeployPrefix path_regexp ^/lollipop(/.*)?$
+	redir @oldDeployPrefix {re.oldDeployPrefix.1} 301
 
 	# Compression: Brotli (preferred) + Gzip fallback
 	# Brotli 压缩率比 gzip 高 15-25%，对 HTML/JS/CSS 效果显著。
@@ -235,16 +232,6 @@ www.aigeo.store {
 	@bonjourAbs path /template /template/* /en /en/* /product /product/* /news /news/* /guide /guide/* /guide.html /history.html /honor.html /market.html /material.html /workmanship.html /yanshengzhoubian.html /yunxixilie.html /fanxingxilie.html /lumingxilie.html /upload /upload/* /include /include/* /cn /cn/*
 	redir @bonjourAbs /bonjourluxe{uri} 301
 
-	# ── lollipop 绝对路径资源 → /lollipop/ 前缀 ──
-	# lollipop SPA 构建产物用绝对路径 /assets/、/blog-images/、/favicon
-	@lollipopAbs path /assets /assets/* /blog-images /blog-images/* /favicon.png /favicon-32.png /favicon-32.webp /favicon.svg /favicon.ico
-	redir @lollipopAbs /lollipop{uri} 301
-
-	# ── lollipop SPA 客户端路由 → /lollipop/ 前缀 ──
-	# React Router 用绝对路径 /about、/blog、/drama/xxx 等，需重定向到子路径
-	@lollipopRoutes path /about /blog /blog/* /contact /creating /distribution /download /login /privacy /terms /press /press/* /glossary /glossary/* /drama /drama/* /genre /genre/*
-	redir @lollipopRoutes /lollipop{uri} 301
-
 	# ── mingfu 语言重定向 ──
 	@langroot path_regexp ^/(zh|es|ar|fr)(/.*)?$
 	redir @langroot /mingfu{uri} 301
@@ -270,21 +257,13 @@ www.aigeo.store {
 		file_server
 	}
 
-	# ── lollipop (AI 竖短剧) 静态站 ──
-	handle_path /lollipop* {
-		root * /srv/www/lollipop/current
-		encode gzip zstd
-		header {
-			X-Content-Type-Options "nosniff"
-			X-Frame-Options "DENY"
-			Cache-Control "public, max-age=3600"
-		}
-		try_files {path} {path}/index.html /index.html
-		file_server {
-			index index.html
-			precompressed zstd gzip
-		}
-	}
+	# ── /lollipop/* → /* 301（2026-10-27：根部署迁移，与 443 端口保持一致）──
+	# 历史上 port 80 把根路径 URL 反向 301 到 /lollipop/*，导致 GSC 1,432 个
+	# "自动重定向" 页面。现已删除反向 redirect，这里只处理残留的 /lollipop/* 旧 URL。
+	# 用 path_regexp 捕获 /lollipop 之后的部分，避免 {uri} 仍返回原始路径的问题。
+	redir /lollipop / 301
+	@oldPrefix path_regexp ^/lollipop(/.*)?$
+	redir @oldPrefix {re.oldPrefix.1} 301
 
 	# ── bonjourluxe (奢侈品导购) PHP 站 ──
 	handle_path /bonjourluxe* {

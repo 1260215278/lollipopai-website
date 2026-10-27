@@ -1964,6 +1964,37 @@ export const blogMeta: BlogMeta[] = [
       "常见杀手：deck 太长、模糊受众、只发一个平台。",
     ],
   },
+  {
+    slug: "ai-short-drama-voice-music-image-rights-tool-licenses",
+    coverImage: "/blog-images/ai-drama-legal-checklist-new.webp",
+    title: "AI Short Drama Voice, Music and Image Rights: What You Need Permission to Use (2026)",
+    titleZh: "AI 短剧声音/音乐/图像授权清单：你需要哪些许可才能用？（2026）",
+    excerpt: "Runway free-tier is the only major video generator allowing commercial use (2026). Suno's Sept 3 TOS change restricted free-tier songs to personal use only. Udio allows ZERO commercial use on any plan. This article is the tool-by-tool license matrix every AI short drama creator needs.",
+    excerptZh: "Runway 免费版是唯一允许商用的主流视频生成工具（2026）。Suno 9 月 3 日 TOS 变更把免费版歌曲锁死为个人使用。Udio 所有计划均零商用许可。本文是 AI 短剧创作者必备的工具授权矩阵。",
+    seoTitle: "AI Short Drama Tool License Matrix 2026 | Voice, Music, Video Rights | Lollipop Drama",
+    seoDescription: "Exact commercial-use licenses for Runway, Kling, Sora 2, ElevenLabs, Suno, Udio, Epidemic Sound. 2026 TOS changes that kill monetization. Decision guide for common creator scenarios.",
+    category: "creator",
+    categoryLabel: "Rights & Licensing",
+    author: "Marcus Liu",
+    authorRole: "Creator Economics Analyst",
+    authorBio: "Marcus covers AI entertainment trends and creator economy analysis at Lollipop Drama.",
+    publishDate: "2026-10-27",
+    updateDate: "2026-10-27",
+    keyTakeaways: [
+      "Runway is the only major video generator allowing commercial use on FREE tier (Runway TOS Oct 23, 2026).",
+      "Suno Sept 3, 2026 TOS change: free-tier songs are Suno property; commercial use requires paid-plan download (Pro $10/mo).",
+      "Udio allows ZERO commercial use on ANY plan (Nov 12, 2025 TOS revision, still in effect 2026).",
+      "ElevenLabs Instant Voice Cloning: can clone ANY voice but MUST get written consent. Professional Voice Cloning: can ONLY clone your own voice.",
+      "Epidemic Sound / Artlist issue sync licenses, never ownership — they always retain rights to the music itself.",
+    ],
+    keyTakeawaysZh: [
+      "Runway 是唯一免费版允许商用的主流视频生成工具（Runway TOS 2026.10.23）。",
+      "Suno 9 月 3 日 TOS 变更：免费版歌曲归 Suno 所有；商用需付费计划下载（Pro $10/月）。",
+      "Udio 所有计划均零商用许可（2025.11.12 TOS 修订，2026 仍有效）。",
+      "ElevenLabs Instant Voice Cloning 可克隆任何声音但必须书面同意；Professional 只能克隆自己的。",
+      "Epidemic Sound / Artlist 发 sync 许可，你永远不拥有音乐本身。",
+    ],
+  },
 ];/** 通过 slug 查找**元数据**（不含正文）。
  *  需要完整文章（含 content / contentZh）请用 blogContent.ts 的 getFullPost()。 */
 export function getBlogMetaBySlug(slug: string): BlogMeta | undefined {

@@ -6,18 +6,31 @@ import { Footer } from "./Footer";
 
 const SITE_URL = "https://www.lollipop.im";
 
+const GLOBENEWSWIRE_URL =
+  "https://www.manilatimes.net/2026/07/09/tmt-newswire/globenewswire/lollipop-launches-global-streaming-platform-for-short-dramas-pioneering-human-ai-content/2381696/amp";
+
 const pressReleases = [
   {
-    date: "2024",
-    title: "Lollipop Drama Launches AI-Powered Short Drama Platform with 80% Creator Revenue Share",
+    date: "2026-07-09",
+    title:
+      "Lollipop Launches Global Streaming Platform for Short Dramas, Pioneering Human-AI Content",
     summary:
-      "Lollipop Drama announces the launch of its AI-powered short drama creation and streaming platform, offering creators an industry-leading 80% revenue share and built-in AI video generation tools.",
-    source: "Company Announcement",
-    url: `${SITE_URL}/about`,
+      "Lollipop Drama announces the global launch of its AI-powered short drama platform, pairing a premium streaming library with built-in AI creation tools and an industry-leading 80% creator revenue share. Distributed via GlobeNewswire / TMT Newswire.",
+    source: "GlobeNewswire",
+    url: GLOBENEWSWIRE_URL,
+  },
+  {
+    date: "2026",
+    title: "Lollipop Drama on Product Hunt",
+    summary:
+      "Lollipop Drama's AI short drama creation and streaming platform is listed on Product Hunt, where the creator community can follow product updates and leave reviews.",
+    source: "Product Hunt",
+    url: "https://www.producthunt.com/products/lollipop-ai",
   },
   {
     date: "2024",
-    title: "Nyx Entertainment Group and Korean Cultural Investment Fund Joint Venture Targets Global Short Drama Market",
+    title:
+      "Nyx Entertainment Group and Korean Cultural Investment Fund Joint Venture Targets Global Short Drama Market",
     summary:
       "The joint venture between Hong Kong-based Nyx Entertainment Group and the Korean Cultural Investment Fund aims to systematically promote K-Contents globally through AI-powered short drama production and distribution.",
     source: "Company Announcement",
@@ -103,7 +116,7 @@ export function PressPage({ onNavigate }: { onNavigate?: (page: string) => void 
             Creators enjoy an industry-leading 80% revenue share, with built-in AI tools for text-to-video, image generation, face swap, and style transfer. The platform is available in 100+ countries with multilingual subtitles and serves 1M+ users worldwide.
           </p>
           <p className="text-gray-300" style={{ fontSize: "0.95rem", lineHeight: 1.8 }}>
-            Founded in 2024 and headquartered in Singapore, Lollipop Drama is committed to the belief that everyone can create, creation can be monetized, and consumption is an incentive.
+            Co-founded by James C. in 2024 and headquartered in Singapore, Lollipop Drama is committed to the belief that everyone can create, creation can be monetized, and consumption is an incentive.
           </p>
         </div>
       </section>
@@ -132,6 +145,8 @@ export function PressPage({ onNavigate }: { onNavigate?: (page: string) => void 
               </p>
               <a
                 href={pr.url}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-red-400 hover:text-red-300 transition-colors"
                 style={{ fontSize: "0.85rem", fontWeight: 500 }}
               >
@@ -194,9 +209,21 @@ export function PressPage({ onNavigate }: { onNavigate?: (page: string) => void 
         <div className="bg-white/[0.03] border border-white/5 rounded-2xl p-6 space-y-4">
           <div className="flex items-center gap-3 text-gray-300" style={{ fontSize: "0.9rem" }}>
             <Mail className="w-4 h-4 text-red-400" />
+            <a href="mailto:media@lollipop.im" className="hover:text-white transition-colors">
+              media@lollipop.im
+            </a>
+            <span className="text-gray-600" style={{ fontSize: "0.8rem" }}>
+              (press &amp; media inquiries)
+            </span>
+          </div>
+          <div className="flex items-center gap-3 text-gray-300" style={{ fontSize: "0.9rem" }}>
+            <Mail className="w-4 h-4 text-gray-600" />
             <a href="mailto:business@lollipop.im" className="hover:text-white transition-colors">
               business@lollipop.im
             </a>
+            <span className="text-gray-600" style={{ fontSize: "0.8rem" }}>
+              (business partnerships)
+            </span>
           </div>
           <div className="flex items-center gap-3 text-gray-300" style={{ fontSize: "0.9rem" }}>
             <Phone className="w-4 h-4 text-red-400" />

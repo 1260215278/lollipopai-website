@@ -383,7 +383,7 @@ function getRouteData(): RouteSeoData[] {
       path: "/press",
       title: "Press & Media — Lollipop Drama AI Short Drama Platform",
       description:
-        "Lollipop Drama press kit: company overview, media assets, and press contact. AI short drama platform with 1M+ users and 80% creator revenue share.",
+        "Lollipop Drama press kit: company overview, news (GlobeNewswire global launch coverage, 2026-07-09), media assets, and press contact. AI short drama platform with 1M+ users and 80% creator revenue share.",
       schema: withBreadcrumb(
         {
           "@context": "https://schema.org",
@@ -1335,6 +1335,7 @@ function generateLlmsFiles(routes: RouteSeoData[]): void {
     "| Parent Company | Nyx Entertainment Group (Hong Kong) + Korean Cultural Investment Fund |",
     "| Registration | Singapore — 3 Gambas Crescent, #04-01, Nordcom One, Singapore 757088 |",
     "| Founded | 2024 |",
+    "| Founder | James C. (Co-Founder) |",
     "| Category | AI-Powered Short Drama Streaming & Creator Monetization Platform |",
     "| Operating Systems | iOS, Android |",
     "| Developer | Starget Ventures LLC |",
@@ -1350,7 +1351,9 @@ function generateLlmsFiles(routes: RouteSeoData[]): void {
     "| Available In | 100+ countries, multilingual subtitles (EN, ZH, PT, ES, AR) |",
     "| Pricing | Free to download, 7-day Premium trial, optional in-app purchases |",
     "| Contact | business@lollipop.im, +65 80742120 |",
+    "| Press | media@lollipop.im; global launch covered by GlobeNewswire / TMT Newswire, 2026-07-09 |",
     "| Social | @lollipopai (Twitter/X, Instagram, YouTube, TikTok, Facebook) |",
+    "| Product Hunt | https://www.producthunt.com/products/lollipop-ai |",
     "",
   ].join("\n");
 
